@@ -9,20 +9,20 @@ import (
 var JsonFunctions = map[string]object.ModuleFunction{}
 
 func init() {
-	JsonFunctions["dikodi"] = decode
-	JsonFunctions["enkodi"] = encode
+	JsonFunctions["decode"] = decode
+	JsonFunctions["encode"] = encode
 }
 
 func decode(args []object.Object, defs map[string]object.Object) object.Object {
 	if len(defs) != 0 {
-		return &object.Error{Message: "Hoja hii hairuhusiwi"}
+		return &object.Error{Message: "This argument is not allowed"}
 	}
 	if len(args) != 1 {
-		return &object.Error{Message: "Tunahitaji hoja moja tu"}
+		return &object.Error{Message: "We only need one argument"}
 	}
 
 	if args[0].Type() != object.STRING_OBJ {
-		return &object.Error{Message: "Hoja lazima iwe neno"}
+		return &object.Error{Message: "The argument must be a string"}
 	}
 
 	var i interface{}
@@ -30,7 +30,7 @@ func decode(args []object.Object, defs map[string]object.Object) object.Object {
 	input := args[0].(*object.String).Value
 	err := json.Unmarshal([]byte(input), &i)
 	if err != nil {
-		return &object.Error{Message: "Hii data sio jsoni"}
+		return &object.Error{Message: "This data is not valid JSON"}
 	}
 
 	return convertWhateverToObject(i)
@@ -76,7 +76,7 @@ func convertWhateverToObject(i interface{}) object.Object {
 
 func encode(args []object.Object, defs map[string]object.Object) object.Object {
 	if len(defs) != 0 {
-		return &object.Error{Message: "Hoja hii hairuhusiwi"}
+		return &object.Error{Message: "This argument is not allowed"}
 	}
 
 	input := args[0]
@@ -84,7 +84,7 @@ func encode(args []object.Object, defs map[string]object.Object) object.Object {
 	data, err := json.Marshal(i)
 
 	if err != nil {
-		return &object.Error{Message: "Siwezi kubadilisha data hii kuwa jsoni"}
+		return &object.Error{Message: "Unable to convert data to JSON"}
 	}
 
 	return &object.String{Value: string(data)}
