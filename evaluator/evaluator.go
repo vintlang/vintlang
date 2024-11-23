@@ -296,7 +296,7 @@ func applyFunction(fn object.Object, args []object.Object, line int) object.Obje
 		return obj
 	default:
 		if fn != nil {
-			return newError("Mstari %d: Hiki sio kiendesha: %s", line, fn.Type())
+			return newError("Line %d: Hiki sio kiendesha: %s", line, fn.Type())
 		} else {
 			return newError("Bro how did you even get here??? Contact language maker asap!")
 		}

@@ -30,7 +30,7 @@ func evalAssignEqual(node *ast.AssignEqual, env *object.Environment) object.Obje
 				v := float64(arg.Value) + val.Value
 				return env.Set(node.Left.Token.Literal, &object.Float{Value: v})
 			default:
-				return newError("Mstari %d: Huwezi kutumia '+=' kujumlisha %v na %v", node.Token.Line, arg.Type(), val.Type())
+				return newError("Line %d: Huwezi kutumia '+=' kujumlisha %v na %v", node.Token.Line, arg.Type(), val.Type())
 			}
 		case *object.Float:
 			switch val := value.(type) {
@@ -41,7 +41,7 @@ func evalAssignEqual(node *ast.AssignEqual, env *object.Environment) object.Obje
 				v := arg.Value + val.Value
 				return env.Set(node.Left.Token.Literal, &object.Float{Value: v})
 			default:
-				return newError("Mstari %d: Huwezi kutumia '+=' kujumlisha %v na %v", node.Token.Line, arg.Type(), val.Type())
+				return newError("Line %d: Huwezi kutumia '+=' kujumlisha %v na %v", node.Token.Line, arg.Type(), val.Type())
 			}
 		case *object.String:
 			switch val := value.(type) {
@@ -49,10 +49,10 @@ func evalAssignEqual(node *ast.AssignEqual, env *object.Environment) object.Obje
 				v := arg.Value + val.Value
 				return env.Set(node.Left.Token.Literal, &object.String{Value: v})
 			default:
-				return newError("Mstari %d: Huwezi kutumia '+=' kwa %v na %v", node.Token.Line, arg.Type(), val.Type())
+				return newError("Line %d: Huwezi kutumia '+=' kwa %v na %v", node.Token.Line, arg.Type(), val.Type())
 			}
 		default:
-			return newError("Mstari %d: Huwezi kutumia '+=' na %v", node.Token.Line, arg.Type())
+			return newError("Line %d: Huwezi kutumia '+=' na %v", node.Token.Line, arg.Type())
 		}
 	case "-=":
 		switch arg := left.(type) {
@@ -65,7 +65,7 @@ func evalAssignEqual(node *ast.AssignEqual, env *object.Environment) object.Obje
 				v := float64(arg.Value) - val.Value
 				return env.Set(node.Left.Token.Literal, &object.Float{Value: v})
 			default:
-				return newError("Mstari %d: Huwezi kutumia '-=' kujumlisha %v na %v", node.Token.Line, arg.Type(), val.Type())
+				return newError("Line %d: Huwezi kutumia '-=' kujumlisha %v na %v", node.Token.Line, arg.Type(), val.Type())
 			}
 		case *object.Float:
 			switch val := value.(type) {
@@ -76,10 +76,10 @@ func evalAssignEqual(node *ast.AssignEqual, env *object.Environment) object.Obje
 				v := arg.Value - val.Value
 				return env.Set(node.Left.Token.Literal, &object.Float{Value: v})
 			default:
-				return newError("Mstari %d: Huwezi kutumia '-=' kujumlisha %v na %v", node.Token.Line, arg.Type(), val.Type())
+				return newError("Line %d: Huwezi kutumia '-=' kujumlisha %v na %v", node.Token.Line, arg.Type(), val.Type())
 			}
 		default:
-			return newError("Mstari %d: Huwezi kutumia '-=' na %v", node.Token.Line, arg.Type())
+			return newError("Line %d: Huwezi kutumia '-=' na %v", node.Token.Line, arg.Type())
 		}
 	case "*=":
 		switch arg := left.(type) {
@@ -95,7 +95,7 @@ func evalAssignEqual(node *ast.AssignEqual, env *object.Environment) object.Obje
 				v := strings.Repeat(val.Value, int(arg.Value))
 				return env.Set(node.Left.Token.Literal, &object.String{Value: v})
 			default:
-				return newError("Mstari %d: Huwezi kutumia '*=' kujumlisha %v na %v", node.Token.Line, arg.Type(), val.Type())
+				return newError("Line %d: Huwezi kutumia '*=' kujumlisha %v na %v", node.Token.Line, arg.Type(), val.Type())
 			}
 		case *object.Float:
 			switch val := value.(type) {
@@ -106,7 +106,7 @@ func evalAssignEqual(node *ast.AssignEqual, env *object.Environment) object.Obje
 				v := arg.Value * val.Value
 				return env.Set(node.Left.Token.Literal, &object.Float{Value: v})
 			default:
-				return newError("Mstari %d: Huwezi kutumia '*=' kujumlisha %v na %v", node.Token.Line, arg.Type(), val.Type())
+				return newError("Line %d: Huwezi kutumia '*=' kujumlisha %v na %v", node.Token.Line, arg.Type(), val.Type())
 			}
 		case *object.String:
 			switch val := value.(type) {
@@ -114,10 +114,10 @@ func evalAssignEqual(node *ast.AssignEqual, env *object.Environment) object.Obje
 				v := strings.Repeat(arg.Value, int(val.Value))
 				return env.Set(node.Left.Token.Literal, &object.String{Value: v})
 			default:
-				return newError("Mstari %d: Huwezi kutumia '+=' kwa %v na %v", node.Token.Line, arg.Type(), val.Type())
+				return newError("Line %d: Huwezi kutumia '+=' kwa %v na %v", node.Token.Line, arg.Type(), val.Type())
 			}
 		default:
-			return newError("Mstari %d: Huwezi kutumia '*=' na %v", node.Token.Line, arg.Type())
+			return newError("Line %d: Huwezi kutumia '*=' na %v", node.Token.Line, arg.Type())
 		}
 	case "/=":
 		switch arg := left.(type) {
@@ -130,7 +130,7 @@ func evalAssignEqual(node *ast.AssignEqual, env *object.Environment) object.Obje
 				v := float64(arg.Value) / val.Value
 				return env.Set(node.Left.Token.Literal, &object.Float{Value: v})
 			default:
-				return newError("Mstari %d: Huwezi kutumia '/=' kujumlisha %v na %v", node.Token.Line, arg.Type(), val.Type())
+				return newError("Line %d: Huwezi kutumia '/=' kujumlisha %v na %v", node.Token.Line, arg.Type(), val.Type())
 			}
 		case *object.Float:
 			switch val := value.(type) {
@@ -141,12 +141,12 @@ func evalAssignEqual(node *ast.AssignEqual, env *object.Environment) object.Obje
 				v := arg.Value / val.Value
 				return env.Set(node.Left.Token.Literal, &object.Float{Value: v})
 			default:
-				return newError("Mstari %d: Huwezi kutumia '/=' kujumlisha %v na %v", node.Token.Line, arg.Type(), val.Type())
+				return newError("Line %d: Huwezi kutumia '/=' kujumlisha %v na %v", node.Token.Line, arg.Type(), val.Type())
 			}
 		default:
-			return newError("Mstari %d: Huwezi kutumia '/=' na %v", node.Token.Line, arg.Type())
+			return newError("Line %d: Huwezi kutumia '/=' na %v", node.Token.Line, arg.Type())
 		}
 	default:
-		return newError("Mstari %d: Operesheni Haifahamiki  %s", node.Token.Line, node.Token.Literal)
+		return newError("Line %d: Operesheni Haifahamiki  %s", node.Token.Line, node.Token.Literal)
 	}
 }

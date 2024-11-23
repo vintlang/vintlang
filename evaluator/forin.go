@@ -24,6 +24,6 @@ func evalForInExpression(fie *ast.ForIn, env *object.Environment, line int) obje
 		}()
 		return loopIterable(i.Next, env, fie)
 	default:
-		return newError("Mstari %d: Huwezi kufanya operesheni hii na %s", line, i.Type())
+		return newError("Line %d: Huwezi kufanya operesheni hii na %s", line, i.Type())
 	}
 }

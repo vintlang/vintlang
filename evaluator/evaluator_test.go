@@ -219,27 +219,27 @@ func TestErrorHandling(t *testing.T) {
 	}{
 		{
 			"5 + kweli",
-			"Mstari 1: Aina Hazilingani: NAMBA + BOOLEAN",
+			"Line 1: Aina Hazilingani: NAMBA + BOOLEAN",
 		},
 		{
 			"5 + kweli; 5;",
-			"Mstari 1: Aina Hazilingani: NAMBA + BOOLEAN",
+			"Line 1: Aina Hazilingani: NAMBA + BOOLEAN",
 		},
 		{
 			"-kweli",
-			"Mstari 1: Operesheni Haieleweki: -BOOLEAN",
+			"Line 1: Operesheni Haieleweki: -BOOLEAN",
 		},
 		{
 			"kweli + sikweli",
-			"Mstari 1: Operesheni Haieleweki: BOOLEAN + BOOLEAN",
+			"Line 1: Operesheni Haieleweki: BOOLEAN + BOOLEAN",
 		},
 		{
 			"5; kweli + sikweli; 5",
-			"Mstari 1: Operesheni Haieleweki: BOOLEAN + BOOLEAN",
+			"Line 1: Operesheni Haieleweki: BOOLEAN + BOOLEAN",
 		},
 		{
 			"kama (10 > 1) { kweli + sikweli;}",
-			"Mstari 1: Operesheni Haieleweki: BOOLEAN + BOOLEAN",
+			"Line 1: Operesheni Haieleweki: BOOLEAN + BOOLEAN",
 		},
 		{
 			`
@@ -251,19 +251,19 @@ kama (10 > 1) {
 	rudisha 1;
 }
 			`,
-			"Mstari 4: Operesheni Haieleweki: BOOLEAN + BOOLEAN",
+			"Line 4: Operesheni Haieleweki: BOOLEAN + BOOLEAN",
 		},
 		{
 			"bangi",
-			"Mstari 1: Neno Halifahamiki: bangi",
+			"Line 1: Neno Halifahamiki: bangi",
 		},
 		{
 			`"Habari" - "Habari"`,
-			"Mstari 1: Operesheni Haieleweki: NENO - NENO",
+			"Line 1: Operesheni Haieleweki: NENO - NENO",
 		},
 		{
 			`{"jina": "Avi"}[unda(x) {x}];`,
-			"Mstari 1: Samahani, UNDO (FUNCTION) haitumiki kama ufunguo",
+			"Line 1: Samahani, UNDO (FUNCTION) haitumiki kama ufunguo",
 		},
 	}
 

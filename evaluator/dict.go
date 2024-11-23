@@ -16,7 +16,7 @@ func evalDictLiteral(node *ast.DictLiteral, env *object.Environment) object.Obje
 
 		hashKey, ok := key.(object.Hashable)
 		if !ok {
-			return newError("Mstari %d: Hashing imeshindikana: %s", node.Token.Line, key.Type())
+			return newError("Line %d: Hashing imeshindikana: %s", node.Token.Line, key.Type())
 		}
 
 		value := Eval(valueNode, env)
