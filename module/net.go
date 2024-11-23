@@ -17,36 +17,35 @@ func init() {
 }
 
 func getRequest(args []object.Object, defs map[string]object.Object) object.Object {
-
 	if len(defs) != 0 {
 		var url *object.String
 		var headers, params *object.Dict
 		for k, v := range defs {
 			switch k {
-			case "yuareli":
+			case "url":
 				strUrl, ok := v.(*object.String)
 				if !ok {
-					return &object.Error{Message: "Yuareli iwe neno"}
+					return &object.Error{Message: "URL must be a string"}
 				}
 				url = strUrl
-			case "vichwa":
+			case "headers":
 				dictHead, ok := v.(*object.Dict)
 				if !ok {
-					return &object.Error{Message: "Vichwa lazima viwe kamusi"}
+					return &object.Error{Message: "Headers must be a dictionary"}
 				}
 				headers = dictHead
-			case "mwili":
+			case "body":
 				dictHead, ok := v.(*object.Dict)
 				if !ok {
-					return &object.Error{Message: "Mwili lazima iwe kamusi"}
+					return &object.Error{Message: "Body must be a dictionary"}
 				}
 				params = dictHead
 			default:
-				return &object.Error{Message: "Hoja si sahihi. Tumia yuareli na vichwa."}
+				return &object.Error{Message: "Arguments are incorrect. Use url and headers."}
 			}
 		}
 		if url.Value == "" {
-			return &object.Error{Message: "Yuareli ni lazima"}
+			return &object.Error{Message: "URL is required"}
 		}
 
 		var responseBody *bytes.Buffer
@@ -56,7 +55,7 @@ func getRequest(args []object.Object, defs map[string]object.Object) object.Obje
 			jsonBody, err := json.Marshal(booty)
 
 			if err != nil {
-				return &object.Error{Message: "Huku format query yako vizuri."}
+				return &object.Error{Message: "Your query is not formatted properly."}
 			}
 
 			responseBody = bytes.NewBuffer(jsonBody)
@@ -70,7 +69,7 @@ func getRequest(args []object.Object, defs map[string]object.Object) object.Obje
 			req, err = http.NewRequest("GET", url.Value, nil)
 		}
 		if err != nil {
-			return &object.Error{Message: "Tumeshindwa kufanya request"}
+			return &object.Error{Message: "Failed to make the request"}
 		}
 
 		if headers != nil {
@@ -83,26 +82,25 @@ func getRequest(args []object.Object, defs map[string]object.Object) object.Obje
 		resp, err := client.Do(req)
 
 		if err != nil {
-			return &object.Error{Message: "Tumeshindwa kutuma request."}
+			return &object.Error{Message: "Failed to send the request."}
 		}
 		defer resp.Body.Close()
 		respBody, err := ioutil.ReadAll(resp.Body)
 		if err != nil {
-			return &object.Error{Message: "Tumeshindwa kusoma majibu."}
+			return &object.Error{Message: "Failed to read the response."}
 		}
 
 		return &object.String{Value: string(respBody)}
-
 	}
 
 	if len(args) == 1 {
 		url, ok := args[0].(*object.String)
 		if !ok {
-			return &object.Error{Message: "Yuareli lazima iwe neno"}
+			return &object.Error{Message: "URL must be a string"}
 		}
 		req, err := http.NewRequest("GET", url.Value, nil)
 		if err != nil {
-			return &object.Error{Message: "Tumeshindwa kufanya request"}
+			return &object.Error{Message: "Failed to make the request"}
 		}
 
 		client := &http.Client{}
@@ -110,17 +108,17 @@ func getRequest(args []object.Object, defs map[string]object.Object) object.Obje
 		resp, err := client.Do(req)
 
 		if err != nil {
-			return &object.Error{Message: "Tumeshindwa kutuma request."}
+			return &object.Error{Message: "Failed to send the request."}
 		}
 		defer resp.Body.Close()
 		respBody, err := ioutil.ReadAll(resp.Body)
 		if err != nil {
-			return &object.Error{Message: "Tumeshindwa kusoma majibu."}
+			return &object.Error{Message: "Failed to read the response."}
 		}
 
 		return &object.String{Value: string(respBody)}
 	}
-	return &object.Error{Message: "Hoja si sahihi. Tumia yuareli na vichwa."}
+	return &object.Error{Message: "Arguments are incorrect. Use url and headers."}
 }
 
 func postRequest(args []object.Object, defs map[string]object.Object) object.Object {
@@ -129,30 +127,30 @@ func postRequest(args []object.Object, defs map[string]object.Object) object.Obj
 		var headers, params *object.Dict
 		for k, v := range defs {
 			switch k {
-			case "yuareli":
+			case "url":
 				strUrl, ok := v.(*object.String)
 				if !ok {
-					return &object.Error{Message: "Yuareli iwe neno"}
+					return &object.Error{Message: "URL must be a string"}
 				}
 				url = strUrl
-			case "vichwa":
+			case "headers":
 				dictHead, ok := v.(*object.Dict)
 				if !ok {
-					return &object.Error{Message: "Vichwa lazima viwe kamusi"}
+					return &object.Error{Message: "Headers must be a dictionary"}
 				}
 				headers = dictHead
-			case "mwili":
+			case "body":
 				dictHead, ok := v.(*object.Dict)
 				if !ok {
-					return &object.Error{Message: "Mwili lazima iwe kamusi"}
+					return &object.Error{Message: "Body must be a dictionary"}
 				}
 				params = dictHead
 			default:
-				return &object.Error{Message: "Hoja si sahihi. Tumia yuareli na vichwa."}
+				return &object.Error{Message: "Arguments are incorrect. Use url and headers."}
 			}
 		}
 		if url.Value == "" {
-			return &object.Error{Message: "Yuareli ni lazima"}
+			return &object.Error{Message: "URL is required"}
 		}
 		var responseBody *bytes.Buffer
 		if params != nil {
@@ -161,7 +159,7 @@ func postRequest(args []object.Object, defs map[string]object.Object) object.Obj
 			jsonBody, err := json.Marshal(booty)
 
 			if err != nil {
-				return &object.Error{Message: "Huku format query yako vizuri."}
+				return &object.Error{Message: "Your query is not formatted properly."}
 			}
 
 			responseBody = bytes.NewBuffer(jsonBody)
@@ -174,7 +172,7 @@ func postRequest(args []object.Object, defs map[string]object.Object) object.Obj
 			req, err = http.NewRequest("POST", url.Value, nil)
 		}
 		if err != nil {
-			return &object.Error{Message: "Tumeshindwa kufanya request"}
+			return &object.Error{Message: "Failed to make the request"}
 		}
 		if headers != nil {
 			for _, val := range headers.Pairs {
@@ -188,14 +186,14 @@ func postRequest(args []object.Object, defs map[string]object.Object) object.Obj
 		resp, err := client.Do(req)
 
 		if err != nil {
-			return &object.Error{Message: "Tumeshindwa kutuma request."}
+			return &object.Error{Message: "Failed to send the request."}
 		}
 		defer resp.Body.Close()
 		respBody, err := ioutil.ReadAll(resp.Body)
 		if err != nil {
-			return &object.Error{Message: "Tumeshindwa kusoma majibu."}
+			return &object.Error{Message: "Failed to read the response."}
 		}
 		return &object.String{Value: string(respBody)}
 	}
-	return &object.Error{Message: "Hoja si sahihi. Tumia yuareli na vichwa."}
+	return &object.Error{Message: "Arguments are incorrect. Use url and headers."}
 }
