@@ -179,13 +179,13 @@ func (ie *IfExpression) expressionNode()      {}
 func (ie *IfExpression) TokenLiteral() string { return ie.Token.Literal }
 func (ie *IfExpression) String() string {
 	var out bytes.Buffer
-	out.WriteString("kama")
+	out.WriteString("if")
 	out.WriteString(ie.Condition.String())
 	out.WriteString(" ")
 	out.WriteString(ie.Consequence.String())
 
 	if ie.Alternative != nil {
-		out.WriteString("sivyo")
+		out.WriteString("else")
 		out.WriteString(ie.Alternative.String())
 	}
 
@@ -506,9 +506,9 @@ func (ce *CaseExpression) String() string {
 	var out bytes.Buffer
 
 	if ce.Default {
-		out.WriteString("kawaida ")
+		out.WriteString("default ")
 	} else {
-		out.WriteString("ikiwa ")
+		out.WriteString("case ")
 
 		tmp := []string{}
 		for _, exp := range ce.Expr {
@@ -607,7 +607,7 @@ func (p *Package) TokenLiteral() string { return p.Token.Literal }
 func (p *Package) String() string {
 	var out bytes.Buffer
 
-	out.WriteString("pakeji " + p.Name.Value + "\n")
+	out.WriteString("package " + p.Name.Value + "\n")
 	out.WriteString("::\n")
 	for _, s := range p.Block.Statements {
 		out.WriteString(s.String())
