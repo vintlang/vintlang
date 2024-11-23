@@ -45,26 +45,26 @@ func (ao *Array) Reset() {
 
 func (a *Array) Method(method string, args []Object) Object {
 	switch method {
-	case "idadi":
+	case "length":
 		return a.len(args)
-	case "sukuma":
+	case "push":
 		return a.push(args)
-	case "yamwisho":
+	case "last":
 		return a.last()
-	case "unga":
+	case "join":
 		return a.join(args)
-	case "chuja":
+	case "filter":
 		return a.filter(args)
-	case "tafuta":
+	case "find":
 		return a.find(args)
 	default:
-		return newError("Samahani, kiendesha hiki hakitumiki na tungo (Neno)")
+		return newError("Sorry, the method '%s' is not supported for this object.", method)
 	}
 }
 
 func (a *Array) len(args []Object) Object {
 	if len(args) != 0 {
-		return newError("Samahani, tunahitaji Hoja 0, wewe umeweka %d", len(args))
+		return newError("Error: Expected 0 arguments, but got %d.", len(args))
 	}
 	return &Integer{Value: int64(len(a.Elements))}
 }
@@ -84,7 +84,7 @@ func (a *Array) push(args []Object) Object {
 
 func (a *Array) join(args []Object) Object {
 	if len(args) > 1 {
-		return newError("Samahani, tunahitaji Hoja 1 au 0, wewe umeweka %d", len(args))
+		return newError("Error: Expected at most 1 argument, but got %d.", len(args))
 	}
 	if len(a.Elements) > 0 {
 		glue := ""
@@ -104,7 +104,7 @@ func (a *Array) join(args []Object) Object {
 
 func (a *Array) filter(args []Object) Object {
 	if len(args) != 1 {
-		return newError("Samahani, idadi ya hoja sii sahihi")
+		return newError("Error: Expected exactly 1 argument, but got %d.", len(args))
 	}
 
 	dummy := []Object{}
@@ -119,7 +119,7 @@ func (a *Array) filter(args []Object) Object {
 
 func (a *Array) find(args []Object) Object {
 	if len(args) != 1 {
-		return newError("Samahani, idadi ya hoja sii sahihi")
+		return newError("Error: Expected exactly 1 argument, but got %d.", len(args))
 	}
 
 	for _, obj := range a.Elements {

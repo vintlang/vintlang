@@ -6,9 +6,9 @@ type Boolean struct {
 
 func (b *Boolean) Inspect() string {
 	if b.Value {
-		return "kweli"
+		return "true"
 	} else {
-		return "sikweli"
+		return "false"
 	}
 }
 func (b *Boolean) Type() ObjectType { return BOOLEAN_OBJ }
