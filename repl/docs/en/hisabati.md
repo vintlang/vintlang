@@ -10,13 +10,13 @@ To use the `hisabati` in-built module follow the steps below:
 
 1. You directly import the `hisabati` in-built module and any required in-built modules in your Nuru code using the `tumia` keyword.
 
-   ```nuru
+   ```vint
    tumia hisabati
    ```
 
 2. Calling the in-built module methods:
 
-   ```nuru
+   ```vint
    andika(hisabati.e())
    ```
 

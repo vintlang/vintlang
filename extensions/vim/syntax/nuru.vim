@@ -1,51 +1,51 @@
-" Sintaksia ya nuru kwenye programu ya "vim"
+" Sintaksia ya vint kwenye programu ya "vim"
 " Lugha: Nuru
 
 " Maneno tengwa
-syntax keyword nuruKeyword unda pakeji rudisha vunja endelea tupu
-syntax keyword nuruType fanya
-syntax keyword nuruBool kweli sikweli
-syntax keyword nuruConditional kama sivyo au
-syntax match nuruComparision /[!\|<>]/
-syntax keyword nuruLoop ktk while badili
-syntax keyword nuruLabel ikiwa kawaida
+syntax keyword vintKeyword unda pakeji rudisha vunja endelea tupu
+syntax keyword vintType fanya
+syntax keyword vintBool kweli sikweli
+syntax keyword vintConditional kama sivyo au
+syntax match vintComparision /[!\|<>]/
+syntax keyword vintLoop ktk while badili
+syntax keyword vintLabel ikiwa kawaida
 
 " Nambari
-syntax match nuruInt '[+-]\d\+' contained display
-syntax match nuruFloat '[+-]\d+\.\d*' contained display
+syntax match vintInt '[+-]\d\+' contained display
+syntax match vintFloat '[+-]\d+\.\d*' contained display
 
 " Viendeshaji
-syntax match nuruAssignment '='
-syntax match nuruLogicalOP /[\&!|]/
+syntax match vintAssignment '='
+syntax match vintLogicalOP /[\&!|]/
 
 " Vitendakazi 
-syntax keyword nuruFunction andika aina jaza fungua
+syntax keyword vintFunction andika aina jaza fungua
 
 " Tungo
-syntax region nuruString start=/"/ skip=/\\"/ end=/"/
-syntax region nuruString start=/'/ skip=/\\'/ end=/'/
+syntax region vintString start=/"/ skip=/\\"/ end=/"/
+syntax region vintString start=/'/ skip=/\\'/ end=/'/
 
 " Maoni
-syntax match nuruComment "//.*"
-syntax region nuruComment start="/\*" end="\*/"
+syntax match vintComment "//.*"
+syntax region vintComment start="/\*" end="\*/"
 
 " Fafanua sintaksia
-let b:current_syntax = "nuru"
+let b:current_syntax = "vint"
 
-highlight def link nuruComment Comment
-highlight def link nuruBool Boolean
-highlight def link nuruFunction Function
-highlight def link nuruComparision Conditional
-highlight def link nuruConditional Conditional
-highlight def link nuruKeyword Keyword
-highlight def link nuruString String
-highlight def link nuruVariable Identifier
-highlight def link nuruLoop Repeat
-highlight def link nuruInt Number
-highlight def link nuruFloat Float
-highlight def link nuruAssignment Operator
-highlight def link nuruLogicalOP Operator
-highlight def link nuruAriOP Operator
-highlight def link nuruType Type
-highlight def link nuruLabel Label
+highlight def link vintComment Comment
+highlight def link vintBool Boolean
+highlight def link vintFunction Function
+highlight def link vintComparision Conditional
+highlight def link vintConditional Conditional
+highlight def link vintKeyword Keyword
+highlight def link vintString String
+highlight def link vintVariable Identifier
+highlight def link vintLoop Repeat
+highlight def link vintInt Number
+highlight def link vintFloat Float
+highlight def link vintAssignment Operator
+highlight def link vintLogicalOP Operator
+highlight def link vintAriOP Operator
+highlight def link vintType Type
+highlight def link vintLabel Label
 
