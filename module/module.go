@@ -9,5 +9,5 @@ func init() {
 	Mapper["time"] = &object.Module{Name: "time", Functions: TimeFunctions}
 	Mapper["net"] = &object.Module{Name: "net", Functions: NetFunctions}
 	Mapper["json"] = &object.Module{Name: "json", Functions: JsonFunctions}
-	Mapper["math"] = &object.Module{Name: "hisabati", Functions: MathFunctions}
+	Mapper["math"] = &object.Module{Name: "math", Functions: MathFunctions}
 }
