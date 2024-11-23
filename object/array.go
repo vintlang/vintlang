@@ -64,7 +64,7 @@ func (a *Array) Method(method string, args []Object) Object {
 
 func (a *Array) len(args []Object) Object {
 	if len(args) != 0 {
-		return newError("Error: Expected 0 arguments, but got %d.", len(args))
+		return newError("Expected 0 arguments, but got %d.", len(args))
 	}
 	return &Integer{Value: int64(len(a.Elements))}
 }
@@ -84,7 +84,7 @@ func (a *Array) push(args []Object) Object {
 
 func (a *Array) join(args []Object) Object {
 	if len(args) > 1 {
-		return newError("Error: Expected at most 1 argument, but got %d.", len(args))
+		return newError("Expected at most 1 argument, but got %d.", len(args))
 	}
 	if len(a.Elements) > 0 {
 		glue := ""
@@ -104,7 +104,7 @@ func (a *Array) join(args []Object) Object {
 
 func (a *Array) filter(args []Object) Object {
 	if len(args) != 1 {
-		return newError("Error: Expected exactly 1 argument, but got %d.", len(args))
+		return newError("Expected exactly 1 argument, but got %d.", len(args))
 	}
 
 	dummy := []Object{}
@@ -119,7 +119,7 @@ func (a *Array) filter(args []Object) Object {
 
 func (a *Array) find(args []Object) Object {
 	if len(args) != 1 {
-		return newError("Error: Expected exactly 1 argument, but got %d.", len(args))
+		return newError("Expected exactly 1 argument, but got %d.", len(args))
 	}
 
 	for _, obj := range a.Elements {

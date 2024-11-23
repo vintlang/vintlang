@@ -7,6 +7,7 @@ import (
 	"strings"
 )
 
+// String represents a string object in the system
 type String struct {
 	Value  string
 	offset int
@@ -14,12 +15,13 @@ type String struct {
 
 func (s *String) Inspect() string  { return s.Value }
 func (s *String) Type() ObjectType { return STRING_OBJ }
+
 func (s *String) HashKey() HashKey {
 	h := fnv.New64a()
 	h.Write([]byte(s.Value))
-
 	return HashKey{Type: s.Type(), Value: h.Sum64()}
 }
+
 func (s *String) Next() (Object, Object) {
 	offset := s.offset
 	if len(s.Value) > offset {
@@ -28,9 +30,11 @@ func (s *String) Next() (Object, Object) {
 	}
 	return nil, nil
 }
+
 func (s *String) Reset() {
 	s.offset = 0
 }
+
 func (s *String) Method(method string, args []Object) Object {
 	switch method {
 	case "len":
@@ -44,132 +48,126 @@ func (s *String) Method(method string, args []Object) Object {
 	case "format":
 		return s.format(args)
 	default:
-		return newError("Samahani, kiendesha hiki hakitumiki na tungo (Neno)")
+		return newError("Method '%s' is not supported on strings", method)
 	}
 }
 
 func (s *String) len(args []Object) Object {
 	if len(args) != 0 {
-		return newError("Samahani, tunahitaji Hoja 0, wewe umeweka %d", len(args))
+		return newError("Expected 0 arguments, but got %d", len(args))
 	}
 	return &Integer{Value: int64(len(s.Value))}
 }
 
 func (s *String) upper(args []Object) Object {
 	if len(args) != 0 {
-		return newError("Samahani, tunahitaji Hoja 0, wewe umeweka %d", len(args))
+		return newError("Expected 0 arguments, but got %d", len(args))
 	}
 	return &String{Value: strings.ToUpper(s.Value)}
 }
 
 func (s *String) lower(args []Object) Object {
 	if len(args) != 0 {
-		return newError("Samahani, tunahitaji Hoja 0, wewe umeweka %d", len(args))
+		return newError("Expected 0 arguments, but got %d", len(args))
 	}
 	return &String{Value: strings.ToLower(s.Value)}
 }
 
 func (s *String) split(args []Object) Object {
 	if len(args) > 1 {
-		return newError("Samahani, tunahitaji Hoja 1 au 0, wewe umeweka %d", len(args))
+		return newError("Expected 1 or 0 arguments, but got %d", len(args))
 	}
 	sep := " "
 	if len(args) == 1 {
-		sep = args[0].(*String).Value
+		strArg, ok := args[0].(*String)
+		if !ok {
+			return newError("Expected argument of type STRING, but got %s", args[0].Type())
+		}
+		sep = strArg.Value
 	}
 	parts := strings.Split(s.Value, sep)
-	length := len(parts)
-	elements := make([]Object, length)
-	for k, v := range parts {
-		elements[k] = &String{Value: v}
+	elements := make([]Object, len(parts))
+	for i, v := range parts {
+		elements[i] = &String{Value: v}
 	}
 	return &Array{Elements: elements}
 }
 
 func (s *String) format(args []Object) Object {
 	value, err := formatStr(s.Value, args)
-
 	if err != nil {
 		return newError(err.Error())
 	}
-
 	return &String{Value: value}
 }
 
 func formatStr(format string, options []Object) (string, error) {
-	var str strings.Builder
-	var val strings.Builder
-	var check_val bool
-	var opts_len int = len(options)
-
-	var escapeChar bool
+	var str, val strings.Builder
+	checkVal := false
+	escapeChar := false
+	optsLen := len(options)
 
 	type optM struct {
-		val bool
-		obj Object
+		used bool
+		obj  Object
 	}
 
-	var optionsMap = make(map[int]optM, opts_len)
-
-	for i, optm := range options {
-		optionsMap[i] = optM{val: false, obj: optm}
+	optionsMap := make(map[int]optM, optsLen)
+	for i, opt := range options {
+		optionsMap[i] = optM{used: false, obj: opt}
 	}
 
-	for _, opt := range format {
-
-		if !escapeChar && opt == '\\' {
+	for _, ch := range format {
+		if !escapeChar && ch == '\\' {
 			escapeChar = true
 			continue
 		}
 
-		if opt == '{' && !escapeChar {
-			check_val = true
+		if ch == '{' && !escapeChar {
+			checkVal = true
 			continue
 		}
 
 		if escapeChar {
-			if opt != '{' && opt != '}' {
+			if ch != '{' && ch != '}' {
 				str.WriteRune('\\')
 			}
 			escapeChar = false
 		}
 
-		if check_val && opt == '}' {
-			vstr := strings.TrimSpace(val.String())
-			arrv, err := strconv.Atoi(vstr)
+		if checkVal && ch == '}' {
+			index, err := strconv.Atoi(strings.TrimSpace(val.String()))
 			if err != nil {
-				return "", fmt.Errorf(fmt.Sprintf("Ulichopeana si NAMBA, jaribu tena: `%s'", vstr))
+				return "", fmt.Errorf("invalid placeholder: `%s` is not a number", val.String())
+			}
+			if index >= optsLen {
+				return "", fmt.Errorf("placeholder index %d exceeds available arguments (%d)", index, optsLen)
 			}
 
-			oVal, exists := optionsMap[arrv]
+			opt := optionsMap[index]
+			str.WriteString(opt.obj.Inspect())
+			optionsMap[index] = optM{used: true, obj: opt.obj}
 
-			if !exists {
-				return "", fmt.Errorf(fmt.Sprintf("Nambari ya chaguo unalolitaka %d ni kubwa kuliko ulizopeana (%d)", arrv, opts_len))
-			}
-
-			str.WriteString(oVal.obj.Inspect())
-			optionsMap[arrv] = optM{val: true, obj: oVal.obj}
-
-			check_val = false
+			checkVal = false
 			val.Reset()
 			continue
 		}
 
-		if check_val {
-			val.WriteRune(opt)
+		if checkVal {
+			val.WriteRune(ch)
 			continue
 		}
 
-		str.WriteRune(opt)
+		str.WriteRune(ch)
 	}
 
-	if check_val {
-		return "", fmt.Errorf(fmt.Sprintf("Haukufunga '{', tuliokota kabla ya kufika mwisho `%s'", val.String()))
+	if checkVal {
+		return "", fmt.Errorf("unmatched '{' detected: `%s`", val.String())
 	}
 
-	for _, v := range optionsMap {
-		if !v.val {
-			return "", fmt.Errorf(fmt.Sprintf("Ulipeana hili chaguo (%s) {%s} lakini haukutumia", v.obj.Inspect(), v.obj.Type()))
+	for i, opt := range optionsMap {
+		if !opt.used {
+			return "", fmt.Errorf("argument at index %d (%s) was provided but not used", i, opt.obj.Inspect())
 		}
 	}
 
