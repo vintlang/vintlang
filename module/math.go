@@ -5,7 +5,7 @@ import (
 	"math/rand"
 	"time"
 
-	"github.com/NuruProgramming/Nuru/object"
+	"github.com/ekilie/vint-lang/object"
 )
 
 var MathFunctions = map[string]object.ModuleFunction{

@@ -1,8 +1,8 @@
 package evaluator
 
 import (
-	"github.com/NuruProgramming/Nuru/ast"
-	"github.com/NuruProgramming/Nuru/object"
+	"github.com/ekilie/vint-lang/ast"
+	"github.com/ekilie/vint-lang/object"
 )
 
 func evalIfExpression(ie *ast.IfExpression, env *object.Environment) object.Object {

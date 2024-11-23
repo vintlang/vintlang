@@ -8,14 +8,14 @@ import (
 	"strings"
 
 	prompt "github.com/AvicennaJr/GoPrompt"
-	"github.com/NuruProgramming/Nuru/evaluator"
-	"github.com/NuruProgramming/Nuru/lexer"
-	"github.com/NuruProgramming/Nuru/object"
-	"github.com/NuruProgramming/Nuru/parser"
-	"github.com/NuruProgramming/Nuru/styles"
 	"github.com/charmbracelet/bubbles/list"
 	tea "github.com/charmbracelet/bubbletea"
 	"github.com/charmbracelet/lipgloss"
+	"github.com/ekilie/vint-lang/evaluator"
+	"github.com/ekilie/vint-lang/lexer"
+	"github.com/ekilie/vint-lang/object"
+	"github.com/ekilie/vint-lang/parser"
+	"github.com/ekilie/vint-lang/styles"
 	zone "github.com/lrstanley/bubblezone"
 )
 
