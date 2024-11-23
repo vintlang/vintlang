@@ -1,6 +1,6 @@
 package evaluator
 
-import "github.com/NuruProgramming/Nuru/object"
+import "github.com/ekilie/vint-lang/object"
 
 func evalIndexExpression(left, index object.Object, line int) object.Object {
 	switch {

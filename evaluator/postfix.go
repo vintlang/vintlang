@@ -1,8 +1,8 @@
 package evaluator
 
 import (
-	"github.com/NuruProgramming/Nuru/ast"
-	"github.com/NuruProgramming/Nuru/object"
+	"github.com/ekilie/vint-lang/ast"
+	"github.com/ekilie/vint-lang/object"
 )
 
 func evalPostfixExpression(env *object.Environment, operator string, node *ast.PostfixExpression) object.Object {

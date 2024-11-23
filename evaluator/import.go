@@ -6,11 +6,11 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/NuruProgramming/Nuru/ast"
-	"github.com/NuruProgramming/Nuru/lexer"
-	"github.com/NuruProgramming/Nuru/module"
-	"github.com/NuruProgramming/Nuru/object"
-	"github.com/NuruProgramming/Nuru/parser"
+	"github.com/ekilie/vint-lang/ast"
+	"github.com/ekilie/vint-lang/lexer"
+	"github.com/ekilie/vint-lang/module"
+	"github.com/ekilie/vint-lang/object"
+	"github.com/ekilie/vint-lang/parser"
 )
 
 var searchPaths []string

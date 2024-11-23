@@ -1,6 +1,6 @@
 package module
 
-import "github.com/NuruProgramming/Nuru/object"
+import "github.com/ekilie/vint-lang/object"
 
 var Mapper = map[string]*object.Module{}
 
