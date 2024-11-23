@@ -48,14 +48,14 @@ _testmain.go
 
 testbinaries/
 tests_random/
-nuru
+vint
 Notes.md
 tutorials/en/*
 config.json
 *local*
 
 # For Nuru executables
-/nuru
+/vint
 /Nuru
 
 dist/

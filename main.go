@@ -55,18 +55,18 @@ func main() {
 			if strings.HasSuffix(file, ".vint") {
 				contents, err := os.ReadFile(file)
 				if err != nil {
-					fmt.Println(styles.ErrorStyle.Render("Error: vint imeshindwa kusoma faili: ", args[1]))
+					fmt.Println(styles.ErrorStyle.Render("Error: vint Failed to read the file: ", args[1]))
 					os.Exit(1)
 				}
 
 				repl.Read(string(contents))
 			} else {
-				fmt.Println(styles.ErrorStyle.Render("'"+file+"'", "sii faili sahihi. Tumia faili la '.vint' "))
+				fmt.Println(styles.ErrorStyle.Render("'"+file+"'", "is not a correct file type use '.vint' "))
 				os.Exit(1)
 			}
 		}
 	} else {
-		fmt.Println(styles.ErrorStyle.Render("Error: Operesheni imeshindikana boss."))
+		fmt.Println(styles.ErrorStyle.Render("Error: Operation failed."))
 		fmt.Println(Help)
 		os.Exit(1)
 	}

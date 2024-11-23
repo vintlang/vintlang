@@ -11,9 +11,9 @@ import (
 var TimeFunctions = map[string]object.ModuleFunction{}
 
 func init() {
-	TimeFunctions["hasahivi"] = now
-	TimeFunctions["lala"] = sleep
-	TimeFunctions["tangu"] = since
+	TimeFunctions["now"] = now
+	TimeFunctions["sleep"] = sleep
+	TimeFunctions["since"] = since
 }
 
 func now(args []object.Object, defs map[string]object.Object) object.Object {

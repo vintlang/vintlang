@@ -314,9 +314,9 @@ jina = "avicenna"
 
 kwa i ktk jina {andika(i)}
 
-a = "nuru"
+a = "vint"
 
-andika(a == "nuru") // kweli
+andika(a == "vint") // kweli
 
 andika(a == "mambo") // sikweli
 
@@ -324,15 +324,15 @@ a = "mambo"
 a.idadi() // 5
 
 a = "NURU"
-a.herufindogo() // nuru
+a.herufindogo() // vint
 
-a = "nuru mambo habari"
+a = "vint mambo habari"
 b = a.gawa()
-andika(b) // ["nuru", "mambo", "habari"]
+andika(b) // ["vint", "mambo", "habari"]
 
-a = "nuru,mambo,habari"
+a = "vint,mambo,habari"
 b = a.gawa(",")
-andika(b) // ["nuru", "mambo", "habari"]
+andika(b) // ["vint", "mambo", "habari"]
 
 a = 2
 

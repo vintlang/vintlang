@@ -89,9 +89,9 @@ Output
 You can compare two strings using the == operator:
 
 ```s
-fanya a = "nuru"
+fanya a = "vint"
 
-andika(a == "nuru") // kweli
+andika(a == "vint") // kweli
 
 andika(a == "mambo") // sikweli
 ```
@@ -112,7 +112,7 @@ a.idadi() // 5
 This method converts a string to uppercase. It does not accept any parameters.
 
 ```s
-fanya a = "nuru"
+fanya a = "vint"
 a.herufikubwa() // NURU
 ```
 
@@ -122,7 +122,7 @@ This method converts a string to lowercase. It does not accept any parameters.
 
 ```s
 fanya a = "NURU"
-a.herufindogo() // nuru
+a.herufindogo() // vint
 ```
 
 ### gawa
@@ -132,17 +132,17 @@ The gawa method splits a string into an array based on a specified delimiter. If
 Example without a parameter:
 
 ```s
-fanya a = "nuru mambo habari"
+fanya a = "vint mambo habari"
 fanya b = a.gawa()
-andika(b) // ["nuru", "mambo", "habari"]
+andika(b) // ["vint", "mambo", "habari"]
 ```
 
 Example with a parameter:
 
 ```s
-fanya a = "nuru,mambo,habari"
+fanya a = "vint,mambo,habari"
 fanya b = a.gawa(",")
-andika(b) // ["nuru", "mambo", "habari"]
+andika(b) // ["vint", "mambo", "habari"]
 ```
 
 By understanding strings and their manipulation in Nuru, you can effectively work with text data in your programs.
