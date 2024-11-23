@@ -1,5 +1,4 @@
 package repl
-
 import (
 	"embed"
 	"fmt"
@@ -38,7 +37,6 @@ func Read(contents string) {
 		for _, msg := range p.Errors() {
 			fmt.Println("\t" + styles.ErrorStyle.Render(msg))
 		}
-
 	}
 	evaluated := evaluator.Eval(program, env)
 	if evaluated != nil {
@@ -46,7 +44,6 @@ func Read(contents string) {
 			fmt.Println(styles.ReplStyle.Render(evaluated.Inspect()))
 		}
 	}
-
 }
 
 func Start() {
@@ -90,7 +87,6 @@ func (d *dummy) executor(in string) {
 			fmt.Println(styles.ReplStyle.Render(evaluated.Inspect()))
 		}
 	}
-
 }
 
 func completer(in prompt.Document) []prompt.Suggest {
@@ -100,8 +96,8 @@ func completer(in prompt.Document) []prompt.Suggest {
 func Docs() {
 	zone.NewGlobal()
 
+	// Removed the Swahili language option
 	languageChoice := []list.Item{
-		languages{title: "Kiswahili", desc: "Soma nyaraka kwa Kiswahili", dir: "sw"},
 		languages{title: "English", desc: "Read documentation in English", dir: "en"},
 	}
 
@@ -145,26 +141,5 @@ var (
 		item{title: "Switch", desc: "🧭 Navigate complex scenarios with 'switch' in Nuru", filename: "switch.md"},
 		item{title: "Time", desc: "⏰ Manage time with ease in Nuru", filename: "time.md"},
 		item{title: "While", desc: "⌛ Learn the art of patience with 'while' loops in Nuru", filename: "while.md"},
-	}
-
-	kiswahiliItems = []list.Item{
-		item{title: "Maoni Katika Nuru", desc: "💬 Toa mawazo yako na maoni (comments) katika Nuru", filename: "maoni.md"},
-		item{title: "Vitambulishi", desc: "🔖 Toa utambulisho wa kipekee kwa vigezo vyako katika Nuru", filename: "identifiers.md"},
-		item{title: "Nambari", desc: "🔢 Gundua uchawi wa nambari katika Nuru", filename: "numbers.md"},
-		item{title: "Maneno", desc: "🎼 Tunga hadithi kwa kutumia maneno katika Nuru", filename: "strings.md"},
-		item{title: "Kamusi", desc: "📚 Fungua maarifa ya kamusi katika Nuru", filename: "dictionaries.md"},
-		item{title: "Buliani", desc: "👍👎 Kuwa mtaalam wa ulimwengu wa 'if' na 'else' kwa kutumia bool", filename: "bools.md"},
-		item{title: "Tupu", desc: "🌌 Kubali utupu na Null katika Nuru", filename: "null.md"},
-		item{title: "Safu", desc: "🚀 Fungua nguvu za safu (arrays) katika Nuru", filename: "arrays.md"},
-		item{title: "Kwa", desc: "🔄 Rudia kama mtaalam kwa kutumia 'kwa' katika Nuru", filename: "for.md"},
-		item{title: "Wakati", desc: "⌛ Jifunze sanaa ya subira na vitanzi vya 'wakati' katika Nuru", filename: "while.md"},
-		item{title: "Undo", desc: "🔧 Unda kazi zenye nguvu katika Nuru", filename: "function.md"},
-		item{title: "Badili", desc: "🧭 Elekeza hali ngumu kwa kutumia 'badili' katika Nuru", filename: "switch.md"},
-		item{title: "Faili", desc: "💾 Shughulikia faili kwa urahisi katika Nuru", filename: "files.md"},
-		item{title: "Muda", desc: "⏰ Simamia muda kwa urahisi katika Nuru", filename: "time.md"},
-		item{title: "JSON", desc: "📄 Kuwa mtaalam wa sanaa ya JSON katika Nuru", filename: "json.md"},
-		item{title: "Mtandao", desc: "🌐 Chunguza ulimwengu wa mitandao katika Nuru", filename: "net.md"},
-		item{title: "Vifurushi", desc: "📦 Tumia nguvu za vifurushi katika Nuru", filename: "packages.md"},
-		item{title: "Vijenzi", desc: "💡 Funua siri za kazi za kujengwa katika Nuru", filename: "builtins.md"},
 	}
 )
