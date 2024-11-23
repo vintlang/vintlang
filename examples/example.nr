@@ -100,7 +100,7 @@ salamu = unda() {
 
 salamu()
 
-aina(2) // Output: "NAMBA"
+aina(2) // Output: "NAMBA" 
 aina("Nuru") // Output: "NENO"
 
 

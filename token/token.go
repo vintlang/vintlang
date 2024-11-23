@@ -1,5 +1,3 @@
-// This is where we define our tokens
-
 package token
 
 type TokenType string
@@ -81,25 +79,25 @@ const (
 )
 
 var keywords = map[string]TokenType{
-	"unda":    FUNCTION,
-	"fanya":   LET,
-	"kweli":   TRUE,
-	"sikweli": FALSE,
-	"kama":    IF,
-	"au":      ELSE,
+	"func":    FUNCTION,
+	"let":   LET,
+	"true":   TRUE,
+	"false": FALSE,
+	"if":    IF,
+	"else":      ELSE,
 	"sivyo":   ELSE,
-	"wakati":  WHILE,
-	"rudisha": RETURN,
-	"vunja":   BREAK,
-	"endelea": CONTINUE,
-	"tupu":    NULL,
-	"ktk":     IN,
-	"kwa":     FOR,
-	"badili":  SWITCH,
-	"ikiwa":   CASE,
-	"kawaida": DEFAULT,
-	"tumia":   IMPORT,
-	"pakeji":  PACKAGE,
+	"while":  WHILE,
+	"return": RETURN,
+	"break":   BREAK,
+	"continue": CONTINUE,
+	"nil":    NULL,
+	"in":     IN,
+	"for":     FOR,
+	"switch":  SWITCH,
+	"case":   CASE,
+	"default": DEFAULT,
+	"import":   IMPORT,
+	"package":  PACKAGE,
 	"@":       AT,
 }
 
