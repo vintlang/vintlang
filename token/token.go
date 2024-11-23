@@ -9,14 +9,14 @@ type Token struct {
 }
 
 const (
-	ILLEGAL = "HARAMU"
-	EOF     = "MWISHO"
+	ILLEGAL = "ILLEGAL"
+	EOF     = "EOF"
 
 	// Identifiers + literals
-	IDENT  = "KITAMBULISHI"
-	INT    = "NAMBA"
-	STRING = "NENO"
-	FLOAT  = "DESIMALI"
+	IDENT  = "IDENT"
+	INT    = "INT"
+	STRING = "STRING"
+	FLOAT  = "FLOAT"
 
 	// Operators
 	ASSIGN          = "="
@@ -44,7 +44,7 @@ const (
 	MODULUS_ASSIGN  = "%="
 	SHEBANG         = "#!"
 
-	//Delimiters
+	// Delimiters
 	COMMA     = ","
 	SEMICOLON = ";"
 	LPAREN    = "("
@@ -59,45 +59,44 @@ const (
 
 	// Keywords
 	FUNCTION = "FUNCTION"
-	LET      = "FANYA"
-	TRUE     = "KWELI"
-	FALSE    = "SIKWELI"
-	IF       = "KAMA"
-	ELSE     = "SIVYO"
-	RETURN   = "RUDISHA"
-	WHILE    = "WAKATI"
-	NULL     = "TUPU"
-	BREAK    = "VUNJA"
-	CONTINUE = "ENDELEA"
-	IN       = "KTK"
-	FOR      = "KWA"
-	SWITCH   = "BADILI"
-	CASE     = "IKIWA"
-	DEFAULT  = "KAWAIDA"
-	IMPORT   = "TUMIA"
-	PACKAGE  = "PAKEJI"
+	LET      = "LET"
+	TRUE     = "TRUE"
+	FALSE    = "FALSE"
+	IF       = "IF"
+	ELSE     = "ELSE"
+	RETURN   = "RETURN"
+	WHILE    = "WHILE"
+	NULL     = "NULL"
+	BREAK    = "BREAK"
+	CONTINUE = "CONTINUE"
+	IN       = "IN"
+	FOR      = "FOR"
+	SWITCH   = "SWITCH"
+	CASE     = "CASE"
+	DEFAULT  = "DEFAULT"
+	IMPORT   = "IMPORT"
+	PACKAGE  = "PACKAGE"
 )
 
 var keywords = map[string]TokenType{
 	"func":    FUNCTION,
-	"let":   LET,
-	"true":   TRUE,
-	"false": FALSE,
-	"if":    IF,
-	"else":      ELSE,
-	"sivyo":   ELSE,
-	"while":  WHILE,
-	"return": RETURN,
+	"let":     LET,
+	"true":    TRUE,
+	"false":   FALSE,
+	"if":      IF,
+	"else":    ELSE,
+	"while":   WHILE,
+	"return":  RETURN,
 	"break":   BREAK,
 	"continue": CONTINUE,
-	"nil":    NULL,
-	"in":     IN,
+	"nil":     NULL,
+	"in":      IN,
 	"for":     FOR,
 	"switch":  SWITCH,
-	"case":   CASE,
+	"case":    CASE,
 	"default": DEFAULT,
-	"import":   IMPORT,
-	"package":  PACKAGE,
+	"import":  IMPORT,
+	"package": PACKAGE,
 	"@":       AT,
 }
 
