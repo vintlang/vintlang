@@ -14,5 +14,5 @@ type Package struct {
 
 func (p *Package) Type() ObjectType { return PACKAGE_OBJ }
 func (p *Package) Inspect() string {
-	return fmt.Sprintf("Pakeji: %s", p.Name.Value)
+	return fmt.Sprintf("package: %s", p.Name.Value)
 }

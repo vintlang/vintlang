@@ -33,15 +33,15 @@ func (s *String) Reset() {
 }
 func (s *String) Method(method string, args []Object) Object {
 	switch method {
-	case "idadi":
+	case "len":
 		return s.len(args)
-	case "herufikubwa":
+	case "upper":
 		return s.upper(args)
-	case "herufindogo":
+	case "lower":
 		return s.lower(args)
-	case "gawa":
+	case "split":
 		return s.split(args)
-	case "panga":
+	case "format":
 		return s.format(args)
 	default:
 		return newError("Samahani, kiendesha hiki hakitumiki na tungo (Neno)")

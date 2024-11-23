@@ -1,18 +1,23 @@
-name = "Vint"
+package main{
+    name = "Vint"
 
-let age = "20"
+    let s = name.split("")
+    print(s)
 
-height = "6.0" //in feats
+    let age = "20"
 
-print("my name is "+name)
+    height = "6.0" //in feats
 
-let printStmt = func(name,age,height){
-    print("My name is "+name+" I am "+age+" old and my height is "+height)
+    print("my name is "+name)
+
+    let printStmt = func(name,age,height){
+        print("My name is "+name+" I am "+age+" old and my height is "+height)
+    }
+
+    //calling the function 
+    printStmt(name,age,height)
+
+    height = "7"
+    printStmt(name,age,height)
 }
-
-//calling the function 
-printStmt(name,age,height)
-
-height = "7"
-printStmt(name,age,height)
 
