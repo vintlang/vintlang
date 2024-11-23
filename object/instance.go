@@ -9,5 +9,5 @@ type Instance struct {
 
 func (i *Instance) Type() ObjectType { return INSTANCE }
 func (i *Instance) Inspect() string {
-	return fmt.Sprintf("Pakeji: %s", i.Package.Name.Value)
+	return fmt.Sprintf("Package: %s", i.Package.Name.Value)
 }
