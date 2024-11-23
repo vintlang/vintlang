@@ -2,40 +2,40 @@ VERSION=0.5.1
 
 build_linux:
 	@echo 'building linux binary...'
-	env GOOS=linux GOARCH=amd64 go build -ldflags="-s -w" -o nuru
+	env GOOS=linux GOARCH=amd64 go build -ldflags="-s -w" -o vint
 	@echo 'shrinking binary...'
-	./upx --brute nuru
+	./upx --brute vint
 	@echo 'zipping build....'
-	tar -zcvf nuru_linux_amd64_v${VERSION}.tar.gz nuru
+	tar -zcvf vint_linux_amd64_v${VERSION}.tar.gz vint
 	@echo 'cleaning up...'
-	rm nuru
+	rm vint
 
 build_windows:
 	@echo 'building windows executable...'
-	env GOOS=windows GOARCH=amd64 go build -ldflags="-s -w" -o nuru_windows_amd64_v${VERSION}.exe
+	env GOOS=windows GOARCH=amd64 go build -ldflags="-s -w" -o vint_windows_amd64_v${VERSION}.exe
 	@echo 'shrinking build...'
-	./upx --brute nuru_windows_amd64_v${VERSION}.exe
+	./upx --brute vint_windows_amd64_v${VERSION}.exe
 
 build_mac:
 	@echo 'building mac binary...'
-	env GOOS=darwin GOARCH=amd64 go build -ldflags="-s -w" -o nuru
+	env GOOS=darwin GOARCH=amd64 go build -ldflags="-s -w" -o vint
 	@echo 'shrinking binary...'
-	./upx --brute nuru
+	./upx --brute vint
 	@echo 'zipping build...'
-	tar -zcvf nuru_mac_amd64_v${VERSION}.tar.gz nuru
+	tar -zcvf vint_mac_amd64_v${VERSION}.tar.gz vint
 	@echo 'cleaning up...'
-	rm nuru
+	rm vint
 
 build_android:
 	@echo 'building android binary'
-	env GOOS=android GOARCH=arm64 go build -ldflags="-s -w" -o nuru
+	env GOOS=android GOARCH=arm64 go build -ldflags="-s -w" -o vint
 	@echo 'zipping build...'
-	tar -zcvf nuru_android_arm64_v${VERSION}.tar.gz nuru
+	tar -zcvf vint_android_arm64_v${VERSION}.tar.gz vint
 	@echo 'cleaning up...'
-	rm nuru
+	rm vint
 
 build_test:
-	go build -ldflags="-s -w" -o nuru
+	go build -ldflags="-s -w" -o vint
 
 dependencies:
 	@echo 'checking dependencies...'
