@@ -12,7 +12,7 @@ func (p *Parser) parseIntegerLiteral() ast.Expression {
 
 	value, err := strconv.ParseInt(p.curToken.Literal, 0, 64)
 	if err != nil {
-		msg := fmt.Sprintf("Mstari %d: Hatuwezi kuparse %q kama namba", p.curToken.Line, p.curToken.Literal)
+		msg := fmt.Sprintf("Line %d: We cannot parse %q as a number", p.curToken.Line, p.curToken.Literal)
 		p.errors = append(p.errors, msg)
 		return nil
 	}

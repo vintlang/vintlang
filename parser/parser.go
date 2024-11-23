@@ -208,7 +208,7 @@ func (p *Parser) Errors() []string {
 }
 
 func (p *Parser) peekError(t token.TokenType) {
-	msg := fmt.Sprintf("Mstari %d: Tulitegemea kupata %s, badala yake tumepata %s", p.curToken.Line, t, p.peekToken.Type)
+	msg := fmt.Sprintf("Line %d: We expected to get %s, instead we got %s", p.curToken.Line, t, p.peekToken.Type)
 	p.errors = append(p.errors, msg)
 }
 
