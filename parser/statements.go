@@ -67,7 +67,7 @@ func (p *Parser) parseBlockStatement() *ast.BlockStatement {
 
 	for !p.curTokenIs(token.RBRACE) {
 		if p.curTokenIs(token.EOF) {
-			msg := fmt.Sprintf("Mstari %d: Hukufunga Mabano '}'", p.curToken.Line)
+			msg := fmt.Sprintf("Line %d: You did not close the '}' bracket", p.curToken.Line)
 			p.errors = append(p.errors, msg)
 			return nil
 		}
