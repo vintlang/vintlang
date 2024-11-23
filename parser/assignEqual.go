@@ -27,10 +27,10 @@ func (p *Parser) parseAssignEqualExpression(exp ast.Expression) ast.Expression {
 		return ae
 	default:
 		if node != nil {
-			msg := fmt.Sprintf("Mstari %d:Tulitegemea kupata kitambulishi au array, badala yake tumepata: %s", p.curToken.Line, node.TokenLiteral())
+			msg := fmt.Sprintf("Line %d:Tulitegemea kupata kitambulishi au array, badala yake tumepata: %s", p.curToken.Line, node.TokenLiteral())
 			p.errors = append(p.errors, msg)
 		} else {
-			msg := fmt.Sprintf("Mstari %d: Umekosea mkuu", p.curToken.Line)
+			msg := fmt.Sprintf("Line %d: Umekosea mkuu", p.curToken.Line)
 			p.errors = append(p.errors, msg)
 		}
 		return nil

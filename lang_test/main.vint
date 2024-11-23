@@ -40,5 +40,5 @@ package main{
     greet()
 }
 
-let res = net.get("http://tachera.com")
+// let res = net.get("http://tachera.com")
 print(res)
