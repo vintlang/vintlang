@@ -268,7 +268,7 @@ func (p *Parser) parsePrefixExpression() ast.Expression {
 }
 
 func (p *Parser) noPrefixParseFnError(t token.TokenType) {
-	msg := fmt.Sprintf("Mstari %d: Tumeshindwa kuparse %s", p.curToken.Line, t)
+	msg := fmt.Sprintf("Line %d: Failed to be parsed %s", p.curToken.Line, t)
 	p.errors = append(p.errors, msg)
 }
 
@@ -288,7 +288,7 @@ func (p *Parser) parseInfixExpression(left ast.Expression) ast.Expression {
 }
 
 func (p *Parser) noInfixParseFnError(t token.TokenType) {
-	msg := fmt.Sprintf("Mstari %d: Tumeshindwa kuparse %s", p.curToken.Line, t)
+	msg := fmt.Sprintf("Line %d: Failed to be parsed %s", p.curToken.Line, t)
 	p.errors = append(p.errors, msg)
 }
 

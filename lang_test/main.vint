@@ -1,3 +1,6 @@
+import net
+import time
+
 package main{
     name = "Vint"
 
@@ -22,5 +25,20 @@ package main{
 
     height = "7"
     printStmt(name,age,height)
+    print(time.now())
+
+    let greet = func(name) {
+        let hour = time.now().hour()
+        print(hour)
+        if (hour < 12){
+            print("Good morning, " + name + "!")
+        }
+        else {
+            print("Good evening, " + name + "!")
+        }
+    }
+    greet()
 }
 
+let res = net.get("http://tachera.com")
+print(res)

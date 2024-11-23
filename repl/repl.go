@@ -32,7 +32,7 @@ func Read(contents string) {
 	program := p.ParseProgram()
 
 	if len(p.Errors()) != 0 {
-		fmt.Println(styles.ErrorStyle.Italic(false).Render("Kuna Errors Zifuatazo:"))
+		fmt.Println(styles.ErrorStyle.Italic(false).Render("These errors occured:"))
 
 		for _, msg := range p.Errors() {
 			fmt.Println("\t" + styles.ErrorStyle.Render(msg))
@@ -55,7 +55,7 @@ func Start() {
 		d.executor,
 		completer,
 		prompt.OptionPrefix(PROMPT),
-		prompt.OptionTitle("Nuru Programming Language"),
+		prompt.OptionTitle("vint Programming Language"),
 	)
 
 	p.Run()
@@ -66,7 +66,7 @@ type dummy struct {
 }
 
 func (d *dummy) executor(in string) {
-	if strings.TrimSpace(in) == "exit()" || strings.TrimSpace(in) == "toka()" {
+	if strings.TrimSpace(in) == "exit()" {
 		fmt.Println(lipgloss.NewStyle().Render("\n🔥🅺🅰🆁🅸🅱🆄 🆃🅴🅽🅰 🔥"))
 		os.Exit(0)
 	}
