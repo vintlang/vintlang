@@ -12,8 +12,8 @@ import (
 var NetFunctions = map[string]object.ModuleFunction{}
 
 func init() {
-	NetFunctions["peruzi"] = getRequest
-	NetFunctions["tuma"] = postRequest
+	NetFunctions["get"] = getRequest
+	NetFunctions["post"] = postRequest
 }
 
 func getRequest(args []object.Object, defs map[string]object.Object) object.Object {
