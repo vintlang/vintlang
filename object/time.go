@@ -14,9 +14,9 @@ func (t *Time) Type() ObjectType { return TIME_OBJ }
 func (t *Time) Inspect() string  { return t.TimeValue }
 func (t *Time) Method(method string, args []Object, defs map[string]Object) Object {
 	switch method {
-	case "ongeza":
+	case "add":
 		return t.add(args, defs)
-	case "tangu":
+	case "since":
 		return t.since(args, defs)
 	}
 	return nil
@@ -29,57 +29,57 @@ func (t *Time) add(args []Object, defs map[string]Object) Object {
 			objvalue := v.Inspect()
 			inttime, err := strconv.Atoi(objvalue)
 			if err != nil {
-				return newError("namba tu zinaruhusiwa kwenye hoja")
+				return newError("Only numbers are allowed as arguments")
 			}
 			switch k {
-			case "sekunde":
+			case "seconds":
 				sec = inttime
-			case "dakika":
+			case "minutes":
 				min = inttime
-			case "saa":
+			case "hours":
 				hr = inttime
-			case "siku":
+			case "days":
 				d = inttime
-			case "miezi":
+			case "months":
 				m = inttime
-			case "miaka":
+			case "years":
 				y = inttime
 			default:
-				return newError("Hukuweka muda sahihi")
+				return newError("Invalid time key provided")
 			}
 		}
-		cur_time, _ := time.Parse("15:04:05 02-01-2006", t.Inspect())
-		next_time := cur_time.
+		curTime, _ := time.Parse("15:04:05 02-01-2006", t.Inspect())
+		nextTime := curTime.
 			Add(time.Duration(sec)*time.Second).
 			Add(time.Duration(min)*time.Minute).
 			Add(time.Duration(hr)*time.Hour).
 			AddDate(y, m, d)
-		return &Time{TimeValue: string(next_time.Format("15:04:05 02-01-2006"))}
+		return &Time{TimeValue: string(nextTime.Format("15:04:05 02-01-2006"))}
 	}
 
 	if len(args) != 1 {
-		return newError("Samahani, tunahitaji Hoja 1, wewe umeweka %d", len(args))
+		return newError("We require exactly 1 argument, but you provided %d", len(args))
 	}
 
-	cur_time, _ := time.Parse("15:04:05 02-01-2006", t.Inspect())
+	curTime, _ := time.Parse("15:04:05 02-01-2006", t.Inspect())
 
 	objvalue := args[0].Inspect()
 	inttime, err := strconv.Atoi(objvalue)
 
 	if err != nil {
-		return newError("namba tu zinaruhusiwa kwenye hoja")
+		return newError("Only numbers are allowed as arguments")
 	}
 
-	next_time := cur_time.Add(time.Duration(inttime) * time.Hour)
-	return &Time{TimeValue: string(next_time.Format("15:04:05 02-01-2006"))}
+	nextTime := curTime.Add(time.Duration(inttime) * time.Hour)
+	return &Time{TimeValue: string(nextTime.Format("15:04:05 02-01-2006"))}
 }
 
 func (t *Time) since(args []Object, defs map[string]Object) Object {
 	if len(defs) != 0 {
-		return &Error{Message: "Hoja hii hairuhusiwi"}
+		return &Error{Message: "This argument is not allowed"}
 	}
 	if len(args) != 1 {
-		return &Error{Message: "tunahitaji hoja moja tu"}
+		return &Error{Message: "We require exactly one argument"}
 	}
 
 	var (
@@ -93,10 +93,10 @@ func (t *Time) since(args []Object, defs map[string]Object) Object {
 	case *String:
 		o, err = time.Parse("15:04:05 02-01-2006", m.Value)
 		if err != nil {
-			return &Error{Message: fmt.Sprintf("Hoja %s sii sahihi", args[0].Inspect())}
+			return &Error{Message: fmt.Sprintf("Invalid argument: %s", args[0].Inspect())}
 		}
 	default:
-		return &Error{Message: fmt.Sprintf("Hoja %s sii sahihi", args[0].Inspect())}
+		return &Error{Message: fmt.Sprintf("Invalid argument: %s", args[0].Inspect())}
 	}
 
 	ct, _ := time.Parse("15:04:05 02-01-2006", t.TimeValue)

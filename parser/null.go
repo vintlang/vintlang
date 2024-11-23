@@ -1,7 +1,7 @@
 package parser
 
 import (
-	"github.com/NuruProgramming/Nuru/ast"
+	"github.com/ekilie/vint-lang/ast"
 )
 
 func (p *Parser) parseNull() ast.Expression {

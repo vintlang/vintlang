@@ -3,7 +3,7 @@ package object
 import (
 	"fmt"
 
-	"github.com/NuruProgramming/Nuru/ast"
+	"github.com/ekilie/vint-lang/ast"
 )
 
 type Package struct {

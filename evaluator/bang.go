@@ -1,6 +1,6 @@
 package evaluator
 
-import "github.com/NuruProgramming/Nuru/object"
+import "github.com/ekilie/vint-lang/object"
 
 func evalBangOperatorExpression(right object.Object) object.Object {
 	switch right {

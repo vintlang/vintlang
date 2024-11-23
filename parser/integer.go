@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"strconv"
 
-	"github.com/NuruProgramming/Nuru/ast"
+	"github.com/ekilie/vint-lang/ast"
 )
 
 func (p *Parser) parseIntegerLiteral() ast.Expression {

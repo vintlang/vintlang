@@ -3,7 +3,7 @@ package evaluator
 import (
 	"strings"
 
-	"github.com/NuruProgramming/Nuru/object"
+	"github.com/ekilie/vint-lang/object"
 )
 
 func evalInExpression(left, right object.Object, line int) object.Object {

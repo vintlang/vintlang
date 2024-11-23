@@ -5,9 +5,9 @@ import (
 	"os"
 	"strings"
 
-	"github.com/NuruProgramming/Nuru/repl"
-	"github.com/NuruProgramming/Nuru/styles"
 	"github.com/charmbracelet/lipgloss"
+	"github.com/ekilie/vint-lang/repl"
+	"github.com/ekilie/vint-lang/styles"
 )
 
 var (

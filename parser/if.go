@@ -1,8 +1,8 @@
 package parser
 
 import (
-	"github.com/NuruProgramming/Nuru/ast"
-	"github.com/NuruProgramming/Nuru/token"
+	"github.com/ekilie/vint-lang/ast"
+	"github.com/ekilie/vint-lang/token"
 )
 
 func (p *Parser) parseIfExpression() ast.Expression {

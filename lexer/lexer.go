@@ -3,7 +3,7 @@
 package lexer
 
 import (
-	"github.com/NuruProgramming/Nuru/token"
+	"github.com/ekilie/vint-lang/token"
 )
 
 type Lexer struct {

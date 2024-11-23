@@ -1,4 +1,4 @@
-module github.com/NuruProgramming/Nuru
+module github.com/ekilie/vint-lang
 
 go 1.18
 
