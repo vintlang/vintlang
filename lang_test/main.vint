@@ -2,7 +2,10 @@ package main{
     name = "Vint"
 
     let s = name.split("")
-    print(s)
+    for i in s{
+        print(i)
+
+    }
 
     let age = "20"
 
