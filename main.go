@@ -16,18 +16,18 @@ var (
 █░░ █░█ █▀▀ █░█ ▄▀█   █▄█ ▄▀█   █▄░█ █░█ █▀█ █░█
 █▄▄ █▄█ █▄█ █▀█ █▀█   ░█░ █▀█   █░▀█ █▄█ █▀▄ █▄█`)
 	Version = styles.VersionStyle.Render("v0.5.17")
-	Author  = styles.AuthorStyle.Render("by Nuru Org")
+	Author  = styles.AuthorStyle.Render("by vint Org")
 	NewLogo = lipgloss.JoinVertical(lipgloss.Center, Title, lipgloss.JoinHorizontal(lipgloss.Center, Author, " | ", Version))
-	Help    = styles.HelpStyle.Italic(false).Render(fmt.Sprintf(`💡 Namna ya kutumia Nuru:
-	%s: Kuanza programu ya Nuru
-	%s: Kuendesha faili la Nuru
-	%s: Kusoma nyaraka za Nuru
-	%s: Kufahamu toleo la Nuru
+	Help    = styles.HelpStyle.Italic(false).Render(fmt.Sprintf(`💡 Namna ya kutumia vint:
+	%s: Kuanza programu ya vint
+	%s: Kuendesha faili la vint
+	%s: Kusoma nyaraka za vint
+	%s: Kufahamu toleo la vint
 `,
-		styles.HelpStyle.Bold(true).Render("nuru"),
-		styles.HelpStyle.Bold(true).Render("nuru jinaLaFile.nr"),
-		styles.HelpStyle.Bold(true).Render("nuru --nyaraka"),
-		styles.HelpStyle.Bold(true).Render("nuru --toleo")))
+		styles.HelpStyle.Bold(true).Render("vint"),
+		styles.HelpStyle.Bold(true).Render("vint jinaLaFile.nr"),
+		styles.HelpStyle.Bold(true).Render("vint --nyaraka"),
+		styles.HelpStyle.Bold(true).Render("vint --toleo")))
 )
 
 func main() {
@@ -52,16 +52,16 @@ func main() {
 		default:
 			file := args[1]
 
-			if strings.HasSuffix(file, "nr") || strings.HasSuffix(file, ".sw") {
+			if strings.HasSuffix(file, ".vint") {
 				contents, err := os.ReadFile(file)
 				if err != nil {
-					fmt.Println(styles.ErrorStyle.Render("Error: Nuru imeshindwa kusoma faili: ", args[1]))
+					fmt.Println(styles.ErrorStyle.Render("Error: vint imeshindwa kusoma faili: ", args[1]))
 					os.Exit(1)
 				}
 
 				repl.Read(string(contents))
 			} else {
-				fmt.Println(styles.ErrorStyle.Render("'"+file+"'", "sii faili sahihi. Tumia faili la '.nr' au '.sw'"))
+				fmt.Println(styles.ErrorStyle.Render("'"+file+"'", "sii faili sahihi. Tumia faili la '.vint' "))
 				os.Exit(1)
 			}
 		}
