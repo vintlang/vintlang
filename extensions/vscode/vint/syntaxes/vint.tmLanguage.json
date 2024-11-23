@@ -60,7 +60,7 @@
         },
         "constant": {
             "name": "constant.language.vint",
-            "match": "\\b(kweli|sikweli)\\b"
+            "match": "\\b(true|false)\\b"
         },
         "operators": {
             "patterns": [
@@ -97,19 +97,19 @@
             "patterns": [
                 {
                     "name": "storage.type.function.vint",
-                    "match": "\\b(unda|andika|idadi|jumla|yamwisho|sukuma|jaza|aina|fungua)\\b"
+                    "match": "\\b(declare|print|number|sum|end|push|fill|type|open)\\b"
                 },
                 {
                     "name": "storage.type.vint",
-                    "match": "\\bfanya\\b"
+                    "match": "\\b(perform)\\b"
                 },
                 {
                     "name": "keyword.control.vint",
-                    "match": "\\b(kama|au|sivyo|wakati|rudisha|vunja|endelea|tupu|ktk|kwa|badili|ikiwa|kawaida|tumia)\\b"
+                    "match": "\\b(if|else|not|while|return|break|continue|empty|in|for|change|when|default|use)\\b"
                 },
                 {
                     "name": "support.function.vint",
-                    "match": "\\b(os|muda)\\b"
+                    "match": "\\b(os|time)\\b"
                 }
             ]
         },
