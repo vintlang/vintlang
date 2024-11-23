@@ -11,7 +11,7 @@ import (
 )
 
 var builtins = map[string]*object.Builtin{
-	"jaza": {
+	"input": {
 		Fn: func(args ...object.Object) object.Object {
 
 			if len(args) > 1 {
@@ -36,7 +36,7 @@ var builtins = map[string]*object.Builtin{
 			return &object.String{Value: string(line)}
 		},
 	},
-	"andika": {
+	"print": {
 		Fn: func(args ...object.Object) object.Object {
 			if len(args) == 0 {
 				fmt.Println("")
