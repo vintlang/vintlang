@@ -213,7 +213,7 @@ func (pg playground) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 			// editor code
 			pg.editor = textarea.New()
 			if pg.language == "en" {
-				pg.editor.Placeholder = "Write Nuru code here..."
+				pg.editor.Placeholder = "Write vint code here..."
 			} else {
 				pg.editor.Placeholder = "Andika code yako hapa..."
 			}

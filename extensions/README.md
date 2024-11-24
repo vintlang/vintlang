@@ -1,8 +1,8 @@
-# Nuru Extensions For Various Editors
+# vint Extensions For Various Editors
 
 ## [VSCODE](./vscode/)
 
-Nuru syntax highlighting on VSCode
+vint syntax highlighting on VSCode
 
 ## [VIM](./vim)
 

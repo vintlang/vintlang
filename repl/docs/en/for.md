@@ -1,6 +1,6 @@
-# For Loops in Nuru
+# For Loops in vint
 
-For loops are a fundamental control structure in Nuru, used for iterating over iterable objects such as strings, arrays, and dictionaries. This page covers the syntax and usage of for loops in Nuru, including key-value pair iteration, and the use of break and continue statements.
+For loops are a fundamental control structure in vint, used for iterating over iterable objects such as strings, arrays, and dictionaries. This page covers the syntax and usage of for loops in vint, including key-value pair iteration, and the use of break and continue statements.
 
 ## Basic Syntax
 To create a for loop, use the kwa keyword followed by a temporary identifier (such as i or v) and the iterable object. Enclose the loop body in curly braces {}. Here's an example with a string:
@@ -27,7 +27,7 @@ o
 
 ### Dictionaries
 
-Nuru allows you to iterate over both the value or the key-value pair of an iterable. To iterate over just the values, use one temporary identifier:
+vint allows you to iterate over both the value or the key-value pair of an iterable. To iterate over just the values, use one temporary identifier:
 
 ```s
 kamusi = {"a": "andaa", "b": "baba"}

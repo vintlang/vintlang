@@ -1,5 +1,5 @@
 " Sintaksia ya vint kwenye programu ya "vim"
-" Lugha: Nuru
+" Lugha: vint
 
 " Maneno tengwa
 syntax keyword vintKeyword unda pakeji rudisha vunja endelea tupu
