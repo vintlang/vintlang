@@ -16,6 +16,8 @@ func init() {
 	TimeFunctions["since"] = since
 	TimeFunctions["format"] = format
 	TimeFunctions["isLeapYear"] = isLeapYear
+	TimeFunctions["add"] = add
+	TimeFunctions["subtract"] = subtract
 }
 
 func now(args []object.Object, defs map[string]object.Object) object.Object {
