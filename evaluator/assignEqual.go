@@ -30,7 +30,8 @@ func evalAssignEqual(node *ast.AssignEqual, env *object.Environment) object.Obje
 				v := float64(arg.Value) + val.Value
 				return env.Set(node.Left.Token.Literal, &object.Float{Value: v})
 			default:
-				return newError("Line %d: Huwezi kutumia '+=' kujumlisha %v na %v", node.Token.Line, arg.Type(), val.Type())
+				// Check for invalid operation between different types
+				return newError("Line %d: Cannot use '+=' to add %v and %v", node.Token.Line, arg.Type(), val.Type())
 			}
 		case *object.Float:
 			switch val := value.(type) {
@@ -41,7 +42,8 @@ func evalAssignEqual(node *ast.AssignEqual, env *object.Environment) object.Obje
 				v := arg.Value + val.Value
 				return env.Set(node.Left.Token.Literal, &object.Float{Value: v})
 			default:
-				return newError("Line %d: Huwezi kutumia '+=' kujumlisha %v na %v", node.Token.Line, arg.Type(), val.Type())
+				// Check for invalid operation between different types
+				return newError("Line %d: Cannot use '+=' to add %v and %v", node.Token.Line, arg.Type(), val.Type())
 			}
 		case *object.String:
 			switch val := value.(type) {
@@ -49,10 +51,12 @@ func evalAssignEqual(node *ast.AssignEqual, env *object.Environment) object.Obje
 				v := arg.Value + val.Value
 				return env.Set(node.Left.Token.Literal, &object.String{Value: v})
 			default:
-				return newError("Line %d: Huwezi kutumia '+=' kwa %v na %v", node.Token.Line, arg.Type(), val.Type())
+				// Check for invalid operation for non-strings
+				return newError("Line %d: Cannot use '+=' with %v and %v", node.Token.Line, arg.Type(), val.Type())
 			}
 		default:
-			return newError("Line %d: Huwezi kutumia '+=' na %v", node.Token.Line, arg.Type())
+			// Check for invalid operation on unsupported types
+			return newError("Line %d: Cannot use '+=' with %v", node.Token.Line, arg.Type())
 		}
 	case "-=":
 		switch arg := left.(type) {
@@ -65,7 +69,8 @@ func evalAssignEqual(node *ast.AssignEqual, env *object.Environment) object.Obje
 				v := float64(arg.Value) - val.Value
 				return env.Set(node.Left.Token.Literal, &object.Float{Value: v})
 			default:
-				return newError("Line %d: Huwezi kutumia '-=' kujumlisha %v na %v", node.Token.Line, arg.Type(), val.Type())
+				// Check for invalid operation between different types
+				return newError("Line %d: Cannot use '-=' to subtract %v and %v", node.Token.Line, arg.Type(), val.Type())
 			}
 		case *object.Float:
 			switch val := value.(type) {
@@ -76,10 +81,12 @@ func evalAssignEqual(node *ast.AssignEqual, env *object.Environment) object.Obje
 				v := arg.Value - val.Value
 				return env.Set(node.Left.Token.Literal, &object.Float{Value: v})
 			default:
-				return newError("Line %d: Huwezi kutumia '-=' kujumlisha %v na %v", node.Token.Line, arg.Type(), val.Type())
+				// Check for invalid operation between different types
+				return newError("Line %d: Cannot use '-=' to subtract %v and %v", node.Token.Line, arg.Type(), val.Type())
 			}
 		default:
-			return newError("Line %d: Huwezi kutumia '-=' na %v", node.Token.Line, arg.Type())
+			// Check for invalid operation on unsupported types
+			return newError("Line %d: Cannot use '-=' with %v", node.Token.Line, arg.Type())
 		}
 	case "*=":
 		switch arg := left.(type) {
@@ -95,7 +102,8 @@ func evalAssignEqual(node *ast.AssignEqual, env *object.Environment) object.Obje
 				v := strings.Repeat(val.Value, int(arg.Value))
 				return env.Set(node.Left.Token.Literal, &object.String{Value: v})
 			default:
-				return newError("Line %d: Huwezi kutumia '*=' kujumlisha %v na %v", node.Token.Line, arg.Type(), val.Type())
+				// Check for invalid operation between different types
+				return newError("Line %d: Cannot use '*=' to multiply %v and %v", node.Token.Line, arg.Type(), val.Type())
 			}
 		case *object.Float:
 			switch val := value.(type) {
@@ -106,7 +114,8 @@ func evalAssignEqual(node *ast.AssignEqual, env *object.Environment) object.Obje
 				v := arg.Value * val.Value
 				return env.Set(node.Left.Token.Literal, &object.Float{Value: v})
 			default:
-				return newError("Line %d: Huwezi kutumia '*=' kujumlisha %v na %v", node.Token.Line, arg.Type(), val.Type())
+				// Check for invalid operation between different types
+				return newError("Line %d: Cannot use '*=' to multiply %v and %v", node.Token.Line, arg.Type(), val.Type())
 			}
 		case *object.String:
 			switch val := value.(type) {
@@ -114,10 +123,12 @@ func evalAssignEqual(node *ast.AssignEqual, env *object.Environment) object.Obje
 				v := strings.Repeat(arg.Value, int(val.Value))
 				return env.Set(node.Left.Token.Literal, &object.String{Value: v})
 			default:
-				return newError("Line %d: Huwezi kutumia '+=' kwa %v na %v", node.Token.Line, arg.Type(), val.Type())
+				// Check for invalid operation for non-integer multiplications
+				return newError("Line %d: Cannot use '*=' with %v and %v", node.Token.Line, arg.Type(), val.Type())
 			}
 		default:
-			return newError("Line %d: Huwezi kutumia '*=' na %v", node.Token.Line, arg.Type())
+			// Check for invalid operation on unsupported types
+			return newError("Line %d: Cannot use '*=' with %v", node.Token.Line, arg.Type())
 		}
 	case "/=":
 		switch arg := left.(type) {
@@ -130,7 +141,8 @@ func evalAssignEqual(node *ast.AssignEqual, env *object.Environment) object.Obje
 				v := float64(arg.Value) / val.Value
 				return env.Set(node.Left.Token.Literal, &object.Float{Value: v})
 			default:
-				return newError("Line %d: Huwezi kutumia '/=' kujumlisha %v na %v", node.Token.Line, arg.Type(), val.Type())
+				// Check for invalid operation between different types
+				return newError("Line %d: Cannot use '/=' to divide %v and %v", node.Token.Line, arg.Type(), val.Type())
 			}
 		case *object.Float:
 			switch val := value.(type) {
@@ -141,12 +153,15 @@ func evalAssignEqual(node *ast.AssignEqual, env *object.Environment) object.Obje
 				v := arg.Value / val.Value
 				return env.Set(node.Left.Token.Literal, &object.Float{Value: v})
 			default:
-				return newError("Line %d: Huwezi kutumia '/=' kujumlisha %v na %v", node.Token.Line, arg.Type(), val.Type())
+				// Check for invalid operation between different types
+				return newError("Line %d: Cannot use '/=' to divide %v and %v", node.Token.Line, arg.Type(), val.Type())
 			}
 		default:
-			return newError("Line %d: Huwezi kutumia '/=' na %v", node.Token.Line, arg.Type())
+			// Check for invalid operation on unsupported types
+			return newError("Line %d: Cannot use '/=' with %v", node.Token.Line, arg.Type())
 		}
 	default:
-		return newError("Line %d: Operesheni Haifahamiki  %s", node.Token.Line, node.Token.Literal)
+		// Check for an unknown operation
+		return newError("Line %d: Unknown operation %s", node.Token.Line, node.Token.Literal)
 	}
 }
