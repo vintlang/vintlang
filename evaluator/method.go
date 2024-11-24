@@ -35,7 +35,7 @@ func applyMethod(obj object.Object, method ast.Expression, args []object.Object,
 		switch method.(*ast.Identifier).Value {
 		case "map":
 			return maap(obj, args)
-		case "chuja":
+		case "filter":
 			return filter(obj, args)
 		default:
 			return obj.Method(method.(*ast.Identifier).Value, args)
@@ -59,20 +59,20 @@ func applyMethod(obj object.Object, method ast.Expression, args []object.Object,
 			return ret
 		}
 	}
-	return newError("Samahani, %s haina function '%s()'", obj.Inspect(), method.(*ast.Identifier).Value)
+	return newError("Sorry, %s does not have a function '%s()'", obj.Inspect(), method.(*ast.Identifier).Value)
 }
 
 // ///////////////////////////////////////////////////////////////
 // //////// Some methods here because of loop dependency ////////
 // /////////////////////////////////////////////////////////////
 func maap(a *object.Array, args []object.Object) object.Object {
-	if len(args) != 1 && args[0].Type() != object.FUNCTION_OBJ {
-		return newError("Samahani, hoja sii sahihi")
+	if len(args) != 1 || args[0].Type() != object.FUNCTION_OBJ {
+		return newError("Sorry, the argument is not valid")
 	}
 
 	fn, ok := args[0].(*object.Function)
 	if !ok {
-		return newError("Samahani, hoja sii sahihi")
+		return newError("Sorry, the argument is not valid")
 	}
 	env := object.NewEnvironment()
 	newArr := object.Array{Elements: []object.Object{}}
@@ -88,20 +88,20 @@ func maap(a *object.Array, args []object.Object) object.Object {
 }
 
 func filter(a *object.Array, args []object.Object) object.Object {
-	if len(args) != 1 && args[0].Type() != object.FUNCTION_OBJ {
-		return newError("Samahani, hoja sii sahihi")
+	if len(args) != 1 || args[0].Type() != object.FUNCTION_OBJ {
+		return newError("Sorry, the argument is not valid")
 	}
 
 	fn, ok := args[0].(*object.Function)
 	if !ok {
-		return newError("Samahani, hoja sii sahihi")
+		return newError("Sorry, the argument is not valid")
 	}
 	env := object.NewEnvironment()
 	newArr := object.Array{Elements: []object.Object{}}
 	for _, obj := range a.Elements {
 		env.Set(fn.Parameters[0].Value, obj)
 		cond := Eval(fn.Body, env)
-		if cond.Inspect() == "kweli" {
+		if cond.Inspect() == "true" {
 			newArr.Elements = append(newArr.Elements, obj)
 		}
 	}

@@ -30,7 +30,7 @@ func evalPropertyExpression(node *ast.PropertyExpression, env *object.Environmen
 		// 		return val()
 		// 	}
 	}
-	return newError("Value %s sii sahihi kwenye %s", node.Property.(*ast.Identifier).Value, left.Inspect())
+	return newError("Value %s is not valid for %s", node.Property.(*ast.Identifier).Value, left.Inspect())
 }
 
 func evalPropertyAssignment(name *ast.PropertyExpression, val object.Object, env *object.Environment) object.Object {
@@ -58,6 +58,6 @@ func evalPropertyAssignment(name *ast.PropertyExpression, val object.Object, env
 		obj.Env.Set(prop, val)
 		return NULL
 	default:
-		return newError("Imeshindikana kuweka kwenye pakiti %s", left.Type())
+		return newError("Failed to set in package %s", left.Type())
 	}
 }

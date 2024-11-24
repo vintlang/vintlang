@@ -8,7 +8,7 @@ import (
 func evalPostfixExpression(env *object.Environment, operator string, node *ast.PostfixExpression) object.Object {
 	val, ok := env.Get(node.Token.Literal)
 	if !ok {
-		return newError("Tumia KITAMBULISHI CHA NAMBA AU DESIMALI, sio %s", node.Token.Type)
+		return newError("Use a NUMBER or DECIMAL IDENTIFIER, not %s", node.Token.Type)
 	}
 	switch operator {
 	case "++":
@@ -20,8 +20,7 @@ func evalPostfixExpression(env *object.Environment, operator string, node *ast.P
 			v := arg.Value + 1
 			return env.Set(node.Token.Literal, &object.Float{Value: v})
 		default:
-			return newError("Line %d: %s sio kitambulishi cha namba. Tumia '++' na kitambulishi cha namba au desimali.\nMfano:\tfanya i = 2; i++", node.Token.Line, node.Token.Literal)
-
+			return newError("Line %d: %s is not a numeric identifier. Use '++' with a number or decimal identifier.\nExample:\tlet i = 2; i++", node.Token.Line, node.Token.Literal)
 		}
 	case "--":
 		switch arg := val.(type) {
@@ -32,9 +31,9 @@ func evalPostfixExpression(env *object.Environment, operator string, node *ast.P
 			v := arg.Value - 1
 			return env.Set(node.Token.Literal, &object.Float{Value: v})
 		default:
-			return newError("Line %d: %s sio kitambulishi cha namba. Tumia '--' na kitambulishi cha namba au desimali.\nMfano:\tfanya i = 2; i++", node.Token.Line, node.Token.Literal)
+			return newError("Line %d: %s is not a numeric identifier. Use '--' with a number or decimal identifier.\nExample:\tlet i = 2; i--", node.Token.Line, node.Token.Literal)
 		}
 	default:
-		return newError("Haifahamiki: %s", operator)
+		return newError("Unknown operator: %s", operator)
 	}
 }
