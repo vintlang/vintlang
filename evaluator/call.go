@@ -26,12 +26,12 @@ func evalCall(node *ast.CallExpression, env *object.Environment) object.Object {
 		// If it's a regular function, evaluate its arguments
 		args = evalArgsExpressions(node, fn, env)
 	case *object.Package:
-		// If it's a package, look for the 'andaa' function inside the package
-		obj, ok := fn.Scope.Get("andaa")
+		// If it's a package, look for the 'init' function inside the package
+		obj, ok := fn.Scope.Get("init")
 		if !ok {
-			return newError("Package does not have 'andaa'") // Return an error if 'andaa' is not found in the package
+			return newError("Package does not have 'init'") // Return an error if 'init' is not found in the package
 		}
-		// If 'andaa' is found, evaluate its arguments
+		// If 'init' is found, evaluate its arguments
 		args = evalArgsExpressions(node, obj.(*object.Function), env)
 	default:
 		// If the function is of unknown type, evaluate the arguments in the default manner
