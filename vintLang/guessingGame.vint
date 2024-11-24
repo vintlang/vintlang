@@ -1,0 +1,25 @@
+import math
+
+// Guessing game in Vint
+guess = input("Guess a number: ")
+guess = convert(guess, "INTEGER")
+
+number = 5  // Predefined correct number
+print(math.PI())
+while (number != guess) {
+    // Check if the guess is correct
+    if (number == guess) {
+        print("Woo hoo you've guessed it right!")
+        break
+    }else if(number > guess){
+        print("Too small")
+    }else{
+        print("Too big")
+    }
+
+    // Prompt for a new guess if incorrect
+    guess = input("Guess Again: ")
+    guess = convert(guess, "INTEGER") // Converting the guess input to an integer
+}
+print("Woo hoo you've guessed it right")
+print("Game over!")
