@@ -1,6 +1,6 @@
-# Strings in Nuru
+# Strings in vint
 
-Strings are a sequence of characters that can represent text in the Nuru programming language. This page covers the basics of strings, their manipulation, and some built-in methods.
+Strings are a sequence of characters that can represent text in the vint programming language. This page covers the basics of strings, their manipulation, and some built-in methods.
 
 ## Basic Syntax
 
@@ -113,7 +113,7 @@ This method converts a string to uppercase. It does not accept any parameters.
 
 ```s
 fanya a = "vint"
-a.herufikubwa() // NURU
+a.herufikubwa() // vint
 ```
 
 ### herufindogo
@@ -121,7 +121,7 @@ a.herufikubwa() // NURU
 This method converts a string to lowercase. It does not accept any parameters.
 
 ```s
-fanya a = "NURU"
+fanya a = "vint"
 a.herufindogo() // vint
 ```
 
@@ -145,4 +145,4 @@ fanya b = a.gawa(",")
 andika(b) // ["vint", "mambo", "habari"]
 ```
 
-By understanding strings and their manipulation in Nuru, you can effectively work with text data in your programs.
+By understanding strings and their manipulation in vint, you can effectively work with text data in your programs.

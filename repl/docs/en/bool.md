@@ -1,12 +1,12 @@
-# Working with Booleans in Nuru
+# Working with Booleans in vint
 
-Boolean objects in Nuru are truthy, meaning that any value is true, except tupu and sikweli. They are used to evaluate expressions that return true or false values.
+Boolean objects in vint are truthy, meaning that any value is true, except tupu and sikweli. They are used to evaluate expressions that return true or false values.
 
 ## Evaluating Boolean Expressions
 
 ### Evaluating Simple Expressions
 
-In Nuru, you can evaluate simple expressions that return a boolean value:
+In vint, you can evaluate simple expressions that return a boolean value:
 
 ```s
 andika(1 > 2) // Output: `sikweli`
@@ -16,7 +16,7 @@ andika(1 + 3 < 10) // Output: `kweli`
 
 ### Evaluating Complex Expressions
 
-In Nuru, you can use boolean operators to evaluate complex expressions:
+In vint, you can use boolean operators to evaluate complex expressions:
 
 ```s
 a = 5
@@ -37,7 +37,7 @@ Here, we create three variables a, b, and c. We then evaluate the expression (a 
 
 ## Boolean Operators
 
-Nuru has several boolean operators that you can use to evaluate expressions:
+vint has several boolean operators that you can use to evaluate expressions:
 
 ### The && Operator
 
@@ -71,7 +71,7 @@ andika(!sikweli) // Output: `kweli`
 
 ## Working with Boolean Values in Loops
 
-In Nuru, you can use boolean expressions in loops to control their behavior. Here's an example:
+In vint, you can use boolean expressions in loops to control their behavior. Here's an example:
 
 ```s
 namba = [1, 2, 3, 4, 5]
@@ -94,4 +94,4 @@ kwa thamani ktk namba {
 Here, we create an array namba with the values 1 through 5. We then loop over each value in the array and use the % operator to determine if it is even or odd. The output will be "is even" for even numbers and "is odd" for odd numbers.
 
 
-Boolean objects in Nuru can be used to evaluate expressions that return true or false values. You can use boolean operators to evaluate complex expressions and control the behavior of loops. Understanding how to work with boolean values is an essential skill for any Nuru programmer.
+Boolean objects in vint can be used to evaluate expressions that return true or false values. You can use boolean operators to evaluate complex expressions and control the behavior of loops. Understanding how to work with boolean values is an essential skill for any vint programmer.

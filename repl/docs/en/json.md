@@ -1,6 +1,6 @@
-# JSON in Nuru
+# JSON in vint
 
-Nuru also makes it easy to deal with JSON.
+vint also makes it easy to deal with JSON.
 
 ## Import JSONI
 

@@ -1,6 +1,6 @@
 # WHILE (WAKATI)
 
-While loops in Nuru are used to execute a block of code repeatedly, as long as a given condition is true. This page covers the basics of while loops, including how to use the break and continue keywords within them.
+While loops in vint are used to execute a block of code repeatedly, as long as a given condition is true. This page covers the basics of while loops, including how to use the break and continue keywords within them.
 
 ## Basic Syntax
 
@@ -71,4 +71,4 @@ nimeruka
 5
 ```
 
-By understanding while loops in Nuru, you can create code that repeats a specific action or checks for certain conditions, offering more flexibility and control over your code execution.
+By understanding while loops in vint, you can create code that repeats a specific action or checks for certain conditions, offering more flexibility and control over your code execution.

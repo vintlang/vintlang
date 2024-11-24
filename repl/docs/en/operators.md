@@ -1,9 +1,9 @@
 # OPERATORS
-Operators are the foundation of any programming language, allowing you to perform various operations on variables and values. This page covers the syntax and usage of operators in Nuru, including assignment, arithmetic, comparison, member, and logic operators.
+Operators are the foundation of any programming language, allowing you to perform various operations on variables and values. This page covers the syntax and usage of operators in vint, including assignment, arithmetic, comparison, member, and logic operators.
 
 ## ASSIGNMENT
 
-Assuming `i` and `v` are predefined variables, Nuru supports the following assignment operators:
+Assuming `i` and `v` are predefined variables, vint supports the following assignment operators:
 
 - `i = v`: which is the regular assignment operator
 - `i += v`: which is the equivalent of `i = i + v`
@@ -19,7 +19,7 @@ list1 += list2 // this is equivalent to list1 = list1 + list2
 
 ## ARITHMETIC OPERATORS
 
-Nuru supports the following arithmetic operators:
+vint supports the following arithmetic operators:
 
 - `+`: Additon
 - `-`: Subtraction
@@ -30,7 +30,7 @@ Nuru supports the following arithmetic operators:
 
 ## COMPARISON OPERATORS
 
-Nuru supports the following comparison operators:
+vint supports the following comparison operators:
 
 - `==`: Equal to
 - `!=`: Not equal to
@@ -41,7 +41,7 @@ Nuru supports the following comparison operators:
 
 ## MEMBER OPERATOR
 
-The member operator in Nuru is `ktk`. It will check if an object exists in another object:
+The member operator in vint is `ktk`. It will check if an object exists in another object:
 ```go
 fanya majina = ['juma', 'asha', 'haruna']
 
@@ -51,7 +51,7 @@ fanya majina = ['juma', 'asha', 'haruna']
 
 ## LOGIC OPERATORS
 
-Nuru supports the following logic operators:
+vint supports the following logic operators:
 
 - `&&`: Logical `AND`. It will evaluate to true if both are true, otherwise it will evaluate to false.
 - `||`: Logical `OR`. It will evaluate to false if both are false, otherwise it will evaluate to true.
@@ -73,4 +73,4 @@ Operators have the following precedence, starting from the highest priority to t
 - `ktk`: Member Operator
 - `&&, ||`: Logical AND and OR
 
-Understanding operators in Nuru allows you to create complex expressions, perform calculations, and make decisions based on the values of variables.
+Understanding operators in vint allows you to create complex expressions, perform calculations, and make decisions based on the values of variables.
