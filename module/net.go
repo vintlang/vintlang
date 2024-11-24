@@ -17,6 +17,7 @@ func init() {
     NetFunctions["put"] = putRequest
     NetFunctions["delete"] = deleteRequest
     NetFunctions["patch"] = patchRequest
+    // NetFunctions["http"] = httpServer
 }
 
 func deleteRequest(args []object.Object, defs map[string]object.Object) object.Object {
@@ -277,6 +278,7 @@ func postRequest(args []object.Object, defs map[string]object.Object) object.Obj
 	}
 	return &object.Error{Message: "Arguments are incorrect. Use url and headers."}
 }
+
 func putRequest(args []object.Object, defs map[string]object.Object) object.Object {
 	if len(defs) != 0 {
 		var url *object.String
@@ -353,3 +355,5 @@ func putRequest(args []object.Object, defs map[string]object.Object) object.Obje
 	}
 	return &object.Error{Message: "Arguments are incorrect. Use url and headers."}
 }
+
+func httpServer(){}
