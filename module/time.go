@@ -18,7 +18,7 @@ func init() {
 
 func now(args []object.Object, defs map[string]object.Object) object.Object {
 	if len(args) != 0 || len(defs) != 0 {
-		return &object.Error{Message: "hatuhitaji hoja kwenye hasahivi"}
+		return &object.Error{Message: "No arguments required here"}
 	}
 
 	tn := time.Now()
@@ -29,17 +29,17 @@ func now(args []object.Object, defs map[string]object.Object) object.Object {
 
 func sleep(args []object.Object, defs map[string]object.Object) object.Object {
 	if len(defs) != 0 {
-		return &object.Error{Message: "Hoja hii hairuhusiwi"}
+		return &object.Error{Message: "This argument is not allowed"}
 	}
 	if len(args) != 1 {
-		return &object.Error{Message: "tunahitaji hoja moja tu"}
+		return &object.Error{Message: "We only need one argument"}
 	}
 
 	objvalue := args[0].Inspect()
 	inttime, err := strconv.Atoi(objvalue)
 
 	if err != nil {
-		return &object.Error{Message: "namba tu zinaruhusiwa kwenye hoja"}
+		return &object.Error{Message: "Only numbers are allowed as arguments"}
 	}
 
 	time.Sleep(time.Duration(inttime) * time.Second)
@@ -49,10 +49,10 @@ func sleep(args []object.Object, defs map[string]object.Object) object.Object {
 
 func since(args []object.Object, defs map[string]object.Object) object.Object {
 	if len(defs) != 0 {
-		return &object.Error{Message: "Hoja hii hairuhusiwi"}
+		return &object.Error{Message: "This argument is not allowed"}
 	}
 	if len(args) != 1 {
-		return &object.Error{Message: "tunahitaji hoja moja tu"}
+		return &object.Error{Message: "We only need one argument"}
 	}
 
 	var (
@@ -66,10 +66,10 @@ func since(args []object.Object, defs map[string]object.Object) object.Object {
 	case *object.String:
 		t, err = time.Parse("15:04:05 02-01-2006", m.Value)
 		if err != nil {
-			return &object.Error{Message: fmt.Sprintf("Hoja %s sii sahihi", args[0].Inspect())}
+			return &object.Error{Message: fmt.Sprintf("Argument %s is not valid", args[0].Inspect())}
 		}
 	default:
-		return &object.Error{Message: fmt.Sprintf("Hoja %s sii sahihi", args[0].Inspect())}
+		return &object.Error{Message: fmt.Sprintf("Argument %s is not valid", args[0].Inspect())}
 	}
 
 	current_time := time.Now().Format("15:04:05 02-01-2006")
@@ -80,3 +80,33 @@ func since(args []object.Object, defs map[string]object.Object) object.Object {
 
 	return &object.Integer{Value: int64(durationInSeconds)}
 }
+
+func format(args []object.Object, defs map[string]object.Object) object.Object {
+	if len(args) != 2 {
+		return &object.Error{Message: "We need two arguments: time and format string"}
+	}
+
+	// Parse the time argument
+	var t time.Time
+	switch m := args[0].(type) {
+	case *object.Time:
+		var err error
+		t, err = time.Parse("15:04:05 02-01-2006", m.TimeValue)
+		if err != nil {
+			return &object.Error{Message: "Invalid time format"}
+		}
+	case *object.String:
+		var err error
+		t, err = time.Parse("15:04:05 02-01-2006", m.Value)
+		if err != nil {
+			return &object.Error{Message: "Invalid time format"}
+		}
+	default:
+		return &object.Error{Message: "Invalid time argument"}
+	}
+
+	formatStr := args[1].Inspect()
+	formattedTime := t.Format(formatStr)
+	return &object.String{Value: formattedTime}
+}
+
