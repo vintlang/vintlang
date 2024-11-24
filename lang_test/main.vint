@@ -4,13 +4,13 @@ import time
 package main{
     name = "Vint"
 
-    let s = name.split("")
+    s = name.split("")
     for i in s{
         print(i)
 
     }
 
-    let age = "10"
+    age = "10"
     if (age == "20"){
         print(age)
     }else if (age=="10"){
