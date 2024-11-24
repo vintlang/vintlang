@@ -59,6 +59,8 @@ let greet = func(nameParam) {
 year = 2024
 print("Is",year,"Leap year:",time.isLeapYear(year))
 print(time.format(time.now(), "02-01-2006 15:04:05"))
+print(time.add(time.now(), "1h"))
+print(time.subtract(time.now(), "2h30m45s"))
 
 // Call the greet function with a sample name
 greet("John")
