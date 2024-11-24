@@ -1,35 +1,35 @@
-" Sintaksia ya vint kwenye programu ya "vim"
-" Lugha: vint
+" Vint language syntax for Vim
+" Language: vint
 
-" Maneno tengwa
-syntax keyword vintKeyword unda pakeji rudisha vunja endelea tupu
-syntax keyword vintType fanya
-syntax keyword vintBool kweli sikweli
-syntax keyword vintConditional kama sivyo au
+" Keywords
+syntax keyword vintKeyword create package return break continue empty
+syntax keyword vintType func
+syntax keyword vintBool true false
+syntax keyword vintConditional if else or
 syntax match vintComparision /[!\|<>]/
-syntax keyword vintLoop ktk while badili
-syntax keyword vintLabel ikiwa kawaida
+syntax keyword vintLoop for while change
+syntax keyword vintLabel if default
 
-" Nambari
+" Numbers
 syntax match vintInt '[+-]\d\+' contained display
 syntax match vintFloat '[+-]\d+\.\d*' contained display
 
-" Viendeshaji
+" Operators
 syntax match vintAssignment '='
 syntax match vintLogicalOP /[\&!|]/
 
-" Vitendakazi 
-syntax keyword vintFunction andika aina jaza fungua
+" Functions
+syntax keyword vintFunction write type fill open
 
-" Tungo
+" Strings
 syntax region vintString start=/"/ skip=/\\"/ end=/"/
 syntax region vintString start=/'/ skip=/\\'/ end=/'/
 
-" Maoni
+" Comments
 syntax match vintComment "//.*"
 syntax region vintComment start="/\*" end="\*/"
 
-" Fafanua sintaksia
+" Define syntax
 let b:current_syntax = "vint"
 
 highlight def link vintComment Comment
@@ -48,4 +48,3 @@ highlight def link vintLogicalOP Operator
 highlight def link vintAriOP Operator
 highlight def link vintType Type
 highlight def link vintLabel Label
-
