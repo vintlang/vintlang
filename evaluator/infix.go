@@ -9,14 +9,14 @@ import (
 
 func evalInfixExpression(operator string, left, right object.Object, line int) object.Object {
 	if right == nil {
-		return newError("Line %d: Umekosea hapa", line)
+		return newError("Line %d: You made a mistake here", line)
 	}
 	if left == nil {
-		return newError("Line %d: Umekosea hapa", line)
+		return newError("Line %d: You made a mistake here", line)
 	}
 	switch {
 
-	case operator == "ktk":
+	case operator == "in":
 		return evalInExpression(left, right, line)
 
 	case left.Type() == object.STRING_OBJ && right.Type() == object.STRING_OBJ:
@@ -89,11 +89,10 @@ func evalInfixExpression(operator string, left, right object.Object, line int) o
 		return evalBooleanInfixExpression(operator, left, right, line)
 
 	case left.Type() != right.Type():
-		return newError("Line %d: Aina Hazilingani: %s %s %s",
-			line, left.Type(), operator, right.Type())
+		return newError("Line %d: Types do not match: %s %s %s", line, left.Type(), operator, right.Type())
 
 	default:
-		return newError("Line %d: Operesheni Haieleweki: %s %s %s",
+		return newError("Line %d: Unknown Operation: %s %s %s",
 			line, left.Type(), operator, right.Type())
 	}
 }
@@ -135,7 +134,7 @@ func evalFloatIntegerInfixExpression(operator string, left, right object.Object,
 	case "!=":
 		return nativeBoolToBooleanObject(leftVal != rightVal)
 	default:
-		return newError("Line %d: Operesheni Haieleweki: %s %s %s",
+		return newError("Line %d: Unknown Operation: %s %s %s",
 			line, left.Type(), operator, right.Type())
 	}
 
@@ -159,7 +158,7 @@ func evalStringInfixExpression(operator string, left, right object.Object, line 
 	case "!=":
 		return nativeBoolToBooleanObject(leftVal != rightVal)
 	default:
-		return newError("Line %d: Operesheni Haieleweki: %s %s %s", line, left.Type(), operator, right.Type())
+		return newError("Line %d: Unknown Operation: %s %s %s", line, left.Type(), operator, right.Type())
 	}
 }
 
@@ -173,7 +172,7 @@ func evalBooleanInfixExpression(operator string, left, right object.Object, line
 	case "||":
 		return nativeBoolToBooleanObject(leftVal || rightVal)
 	default:
-		return newError("Line %d: Operesheni Haieleweki: %s %s %s", line, left.Type(), operator, right.Type())
+		return newError("Line %d: Unknown Operation: %s %s %s", line, left.Type(), operator, right.Type())
 	}
 }
 
@@ -205,7 +204,7 @@ func evalFloatInfixExpression(operator string, left, right object.Object, line i
 	case "!=":
 		return nativeBoolToBooleanObject(leftVal != rightVal)
 	default:
-		return newError("Line %d: Operesheni Haieleweki: %s %s %s",
+		return newError("Line %d: Unknown Operation: %s %s %s",
 			line, left.Type(), operator, right.Type())
 	}
 }
@@ -245,7 +244,7 @@ func evalIntegerInfixExpression(operator string, left, right object.Object, line
 	case "!=":
 		return nativeBoolToBooleanObject(leftVal != rightVal)
 	default:
-		return newError("Line %d: Operesheni Haieleweki: %s %s %s",
+		return newError("Line %d: Unknown Operation: %s %s %s",
 			line, left.Type(), operator, right.Type())
 	}
 }

@@ -6,24 +6,30 @@ import (
 )
 
 func evalForInExpression(fie *ast.ForIn, env *object.Environment, line int) object.Object {
+	// Evaluates the iterable expression and checks for existing key and value identifiers in the environment
 	iterable := Eval(fie.Iterable, env)
-	existingKeyIdentifier, okk := env.Get(fie.Key) // again, stay safe
-	existingValueIdentifier, okv := env.Get(fie.Value)
-	defer func() { // restore them later on
+	existingKeyIdentifier, okk := env.Get(fie.Key) // Check if key identifier exists
+	existingValueIdentifier, okv := env.Get(fie.Value) // Check if value identifier exists
+	
+	// Ensure the original key and value identifiers are restored after execution
+	defer func() { 
 		if okk {
-			env.Set(fie.Key, existingKeyIdentifier)
+			env.Set(fie.Key, existingKeyIdentifier) // Restore key identifier
 		}
 		if okv {
-			env.Set(fie.Value, existingValueIdentifier)
+			env.Set(fie.Value, existingValueIdentifier) // Restore value identifier
 		}
 	}()
+	
+	// Check if the iterable object supports iteration
 	switch i := iterable.(type) {
 	case object.Iterable:
 		defer func() {
-			i.Reset()
+			i.Reset() // Reset iterable after iteration
 		}()
-		return loopIterable(i.Next, env, fie)
+		return loopIterable(i.Next, env, fie) // Start looping through the iterable
 	default:
-		return newError("Line %d: Huwezi kufanya operesheni hii na %s", line, i.Type())
+		// Returns an error if the iterable object does not support iteration
+		return newError("Line %d: Operation not supported on %s", line, i.Type())
 	}
 }

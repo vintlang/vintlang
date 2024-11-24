@@ -30,7 +30,7 @@ func evalImportFile(name string, ident *ast.Identifier, env *object.Environment)
 	addSearchPath("")
 	filename := findFile(name)
 	if filename == "" {
-		return newError("Moduli %s haipo", name)
+		return newError("Module %s not found", name) 
 	}
 	var scope *object.Environment
 	scope, err := evaluateFile(filename, env)
@@ -59,17 +59,17 @@ func fileExists(file string) bool {
 	_, err := os.Stat(file)
 	return err == nil
 }
- 
+
 func evaluateFile(file string, env *object.Environment) (*object.Environment, object.Object) {
 	source, err := os.ReadFile(file)
 	if err != nil {
-		return nil, &object.Error{Message: fmt.Sprintf("Tumeshindwa kufungua pakeji: %s", file)}
+		return nil, &object.Error{Message: fmt.Sprintf("Failed to open package: %s", file)} 
 	}
 	l := lexer.New(string(source))
 	p := parser.New(l)
 	program := p.ParseProgram()
 	if len(p.Errors()) != 0 {
-		return nil, &object.Error{Message: fmt.Sprintf("Pakeji %s ina makosa yafuatayo:\n%s", file, strings.Join(p.Errors(), "\n"))}
+		return nil, &object.Error{Message: fmt.Sprintf("Package %s has the following errors:\n%s", file, strings.Join(p.Errors(), "\n"))} 
 	}
 
 	scope := object.NewEnvironment()
@@ -83,7 +83,7 @@ func evaluateFile(file string, env *object.Environment) (*object.Environment, ob
 func importFile(name string, ident *ast.Identifier, env *object.Environment, scope *object.Environment) object.Object {
 	value, ok := scope.Get(ident.Value)
 	if !ok {
-		return newError("%s sio pakeji", name)
+		return newError("%s is not a package", name) 
 	}
 	env.Set(name, value)
 	return NULL
