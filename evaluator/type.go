@@ -6,6 +6,7 @@ import (
 	"github.com/ekilie/vint-lang/object"
 )
 
+// Converts an object to an integer, if possible
 func convertToInteger(obj object.Object) object.Object {
 	switch obj := obj.(type) {
 	case *object.Integer:
@@ -15,7 +16,7 @@ func convertToInteger(obj object.Object) object.Object {
 	case *object.String:
 		i, err := strconv.ParseInt(obj.Value, 10, 64)
 		if err != nil {
-			return newError("Haiwezi kubadilisha '%s' kuwa NAMBA", obj.Value)
+			return newError("Cannot convert '%s' to INTEGER", obj.Value)
 		}
 		return &object.Integer{Value: i}
 	case *object.Boolean:
@@ -24,10 +25,11 @@ func convertToInteger(obj object.Object) object.Object {
 		}
 		return &object.Integer{Value: 0}
 	default:
-		return newError("Haiwezi kubadilisha %s kuwa NAMBA", obj.Type())
+		return newError("Cannot convert %s to INTEGER", obj.Type())
 	}
 }
 
+// Converts an object to a float, if possible
 func convertToFloat(obj object.Object) object.Object {
 	switch obj := obj.(type) {
 	case *object.Float:
@@ -37,7 +39,7 @@ func convertToFloat(obj object.Object) object.Object {
 	case *object.String:
 		f, err := strconv.ParseFloat(obj.Value, 64)
 		if err != nil {
-			return newError("Haiwezi kubadilisha '%s' kuwa DESIMALI", obj.Value)
+			return newError("Cannot convert '%s' to FLOAT", obj.Value)
 		}
 		return &object.Float{Value: f}
 	case *object.Boolean:
@@ -46,14 +48,16 @@ func convertToFloat(obj object.Object) object.Object {
 		}
 		return &object.Float{Value: 0.0}
 	default:
-		return newError("Haiwezi kubadilisha %s kuwa DESIMALI", obj.Type())
+		return newError("Cannot convert %s to FLOAT", obj.Type())
 	}
 }
 
+// Converts an object to a string
 func convertToString(obj object.Object) object.Object {
 	return &object.String{Value: obj.Inspect()}
 }
 
+// Converts an object to a boolean
 func convertToBoolean(obj object.Object) object.Object {
 	switch obj := obj.(type) {
 	case *object.Boolean:
