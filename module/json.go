@@ -11,7 +11,7 @@ var JsonFunctions = map[string]object.ModuleFunction{}
 func init() {
 	JsonFunctions["decode"] = decode
 	JsonFunctions["encode"] = encode
-}
+} 
 
 func decode(args []object.Object, defs map[string]object.Object) object.Object {
 	if len(defs) != 0 {
