@@ -11,6 +11,9 @@ var JsonFunctions = map[string]object.ModuleFunction{}
 func init() {
 	JsonFunctions["decode"] = decode
 	JsonFunctions["encode"] = encode
+	JsonFunctions["pretty"] = pretty
+	JsonFunctions["merge"] = merge
+	JsonFunctions["get"] = get
 } 
 
 func decode(args []object.Object, defs map[string]object.Object) object.Object {
@@ -117,4 +120,77 @@ func convertObjectToWhatever(obj object.Object) interface{} {
 		return nil
 	}
 	return nil
+}
+
+// pretty formats JSON with indentation for better readability
+func pretty(args []object.Object, defs map[string]object.Object) object.Object {
+	if len(defs) != 0 || len(args) != 1 || args[0].Type() != object.STRING_OBJ {
+		return &object.Error{Message: "Expect a single string argument"}
+	}
+
+	var i interface{}
+	input := args[0].(*object.String).Value
+	err := json.Unmarshal([]byte(input), &i)
+	if err != nil {
+		return &object.Error{Message: "Invalid JSON input"}
+	}
+
+	prettyJSON, err := json.MarshalIndent(i, "", "  ")
+	if err != nil {
+		return &object.Error{Message: "Unable to format JSON"}
+	}
+
+	return &object.String{Value: string(prettyJSON)}
+}
+
+// merge combines two JSON objects into one
+func merge(args []object.Object, defs map[string]object.Object) object.Object {
+	if len(defs) != 0 || len(args) != 2 {
+		return &object.Error{Message: "Expect exactly two arguments"}
+	}
+
+	obj1 := args[0]
+	obj2 := args[1]
+	map1, ok1 := convertObjectToWhatever(obj1).(map[string]interface{})
+	map2, ok2 := convertObjectToWhatever(obj2).(map[string]interface{})
+	if !ok1 || !ok2 {
+		return &object.Error{Message: "Arguments must be JSON objects"}
+	}
+
+	// Merging maps
+	for k, v := range map2 {
+		map1[k] = v
+	}
+
+	mergedJSON, err := json.Marshal(map1)
+	if err != nil {
+		return &object.Error{Message: "Unable to merge JSON"}
+	}
+
+	return &object.String{Value: string(mergedJSON)}
+}
+
+// get retrieves a value from a JSON object by key
+func get(args []object.Object, defs map[string]object.Object) object.Object {
+	if len(defs) != 0 || len(args) != 2 {
+		return &object.Error{Message: "Expect two arguments: JSON object and key"}
+	}
+
+	obj := args[0]
+	key := args[1]
+	if key.Type() != object.STRING_OBJ {
+		return &object.Error{Message: "Key must be a string"}
+	}
+
+	mapObj, ok := convertObjectToWhatever(obj).(map[string]interface{})
+	if !ok {
+		return &object.Error{Message: "First argument must be a JSON object"}
+	}
+
+	val, exists := mapObj[key.(*object.String).Value]
+	if !exists {
+		return &object.Null{}
+	}
+
+	return convertWhateverToObject(val)
 }
