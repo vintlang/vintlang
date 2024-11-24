@@ -1,4 +1,10 @@
-VERSION=0.5.1
+VERSION=0.1.0
+
+build:
+	make build_android
+	make build_linux
+	make build_windows
+	make build_mac
 
 build_linux:
 	@echo 'building linux binary...'
@@ -6,7 +12,7 @@ build_linux:
 	@echo 'shrinking binary...'
 	./upx --brute vint
 	@echo 'zipping build....'
-	tar -zcvf vint_linux_amd64_v${VERSION}.tar.gz vint
+	tar -zcvf vintLang_linux_amd64_v${VERSION}.tar.gz vint
 	@echo 'cleaning up...'
 	rm vint
 
@@ -14,7 +20,7 @@ build_windows:
 	@echo 'building windows executable...'
 	env GOOS=windows GOARCH=amd64 go build -ldflags="-s -w" -o vint_windows_amd64_v${VERSION}.exe
 	@echo 'shrinking build...'
-	./upx --brute vint_windows_amd64_v${VERSION}.exe
+	./upx --brute vintLang_windows_amd64_v${VERSION}.exe
 
 build_mac:
 	@echo 'building mac binary...'
@@ -22,7 +28,7 @@ build_mac:
 	@echo 'shrinking binary...'
 	./upx --brute vint
 	@echo 'zipping build...'
-	tar -zcvf vint_mac_amd64_v${VERSION}.tar.gz vint
+	tar -zcvf vintLang_mac_amd64_v${VERSION}.tar.gz vint
 	@echo 'cleaning up...'
 	rm vint
 
@@ -30,7 +36,7 @@ build_android:
 	@echo 'building android binary'
 	env GOOS=android GOARCH=arm64 go build -ldflags="-s -w" -o vint
 	@echo 'zipping build...'
-	tar -zcvf vint_android_arm64_v${VERSION}.tar.gz vint
+	tar -zcvf vintLang_android_arm64_v${VERSION}.tar.gz vint
 	@echo 'cleaning up...'
 	rm vint
 
