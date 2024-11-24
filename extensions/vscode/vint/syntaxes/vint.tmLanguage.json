@@ -60,13 +60,13 @@
         },
         "constant": {
             "name": "constant.language.vint",
-            "match": "\\b(true|false)\\b"
+            "match": "\\b(true|false|null)\\b"
         },
         "operators": {
             "patterns": [
                 {
                     "name": "keyword.operator.arithmetic.vint",
-                    "match": "\\b(\\+|\\-|%|\\*|\\/|\\^)\\b"
+                    "match": "\\b(\\+|\\-|%|\\*|\\/|\\^|\\*\\*|\\+\\+|--|\\+=|-=|\\*=|\\/=|%=)\\b"
                 },
                 {
                     "name": "keyword.operator.logical.vint",
@@ -74,7 +74,7 @@
                 },
                 {
                     "name": "keyword.operator.assignment.vint",
-                    "match": "\\b(=|:)\\b"
+                    "match": "\\b(=|:=)\\b"
                 },
                 {
                     "name": "punctuation.accessor.vint",
@@ -97,19 +97,23 @@
             "patterns": [
                 {
                     "name": "storage.type.function.vint",
-                    "match": "\\b(declare|print|number|sum|end|push|fill|type|open)\\b"
+                    "match": "\\b(func|declare|return)\\b"
                 },
                 {
                     "name": "storage.type.vint",
-                    "match": "\\b(perform)\\b"
+                    "match": "\\b(perform|let)\\b"
                 },
                 {
                     "name": "keyword.control.vint",
-                    "match": "\\b(if|else|not|while|return|break|continue|empty|in|for|change|when|default|use)\\b"
+                    "match": "\\b(if|else|while|break|continue|for|switch|case|default|in)\\b"
                 },
                 {
                     "name": "support.function.vint",
-                    "match": "\\b(os|time)\\b"
+                    "match": "\\b(os|time|print)\\b"
+                },
+                {
+                    "name": "keyword.package.vint",
+                    "match": "\\b(package|import)\\b"
                 }
             ]
         },
