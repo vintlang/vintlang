@@ -286,9 +286,9 @@ func applyFunction(fn object.Object, args []object.Object, line int) object.Obje
 			Env:     object.NewEnclosedEnvironment(fn.Env),
 		}
 		obj.Env.Set("@", obj)
-		node, ok := fn.Scope.Get("andaa")
+		node, ok := fn.Scope.Get("init")
 		if !ok {
-			return newError("Hamna andaa kiendesha")
+			return newError("No init func")
 		}
 		node.(*object.Function).Env.Set("@", obj)
 		applyFunction(node, args, fn.Name.Token.Line)
