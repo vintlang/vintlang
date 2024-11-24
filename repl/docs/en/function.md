@@ -1,6 +1,6 @@
-# Functions in Nuru
+# Functions in vint
 
-Functions are a fundamental part of Nuru programming, allowing you to define reusable blocks of code. This page covers the syntax and usage of functions in Nuru, including parameters, default parameters, return statements, recursion, and closures.
+Functions are a fundamental part of vint programming, allowing you to define reusable blocks of code. This page covers the syntax and usage of functions in vint, including parameters, default parameters, return statements, recursion, and closures.
 
 ## Basic Syntax
 
@@ -60,7 +60,7 @@ mfano("x") // nimerudi
 
 ## Recursion
 
-Nuru also supports recursion. Here's an example of a recursive Fibonacci function:
+vint also supports recursion. Here's an example of a recursive Fibonacci function:
 
 ```s
 
@@ -79,7 +79,7 @@ The fib function calculates the nth Fibonacci number by recursively calling itse
 
 ## Closures
 
-Closures are anonymous functions that can capture and store references to variables from their surrounding context. In Nuru, you can create closures using the unda keyword without assigning them to a variable. Here's an example:
+Closures are anonymous functions that can capture and store references to variables from their surrounding context. In vint, you can create closures using the unda keyword without assigning them to a variable. Here's an example:
 
 ```s
 fanya jum = unda(x) {
@@ -94,4 +94,4 @@ andika(jum_x(3)) // 8
 
 In the example above, the jum function returns another function that takes a single parameter y. The returned function has access to the x variable from its surrounding context.
 
-Now that you understand the basics of functions in Nuru, including recursion and closures, you can create reusable blocks of code to simplify your programs and improve code organization.
+Now that you understand the basics of functions in vint, including recursion and closures, you can create reusable blocks of code to simplify your programs and improve code organization.

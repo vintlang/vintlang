@@ -1,6 +1,6 @@
-# Null (Tupu) in Nuru
+# Null (Tupu) in vint
 
-The null data type in Nuru represents the absence of a value or the concept of "nothing" or "empty." This page covers the syntax and usage of the null data type in Nuru, including its definition and evaluation.
+The null data type in vint represents the absence of a value or the concept of "nothing" or "empty." This page covers the syntax and usage of the null data type in vint, including its definition and evaluation.
 
 ## Definition
 
@@ -23,4 +23,4 @@ kama (a) {
 // Output: nimevaa nguo
 ```
 
-The null data type is useful in Nuru when you need to represent an uninitialized, missing, or undefined value in your programs. By understanding the null data type, you can create more robust and flexible code.
+The null data type is useful in vint when you need to represent an uninitialized, missing, or undefined value in your programs. By understanding the null data type, you can create more robust and flexible code.

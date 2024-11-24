@@ -1,8 +1,8 @@
-# Time in Nuru
+# Time in vint
 
 ## Importing Time
 
-To use Time in Nuru, you first have to import the `muda` module as follows:
+To use Time in vint, you first have to import the `muda` module as follows:
 ```so
 tumia muda
 ```

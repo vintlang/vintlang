@@ -1,7 +1,7 @@
 // basics
 
-jina = "Nuru"
-andika(jina) // Nuru
+jina = "vint"
+andika(jina) // vint
 
 // lists
 
@@ -101,7 +101,7 @@ salamu = unda() {
 salamu()
 
 aina(2) // Output: "NAMBA" 
-aina("Nuru") // Output: "NENO"
+aina("vint") // Output: "NENO"
 
 
 orodha = {"jina": "Juma", "umri": 25}
@@ -323,7 +323,7 @@ andika(a == "mambo") // sikweli
 a = "mambo"
 a.idadi() // 5
 
-a = "NURU"
+a = "vint"
 a.herufindogo() // vint
 
 a = "vint mambo habari"

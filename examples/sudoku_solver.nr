@@ -4,7 +4,7 @@
 
         https://github.com/VictorKariuki
 
-NURU program to solve Sudoku using Backtracking Algorithm
+vint program to solve Sudoku using Backtracking Algorithm
 
 The sudoku puzzle is represented as a 2D array. The empty 
 cells are represented by 0. The algorithm works by trying

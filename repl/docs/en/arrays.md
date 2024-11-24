@@ -1,6 +1,6 @@
-# Arrays in Nuru
+# Arrays in vint
 
-Arrays in Nuru are versatile data structures that can hold multiple items, including different types such as numbers, strings, booleans, functions, and null values. This page covers various aspects of arrays, including how to create, manipulate, and iterate over them using Nuru's built-in keywords and methods.
+Arrays in vint are versatile data structures that can hold multiple items, including different types such as numbers, strings, booleans, functions, and null values. This page covers various aspects of arrays, including how to create, manipulate, and iterate over them using vint's built-in keywords and methods.
 
 ## Creating Arrays
 
@@ -11,7 +11,7 @@ orodha = [1, "pili", kweli]
 ```
 ## Accessing and Modifying Array Elements
 
-Arrays in Nuru are zero-indexed. To access an element, use the element's index in square brackets:
+Arrays in vint are zero-indexed. To access an element, use the element's index in square brackets:
 
 ```s
 namba = [10, 20, 30]
@@ -68,7 +68,7 @@ kwa idx, jina ktk majina {
 
 ## Array Methods
 
-Arrays in Nuru have several built-in methods:
+Arrays in vint have several built-in methods:
 
 ### idadi()
 
@@ -130,4 +130,4 @@ b = a.chuja(unda(x){
 andika(b) // [2, 4]
 ```
 
-With this information, you can now effectively work with arrays in Nuru, making it easy to manipulate collections of data in your programs.
+With this information, you can now effectively work with arrays in vint, making it easy to manipulate collections of data in your programs.

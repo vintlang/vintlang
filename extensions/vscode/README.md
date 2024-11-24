@@ -1,13 +1,13 @@
-# Nuru VSCode Extension
+# vint VSCode Extension
 
-This is a syntax highliting extension for Nuru on vscode. It detects `.nr` and `.sw` files.
+This is a syntax highliting extension for vint on vscode. It detects `.nr` and `.sw` files.
 
 
 ## How To Install
 
 ### Download From Market Place
 
-- Simply download the Nuru Extension from VSCode Market Place
+- Simply download the vint Extension from VSCode Market Place
 
 ### Windows
 

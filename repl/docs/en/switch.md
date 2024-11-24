@@ -1,6 +1,6 @@
-# Switch Statements in Nuru
+# Switch Statements in vint
 
-Switch statements in Nuru allow you to execute different code blocks based on the value of a given expression. This page covers the basics of switch statements and their usage.
+Switch statements in vint allow you to execute different code blocks based on the value of a given expression. This page covers the basics of switch statements and their usage.
 
 ## Basic Syntax
 
@@ -56,4 +56,4 @@ badili(z) {
 }
 ```
 
-By understanding switch statements in Nuru, you can create more efficient and organized code that can handle multiple conditions easily.
+By understanding switch statements in vint, you can create more efficient and organized code that can handle multiple conditions easily.

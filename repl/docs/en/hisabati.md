@@ -8,7 +8,7 @@ This in-built module provides various mathematical functions and constants. It i
 
 To use the `hisabati` in-built module follow the steps below:
 
-1. You directly import the `hisabati` in-built module and any required in-built modules in your Nuru code using the `tumia` keyword.
+1. You directly import the `hisabati` in-built module and any required in-built modules in your vint code using the `tumia` keyword.
 
    ```vint
    tumia hisabati
