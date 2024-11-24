@@ -10,7 +10,16 @@ package main{
 
     }
 
-    let age = "20"
+    let age = "10"
+    if (age == "20"){
+        print(age)
+    }else if (age=="10"){
+        print("age is "+age)
+    }
+    else{
+        print(age=="20")
+    }
+
 
     height = "6.0" //in feats
 
@@ -27,18 +36,20 @@ package main{
     printStmt(name,age,height)
     print(time.now())
 
-    let greet = func(name) {
-        let hour = time.now().hour()
-        print(hour)
-        if (hour < 12){
-            print("Good morning, " + name + "!")
-        }
-        else {
-            print("Good evening, " + name + "!")
-        }
-    }
-    greet()
+    
 }
 
+let greet = func(nameParam) {
+        let hour = time.now()
+        print(hour)
+        if (true){
+            print("Good morning, " + nameParam + "!")
+        }
+        else {
+            print("Good evening, " + nameParam + "!")
+        }
+}
+greet("name")
+
 // let res = net.get("http://tachera.com")
-print(res)
+// print(res)
