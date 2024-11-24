@@ -59,7 +59,7 @@ func fileExists(file string) bool {
 	_, err := os.Stat(file)
 	return err == nil
 }
-
+ 
 func evaluateFile(file string, env *object.Environment) (*object.Environment, object.Object) {
 	source, err := os.ReadFile(file)
 	if err != nil {
