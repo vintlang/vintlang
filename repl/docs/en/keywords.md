@@ -29,7 +29,7 @@ The table below lists the reserved keywords in vint. These words have specific m
   <tr>
     <td>ktk</td>
     <td>kwa</td>
-    <td>badili</td>
+    <td>switch</td>
     <td>ikiwa</td>
   </tr>
   <tr>

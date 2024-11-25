@@ -914,7 +914,7 @@ func TestSwitchStatement(t *testing.T) {
 		{
 			`
 			i = 5
-			badili (i) {
+			switch (i) {
 				ikiwa 2 {
 					output = 2
 				}
@@ -932,7 +932,7 @@ func TestSwitchStatement(t *testing.T) {
 		{
 			`
 			i = 5
-			badili (i) {
+			switch (i) {
 				ikiwa 2 {
 					output = 2
 				}
@@ -947,7 +947,7 @@ func TestSwitchStatement(t *testing.T) {
 		{
 			`
 			i = 5
-			badili (i) {
+			switch (i) {
 				ikiwa 5 {
 					output = 5
 				}

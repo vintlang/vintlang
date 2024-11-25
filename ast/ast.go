@@ -530,7 +530,7 @@ func (se *SwitchExpression) expressionNode()      {}
 func (se *SwitchExpression) TokenLiteral() string { return se.Token.Literal }
 func (se *SwitchExpression) String() string {
 	var out bytes.Buffer
-	out.WriteString("\nbadili (")
+	out.WriteString("\nswitch (")
 	out.WriteString(se.Value.String())
 	out.WriteString(")\n{\n")
 

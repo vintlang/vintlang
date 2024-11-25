@@ -1094,7 +1094,7 @@ func TestParseDot(t *testing.T) {
 
 func TestParseSwitch(t *testing.T) {
 	input := `
-	badili (a) {
+	switch (a) {
 		ikiwa 2 {
 			andika(2)
 		}

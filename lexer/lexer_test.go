@@ -44,7 +44,7 @@ func TestNextToken(t *testing.T) {
 	. // test dot
 	tumia muda
 	
-	badili (a) {
+	switch (a) {
 		ikiwa 2 {
 			andika(2)
 		}
@@ -150,7 +150,7 @@ func TestNextToken(t *testing.T) {
 		{token.DOT, "."},
 		{token.IMPORT, "tumia"},
 		{token.IDENT, "muda"},
-		{token.SWITCH, "badili"},
+		{token.SWITCH, "switch"},
 		{token.LPAREN, "("},
 		{token.IDENT, "a"},
 		{token.RPAREN, ")"},

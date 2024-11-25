@@ -71,13 +71,13 @@ fanya waza = unda(pembejeo, mizani) {
     rudisha jumlaYaUzani;
 }
 
-fanya badiliMatriki = unda(matrix) {
+fanya switchMatriki = unda(matrix) {
     // Pata idadi ya safu mlalo na safu wima katika matrix asili
     fanya nambari_ya_safu_mlalo = matrix.idadi();
     fanya nambari_ya_safu_wima = matrix[0].idadi();
 
-    // Unda matrix mpya na safu mlalo na safu wima zilizobadilishwa
-    fanya matrikiIliyobadili = [];
+    // Unda matrix mpya na safu mlalo na safu wima zilizoswitchshwa
+    fanya matrikiIliyoswitch = [];
 
     // Pita ndani ya safu wima
     kwa safu_wima_ya, safuW ktk orodhesha(0, nambari_ya_safu_wima, 1){
@@ -91,10 +91,10 @@ fanya badiliMatriki = unda(matrix) {
         }
 
         // Sukuma safu mlalo iliyopitishwa kwenye matriki lililopitishwa
-        matrikiIliyobadili.sukuma(transposed_safu_mlalo);
+        matrikiIliyoswitch.sukuma(transposed_safu_mlalo);
     }
 
-    rudisha matrikiIliyobadili;
+    rudisha matrikiIliyoswitch;
 }
 
 // Funza mtandao wa neva
@@ -139,10 +139,10 @@ fanya funza = unda(mizani, mafunzoPembejeo, matokeoYaMafunzo, marudioYaMafunzo) 
         andika('\nzidishaKwaNukta tokeo: ');
         andika(zidishaKwaNukta_tokeo);
         
-        fanya mafunzoPembejeoYaliyobadili = badiliMatriki(mafunzoPembejeo)
+        fanya mafunzoPembejeoYaliyoswitch = switchMatriki(mafunzoPembejeo)
 
-        andika('\nmafunzo pembejeo yaliyobadili: ');
-        andika(mafunzoPembejeoYaliyobadili);
+        andika('\nmafunzo pembejeo yaliyoswitch: ');
+        andika(mafunzoPembejeoYaliyoswitch);
 
         // Kuzidisha upungufu kwa pembejeo na upinde rangi ya kitendakazi cha sigmoid
         // Uzito mdogo wa ujasiri hurekebishwa zaidi kupitia asili ya kazi
