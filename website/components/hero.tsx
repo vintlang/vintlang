@@ -5,7 +5,7 @@ import { motion, useAnimation, useInView } from 'framer-motion'
 import { Button } from '@/components/ui/button'
 import { ArrowRight, Code2 } from 'lucide-react'
 
-const AnimatedBackground = () => {
+export const AnimatedBackground = () => {
   return (
     <div className="absolute inset-0 overflow-hidden opacity-20 dark:opacity-30">
       <svg className="w-full h-full" xmlns="http://www.w3.org/2000/svg">
@@ -61,10 +61,10 @@ export default function Hero() {
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
-          className="flex items-center gap-2 text-taupe-500 dark:text-taupe-400"
+          className="flex items-center gap-2 text-taupe-850 dark:text-taupe-400"
         >
           <Code2 className="w-8 h-8" />
-          <span className="text-2xl font-bold">VintLang</span>
+          <span className="text-3xl font-bold">VintLang</span>
         </motion.div>
         <motion.h1
           className="mt-6 text-4xl font-extrabold tracking-tight sm:text-5xl md:text-6xl lg:text-7xl text-center"
@@ -91,7 +91,7 @@ export default function Hero() {
                 visible: { opacity: 1, y: 0 },
               }}
             >
-              <span className={index % 2 === 0 ? 'text-taupe-500 dark:text-taupe-400' : ''}>
+              <span className={index % 2 === 0 ? 'text-taupe-800 dark:text-taupe-400' : ''}>
                 {word}{' '}
               </span>
             </motion.span>
@@ -111,7 +111,7 @@ export default function Hero() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 1 }}
         >
-          <Button size="lg" className="bg-taupe-500 hover:bg-taupe-600 text-white text-lg px-8 py-6 w-full sm:w-auto">
+          <Button size="lg" className="bg-taupe-900 hover:bg-taupe-600 text-white text-lg px-8 py-6 w-full sm:w-auto">
             Get Started
             <ArrowRight className="ml-2 h-5 w-5" />
           </Button>
