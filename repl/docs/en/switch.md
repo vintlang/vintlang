@@ -4,14 +4,14 @@ Switch statements in vint allow you to execute different code blocks based on th
 
 ## Basic Syntax
 
-You initialize a switch statement with the badili keyword, the expression inside parentheses (), and all cases enclosed within curly braces {}.
+You initialize a switch statement with the switch keyword, the expression inside parentheses (), and all cases enclosed within curly braces {}.
 
 A case statement has the keyword ikiwa followed by a value to check. Multiple values can be in a single case separated by commas ,. The consequence to execute if a condition is fulfilled must be inside curly braces {}. Here's an example:
 
 ```s
 fanya a = 2
 
-badili (a){
+switch (a){
 	ikiwa 3 {
 		andika("a ni tatu")
 	}
@@ -26,7 +26,7 @@ badili (a){
 Multiple possibilities can be assigned to a single case (ikiwa) statement:
 
 ```s
-badili (a) {
+switch (a) {
 	ikiwa 1,2,3 {
 		andika("a ni kati ya 1, 2 au 3")
 	}
@@ -43,7 +43,7 @@ The default statement will be executed when no condition is satisfied. The defau
 ```s
 fanya z = 20
 
-badili(z) {
+switch(z) {
 	ikiwa 10 {
 		andika("kumi")
 	}

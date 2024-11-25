@@ -336,7 +336,7 @@ andika(b) // ["vint", "mambo", "habari"]
 
 a = 2
 
-badili (a){
+switch (a){
 	ikiwa 3 {
 		andika("a ni tatu")
 	}
@@ -345,7 +345,7 @@ badili (a){
 	}
 }
 
-badili (a) {
+switch (a) {
 	ikiwa 1,2,3 {
 		andika("a ni kati ya 1, 2 au 3")
 	}
@@ -356,7 +356,7 @@ badili (a) {
 
 z = 20
 
-badili(z) {
+switch(z) {
 	ikiwa 10 {
 		andika("kumi")
 	}
