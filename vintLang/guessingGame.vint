@@ -1,5 +1,7 @@
 import math
 
+// greet("Tach")
+
 // Guessing game in Vint
 guess = input("Guess a number: ")
 guess = convert(guess, "INTEGER")

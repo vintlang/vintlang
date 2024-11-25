@@ -45,7 +45,7 @@ func addSearchPath(path string) {
 }
 
 func findFile(name string) string {
-	basename := fmt.Sprintf("%s.nr", name)
+	basename := fmt.Sprintf("%s.vint", name)
 	for _, path := range searchPaths {
 		file := filepath.Join(path, basename)
 		if fileExists(file) {

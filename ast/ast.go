@@ -480,12 +480,12 @@ func (fi *ForIn) TokenLiteral() string { return fi.Token.Literal }
 func (fi *ForIn) String() string {
 	var out bytes.Buffer
 
-	out.WriteString("kwa ")
+	out.WriteString("for ")
 	if fi.Key != "" {
 		out.WriteString(fi.Key + ", ")
 	}
 	out.WriteString(fi.Value + " ")
-	out.WriteString("ktk ")
+	out.WriteString("in ")
 	out.WriteString(fi.Iterable.String() + " {\n")
 	out.WriteString("\t" + fi.Block.String())
 	out.WriteString("\n}")
@@ -572,7 +572,7 @@ func (i *Import) expressionNode()      {}
 func (i *Import) TokenLiteral() string { return i.Token.Literal }
 func (i *Import) String() string {
 	var out bytes.Buffer
-	out.WriteString("tumia ")
+	out.WriteString("import ")
 	for k := range i.Identifiers {
 		out.WriteString(k + " ")
 	}
