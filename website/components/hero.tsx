@@ -77,7 +77,7 @@ export default function Hero() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 1 }}
         >
-          <Button size="lg" className="bg-taupe-900 hover:bg-taupe-600 text-white text-lg px-8 py-6 w-full sm:w-auto">
+          <Button size="lg" className="bg-taupe-900 hover:bg-taupe-800 text-white text-lg px-8 py-6 w-full sm:w-auto">
             Get Started
             <ArrowRight className="ml-2 h-5 w-5" />
           </Button>
