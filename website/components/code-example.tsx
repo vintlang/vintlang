@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { motion } from 'framer-motion'
+import { motion } from 'motion/react'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { codeExamples } from '@/lib/codeExample'
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter'
