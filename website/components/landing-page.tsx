@@ -23,7 +23,7 @@ export function LandingPage() {
 
   return (
     <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-      <div className="min-h-screen bg-background text-foreground">
+      <div className="min-h-screen max-w-screen-xl  bg-background text-foreground">
         <Header />
         <main className="overflow-hidden">
           <Hero />
