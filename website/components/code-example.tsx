@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { motion } from 'motion/react'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 
@@ -43,6 +43,10 @@ print(res)`,
 
 export default function CodeExample() {
   const [activeTab, setActiveTab] = useState('basics')
+
+  useEffect(()=>{
+    console.log(activeTab)
+  },[activeTab])
 
   return (
     <section id="code-example" className="container py-24 sm:py-32">
