@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useRef } from 'react'
-import { motion, useAnimation, useInView } from 'motion/react'
+import { motion, useAnimation, useInView } from 'framer-motion'
 import { Button } from '@/components/ui/button'
 import { ArrowRight, Code2 } from 'lucide-react'
 import { AnimatedBackground } from './AnimatedBackground'
