@@ -21,6 +21,7 @@
     "react": "18",
     "react-dom": "18",
     "react-intersection-observer": "^9.13.1",
+    "react-syntax-highlighter": "^15.6.1",
     "tailwind-merge": "^2.5.5",
     "tailwindcss-animate": "^1.0.7"
   },
@@ -28,6 +29,7 @@
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",
+    "@types/react-syntax-highlighter": "^15.5.13",
     "eslint": "^8",
     "eslint-config-next": "15.0.3",
     "postcss": "^8",
