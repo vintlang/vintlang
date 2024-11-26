@@ -27,7 +27,7 @@ export default function RootLayout({
         <meta name="author" content={metadata.author} />
         <meta name="viewport" content={metadata.viewport} />
       </head>
-      <body className={`${inter.className} max-w-screen-xl mx-auto`}>
+      <body className={`${inter.className}  mx-auto`}>
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
           {children}
         </ThemeProvider>
