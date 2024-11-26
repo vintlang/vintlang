@@ -1,6 +1,6 @@
 'use client'
 
-import { motion } from 'framer-motion'
+import { motion } from 'motion/react'
 import { Clock, Globe, Network, Type, Variable, Wand2 } from 'lucide-react'
 
 const features = [
