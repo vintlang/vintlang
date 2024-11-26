@@ -20,7 +20,7 @@ interface FeatureProps {
 const Feature: React.FC<FeatureProps> = ({ feature, index }) => {
   return (
     <motion.div
-      className="rounded-lg bg-taupe-900 p-6 text-center md:text-left flex flex-col md:flex-row items-center shadow-lg hover:shadow-xl transition-shadow duration-300"
+      className="rounded-lg bg-taupe-900 p-6 text-center md:text-left flex flex-col md:flex-row items-center shadow-lg hover:shadow-xl transition-shadow duration-300 cursor-pointer"
       initial={{ opacity: 0, y: 30 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.6, delay: index * 0.1 }}
