@@ -38,3 +38,46 @@ export const features = [
     icon: Globe,
   },
 ]
+
+export const taupeTheme = {
+  'code[class*="language-"]': {
+    color: '#3c3a36', // Dark taupe color for text
+    background: 'none',
+    fontFamily: 'monospace',
+    fontSize: '1em',
+    lineHeight: '1.5',
+    whiteSpace: 'pre',
+    wordWrap: 'normal',
+    tabSize: '4',
+    hyphens: 'none',
+  },
+  'pre[class*="language-"]': {
+    background: '#ebe3d7', // Lighter taupe for the background
+    padding: '16px',
+    borderRadius: '5px',
+    overflow: 'auto',
+  },
+  'token.keyword': {
+    color: '#a15c1c', // Earthy brown for keywords
+  },
+  'token.string': {
+    color: '#6a493d', // Soft brownish color for strings
+  },
+  'token.comment': {
+    color: '#928e85', // Faded taupe gray for comments
+    fontStyle: 'italic',
+  },
+  'token.operator': {
+    color: '#3c3a36', // Darker taupe for operators
+  },
+  'token.function': {
+    color: '#4b3e31', // A warm brown for function names
+  },
+  'token.variable': {
+    color: '#2f2a27', // A darker taupe for variable names
+  },
+  'token.number': {
+    color: '#d49952', // A slightly golden brown for numbers
+  },
+}
+
