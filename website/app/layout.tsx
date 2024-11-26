@@ -9,8 +9,7 @@ export const metadata = {
   description:
     'A powerful programming language built with Go, featuring intuitive syntax, built-in networking, and comprehensive time operations.',
   keywords: 'VintLang, Go Programming Language, Modern Programming, Networking, Time Operations',
-  author: 'Tachera Sasi',
-  viewport: 'width=device-width, initial-scale=1.0',
+  author: 'Tachera Sasi'
 };
 
 export default function RootLayout({
@@ -25,7 +24,6 @@ export default function RootLayout({
         <meta name="description" content={metadata.description} />
         <meta name="keywords" content={metadata.keywords} />
         <meta name="author" content={metadata.author} />
-        <meta name="viewport" content={metadata.viewport} />
       </head>
       <body className={`${inter.className}  mx-auto`}>
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem>

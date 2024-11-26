@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react'
 import { Moon, Sun } from 'lucide-react'
 import { useTheme } from 'next-themes'
 import { Button } from '@/components/ui/button'
+import Link from 'next/link'
 
 export default function Header() {
   const [mounted, setMounted] = useState(false)
@@ -14,12 +15,12 @@ export default function Header() {
   if (!mounted) return null
 
   return (
-    <header className="sticky max-w-screen-xl top-0 z-40 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+    <header className="sticky max-w-screen-xl mx-auto top-0 z-40 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="container flex h-14 items-center px-4 sm:px-6 lg:px-8">
         <div className="mr-4 hidden md:flex">
-          <a className="mr-6 flex items-center space-x-2" href="/">
+          <Link className="mr-6 flex items-center space-x-2" href="/">
             <span className="hidden font-bold sm:inline-block">VintLang</span>
-          </a>
+          </Link>
           <nav className="flex items-center space-x-6 text-sm font-medium">
             <a className="transition-colors hover:text-foreground/80 text-foreground/60" href="#features">Features</a>
             <a className="transition-colors hover:text-foreground/80 text-foreground/60" href="#code-example">Code Example</a>
