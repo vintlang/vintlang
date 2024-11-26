@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect } from 'react'
-import { motion, useAnimation } from 'framer-motion'
+import { motion, useAnimation } from 'motion/react'
 import { useInView } from 'react-intersection-observer'
 import Header from './header'
 import Hero from './hero'
@@ -23,7 +23,7 @@ export function LandingPage() {
 
   return (
     <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-      <div className="min-h-screen max-w-screen-xl  bg-background text-foreground">
+      <div className="min-h-screen   bg-background text-foreground">
         <Header />
         <main className="overflow-hidden">
           <Hero />
