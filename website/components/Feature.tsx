@@ -1,7 +1,7 @@
 "use client";
 
 import React, { ForwardRefExoticComponent, RefAttributes } from "react";
-import { motion } from "framer-motion";
+import { motion } from "motion/react";
 import { LucideProps } from "lucide-react";
 
 interface VintLangFeature {
