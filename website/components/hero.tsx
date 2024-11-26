@@ -5,7 +5,7 @@ import { motion, useAnimation, useInView } from 'motion/react'
 import { Button } from '@/components/ui/button'
 import { ArrowRight, Code2 } from 'lucide-react'
 import { AnimatedBackground } from './AnimatedBackground'
-
+import Link from 'next/link'
 
 
 export default function Hero() {
@@ -82,7 +82,7 @@ export default function Hero() {
             <ArrowRight className="ml-2 h-5 w-5" />
           </Button>
           <Button size="lg" variant="outline" className="text-lg px-8 py-6 w-full sm:w-auto">
-            View Examples
+            <Link href="#code-example">View Examples</Link>
           </Button>
         </motion.div>
         <motion.div
