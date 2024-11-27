@@ -73,6 +73,11 @@ type Parser struct {
 	postfixParseFns map[token.TokenType]postfixParseFn
 }
 
+//adds error
+func (p *Parser) addError(msg string) {
+	p.errors = append(p.errors, msg)
+}
+
 func (p *Parser) registerPrefix(tokenType token.TokenType, fn prefixParseFn) {
 	p.prefixParseFns[tokenType] = fn
 }
