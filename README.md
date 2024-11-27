@@ -17,7 +17,7 @@ curl -O -L https://github.com/ekilie/vint-lang/releases/download/0.1.0/vintLang_
 Once the download is complete, extract the file and place the binary in a directory that is globally available (`/usr/local/bin` is typically used for this purpose):
 
 ```bash
-sudo tar -C /usr/local/bin -xzvf vintLang_Linux_amd64.tar.gz
+sudo tar -C /usr/local/bin -xzvf vintLang_linux_amd64_v0.1.2.tar.gz
 ```
 
 This will unpack the binary and make the `vintLang` command available to all users on your system.
