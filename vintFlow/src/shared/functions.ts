@@ -33,6 +33,7 @@ export const get_file_types = (file_name: string) => {
         '.yaml': 'yaml',
         '.yml': 'yaml',
         '.md': 'markdown',
+        '.vint':'vint'
     };
     return fileTypes[Object.keys(fileTypes).filter(type => (new RegExp(`${type}$`)).test(file_name))[0] as keyof typeof fileTypes]
 } 

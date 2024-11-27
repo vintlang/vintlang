@@ -8,6 +8,7 @@ import {ReactComponent as TSFileIcon} from '../assets/svg/ts-1.svg'
 import {ReactComponent as TTFFileIcon} from '../assets/svg/ttf.svg'
 import {ReactComponent as SVGFileIcon} from '../assets/svg/svg.svg'
 import {ReactComponent as UnknownFileIcon} from '../assets/svg/unknown.svg'
+import {ReactComponent as VintFileIcon } from '../assets/svg/vint.svg'
 
 const FileIcon = ({type}:{type: string}) => {
     const typeIcon = {
@@ -22,6 +23,7 @@ const FileIcon = ({type}:{type: string}) => {
         tsx: <TSFileIcon />,
         ttf: <TTFFileIcon />,
         svg: <SVGFileIcon />,
+        vint: <VintFileIcon />,
         unknown: <UnknownFileIcon />,
     }
 
