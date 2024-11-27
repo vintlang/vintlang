@@ -1,0 +1,15 @@
+import crypto
+
+// MD5 Hashing
+md5_hash = crypto.hashMD5("Hello, World!")
+print(md5_hash)  // Prints the MD5 hash of "Hello, World!"
+
+// AES Encryption and Decryption
+key = "mysecretkey12345"
+data = "Sensitive data"
+encrypted = crypto.encryptAES(data, key)
+print(encrypted)
+
+decrypted = crypto.decryptAES(encrypted, key)
+print(decrypted)  
+print(type(decrypted)) 

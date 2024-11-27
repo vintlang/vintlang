@@ -10,6 +10,14 @@ import (
 	"github.com/ekilie/vint-lang/object"
 )
 
+// CryptoFunctions is a map that holds the available functions in the Crypto module.
+var CryptoFunctions = map[string]object.ModuleFunction{
+	"hashMD5":    hashMD5,
+	"hashSHA256": hashSHA256,
+	"encryptAES": encryptAES,
+	"decryptAES": decryptAES,
+}
+
 // hashMD5 takes a string as input and returns the MD5 hash of that string.
 // The MD5 hash is commonly used for checksums or for detecting duplicate data.
 func hashMD5(args []object.Object, defs map[string]object.Object) object.Object {
@@ -134,10 +142,4 @@ func aesDecrypt(data, key []byte) ([]byte, error) {
 	return plaintext, nil
 }
 
-// CryptoFunctions is a map that holds the available functions in the Crypto module.
-var CryptoFunctions = map[string]object.ModuleFunction{
-	"hashMD5":    hashMD5,
-	"hashSHA256": hashSHA256,
-	"encryptAES": encryptAES,
-	"decryptAES": decryptAES,
-}
+
