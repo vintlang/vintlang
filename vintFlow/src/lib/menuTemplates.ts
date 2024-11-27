@@ -108,7 +108,7 @@ export const menuTemplate = [
     {
       label: 'File',
       submenu: [
-        {label: 'New Text File'},
+        {label: 'New Vint File'},
         {label: 'New File'},
         {label: 'New Window'},
         {type: 'separator'},
