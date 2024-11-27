@@ -10,7 +10,7 @@ If you are adding a new function, please document it and add tests:
 
 ```
 // foo does foo and bar
-foo = unda() {
+foo = func() {
     // does foo and bar 
 }
 ```
