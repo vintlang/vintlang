@@ -15,6 +15,7 @@ const HeaderSection = React.memo((props: any) => {
         <div className="header-section">
             <div className="header-main">
                 <div>
+                    VintFlow
                     <ArrowLeftIcon />
                     <ArrowRightIcon />
                 </div>
