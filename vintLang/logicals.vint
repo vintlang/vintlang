@@ -1,0 +1,19 @@
+// Sample Vint program demonstrating logical operators
+
+// Define a function to test 'and', 'or', and 'not'
+let test_logical_operators = func () {
+    // Testing 'and' operator
+    let result_and = and(true, false) // Should return false
+    print("Result of true AND false: ", result_and)
+
+    // Testing 'or' operator
+    let result_or = or(false, true) // Should return true
+    print("Result of false OR true: ", result_or)
+
+    // Testing 'not' operator
+    let result_not = not(true) // Should return false
+    print("Result of NOT true: ", result_not)
+}
+
+// Call the function to test the logical operators
+test_logical_operators()

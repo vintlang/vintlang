@@ -177,6 +177,76 @@ var builtins = map[string]*object.Builtin{
 			}
 		},
 	},
+
+	"and": {
+		Fn: func(args ...object.Object) object.Object {
+			// Ensure that there are exactly 2 arguments
+			if len(args) != 2 {
+				return newError("and requires 2 arguments, you provided %d", len(args))
+			}
+
+			// Get the boolean value of the first argument
+			bool1, err := getBooleanValue(args[0])
+			if err != nil {
+				// Return an error if the first argument is not a boolean
+				return newError("First argument must be a boolean")
+			}
+
+			// Get the boolean value of the second argument
+			bool2, err := getBooleanValue(args[1])
+			if err != nil {
+				// Return an error if the second argument is not a boolean
+				return newError("Second argument must be a boolean")
+			}
+
+			// Perform the logical AND operation and return the result as a boolean
+			return &object.Boolean{Value: bool1 && bool2}
+		},
+	},
+	"or": {
+		Fn: func(args ...object.Object) object.Object {
+			// Ensure that there are exactly 2 arguments
+			if len(args) != 2 {
+				return newError("or requires 2 arguments, you provided %d", len(args))
+			}
+
+			// Get the boolean value of the first argument
+			bool1, err := getBooleanValue(args[0])
+			if err != nil {
+				// Return an error if the first argument is not a boolean
+				return newError("First argument must be a boolean")
+			}
+
+			// Get the boolean value of the second argument
+			bool2, err := getBooleanValue(args[1])
+			if err != nil {
+				// Return an error if the second argument is not a boolean
+				return newError("Second argument must be a boolean")
+			}
+
+			// Perform the logical OR operation and return the result as a boolean
+			return &object.Boolean{Value: bool1 || bool2}
+		},
+	},
+	"not": {
+		Fn: func(args ...object.Object) object.Object {
+			// Ensure that there is exactly 1 argument
+			if len(args) != 1 {
+				return newError("not requires 1 argument, you provided %d", len(args))
+			}
+
+			// Get the boolean value of the argument
+			boolVal, err := getBooleanValue(args[0])
+			if err != nil {
+				// Return an error if the argument is not a boolean
+				return newError("Argument must be a boolean")
+			}
+
+			// Perform the logical NOT operation and return the result as a boolean
+			return &object.Boolean{Value: !boolVal}
+		},
+	},
+
 }
 
 func getIntValue(obj object.Object) (int64, error) {
