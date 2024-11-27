@@ -14,18 +14,18 @@ var OsFunctions = map[string]object.ModuleFunction{}
 func init() {
 	OsFunctions["exit"] = exit
 	OsFunctions["run"] = run
-	OsFunctions["get_env"] = getEnv
-	OsFunctions["set_env"] = setEnv
-	OsFunctions["read_file"] = readFile
-	OsFunctions["write_file"] = writeFile
-	OsFunctions["list_dir"] = listDir
-	OsFunctions["delete_file"] = deleteFile
-	OsFunctions["make_dir"] = makeDir
-	OsFunctions["remove_dir"] = removeDir
-	OsFunctions["current_dir"] = currentDir
-	OsFunctions["change_dir"] = changeDir
-	OsFunctions["file_exists"] = fileExists
-	OsFunctions["read_lines"] = readLines
+	OsFunctions["getEnv"] = getEnv
+	OsFunctions["setEnv"] = setEnv
+	OsFunctions["readFile"] = readFile
+	OsFunctions["writeFile"] = writeFile
+	OsFunctions["listDir"] = listDir
+	OsFunctions["deleteFile"] = deleteFile
+	OsFunctions["makeDir"] = makeDir
+	OsFunctions["removeDir"] = removeDir
+	OsFunctions["currentDir"] = currentDir
+	OsFunctions["changeDir"] = changeDir
+	OsFunctions["fileExists"] = fileExists
+	OsFunctions["readLines"] = readLines
 }
 
 func exit(args []object.Object, defs map[string]object.Object) object.Object {
@@ -179,6 +179,8 @@ func deleteFile(args []object.Object, defs map[string]object.Object) object.Obje
 	return &object.String{Value: "File deleted successfully"}
 }
 
+//This makeDir method Still has an issue with what 
+//path the new dir is saved will fix this
 func makeDir(args []object.Object, defs map[string]object.Object) object.Object {
 	if len(args) != 1 {
 		return &object.Error{Message: "Incorrect number of arguments"}
