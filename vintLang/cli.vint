@@ -1,0 +1,10 @@
+import cli
+
+args = cli.parseArgs("arg1=val1 arg2=val2")
+print(args) // Outputs the list of arguments
+
+value = cli.getArgValue("arg1")
+print(value) // Outputs "val1" if arg1 was provided as an argument
+
+hasArg = cli.hasArg("arg2")
+print(hasArg) // Outputs true if arg2 exists in the arguments
