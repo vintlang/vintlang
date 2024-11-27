@@ -1,0 +1,30 @@
+// Sample usage of the Regex module in Vint
+import regex
+
+// 1. Using match to check if a string matches a pattern
+result = regex.match("^Hello", "Hello World")
+print(result)  // Expected output: true
+
+// 2. Using match to check if a string does not match a pattern
+result = regex.match("^World", "Hello World")
+print(result)  // Expected output: false
+
+// 3. Using replaceString to replace part of a string with a new value
+newString = regex.replaceString("World", "VintLang", "Hello World")
+print(newString)  // Expected output: "Hello VintLang"
+
+// 4. Using splitString to split a string by a regex pattern
+words = regex.splitString("\\s+", "Hello World VintLang")
+print(words)  // Expected output: ["Hello", "World", "VintLang"]
+
+// 5. Using splitString to split a string by a comma
+csv = regex.splitString(",", "apple,banana,orange")
+print(csv)  // Expected output: ["apple", "banana", "orange"]
+
+// 6. Using match with a more complex regex pattern
+emailMatch = regex.match("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$", "test@example.com")
+print(emailMatch)  // Expected output: true
+
+// 7. Using replaceString with a regex pattern to replace digits in a string
+maskedString = regex.replaceString("\\d", "*", "My phone number is 123456789")
+print(maskedString)  // Expected output: "My phone number is *********"
