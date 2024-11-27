@@ -6,10 +6,10 @@ import os
 // Run a shell command
 result = os.run("ls -la")
 print(result)
-print(os.run("go run . vintLang/main.vint"))
+// print(os.run("go run . vintLang/main.vint"))
 
 // Get and set environment variables
-os.setEnv("API_KEY", "12345")
+// os.setEnv("API_KEY", "12345")
 api_key = os.getEnv("API_KEY")
 print(api_key)
 

@@ -31,33 +31,37 @@ func (p *Parser) parseFunctionLiteral() ast.Expression {
 }
 
 func (p *Parser) parseFunctionParameters(lit *ast.FunctionLiteral) bool {
-	lit.Defaults = make(map[string]ast.Expression)
-	for !p.peekTokenIs(token.RPAREN) {
-		p.nextToken()
+    lit.Defaults = make(map[string]ast.Expression)
+    hasDefaults := false // Track if any default parameter has been encountered
 
-		if p.curTokenIs(token.COMMA) {
-			continue
-		}
+    for !p.peekTokenIs(token.RPAREN) {
+        p.nextToken()
 
-		ident := &ast.Identifier{Token: p.curToken, Value: p.curToken.Literal}
-		lit.Parameters = append(lit.Parameters, ident)
+        if p.curTokenIs(token.COMMA) {
+            continue
+        }
 
-		if p.peekTokenIs(token.ASSIGN) {
-			p.nextToken()
-			p.nextToken()
-			lit.Defaults[ident.Value] = p.parseExpression(LOWEST)
-		} else {
-			if len(lit.Defaults) > 0 {
-				return false
-			}
-		}
+        ident := &ast.Identifier{Token: p.curToken, Value: p.curToken.Literal}
+        lit.Parameters = append(lit.Parameters, ident)
 
-		if !(p.peekTokenIs(token.COMMA) || p.peekTokenIs(token.RPAREN)) {
-			return false
-		}
-	}
+        if p.peekTokenIs(token.ASSIGN) {
+            p.nextToken() // Consume '='
+            p.nextToken() // Parse default expression
+            lit.Defaults[ident.Value] = p.parseExpression(LOWEST)
+            hasDefaults = true
+        } else {
+            if hasDefaults {
+                p.addError("Non-default parameter cannot appear after a default parameter")
+                return false
+            }
+        }
 
-	return p.expectPeek(token.RPAREN)
+        if !(p.peekTokenIs(token.COMMA) || p.peekTokenIs(token.RPAREN)) {
+            return false
+        }
+    }
+
+    return p.expectPeek(token.RPAREN)
 }
 
 func (p *Parser) parseCallExpression(function ast.Expression) ast.Expression {
