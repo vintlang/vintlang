@@ -1,0 +1,38 @@
+import os
+
+// Exit with a status code
+// os.exit(1)
+
+// Run a shell command
+result = os.run("ls -la")
+print(result)
+
+// Get and set environment variables
+os.set_env("API_KEY", "12345")
+api_key = os.get_env("API_KEY")
+print(api_key)
+
+// Read and write files
+os.write_file("example.txt", "Hello, Vint!")
+content = os.read_file("example.txt")
+print(content)
+
+// List directory contents
+files = os.list_dir(".")
+print(files)
+
+// Create a directory
+os.make_dir("new_folder")
+
+// Check if a file exists
+exists = os.file_exists("example.txt")
+print(exists) // Outputs: false
+
+// Write a file and read it line by line
+os.write_file("example.txt", "Hello\nWorld")
+lines = os.read_lines("example.txt")
+print(lines) // Outputs: ["Hello", "World"]
+
+// Delete a file
+os.delete_file("example.txt")
+
