@@ -215,7 +215,7 @@ func (pg playground) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 			if pg.language == "en" {
 				pg.editor.Placeholder = "Write vint code here..."
 			} else {
-				pg.editor.Placeholder = "Andika code yako hapa..."
+				pg.editor.Placeholder = "Write vint code here..."
 			}
 
 			pg.editor.Prompt = "┃ "
@@ -234,12 +234,8 @@ func (pg playground) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 			pg.output = viewport.New(msg.Width/2, msg.Height/3-4)
 			pg.output.Style = lipgloss.NewStyle().PaddingLeft(3)
 			var output string
-			if pg.language == "en" {
-
-				output = "Your code output will be displayed here..." + strings.Repeat(" ", msg.Width-6)
-			} else {
-				output = "Matokeo hapa..." + strings.Repeat(" ", msg.Width-6)
-			}
+			output = "Your code output will be displayed here..." + strings.Repeat(" ", msg.Width-6)
+			
 			pg.output.SetContent(output)
 
 			// documentation
