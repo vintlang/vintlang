@@ -27,3 +27,14 @@ print(name.replace("Sasi", "Vint"))
 
 // Trim any occurrence of the character "a" from the start and end of the string and print the result
 print(name.trim("a"))
+
+print(string(123))           // "123"
+print(string(true))          // "true"
+print(string(12.34))         // "12.34"
+print(string("Hello World")) // "Hello World"
+
+
+print(int("123"))    // 123
+print(int(12.34))    // 12
+print(int(true))     // 1
+print(int(false))    // 0

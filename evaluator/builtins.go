@@ -178,6 +178,36 @@ var builtins = map[string]*object.Builtin{
 		},
 	},
 
+	"string": {
+		// Converts a given object to a string representation
+		Fn: func(args ...object.Object) object.Object {
+			// Check that exactly one argument is provided
+			if len(args) != 1 {
+				return newError("string() requires exactly 1 argument, you provided %d", len(args))
+			}
+
+			value := args[0]
+
+			// Use the existing convertToString function to handle conversion
+			return convertToString(value)
+		},
+	},
+	"int": {
+		// Converts a given object to an integer, if possible
+		Fn: func(args ...object.Object) object.Object {
+			// Check that exactly one argument is provided
+			if len(args) != 1 {
+				return newError("int() requires exactly 1 argument, you provided %d", len(args))
+			}
+
+			value := args[0]
+
+			// Use the existing convertToInteger function to handle conversion
+			return convertToInteger(value)
+		},
+	},
+
+
 	"and": {
 		Fn: func(args ...object.Object) object.Object {
 			// Ensure that there are exactly 2 arguments
