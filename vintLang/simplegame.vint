@@ -1,3 +1,6 @@
+/*
+THIS IS A SIMPLE TERMINAL GAME WRITTEN IN VINTLANG
+*/
 import time
 import os
 import json
@@ -84,7 +87,7 @@ let gameLoop = func () {
 // Start the game
 print("Welcome to the Adventure Game!")
 print("Enter your player name:")
-player["name"] = input("> ")
+player["name"] = input(">>> ")
 
 print("Hello, " + player["name"] + "! Let's begin.")
 gameLoop()

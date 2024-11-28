@@ -48,3 +48,9 @@ print(result)  // Output: "Hello"
 // Example 12: Invalid indices (start >= end)
 result = string.substring("Hello, World!", 7, 3)
 print(result)  // Output: Error: Invalid start or end index
+
+
+/*
+More methods for this module
+simirality
+*/
