@@ -35,5 +35,5 @@ lines = os.readLines("example.txt")
 print(lines) // Outputs: ["Hello", "World"]
 
 // Delete a file
-os.deleteFile("example.txt")
+//os.deleteFile("example.txt")
 
