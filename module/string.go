@@ -3,6 +3,7 @@ package module
 import (
 	"strings"
 	"github.com/ekilie/vint-lang/object"
+	"github.com/xrash/smetrics" // A library for string metrics, like Levenshtein
 )
 
 var StringFunctions = map[string]object.ModuleFunction{}
@@ -18,6 +19,34 @@ func init() {
 	StringFunctions["substring"] = substring
 	StringFunctions["length"] = length
 	StringFunctions["indexOf"] = indexOf
+	StringFunctions["similarity"] = similarity 
+}
+
+// similarity computes a similarity score between two strings
+func similarity(args []object.Object, defs map[string]object.Object) object.Object {
+	if len(args) != 2 {
+		return &object.Error{Message: "We need two arguments: the first string and the second string"}
+	}
+
+	str1 := args[0].Inspect()
+	str2 := args[1].Inspect()
+
+	// Using Levenshtein distance to calculate similarity
+	distance := smetrics.WagnerFischer(str1, str2, 1, 1, 2)
+	maxLen := len(str1)
+	if len(str2) > maxLen {
+		maxLen = len(str2)
+	}
+
+	// Avoid division by zero
+	if maxLen == 0 {
+		return &object.Float{Value: 1.0} // Perfect match for empty strings
+	}
+
+	// Calculate similarity as 1 - (normalized distance)
+	similarityScore := 1.0 - float64(distance)/float64(maxLen)
+
+	return &object.Float{Value: similarityScore}
 }
 
 // trim removes leading and trailing whitespaces
