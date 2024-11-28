@@ -1,0 +1,13 @@
+/**
+Not working Still in development 
+*/
+
+
+package vint{
+    init = func(){
+        name = "vint"
+        a = "hiofehoi"
+    }
+    print(@.name)
+}
+    print(@.a)

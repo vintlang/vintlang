@@ -1,3 +1,5 @@
+//This module is still experimental
+
 import cli
 
 args = cli.parseArgs("arg1=val1 arg2=val2")

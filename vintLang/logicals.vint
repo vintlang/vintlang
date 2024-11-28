@@ -3,8 +3,9 @@
 // Define a function to test 'and', 'or', and 'not'
 let test_logical_operators = func () {
     // Testing 'and' operator
-    let result_and = and(true, false) // Should return false
+    let result_and = and(1+2==3, false) // Should return false
     print("Result of true AND false: ", result_and)
+    print(1+2==4)
 
     // Testing 'or' operator
     let result_or = or(false, true) // Should return true
