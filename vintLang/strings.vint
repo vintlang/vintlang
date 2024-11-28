@@ -1,5 +1,4 @@
 // Sample usage of the string module
-
 import "string"
 
 // Example 1: Trim whitespace

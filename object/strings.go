@@ -3,6 +3,7 @@ package object
 import (
 	// "fmt"
 	"hash/fnv"
+	"strconv"
 	// "strconv"
 	"strings"
 )
@@ -75,6 +76,25 @@ func (s *String) len(args []Object) Object {
 	}
 	return &Integer{Value: int64(len(s.Value))}
 }
+
+// toInt converts the string to an integer
+func (s *String) toInt(args []Object) Object {
+	// Ensure no arguments are provided
+	if len(args) != 0 {
+		return newError("toInt() expects 0 arguments, got %d", len(args))
+	}
+
+	// Try to convert the string value to an integer
+	numVal, err := strconv.Atoi(s.Value)
+	if err != nil {
+		// Return an error if conversion fails
+		return newError("Failed to convert '%s' to an integer", s.Value)
+	}
+
+	// Return the integer value as an Integer object
+	return &Integer{Value: int64(numVal)}
+}
+
 
 // upper converts the string to uppercase.
 func (s *String) upper(args []Object) Object {
