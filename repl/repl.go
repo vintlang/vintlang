@@ -69,16 +69,16 @@ type dummy struct {
 func (d *dummy) executor(in string) {
 	if strings.TrimSpace(in) == "exit()" {
 		style := lipgloss.NewStyle().
-		Foreground(lipgloss.Color("#FFD700")). // Gold text
-		Background(lipgloss.Color("#282C34")). // Dark background
-		Bold(true).
-		Padding(1, 2).
-		Margin(1).
-		Border(lipgloss.DoubleBorder()).
-		BorderForeground(lipgloss.Color("#FF4500")) // Bright orange border
+			Foreground(lipgloss.Color("#FFD700")). // Gold text
+			Background(lipgloss.Color("#282C34")). // Dark background
+			Bold(true).
+			Padding(1, 2).
+			Margin(1).
+			Border(lipgloss.DoubleBorder()).
+			BorderForeground(lipgloss.Color("#FF4500")) // Bright orange border
 
-	message := style.Render("\n🔥  Thank you for using Vint! Goodbye and happy coding! 🔥")
-	fmt.Println(message)
+		message := style.Render("\nThank you for using Vint! Goodbye and happy coding!")
+		fmt.Println(message)
 		os.Exit(0)
 	}
 	l := lexer.New(in)
@@ -107,7 +107,6 @@ func completer(in prompt.Document) []prompt.Suggest {
 func Docs() {
 	zone.NewGlobal()
 
-	// Removed the Swahili language option
 	languageChoice := []list.Item{
 		languages{title: "English", desc: "Read documentation in English", dir: "en"},
 	}

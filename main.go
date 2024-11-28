@@ -41,7 +41,7 @@ func main() {
     args := os.Args
     if len(args) < 2 {
 
-        help := styles.HelpStyle.Render("💡 Use exit() or quit() to exit")
+        help := styles.HelpStyle.Render("💡 Use exit() to exit")
         fmt.Println(lipgloss.JoinVertical(lipgloss.Left, NewLogo, "\n", help))
         repl.Start()
         return
