@@ -1,0 +1,13 @@
+n = 1
+switch (n) {
+    case 1 {
+
+        print("is",n)
+        break
+    }
+    default {
+
+        print("is not")
+        break
+    }
+} 
