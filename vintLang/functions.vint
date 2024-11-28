@@ -1,0 +1,9 @@
+let go = func(){
+    print("this is a functions")
+}()
+
+let vint = func(){
+    print("This is also a function\nBut not invoked imediately afte being declared")
+}
+
+vint()
