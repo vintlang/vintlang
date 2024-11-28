@@ -1,13 +1,20 @@
 package object
 
-import "fmt"
+import (
+	"fmt"
+)
 
+// Error represents a custom error type with an associated message.
 type Error struct {
 	Message string
 }
 
+// Inspect returns a formatted string representation of the error.
 func (e *Error) Inspect() string {
-	msg := fmt.Sprintf("\x1b[%dm%s\x1b[0m", 31, "Error: ")
-	return msg + e.Message
+	return fmt.Sprintf("\x1b[1;31mError:\x1b[0m %s", e.Message)
 }
-func (e *Error) Type() ObjectType { return ERROR_OBJ }
+
+// Type returns the object type of the error.
+func (e *Error) Type() ObjectType {
+	return ERROR_OBJ
+}

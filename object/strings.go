@@ -1,40 +1,48 @@
 package object
 
 import (
-	"fmt"
+	// "fmt"
 	"hash/fnv"
-	"strconv"
+	// "strconv"
 	"strings"
 )
 
-// String represents a string object in the system
+// String represents a string object in the system.
 type String struct {
 	Value  string
 	offset int
 }
 
-func (s *String) Inspect() string  { return s.Value }
+// Inspect returns the string representation of the String object.
+func (s *String) Inspect() string { return s.Value }
+
+// Type returns the object type for String.
 func (s *String) Type() ObjectType { return STRING_OBJ }
 
+// HashKey generates a hash key for the String object.
 func (s *String) HashKey() HashKey {
 	h := fnv.New64a()
 	h.Write([]byte(s.Value))
 	return HashKey{Type: s.Type(), Value: h.Sum64()}
 }
 
+// Next implements an iterator for the String, returning the next character and its index.
 func (s *String) Next() (Object, Object) {
-	offset := s.offset
-	if len(s.Value) > offset {
-		s.offset = offset + 1
-		return &Integer{Value: int64(offset)}, &String{Value: string(s.Value[offset])}
+	if s.offset < len(s.Value) {
+		char := string(s.Value[s.offset])
+		index := &Integer{Value: int64(s.offset)}
+		s.offset++
+		return index, &String{Value: char}
 	}
 	return nil, nil
 }
 
+// Reset resets the iterator offset to the beginning of the string.
 func (s *String) Reset() {
 	s.offset = 0
 }
 
+// Method dynamically dispatches string-related methods.
 func (s *String) Method(method string, args []Object) Object {
 	switch method {
 	case "len":
@@ -45,131 +53,132 @@ func (s *String) Method(method string, args []Object) Object {
 		return s.lower(args)
 	case "split":
 		return s.split(args)
-	case "format":
-		return s.format(args)
+	case "trim":
+		return s.trim(args)
+	case "contains":
+		return s.contains(args)
+	case "replace":
+		return s.replace(args)
+	case "reverse":
+		return s.reverse(args)
+	// case "format":
+	// 	return s.format(args)
 	default:
 		return newError("Method '%s' is not supported on strings", method)
 	}
 }
 
+// len returns the length of the string.
 func (s *String) len(args []Object) Object {
 	if len(args) != 0 {
-		return newError("Expected 0 arguments, but got %d", len(args))
+		return newError("len() expects 0 arguments, got %d", len(args))
 	}
 	return &Integer{Value: int64(len(s.Value))}
 }
 
+// upper converts the string to uppercase.
 func (s *String) upper(args []Object) Object {
 	if len(args) != 0 {
-		return newError("Expected 0 arguments, but got %d", len(args))
+		return newError("upper() expects 0 arguments, got %d", len(args))
 	}
 	return &String{Value: strings.ToUpper(s.Value)}
 }
 
+// lower converts the string to lowercase.
 func (s *String) lower(args []Object) Object {
 	if len(args) != 0 {
-		return newError("Expected 0 arguments, but got %d", len(args))
+		return newError("lower() expects 0 arguments, got %d", len(args))
 	}
 	return &String{Value: strings.ToLower(s.Value)}
 }
 
+// split splits the string by a given delimiter.
 func (s *String) split(args []Object) Object {
-	if len(args) > 1 {
-		return newError("Expected 1 or 0 arguments, but got %d", len(args))
-	}
-	sep := " "
+	sep := ""
 	if len(args) == 1 {
-		strArg, ok := args[0].(*String)
+		arg, ok := args[0].(*String)
 		if !ok {
-			return newError("Expected argument of type STRING, but got %s", args[0].Type())
+			return newError("split() expects a STRING argument, got %s", args[0].Type())
 		}
-		sep = strArg.Value
+		sep = arg.Value
+	} else if len(args) > 1 {
+		return newError("split() expects at most 1 argument, got %d", len(args))
 	}
+
 	parts := strings.Split(s.Value, sep)
 	elements := make([]Object, len(parts))
-	for i, v := range parts {
-		elements[i] = &String{Value: v}
+	for i, part := range parts {
+		elements[i] = &String{Value: part}
 	}
 	return &Array{Elements: elements}
 }
 
-func (s *String) format(args []Object) Object {
-	value, err := formatStr(s.Value, args)
-	if err != nil {
-		return newError(err.Error())
+// trim removes leading and trailing whitespace or specified characters.
+func (s *String) trim(args []Object) Object {
+	if len(args) > 1 {
+		return newError("trim() expects at most 1 argument, got %d", len(args))
 	}
-	return &String{Value: value}
+
+	chars := " \t\n\r"
+	if len(args) == 1 {
+		arg, ok := args[0].(*String)
+		if !ok {
+			return newError("trim() expects a STRING argument, got %s", args[0].Type())
+		}
+		chars = arg.Value
+	}
+
+	return &String{Value: strings.Trim(s.Value, chars)}
 }
 
-func formatStr(format string, options []Object) (string, error) {
-	var str, val strings.Builder
-	checkVal := false
-	escapeChar := false
-	optsLen := len(options)
-
-	type optM struct {
-		used bool
-		obj  Object
+// contains checks if the string contains a given substring.
+func (s *String) contains(args []Object) Object {
+	if len(args) != 1 {
+		return newError("contains() expects 1 argument, got %d", len(args))
 	}
 
-	optionsMap := make(map[int]optM, optsLen)
-	for i, opt := range options {
-		optionsMap[i] = optM{used: false, obj: opt}
+	arg, ok := args[0].(*String)
+	if !ok {
+		return newError("contains() expects a STRING argument, got %s", args[0].Type())
 	}
 
-	for _, ch := range format {
-		if !escapeChar && ch == '\\' {
-			escapeChar = true
-			continue
-		}
-
-		if ch == '{' && !escapeChar {
-			checkVal = true
-			continue
-		}
-
-		if escapeChar {
-			if ch != '{' && ch != '}' {
-				str.WriteRune('\\')
-			}
-			escapeChar = false
-		}
-
-		if checkVal && ch == '}' {
-			index, err := strconv.Atoi(strings.TrimSpace(val.String()))
-			if err != nil {
-				return "", fmt.Errorf("invalid placeholder: `%s` is not a number", val.String())
-			}
-			if index >= optsLen {
-				return "", fmt.Errorf("placeholder index %d exceeds available arguments (%d)", index, optsLen)
-			}
-
-			opt := optionsMap[index]
-			str.WriteString(opt.obj.Inspect())
-			optionsMap[index] = optM{used: true, obj: opt.obj}
-
-			checkVal = false
-			val.Reset()
-			continue
-		}
-
-		if checkVal {
-			val.WriteRune(ch)
-			continue
-		}
-
-		str.WriteRune(ch)
-	}
-
-	if checkVal {
-		return "", fmt.Errorf("unmatched '{' detected: `%s`", val.String())
-	}
-
-	for i, opt := range optionsMap {
-		if !opt.used {
-			return "", fmt.Errorf("argument at index %d (%s) was provided but not used", i, opt.obj.Inspect())
-		}
-	}
-
-	return str.String(), nil
+	return &Boolean{Value: strings.Contains(s.Value, arg.Value)}
 }
+
+// replace replaces occurrences of a substring with another substring.
+func (s *String) replace(args []Object) Object {
+	if len(args) != 2 {
+		return newError("replace() expects 2 arguments, got %d", len(args))
+	}
+
+	old, ok1 := args[0].(*String)
+	new, ok2 := args[1].(*String)
+	if !ok1 || !ok2 {
+		return newError("replace() expects STRING arguments, got %s and %s", args[0].Type(), args[1].Type())
+	}
+
+	return &String{Value: strings.ReplaceAll(s.Value, old.Value, new.Value)}
+}
+
+// reverse reverses the string.
+func (s *String) reverse(args []Object) Object {
+	if len(args) != 0 {
+		return newError("reverse() expects 0 arguments, got %d", len(args))
+	}
+
+	runes := []rune(s.Value)
+	for i, j := 0, len(runes)-1; i < j; i, j = i+1, j-1 {
+		runes[i], runes[j] = runes[j], runes[i]
+	}
+
+	return &String{Value: string(runes)}
+}
+
+// format applies formatting to the string with provided arguments.
+// func (s *String) format(args []Object) Object {
+// 	value, err := formatStr(s.Value, args)
+// 	if err != nil {
+// 		return newError(err.Error())
+// 	}
+// 	return &String{Value: value}
+// }
