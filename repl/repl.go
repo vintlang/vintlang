@@ -56,7 +56,7 @@ func Start() {
 		d.executor,
 		completer,
 		prompt.OptionPrefix(PROMPT),
-		prompt.OptionTitle("vint Programming Language"),
+		prompt.OptionTitle("Vint Programming Language"),
 	)
 
 	p.Run()
@@ -68,7 +68,17 @@ type dummy struct {
 
 func (d *dummy) executor(in string) {
 	if strings.TrimSpace(in) == "exit()" {
-		fmt.Println(lipgloss.NewStyle().Render("\n🔥🅺🅰🆁🅸🅱🆄 🆃🅴🅽🅰 🔥"))
+		style := lipgloss.NewStyle().
+		Foreground(lipgloss.Color("#FFD700")). // Gold text
+		Background(lipgloss.Color("#282C34")). // Dark background
+		Bold(true).
+		Padding(1, 2).
+		Margin(1).
+		Border(lipgloss.DoubleBorder()).
+		BorderForeground(lipgloss.Color("#FF4500")) // Bright orange border
+
+	message := style.Render("\n🔥  Thank you for using Vint! Goodbye and happy coding! 🔥")
+	fmt.Println(message)
 		os.Exit(0)
 	}
 	l := lexer.New(in)
