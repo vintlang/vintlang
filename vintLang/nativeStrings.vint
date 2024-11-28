@@ -1,0 +1,8 @@
+name = "Tachera Sasi"
+
+print(name.split(""))
+print(name.reverse())
+print(name.len())
+print(name.upper())
+print(name.lower())
+print(name.upper())
