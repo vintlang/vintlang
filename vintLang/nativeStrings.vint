@@ -1,8 +1,29 @@
+// Define the variable 'name' and assign the string "Tachera Sasi" to it
 name = "Tachera Sasi"
 
-print(name.split(""))
-print(name.reverse())
-print(name.len())
-print(name.upper())
-print(name.lower())
-print(name.upper())
+// Split the string into an array of characters and print the result
+print(name.split("")) 
+
+// Reverse the string and print the result
+print(name.reverse()) 
+
+// Get the length of the string and print it
+print(name.len()) 
+
+// Convert the string to uppercase and print it
+print(name.upper()) 
+
+// Convert the string to lowercase and print it
+print(name.lower()) 
+
+// Check if the string contains the substring "sasi" (case-sensitive) and print the result
+print(name.contains("sasi")) 
+
+// Convert the string to uppercase and check if it contains the substring "SASI" (case-sensitive), then print the result
+print(name.upper().contains("SASI")) 
+
+// Replace the substring "Sasi" with "Vint" and print the result
+print(name.replace("Sasi", "Vint")) 
+
+// Trim any occurrence of the character "a" from the start and end of the string and print the result
+print(name.trim("a"))
