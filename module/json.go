@@ -2,6 +2,7 @@ package module
 
 import (
 	"encoding/json"
+	"strings"
 
 	"github.com/ekilie/vint-lang/object"
 )
@@ -11,6 +12,7 @@ var JsonFunctions = map[string]object.ModuleFunction{}
 func init() {
 	JsonFunctions["decode"] = decode
 	JsonFunctions["encode"] = encode
+	JsonFunctions["stringify"] = encode  //Experimental
 	JsonFunctions["pretty"] = pretty
 	JsonFunctions["merge"] = merge
 	JsonFunctions["get"] = get
@@ -78,20 +80,43 @@ func convertWhateverToObject(i interface{}) object.Object {
 }
 
 func encode(args []object.Object, defs map[string]object.Object) object.Object {
-	if len(defs) != 0 {
-		return &object.Error{Message: "This argument is not allowed"}
-	}
+    if len(defs) != 0 {
+        return &object.Error{Message: "This argument is not allowed"}
+    }
 
-	input := args[0]
-	i := convertObjectToWhatever(input)
-	data, err := json.Marshal(i)
+    if len(args) < 1 || len(args) > 2 {
+        return &object.Error{Message: "Expect one or two arguments: data and optional indent"}
+    }
 
-	if err != nil {
-		return &object.Error{Message: "Unable to convert data to JSON"}
-	}
+    input := args[0]
+    i := convertObjectToWhatever(input)
 
-	return &object.String{Value: string(data)}
+    // Default to no indentation
+    indent := ""
+    if len(args) == 2 {
+        if args[1].Type() != object.INTEGER_OBJ {
+            return &object.Error{Message: "Indent must be an integer"}
+        }
+        spaces := int(args[1].(*object.Integer).Value)
+        indent = strings.Repeat(" ", spaces)
+    }
+
+    var data []byte
+    var err error
+
+    if indent != "" {
+        data, err = json.MarshalIndent(i, "", indent)
+    } else {
+        data, err = json.Marshal(i)
+    }
+
+    if err != nil {
+        return &object.Error{Message: "Unable to convert data to JSON"}
+    }
+
+    return &object.String{Value: string(data)}
 }
+
 
 func convertObjectToWhatever(obj object.Object) interface{} {
 	switch v := obj.(type) {

@@ -1,0 +1,101 @@
+import os
+import json
+import string
+
+// Function to load the knowledge base from a file
+// This function checks if the file exists. If not, it creates an empty knowledge base with a "questions" array.
+// Then, it reads the file content and decodes it from JSON format into a usable object.
+let loadKnowledgeBase = func(filePath) {
+    if (!os.fileExists(filePath)) {
+        os.writeFile(filePath, '{"questions": []}') // Create the file if it doesn't exist
+    }
+    let content = os.readFile(filePath) // Read file content
+    return json.decode(content) // Decode JSON content into an object
+}
+
+// Function to save the knowledge base to a file
+// This function converts the knowledge base object into a JSON string with indentation for readability
+// and writes it to the specified file. (Currently commented out as per user request.)
+let saveKnowledgeBase = func(filePath, data) {
+    // os.writeFile(filePath, json.stringify(data, indent=2))
+}
+
+// Function to find the best match for a user's question
+// This function calculates the similarity score between the user's input and each question in the knowledge base.
+// If the similarity score is above 0.6, it returns the closest matching question.
+let findBestMatch = func(userQuestion, questions) {
+    let bestMatch = "" // Holds the closest matching question
+    let highestScore = 0.0 // Keeps track of the highest similarity score
+    for question in questions {
+        let score = string.similarity(userQuestion, question) // Calculate similarity
+        if (score > highestScore && score >= 0.6) { // Update best match if conditions are met
+            highestScore = score
+            bestMatch = question
+        }
+    }
+    return bestMatch
+}
+
+// Function to get the answer for a question from the knowledge base
+// Searches for the given question in the knowledge base and returns the corresponding answer.
+// Returns null if the question is not found.
+let getAnswerForQuestion = func(question, knowledgeBase) {
+    for q in knowledgeBase["questions"] {
+        if (q["question"] == question) {
+            return q["answer"] // Return the matching answer
+        }
+    }
+    return null // Return null if no match is found
+}
+
+// Chatbot main logic
+// This is the main chatbot loop. It continuously interacts with the user until they type "quit."
+let chatBot = func() {
+    print("Hello, BUDDDY your daily assistant") // Initial greeting
+    let filePath = "./knowledge_base.json" // Filepath for the knowledge base
+    let knowledgeBase = loadKnowledgeBase(filePath) // Load knowledge base
+
+    while (true) {
+        let userInput = input("You: ") // Simulate user input
+        if (string.toLower(userInput) == "quit") { // Exit condition
+            break
+        }
+
+        // Gather all questions from the knowledge base
+        let questions = []
+        for q in knowledgeBase["questions"] {
+            questions.push(q["question"])
+        }
+
+        // Find the best match for the user's input
+        let bestMatch = findBestMatch(userInput, questions)
+
+        if (bestMatch != "") {
+            // If a matching question is found, get and display the answer
+            let answer = getAnswerForQuestion(bestMatch, knowledgeBase)
+            print("BUDDDY: " + answer)
+        } else {
+            // If no match is found, inform the user without learning new answers
+            print("BUDDDY: Sorry, I don't know the answer to that.") 
+            
+            // Commented out the part where the chatbot asks to be taught
+            /*
+            print("Sorry, I don't know the answer. Can you teach me?")
+            let newAnswer = input("Type the answer or 'skip' to skip: ")
+
+            if (string.toLower(newAnswer) != "skip") {
+                // Add the new question-answer pair to the knowledge base
+                knowledgeBase["questions"].push({"question": userInput, "answer": newAnswer})
+
+                // Commented out saving functionality
+                // saveKnowledgeBase(filePath, knowledgeBase)
+
+                print("BUDDDY: Thank you, I learned a new response!")
+            }
+            */
+        }
+    }
+}
+
+// Run the chatbot
+chatBot()
