@@ -5,6 +5,7 @@ import Link from "next/link";
 import React, { memo, useState } from "react";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
+import { Button } from "./ui/button";
 
 const NonMemoizedMarkdown = ({ children }: { children: string }) => {
   const [isCopied,setIsCopied] = useState(false)
@@ -59,12 +60,12 @@ const NonMemoizedMarkdown = ({ children }: { children: string }) => {
           >
             <code className={match[1]}>{children}</code>
           </pre>
-          <button
+          <Button
             onClick={() => copyToClipboard(codeContent)}
-            className="absolute top-2 right-2 bg-neutral-200 dark:bg-neutral-700 text-sm px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity"
+            className="absolute top-2 right-2 dark:bg-neutral-700 text-sm px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity"
           >
             {!isCopied ? (<Clipboard />):(<ClipboardCheck />)}
-          </button>
+          </Button>
         </div>
       ) : (
         <code
