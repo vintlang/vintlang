@@ -6,6 +6,18 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
 }
 
+export async function getMarkdownContent(file:string) {
+  const res = await fetch(
+    `https://raw.githubusercontent.com/ekilie/vint-lang/main/${file}`
+  );
+  if (!res.ok) {
+    throw new Error(`Failed to fetch Markdown: ${res.statusText}`);
+  }
+  const markdown = await res.text();
+  return markdown;
+}
+
+
 export const features = [
   {
     name: 'Simple Syntax',
