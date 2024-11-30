@@ -1,4 +1,4 @@
-import { motion, useAnimation, useInView } from 'motion/react'
+import { motion } from 'motion/react'
 
 export const AnimatedBackground = () => {
     return (
