@@ -5,7 +5,7 @@ import { motion } from 'motion/react'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { codeExamples } from '@/lib/codeExample'
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter'
-import { dracula ,dark ,oneDark } from 'react-syntax-highlighter/dist/esm/styles/prism'
+import { oneDark } from 'react-syntax-highlighter/dist/esm/styles/prism'
 
 
 export default function CodeExample() {
