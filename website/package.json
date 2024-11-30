@@ -16,6 +16,7 @@
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
     "ekilirelay": "^1.0.3",
+    "highlight.js": "^11.10.0",
     "lucide-react": "^0.461.0",
     "motion": "^11.11.17",
     "next": "15.0.3",
@@ -27,6 +28,7 @@
     "react-syntax-highlighter": "^15.6.1",
     "rehype-highlight": "^7.0.1",
     "remark": "^15.0.1",
+    "remark-gfm": "^4.0.0",
     "remark-html": "^16.0.1",
     "tailwind-merge": "^2.5.5",
     "tailwindcss-animate": "^1.0.7"
