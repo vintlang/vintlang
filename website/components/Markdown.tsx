@@ -13,10 +13,14 @@ const NonMemoizedMarkdown = ({ children }: { children: string }) => {
     navigator.clipboard.writeText(text).then(() => {
       setIsCopied(true)
     });
+
+    setTimeout(()=>{
+      setIsCopied(false)
+    },250)
   };
 
   const components = {
-    h1: ({ node, children, ...props }: any) => (
+    h1: ({ children, ...props }: any) => (
       <h1
         className="text-3xl font-bold mb-4 mt-6 text-neutral-800 dark:text-neutral-100 border-b border-neutral-300 dark:border-neutral-700 pb-2"
         {...props}
@@ -24,7 +28,7 @@ const NonMemoizedMarkdown = ({ children }: { children: string }) => {
         {children}
       </h1>
     ),
-    h2: ({ node, children, ...props }: any) => (
+    h2: ({ children, ...props }: any) => (
       <h2
         className="text-2xl font-semibold mb-3 mt-5 text-neutral-800 dark:text-neutral-200"
         {...props}
@@ -32,7 +36,7 @@ const NonMemoizedMarkdown = ({ children }: { children: string }) => {
         {children}
       </h2>
     ),
-    h3: ({ node, children, ...props }: any) => (
+    h3: ({ children, ...props }: any) => (
       <h3
         className="text-xl font-medium mb-2 mt-4 text-neutral-800 dark:text-neutral-200"
         {...props}
@@ -40,7 +44,7 @@ const NonMemoizedMarkdown = ({ children }: { children: string }) => {
         {children}
       </h3>
     ),
-    p: ({ node, children, ...props }: any) => (
+    p: ({ children, ...props }: any) => (
       <p
         className="text-base leading-6 mb-4 text-neutral-700 dark:text-neutral-300"
         {...props}
@@ -48,7 +52,7 @@ const NonMemoizedMarkdown = ({ children }: { children: string }) => {
         {children}
       </p>
     ),
-    code: ({ node, inline, className, children, ...props }: any) => {
+    code: ({ inline, className, children, ...props }: any) => {
       const match = /language-(\w+)/.exec(className || "");
       const codeContent = String(children).trim();
 
@@ -62,7 +66,7 @@ const NonMemoizedMarkdown = ({ children }: { children: string }) => {
           </pre>
           <Button
             onClick={() => copyToClipboard(codeContent)}
-            className="absolute top-2 right-2 dark:bg-neutral-700 text-sm px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity"
+            className="absolute top-2 right-2 dark:bg-neutral-700 dark:text-white text-sm px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity"
           >
             {!isCopied ? (<Clipboard />):(<ClipboardCheck />)}
           </Button>
@@ -76,7 +80,7 @@ const NonMemoizedMarkdown = ({ children }: { children: string }) => {
         </code>
       );
     },
-    ol: ({ node, children, ...props }: any) => (
+    ol: ({ children, ...props }: any) => (
       <ol
         className="list-decimal list-outside ml-6 mb-4 text-neutral-700 dark:text-neutral-300"
         {...props}
@@ -84,7 +88,7 @@ const NonMemoizedMarkdown = ({ children }: { children: string }) => {
         {children}
       </ol>
     ),
-    ul: ({ node, children, ...props }: any) => (
+    ul: ({ children, ...props }: any) => (
       <ul
         className="list-disc list-outside ml-6 mb-4 text-neutral-700 dark:text-neutral-300"
         {...props}
@@ -92,12 +96,12 @@ const NonMemoizedMarkdown = ({ children }: { children: string }) => {
         {children}
       </ul>
     ),
-    li: ({ node, children, ...props }: any) => (
+    li: ({ children, ...props }: any) => (
       <li className="py-1" {...props}>
         {children}
       </li>
     ),
-    blockquote: ({ node, children, ...props }: any) => (
+    blockquote: ({ children, ...props }: any) => (
       <blockquote
         className="border-l-4 border-neutral-300 dark:border-neutral-700 pl-4 italic text-neutral-600 dark:text-neutral-400 mb-4"
         {...props}
@@ -105,12 +109,12 @@ const NonMemoizedMarkdown = ({ children }: { children: string }) => {
         {children}
       </blockquote>
     ),
-    strong: ({ node, children, ...props }: any) => (
+    strong: ({ children, ...props }: any) => (
       <span className="font-semibold" {...props}>
         {children}
       </span>
     ),
-    a: ({ node, children, ...props }: any) => (
+    a: ({ children, ...props }: any) => (
       <Link
         className="text-green-500 hover:underline"
         target="_blank"
@@ -120,13 +124,13 @@ const NonMemoizedMarkdown = ({ children }: { children: string }) => {
         {children}
       </Link>
     ),
-    hr: ({ node, ...props }: any) => (
+    hr: ({ ...props }: any) => (
       <hr
         className="border-t border-neutral-300 dark:border-neutral-700 my-6"
         {...props}
       />
     ),
-    table: ({ node, children, ...props }: any) => (
+    table: ({ children, ...props }: any) => (
       <table
         className="table-auto border-collapse border border-neutral-300 dark:border-neutral-700 w-full text-left mb-4"
         {...props}
@@ -134,7 +138,7 @@ const NonMemoizedMarkdown = ({ children }: { children: string }) => {
         {children}
       </table>
     ),
-    th: ({ node, children, ...props }: any) => (
+    th: ({ children, ...props }: any) => (
       <th
         className="border border-neutral-300 dark:border-neutral-700 px-4 py-2 bg-neutral-100 dark:bg-neutral-800 font-semibold"
         {...props}
@@ -142,7 +146,7 @@ const NonMemoizedMarkdown = ({ children }: { children: string }) => {
         {children}
       </th>
     ),
-    td: ({ node, children, ...props }: any) => (
+    td: ({ children, ...props }: any) => (
       <td
         className="border border-neutral-300 dark:border-neutral-700 px-4 py-2"
         {...props}

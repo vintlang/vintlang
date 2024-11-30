@@ -4,7 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
-import { Search } from "@/components/docs/search";
+// import { Search } from "@/components/docs/search";
 import {
   Hand,
   FileText,
