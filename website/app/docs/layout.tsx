@@ -8,7 +8,7 @@ interface DocsLayoutProps {
 export default function DocsLayout({ children }: DocsLayoutProps) {
   return (
     <div className="flex min-h-screen">
-      <aside className="fixed left-0 top-0 z-30 h-screen w-[250px] border-r bg-background">
+      <aside className="fixed left-0 top-0 z-30 h-screen w-[350px] border-r bg-background">
         <ScrollArea className="h-full">
           <Sidebar />
         </ScrollArea>
