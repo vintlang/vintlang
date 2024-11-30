@@ -78,7 +78,7 @@ export default function Hero() {
           transition={{ duration: 0.5, delay: 1 }}
         >
           <Button size="lg" className="bg-taupe-900 hover:bg-taupe-800 text-white text-lg px-8 py-6 w-full sm:w-auto">
-            Get Started
+            <Link href="/docs">Get Started</Link>
             <ArrowRight className="ml-2 h-5 w-5" />
           </Button>
           <Button size="lg" variant="outline" className="text-lg px-8 py-6 w-full sm:w-auto">
