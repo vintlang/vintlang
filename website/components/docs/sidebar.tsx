@@ -60,7 +60,7 @@ export function Sidebar() {
               key={item.name}
               variant={isActive ? "secondary" : "ghost"}
               className={cn(
-                "mb-2 w-full p-4 sm:p-6 justify-start shadow-lg rounded-lg border-2",
+                "mb-3 w-full p-6 sm:p-6 justify-start shadow-lg rounded-lg border-2 dark:border-none dark:bg-neutral-900 dark:hover:bg-neutral-800",
                 isActive ? "bg-accent" : "hover:bg-accent/50"
               )}
               asChild
