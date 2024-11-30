@@ -1,5 +1,5 @@
 import React from "react";
-import { fetchMarkdown, getMarkdownContent } from "@/lib/utils";
+import { fetchMarkdown } from "@/lib/utils";
 import SectionHeader from "./SectionHeader";
 // import MarkdownRenderer from "../MarkdownRender";
 import { Markdown } from "../Markdown";
