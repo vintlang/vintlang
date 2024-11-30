@@ -10,7 +10,7 @@ export default function DocsLayout({ children }: DocsLayoutProps) {
   return (
     <div className="flex min-h-screen max-w-screen-xl mx-auto">
       {/* Sidebar */}
-      <aside className="hidden lg:block fixed left-0 top-0 z-30 w-[250px] sm:w-[300px] md:w-[380px] h-full border-r bg-background">
+      <aside className="hidden lg:block md:block fixed left-0 top-0 z-30 w-[250px] sm:w-[300px] md:w-[380px] h-full border-r bg-background">
         <ScrollArea className="h-full">
           <Sidebar />
         </ScrollArea>
