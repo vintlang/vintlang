@@ -1,11 +1,18 @@
-"use client"
+"use client";
 
-import Link from "next/link"
-import { usePathname } from "next/navigation"
-import { cn } from "@/lib/utils"
-import { Button } from "@/components/ui/button"
-import { Search } from "@/components/docs/search"
-import { Hand,FileText, BookOpen, HelpCircle, Github,ArrowDownToLine } from 'lucide-react'
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import { cn } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
+import { Search } from "@/components/docs/search";
+import {
+  Hand,
+  FileText,
+  BookOpen,
+  HelpCircle,
+  Github,
+  ArrowDownToLine,
+} from "lucide-react";
 
 const navigation = [
   {
@@ -38,10 +45,10 @@ const navigation = [
   //   href: "https://github.com/ekilie/vint-lang",
   //   icon: Github,
   // },
-]
+];
 
 export function Sidebar() {
-  const pathname = usePathname()
+  const pathname = usePathname();
 
   return (
     <div className="flex h-full flex-col p-14">
@@ -56,7 +63,7 @@ export function Sidebar() {
       {/* <Search /> */}
       <nav className="mt-4 flex-1">
         {navigation.map((item) => {
-          const isActive = pathname === item.href
+          const isActive = pathname === item.href;
           return (
             <Button
               key={item.name}
@@ -72,12 +79,14 @@ export function Sidebar() {
                 {item.name}
               </Link>
             </Button>
-          )
+          );
         })}
       </nav>
       <div className="mt-auto space-y-2 text-xs text-muted-foreground">
         <p>Language by Tachera Sasi</p>
-        <p>From <Link href="https://ekilie.com">ekilie</Link></p>
+        <p>
+          From <Link href="https://ekilie.com">ekilie</Link>
+        </p>
         {/* <p className="flex items-center">
           site by{" "}
           <span className="ml-1">
@@ -90,6 +99,5 @@ export function Sidebar() {
         </p> */}
       </div>
     </div>
-  )
+  );
 }
-
