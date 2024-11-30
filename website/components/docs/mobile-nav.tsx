@@ -29,9 +29,7 @@ export function MobileNav() {
         </Button>
       </SheetTrigger>
       <SheetContent side="left" className="pr-0">
-        <SheetHeader>
-          <SheetTitle>Navigation</SheetTitle>
-        </SheetHeader>
+        
         <ScrollArea className="my-4 h-[calc(100vh-8rem)] pb-10">
           <Sidebar />
         </ScrollArea>

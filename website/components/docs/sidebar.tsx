@@ -10,7 +10,6 @@ import {
   FileText,
   BookOpen,
   HelpCircle,
-  Github,
   ArrowDownToLine,
 } from "lucide-react";
 
@@ -40,27 +39,19 @@ const navigation = [
     href: "#sponsor",
     icon: HelpCircle,
   },
-  // {
-  //   name: "Repository",
-  //   href: "https://github.com/ekilie/vint-lang",
-  //   icon: Github,
-  // },
 ];
 
 export function Sidebar() {
   const pathname = usePathname();
 
   return (
-    <div className="flex h-full flex-col p-14">
+    <div className="flex h-full flex-col p-6 sm:p-10 lg:p-14">
       <div className="mb-6">
         <Link href="/" className="flex items-center space-x-2">
-          <span className="text-9xl text-neutral-300 font-bold">Vint</span>
+          <span className="text-4xl sm:text-6xl lg:text-9xl text-neutral-300 font-bold">Vint</span>
         </Link>
-        <p className="mt-1 text-sm text-muted-foreground">
-          Modern Programming made simple
-        </p>
+        <p className="mt-1 text-sm text-muted-foreground">Modern Programming made simple</p>
       </div>
-      {/* <Search /> */}
       <nav className="mt-4 flex-1">
         {navigation.map((item) => {
           const isActive = pathname === item.href;
@@ -69,7 +60,7 @@ export function Sidebar() {
               key={item.name}
               variant={isActive ? "secondary" : "ghost"}
               className={cn(
-                "mb-2 w-full p-6 justify-start shadow-lg rounded-lg border-2",
+                "mb-2 w-full p-4 sm:p-6 justify-start shadow-lg rounded-lg border-2",
                 isActive ? "bg-accent" : "hover:bg-accent/50"
               )}
               asChild
@@ -87,16 +78,6 @@ export function Sidebar() {
         <p>
           From <Link href="https://ekilie.com">ekilie</Link>
         </p>
-        {/* <p className="flex items-center">
-          site by{" "}
-          <span className="ml-1">
-            <span className="text-[#977196]">T</span>
-            <span className="text-[#98aa98]">a</span>
-            <span className="text-[#00FF00]">c</span>
-            <span className="text-[#FF1CF7]">h</span>
-            <span className="text-[#00FF00]">era</span>
-          </span>
-        </p> */}
       </div>
     </div>
   );
