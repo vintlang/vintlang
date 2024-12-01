@@ -1,55 +1,76 @@
-# VintLang Installation Guide
+# VintLang Installation Guide (Linux & macOS)
 
-## Installing vintLang on Linux
-
-You can install **vintLang** on your Linux computer using the following steps. This guide will walk you through downloading, extracting, and confirming the installation.
-
-### Step 1: Download the vintLang Binary
-
-First, download the binary release of vintLang for Linux using the following `curl` command:
-
-```bash
-curl -O -L https://github.com/ekilie/vint-lang/releases/download/0.1.0/vintLang_linux_amd64_v0.1.2.tar.gz
-```
-
-### Step 2: Extract the Binary to a Global Location
-
-Once the download is complete, extract the file and place the binary in a directory that is globally available (`/usr/local/bin` is typically used for this purpose):
-
-```bash
-sudo tar -C /usr/local/bin -xzvf vintLang_linux_amd64_v0.1.2.tar.gz
-```
-
-This will unpack the binary and make the `vintLang` command available to all users on your system.
-
-### Step 3: Confirm the Installation
-
-To verify that **vintLang** has been installed correctly, run the following command to check its version:
-
-```bash
-vint -v
-```
-
-If the installation was successful, this command will output the version of **vintLang** that was installed.
+Follow the steps below to easily install **VintLang** on your Linux or macOS system.
 
 ---
 
+### For Linux:
 
+1. **Download the Binary:**
 
-### How to Install `vintLang`:
-1. Open your terminal.
-2. Run the `curl` command to download the `vintLang` binary.
-3. Extract the downloaded archive to a globally accessible directory (`/usr/local/bin`).
-4. Confirm the installation by checking the version with `vint -v`.
+   First, download the **VintLang** binary for Linux. You can do this using the `curl` command. This will download the `tar.gz` file containing the binary to your current directory.
 
-This guide should be easy to follow for installing `vintLang` on Linux!
+   ```bash
+   curl -O -L https://github.com/ekilie/vint-lang/releases/download/0.1.0/vintLang_linux_amd64_v0.1.2.tar.gz
+   ```
 
-Now you can start using **vintLang** on your Linux system!
+2. **Extract the Binary to a Global Location:**
 
+   After downloading the binary, you need to extract it into a directory that is globally accessible. `/usr/local/bin` is a commonly used directory for this purpose. The `tar` command will extract the contents of the `tar.gz` file and place them in `/usr/local/bin`.
+
+   ```bash
+   sudo tar -C /usr/local/bin -xzvf vintLang_linux_amd64_v0.1.2.tar.gz
+   ```
+
+   This step ensures that the **VintLang** command can be used from anywhere on your system.
+
+3. **Verify the Installation:**
+
+   Once the extraction is complete, confirm that **VintLang** was installed successfully by checking its version. If the installation was successful, it will display the installed version of **VintLang**.
+
+   ```bash
+   vint -v
+   ```
+
+---
+
+### For macOS:
+
+1. **Download the Binary:**
+
+   Begin by downloading the **VintLang** binary for macOS using the following `curl` command. This will download the `tar.gz` file for macOS to your current directory.
+
+   ```bash
+   curl -O -L https://github.com/ekilie/vint-lang/releases/download/0.1.0/vintLang_mac_amd64_v0.1.0.tar.gz
+   ```
+
+2. **Extract the Binary to a Global Location:**
+
+   Next, extract the downloaded binary to a globally accessible location. As with Linux, the standard directory for this on macOS is `/usr/local/bin`. Use the following command to extract the binary:
+
+   ```bash
+   sudo tar -C /usr/local/bin -xzvf vintLang_mac_amd64_v0.1.0.tar.gz
+   ```
+
+   This allows you to run **VintLang** from any terminal window.
+
+3. **Verify the Installation:**
+
+   To check that the installation was successful, run the following command. It will output the version of **VintLang** that was installed:
+
+   ```bash
+   vint -v
+   ```
+
+---
+
+### Summary of Installation Steps:
+
+1. **Download the Binary** using `curl` for your system (Linux or macOS).
+2. **Extract the Binary** to `/usr/local/bin` (or another globally accessible directory).
+3. **Verify the Installation** by checking the version with `vint -v`.
 
 ## Sample Code
-
-Here are some sample code snippets that show how to use **vintLang**. More examples are located in the `./vintLang` folder of the codebase.
 
 ### Example 1: String Splitting and Printing
 
