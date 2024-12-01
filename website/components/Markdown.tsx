@@ -22,7 +22,7 @@ const NonMemoizedMarkdown = ({ children }: { children: string }) => {
   const components = {
     h1: ({ children, ...props }: any) => (
       <h1
-        className="text-3xl font-bold mb-4 mt-6 text-neutral-800 dark:text-neutral-100 border-b border-neutral-300 dark:border-neutral-700 pb-2"
+        className="md:text-3xl font-bold mb-4 mt-6 text-neutral-800 dark:text-neutral-100 border-b border-neutral-300 dark:border-neutral-700 pb-2"
         {...props}
       >
         {children}
@@ -30,7 +30,7 @@ const NonMemoizedMarkdown = ({ children }: { children: string }) => {
     ),
     h2: ({ children, ...props }: any) => (
       <h2
-        className="text-2xl font-semibold mb-3 mt-5 text-neutral-800 dark:text-neutral-200"
+        className="md:text-2xl font-semibold mb-3 mt-5 text-neutral-800 dark:text-neutral-200"
         {...props}
       >
         {children}
@@ -38,7 +38,7 @@ const NonMemoizedMarkdown = ({ children }: { children: string }) => {
     ),
     h3: ({ children, ...props }: any) => (
       <h3
-        className="text-xl font-medium mb-2 mt-4 text-neutral-800 dark:text-neutral-200"
+        className="text-sm md:text-xl font-medium mb-2 mt-4 text-neutral-800 dark:text-neutral-200"
         {...props}
       >
         {children}
@@ -46,7 +46,7 @@ const NonMemoizedMarkdown = ({ children }: { children: string }) => {
     ),
     p: ({ children, ...props }: any) => (
       <p
-        className="text-base leading-6 mb-4 text-neutral-700 dark:text-neutral-300"
+        className="text-xs md:text-base max-w-prose leading-6 mb-4 text-neutral-700 dark:text-neutral-300"
         {...props}
       >
         {children}
@@ -60,20 +60,20 @@ const NonMemoizedMarkdown = ({ children }: { children: string }) => {
         <div className="relative group">
           <pre
             {...props}
-            className={`${className} text-sm w-[90%] md:max-w-full overflow-x-auto bg-zinc-100 p-4 rounded-lg mt-3 dark:bg-zinc-800`}
+            className={`${className} text-[9px] max-w-prose md:text-sm w-[90%] md:max-w-full overflow-x-auto bg-zinc-100 p-4 rounded-lg mt-3 dark:bg-zinc-800`}
           >
             <code className={match[1]}>{children}</code>
           </pre>
           <Button
             onClick={() => copyToClipboard(codeContent)}
-            className="absolute top-2 right-2 dark:bg-neutral-700 dark:text-white text-sm px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity"
+            className="absolute top-2 right-2 dark:bg-neutral-700 dark:text-white text-xs md:text-sm px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity"
           >
             {!isCopied ? (<Clipboard />):(<ClipboardCheck />)}
           </Button>
         </div>
       ) : (
         <code
-          className={`${className} text-sm bg-zinc-100 dark:bg-zinc-800 py-0.5 px-1 rounded-md`}
+          className={`${className} text-xs md:text-sm bg-zinc-100 dark:bg-zinc-800 py-0.5 px-1 rounded-md`}
           {...props}
         >
           {children}
@@ -82,7 +82,7 @@ const NonMemoizedMarkdown = ({ children }: { children: string }) => {
     },
     ol: ({ children, ...props }: any) => (
       <ol
-        className="list-decimal list-outside ml-6 mb-4 text-neutral-700 dark:text-neutral-300"
+        className="text-xs md:text-base list-decimal list-outside ml-6 mb-4 text-neutral-700 dark:text-neutral-300"
         {...props}
       >
         {children}
