@@ -429,6 +429,105 @@ print("Woo hoo you've guessed it right")
 print("Game over!")
 
 ```
+---
+
+## Inventory Game
+```
+/*
+THIS IS A SIMPLE TERMINAL GAME WRITTEN IN VINTLANG
+*/
+import time
+import os
+import json
+import uuid
+
+// Game initialization
+let player = {
+    "name": "",
+    "health": 100,
+    "inventory": [],
+    "location": "start"
+}
+
+// Save game state to a file
+let saveGame = func () {
+    let saveData = json.encode(player)
+    os.writeFile("savegame.json", saveData)
+    print("Game saved!")
+}
+
+// Load game state from a file
+let loadGame = func () {
+    if (os.fileExists("savegame.json")) {
+        let saveData = os.readFile("savegame.json")
+        player = json.decode(saveData)
+        print("Game loaded!")
+    } else {
+        print("No saved game found.")
+    }
+}
+
+// Display player stats
+let showStats = func () {
+    print("Player Stats:")
+    print("Name: " + player["name"])
+    print("Health: " + string(player["health"]))
+    print("Inventory: " + string(player["inventory"]))
+    print("Location: " + player["location"])
+}
+
+// Handle game events
+let handleEvent = func (event) {
+    if (event["type"] == "item") {
+        print("You found an item: " + event["name"])
+        player["inventory"].push(event["name"])
+    } else if (event["type"] == "enemy") {
+        print("An enemy appears: " + event["name"])
+        print("You lose 10 health!")
+        player["health"] -= 10
+    }
+    if (player["health"] <= 0) {
+        print("You died! Game Over.")
+        os.exit(1)
+    }
+}
+
+// Main game loop
+let gameLoop = func () {
+    while (true) {
+        print("\nYou are at: " + player["location"])
+        print("Choose an action: [explore, stats, save, quit]")
+        let action = input("> ")
+
+        if (action == "explore") {
+            print("Exploring...")
+            let event = {
+                "type": "item",
+                "name": "Mystic Key"
+            }
+            handleEvent(event)
+        } else if (action == "stats") {
+            showStats()
+        } else if (action == "save") {
+            saveGame()
+        } else if (action == "quit") {
+            print("Quitting game...")
+            os.exit(0)
+        } else {
+            print("Invalid action!")
+        }
+    }
+}
+
+// Start the game
+print("Welcome to the Adventure Game!")
+print("Enter your player name:")
+player["name"] = input(">>> ")
+
+print("Hello, " + player["name"] + "! Let's begin.")
+gameLoop()
+
+```
 
 ## Comprehensive Example
 
