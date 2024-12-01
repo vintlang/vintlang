@@ -286,7 +286,7 @@ test_logical_operators()
 
 ## 10. OS
 
-```
+```vint
 import os
 
 // Exit with a status code
