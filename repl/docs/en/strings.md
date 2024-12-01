@@ -7,11 +7,11 @@ Strings are a sequence of characters that can represent text in the vint program
 Strings can be enclosed in either single quotes '' or double quotes "":
 
 ```s
-andika("mambo") // mambo
+print("mambo") // mambo
 
 fanya a = 'niaje'
 
-andika("mambo", a) // mambo niaje
+print("mambo", a) // mambo niaje
 ```
 
 ## Concatenating Strings
@@ -21,7 +21,7 @@ Strings can be concatenated using the + operator:
 ```s
 fanya a = "habari" + " " + "yako"
 
-andika(a) // habari yako
+print(a) // habari yako
 
 fanya b = "habari"
 
@@ -33,7 +33,7 @@ b += " yako"
 You can also repeat a string n number of times using the * operator:
 
 ```s
-andika("mambo " * 4)
+print("mambo " * 4)
 
 // mambo mambo mambo mambo
 
@@ -51,7 +51,7 @@ You can loop through a string using the kwa keyword:
 ```s
 fanya jina = "avicenna"
 
-kwa i ktk jina {andika(i)}
+kwa i ktk jina {print(i)}
 ```
 Output
 ```s 
@@ -69,7 +69,7 @@ And for key-value pairs:
 
 ```s
 kwa i, v ktk jina {
-	andika(i, "=>", v)
+	print(i, "=>", v)
 }
 ```
 Output
@@ -91,9 +91,9 @@ You can compare two strings using the == operator:
 ```s
 fanya a = "vint"
 
-andika(a == "vint") // kweli
+print(a == "vint") // kweli
 
-andika(a == "mambo") // sikweli
+print(a == "mambo") // sikweli
 ```
 
 ## String Methods
@@ -134,7 +134,7 @@ Example without a parameter:
 ```s
 fanya a = "vint mambo habari"
 fanya b = a.gawa()
-andika(b) // ["vint", "mambo", "habari"]
+print(b) // ["vint", "mambo", "habari"]
 ```
 
 Example with a parameter:
@@ -142,7 +142,7 @@ Example with a parameter:
 ```s
 fanya a = "vint,mambo,habari"
 fanya b = a.gawa(",")
-andika(b) // ["vint", "mambo", "habari"]
+print(b) // ["vint", "mambo", "habari"]
 ```
 
 By understanding strings and their manipulation in vint, you can effectively work with text data in your programs.
