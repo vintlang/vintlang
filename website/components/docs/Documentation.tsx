@@ -10,8 +10,8 @@ export default async function Documentation() {
   const markdown = await fetchMarkdown("get-started.md");
 
   return (
-    <div className="p-6" id="installation">
-      <SectionHeader title="Installation" />
+    <div className="p-6" id="docs">
+      <SectionHeader title="Documentation" />
       <Markdown>{markdown}</Markdown>
     </div>
   );
