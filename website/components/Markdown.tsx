@@ -16,7 +16,7 @@ const NonMemoizedMarkdown = ({ children }: { children: string }) => {
 
     setTimeout(()=>{
       setIsCopied(false)
-    },250)
+    },2500)
   };
 
   const components = {
