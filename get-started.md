@@ -6,14 +6,14 @@ This documentation introduces VintLang programming concepts and progresses from 
 ## 1. Basics
 
 ### 1.1 Variables and Data Types
-```vint
+```js
 // Define a variable
 let name = "VintLang"
 print(name)  // Output: VintLang
 ```
 
 ### 1.2 String Operations
-```vint
+```js
 let name = "VintLang"
 let characters = name.split("")
 for i in characters {
@@ -68,7 +68,7 @@ print(int(false))    // 0
 ## 2. Control Flow
 
 ### 2.1 Conditional Statements
-```vint
+```js
 let age = "10"
 age = convert(age, "INTEGER")  // Convert string to integer
 
@@ -82,7 +82,7 @@ if (age == 20) {
 ```
 
 ### 2.2 Loops
-```vint
+```js
 let numbers = [1, 2, 3, 4]
 for n in numbers {
     print(n)
@@ -94,7 +94,7 @@ for n in numbers {
 ## 3. Functions
 
 ### 3.1 Defining Functions
-```vint
+```js
 let printDetails = func(name, age, height) {
     print("My name is " + name + ", I am " + age + " years old, and my height is " + height + " feet.")
 }
@@ -111,7 +111,7 @@ printDetails(name, age, height)
 ## 4. Built-in Modules
 
 ### 4.1 Time Module
-```vint
+```js
 import time
 print(time.now())  // Print current timestamp
 
@@ -120,7 +120,7 @@ print("Is", year, "Leap year:", time.isLeapYear(year))
 ```
 
 ### 4.2 Networking (HTTP Requests)
-```vint
+```js
 import net
 let res = net.get("https://tachera.com")
 print(res)  // Prints the response
@@ -131,7 +131,7 @@ print(res)  // Prints the response
 ## 5. Advanced Features
 
 ### 5.1 String Manipulation
-```vint
+```js
 import string
 let trimmed = string.trim("  Hello, World!  ")
 print(trimmed)  // Output: "Hello, World!"
@@ -144,7 +144,7 @@ print(replaced)  // Output: "Hello, Vint!"
 ```
 
 ### 5.2 Regex Module
-```vint
+```js
 // Sample usage of the Regex module in Vint
 import regex
 
@@ -183,7 +183,7 @@ print(maskedString)  // Expected output: "My phone number is *********"
 ## 6. File System Operations
 
 ### 6.1 Using the OS Module
-```vint
+```js
 import os
 os.writeFile("example.txt", "Hello, Vint!")
 let content = os.readFile("example.txt")
@@ -198,7 +198,7 @@ print(files)  // List directory contents
 ## 7. Error Handling and Debugging
 
 ### 7.1 Switch Case
-```vint
+```js
 let n = 1
 switch (n) {
     case 1 {
@@ -215,7 +215,7 @@ switch (n) {
 ---
 
 ## 8. Json
-```vint
+```js
 import json
 
 //Example 1: Decode a JSON string
@@ -260,7 +260,7 @@ print("Country (missing key):", missing_value)
 
 ## 9. Logical
 
-```vint
+```js
 // Sample Vint program demonstrating logical operators
 
 // Define a function to test 'and', 'or', and 'not'
@@ -286,7 +286,7 @@ test_logical_operators()
 
 ## 10. OS
 
-```vint
+```js
 import os
 
 // Exit with a status code
@@ -330,7 +330,7 @@ print(lines) // Outputs: ["Hello", "World"]
 ```
 
 ## 11.String module
-```vint
+```js
 // Sample usage of the string module
 import "string"
 
@@ -391,7 +391,7 @@ simirality
 ```
 
 ## 12. UUID
-```vint
+```js
 import uuid
 
 print(uuid.generate())
@@ -399,7 +399,7 @@ print(uuid.generate())
 
 ## GuessingGame
 
-```vint
+```js
 import math
 
 // greet("Tach")
@@ -432,7 +432,7 @@ print("Game over!")
 ---
 
 ## Inventory Game
-```vint
+```js
 /*
 THIS IS A SIMPLE TERMINAL GAME WRITTEN IN VINTLANG
 */
@@ -532,7 +532,7 @@ gameLoop()
 ## Comprehensive Example
 
 This example integrates modules and features to create a simple application.
-```vint
+```js
 import net
 import time
 import string
