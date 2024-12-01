@@ -215,7 +215,7 @@ switch (n) {
 ---
 
 ## 8. Json
-```
+```vint
 import json
 
 //Example 1: Decode a JSON string
@@ -260,7 +260,7 @@ print("Country (missing key):", missing_value)
 
 ## 9. Logical
 
-```
+```vint
 // Sample Vint program demonstrating logical operators
 
 // Define a function to test 'and', 'or', and 'not'
@@ -330,7 +330,7 @@ print(lines) // Outputs: ["Hello", "World"]
 ```
 
 ## 11.String module
-```
+```vint
 // Sample usage of the string module
 import "string"
 
@@ -391,7 +391,7 @@ simirality
 ```
 
 ## 12. UUID
-```
+```vint
 import uuid
 
 print(uuid.generate())
@@ -432,7 +432,7 @@ print("Game over!")
 ---
 
 ## Inventory Game
-```
+```vint
 /*
 THIS IS A SIMPLE TERMINAL GAME WRITTEN IN VINTLANG
 */
