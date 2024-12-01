@@ -46,7 +46,7 @@ const NonMemoizedMarkdown = ({ children }: { children: string }) => {
     ),
     p: ({ children, ...props }: any) => (
       <p
-        className="text-xs md:text-base max-w-prose leading-6 mb-4 text-neutral-700 dark:text-neutral-300"
+        className="text-[9px] md:text-base max-w-prose leading-6 mb-4 text-neutral-700 dark:text-neutral-300"
         {...props}
       >
         {children}
