@@ -8,10 +8,10 @@ export function Features() {
   
     return (
       <div className="space-y-4">
-        <h2 className="text-2xl font-semibold tracking-tight">Features</h2>
+        <h2 className="text-base md:text-2xl font-semibold tracking-tight">Features</h2>
         <ul className="list-disc space-y-2 pl-6">
           {features.map((feature) => (
-            <li key={feature} className="text-muted-foreground">
+            <li key={feature} className="text-xs md:text-base text-muted-foreground">
               {feature}
             </li>
           ))}
