@@ -2,8 +2,8 @@ export function Features() {
     const features = [
       "Minimal core API (2kb)",
       "Many utilities and extensions",
-      "TypeScript oriented",
-      "Works with Next.js, Waku, Remix, and React Native",
+      // "TypeScript oriented",
+      // "Works with Next.js, Waku, Remix, and React Native",
     ]
   
     return (
