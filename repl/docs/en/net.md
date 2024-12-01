@@ -1,47 +1,47 @@
 # HTTP with vint
 
-You can access the internet via http protocol using the `mtandao` module.
+You can access the internet via http protocol using the `net` module.
 
 ## Importing
 
 Import the module with:
 ```
-tumia mtandao
+import net
 ```
 
 ## Methods
 
-### peruzi()
+### get()
 
 Use this as GET method. It can either accept one positional argument which will be the URL:
 
 ```
-tumia mtandao
+import net
 
-mtandao.peruzi("http://google.com")
+net.get("http://google.com")
 ```
 
 Or you can use keyword arguments to pass in parameters and headers as shown below. Note that headers and parameters must be a dictionary:
 
 ```
-tumia mtandao
+import net
 
 url = "http://mysite.com"
 headers = {"Authentication": "Bearer XXXX"}
 
-mtandao.peruzi(yuareli=url, vichwa=headers, mwili=params)
+net.get(yuareli=url, vichwa=headers, mwili=params)
 ```
 
-### tuma()
+### post()
 
 Use this as POST method. Use keyword arguments to pass in parameters and headers as shown below. Note that headers and parameters must be a dictionary:
 
 ```
-tumia mtandao
+import net
 
 url = "http://mysite.com"
 headers = {"Authentication": "Bearer XXXX"}
 params = {"key": "Value"}
 
-mtandao.tuma(yuareli=url, vichwa=headers, mwili=params)
+net.post(yuareli=url, vichwa=headers, mwili=params)
 ```
