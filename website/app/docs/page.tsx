@@ -18,8 +18,8 @@ export default function DocsPage() {
       <Introduction />
       <Installation/>
       <Documentation/>
-      <Features />
-      <Core />
+      {/* <Features /> */}
+      {/* <Core /> */}
     </div>
   );
 }
