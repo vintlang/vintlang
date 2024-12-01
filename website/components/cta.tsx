@@ -18,7 +18,7 @@ export default function CTA() {
         <p className="mt-6 text-lg leading-8 text-taupe-700 ">
           Start your journey with VintLang today and experience the power of Swahili-inspired programming.
         </p>
-        <div className="mt-10 flex items-center justify-center gap-x-6">
+        <div className="mt-10 flex items-center flex-wrap justify-center gap-x-6 gap-y-3">
           <Button size="lg" className="bg-taupe-800 text-white hover:bg-taupe-600 ">
             Get Started
           </Button>
