@@ -3,6 +3,7 @@
   "displayName": "vintlang",
   "description": "The official vint language support extension",
   "version": "0.0.1",
+  "publisher": "tacheraSasi",
   "engines": {
     "vscode": "^1.95.0"
   },
