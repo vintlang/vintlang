@@ -31,6 +31,9 @@ Follow the steps below to easily install **VintLang** on your Linux or macOS sys
    ```bash
    vint -v
    ```
+4. **Install the vintlang extension from vscode**
+
+    Install the official vint language support extension int vscode called **`vintlang`**
 
 ---
 
