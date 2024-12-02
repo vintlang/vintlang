@@ -48,7 +48,7 @@ _testmain.go
 
 testbinaries/
 tests_random/
-vint
+
 Notes.md
 tutorials/en/*
 config.json
