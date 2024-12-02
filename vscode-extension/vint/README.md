@@ -1,65 +1,93 @@
-# vint README
+# Vint Extension for VS Code
 
-This is the README for your extension "vint". After writing up a brief description, we recommend including the following sections.
+Welcome to the **Vint** extension for Visual Studio Code! This extension enhances your coding experience by providing a collection of snippets tailored for the Vint programming language. With these snippets, you can write code faster and more efficiently, allowing you to focus on building amazing applications.
 
 ## Features
 
-Describe specific features of your extension including screenshots of your extension in action. Image paths are relative to this README file.
+- **Predefined Snippets**: Easily insert commonly used code patterns, such as functions, loops, conditionals, and more.
+- **Syntax Assistance**: Quickly scaffold structures like if-else statements, loops, and switch cases.
+- **Customization**: Tailor snippets to suit your coding style and project needs.
 
-For example if there is an image subfolder under your extension project workspace:
+### Example
 
-\!\[feature X\]\(images/feature-x.png\)
+Quickly create a function with the `func` snippet:
 
-> Tip: Many popular extensions utilize animations. This is an excellent way to show off your extension! We recommend short, focused animations that are easy to follow.
+```vint
+
+// Main logic to split and print characters of a string
+let name = "VintLang"
+s = name.split("") 
+for i in s { 
+    print(i)
+}
+
+// Demonstrating type conversion and conditional statements
+age = "10"
+convert(age, "INTEGER")  // Convert age string to integer
+print(type(age))          // Uncomment to check the type of ageInInt
+
+// Conditional statements to compare the age variable
+if (age == 20) {
+    print(age)
+} else if (age == 10) {
+    print("Age is " + age)
+} else {
+    print((age == "20"))
+}
+
+// Working with height variable
+height = "6.0" // Height in feet
+print("My name is " + name)
+
+// Define a function to print details
+let printDetails = func(name, age, height) {
+    print("My name is " + name + ", I am " + age + " years old, and my height is " + height + " feet.")
+}
+
+// Calling the printDetails function with initial values
+printDetails(name, age, height)
+
+```
+
+> Tip: Explore the full list of snippets in the snippet documentation or directly in the VS Code IntelliSense suggestions.
 
 ## Requirements
 
-If you have any requirements or dependencies, add a section describing those and how to install and configure them.
+This extension does not have specific dependencies. However, ensure that you have:
+
+1. Visual Studio Code installed.
+2. The Vint language environment properly configured in your system (if applicable).
 
 ## Extension Settings
 
-Include if your extension adds any VS Code settings through the `contributes.configuration` extension point.
-
-For example:
-
 This extension contributes the following settings:
 
-* `myExtension.enable`: Enable/disable this extension.
-* `myExtension.thing`: Set to `blah` to do something.
+- `vint.snippets.enable`: Enable or disable the Vint snippets.
+- `vint.snippets.custom`: Add your custom snippets for Vint.
+
+To configure these settings, navigate to `File > Preferences > Settings` (or `Code > Preferences > Settings` on macOS) and search for "vint".
 
 ## Known Issues
 
-Calling out known issues can help limit users opening duplicate issues against your extension.
+- Snippets may not appear in non-Vint files.
+- Some advanced code patterns might require manual adjustments.
+
+If you encounter issues, please report them in the [GitHub issues](https://github.com/your-repo/vint/issues) section of the project.
 
 ## Release Notes
 
-Users appreciate release notes as you update your extension.
-
 ### 1.0.0
 
-Initial release of ...
-
-### 1.0.1
-
-Fixed issue #.
+- Initial release with basic snippets for functions, loops, conditionals, and more.
 
 ### 1.1.0
 
-Added features X, Y, and Z.
+- Added new snippets for switch cases, try-catch blocks, and variable declarations.
+- Improved snippet descriptions for better IntelliSense integration.
+
+### 1.2.0
+
+- Enhanced customization options for user-defined snippets.
+- Bug fixes and performance improvements.
 
 ---
-
-## Working with Markdown
-
-You can author your README using Visual Studio Code. Here are some useful editor keyboard shortcuts:
-
-* Split the editor (`Cmd+\` on macOS or `Ctrl+\` on Windows and Linux).
-* Toggle preview (`Shift+Cmd+V` on macOS or `Shift+Ctrl+V` on Windows and Linux).
-* Press `Ctrl+Space` (Windows, Linux, macOS) to see a list of Markdown snippets.
-
-## For more information
-
-* [Visual Studio Code's Markdown Support](http://code.visualstudio.com/docs/languages/markdown)
-* [Markdown Syntax Reference](https://help.github.com/articles/markdown-basics/)
-
-**Enjoy!**
