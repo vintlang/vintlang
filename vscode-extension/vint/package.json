@@ -1,0 +1,25 @@
+{
+  "name": "vint",
+  "displayName": "vintlang",
+  "description": "The official vint language support extension",
+  "version": "0.0.1",
+  "engines": {
+    "vscode": "^1.95.0"
+  },
+  "categories": [
+    "Programming Languages"
+  ],
+  "contributes": {
+    "languages": [{
+      "id": "vint",
+      "aliases": ["vint", "vint"],
+      "extensions": [".vint"],
+      "configuration": "./language-configuration.json"
+    }],
+    "grammars": [{
+      "language": "vint",
+      "scopeName": "source.vint",
+      "path": "./syntaxes/vint.tmLanguage.json"
+    }]
+  }
+}
