@@ -7,6 +7,84 @@
         "}"
       ],
       "description": "Create a function"
+    },
+    "IfStatement": {
+      "prefix": "if",
+      "body": [
+        "if ($1) {",
+        "\t$2",
+        "}"
+      ],
+      "description": "Create an if statement"
+    },
+    "ElseStatement": {
+      "prefix": "else",
+      "body": [
+        "else {",
+        "\t$1",
+        "}"
+      ],
+      "description": "Create an else statement"
+    },
+    "ForLoop": {
+      "prefix": "for",
+      "body": [
+        "for ($1 in $2) {",
+        "\t$3",
+        "}"
+      ],
+      "description": "Create a for loop"
+    },
+    "WhileLoop": {
+      "prefix": "while",
+      "body": [
+        "while ($1) {",
+        "\t$2",
+        "}"
+      ],
+      "description": "Create a while loop"
+    },
+    "SwitchCase": {
+      "prefix": "switch",
+      "body": [
+        "switch ($1) {",
+        "\tcase $2:",
+        "\t\t$3",
+        "\t\tbreak;",
+        "\tdefault:",
+        "\t\t$4",
+        "}"
+      ],
+      "description": "Create a switch-case statement"
+    },
+    "VariableDeclaration": {
+      "prefix": "let",
+      "body": [
+        "let $1 = $2;"
+      ],
+      "description": "Declare a variable"
+    },
+    "PrintStatement": {
+      "prefix": "print",
+      "body": [
+        "print($1);"
+      ],
+      "description": "Print a value"
+    },
+    "ImportStatement": {
+      "prefix": "import",
+      "body": [
+        "import $1 from '$2';"
+      ],
+      "description": "Import a module"
+    },
+    "PackageDeclaration": {
+      "prefix": "package",
+      "body": [
+        "package $1;"
+      ],
+      "description": "Declare a package"
     }
+    
   }
   
