@@ -2,6 +2,7 @@
 
 import { motion } from 'motion/react'
 import { Button } from '@/components/ui/button'
+import Link from 'next/link'
 
 export default function CTA() {
   return (
@@ -20,10 +21,10 @@ export default function CTA() {
         </p>
         <div className="mt-10 flex items-center flex-wrap justify-center gap-x-6 gap-y-3">
           <Button size="lg" className="bg-taupe-800 text-white hover:bg-taupe-600 ">
-            Get Started
+            <Link href="/docs">Get Started</Link>
           </Button>
           <Button size="lg" variant="outline" className=" border-taupe-700 border-white  ">
-            Learn More
+            <Link href="/docs">Learn More</Link>
           </Button>
         </div>
       </motion.div>
