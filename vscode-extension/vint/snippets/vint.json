@@ -1,0 +1,12 @@
+{
+    "Function": {
+      "prefix": "func",
+      "body": [
+        "function $1($2) {",
+        "\t$3",
+        "}"
+      ],
+      "description": "Create a function"
+    }
+  }
+  
