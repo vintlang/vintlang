@@ -27,7 +27,7 @@ var (
 	Author  = styles.AuthorStyle.Render("by Tachera Sasi")
 
 	// Combined logo with title, author, and version
-	NewLogo = lipgloss.JoinVertical(lipgloss.Center, Title, 
+	NewLogo = lipgloss.JoinVertical(lipgloss.Center, Title,
 		lipgloss.JoinHorizontal(lipgloss.Center, Author, " | ", Version))
 
 	// Help message for the CLI usage
