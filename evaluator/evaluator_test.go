@@ -49,8 +49,8 @@ func TestEvalBooleanExpression(t *testing.T) {
 		input    string
 		expected bool
 	}{
-		{"kweli", true},
-		{"sikweli", false},
+		{"true", true},
+		{"false", false},
 		{"1 < 2", true},
 		{"1 > 2", false},
 		{"1 > 1", false},
@@ -59,16 +59,16 @@ func TestEvalBooleanExpression(t *testing.T) {
 		{"1 != 1", false},
 		{"1 == 2", false},
 		{"1 != 2", true},
-		{"kweli == kweli", true},
-		{"sikweli == sikweli", true},
-		{"kweli == sikweli", false},
-		{"kweli != sikweli", true},
-		{"sikweli != kweli", true},
-		{"(1 < 2) == kweli", true},
-		{"!kweli", false},
-		{"!sikweli", true},
-		{"!tupu", true},
-		{"!'kitu'", false},
+		{"true == true", true},
+		{"false == false", true},
+		{"true == false", false},
+		{"true != false", true},
+		{"false != true", true},
+		{"(1 < 2) == true", true},
+		{"!true", false},
+		{"!false", true},
+		{"!null", true},
+		{"!'thing'", false},
 		{"2 > 1 && 1 < 4", true},
 		{"2 > 1 && 1 > 4", false},
 		{"2 < 1 && 1 < 4", false},
@@ -92,11 +92,11 @@ func TestBangOperator(t *testing.T) {
 		input    string
 		expected bool
 	}{
-		{"!kweli", false},
-		{"!sikweli", true},
+		{"!true", false},
+		{"!false", true},
 		{"!5", false},
-		{"!!kweli", true},
-		{"!!sikweli", false},
+		{"!!true", true},
+		{"!!false", false},
 		{"!!5", true},
 	}
 
@@ -167,13 +167,13 @@ func TestIfElseExpressions(t *testing.T) {
 		input    string
 		expected interface{}
 	}{
-		{"kama (kweli) {10}", 10},
-		{"kama (sikweli) {10}", nil},
-		{"kama (1) {10}", 10},
-		{"kama (1 < 2) {10}", 10},
-		{"kama (1 > 2) {10}", nil},
-		{"kama (1 > 2) {10} sivyo {20}", 20},
-		{"kama (1 < 2) {10} sivyo {20}", 10},
+		{"if (true) {10}", 10},
+		{"if (false) {10}", nil},
+		{"if (1) {10}", 10},
+		{"if (1 < 2) {10}", 10},
+		{"if (1 > 2) {10}", nil},
+		{"if (1 > 2) {10} else {20}", 20},
+		{"if (1 < 2) {10} else {20}", 10},
 	}
 
 	for _, tt := range tests {
@@ -200,10 +200,10 @@ func TestReturnStatements(t *testing.T) {
 		input    string
 		expected int64
 	}{
-		{"rudisha 10", 10},
-		{"rudisha 10; 9;", 10},
-		{"rudisha 2 * 5; 9;", 10},
-		{"9; rudisha 2 * 5; 9;", 10},
+		{"return 10", 10},
+		{"return 10; 9;", 10},
+		{"return 2 * 5; 9;", 10},
+		{"9; return 2 * 5; 9;", 10},
 	}
 
 	for _, tt := range tests {
@@ -218,37 +218,37 @@ func TestErrorHandling(t *testing.T) {
 		expectedMessage string
 	}{
 		{
-			"5 + kweli",
+			"5 + true",
 			"Line 1: Aina Hazilingani: NAMBA + BOOLEAN",
 		},
 		{
-			"5 + kweli; 5;",
+			"5 + true; 5;",
 			"Line 1: Aina Hazilingani: NAMBA + BOOLEAN",
 		},
 		{
-			"-kweli",
+			"-true",
 			"Line 1: Operesheni Haieleweki: -BOOLEAN",
 		},
 		{
-			"kweli + sikweli",
+			"true + false",
 			"Line 1: Operesheni Haieleweki: BOOLEAN + BOOLEAN",
 		},
 		{
-			"5; kweli + sikweli; 5",
+			"5; true + false; 5",
 			"Line 1: Operesheni Haieleweki: BOOLEAN + BOOLEAN",
 		},
 		{
-			"kama (10 > 1) { kweli + sikweli;}",
+			"if (10 > 1) { true + false;}",
 			"Line 1: Operesheni Haieleweki: BOOLEAN + BOOLEAN",
 		},
 		{
 			`
-kama (10 > 1) {
-	kama (10 > 1) {
-		rudisha kweli + kweli;
+if (10 > 1) {
+	if (10 > 1) {
+		return true + true;
 	}
 
-	rudisha 1;
+	return 1;
 }
 			`,
 			"Line 4: Operesheni Haieleweki: BOOLEAN + BOOLEAN",
@@ -262,8 +262,8 @@ kama (10 > 1) {
 			"Line 1: Operesheni Haieleweki: NENO - NENO",
 		},
 		{
-			`{"jina": "Avi"}[unda(x) {x}];`,
-			"Line 1: Samahani, UNDO (FUNCTION) haitumiki kama ufunguo",
+			`{"jina": "Avi"}[func(x) {x}];`,
+			"Line 1: Samahani, UNDO (FUNCTION) haitumiki if ufunguo",
 		},
 	}
 
@@ -287,10 +287,10 @@ func TestLetStatement(t *testing.T) {
 		input    string
 		expected int64
 	}{
-		{"fanya a = 5; a;", 5},
-		{"fanya a = 5 * 5; a;", 25},
-		{"fanya a = 5; fanya b = a; b;", 5},
-		{"fanya a = 5; fanya b = a; fanya c = a + b + 5; c;", 15},
+		{"let a = 5; a;", 5},
+		{"let a = 5 * 5; a;", 25},
+		{"let a = 5; let b = a; b;", 5},
+		{"let a = 5; let b = a; let c = a + b + 5; c;", 15},
 	}
 
 	for _, tt := range tests {
@@ -299,7 +299,7 @@ func TestLetStatement(t *testing.T) {
 }
 
 func TestFunctionObject(t *testing.T) {
-	input := "unda(x) { x + 2 ;};"
+	input := "func(x) { x + 2 ;};"
 
 	evaluated := testEval(input)
 	unda, ok := evaluated.(*object.Function)
@@ -327,12 +327,12 @@ func TestFunctionApplication(t *testing.T) {
 		input    string
 		expected int64
 	}{
-		{"fanya mfano = unda(x) {x;}; mfano(5);", 5},
-		{"fanya mfano = unda(x) {rudisha x;}; mfano(5);", 5},
-		{"fanya double = unda(x) { x * 2;}; double(5);", 10},
-		{"fanya add = unda(x, y) {x + y;}; add(5,5);", 10},
-		{"fanya add = unda(x, y) {x + y;}; add(5 + 5, add(5, 5));", 20},
-		{"unda(x) {x;}(5)", 5},
+		{"let test = func(x) {x;}; test(5);", 5},
+		{"let test = func(x) {return x;}; test(5);", 5},
+		{"let double = func(x) { x * 2;}; double(5);", 10},
+		{"let add = func(x, y) {x + y;}; add(5,5);", 10},
+		{"let add = func(x, y) {x + y;}; add(5 + 5, add(5, 5));", 20},
+		{"func(x) {x;}(5)", 5},
 	}
 
 	for _, tt := range tests {
@@ -342,11 +342,11 @@ func TestFunctionApplication(t *testing.T) {
 
 func TestClosures(t *testing.T) {
 	input := `
-fanya newAdder = unda(x) {
-	unda(y) { x + y};
+let newAdder = func(x) {
+	func(y) { x + y};
 };
 
-fanya addTwo = newAdder(2);
+let addTwo = newAdder(2);
 addTwo(2);
 `
 	testIntegerObject(t, testEval(input), 4)
@@ -361,7 +361,7 @@ func TestStringLiteral(t *testing.T) {
 		t.Fatalf("Object is not string, got=%T(%+v)", evaluated, evaluated)
 	}
 
-	if str.Value != "Habari yako!" {
+	if str.Value != "how are you!" {
 		t.Errorf("String has wrong value, got=%q", str.Value)
 	}
 }
@@ -396,41 +396,6 @@ func TestStringMultiplyInteger(t *testing.T) {
 	}
 }
 
-// func TestBuiltinFunctions(t *testing.T) {
-// 	tests := []struct {
-// 		input    string
-// 		expected interface{}
-// 	}{
-// 		{`jumla()`, "Hoja hazilingani, tunahitaji=1, tumepewa=0"},
-// 		{`jumla("")`, "Samahani, hii function haitumiki na NENO"},
-// 		{`jumla(1)`, "Samahani, hii function haitumiki na NAMBA"},
-// 		{`jumla([1,2,3])`, 6},
-// 		{`jumla([1,2,3.4])`, 6.4},
-// 		{`jumla([1.1,2.5,3.4])`, 7},
-// 		{`jumla([1.1,2.5,"q"])`, "Samahani namba tu zinahitajika"},
-// 	}
-
-// 	for _, tt := range tests {
-// 		evaluated := testEval(tt.input)
-
-// 		switch expected := tt.expected.(type) {
-// 		case int:
-// 			testIntegerObject(t, evaluated, int64(expected))
-// 		case float64:
-// 			testFloatObject(t, evaluated, float64(expected))
-
-// 		case string:
-// 			errObj, ok := evaluated.(*object.Error)
-// 			if !ok {
-// 				t.Errorf("Object is not Error, got=%T(%+v)", evaluated, evaluated)
-// 				continue
-// 			}
-// 			if errObj.Message != fmt.Sprintf("\x1b[%dm%s\x1b[0m", 31, expected) {
-// 				t.Errorf("Wrong eror message, expected=%q, got=%q", expected, errObj.Message)
-// 			}
-// 		}
-// 	}
-// }
 
 func TestArrayLiterals(t *testing.T) {
 	input := "[1, 2 * 2, 3 + 3]"
@@ -468,11 +433,11 @@ func TestArrayIndexExpressions(t *testing.T) {
 			3,
 		},
 		{
-			"fanya i = 0; [1][i];",
+			"let i = 0; [1][i];",
 			1,
 		},
 		{
-			"fanya myArr = [1, 2, 3]; myArr[2];",
+			"let myArr = [1, 2, 3]; myArr[2];",
 			3,
 		},
 		{
@@ -497,14 +462,14 @@ func TestArrayIndexExpressions(t *testing.T) {
 }
 
 func TestDictLiterals(t *testing.T) {
-	input := `fanya two = "two";
+	input := `let two = "two";
 {
 	"one": 10 - 9,
 	two: 1 +1,
 	"thr" + "ee": 6 / 2,
 	4: 4,
-	kweli: 5,
-	sikweli: 6
+	true: 5,
+	false: 6
 }`
 
 	evaluated := testEval(input)
@@ -550,7 +515,7 @@ func TestDictIndexExpression(t *testing.T) {
 			nil,
 		},
 		{
-			`fanya key = "foo"; {"foo": 5}[key]`,
+			`let key = "foo"; {"foo": 5}[key]`,
 			5,
 		},
 		{
@@ -562,11 +527,11 @@ func TestDictIndexExpression(t *testing.T) {
 			5,
 		},
 		{
-			`{kweli: 5}[kweli]`,
+			`{true: 5}[true]`,
 			5,
 		},
 		{
-			`{sikweli: 5}[sikweli]`,
+			`{false: 5}[false]`,
 			5,
 		},
 	}
@@ -823,7 +788,7 @@ func TestBreakLoop(t *testing.T) {
 	input := `
 	i = 0
 	wakati (i < 10) {
-		kama (i == 5) {
+		if (i == 5) {
 			vunja
 		}
 		i++
@@ -844,7 +809,7 @@ func TestBreakLoop(t *testing.T) {
 	output = ""
 	kwa i ktk "mojo" {
 		output += i
-		kama (i == 'o') {
+		if (i == 'o') {
 			vunja
 		}
 	}
@@ -867,7 +832,7 @@ func TestContinueLoop(t *testing.T) {
 	i = 0
 	wakati (i < 10) {
 		i++
-		kama (i == 5) {
+		if (i == 5) {
 			endelea
 		}
 		i++
@@ -887,7 +852,7 @@ func TestContinueLoop(t *testing.T) {
 	input = `
 	output = ""
 	kwa i ktk "mojo" {
-		kama (i == 'o') {
+		if (i == 'o') {
 			endelea
 		}
 		output += i
@@ -1113,8 +1078,8 @@ func TestStringMethods(t *testing.T) {
 
 func TestTimeModule(t *testing.T) {
 	input := `
-	tumia muda
-	muda.hasahivi()
+	import time
+	time.now()
 	`
 
 	evaluated := testEval(input)
