@@ -1,0 +1,77 @@
+// Importing modules
+import net       // Importing networking module for HTTP operations
+import time      // Importing time module to work with date and time
+
+// Main logic to split and print characters of a string
+let name = "VintLang"
+s = name.split("") 
+for i in s { 
+    print(i)
+}
+
+// Demonstrating type conversion and conditional statements
+age = "10"
+convert(age, "INTEGER")  // Convert age string to integer
+print(type(age))          // Uncomment to check the type of ageInInt
+
+// Conditional statements to compare the age variable
+if (age == 20) {
+    print(age)
+} else if (age == 10) {
+    print("Age is " + age)
+} else {
+    print((age == "20"))
+}
+
+// Working with height variable
+height = "6.0" // Height in feet
+print("My name is " + name)
+
+// Define a function to print details
+let printDetails = func(name, age, height) {
+    print("My name is " + name + ", I am " + age + " years old, and my height is " + height + " feet.")
+}
+
+// Calling the printDetails function with initial values
+printDetails(name, age, height)
+
+// Update height and call the function again
+height = "7"
+printDetails(name, age, height)
+
+// Print the current timestamp
+print(time.now())
+
+// Function to greet a user based on the time of the day
+let greet = func(nameParam) {
+    let currentTime = time.now()  // Get the current time
+    print(currentTime)            // Print the current time
+    if (true) {                   // Placeholder condition, modify for actual logic
+        print("Good morning, " + nameParam + "!")
+    } else {
+        print("Good evening, " + nameParam + "!")
+    }
+}
+
+// Time-related operations
+year = 2024
+print("Is", year, "Leap year:", time.isLeapYear(year))
+print(time.format(time.now(), "02-01-2006 15:04:05"))
+print(time.add(time.now(), "1h"))
+print(time.subtract(time.now(), "2h30m45s"))
+
+// Call the greet function with a sample name
+greet("John")
+
+// Example of a GET request using the net module
+let res = net.get("https://tachera.com")
+print(res)
+
+// Built-in functions
+print(type(123))             // Print the type of an integer
+let a = "123"                // Initialize a string variable
+convert(a, "INTEGER")        // Convert the string to an integer
+type(a)
+print(a)                     // Check the type of the variable
+print("Hello", "World")      // Print multiple values
+write("Hello World")         // Write a string (useful in returning output)
