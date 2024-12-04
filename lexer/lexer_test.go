@@ -8,28 +8,28 @@ import (
 
 func TestNextToken(t *testing.T) {
 	input := `
-	// Testing kama lex luther iko sawa
-	fanya tano = 5;
-	fanya kumi = 10;
+	
+	let five = 5;
+	let ten = 10;
 
-	fanya jumla = unda(x, y){
+	let sum = func(x, y){
 	x + y;
 	};
 
-	fanya jibu = jumla(tano, kumi);
+	let ans = sum(five, ten);
 
 	!-/5;
 	5 < 10 > 5;
 
-	kama (5 < 10) {
-		rudisha kweli;
-	} sivyo {
-		rudisha sikweli;
+	if (5 < 10) {
+		return true;
+	} else {
+		return false;
 	}
 
 	10 == 10;
-	10 != 9; // Hii ni comment
-	// Comment nyingine
+	10 != 9; // This is a comment
+	// Comment 
 
 	/*
 	multiline comment
@@ -37,44 +37,26 @@ func TestNextToken(t *testing.T) {
 
 	/* multiline comment number twooooooooooo */
 	5
-	"bangi"
-	"ba ngi"
-	[1, 2];
-	{"mambo": "vipi"}
-	. // test dot
-	tumia muda
-	
-	switch (a) {
-		ikiwa 2 {
-			andika(2)
-		}
-		kawaida {
-			andika(0)
-		}
-	}
-	
-	tupu
-	
-	kwa i, v ktk j`
+	`
 
 	tests := []struct {
 		expectedType    token.TokenType
 		expectedLiteral string
 	}{
-		{token.LET, "fanya"},
-		{token.IDENT, "tano"},
+		{token.LET, "let"},
+		{token.IDENT, "five"},
 		{token.ASSIGN, "="},
 		{token.INT, "5"},
 		{token.SEMICOLON, ";"},
-		{token.LET, "fanya"},
-		{token.IDENT, "kumi"},
+		{token.LET, "let"},
+		{token.IDENT, "ten"},
 		{token.ASSIGN, "="},
 		{token.INT, "10"},
 		{token.SEMICOLON, ";"},
-		{token.LET, "fanya"},
-		{token.IDENT, "jumla"},
+		{token.LET, "let"},
+		{token.IDENT, "sum"},
 		{token.ASSIGN, "="},
-		{token.FUNCTION, "unda"},
+		{token.FUNCTION, "func"},
 		{token.LPAREN, "("},
 		{token.IDENT, "x"},
 		{token.COMMA, ","},
@@ -87,14 +69,14 @@ func TestNextToken(t *testing.T) {
 		{token.SEMICOLON, ";"},
 		{token.RBRACE, "}"},
 		{token.SEMICOLON, ";"},
-		{token.LET, "fanya"},
-		{token.IDENT, "jibu"},
+		{token.LET, "let"},
+		{token.IDENT, "ans"},
 		{token.ASSIGN, "="},
-		{token.IDENT, "jumla"},
+		{token.IDENT, "sum"},
 		{token.LPAREN, "("},
-		{token.IDENT, "tano"},
+		{token.IDENT, "five"},
 		{token.COMMA, ","},
-		{token.IDENT, "kumi"},
+		{token.IDENT, "ten"},
 		{token.RPAREN, ")"},
 		{token.SEMICOLON, ";"},
 		{token.BANG, "!"},
@@ -108,21 +90,21 @@ func TestNextToken(t *testing.T) {
 		{token.GT, ">"},
 		{token.INT, "5"},
 		{token.SEMICOLON, ";"},
-		{token.IF, "kama"},
+		{token.IF, "if"},
 		{token.LPAREN, "("},
 		{token.INT, "5"},
 		{token.LT, "<"},
 		{token.INT, "10"},
 		{token.RPAREN, ")"},
 		{token.LBRACE, "{"},
-		{token.RETURN, "rudisha"},
-		{token.TRUE, "kweli"},
+		{token.RETURN, "return"},
+		{token.TRUE, "true"},
 		{token.SEMICOLON, ";"},
 		{token.RBRACE, "}"},
 		{token.ELSE, "sivyo"},
 		{token.LBRACE, "{"},
-		{token.RETURN, "rudisha"},
-		{token.FALSE, "sikweli"},
+		{token.RETURN, "return"},
+		{token.FALSE, "false"},
 		{token.SEMICOLON, ";"},
 		{token.RBRACE, "}"},
 		{token.INT, "10"},

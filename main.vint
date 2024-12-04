@@ -1,6 +1,10 @@
 // Importing modules
-import net       // Importing networking module for HTTP operations
-import time      // Importing time module to work with date and time
+import net, time       // Importing networking module for HTTP operations
+// import time      // Importing time module to work with date and time
+
+import mathfile
+
+print("The sum of 1 and 2 is",mathfile.sum(1,2))
 
 // Main logic to split and print characters of a string
 let name = "VintLang"
