@@ -176,11 +176,11 @@ func Eval(node ast.Node, env *object.Environment) object.Object {
 				}
 				if idx, ok := index.(*object.Integer); ok {
 					if int(idx.Value) >= len(array.Elements) {
-						return newError("Index imezidi idadi ya elements")
+						return newError("Index exceeds the number of elements")
 					}
 					array.Elements[idx.Value] = value
 				} else {
-					return newError("Hauwezi kufanya operesheni hii na %#v", index)
+					return newError("Cannot perform this operation with %#v", index)
 				}
 			} else if hash, ok := obj.(*object.Dict); ok {
 				key := Eval(ie.Index, env)
@@ -191,13 +191,13 @@ func Eval(node ast.Node, env *object.Environment) object.Object {
 					hashed := hashKey.HashKey()
 					hash.Pairs[hashed] = object.DictPair{Key: key, Value: value}
 				} else {
-					return newError("Hauwezi kufanya operesheni hii na %T", key)
+					return newError("Cannot perform this operation with %T", key)
 				}
 			} else {
-				return newError("%T haifanyi operesheni hii", obj)
+				return newError("%T does not support this operation", obj)
 			}
 		} else {
-			return newError("Tumia neno kama kibadala, sio %T", left)
+			return newError("Use an identifier instead of %T", node.Left)
 		}
 
 	}
@@ -288,7 +288,7 @@ func applyFunction(fn object.Object, args []object.Object, line int) object.Obje
 		obj.Env.Set("@", obj)
 		node, ok := fn.Scope.Get("init")
 		if !ok {
-			return newError("No init func")
+			return newError("Line %d: The package does not have an 'init' function", line)
 		}
 		node.(*object.Function).Env.Set("@", obj)
 		applyFunction(node, args, fn.Name.Token.Line)
@@ -296,13 +296,13 @@ func applyFunction(fn object.Object, args []object.Object, line int) object.Obje
 		return obj
 	default:
 		if fn != nil {
-			return newError("Line %d: Hiki sio kiendesha: %s", line, fn.Type())
+			return newError("Line %d: Unsupported operator or function type: %s", line, fn.Type())
 		} else {
-			return newError("Bro how did you even get here??? Contact language maker asap!")
+			return newError("Line %d: Unexpected error: Function object is nil. Contact the language developer.", line)
 		}
 	}
-
 }
+
 
 func extendedFunctionEnv(fn *object.Function, args []object.Object) *object.Environment {
 	env := object.NewEnclosedEnvironment(fn.Env)
