@@ -1,5 +1,3 @@
-// This will convert the sequence of characters into a sequence of tokens
-
 package lexer
 
 import (
