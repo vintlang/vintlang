@@ -11,7 +11,7 @@ Follow the steps below to easily install **VintLang** on your Linux or macOS sys
    First, download the **VintLang** binary for Linux. You can do this using the `curl` command. This will download the `tar.gz` file containing the binary to your current directory.
 
    ```bash
-   curl -O -L https://github.com/ekilie/vint-lang/releases/download/0.1.0/vintLang_linux_amd64_v0.1.0.tar.gz
+   curl -O -L https://github.com/ekilie/vint-lang/releases/download/0.1.0_i/vintLang_linux_amd64_v0.1.0.tar.gz
    ```
 
 2. **Extract the Binary to a Global Location:**
@@ -44,7 +44,7 @@ Follow the steps below to easily install **VintLang** on your Linux or macOS sys
    Begin by downloading the **VintLang** binary for macOS using the following `curl` command. This will download the `tar.gz` file for macOS to your current directory.
 
    ```bash
-   curl -O -L https://github.com/ekilie/vint-lang/releases/download/0.1.0/vintLang_mac_amd64_v0.1.0.tar.gz
+   curl -O -L https://github.com/ekilie/vint-lang/releases/download/0.1.0_i/vintLang_mac_amd64_v0.1.0.tar.gz
    ```
 
 2. **Extract the Binary to a Global Location:**
