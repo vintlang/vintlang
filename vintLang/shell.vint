@@ -1,0 +1,7 @@
+import shell
+
+output = shell.run("echo Hello, Shell!")
+print(output) // Outputs "Hello, Shell!"
+
+exists = shell.exists("ls")
+print(exists) // Outputs true if the 'ls' command exists
