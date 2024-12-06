@@ -15,5 +15,10 @@ func init() {
 	Mapper["string"] = &object.Module{Name: "string", Functions: StringFunctions}
 	Mapper["crypto"] = &object.Module{Name: "crypto", Functions: CryptoFunctions}
 	Mapper["regex"] = &object.Module{Name: "regex", Functions: RegexFunctions}
+	Mapper["shell"] = &object.Module{Name: "shell", Functions: RegexFunctions}
+	Mapper["dotenv"] = &object.Module{Name: "dotenv", Functions: RegexFunctions}
+	Mapper["sysinfo"] = &object.Module{Name: "sysinfo", Functions: RegexFunctions}
+	Mapper["encoding"] = &object.Module{Name: "encoding", Functions: RegexFunctions}
+	Mapper["colors"] = &object.Module{Name: "colors", Functions: RegexFunctions}
 
 }

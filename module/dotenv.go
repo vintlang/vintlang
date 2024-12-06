@@ -12,7 +12,7 @@ var DotenvFunctions = map[string]object.ModuleFunction{}
 
 func init() {
 	DotenvFunctions["load"] = loadEnv
-	DotenvFunctions["get"] = getEnv
+	DotenvFunctions["get"] = getDotenvValue
 }
 
 func loadEnv(args []object.Object, defs map[string]object.Object) object.Object {
@@ -33,7 +33,7 @@ func loadEnv(args []object.Object, defs map[string]object.Object) object.Object 
 	return &object.Boolean{Value: true}
 }
 
-func getEnv(args []object.Object, defs map[string]object.Object) object.Object {
+func getDotenvValue(args []object.Object, defs map[string]object.Object) object.Object {
 	if len(args) != 1 || len(defs) != 0 {
 		return &object.Error{Message: "get requires exactly one argument: the key name"}
 	}
