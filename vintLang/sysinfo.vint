@@ -1,0 +1,5 @@
+import sysinfo
+
+os = sysinfo.os()
+arch = sysinfo.arch()
+print("OS:", os, "Arch:", arch)
