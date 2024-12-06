@@ -1,0 +1,5 @@
+import vintSocket
+
+vintSocket.createServer("8080")
+vintSocket.connect("ws://localhost:8080")
+vintSocket.broadcast("Hello, WebSocket clients!")
