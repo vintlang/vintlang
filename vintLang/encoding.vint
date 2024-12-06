@@ -1,0 +1,7 @@
+import encoding
+
+encoded = encoding.base64Encode("Hello, World!")
+print(encoded) // Outputs "SGVsbG8sIFdvcmxkIQ=="
+
+decoded = encoding.base64Decode(encoded)
+print(decoded) // Outputs "Hello, World!"
