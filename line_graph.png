@@ -1,0 +1,24 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Awesome go-echarts</title>
+    <script src="https://go-echarts.github.io/go-echarts-assets/assets/echarts.min.js"></script>
+</head>
+
+<body><div class="container">
+    <div class="item" id="qnrTaoUYbPrr" style="width:900px;height:500px;"></div>
+</div><script type="text/javascript">
+    "use strict";
+    let goecharts_qnrTaoUYbPrr = echarts.init(document.getElementById('qnrTaoUYbPrr'), "white", { renderer: "canvas" });
+    let option_qnrTaoUYbPrr = {"color":["#5470c6","#91cc75","#fac858","#ee6666","#73c0de","#3ba272","#fc8452","#9a60b4","#ea7ccc"],"legend":{},"series":[{"name":"Values","type":"line","data":[{"value":10},{"value":20},{"value":30},{"value":40}]}],"title":{"text":"Line Graph"},"toolbox":{},"tooltip":{},"xAxis":[{"data":["A","B","C","D"]}],"yAxis":[{}]}
+
+    goecharts_qnrTaoUYbPrr.setOption(option_qnrTaoUYbPrr);
+</script>
+<style>
+    .container {margin-top:30px; display: flex;justify-content: center;align-items: center;}
+    .item {margin: auto;}
+</style>
+</body>
+</html>

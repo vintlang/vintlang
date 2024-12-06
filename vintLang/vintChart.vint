@@ -1,0 +1,7 @@
+import vintChart
+
+labels = ["A", "B", "C", "D"]
+values = [10, 20, 30, 40]
+vintChart.barChart(labels, values, "bar_chart.png")
+vintChart.pieChart(labels, values, "pie_chart.png")
+vintChart.lineGraph(labels, values, "line_graph.png")
