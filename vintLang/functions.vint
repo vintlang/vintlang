@@ -7,16 +7,11 @@ let vint = func(){
 }
 
 vint()
-n = 1
-switch (n) {
-    case 1 {
+let w = func(){
+    print("w function")
+}
+func(w){
+    w()
+    print("func")
+}(w)
 
-        print("is",n)
-        break
-    }
-    default {
-
-        print("is not")
-        break
-    }
-} 
