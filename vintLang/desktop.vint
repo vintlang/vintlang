@@ -1,0 +1,18 @@
+import desktop
+
+// Create the desktop application
+desktop.createApp()
+
+// Add a label to the window
+desktop.newLabel("Hello, Vint Desktop App!")
+
+// Add a button with a callback
+desktop.newButton("Click Me", fun() {
+    print("Button clicked!")
+})
+
+// Add an entry field
+desktop.newEntry()
+
+// Run the application
+desktop.runApp()
