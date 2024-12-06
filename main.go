@@ -23,7 +23,7 @@ var (
 `)
 
 	// CLI metadata
-	Version = styles.VersionStyle.Render("v0.1.1")
+	Version = styles.VersionStyle.Render("v0.1.3")
 	Author  = styles.AuthorStyle.Render("by Tachera Sasi")
 
 	// Combined logo with title, author, and version
