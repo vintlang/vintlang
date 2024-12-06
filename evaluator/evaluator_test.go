@@ -263,7 +263,7 @@ if (10 > 1) {
 		},
 		{
 			`{"jina": "Avi"}[func(x) {x}];`,
-			"Line 1: Samahani, UNDO (FUNCTION) haitumiki if ufunguo",
+			"Line 1: Samahani, FUNC (FUNCTION) haitumiki if ufunguo",
 		},
 	}
 
@@ -603,31 +603,31 @@ func TestInExpression(t *testing.T) {
 		expected bool
 	}{
 		{
-			"'a' ktk 'habari'",
+			"'a' in 'habari'",
 			true,
 		},
 		{
-			"'c' ktk 'habari'",
+			"'c' in 'habari'",
 			false,
 		},
 		{
-			"1 ktk [1, 2, 3]",
+			"1 in [1, 2, 3]",
 			true,
 		},
 		{
-			"4 ktk [1, 2, 3]",
+			"4 in [1, 2, 3]",
 			false,
 		},
 		{
-			"'a' ktk {'a': 'apple', 'b': 'banana'}",
+			"'a' in {'a': 'apple', 'b': 'banana'}",
 			true,
 		},
 		{
-			"'apple' ktk {'a': 'apple', 'b': 'banana'}",
+			"'apple' in {'a': 'apple', 'b': 'banana'}",
 			false,
 		},
 		{
-			"'c' ktk {'a': 'apple', 'b': 'banana'}",
+			"'c' in {'a': 'apple', 'b': 'banana'}",
 			false,
 		},
 	}
@@ -748,7 +748,7 @@ func TestPostfixExpression(t *testing.T) {
 func TestWhileLoop(t *testing.T) {
 	input := `
 	i = 10
-	wakati (i > 0){
+	while (i > 0){
 		i--
 	}
 	i
@@ -768,7 +768,7 @@ func TestWhileLoop(t *testing.T) {
 func TestForLoop(t *testing.T) {
 	input := `
 	output = ""
-	kwa i ktk "mojo" {
+	for i in "mojo" {
 		output += i
 	}
 	output
@@ -787,9 +787,9 @@ func TestForLoop(t *testing.T) {
 func TestBreakLoop(t *testing.T) {
 	input := `
 	i = 0
-	wakati (i < 10) {
+	while (i < 10) {
 		if (i == 5) {
-			vunja
+			break
 		}
 		i++
 	}
@@ -807,10 +807,10 @@ func TestBreakLoop(t *testing.T) {
 
 	input = `
 	output = ""
-	kwa i ktk "mojo" {
+	for i in "mojo" {
 		output += i
 		if (i == 'o') {
-			vunja
+			break
 		}
 	}
 	output
@@ -830,10 +830,10 @@ func TestBreakLoop(t *testing.T) {
 func TestContinueLoop(t *testing.T) {
 	input := `
 	i = 0
-	wakati (i < 10) {
+	while (i < 10) {
 		i++
 		if (i == 5) {
-			endelea
+			continue
 		}
 		i++
 	}
@@ -851,9 +851,9 @@ func TestContinueLoop(t *testing.T) {
 
 	input = `
 	output = ""
-	kwa i ktk "mojo" {
+	for i in "mojo" {
 		if (i == 'o') {
-			endelea
+			continue
 		}
 		output += i
 	}
@@ -880,14 +880,14 @@ func TestSwitchStatement(t *testing.T) {
 			`
 			i = 5
 			switch (i) {
-				ikiwa 2 {
+				case 2 {
 					output = 2
 				}
-				ikiwa 5 {
+				case 5 {
 					output = 5
 				}
-				kawaida {
-					output = "haijulikani"
+				default {
+					output = "failed"
 				}
 			}
 			output
@@ -898,29 +898,29 @@ func TestSwitchStatement(t *testing.T) {
 			`
 			i = 5
 			switch (i) {
-				ikiwa 2 {
+				case 2 {
 					output = 2
 				}
-				kawaida {
-					output = "haijulikani"
+				default {
+					output = "failed"
 				}
 			}
 			output
 			`,
-			"haijulikani",
+			"failed",
 		},
 		{
 			`
 			i = 5
 			switch (i) {
-				ikiwa 5 {
+				case 5 {
 					output = 5
 				}
-				ikiwa 2 {
+				case 2 {
 					output = 2
 				}
-				kawaida {
-					output = "haijulikani"
+				default {
+					output = "failed"
 				}
 			}
 			output
@@ -942,7 +942,7 @@ func TestSwitchStatement(t *testing.T) {
 			}
 
 			if s.Value != tt.expected {
-				t.Errorf("Wrong Value, want='haijulikani', got=%s", s.Value)
+				t.Errorf("Wrong Value, want='failed', got=%s", s.Value)
 			}
 
 		}
@@ -1029,19 +1029,19 @@ func TestStringMethods(t *testing.T) {
 		expected interface{}
 	}{
 		{
-			"'mambo'.idadi()",
+			"'mambo'.len()",
 			5,
 		},
 		{
-			"'mambo'.herufikubwa()",
+			"'mambo'.upper()",
 			"MAMBO",
 		},
 		{
-			"'MaMbO'.herufindogo()",
+			"'MaMbO'.lower()",
 			"mambo",
 		},
 		{
-			"'habari'.gawa('a')",
+			"'habari'.split('a')",
 			"[h, b, ri]",
 		},
 	}
