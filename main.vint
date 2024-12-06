@@ -79,3 +79,11 @@ type(a)
 print(a)                     // Check the type of the variable
 print("Hello", "World")      // Print multiple values
 write("Hello World")         // Write a string (useful in returning output)
+
+let w = func(){
+    print("w function")
+}
+func(w){
+    w()
+print("func")
+}(w)
