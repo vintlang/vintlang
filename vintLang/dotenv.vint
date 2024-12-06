@@ -1,0 +1,5 @@
+import dotenv
+
+dotenv.load(".env")
+apiKey = dotenv.get("API_KEY")
+print(apiKey) // Outputs the value of API_KEY from .env
