@@ -148,6 +148,22 @@ var builtins = map[string]*object.Builtin{
 		},
 	},
 
+	"eq":{
+		Fn: func (args ...object.Object)object.Object  {
+			if len(args) !=2{
+				return newError("Sorry, convert requires 2 arguments, you provided %d", len(args))
+			}
+
+			a := args[0]
+			b := args[1]
+
+			if a == b {
+				return &object.Boolean{Value:true}
+			}
+			return &object.Boolean{Value:false}
+		},
+	},
+
 	"convert": {
 		Fn: func(args ...object.Object) object.Object {
 			if len(args) != 2 {
