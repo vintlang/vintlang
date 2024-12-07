@@ -1,0 +1,1 @@
+print(eq(2,"")) //Prints False
