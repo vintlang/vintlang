@@ -37,7 +37,7 @@ var MathFunctions = map[string]object.ModuleFunction{
 	"min":       min,
 	"exp":       exp,
 	"expm1":     expm1,
-	"log":       log,
+	// "log":       log,
 	"log10":     log10,
 	"log1p":     log1p,
 	"cos":       cos,
@@ -452,19 +452,19 @@ func expm1(args []object.Object, defs map[string]object.Object) object.Object {
 	return &object.Float{Value: math.Expm1(num)}
 }
 
-func log(args []object.Object, defs map[string]object.Object) object.Object {
-	if len(defs) != 0 {
-		return &object.Error{Message: "Undo hili haliruhusu ufafanuzi."}
-	}
-	if len(args) != 1 {
-		return &object.Error{Message: "Undo hili linahitaji hoja moja tu"}
-	}
-	if args[0].Type() != object.FLOAT_OBJ {
-		return &object.Error{Message: "Hoja lazima iwe desimali"}
-	}
-	num := args[0].(*object.Float).Value
-	return &object.Float{Value: math.Log(num)}
-}
+// func log(args []object.Object, defs map[string]object.Object) object.Object {
+// 	if len(defs) != 0 {
+// 		return &object.Error{Message: "Undo hili haliruhusu ufafanuzi."}
+// 	}
+// 	if len(args) != 1 {
+// 		return &object.Error{Message: "Undo hili linahitaji hoja moja tu"}
+// 	}
+// 	if args[0].Type() != object.FLOAT_OBJ {
+// 		return &object.Error{Message: "Hoja lazima iwe desimali"}
+// 	}
+// 	num := args[0].(*object.Float).Value
+// 	return &object.Float{Value: math.Log(num)}
+// }
 
 func log10(args []object.Object, defs map[string]object.Object) object.Object {
 	if len(defs) != 0 {
