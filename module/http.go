@@ -18,9 +18,9 @@ func init() {
 }
 
 // fileServer serves files from a specified directory on a given port.
-func fileServer(args []object.Object,defs map[string]object.Object) object.Object {
-	if len(args) != 2 {
-		return &object.Error{Message: "Usage: http.fileServer(port, directory)"}
+func fileServer(args []object.Object, defs map[string]object.Object) object.Object {
+	if len(args) < 2 || len(args) > 3 {
+		return &object.Error{Message: "Usage: http.fileServer(port, directory, [message])"}
 	}
 
 	// Validates port argument
@@ -35,6 +35,19 @@ func fileServer(args []object.Object,defs map[string]object.Object) object.Objec
 		return &object.Error{Message: "Directory must be a string"}
 	}
 
+	// Determines custom or default message
+	var message string
+	if len(args) == 3 {
+		customMessage, ok := args[2].(*object.String)
+		if ok {
+			message = customMessage.Value
+		} else {
+			return &object.Error{Message: "Message must be a string"}
+		}
+	} else {
+		message = fmt.Sprintf("Server started on port %s serving files from %s", port.Value, directory.Value)
+	}
+
 	// Creates a file server
 	fs := http.FileServer(http.Dir(directory.Value))
 
@@ -43,7 +56,7 @@ func fileServer(args []object.Object,defs map[string]object.Object) object.Objec
 
 	// Starts the server in a new goroutine
 	go func() {
-		fmt.Printf("Server started on port %s serving files from %s\n", port.Value, directory.Value)
+		fmt.Println(message)
 		if err := http.ListenAndServe(":"+port.Value, nil); err != nil {
 			fmt.Printf("Error starting server: %v\n", err)
 			os.Exit(1)
@@ -53,7 +66,7 @@ func fileServer(args []object.Object,defs map[string]object.Object) object.Objec
 	// Waits for interrupt signal to gracefully stop the program
 	waitForInterrupt()
 
-	return &object.String{Value: "Server started on port " + port.Value}
+	return &object.String{Value: "Server stopped on port " + port.Value}
 }
 
 // waitForInterrupt blocks until an interrupt signal (Ctrl+C) is received.

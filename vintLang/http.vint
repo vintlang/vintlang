@@ -3,4 +3,11 @@ import http
 let port = "3000"
 let dir = "/var/www/html"
 
-http.fileServer(port,dir)
+// http.fileServer(port,dir)  //Using the default message
+
+// Starting a file server with a custom message
+http.fileServer(
+    port, 
+    dir, 
+    "My custom server is running on port 3000!"
+)
