@@ -8,6 +8,7 @@ func init() {
 	Mapper["os"] = &object.Module{Name: "os", Functions: OsFunctions}
 	Mapper["time"] = &object.Module{Name: "time", Functions: TimeFunctions}
 	Mapper["net"] = &object.Module{Name: "net", Functions: NetFunctions}
+	Mapper["http"] = &object.Module{Name: "http", Functions: HttpFunctions}
 	Mapper["json"] = &object.Module{Name: "json", Functions: JsonFunctions}
 	Mapper["math"] = &object.Module{Name: "math", Functions: MathFunctions}
 	Mapper["cli"] = &object.Module{Name: "cli", Functions: CliFunctions}

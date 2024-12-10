@@ -27,29 +27,29 @@ func init() {
 
 // Creates a slug string from a normal string
 func slug(args []object.Object, defs map[string]object.Object) object.Object {
-	// Ensure exactly one argument is passed
+	// Ensures exactly one argument is passed
 	if len(args) != 1 {
 		return &object.Error{Message: "string.slug requires exactly one argument"}
 	}
 
-	// Inspect the argument and convert it to a string
+	// Inspects the argument and convert it to a string
 	input := args[0].Inspect()
 
-	// Convert the input to lowercase
+	// Converts the input to lowercase
 	input = strings.ToLower(input)
 
-	// Remove all non-alphanumeric characters except spaces and hyphens
+	// Removes all non-alphanumeric characters except spaces and hyphens
 	re := regexp.MustCompile(`[^a-z0-9\s-]+`)
 	input = re.ReplaceAllString(input, "")
 
-	// Replace spaces and multiple hyphens with a single hyphen
+	// Replaces spaces and multiple hyphens with a single hyphen
 	re = regexp.MustCompile(`[\s-]+`)
 	input = re.ReplaceAllString(input, "-")
 
-	// Trim leading and trailing hyphens
+	// Trims leading and trailing hyphens
 	input = strings.Trim(input, "-")
 
-	// Return the result as a Vint object string
+	// Returns the result as a Vint object string
 	return &object.String{Value: input}
 }
 
