@@ -46,8 +46,12 @@ result = string.substring("Hello, World!", 0, 5)
 print(result)  // Output: "Hello"
 
 // Example 12: Invalid indices (start >= end)
-result = string.substring("Hello, World!", 7, 3)
-print(result)  // Output: Error: Invalid start or end index
+// result = string.substring("Hello, World!", 7, 3)
+// print(result)  // Output: Error: Invalid start or end index
+
+//Example 12: Generating a slug
+result = string.slug("Creates a slug string from a normal string")
+print(result)   //Output: string: creates-a-slug-string-from-a-normal-string
 
 
 /*
