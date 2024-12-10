@@ -1,13 +1,44 @@
-import http 
+import http
 
 let port = "3000"
 let dir = "/var/www/html"
 
-// http.fileServer(port,dir)  //Using the default message
+// Scenario 1: Using the default message and no directory listing
+http.fileServer(port, dir)
 
-// Starting a file server with a custom message
+// Scenario 2: Starting a file server with a custom message
 http.fileServer(
-    port, 
-    dir, 
-    "My custom server is running on port 3000!"
+    port,
+    dir,
+    "My custom Vint server is running on port 3000!"
 )
+
+// Scenario 3: Starting a file server with directory listing enabled (default message)
+http.fileServer(
+    port,
+    dir,
+    null,  // No custom message, use the default
+    true   // Enable directory listing
+)
+
+// Scenario 4: Starting a file server with a custom message and directory listing enabled
+http.fileServer(
+    port,
+    dir,
+    "Directory listing is now enabled! Check it out!",
+    true
+)
+
+// Scenario 5: Starting a file server with a custom message and directory listing disabled
+http.fileServer(
+    port,
+    dir,
+    "No directory listing. Just serving static files.",
+    false
+)
+
+// Scenario 6: Invalid usage (e.g., wrong arguments) - this should return an error
+http.fileServer(3000, dir)  // Port must be a string
+http.fileServer(port, 123)  // Directory must be a string
+http.fileServer(port, dir, 404)  // Message must be a string
+http.fileServer(port, dir, "Message", "true")  // enableListing must be a boolean
