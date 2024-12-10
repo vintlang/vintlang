@@ -66,7 +66,7 @@ func fileServer(args []object.Object, defs map[string]object.Object) object.Obje
 	// Waits for interrupt signal to gracefully stop the program
 	waitForInterrupt()
 
-	return &object.String{Value: "Server stopped on port " + port.Value}
+	return &object.String{Value: "Server stopped"}
 }
 
 // waitForInterrupt blocks until an interrupt signal (Ctrl+C) is received.
