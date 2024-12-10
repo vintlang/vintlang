@@ -1,8 +1,10 @@
+import http
+
 let port = "3000";
 let dir = "/var/www/html";
 
 // Scenario 1: Using the default message and no directory listing
-http.fileServer(port, dir);
+// http.fileServer(port, dir);
 
 // Scenario 2: Starting a file server with a custom message
 http.fileServer(
@@ -25,7 +27,7 @@ http.fileServer(
 );
 
 // Scenario 5: Invalid usage (e.g., wrong arguments) - this should return an error
-http.fileServer(3000, dir);  // Port must be a string
-http.fileServer(port, 123);  // Directory must be a string
-http.fileServer(port, dir, 404);  // Message must be a string
-http.fileServer(port, dir, "Message", "true");  // enableListing must be a boolean
+// http.fileServer(3000, dir);  // Port must be a string
+// http.fileServer(port, 123);  // Directory must be a string
+// http.fileServer(port, dir, 404);  // Message must be a string
+// http.fileServer(port, dir, "Message", "true");  // enableListing must be a boolean
