@@ -633,7 +633,7 @@ type PropertyAssignment struct {
 
 func (pa *PropertyAssignment) expressionNode()      {}
 func (pa *PropertyAssignment) TokenLiteral() string { return pa.Token.Literal }
-func (pa *PropertyAssignment) String() string       { return "Ngl I'm tired" }
+func (pa *PropertyAssignment) String() string       { return "tach" }
 
 type PropertyExpression struct {
 	Expression
@@ -644,4 +644,4 @@ type PropertyExpression struct {
 
 func (pe *PropertyExpression) expressionNode()      {}
 func (pe *PropertyExpression) TokenLiteral() string { return pe.Token.Literal }
-func (pe *PropertyExpression) String() string       { return "Ngl I'm tired part two" }
+func (pe *PropertyExpression) String() string       { return "Tach two" }
