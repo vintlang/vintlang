@@ -19,10 +19,10 @@ func init() {
 	HttpFunctions["fileServer"] = fileServer
 }
 
-// fileServer serves files from a specified directory with enhanced features.
+// fileServer serves files from a specified directory with directory listing enabled.
 func fileServer(args []object.Object, defs map[string]object.Object) object.Object {
-	if len(args) < 2 || len(args) > 4 {
-		return &object.Error{Message: "Usage: http.fileServer(port, directory, [message], [enableListing])"}
+	if len(args) < 2 || len(args) > 3 {
+		return &object.Error{Message: "Usage: http.fileServer(port, directory, [message])"}
 	}
 
 	// Validate port argument
@@ -47,18 +47,7 @@ func fileServer(args []object.Object, defs map[string]object.Object) object.Obje
 			return &object.Error{Message: "Message must be a string"}
 		}
 	} else {
-		message = fmt.Sprintf("Server started on port %s serving files from %s", port.Value, directory.Value)
-	}
-
-	// Validates enableListing flag (optional)
-	enableListing := false
-	if len(args) == 4 {
-		listingFlag, ok := args[3].(*object.Boolean)
-		if ok {
-			enableListing = listingFlag.Value
-		} else {
-			return &object.Error{Message: "enableListing must be a boolean"}
-		}
+		message = fmt.Sprintf("Server started on port %s serving files from %s with directory listing enabled", port.Value, directory.Value)
 	}
 
 	// Ensure directory exists
@@ -67,11 +56,9 @@ func fileServer(args []object.Object, defs map[string]object.Object) object.Obje
 		return &object.Error{Message: "Invalid or non-existent directory"}
 	}
 
-	// Create a file server with optional middleware
+	// Create a file server with directory listing enabled
 	fileHandler := http.FileServer(http.Dir(absDirectory))
-	if enableListing {
-		fileHandler = enableDirectoryListing(fileHandler)
-	}
+	fileHandler = enableDirectoryListing(fileHandler)
 
 	// Wrap the file server in middleware for logging requests
 	http.Handle("/", logMiddleware(fileHandler))
@@ -98,9 +85,10 @@ func logMiddleware(next http.Handler) http.Handler {
 	})
 }
 
-// enableDirectoryListing modifies the handler to allow directory listings.
+// enableDirectoryListing modifies the handler to always show directory listings.
 func enableDirectoryListing(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		// Setting the content type to HTML so directory contents are rendered as a webpage.
 		w.Header().Set("Content-Type", "text/html")
 		next.ServeHTTP(w, r)
 	})
