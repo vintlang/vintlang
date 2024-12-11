@@ -5,6 +5,7 @@ import (
 	"strings"
 
 	"github.com/ekilie/vint-lang/object"
+	"github.com/ekilie/vint-lang/toolkit"
 )
 
 var CliFunctions = map[string]object.ModuleFunction{}
@@ -13,6 +14,21 @@ func init() {
 	CliFunctions["parseArgs"] = parseArgs
 	CliFunctions["getArgValue"] = getArgValue
 	CliFunctions["hasArg"] = hasArg
+	CliFunctions["getArgs"] = getArgs
+}
+
+func getArgs(args []object.Object, defs map[string]object.Object)object.Object{
+	if len(args) > 0{
+		return &object.Error{Message:"getArgs does not accept any arguments"}
+	}
+
+	cliArgs := &object.Array{}
+
+	for _, arg := range toolkit.GetCliArgs() {
+		cliArgs.Elements = append(cliArgs.Elements,&object.String{Value:arg})
+	}
+
+	return cliArgs
 }
 
 func parseArgs(args []object.Object, defs map[string]object.Object) object.Object {
