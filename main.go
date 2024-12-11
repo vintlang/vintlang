@@ -88,10 +88,10 @@ func run(file string) {
 			if i < 2{
 				continue
 			}
-			toolkit.CLI_ARGS = append(toolkit.CLI_ARGS,v)
+			toolkit.CLI_ARGS = append(toolkit.CLI_ARGS,v) // Appending the args to the slice
 		}
-		fmt.Println(toolkit.CLI_ARGS[1])
-		return
+		// fmt.Println(toolkit.CLI_ARGS[1]) // for debugging purposes
+		
 	}
 	// Ensures the file has a .vint extension
 	if strings.HasSuffix(file, ".vint") {
