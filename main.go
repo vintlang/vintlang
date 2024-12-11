@@ -65,6 +65,8 @@ func main() {
 			fmt.Println(NewLogo)
 		case "--docs", "-docs":
 			repl.Docs()
+		case "update":
+			toolkit.Update()
 		case ".":
 			// Runs default main.vint file
 			run("main.vint")
