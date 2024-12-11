@@ -10,7 +10,7 @@ import (
 	"github.com/ekilie/vint-lang/styles"
 	"github.com/ekilie/vint-lang/toolkit"
 )
-
+const VINT_VERSION = "0.1.2"
 // Constants for styled output
 var (
 	// Title banner for the CLI
@@ -24,7 +24,7 @@ var (
 `)
 
 	// CLI metadata
-	Version = styles.VersionStyle.Render("v0.1.3")
+	Version = styles.VersionStyle.Render("v"+VINT_VERSION)
 	Author  = styles.AuthorStyle.Render("by Tachera Sasi")
 
 	// Combined logo with title, author, and version
