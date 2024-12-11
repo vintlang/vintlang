@@ -5,7 +5,7 @@ import (
 	"strings"
 
 	"github.com/ekilie/vint-lang/object"
-	"github.com/xrash/smetrics" // A library for string metrics, like Levenshtein
+	"github.com/xrash/smetrics" // string metrics, like Levenshtein
 )
 
 var StringFunctions = map[string]object.ModuleFunction{}
