@@ -10,3 +10,7 @@ print(value) // Outputs "val1" if arg1 was provided as an argument
 
 hasArg = cli.hasArg("arg2")
 print(hasArg) // Outputs true if arg2 exists in the arguments
+
+args = cli.getArgs()
+
+print(args)
