@@ -56,7 +56,7 @@ func main() {
 	}
 
 	// Single argument provided: Handle specific commands
-	if len(args) == 2 {
+	if len(args) >= 2 {//Greater or equal accounting for the cli-args and the package manager for vint 
 		switch args[1] {
 		case "help", "-help", "--help", "-h":
 			fmt.Println(Help)
@@ -65,24 +65,27 @@ func main() {
 		case "--docs", "-docs":
 			repl.Docs()
 		case ".":
-			// Run default main.vint file
+			// Runs default main.vint file
 			run("main.vint")
 		default:
-			// Attempt to run the specified file
+			// Attempts to run the specified file
 			file := args[1]
 			run(file)
 		}
 	} else {
-		// Invalid usage: Display error and help
+		// Invalid usage: Displays error and help
 		fmt.Println(styles.ErrorStyle.Render("Error: Operation failed."))
 		fmt.Println(Help)
 		os.Exit(1)
 	}
 }
 
-// run executes the specified Vint file
+// runs and executes the specified Vint file
 func run(file string) {
-	// Ensure the file has a .vint extension
+	if len(os.Args) > 2 {
+		
+	}
+	// Ensures the file has a .vint extension
 	if strings.HasSuffix(file, ".vint") {
 		contents, err := os.ReadFile(file)
 		if err != nil {
@@ -90,10 +93,10 @@ func run(file string) {
 			os.Exit(1)
 		}
 
-		// Pass the file contents to the REPL for execution
+		// Passes the file contents to the REPL for execution
 		repl.Read(string(contents))
 	} else {
-		// Handle invalid file type
+		// Handles invalid file type
 		fmt.Println(styles.ErrorStyle.Render("'"+file+"'", "is not a correct file type. Use '.vint'"))
 		os.Exit(1)
 	}
