@@ -8,6 +8,7 @@ import (
 	"github.com/charmbracelet/lipgloss"
 	"github.com/ekilie/vint-lang/repl"
 	"github.com/ekilie/vint-lang/styles"
+	"github.com/ekilie/vint-lang/toolkit"
 )
 
 // Constants for styled output
@@ -83,7 +84,14 @@ func main() {
 // runs and executes the specified Vint file
 func run(file string) {
 	if len(os.Args) > 2 {
-		
+		for i, v := range os.Args {
+			if i < 2{
+				continue
+			}
+			toolkit.CLI_ARGS = append(toolkit.CLI_ARGS,v)
+		}
+		fmt.Println(toolkit.CLI_ARGS[1])
+		return
 	}
 	// Ensures the file has a .vint extension
 	if strings.HasSuffix(file, ".vint") {
