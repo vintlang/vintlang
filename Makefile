@@ -11,7 +11,7 @@ build_linux:
 	env GOOS=linux GOARCH=amd64 go build -ldflags="-s -w" -o vint
 	@echo 'shrinking binary...'
 	./upx --brute vint
-	@echo 'zipping build....'
+	@echo 'zipping build...'
 	tar -zcvf binaries/vintLang_linux_amd64.tar.gz vint
 	@echo 'cleaning up...'
 	rm vint
