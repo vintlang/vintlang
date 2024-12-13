@@ -1,6 +1,9 @@
 //This module is still experimental
 
+import utils
 import cli
+
+utils.printer("Hello from module printer")
 
 args = cli.parseArgs("arg1=val1 arg2=val2")
 print(args) // Outputs the list of arguments

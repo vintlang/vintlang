@@ -28,6 +28,7 @@ func evalImport(node *ast.Import, env *object.Environment) object.Object {
 
 func evalImportFile(name string, ident *ast.Identifier, env *object.Environment) object.Object {
 	addSearchPath("")
+	addSearchPath("./modules")
 	filename := findFile(name)
 	if filename == "" {
 		return newError("Module %s not found", name) 

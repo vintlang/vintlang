@@ -1,0 +1,7 @@
+import http
+
+PORT = "3000"
+
+dir = "/var/www/html"
+
+http.fileServer(PORT,dir,"server running on "+PORT)
