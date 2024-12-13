@@ -1,0 +1,7 @@
+import time
+
+package utils{
+    let printer = func(message){
+        print(string(time.now()),message)
+    }
+}

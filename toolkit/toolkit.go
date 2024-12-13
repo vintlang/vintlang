@@ -188,3 +188,12 @@ func Update() {
 	fmt.Println("Installation complete!")
 }
 
+
+func Get(pkg string){
+	switch pkg {
+	case "vintpm":
+		fmt.Println("Installing vintpm...")
+		
+	}
+}
+
