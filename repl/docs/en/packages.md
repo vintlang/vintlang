@@ -10,7 +10,7 @@ You can use third packages written in vint with the following conditions:
 // imports if any
 
 pakeji [name of package] {
-        andaa = unda() { // the andaa function is mandatory even if its empty
+        andaa = func() { // the andaa function is mandatory even if its empty
 
             }
         [body of package]
@@ -33,7 +33,7 @@ tumia jsoni
 pakeji sarufi {
 
         // initialize function
-        andaa = unda(file) {
+        andaa = func(file) {
             config = fungua(file) // read passwords from json file
             configString = config.soma()
 
@@ -56,19 +56,19 @@ pakeji sarufi {
             }
 
         // a method to get token
-        tokenYangu = unda() {
+        tokenYangu = func() {
                 rudisha @.token
             }
 
         // a method to create new chatbots.
         // the data should be a dict
-        tengenezaChatbot = unda(data) {
+        tengenezaChatbot = func(data) {
                 majibu = mtandao.tuma(yuareli="https://api.sarufi.io/chatbot", vichwa={"Authorization": @.Auth}, mwili = data)
                 rudisha majibu
             }
 
         // a method to get all available chatbots
-        pataChatbotZote = unda() {
+        pataChatbotZote = func() {
                 majibu = mtandao.peruzi(yuareli="https://api.sarufi.io/chatbots", vichwa={"Authorization": @.Auth})
                 rudisha majibu
             }

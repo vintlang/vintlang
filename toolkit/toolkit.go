@@ -234,7 +234,7 @@ func Init(args []string) {
 		Description: "I love VintLang",
 	}
 
-	// Create vint.json
+	// Creating vint.json
 	fmt.Println("Creating vint.json...")
 	vintFile, err := os.Create("vint.json")
 	if err != nil {
@@ -254,7 +254,7 @@ func Init(args []string) {
 	}
 	fmt.Println("vint.json created successfully!")
 
-	// Create main.vint
+	// Creating main.vint
 	fmt.Println("Creating main.vint...")
 	mainFile, err := os.Create("main.vint")
 	if err != nil {

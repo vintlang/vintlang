@@ -134,11 +134,11 @@ func (pg playground) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 				pg.editor.Focus()
 			}
 		case tea.KeyCtrlR:
-			if strings.Contains(pg.editor.Value(), "jaza") {
-				pg.output.SetContent(styles.HelpStyle.Italic(false).Render("Samahani, huwezi kutumia `jaza()` kwa sasa."))
+			if strings.Contains(pg.editor.Value(), "input") {
+				pg.output.SetContent(styles.HelpStyle.Italic(false).Render("Samahani, huwezi kutumia `input()` kwa sasa."))
 			} else {
 				// this is just for the output will find a better solution
-				code := strings.ReplaceAll(pg.editor.Value(), "andika", "_andika")
+				code := strings.ReplaceAll(pg.editor.Value(), "print", "_print")
 				pg.code = code
 				env := object.NewEnvironment()
 				l := lexer.New(pg.code)
@@ -177,11 +177,11 @@ func (pg playground) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		switch msg.Type {
 		case tea.MouseLeft:
 			if zone.Get(pg.id + "run").InBounds(msg) {
-				if strings.Contains(pg.editor.Value(), "jaza") {
-					pg.output.SetContent(styles.HelpStyle.Italic(false).Render("Samahani, huwezi kutumia `jaza()` kwa sasa."))
+				if strings.Contains(pg.editor.Value(), "input") {
+					pg.output.SetContent(styles.HelpStyle.Italic(false).Render("Samahani, huwezi kutumia `input()` kwa sasa."))
 				} else {
 					// this is just for the output will find a better solution
-					code := strings.ReplaceAll(pg.editor.Value(), "andika", "_andika")
+					code := strings.ReplaceAll(pg.editor.Value(), "print", "_print")
 					pg.code = code
 					env := object.NewEnvironment()
 					l := lexer.New(pg.code)
@@ -235,7 +235,7 @@ func (pg playground) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 			pg.output.Style = lipgloss.NewStyle().PaddingLeft(3)
 			var output string
 			output = "Your code output will be displayed here..." + strings.Repeat(" ", msg.Width-6)
-			
+
 			pg.output.SetContent(output)
 
 			// documentation
