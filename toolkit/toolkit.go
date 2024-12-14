@@ -224,7 +224,7 @@ greet("Developer")`
 func Init(args []string) {
 	projectName := "vint-project"
 	if len(args) >= 2 {
-		projectName = args[1]
+		projectName = args[2]
 	}
 
 	// Structure for vint.json
