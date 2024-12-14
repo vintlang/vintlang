@@ -9,9 +9,9 @@ Boolean objects in vint are truthy, meaning that any value is true, except tupu 
 In vint, you can evaluate simple expressions that return a boolean value:
 
 ```s
-andika(1 > 2) // Output: `sikweli`
+print(1 > 2) // Output: `sikweli`
 
-andika(1 + 3 < 10) // Output: `kweli`
+print(1 + 3 < 10) // Output: `kweli`
 ```
 
 ### Evaluating Complex Expressions
@@ -26,9 +26,9 @@ c = 15
 result = (a < b) && (b < c)
 
 kama (result) {
-    andika("Both conditions are true")
+    print("Both conditions are true")
 } sivyo {
-    andika("At least one condition is false")
+    print("At least one condition is false")
 }
 // Output: "Both conditions are true"
 ```
@@ -44,9 +44,9 @@ vint has several boolean operators that you can use to evaluate expressions:
 The && operator evaluates to true only if both operands are true. Here's an example:
 
 ```s
-andika(kweli && kweli) // Output: `kweli`
+print(kweli && kweli) // Output: `kweli`
 
-andika(kweli && sikweli) // Output: `sikweli`
+print(kweli && sikweli) // Output: `sikweli`
 ```
 
 ### The || Operator
@@ -54,9 +54,9 @@ andika(kweli && sikweli) // Output: `sikweli`
 The || operator evaluates to true if at least one of the operands is true. Here's an example:
 
 ```s
-andika(kweli || sikweli) // Output: `kweli`
+print(kweli || sikweli) // Output: `kweli`
 
-andika(sikweli || sikweli) // Output: `sikweli`
+print(sikweli || sikweli) // Output: `sikweli`
 ```
 
 ### The ! Operator
@@ -64,9 +64,9 @@ andika(sikweli || sikweli) // Output: `sikweli`
 The ! operator negates the value of the operand. Here's an example:
 
 ```s
-andika(!kweli) // Output: `sikweli`
+print(!kweli) // Output: `sikweli`
 
-andika(!sikweli) // Output: `kweli`
+print(!sikweli) // Output: `kweli`
 ```
 
 ## Working with Boolean Values in Loops
@@ -78,9 +78,9 @@ namba = [1, 2, 3, 4, 5]
 
 kwa thamani ktk namba {
     kama (thamani % 2 == 0) {
-        andika(thamani, "is even")
+        print(thamani, "is even")
     } sivyo {
-        andika(thamani, "is odd")
+        print(thamani, "is odd")
     }
 }
 // Output:

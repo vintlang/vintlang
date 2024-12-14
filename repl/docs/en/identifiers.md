@@ -11,11 +11,11 @@ Identifiers can contain letters, numbers, and underscores. However, there are a 
 Here are some examples of valid identifiers:
 
 ```s
-fanya birth_year = 2020
-andika(birth_year) // 2020
+let birth_year = 2020
+print(birth_year) // 2020
 
-fanya convert_c_to_p = "C to P"
-andika(convert_c_to_p) // "C to P"
+let convert_c_to_p = "C to P"
+print(convert_c_to_p) // "C to P"
 ```
 
 In the examples above, birth_year and convert_c_to_p are both valid identifiers.

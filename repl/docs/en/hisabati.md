@@ -17,7 +17,7 @@ To use the `hisabati` in-built module follow the steps below:
 2. Calling the in-built module methods:
 
    ```vint
-   andika(hisabati.e())
+   print(hisabati.e())
    ```
 
 ## Yaliyomo

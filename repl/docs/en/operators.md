@@ -1,5 +1,5 @@
 # OPERATORS
-Operators are the foundation of any programming language, allowing you to perform various operations on variables and values. This page covers the syntax and usage of operators in vint, including assignment, arithmetic, comparison, member, and logic operators.
+Operators are the fofunction of any programming language, allowing you to perform various operations on variables and values. This page covers the syntax and usage of operators in vint, including assignment, arithmetic, comparison, member, and logic operators.
 
 ## ASSIGNMENT
 
@@ -43,7 +43,7 @@ vint supports the following comparison operators:
 
 The member operator in vint is `ktk`. It will check if an object exists in another object:
 ```go
-fanya majina = ['juma', 'asha', 'haruna']
+let majina = ['juma', 'asha', 'haruna']
 
 "haruna" ktk majina // kweli
 "halima" ktk majina // sikweli
