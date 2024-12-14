@@ -196,7 +196,7 @@ func Get(pkg string) {
 	}
 }
 
-type Vint_config struct {
+type VintConfig struct {
 	Name        string `json:"name"`
 	Version     string `json:"version"`
 	Description string `json:"description"`
@@ -224,16 +224,18 @@ greet("Developer")`
 func Init(args []string) {
 	projectName := "vint-project"
 	if len(args) >= 2 {
-		projectName = args[2]
-	}
-	// Structure for vint.json
-	var vintConfig = Vint_config{
-		Name:    projectName,
-		Version: "1.0.0",
-		Description: "I love vintLang",
+		projectName = args[1]
 	}
 
-	// Creating vint.json
+	// Structure for vint.json
+	var vintConfig = VintConfig{
+		Name:        projectName,
+		Version:     "1.0.0",
+		Description: "I love VintLang",
+	}
+
+	// Create vint.json
+	fmt.Println("Creating vint.json...")
 	vintFile, err := os.Create("vint.json")
 	if err != nil {
 		fmt.Printf("Error creating vint.json: %v\n", err)
@@ -248,9 +250,12 @@ func Init(args []string) {
 	}
 	if _, err := vintFile.Write(vintData); err != nil {
 		fmt.Printf("Error writing to vint.json: %v\n", err)
+		return
 	}
+	fmt.Println("vint.json created successfully!")
 
-	// Creating main.vint
+	// Create main.vint
+	fmt.Println("Creating main.vint...")
 	mainFile, err := os.Create("main.vint")
 	if err != nil {
 		fmt.Printf("Error creating main.vint: %v\n", err)
@@ -260,5 +265,10 @@ func Init(args []string) {
 
 	if _, err := mainFile.WriteString(sampleVintCode); err != nil {
 		fmt.Printf("Error writing to main.vint: %v\n", err)
+		return
 	}
+	fmt.Println("main.vint created successfully!")
+
+	// Success message
+	fmt.Printf("Project '%s' initialized successfully!\n", projectName)
 }
