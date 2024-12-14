@@ -13,9 +13,10 @@ import (
 	"runtime"
 	// "strings"
 )
+
 var CLI_ARGS []string = []string{}
 
-func GetCliArgs()[]string{// Returns the CLI_ARGS 
+func GetCliArgs() []string { // Returns the CLI_ARGS
 	return CLI_ARGS
 }
 
@@ -188,26 +189,19 @@ func Update() {
 	fmt.Println("Installation complete!")
 }
 
-
-func Get(pkg string){
+func Get(pkg string) {
 	switch pkg {
 	case "vintpm":
 		fmt.Println("Installing vintpm...")
 	}
 }
 
-
-
-// Structure for vint.json
-var vintConfig = struct {
-	Name    string `json:"name"`
-	Version string `json:"version"`
-}{
-	Name:    "vint-project",
-	Version: "1.0.0",
+type Vint_config struct {
+	Name        string `json:"name"`
+	Version     string `json:"version"`
+	Description string `json:"description"`
 }
 
-// Simplified VintLang code for main.vint
 const sampleVintCode = `// Simple string manipulation and message printing
 
 // Print a greeting
@@ -227,7 +221,18 @@ let greet = func(name) {
 
 greet("Developer")`
 
-func init() {
+func Init(args []string) {
+	projectName := "vint-project"
+	if len(args) >= 2 {
+		projectName = args[2]
+	}
+	// Structure for vint.json
+	var vintConfig = Vint_config{
+		Name:    projectName,
+		Version: "1.0.0",
+		Description: "I love vintLang",
+	}
+
 	// Creating vint.json
 	vintFile, err := os.Create("vint.json")
 	if err != nil {
@@ -257,4 +262,3 @@ func init() {
 		fmt.Printf("Error writing to main.vint: %v\n", err)
 	}
 }
-
