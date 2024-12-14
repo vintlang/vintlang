@@ -197,7 +197,64 @@ func Get(pkg string){
 }
 
 
-func init(){
-	
+
+// Structure for vint.json
+var vintConfig = struct {
+	Name    string `json:"name"`
+	Version string `json:"version"`
+}{
+	Name:    "vint-project",
+	Version: "1.0.0",
+}
+
+// Simplified VintLang code for main.vint
+const sampleVintCode = `// Simple string manipulation and message printing
+
+// Print a greeting
+print("Hello, VintLang World!")
+
+// Demonstrate string splitting
+let phrase = "VintLang"
+let letters = phrase.split("")
+for letter in letters {
+    print(letter)
+}
+
+// Demonstrate a simple function
+let greet = func(name) {
+    print("Hello, " + name + "!")
+}
+
+greet("Developer")`
+
+func init() {
+	// Creating vint.json
+	vintFile, err := os.Create("vint.json")
+	if err != nil {
+		fmt.Printf("Error creating vint.json: %v\n", err)
+		return
+	}
+	defer vintFile.Close()
+
+	vintData, err := json.MarshalIndent(vintConfig, "", "  ")
+	if err != nil {
+		fmt.Printf("Error marshalling vint.json: %v\n", err)
+		return
+	}
+	if _, err := vintFile.Write(vintData); err != nil {
+		fmt.Printf("Error writing to vint.json: %v\n", err)
+	}
+
+	// Creating main.vint
+	mainFile, err := os.Create("main.vint")
+	if err != nil {
+		fmt.Printf("Error creating main.vint: %v\n", err)
+		return
+	}
+	defer mainFile.Close()
+
+	if _, err := mainFile.WriteString(sampleVintCode); err != nil {
+		fmt.Printf("Error writing to main.vint: %v\n", err)
+	}
 }
 
