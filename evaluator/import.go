@@ -16,11 +16,14 @@ import (
 var searchPaths []string
 
 func evalImport(node *ast.Import, env *object.Environment) object.Object {
-	for k, v := range node.Identifiers {
-		if mod, ok := module.Mapper[v.Value]; ok {
-			env.Set(k, mod)
+	for alias, modName := range node.Identifiers {
+		if mod, exists := module.Mapper[modName.Value]; exists {
+			env.Set(alias, mod)
 		} else {
-			return evalImportFile(k, v, env)
+			result := evalImportFile(alias, modName, env)
+			if isError(result) {
+				return result
+			}
 		}
 	}
 	return NULL
@@ -29,15 +32,17 @@ func evalImport(node *ast.Import, env *object.Environment) object.Object {
 func evalImportFile(name string, ident *ast.Identifier, env *object.Environment) object.Object {
 	addSearchPath("")
 	addSearchPath("./modules")
+
 	filename := findFile(name)
 	if filename == "" {
-		return newError("Module %s not found", name) 
+		return newError("Module '%s' not found. Searched paths: %s", name, strings.Join(searchPaths, ", "))
 	}
-	var scope *object.Environment
+
 	scope, err := evaluateFile(filename, env)
 	if err != nil {
-		return err
+		return newError("Error evaluating module '%s': %s", name, err)
 	}
+
 	return importFile(name, ident, env, scope)
 }
 
@@ -64,27 +69,31 @@ func fileExists(file string) bool {
 func evaluateFile(file string, env *object.Environment) (*object.Environment, object.Object) {
 	source, err := os.ReadFile(file)
 	if err != nil {
-		return nil, &object.Error{Message: fmt.Sprintf("Failed to open package: %s", file)} 
+		return nil, newError("Failed to open file '%s': %s", file, err.Error())
 	}
+
 	l := lexer.New(string(source))
 	p := parser.New(l)
 	program := p.ParseProgram()
-	if len(p.Errors()) != 0 {
-		return nil, &object.Error{Message: fmt.Sprintf("Package %s has the following errors:\n%s", file, strings.Join(p.Errors(), "\n"))} 
+
+	if len(p.Errors()) > 0 {
+		return nil, newError("Syntax errors in file '%s':\n%s", file, strings.Join(p.Errors(), "\n"))
 	}
 
 	scope := object.NewEnvironment()
 	result := Eval(program, scope)
+
 	if isError(result) {
-		return nil, result
+		return nil, newError("Runtime error in file '%s': %s", file, result.Inspect())
 	}
+
 	return scope, nil
 }
 
 func importFile(name string, ident *ast.Identifier, env *object.Environment, scope *object.Environment) object.Object {
-	value, ok := scope.Get(ident.Value)
-	if !ok {
-		return newError("%s is not a package", name) 
+	value, found := scope.Get(ident.Value)
+	if !found {
+		return newError("Identifier '%s' not found in module '%s'", ident.Value, name)
 	}
 	env.Set(name, value)
 	return NULL
