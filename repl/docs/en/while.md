@@ -6,10 +6,10 @@ While loops in vint are used to execute a block of code repeatedly, as long as a
 
 A while loop is executed when a specified condition is true. You initiliaze a while loop with the `wakati` keyword followed by the condition in paranthesis  `()`. The consequence of the loop should be enclosed in brackets `{}`:
 ```s
-fanya i = 1
+let i = 1
 
 wakati (i <= 5) {
-	andika(i)
+	print(i)
 	i++
 }
 ```
@@ -28,14 +28,14 @@ Output
 Use the vunja keyword to terminate a loop:
 
 ```s
-fanya i = 1
+let i = 1
 
 wakati (i < 5) {
 	kama (i == 3) {
-		andika("nimevunja")
+		print("nimevunja")
 		vunja
 	}
-	andika(i)
+	print(i)
 	i++
 }
 ```
@@ -51,15 +51,15 @@ nimevunja
 Use the endelea keyword to skip a specific iteration:
 
 ```s
-fanya i = 0
+let i = 0
 
 wakati (i < 5) {
 	i++
 	kama (i == 3) {
-		andika("nimeruka")
+		print("nimeruka")
 		endelea
 	}
-	andika(i)
+	print(i)
 }
 ```
 Output

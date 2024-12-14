@@ -1,0 +1,18 @@
+// Simple string manipulation and message printing
+
+// Print a greeting
+print("Hello, VintLang World!")
+
+// Demonstrate string splitting
+let phrase = "VintLang"
+let letters = phrase.split("")
+for letter in letters {
+    print(letter)
+}
+
+// Demonstrate a simple function
+let greet = func(name) {
+    print("Hello, " + name + "!")
+}
+
+greet("Developer")

@@ -41,7 +41,7 @@ Use the `ktk` keyword to check if an item exists in an array:
 
 ```s
 namba = [10, 20, 30]
-andika(20 ktk namba)  // will print kweli
+print(20 ktk namba)  // will print kweli
 ```
 
 ## Looping Over Arrays
@@ -52,7 +52,7 @@ You can use the kwa and ktk keywords to loop over array elements. To loop over j
 namba = [1, 2, 3, 4, 5]
 
 kwa thamani ktk namba {
-    andika(thamani)
+    print(thamani)
 }
 ```
 
@@ -62,7 +62,7 @@ To loop over both index and value pairs, use this syntax:
 majina = ["Juma", "Asha", "Haruna"]
 
 kwa idx, jina ktk majina {
-    andika(idx, "-", jina)
+    print(idx, "-", jina)
 }
 ```
 
@@ -77,7 +77,7 @@ idadi() returns the length of an array:
 ```s
 a = [1, 2, 3]
 urefu = a.idadi()
-andika(urefu)  // will print 3
+print(urefu)  // will print 3
 ```
 
 ### sukuma()
@@ -87,7 +87,7 @@ sukuma() adds one or more items to the end of an array:
 ```s
 a = [1, 2, 3]
 a.sukuma("s", "g")
-andika(a)  // will print [1, 2, 3, "s", "g"]
+print(a)  // will print [1, 2, 3, "s", "g"]
 ```
 
 ### yamwisho()
@@ -97,11 +97,11 @@ yamwisho() returns the last item in an array, or tupu if the array is empty:
 ```s
 a = [1, 2, 3]
 mwisho = a.yamwisho()
-andika(mwisho)  // will print 3
+print(mwisho)  // will print 3
 
 b = []
 mwisho = b.yamwisho()
-andika(mwisho)  // will print tupu
+print(mwisho)  // will print tupu
 ```
 
 ### map()
@@ -110,9 +110,9 @@ map() goes through every element in the array and applies the passed function to
 ```s
 a = [1, 2, 3]
 
-b = a.map(unda(x){rudisha x*2})
+b = a.map(func(x){rudisha x*2})
 
-andika(b) // [2, 4, 6]
+print(b) // [2, 4, 6]
 ```
 
 ### chuja()
@@ -121,13 +121,13 @@ chuja() will go through every single element of an array and checks if that elem
 ```s
 a = [1, 2, 3, 4]
 
-b = a.chuja(unda(x){
+b = a.chuja(func(x){
     kama (x % 2 == 0) 
         {rudisha kweli}
     rudisha sikweli
     })
 
-andika(b) // [2, 4]
+print(b) // [2, 4]
 ```
 
 With this information, you can now effectively work with arrays in vint, making it easy to manipulate collections of data in your programs.

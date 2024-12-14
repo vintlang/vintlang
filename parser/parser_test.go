@@ -14,9 +14,9 @@ func TestLetStatements(t *testing.T) {
 		expectedIdentifier string
 		expectedValue      interface{}
 	}{
-		{"fanya x = 5;", "x", 5},
-		{"fanya y = x;", "y", "x"},
-		{"fanya bangi = y;", "bangi", "y"},
+		{"let x = 5;", "x", 5},
+		{"let y = x;", "y", "x"},
+		{"let bangi = y;", "bangi", "y"},
 	}
 
 	for _, tt := range tests {
@@ -43,8 +43,8 @@ func TestLetStatements(t *testing.T) {
 }
 
 func testLetStatement(t *testing.T, s ast.Statement, name string) bool {
-	if s.TokenLiteral() != "fanya" {
-		t.Errorf("s.TokenLiteral not 'fanya', got = %q", s.TokenLiteral())
+	if s.TokenLiteral() != "let" {
+		t.Errorf("s.TokenLiteral not 'let', got = %q", s.TokenLiteral())
 		return false
 	}
 
@@ -637,7 +637,7 @@ func TestIfElseExpression(t *testing.T) {
 }
 
 func TestFunctionLiteralParsing(t *testing.T) {
-	input := `unda(x, y) {x + y}`
+	input := `func(x, y) {x + y}`
 
 	l := lexer.New(input)
 	p := New(l)
@@ -682,9 +682,9 @@ func TestFunctionParameterParsing(t *testing.T) {
 		input          string
 		expectedParams []string
 	}{
-		{input: "unda() {};", expectedParams: []string{}},
-		{input: "unda(x) {};", expectedParams: []string{"x"}},
-		{input: "unda(x, y, z) {};", expectedParams: []string{"x", "y", "z"}},
+		{input: "func() {};", expectedParams: []string{}},
+		{input: "func(x) {};", expectedParams: []string{"x"}},
+		{input: "func(x, y, z) {};", expectedParams: []string{"x", "y", "z"}},
 	}
 
 	for _, tt := range tests {
@@ -974,7 +974,7 @@ func TestParsingEmptyDict(t *testing.T) {
 }
 
 func TestWhileLoop(t *testing.T) {
-	input := `wakati ( x > y ) { fanya x = 2 }`
+	input := `wakati ( x > y ) { let x = 2 }`
 
 	l := lexer.New(input)
 	p := New(l)
@@ -1016,13 +1016,13 @@ func TestWhileLoop(t *testing.T) {
 
 func TestShorthandAssignment(t *testing.T) {
 	input := []string{
-		"fanya x = 10; x *= 20;",
-		"fanya x = 5; x += 4;",
-		"fanya x = 7; x /= 2;",
-		"fanya x = 8; x -= 1;",
-		"fanya x = 5; x++;",
-		"fanya x = 3; x--;",
-		"fanya x = 40; fanya y = 13; x += y;"}
+		"let x = 10; x *= 20;",
+		"let x = 5; x += 4;",
+		"let x = 7; x /= 2;",
+		"let x = 8; x -= 1;",
+		"let x = 5; x++;",
+		"let x = 3; x--;",
+		"let x = 40; let y = 13; x += y;"}
 
 	for _, txt := range input {
 		l := lexer.New(txt)
@@ -1033,7 +1033,7 @@ func TestShorthandAssignment(t *testing.T) {
 }
 
 func TestForExpression(t *testing.T) {
-	input := `kwa i, v ktk j {andika(i)}`
+	input := `kwa i, v ktk j {print(i)}`
 
 	l := lexer.New(input)
 	p := New(l)
@@ -1096,13 +1096,13 @@ func TestParseSwitch(t *testing.T) {
 	input := `
 	switch (a) {
 		ikiwa 2 {
-			andika(2)
+			print(2)
 		}
 		ikiwa 3 {
-			andika(3)
+			print(3)
 		}
 		kawaida {
-			andika(0)
+			print(0)
 		}
 	}
 	`

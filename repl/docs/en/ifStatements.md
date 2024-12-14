@@ -1,6 +1,6 @@
 # Conditional Statements in vint
 
-Conditional statements in vint are used to perform different actions based on different conditions. The if/else statement is a fundamental control structure that allows you to execute code based on specific conditions. This page covers the basics of if/else statements in vint.
+Conditional statements in vint are used to perform different actions based on different conditions. The if/else statement is a ffuncmental control structure that allows you to execute code based on specific conditions. This page covers the basics of if/else statements in vint.
 
 ## If Statement (Kama)
 
@@ -8,11 +8,11 @@ An if statement starts with the kama keyword, followed by a condition in parenth
 
 ```s
 kama (2 > 1) {
-    andika(kweli) // kweli
+    print(kweli) // kweli
 }
 ```
 
-In this example, the condition 2 > 1 is true, so the andika(kweli) statement is executed, and the output is kweli.
+In this example, the condition 2 > 1 is true, so the print(kweli) statement is executed, and the output is kweli.
 
 ## Else If and Else Blocks (Au Kama and Sivyo)
 
@@ -20,14 +20,14 @@ You can use au kama to test multiple conditions and sivyo to specify a default b
 
 ```s
 
-fanya a = 10
+let a = 10
 
 kama (a > 100) {
-    andika("a imezidi 100")
+    print("a imezidi 100")
 } au kama (a < 10) {
-    andika("a ndogo kuliko 10")
+    print("a ndogo kuliko 10")
 } sivyo {
-    andika("Thamani ya a ni", a)
+    print("Thamani ya a ni", a)
 }
 
 // The output will be 'Thamani ya a ni 10'

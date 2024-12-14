@@ -1,6 +1,6 @@
 # For Loops in vint
 
-For loops are a fundamental control structure in vint, used for iterating over iterable objects such as strings, arrays, and dictionaries. This page covers the syntax and usage of for loops in vint, including key-value pair iteration, and the use of break and continue statements.
+For loops are a ffuncmental control structure in vint, used for iterating over iterable objects such as strings, arrays, and dictionaries. This page covers the syntax and usage of for loops in vint, including key-value pair iteration, and the use of break and continue statements.
 
 ## Basic Syntax
 To create a for loop, use the kwa keyword followed by a temporary identifier (such as i or v) and the iterable object. Enclose the loop body in curly braces {}. Here's an example with a string:
@@ -9,7 +9,7 @@ To create a for loop, use the kwa keyword followed by a temporary identifier (su
 jina = "lugano"
 
 kwa i ktk jina {
-    andika(i)
+    print(i)
 }
 ```
 Output:
@@ -33,7 +33,7 @@ vint allows you to iterate over both the value or the key-value pair of an itera
 kamusi = {"a": "andaa", "b": "baba"}
 
 kwa v ktk kamusi {
-    andika(v)
+    print(v)
 }
 ```
 
@@ -48,7 +48,7 @@ To iterate over both the keys and the values, use two temporary identifiers:
 ```s
 
 kwa k, v ktk kamusi {
-    andika(k + " ni " + v)
+    print(k + " ni " + v)
 }
 ```
 Output:
@@ -64,7 +64,7 @@ To iterate over just the values in a string, use one temporary identifier:
 
 ```s
 kwa v ktk "mojo" {
-    andika(v)
+    print(v)
 }
 ```
 
@@ -79,7 +79,7 @@ To iterate over both the keys and the values in a string, use two temporary iden
 
 ```s
 kwa i, v ktk "mojo" {
-    andika(i, "->", v)
+    print(i, "->", v)
 }
 ```
 Output:
@@ -98,7 +98,7 @@ To iterate over just the values in a list, use one temporary identifier:
 majina = ["juma", "asha", "haruna"]
 
 kwa v ktk majina {
-    andika(v)
+    print(v)
 }
 ```
 
@@ -114,7 +114,7 @@ To iterate over both the keys and the values in a list, use two temporary identi
 
 ```s
 kwa i, v ktk majina {
-    andika(i, "-", v)
+    print(i, "-", v)
 }
 ```
 
@@ -136,10 +136,10 @@ Use the vunja keyword to terminate a loop:
 
 kwa i, v ktk "mojo" {
     kama (i == 2) {
-        andika("nimevunja")
+        print("nimevunja")
         vunja
     }
-    andika(v)
+    print(v)
 }
 ```
 
@@ -158,10 +158,10 @@ Use the endelea keyword to skip a specific iteration:
 ```s
 kwa i, v ktk "mojo" {
     kama (i == 2) {
-        andika("nimeruka")
+        print("nimeruka")
         endelea
     }
-    andika(v)
+    print(v)
 }
 ```
 

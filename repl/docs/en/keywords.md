@@ -11,8 +11,8 @@ The table below lists the reserved keywords in vint. These words have specific m
   <tr>
     <td>kweli</td>
     <td>sikweli</td>
-    <td>unda</td>
-    <td>fanya</td>
+    <td>func</td>
+    <td>let</td>
   </tr>
   <tr>
     <td>kama</td>
@@ -48,9 +48,9 @@ vint also provides several built-in functions that are reserved and cannot be us
 <table style="display: inline-table; width: 100%; text-align: center">
 <tbody>
 <tr>
-    <td>andika</td>
+    <td>print</td>
     <td>aina</td>
-    <td>jaza</td>
+    <td>input</td>
     <td>fungua</td>
   </tr>
 </tbody>

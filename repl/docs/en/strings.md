@@ -9,7 +9,7 @@ Strings can be enclosed in either single quotes '' or double quotes "":
 ```s
 print("mambo") // mambo
 
-fanya a = 'niaje'
+let a = 'niaje'
 
 print("mambo", a) // mambo niaje
 ```
@@ -19,11 +19,11 @@ print("mambo", a) // mambo niaje
 Strings can be concatenated using the + operator:
 
 ```s
-fanya a = "habari" + " " + "yako"
+let a = "habari" + " " + "yako"
 
 print(a) // habari yako
 
-fanya b = "habari"
+let b = "habari"
 
 b += " yako"
 
@@ -37,7 +37,7 @@ print("mambo " * 4)
 
 // mambo mambo mambo mambo
 
-fanya a = "habari"
+let a = "habari"
 
 a *= 4
 
@@ -49,7 +49,7 @@ a *= 4
 You can loop through a string using the kwa keyword:
 
 ```s
-fanya jina = "avicenna"
+let jina = "avicenna"
 
 kwa i ktk jina {print(i)}
 ```
@@ -89,7 +89,7 @@ Output
 You can compare two strings using the == operator:
 
 ```s
-fanya a = "vint"
+let a = "vint"
 
 print(a == "vint") // kweli
 
@@ -103,7 +103,7 @@ print(a == "mambo") // sikweli
 You can find the length of a string using the idadi method. It does not accept any parameters.
 
 ```s
-fanya a = "mambo"
+let a = "mambo"
 a.idadi() // 5
 ```
 
@@ -112,7 +112,7 @@ a.idadi() // 5
 This method converts a string to uppercase. It does not accept any parameters.
 
 ```s
-fanya a = "vint"
+let a = "vint"
 a.herufikubwa() // vint
 ```
 
@@ -121,7 +121,7 @@ a.herufikubwa() // vint
 This method converts a string to lowercase. It does not accept any parameters.
 
 ```s
-fanya a = "vint"
+let a = "vint"
 a.herufindogo() // vint
 ```
 
@@ -132,16 +132,16 @@ The gawa method splits a string into an array based on a specified delimiter. If
 Example without a parameter:
 
 ```s
-fanya a = "vint mambo habari"
-fanya b = a.gawa()
+let a = "vint mambo habari"
+let b = a.gawa()
 print(b) // ["vint", "mambo", "habari"]
 ```
 
 Example with a parameter:
 
 ```s
-fanya a = "vint,mambo,habari"
-fanya b = a.gawa(",")
+let a = "vint,mambo,habari"
+let b = a.gawa(",")
 print(b) // ["vint", "mambo", "habari"]
 ```
 

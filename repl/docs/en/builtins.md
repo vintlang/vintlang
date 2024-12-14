@@ -2,28 +2,28 @@
 
 vint has several built-in functions that perform specific tasks.
 
-## The andika() Function
+## The print() Function
 
-The andika() function is used to print out messages to the console. It can take zero or more arguments, and the arguments will be printed out with a space in between them. Additionally, andika() supports basic formatting such as /n for a new line, /t for a tab space, and \\ for a backslash. Here's an example:
+The print() function is used to print out messages to the console. It can take zero or more arguments, and the arguments will be printed out with a space in between them. Additionally, print() supports basic formatting such as /n for a new line, /t for a tab space, and \\ for a backslash. Here's an example:
 
 ```s
-andika(1, 2, 3) // Output: "1 2 3"
+print(1, 2, 3) // Output: "1 2 3"
 ```
 
-## The jaza() Function
+## The input() Function
 
-The jaza() function is used to get input from the user. It can take zero or one argument, which is a string that will be used as a prompt for the user. Here's an example:
+The input() function is used to get input from the user. It can take zero or one argument, which is a string that will be used as a prompt for the user. Here's an example:
 
 ```s
-fanya salamu = unda() {
-    fanya jina = jaza("Unaitwa nani? ")
-    andika("Mambo vipi", jina)
+let salamu = func() {
+    let jina = input("Unaitwa nani? ")
+    print("Mambo vipi", jina)
 }
 
 salamu()
 ```
 
-In this example, we define a function `salamu()` that prompts the user to enter their name using the `jaza()` function. We then use the `andika()` function to print out a message that includes the user's name.
+In this example, we define a function `salamu()` that prompts the user to enter their name using the `input()` function. We then use the `print()` function to print out a message that includes the user's name.
 
 ## The aina() Function
 

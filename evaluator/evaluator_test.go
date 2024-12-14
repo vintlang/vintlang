@@ -302,23 +302,23 @@ func TestFunctionObject(t *testing.T) {
 	input := "func(x) { x + 2 ;};"
 
 	evaluated := testEval(input)
-	unda, ok := evaluated.(*object.Function)
+	function, ok := evaluated.(*object.Function)
 	if !ok {
 		t.Fatalf("object is not a Function, got=%T(%+v)", evaluated, evaluated)
 	}
 
-	if len(unda.Parameters) != 1 {
-		t.Fatalf("function has wrong parameters,Parameters=%+v", unda.Parameters)
+	if len(function.Parameters) != 1 {
+		t.Fatalf("function has wrong parameters,Parameters=%+v", function.Parameters)
 	}
 
-	if unda.Parameters[0].String() != "x" {
-		t.Fatalf("parameter is not x, got=%q", unda.Parameters[0])
+	if function.Parameters[0].String() != "x" {
+		t.Fatalf("parameter is not x, got=%q", function.Parameters[0])
 	}
 
 	expectedBody := "(x + 2)"
 
-	if unda.Body.String() != expectedBody {
-		t.Fatalf("body is not %q, got=%q", expectedBody, unda.Body.String())
+	if function.Body.String() != expectedBody {
+		t.Fatalf("body is not %q, got=%q", expectedBody, function.Body.String())
 	}
 }
 

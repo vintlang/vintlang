@@ -18,7 +18,7 @@ k = {
     "jina": "Juma",
     "umri": 25,
     kweli: "kweli",
-    "salimu": unda(x) { andika("habari", x) },
+    "salimu": func(x) { print("habari", x) },
     "sina value": tupu
 }
 ```
@@ -29,8 +29,8 @@ Access individual elements in a dictionary using their keys:
 
 ```s
 
-andika(k[kweli]) // kweli
-andika(k["salimu"]("Juma")) // habari Juma
+print(k[kweli]) // kweli
+print(k["salimu"]("Juma")) // habari Juma
 ```
 
 ## Updating Elements
@@ -39,7 +39,7 @@ Update the value of an element by assigning a new value to its key:
 
 ```s
 k['umri'] = 30
-andika(k['umri']) // 30
+print(k['umri']) // 30
 ```
 
 ## Adding New Elements
@@ -48,7 +48,7 @@ Add a new key-value pair to a dictionary by assigning a value to a non-existent 
 
 ```s
 k["lugha"] = "Kiswahili"
-andika(k["lugha"]) // Kiswahili
+print(k["lugha"]) // Kiswahili
 ```
 
 ## Concatenating Dictionaries
@@ -56,10 +56,10 @@ andika(k["lugha"]) // Kiswahili
 Combine two dictionaries using the + operator:
 
 ```s
-matunda = {"a": "apple", "b": "banana"}
+matfunc = {"a": "apple", "b": "banana"}
 mboga = {"c": "carrot", "d": "daikon"}
-vyakula = matunda + mboga
-andika(vyakula) // {"a": "apple", "b": "banana", "c": "carrot", "d": "daikon"}
+vyakula = matfunc + mboga
+print(vyakula) // {"a": "apple", "b": "banana", "c": "carrot", "d": "daikon"}
 ```
 
 ## Checking If a Key Exists in a Dictionary
@@ -80,7 +80,7 @@ Loop over a dictionary to access its keys and values:
 
 hobby = {"a": "asili", "b": "baiskeli", "c": "chakula"}
 kwa i, v ktk hobby {
-    andika(i, "=>", v)
+    print(i, "=>", v)
 }
 ```
 Output
@@ -94,7 +94,7 @@ Loop over just the values:
 
 ```s
 kwa v ktk hobby {
-    andika(v)
+    print(v)
 }
 ```
 Output
