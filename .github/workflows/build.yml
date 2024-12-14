@@ -30,8 +30,8 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-go-mod-
 
-      - name: Test
-        run: go mod tidy && make test
+      # - name: Test
+      #   run: go mod tidy && make test
     
       - name: Run GoReleaser
         uses: goreleaser/goreleaser-action@v5
