@@ -193,7 +193,11 @@ func Get(pkg string){
 	switch pkg {
 	case "vintpm":
 		fmt.Println("Installing vintpm...")
-		
 	}
+}
+
+
+func init(){
+	
 }
 
