@@ -66,9 +66,9 @@ func main() {
 		case "--docs", "-docs":
 			repl.Docs()
 		case "get":
-			toolkit.Get(os.Args[2])
+			toolkit.Get(args[2])
 		case "init":
-			toolkit.Init()
+			toolkit.Init(args)
 		case ".":
 			// Runs default main.vint file
 			run("main.vint")
