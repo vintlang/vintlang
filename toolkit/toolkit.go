@@ -203,7 +203,7 @@ type VintConfig struct {
 }
 
 const sampleVintCode = `// Simple string manipulation and message printing
-
+import greetings_module
 // Print a greeting
 print("Hello, VintLang World!")
 
@@ -214,12 +214,17 @@ for letter in letters {
     print(letter)
 }
 
-// Demonstrate a simple function
-let greet = func(name) {
-    print("Hello, " + name + "!")
-}
+//from the greetings_module
+greetings_module.greet("Developer")`
 
-greet("Developer")`
+const sampleGreetingsCode = `
+package greetings_module{
+	// Demonstrate a simple function from a package
+	let greet = func(name) {
+		print("Hello, " + name + "!")
+	}
+}
+`
 
 func Init(args []string) {
 	projectName := "vint-project"
@@ -270,6 +275,16 @@ func Init(args []string) {
 	fmt.Println("main.vint created successfully!")
 
 	//creating greetings_module
+	greetings_module_file, err := os.Create("greetings_module.vint")
+	if err != nil {
+		fmt.Printf("Error creating greetings_module.vint: %v\n", err)
+		return
+	}
+	defer greetings_module_file.Close()
+	if _, err := greetings_module_file.WriteString(sampleGreetingsCode); err != nil {
+		fmt.Printf("Error writing to greetings_module.vint: %v\n", err)
+	}
+	fmt.Println("greetings_module.vint creates succesfully")
 
 	// Success message
 	fmt.Printf("Project '%s' initialized successfully!\n", projectName)
