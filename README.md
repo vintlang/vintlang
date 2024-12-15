@@ -31,9 +31,10 @@ Follow the steps below to easily install **VintLang** on your Linux or macOS sys
    ```bash
    vint -v
    ```
+
 4. **Install the vintlang extension from vscode**
 
-    Install the official vint language support extension int vscode called **`vintlang`**
+   Install the official vint language support extension int vscode called **`vintlang`**
 
 ---
 
@@ -65,6 +66,14 @@ Follow the steps below to easily install **VintLang** on your Linux or macOS sys
    vint -v
    ```
 
+4. **Initialize a vint project:**
+
+   Create a simple boilerplate vint project
+
+   ```bash
+   vint init <optional:project-name>
+   ```
+
 ---
 
 ### Summary of Installation Steps:
@@ -72,6 +81,7 @@ Follow the steps below to easily install **VintLang** on your Linux or macOS sys
 1. **Download the Binary** using `curl` for your system (Linux or macOS).
 2. **Extract the Binary** to `/usr/local/bin` (or another globally accessible directory).
 3. **Verify the Installation** by checking the version with `vint -v`.
+4. **Initialize a vintlang project** by running `vint init <projectname>`.
 
 ## Sample Code
 
@@ -84,8 +94,8 @@ import time      // Importing time module to work with date and time
 
 // Main logic to split and print characters of a string
 let name = "VintLang"
-s = name.split("") 
-for i in s { 
+s = name.split("")
+for i in s {
     print(i)
 }
 ```
