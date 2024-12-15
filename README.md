@@ -32,7 +32,17 @@ Follow the steps below to easily install **VintLang** on your Linux or macOS sys
    vint -v
    ```
 
-4. **Install the vintlang extension from vscode**
+4. **Initialize a vint project:**
+
+   Create a simple boilerplate vint project
+
+   ```bash
+   vint init <optional:project-name>
+   ```
+
+---
+
+5. **Install the vintlang extension from vscode**
 
    Install the official vint language support extension int vscode called **`vintlang`**
 
@@ -76,12 +86,20 @@ Follow the steps below to easily install **VintLang** on your Linux or macOS sys
 
 ---
 
+5. **Install the vintlang extension from vscode**
+
+   Install the official vint language support extension int vscode called **`vintlang`**
+
+---
+
+
 ### Summary of Installation Steps:
 
 1. **Download the Binary** using `curl` for your system (Linux or macOS).
 2. **Extract the Binary** to `/usr/local/bin` (or another globally accessible directory).
 3. **Verify the Installation** by checking the version with `vint -v`.
 4. **Initialize a vintlang project** by running `vint init <projectname>`.
+5. **Install the vintlang extension from vscode** install vintlang extension in vscode
 
 ## Sample Code
 
