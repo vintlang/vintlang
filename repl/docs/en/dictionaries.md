@@ -8,7 +8,7 @@ Dictionaries are enclosed in curly braces {} and consist of keys and values sepa
 
 ```s
 
-orodha = {"jina": "Juma", "umri": 25}
+dict = {"jina": "Juma", "umri": 25}
 ```
 
 Keys can be strings, integers, floats, or booleans, while values can be any data type, including strings, integers, floats, booleans, null, or functions:
