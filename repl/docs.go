@@ -135,7 +135,7 @@ func (pg playground) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 			}
 		case tea.KeyCtrlR:
 			if strings.Contains(pg.editor.Value(), "input") {
-				pg.output.SetContent(styles.HelpStyle.Italic(false).Render("Samahani, huwezi kutumia `input()` kwa sasa."))
+				pg.output.SetContent(styles.HelpStyle.Italic(false).Render("Samahani, huwezi kutumia `input()` for sasa."))
 			} else {
 				// this is just for the output will find a better solution
 				code := strings.ReplaceAll(pg.editor.Value(), "print", "_print")
@@ -178,7 +178,7 @@ func (pg playground) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		case tea.MouseLeft:
 			if zone.Get(pg.id + "run").InBounds(msg) {
 				if strings.Contains(pg.editor.Value(), "input") {
-					pg.output.SetContent(styles.HelpStyle.Italic(false).Render("Samahani, huwezi kutumia `input()` kwa sasa."))
+					pg.output.SetContent(styles.HelpStyle.Italic(false).Render("Samahani, huwezi kutumia `input()` for sasa."))
 				} else {
 					// this is just for the output will find a better solution
 					code := strings.ReplaceAll(pg.editor.Value(), "print", "_print")

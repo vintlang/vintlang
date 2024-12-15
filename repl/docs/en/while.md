@@ -31,7 +31,7 @@ Use the vunja keyword to terminate a loop:
 let i = 1
 
 wakati (i < 5) {
-	kama (i == 3) {
+	if (i == 3) {
 		print("nimevunja")
 		vunja
 	}
@@ -55,7 +55,7 @@ let i = 0
 
 wakati (i < 5) {
 	i++
-	kama (i == 3) {
+	if (i == 3) {
 		print("nimeruka")
 		endelea
 	}

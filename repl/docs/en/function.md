@@ -65,9 +65,9 @@ vint also supports recursion. Here's an example of a recursive Fibonacci functio
 ```s
 
 fib = func(n) {
-    kama (n <= 1) {
+    if (n <= 1) {
         rudisha n
-    } sivyo {
+    } else {
         rudisha fib(n-1) + fib(n-2)
     }
 }

@@ -17,7 +17,7 @@ Keys can be strings, integers, floats, or booleans, while values can be any data
 k = {
     "jina": "Juma",
     "umri": 25,
-    kweli: "kweli",
+    true: "true",
     "salimu": func(x) { print("habari", x) },
     "sina value": tupu
 }
@@ -29,7 +29,7 @@ Access individual elements in a dictionary using their keys:
 
 ```s
 
-print(k[kweli]) // kweli
+print(k[true]) // true
 print(k["salimu"]("Juma")) // habari Juma
 ```
 
@@ -64,12 +64,12 @@ print(vyakula) // {"a": "apple", "b": "banana", "c": "carrot", "d": "daikon"}
 
 ## Checking If a Key Exists in a Dictionary
 
-Use the ktk keyword to check if a key exists in a dictionary:
+Use the in keyword to check if a key exists in a dictionary:
 
 ```s
 
-"umri" ktk k // kweli
-"urefu" ktk k // sikweli
+"umri" in k // true
+"urefu" in k // false
 ```
 
 ## Looping Over a Dictionary
@@ -79,7 +79,7 @@ Loop over a dictionary to access its keys and values:
 ```s
 
 hobby = {"a": "asili", "b": "baiskeli", "c": "chakula"}
-kwa i, v ktk hobby {
+for i, v in hobby {
     print(i, "=>", v)
 }
 ```
@@ -93,7 +93,7 @@ c => chakula
 Loop over just the values:
 
 ```s
-kwa v ktk hobby {
+for v in hobby {
     print(v)
 }
 ```
