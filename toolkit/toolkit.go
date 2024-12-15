@@ -269,6 +269,8 @@ func Init(args []string) {
 	}
 	fmt.Println("main.vint created successfully!")
 
+	//creating greetings_module
+
 	// Success message
 	fmt.Printf("Project '%s' initialized successfully!\n", projectName)
 }
