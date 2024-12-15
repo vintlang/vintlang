@@ -6,7 +6,7 @@ vint also makes it easy to deal with JSON.
 
 Use the following to import the json module:
 ```
-tumia jsoni
+import jsoni
 ```
 
 ## Decoding JSON with dikodi()
@@ -21,7 +21,7 @@ jsonString = '{
 
 // to make it a dict
 
-tumia jsoni
+import jsoni
 
 k = jsoni.dikodi(jsonString)
 
@@ -32,7 +32,7 @@ k["joke"] // I was reading a great book about an immortal dog the other day. It 
 
 You can encode JSON with the `enkodi` method, this will turn a dictionary to a string:
 ```
-tumia jsoni
+import jsoni
 
 k = {
         "a": "apple",
