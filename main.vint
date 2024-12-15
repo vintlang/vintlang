@@ -1,5 +1,5 @@
 // Simple string manipulation and message printing
-
+import greetings_module
 // Print a greeting
 print("Hello, VintLang World!")
 
@@ -10,9 +10,5 @@ for letter in letters {
     print(letter)
 }
 
-// Demonstrate a simple function
-let greet = func(name) {
-    print("Hello, " + name + "!")
-}
-
-greet("Developer")
+//from the greetings_module
+greetings_module.greet("Developer")
