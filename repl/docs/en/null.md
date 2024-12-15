@@ -7,7 +7,7 @@ The null data type in vint represents the absence of a value or the concept of "
 A null data type is a data type with no value, defined with the tupu keyword:
 
 ```s
-let a = tupu
+let a = null
 ```
 ## Evaluation
 

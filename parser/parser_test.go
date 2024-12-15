@@ -1115,7 +1115,7 @@ func TestParseSwitch(t *testing.T) {
 
 func TestParseImport(t *testing.T) {
 	input := `
-	tumia muda
+	import muda
 	muda.hasahivi()
 	`
 
