@@ -1,6 +1,6 @@
 # Working with Booleans in vint
 
-Boolean objects in vint are truthy, meaning that any value is true, except tupu and sikweli. They are used to evaluate expressions that return true or false values.
+Boolean objects in vint are truthy, meaning that any value is true, except tupu and false. They are used to evaluate expressions that return true or false values.
 
 ## Evaluating Boolean Expressions
 
@@ -9,9 +9,9 @@ Boolean objects in vint are truthy, meaning that any value is true, except tupu 
 In vint, you can evaluate simple expressions that return a boolean value:
 
 ```s
-print(1 > 2) // Output: `sikweli`
+print(1 > 2) // Output: `false`
 
-print(1 + 3 < 10) // Output: `kweli`
+print(1 + 3 < 10) // Output: `true`
 ```
 
 ### Evaluating Complex Expressions
@@ -25,9 +25,9 @@ c = 15
 
 result = (a < b) && (b < c)
 
-kama (result) {
+if (result) {
     print("Both conditions are true")
-} sivyo {
+} else {
     print("At least one condition is false")
 }
 // Output: "Both conditions are true"
@@ -44,9 +44,9 @@ vint has several boolean operators that you can use to evaluate expressions:
 The && operator evaluates to true only if both operands are true. Here's an example:
 
 ```s
-print(kweli && kweli) // Output: `kweli`
+print(true && true) // Output: `true`
 
-print(kweli && sikweli) // Output: `sikweli`
+print(true && false) // Output: `false`
 ```
 
 ### The || Operator
@@ -54,9 +54,9 @@ print(kweli && sikweli) // Output: `sikweli`
 The || operator evaluates to true if at least one of the operands is true. Here's an example:
 
 ```s
-print(kweli || sikweli) // Output: `kweli`
+print(true || false) // Output: `true`
 
-print(sikweli || sikweli) // Output: `sikweli`
+print(false || false) // Output: `false`
 ```
 
 ### The ! Operator
@@ -64,9 +64,9 @@ print(sikweli || sikweli) // Output: `sikweli`
 The ! operator negates the value of the operand. Here's an example:
 
 ```s
-print(!kweli) // Output: `sikweli`
+print(!true) // Output: `false`
 
-print(!sikweli) // Output: `kweli`
+print(!false) // Output: `true`
 ```
 
 ## Working with Boolean Values in Loops
@@ -74,13 +74,13 @@ print(!sikweli) // Output: `kweli`
 In vint, you can use boolean expressions in loops to control their behavior. Here's an example:
 
 ```s
-namba = [1, 2, 3, 4, 5]
+num = [1, 2, 3, 4, 5]
 
-kwa thamani ktk namba {
-    kama (thamani % 2 == 0) {
-        print(thamani, "is even")
-    } sivyo {
-        print(thamani, "is odd")
+for v in num {
+    if (v % 2 == 0) {
+        print(v, "is even")
+    } else {
+        print(v, "is odd")
     }
 }
 // Output:
@@ -91,7 +91,7 @@ kwa thamani ktk namba {
 // 5 is odd
 ```
 
-Here, we create an array namba with the values 1 through 5. We then loop over each value in the array and use the % operator to determine if it is even or odd. The output will be "is even" for even numbers and "is odd" for odd numbers.
+Here, we create an array num with the values 1 through 5. We then loop over each value in the array and use the % operator to determine if it is even or odd. The output will be "is even" for even numbers and "is odd" for odd numbers.
 
 
 Boolean objects in vint can be used to evaluate expressions that return true or false values. You can use boolean operators to evaluate complex expressions and control the behavior of loops. Understanding how to work with boolean values is an essential skill for any vint programmer.
