@@ -229,7 +229,7 @@ package greetings_module{
 func Init(args []string) {
 	projectName := "vint-project"
 	if len(args) >= 2 {
-		projectName = args[2]
+		projectName = args[1]
 	}
 
 	// Structure for vint.json
