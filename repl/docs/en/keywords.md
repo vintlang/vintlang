@@ -9,15 +9,15 @@ The table below lists the reserved keywords in vint. These words have specific m
 <table style="display: inline-table; width: 100%; text-align: center">
 <tbody>
   <tr>
-    <td>kweli</td>
-    <td>sikweli</td>
+    <td>true</td>
+    <td>false</td>
     <td>func</td>
     <td>let</td>
   </tr>
   <tr>
-    <td>kama</td>
+    <td>if</td>
     <td>au</td>
-    <td>sivyo</td>
+    <td>else</td>
     <td>wakati</td>
   </tr>
   <tr>
@@ -27,8 +27,8 @@ The table below lists the reserved keywords in vint. These words have specific m
     <td>tupu</td>
   </tr>
   <tr>
-    <td>ktk</td>
-    <td>kwa</td>
+    <td>in</td>
+    <td>for</td>
     <td>switch</td>
     <td>ikiwa</td>
   </tr>

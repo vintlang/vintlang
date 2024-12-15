@@ -41,12 +41,12 @@ vint supports the following comparison operators:
 
 ## MEMBER OPERATOR
 
-The member operator in vint is `ktk`. It will check if an object exists in another object:
+The member operator in vint is `in`. It will check if an object exists in another object:
 ```go
 let majina = ['juma', 'asha', 'haruna']
 
-"haruna" ktk majina // kweli
-"halima" ktk majina // sikweli
+"haruna" in majina // true
+"halima" in majina // false
 ```
 
 ## LOGIC OPERATORS
@@ -70,7 +70,7 @@ Operators have the following precedence, starting from the highest priority to t
 - `>, >=, <, <=`: Comparison operators
 - `==, !=`: Equal or Not Equal to
 - `=`: Assignment Operator
-- `ktk`: Member Operator
+- `in`: Member Operator
 - `&&, ||`: Logical AND and OR
 
 Understanding operators in vint allows you to create complex expressions, perform calculations, and make decisions based on the values of variables.

@@ -14,9 +14,9 @@ let a = tupu
 When evaluating a null data type in a conditional expression, it will evaluate to false:
 
 ```s
-kama (a) {
+if (a) {
     print("niko tupu")
-} sivyo {
+} else {
     print("nimevaa nguo")
 }
 

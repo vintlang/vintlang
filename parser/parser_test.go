@@ -87,7 +87,7 @@ func TestReturnStatements(t *testing.T) {
 		expectedValue interface{}
 	}{
 		{"rudisha 5;", 5},
-		{"rudisha kweli;", true},
+		{"rudisha true;", true},
 		{"rudisha bangi;", "bangi"},
 	}
 
@@ -188,8 +188,8 @@ func TestParsingPrefixExpressions(t *testing.T) {
 	}{
 		{"!5;", "!", 5},
 		{"-15;", "-", 15},
-		{"!kweli", "!", true},
-		{"!sikweli", "!", false},
+		{"!true", "!", true},
+		{"!false", "!", false},
 	}
 
 	for _, tt := range prefixTests {
@@ -261,9 +261,9 @@ func TestParsingInfixExpressions(t *testing.T) {
 		{"5 <= 5;", 5, "<=", 5},
 		{"5 || 5;", 5, "||", 5},
 		{"5 && 5;", 5, "&&", 5},
-		{"kweli == kweli", true, "==", true},
-		{"kweli != sikweli", true, "!=", false},
-		{"sikweli == sikweli", false, "==", false},
+		{"true == true", true, "==", true},
+		{"true != false", true, "!=", false},
+		{"false == false", false, "==", false},
 	}
 
 	for _, tt := range infixTests {
@@ -341,20 +341,20 @@ func TestOperatorPrecedenceParsing(t *testing.T) {
 			"((3 + (4 * 5)) == ((3 * 1) + (4 * 5)))",
 		},
 		{
-			"kweli",
-			"kweli",
+			"true",
+			"true",
 		},
 		{
-			"sikweli",
-			"sikweli",
+			"false",
+			"false",
 		},
 		{
-			"3 > 5 == sikweli",
-			"((3 > 5) == sikweli)",
+			"3 > 5 == false",
+			"((3 > 5) == false)",
 		},
 		{
-			"3 < 5 == kweli",
-			"((3 < 5) == kweli)",
+			"3 < 5 == true",
+			"((3 < 5) == true)",
 		},
 		{
 			"1 + (2 + 3) + 4",
@@ -373,8 +373,8 @@ func TestOperatorPrecedenceParsing(t *testing.T) {
 			"(-(5 + 5))",
 		},
 		{
-			"!(kweli == kweli)",
-			"(!(kweli == kweli))",
+			"!(true == true)",
+			"(!(true == true))",
 		},
 		{
 			"a + add(b * c) + d",
@@ -501,8 +501,8 @@ func TestBooleanExpression(t *testing.T) {
 		input           string
 		expectedBoolean bool
 	}{
-		{"kweli;", true},
-		{"sikweli;", false},
+		{"true;", true},
+		{"false;", false},
 	}
 
 	for _, tt := range tests {
@@ -534,7 +534,7 @@ func TestBooleanExpression(t *testing.T) {
 }
 
 func TestIfExpression(t *testing.T) {
-	input := `kama (x < y) { x }`
+	input := `if (x < y) { x }`
 
 	l := lexer.New(input)
 	p := New(l)
@@ -578,7 +578,7 @@ func TestIfExpression(t *testing.T) {
 }
 
 func TestIfElseExpression(t *testing.T) {
-	input := `kama (x < y) { x } sivyo { y }`
+	input := `if (x < y) { x } else { y }`
 
 	l := lexer.New(input)
 	p := New(l)
@@ -874,7 +874,7 @@ func TestParsingDictLiteralsIntegerKeys(t *testing.T) {
 }
 
 func TestParsingDictLiteralsBoolKeys(t *testing.T) {
-	input := `{kweli: 1, sikweli: 2}`
+	input := `{true: 1, false: 2}`
 
 	l := lexer.New(input)
 	p := New(l)
@@ -1033,7 +1033,7 @@ func TestShorthandAssignment(t *testing.T) {
 }
 
 func TestForExpression(t *testing.T) {
-	input := `kwa i, v ktk j {print(i)}`
+	input := `for i, v in j {print(i)}`
 
 	l := lexer.New(input)
 	p := New(l)

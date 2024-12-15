@@ -46,12 +46,12 @@ a *= 4
 
 ## Looping over a String
 
-You can loop through a string using the kwa keyword:
+You can loop through a string using the for keyword:
 
 ```s
 let jina = "avicenna"
 
-kwa i ktk jina {print(i)}
+for i in jina {print(i)}
 ```
 Output
 ```s 
@@ -68,7 +68,7 @@ a
 And for key-value pairs:
 
 ```s
-kwa i, v ktk jina {
+for i, v in jina {
 	print(i, "=>", v)
 }
 ```
@@ -91,9 +91,9 @@ You can compare two strings using the == operator:
 ```s
 let a = "vint"
 
-print(a == "vint") // kweli
+print(a == "vint") // true
 
-print(a == "mambo") // sikweli
+print(a == "mambo") // false
 ```
 
 ## String Methods

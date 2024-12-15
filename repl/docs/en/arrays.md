@@ -7,21 +7,21 @@ Arrays in vint are versatile data structures that can hold multiple items, inclu
 To create an array, use square brackets [] and separate items with commas:
 
 ```s
-orodha = [1, "pili", kweli]
+list = [1, "second", true]
 ```
 ## Accessing and Modifying Array Elements
 
 Arrays in vint are zero-indexed. To access an element, use the element's index in square brackets:
 
 ```s
-namba = [10, 20, 30]
-jina = namba[1]  // jina is 20
+num = [10, 20, 30]
+n = num[1]  // n is 20
 ```
 
 You can reassign an element in an array using its index:
 
 ```s
-namba[1] = 25
+num[1] = 25
 ```
 
 ## Concatenating Arrays
@@ -37,32 +37,32 @@ c = a + b
 
 ## Checking for Array Membership
 
-Use the `ktk` keyword to check if an item exists in an array:
+Use the `in` keyword to check if an item exists in an array:
 
 ```s
-namba = [10, 20, 30]
-print(20 ktk namba)  // will print kweli
+num = [10, 20, 30]
+print(20 in num)  // will print true
 ```
 
 ## Looping Over Arrays
 
-You can use the kwa and ktk keywords to loop over array elements. To loop over just the values, use the following syntax:
+You can use the for and in keywords to loop over array elements. To loop over just the values, use the following syntax:
 
 ```
-namba = [1, 2, 3, 4, 5]
+num = [1, 2, 3, 4, 5]
 
-kwa thamani ktk namba {
-    print(thamani)
+for value in num {
+    print(value)
 }
 ```
 
 To loop over both index and value pairs, use this syntax:
 
 ```s
-majina = ["Juma", "Asha", "Haruna"]
+man = ["Juma", "Asha", "Haruna"]
 
-kwa idx, jina ktk majina {
-    print(idx, "-", jina)
+for idx, n in man {
+    print(idx, "-", n)
 }
 ```
 
@@ -70,38 +70,38 @@ kwa idx, jina ktk majina {
 
 Arrays in vint have several built-in methods:
 
-### idadi()
+### length()
 
-idadi() returns the length of an array:
+length() returns the length of an array:
 
 ```s
 a = [1, 2, 3]
-urefu = a.idadi()
+urefu = a.length()
 print(urefu)  // will print 3
 ```
 
-### sukuma()
+### push()
 
-sukuma() adds one or more items to the end of an array:
+push() adds one or more items to the end of an array:
 
 ```s
 a = [1, 2, 3]
-a.sukuma("s", "g")
+a.push("s", "g")
 print(a)  // will print [1, 2, 3, "s", "g"]
 ```
 
-### yamwisho()
+### last()
 
-yamwisho() returns the last item in an array, or tupu if the array is empty:
+last() returns the last item in an array, or tupu if the array is empty:
 
 ```s
 a = [1, 2, 3]
-mwisho = a.yamwisho()
-print(mwisho)  // will print 3
+last_el = a.last()
+print(last_el)  // will print 3
 
 b = []
-mwisho = b.yamwisho()
-print(mwisho)  // will print tupu
+last_el = b.last()
+print(last_el)  // will print tupu
 ```
 
 ### map()
@@ -110,21 +110,21 @@ map() goes through every element in the array and applies the passed function to
 ```s
 a = [1, 2, 3]
 
-b = a.map(func(x){rudisha x*2})
+b = a.map(func(x){return x*2})
 
 print(b) // [2, 4, 6]
 ```
 
-### chuja()
+### filter()
 
-chuja() will go through every single element of an array and checks if that element returns true or false when passed into a function. It will return a new array with elements that returned true:
+filter() will go through every single element of an array and checks if that element returns true or false when passed into a function. It will return a new array with elements that returned true:
 ```s
 a = [1, 2, 3, 4]
 
-b = a.chuja(func(x){
-    kama (x % 2 == 0) 
-        {rudisha kweli}
-    rudisha sikweli
+b = a.filter(func(x){
+    if (x % 2 == 0) 
+        {return true}
+    return false
     })
 
 print(b) // [2, 4]
