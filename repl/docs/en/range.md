@@ -24,25 +24,25 @@ Returns an array of integers.
 
 ```go
 // Generate numbers from 0 to 4
-kwa i katika mfululizo(5) {
+for i katika mfululizo(5) {
     print(i)
 }
 // Output: 0 1 2 3 4
 
 // Generate numbers from 1 to 9
-kwa i katika mfululizo(1, 10) {
+for i katika mfululizo(1, 10) {
     print(i)
 }
 // Output: 1 2 3 4 5 6 7 8 9
 
 // Generate even numbers from 0 to 8
-kwa i katika mfululizo(0, 10, 2) {
+for i katika mfululizo(0, 10, 2) {
     print(i)
 }
 // Output: 0 2 4 6 8
 
 // Generate numbers in reverse order
-kwa i katika mfululizo(10, 0, -1) {
+for i katika mfululizo(10, 0, -1) {
     print(i)
 }
 // Output: 10 9 8 7 6 5 4 3 2 1

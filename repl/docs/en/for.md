@@ -3,12 +3,12 @@
 For loops are a ffuncmental control structure in vint, used for iterating over iterable objects such as strings, arrays, and dictionaries. This page covers the syntax and usage of for loops in vint, including key-value pair iteration, and the use of break and continue statements.
 
 ## Basic Syntax
-To create a for loop, use the kwa keyword followed by a temporary identifier (such as i or v) and the iterable object. Enclose the loop body in curly braces {}. Here's an example with a string:
+To create a for loop, use the for keyword followed by a temporary identifier (such as i or v) and the iterable object. Enclose the loop body in curly braces {}. Here's an example with a string:
 
 ```s
 jina = "lugano"
 
-kwa i ktk jina {
+for i in jina {
     print(i)
 }
 ```
@@ -32,7 +32,7 @@ vint allows you to iterate over both the value or the key-value pair of an itera
 ```s
 kamusi = {"a": "andaa", "b": "baba"}
 
-kwa v ktk kamusi {
+for v in kamusi {
     print(v)
 }
 ```
@@ -47,7 +47,7 @@ To iterate over both the keys and the values, use two temporary identifiers:
 
 ```s
 
-kwa k, v ktk kamusi {
+for k, v in kamusi {
     print(k + " ni " + v)
 }
 ```
@@ -63,7 +63,7 @@ b ni baba
 To iterate over just the values in a string, use one temporary identifier:
 
 ```s
-kwa v ktk "mojo" {
+for v in "mojo" {
     print(v)
 }
 ```
@@ -78,7 +78,7 @@ o
 To iterate over both the keys and the values in a string, use two temporary identifiers:
 
 ```s
-kwa i, v ktk "mojo" {
+for i, v in "mojo" {
     print(i, "->", v)
 }
 ```
@@ -97,7 +97,7 @@ To iterate over just the values in a list, use one temporary identifier:
 ```s
 majina = ["juma", "asha", "haruna"]
 
-kwa v ktk majina {
+for v in majina {
     print(v)
 }
 ```
@@ -113,7 +113,7 @@ haruna
 To iterate over both the keys and the values in a list, use two temporary identifiers:
 
 ```s
-kwa i, v ktk majina {
+for i, v in majina {
     print(i, "-", v)
 }
 ```
@@ -134,8 +134,8 @@ Use the vunja keyword to terminate a loop:
 
 ```s
 
-kwa i, v ktk "mojo" {
-    kama (i == 2) {
+for i, v in "mojo" {
+    if (i == 2) {
         print("nimevunja")
         vunja
     }
@@ -156,8 +156,8 @@ nimevunja
 Use the endelea keyword to skip a specific iteration:
 
 ```s
-kwa i, v ktk "mojo" {
-    kama (i == 2) {
+for i, v in "mojo" {
+    if (i == 2) {
         print("nimeruka")
         endelea
     }
