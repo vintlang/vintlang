@@ -4,7 +4,7 @@
 
 To use Time in vint, you first have to import the `muda` module as follows:
 ```so
-tumia muda
+import muda
 ```
 
 ## Time Methods
@@ -12,7 +12,7 @@ tumia muda
 ### hasahivi()
 To get the current time use the the `muda.hasahivi()` method. This will return a `muda` object with the current time:
 ```so
-tumia muda
+import muda
 
 saivi = muda.hasahivi()
 ```
@@ -21,7 +21,7 @@ saivi = muda.hasahivi()
 Use this method to get the total time elapsed in seconds. It accepts a time object or a string in the format `HH:mm:ss dd-MM-YYYY`:
 
 ```so
-tumia muda
+import muda
 
 sasa = muda.hasahivi()
 
@@ -43,7 +43,7 @@ muda.lala(10) // will sleep for ten seconds
 
 Use this method to add to time, better explained with an example:
 ```so
-tumia muda
+import muda
 
 sasa = muda.hasahivi()
 

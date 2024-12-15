@@ -29,7 +29,7 @@ import net
 url = "http://mysite.com"
 headers = {"Authentication": "Bearer XXXX"}
 
-net.get(yuareli=url, vichwa=headers, mwili=params)
+net.get(url=url, headers=headers, body=params)
 ```
 
 ### post()
@@ -43,5 +43,5 @@ url = "http://mysite.com"
 headers = {"Authentication": "Bearer XXXX"}
 params = {"key": "Value"}
 
-net.post(yuareli=url, vichwa=headers, mwili=params)
+net.post(url=url, headers=headers, body=params)
 ```

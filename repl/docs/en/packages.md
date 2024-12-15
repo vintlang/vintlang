@@ -26,8 +26,8 @@ A variable being globally available means that the variable can be accessed and 
 Below is an example Sarufi package:
 ```
 // import modules
-tumia mtandao
-tumia jsoni
+import mtandao
+import jsoni
 
 // package body
 pakeji sarufi {

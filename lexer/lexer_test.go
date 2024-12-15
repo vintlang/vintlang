@@ -130,7 +130,7 @@ func TestNextToken(t *testing.T) {
 		{token.STRING, "vipi"},
 		{token.RBRACE, "}"},
 		{token.DOT, "."},
-		{token.IMPORT, "tumia"},
+		{token.IMPORT, "import"},
 		{token.IDENT, "muda"},
 		{token.SWITCH, "switch"},
 		{token.LPAREN, "("},

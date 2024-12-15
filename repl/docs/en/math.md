@@ -1,23 +1,20 @@
-# Module Hisabati
+# Module math
 
-Module Hisabati is a inbuilt math module by [VictorKariuki](https://github.com/VictorKariuki).
-
-This in-built module provides various mathematical functions and constants. It includes methods for `trigonometric functions`, `logarithmic functions`, `array operations`, and `utility functions`.
 
 ## Usage
 
-To use the `hisabati` in-built module follow the steps below:
+To use the `math` in-built module follow the steps below:
 
-1. You directly import the `hisabati` in-built module and any required in-built modules in your vint code using the `tumia` keyword.
+1. You directly import the `math` in-built module and any required in-built modules in your vint code using the `import` keyword.
 
    ```vint
-   tumia hisabati
+   import math
    ```
 
 2. Calling the in-built module methods:
 
    ```vint
-   print(hisabati.e())
+   print(math.e())
    ```
 
 ## Yaliyomo
@@ -96,161 +93,161 @@ Here is an in-depth classification of the methods:
 1. **abs(namba)**
 
    - Description: Calculates the absolute value of a number.
-   - Example: `hisabati.abs(-42)` returns `42`.
+   - Example: `math.abs(-42)` returns `42`.
 
 2. **acos(n)**
 
    - Description: Calculates the arccosine of a number.
-   - Example: `hisabati.acos(0.5)` returns `1.0471975511965979`.
+   - Example: `math.acos(0.5)` returns `1.0471975511965979`.
 
 3. **acosh(n)**
 
    - Description: Calculates the inverse hyperbolic cosine of a number.
-   - Example: `hisabati.acosh(2.0)` returns `1.3169578969248166`.
+   - Example: `math.acosh(2.0)` returns `1.3169578969248166`.
 
 4. **asin(n)**
 
    - Description: Calculates the arcsine of a number using the Taylor series.
-   - Example: `hisabati.arcsin(0.5)` returns `0.5235987755982988`.
+   - Example: `math.arcsin(0.5)` returns `0.5235987755982988`.
 
 5. **asinh(n)**
 
    - Description: Calculates the inverse hyperbolic sine of a number.
-   - Example: `hisabati.arsinh(2.0)` returns `1.4436354751788103`.
+   - Example: `math.arsinh(2.0)` returns `1.4436354751788103`.
 
 6. **atan(n)**
 
    - Description: Calculates the arctangent of a number using the Taylor series.
-   - Example: `hisabati.atan(1.0)` returns `0.7853981633974483`.
+   - Example: `math.atan(1.0)` returns `0.7853981633974483`.
 
 7. **atan2(y, x)**
 
    - Description: Calculates the arctangent of the quotient of its arguments.
-   - Example: `hisabati.atan2(1.0, 1.0)` returns `0.7853981633974483`.
+   - Example: `math.atan2(1.0, 1.0)` returns `0.7853981633974483`.
 
 8. **atanh(n)**
 
    - Description: Calculates the inverse hyperbolic tangent of a number.
-   - Example: `hisabati.atanh(0.5)` returns `0.5493061443340549`.
+   - Example: `math.atanh(0.5)` returns `0.5493061443340549`.
 
 9. **cbrt(n)**
 
    - Description: Calculates the cube root of a number.
-   - Example: `hisabati.cbrt(8)` returns `2`.
+   - Example: `math.cbrt(8)` returns `2`.
 
 10. **root(x, n)**
 
     - Description: Calculates the nth root of a number using the Newton-Raphson method.
-    - Example: `hisabati.root(27, 3)` returns `3`.
+    - Example: `math.root(27, 3)` returns `3`.
 
 11. **ceil(n)**
 
     - Description: Rounds up to the smallest integer greater than or equal to a given number.
-    - Example: `hisabati.ceil(4.3)` returns `5`.
+    - Example: `math.ceil(4.3)` returns `5`.
 
 12. **cos(n)**
 
     - Description: Calculates the cosine of an angle in radians using the Taylor series.
-    - Example: `hisabati.cos(0.0)` returns `1`.
+    - Example: `math.cos(0.0)` returns `1`.
 
 13. **cosh(n)**
 
     - Description: Calculates the hyperbolic cosine of a number.
-    - Example: `hisabati.cosh(0.0)` returns `1`.
+    - Example: `math.cosh(0.0)` returns `1`.
 
 14. **exp(n)**
 
     - Description: Calculates the value of Euler's number raised to the power of a given number.
-    - Example: `hisabati.exp(2.0)` returns `7.38905609893065`.
+    - Example: `math.exp(2.0)` returns `7.38905609893065`.
 
 15. **expm1(n)**
 
     - Description: Calculates Euler's number raised to the power of a number minus 1.
-    - Example: `hisabati.expm1(1.0)` returns `1.718281828459045`.
+    - Example: `math.expm1(1.0)` returns `1.718281828459045`.
 
 16. **floor(n)**
 
     - Description: Rounds down to the largest integer less than or equal to a given number.
-    - Example: `hisabati.floor(4.7)` returns `4`.
+    - Example: `math.floor(4.7)` returns `4`.
 
 17. **hypot(values)**
 
     - Description: Calculates the square root of the sum of squares of the given values.
-    - Example: `hisabati.hypot([3, 4])` returns `5`.
+    - Example: `math.hypot([3, 4])` returns `5`.
 
 18. **log(n)**
 
     - Description: Calculates the natural logarithm of a number.
-    - Example: `hisabati.log(1.0)` returns `0`.
+    - Example: `math.log(1.0)` returns `0`.
 
 19. **log10(n)**
 
     - Description: Calculates the base 10 logarithm of a number.
-    - Example: `hisabati.log10(100.0)` returns `2`.
+    - Example: `math.log10(100.0)` returns `2`.
 
 20. **log1p(n)**
 
     - Description: Calculates the natural logarithm of 1 plus the given number.
-    - Example: `hisabati.log1p(1.0)` returns `0.6931471805599453`.
+    - Example: `math.log1p(1.0)` returns `0.6931471805599453`.
 
 21. **log2(n)**
 
     - Description: Calculates the base 2 logarithm of a number.
-    - Example: `hisabati.log2(8)` returns `3`.
+    - Example: `math.log2(8)` returns `3`.
 
 22. **max(numbers)**
 
     - Description: Finds the maximum value in a list of numbers.
-    - Example: `hisabati.max([4, 2, 9, 5])` returns `9`.
+    - Example: `math.max([4, 2, 9, 5])` returns `9`.
 
 23. **min(numbers)**
 
     - Description: Finds the minimum value in a list of numbers.
-    - Example: `hisabati.min([4, 2, 9, 5])` returns `2`.
+    - Example: `math.min([4, 2, 9, 5])` returns `2`.
 
 24. **round(x, method)**
 
     - Description: Rounds a number to the nearest integer using the specified method.
-    - Example: `hisabati.round(4.6)` returns `5`.
+    - Example: `math.round(4.6)` returns `5`.
 
 25. **sign(n)**
 
     - Description: Determines the sign of a number.
-    - Example: `hisabati.sign(-5)` returns `-1`.
+    - Example: `math.sign(-5)` returns `-1`.
 
 26. **sin(n)**
 
     - Description: Calculates the sine of an angle in radians using the Taylor series.
-    - Example: `hisabati.sin(1.0)` returns `0.8414709848078965`.
+    - Example: `math.sin(1.0)` returns `0.8414709848078965`.
 
 27. **sinh(n)**
 
     - Description: Calculates the hyperbolic sine of a number.
-    - Example: `hisabati.sinh(1.0)` returns `1.1752011936438014`.
+    - Example: `math.sinh(1.0)` returns `1.1752011936438014`.
 
 28. **sqrt(n)**
 
     - Description: Calculates the square root of a number.
-    - Example: `hisabati.sqrt(4)` returns `2`.
+    - Example: `math.sqrt(4)` returns `2`.
 
 29. **tan(n)**
 
     - Description: Calculates the tangent of an angle in radians.
-    - Example: `hisabati.tan(1.0)` returns `1.557407724654902`.
+    - Example: `math.tan(1.0)` returns `1.557407724654902`.
 
 30. **tanh(n)**
 
     - Description: Calculates the hyperbolic tangent of a number.
-    - Example: `hisabati.tanh(1.0)` returns `0.7615941559557649`.
+    - Example: `math.tanh(1.0)` returns `0.7615941559557649`.
 
 31. **factorial(n)**
 
     - Description: Calculates the factorial of a number.
-    - Example: `hisabati.factorial(5)` returns `120`.
+    - Example: `math.factorial(5)` returns `120`.
 
 ### Contributing
 
-Contributions to the `module hisabati` are welcome. If you have any improvements or bug fixes, feel free to create a pull request.
+Contributions to the `module math` are welcome. If you have any improvements or bug fixes, feel free to create a pull request.
 
 ### License
 
