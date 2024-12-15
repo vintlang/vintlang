@@ -25,21 +25,21 @@ salamu()
 
 In this example, we define a function `salamu()` that prompts the user to enter their name using the `input()` function. We then use the `print()` function to print out a message that includes the user's name.
 
-## The aina() Function
+## The type() Function
 
-The `aina()` function is used to determine the type of an object. It accepts one argument, and the return value will be a string indicating the type of the object. Here's an example:
-
-```s
-aina(2) // Output: "NAMBA"
-aina("vint") // Output: "NENO"
-```
-
-## The fungua() Function
-
-The `fungua()` function is used to open a file. It accepts one argument, which is the path to the file that you want to open. Here's an example:
+The `type()` function is used to determine the type of an object. It accepts one argument, and the return value will be a string indicating the type of the object. Here's an example:
 
 ```s
-faili = fungua("data.txt")
+type(2) // Output: "NAMBA"
+type("vint") // Output: "NENO"
 ```
 
-In this example, we use the `fungua()` function to open a file named "data.txt". The variable faili will contain a reference to the opened file.
+## The open() Function
+
+The `open()` function is used to open a file. It accepts one argument, which is the path to the file that you want to open. Here's an example:
+
+```s
+file = open("data.txt")
+```
+
+In this example, we use the `open()` function to open a file named "data.txt". The variable file will contain a reference to the opened file.
