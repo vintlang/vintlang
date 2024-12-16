@@ -1,22 +1,33 @@
+version: 2
+
 project_name: vint
+
 before:
   hooks:
     - go mod tidy
     - go generate ./...
 
 builds:
-  - env:
+  - id: vint-build
+    env:
       - CGO_ENABLED=0
     goos:
       - linux
       - windows
       - darwin
       - android
+    goarch:
+      - amd64
+      - 386
+      - arm64
+      - arm
     ldflags:
       - "-s -w"
     ignore:
       - goos: android
         goarch: 386
+    binary: vint
+    main: ./main.go 
 
 archives:
   - format: tar.gz
@@ -30,6 +41,11 @@ archives:
     format_overrides:
       - goos: windows
         format: zip
+    files:
+      - LICENSE
+      - README.md 
+    replacements:
+      darwin: macOS 
 
 changelog:
   sort: asc
@@ -39,9 +55,24 @@ changelog:
       - "^test:"
 
 nfpms:
-  - maintainer: "ekilie"
-    homepage: "https://ekilie.com"
-    description: "vint is a programming language built from the ground up"
+  - maintainer: "Tachera Sasi"
+    homepage: "https://vintlang.ekilie.com"
+    description: "Vint is a programming language built from the ground up"
     formats:
       - deb
-    file_name_template: "{{ .ProjectName }}.{{ .Os }}-{{ .Arch }}{{ if .Arm }}v{{ .Arm }}{{ end }}"
+    file_name_template: "{{ .ProjectName }}_{{ .Version }}_{{ .Os }}-{{ .Arch }}{{ if .Arm }}v{{ .Arm }}{{ end }}"
+    license: MIT 
+
+release:
+  github:
+    owner: ekilie
+    name: vint
+  draft: false
+  prerelease: false
+  tag_name: "{{ .Version }}"
+  name_template: "{{ .ProjectName }} {{ .Version }}"
+  changelog:
+    use: true
+
+env:
+  - GITHUB_TOKEN 
