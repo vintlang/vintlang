@@ -48,20 +48,20 @@ func detectPlatform() string {
 func getBinaryName(platform string) string {
 	switch platform {
 	case "linux":
-		return "vintLang_linux_amd64.tar.gz"
+		return "vintpm_linux_amd64.tar.gz"
 	case "macos":
-		return "vintLang_macos_amd64.tar.gz"
+		return "vintpm_macos_amd64.tar.gz"
 	case "android":
-		return "vintLang_android_arm64.tar.gz"
+		return "vintpm_android_arm64.tar.gz"
 	case "windows":
-		return "vintLang_windows_amd64.zip"
+		return "vintpm_windows_amd64.zip"
 	default:
 		return ""
 	}
 }
 
 func fetchLatestReleaseURL(binaryName string) (string, error) {
-	resp, err := http.Get("https://api.github.com/repos/ekilie/vint-lang/releases/latest")
+	resp, err := http.Get("https://api.github.com/repos/ekilie/vintpm/releases/latest")
 	if err != nil {
 		return "", err
 	}
@@ -149,7 +149,7 @@ func installBinary(binaryName, platform string) error {
 	return nil
 }
 
-func Update() {
+func InstallVintpm() {
 	platform := detectPlatform()
 	if platform == "unsupported" {
 		fmt.Println("Unsupported platform. Exiting.")
@@ -175,7 +175,7 @@ func Update() {
 		return
 	}
 
-	fmt.Println("Installing the new binary...")
+	fmt.Println("Installing vintpm...")
 	if err := installBinary(binaryName, platform); err != nil {
 		fmt.Printf("Error installing binary: %v\n", err)
 		return
@@ -192,7 +192,7 @@ func Update() {
 func Get(pkg string) {
 	switch pkg {
 	case "vintpm":
-		fmt.Println("Installing vintpm...")
+		InstallVintpm()
 	}
 }
 
