@@ -27,7 +27,7 @@ builds:
       - goos: android
         goarch: 386
     binary: vint
-    main: ./main.go 
+    main: ./main.go
 
 archives:
   - format: tar.gz
@@ -43,9 +43,7 @@ archives:
         format: zip
     files:
       - LICENSE
-      - README.md 
-    replacements:
-      darwin: macOS 
+      - README.md
 
 changelog:
   sort: asc
@@ -61,7 +59,7 @@ nfpms:
     formats:
       - deb
     file_name_template: "{{ .ProjectName }}_{{ .Version }}_{{ .Os }}-{{ .Arch }}{{ if .Arm }}v{{ .Arm }}{{ end }}"
-    license: MIT 
+    license: MIT
 
 release:
   github:
@@ -69,10 +67,6 @@ release:
     name: vint
   draft: false
   prerelease: false
-  tag_name: "{{ .Version }}"
-  name_template: "{{ .ProjectName }} {{ .Version }}"
-  changelog:
-    use: true
 
 env:
-  - GITHUB_TOKEN 
+  - GITHUB_TOKEN
