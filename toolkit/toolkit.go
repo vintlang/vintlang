@@ -204,8 +204,10 @@ type VintConfig struct {
 
 const sampleVintCode = `// Simple string manipulation and message printing
 import greetings_module
+import time
+
 // Print a greeting
-print("Hello, VintLang World!")
+print("Hello, VintLang World! it currently",time.now())
 
 // Demonstrate string splitting
 let phrase = "VintLang"
