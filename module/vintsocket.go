@@ -1,4 +1,4 @@
-package module
+package module  //THIS IS AN EXPERIMENTAL MODULE
 
 import (
 	"github.com/gorilla/websocket"
