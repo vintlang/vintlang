@@ -16,7 +16,7 @@ func init() {
 	CliFunctions["hasArg"] = hasArg
 	CliFunctions["getArgs"] = getArgs
 }
-
+//Returns an array/list of args as strings []strings
 func getArgs(args []object.Object, defs map[string]object.Object)object.Object{
 	if len(args) > 0{
 		return &object.Error{Message:"getArgs does not accept any arguments"}
