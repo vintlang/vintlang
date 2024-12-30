@@ -105,7 +105,7 @@ Follow the steps below to easily install **VintLang** on your Linux or macOS sys
 
 ### Example 1: String Splitting and Printing
 
-```vint
+```js
 // Importing modules
 import net       // Importing networking module for HTTP operations
 import time      // Importing time module to work with date and time
@@ -120,7 +120,7 @@ for i in s {
 
 ### Example 2: Type Conversion and Conditional Statements
 
-```vint
+```js
 // Demonstrating type conversion and conditional statements
 age = "10"
 convert(age, "INTEGER")  // Convert age string to integer
@@ -138,7 +138,7 @@ if (age == 20) {
 
 ### Example 3: Working with Height Variable
 
-```vint
+```ja
 // Working with height variable
 height = "6.0" // Height in feet
 print("My name is " + name)
