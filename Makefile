@@ -1,4 +1,4 @@
-VERSION=0.1.3
+VERSION=0.1.4
 
 build:
 	make build_android

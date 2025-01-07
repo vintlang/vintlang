@@ -245,10 +245,3 @@ Here is an in-depth classification of the methods:
     - Description: Calculates the factorial of a number.
     - Example: `math.factorial(5)` returns `120`.
 
-### Contributing
-
-Contributions to the `module math` are welcome. If you have any improvements or bug fixes, feel free to create a pull request.
-
-### License
-
-This in-built module is available under the MIT License. See the [LICENSE](LICENSE) file for more information.
