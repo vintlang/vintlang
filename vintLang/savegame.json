@@ -1,1 +1,6 @@
-{"health":100,"inventory":["Mystic Key"],"location":"start","name":"Tach"}
+{
+  "health": 100,
+  "inventory": ["Mystic Key"],
+  "location": "start",
+  "name": "Tach"
+}
