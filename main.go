@@ -10,7 +10,7 @@ import (
 	"github.com/ekilie/vint-lang/styles"
 	"github.com/ekilie/vint-lang/toolkit"
 )
-const VINT_VERSION = "0.1.3"
+const VINT_VERSION = "0.1.4"
 // Constants for styled output
 var (
 	// Title banner for the CLI

@@ -165,25 +165,25 @@ func InstallVintpm() {
 	fmt.Println("Fetching the latest release information...")
 	assetURL, err := fetchLatestReleaseURL(binaryName)
 	if err != nil {
-		fmt.Printf("Error fetching release: %v\n", err)
+		fmt.Printf("❌ Error fetching release: %v\n", err)
 		return
 	}
 
 	fmt.Println("Downloading the latest release...")
 	if err := downloadFile(assetURL, binaryName); err != nil {
-		fmt.Printf("Error downloading binary: %v\n", err)
+		fmt.Printf("❌ Error downloading binary: %v\n", err)
 		return
 	}
 
 	fmt.Println("Installing vintpm...")
 	if err := installBinary(binaryName, platform); err != nil {
-		fmt.Printf("Error installing binary: %v\n", err)
+		fmt.Printf("❌ Error installing binary: %v\n", err)
 		return
 	}
 
 	fmt.Println("Cleaning up...")
 	if err := os.Remove(binaryName); err != nil {
-		fmt.Printf("Error cleaning up: %v\n", err)
+		fmt.Printf("❌ Error cleaning up: %v\n", err)
 	}
 
 	fmt.Println("Installation complete!")
@@ -231,7 +231,7 @@ package greetings_module{
 func Init(args []string) {
 	projectName := "vint-project"
 	if len(args) >= 2 {
-		projectName = args[1]
+		projectName = args[2]
 	}
 
 	// Structure for vint.json
@@ -242,52 +242,52 @@ func Init(args []string) {
 	}
 
 	// Creating vint.json
-	fmt.Println("Creating vint.json...")
+	fmt.Println("🫠 Creating vint.json...")
 	vintFile, err := os.Create("vint.json")
 	if err != nil {
-		fmt.Printf("Error creating vint.json: %v\n", err)
+		fmt.Printf("❌ Error creating vint.json: %v\n", err)
 		return
 	}
 	defer vintFile.Close()
 
 	vintData, err := json.MarshalIndent(vintConfig, "", "  ")
 	if err != nil {
-		fmt.Printf("Error marshalling vint.json: %v\n", err)
+		fmt.Printf("❌ Error marshalling vint.json: %v\n", err)
 		return
 	}
 	if _, err := vintFile.Write(vintData); err != nil {
-		fmt.Printf("Error writing to vint.json: %v\n", err)
+		fmt.Printf("❌ Error writing to vint.json: %v\n", err)
 		return
 	}
-	fmt.Println("vint.json created successfully!")
+	fmt.Println("✅ vint.json created successfully!")
 
 	// Creating main.vint
-	fmt.Println("Creating main.vint...")
+	fmt.Println("🫠 Creating main.vint...")
 	mainFile, err := os.Create("main.vint")
 	if err != nil {
-		fmt.Printf("Error creating main.vint: %v\n", err)
+		fmt.Printf("❌ Error creating main.vint: %v\n", err)
 		return
 	}
 	defer mainFile.Close()
 
 	if _, err := mainFile.WriteString(sampleVintCode); err != nil {
-		fmt.Printf("Error writing to main.vint: %v\n", err)
+		fmt.Printf("❌ Error writing to main.vint: %v\n", err)
 		return
 	}
-	fmt.Println("main.vint created successfully!")
+	fmt.Println("✅ main.vint created successfully!")
 
 	//creating greetings_module
 	greetings_module_file, err := os.Create("greetings_module.vint")
 	if err != nil {
-		fmt.Printf("Error creating greetings_module.vint: %v\n", err)
+		fmt.Printf("❌ Error creating greetings_module.vint: %v\n", err)
 		return
 	}
 	defer greetings_module_file.Close()
 	if _, err := greetings_module_file.WriteString(sampleGreetingsCode); err != nil {
-		fmt.Printf("Error writing to greetings_module.vint: %v\n", err)
+		fmt.Printf("❌ Error writing to greetings_module.vint: %v\n", err)
 	}
-	fmt.Println("greetings_module.vint creates succesfully")
+	fmt.Println("✅ greetings_module.vint creates succesfully")
 
 	// Success message
-	fmt.Printf("Project '%s' initialized successfully!\n", projectName)
+	fmt.Printf("🚀 Project '%s' initialized successfully!\n", projectName)
 }
