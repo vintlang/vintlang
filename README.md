@@ -11,7 +11,7 @@ Follow the steps below to easily install **VintLang** on your Linux or macOS sys
    First, download the **VintLang** binary for Linux. You can do this using the `curl` command. This will download the `tar.gz` file containing the binary to your current directory.
 
    ```bash
-   curl -O -L https://github.com/ekilie/vint-lang/releases/download/0.1.0_i/vintLang_linux_amd64_v0.1.0.tar.gz
+   curl -O -L https://github.com/ekilie/vint-lang/releases/download/latest/vintLang_linux_amd64.tar.gz
    ```
 
 2. **Extract the Binary to a Global Location:**
@@ -19,7 +19,7 @@ Follow the steps below to easily install **VintLang** on your Linux or macOS sys
    After downloading the binary, you need to extract it into a directory that is globally accessible. `/usr/local/bin` is a commonly used directory for this purpose. The `tar` command will extract the contents of the `tar.gz` file and place them in `/usr/local/bin`.
 
    ```bash
-   sudo tar -C /usr/local/bin -xzvf vintLang_linux_amd64_v0.1.0.tar.gz
+   sudo tar -C /usr/local/bin -xzvf vintLang_linux_amd64.tar.gz
    ```
 
    This step ensures that the **VintLang** command can be used from anywhere on your system.
@@ -37,7 +37,7 @@ Follow the steps below to easily install **VintLang** on your Linux or macOS sys
    Create a simple boilerplate vint project
 
    ```bash
-   vint init <optional:project-name>
+   vint <optional:project-name>
    ```
 
 ---
@@ -55,7 +55,7 @@ Follow the steps below to easily install **VintLang** on your Linux or macOS sys
    Begin by downloading the **VintLang** binary for macOS using the following `curl` command. This will download the `tar.gz` file for macOS to your current directory.
 
    ```bash
-   curl -O -L https://github.com/ekilie/vint-lang/releases/download/0.1.0_i/vintLang_mac_amd64_v0.1.0.tar.gz
+   curl -O -L https://github.com/ekilie/vint-lang/releases/download/latest/vintLang_mac_amd64.tar.gz
    ```
 
 2. **Extract the Binary to a Global Location:**
@@ -63,7 +63,7 @@ Follow the steps below to easily install **VintLang** on your Linux or macOS sys
    Next, extract the downloaded binary to a globally accessible location. As with Linux, the standard directory for this on macOS is `/usr/local/bin`. Use the following command to extract the binary:
 
    ```bash
-   sudo tar -C /usr/local/bin -xzvf vintLang_mac_amd64_v0.1.0.tar.gz
+   sudo tar -C /usr/local/bin -xzvf vintLang_mac_amd64.tar.gz
    ```
 
    This allows you to run **VintLang** from any terminal window.
