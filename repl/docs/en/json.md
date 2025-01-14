@@ -1,43 +1,154 @@
-# JSON in vint
+# JSON Module in Vint
 
-vint also makes it easy to deal with JSON.
+The JSON module in Vint provides powerful and straightforward functions for working with JSON data, including decoding, encoding, formatting, merging, and retrieving values. Below is the detailed documentation, along with examples.
 
-## Import JSONI
+---
 
-Use the following to import the json module:
-```
-import jsoni
-```
+## Importing the JSON Module
 
-## Decoding JSON with dikodi()
-Use this to convert a string to a dictionary:
-```
-jsonString = '{                                                                                                            
-    "error": false,                                                                                          
-    "category": "Pun",                                                                                       
-    "type": "single",                                                                                        
-    "joke": "I was reading a great book about an immortal dog the other day. It was impossible to put down."
-}'
-
-// to make it a dict
-
-import jsoni
-
-k = jsoni.dikodi(jsonString)
-
-k["joke"] // I was reading a great book about an immortal dog the other day. It was impossible to put down.
+To use the JSON module, simply import it:
+```vint
+import json
 ```
 
-## Encoding JSON with enkodi()
+---
 
-You can encode JSON with the `enkodi` method, this will turn a dictionary to a string:
+## Functions and Examples
+
+### 1. Decode JSON (`decode`)
+The `decode` function parses a JSON string into a Vint dictionary or array.
+
+**Syntax**:
+```vint
+decode(jsonString)
 ```
-import jsoni
 
-k = {
-        "a": "apple",
-        "b": "banana"
-    }
+**Example**:
+```vint
+import json
 
-j = json.enkodi(k)
+print("=== Example 1: Decode ===")
+raw_json = '{"name": "John", "age": 30, "isAdmin": false, "friends": ["Jane", "Doe"]}'
+decoded = json.decode(raw_json)
+print("Decoded Object:", decoded)
+// Output: Decoded Object: {"name": "John", "age": 30, "isAdmin": false, "friends": ["Jane", "Doe"]}
 ```
+
+---
+
+### 2. Encode JSON (`encode`)
+The `encode` function converts a Vint dictionary or array into a JSON string. It optionally supports pretty formatting with an `indent` parameter.
+
+**Syntax**:
+```vint
+encode(data, indent = 0)
+```
+
+**Example**:
+```vint
+import json
+
+print("\n=== Example 2: Encode ===")
+data = {
+  "language": "Vint",
+  "version": 1.0,
+  "features": ["custom modules", "native objects"]
+}
+encoded_json = json.encode(data, indent=2)
+print("Encoded JSON:", encoded_json)
+// Output:
+// Encoded JSON: {
+//   "language": "Vint",
+//   "version": 1.0,
+//   "features": ["custom modules", "native objects"]
+// }
+```
+
+---
+
+### 3. Pretty Print JSON (`pretty`)
+The `pretty` function reformats a JSON string into a human-readable format with proper indentation.
+
+**Syntax**:
+```vint
+pretty(jsonString)
+```
+
+**Example**:
+```vint
+import json
+
+print("\n=== Example 3: Pretty Print ===")
+raw_json_pretty = '{"name":"John","age":30,"friends":["Jane","Doe"]}'
+pretty_json = json.pretty(raw_json_pretty)
+print("Pretty JSON:\n", pretty_json)
+// Output:
+// Pretty JSON:
+// {
+//   "name": "John",
+//   "age": 30,
+//   "friends": ["Jane", "Doe"]
+// }
+```
+
+---
+
+### 4. Merge JSON Objects (`merge`)
+The `merge` function combines two JSON objects. If both objects have the same key, the value from the second object overwrites the first.
+
+**Syntax**:
+```vint
+merge(json1, json2)
+```
+
+**Example**:
+```vint
+import json
+
+print("\n=== Example 4: Merge ===")
+json1 = {"name": "John", "age": 30}
+json2 = {"city": "New York", "age": 35}
+merged_json = json.merge(json1, json2)
+print("Merged JSON:", merged_json)
+// Output: Merged JSON: {"name": "John", "age": 35, "city": "New York"}
+```
+
+---
+
+### 5. Get Value by Key (`get`)
+The `get` function retrieves a value associated with a key from a JSON object. If the key is not found, it returns `null`.
+
+**Syntax**:
+```vint
+get(jsonObject, key)
+```
+
+**Example**:
+```vint
+import json
+
+print("\n=== Example 5: Get Value by Key ===")
+json_object = {"name": "John", "age": 30, "city": "New York"}
+
+value = json.get(json_object, "age")
+print("Age:", value)
+// Output: Age: 30
+
+missing_value = json.get(json_object, "country")
+print("Country (missing key):", missing_value)
+// Output: Country (missing key): null
+```
+
+---
+
+## Summary of Functions
+
+| Function         | Description                                         | Example Output                           |
+|------------------|-----------------------------------------------------|------------------------------------------|
+| `decode`         | Converts JSON string to a Vint object.             | `{"key": "value"}`                       |
+| `encode`         | Converts Vint object to a JSON string.             | `{"key":"value"}`                        |
+| `pretty`         | Formats JSON string for better readability.        | `{ "key": "value" }`                     |
+| `merge`          | Combines two JSON objects, overwriting duplicates. | `{"key1": "value1", "key2": "value2"}`   |
+| `get`            | Retrieves a value by key, returns `null` if absent.| `"value"` or `null`                      |
+
+These functions make working with JSON in Vint easy, flexible, and efficient.

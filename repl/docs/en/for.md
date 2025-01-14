@@ -126,18 +126,18 @@ Output:
 2 - haruna
 ```
 
-## Break (Vunja) and Continue (Endelea)
+## Break  and Continue 
 
-### Break (Vunja)
+### Break 
 
-Use the vunja keyword to terminate a loop:
+Use the break keyword to terminate a loop:
 
 ```s
 
 for i, v in "mojo" {
     if (i == 2) {
-        print("nimevunja")
-        vunja
+        print("break")
+        break
     }
     print(v)
 }
@@ -148,18 +148,18 @@ Output:
 ```s
 m
 o
-nimevunja
+nimebreak
 ```
 
 ### Continue (Endelea)
 
-Use the endelea keyword to skip a specific iteration:
+Use the continue keyword to skip a specific iteration:
 
 ```s
 for i, v in "mojo" {
     if (i == 2) {
         print("nimeruka")
-        endelea
+        continue
     }
     print(v)
 }
