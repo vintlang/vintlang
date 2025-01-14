@@ -21,7 +21,7 @@ let greet = func() {
 }
 
 greet()
-```
+``` 
 
 In this example, we define a function `greet()` that prompts the user to enter their name using the `input()` function. We then use the `print()` function to print out a message that includes the user's name.
 

@@ -1,4 +1,4 @@
-# INTEGERS (NAMBA) AND FLOATS (DESIMALI)
+# INTEGERS  AND FLOATS 
 
 Integers and floats are the basic numeric data types in vint, used for representing whole numbers and decimal numbers, respectively. This page covers the syntax and usage of integers and floats in vint, including precedence, unary increments, shorthand assignments, and negative numbers.
 
@@ -45,7 +45,7 @@ Negative numbers also behave as expected:
 ```go
 let i = -10
 
-wakati (i < 0) {
+while (i < 0) {
     print(i)
     i++
 }
