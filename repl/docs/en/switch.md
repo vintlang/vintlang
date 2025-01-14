@@ -1,59 +1,110 @@
-# Switch Statements in vint
+# Switch Statements in Vint
 
-Switch statements in vint allow you to execute different code blocks based on the value of a given expression. This page covers the basics of switch statements and their usage.
+Switch statements in **Vint** allow you to execute different code blocks based on the value of a given expression. This guide covers the basics of switch statements and their usage.
 
 ## Basic Syntax
 
-You initialize a switch statement with the switch keyword, the expression inside parentheses (), and all cases enclosed within curly braces {}.
+A switch statement starts with the `switch` keyword, followed by the expression inside parentheses `()`, and all cases enclosed within curly braces `{}`.
 
-A case statement has the keyword ikiwa followed by a value to check. Multiple values can be in a single case separated by commas ,. The consequence to execute if a condition is fulfilled must be inside curly braces {}. Here's an example:
+Each case uses the keyword `case`, followed by a value to check. Multiple values in a case can be separated by commas `,`. The block of code to execute if the condition is met is placed within curly braces `{}`.
 
-```s
+### Example:
+```vint
 let a = 2
 
-switch (a){
-	ikiwa 3 {
-		print("a ni tatu")
+switch (a) {
+	case 3 {
+		print("a is three")
 	}
-	ikiwa 2 {
-		print ("a ni mbili")
+	case 2 {
+		print("a is two")
 	}
 }
 ```
 
 ## Multiple Values in a Case
 
-Multiple possibilities can be assigned to a single case (ikiwa) statement:
+A single `case` can handle multiple possible values. These values are separated by commas `,`.
 
-```s
+### Example:
+```vint
 switch (a) {
-	ikiwa 1,2,3 {
-		print("a ni kati ya 1, 2 au 3")
+	case 1, 2, 3 {
+		print("a is one, two, or three")
 	}
-	ikiwa 4 {
-		print("a ni 4")
+	case 4 {
+		print("a is four")
 	}
 }
 ```
 
-## Default Case (kawaida)
+## Default Case (`default`)
 
-The default statement will be executed when no condition is satisfied. The default statement is represented by kawaida:
+The `default` statement is executed when none of the specified cases match. It is represented by the `default` keyword.
 
-```s
+### Example:
+```vint
 let z = 20
 
 switch(z) {
-	ikiwa 10 {
-		print("kumi")
+	case 10 {
+		print("ten")
 	}
-	ikiwa 30 {
-		print("thelathini")
+	case 30 {
+		print("thirty")
 	}
-	kawaida {
-		print("ishirini")
+	default {
+		print("twenty")
 	}
 }
 ```
 
-By understanding switch statements in vint, you can create more efficient and organized code that can handle multiple conditions easily.
+## Nested Switch Statements
+
+Switch statements can be nested to handle more complex conditions.
+
+### Example:
+```vint
+let x = 1
+let y = 2
+
+switch (x) {
+	case 1 {
+		switch (y) {
+			case 2 {
+				print("x is one and y is two")
+			}
+			case 3 {
+				print("x is one and y is three")
+			}
+		}
+	}
+	case 2 {
+		print("x is two")
+	}
+}
+```
+
+## Logical Conditions in Cases
+
+Cases can also be used with logical conditions.
+
+### Example:
+```vint
+let isTrue = true
+let isFalse = false
+
+switch (isTrue) {
+	case true {
+		print("isTrue is true")
+	}
+	case isFalse {
+		print("isFalse is true")
+	}
+	default {
+		print("Neither condition is true")
+	}
+}
+```
+
+By mastering switch statements in **Vint**, you can write clean, structured, and efficient code that efficiently handles complex branching logic.

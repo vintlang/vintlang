@@ -1,76 +1,96 @@
-# OPERATORS
-Operators are the fofunction of any programming language, allowing you to perform various operations on variables and values. This page covers the syntax and usage of operators in vint, including assignment, arithmetic, comparison, member, and logic operators.
+# Operators in Vint
 
-## ASSIGNMENT
+Operators are a core feature of any programming language, enabling you to perform various operations on variables and values. This page details the syntax and usage of operators in Vint, including assignment, arithmetic, comparison, membership, and logical operators.
 
-Assuming `i` and `v` are predefined variables, vint supports the following assignment operators:
+---
 
-- `i = v`: which is the regular assignment operator
-- `i += v`: which is the equivalent of `i = i + v`
-- `i -= v`: which is the equivalent of `i = i - v`
-- `i *= v`: which is the equivalent of `i = i * v`
-- `i /= v`: which is the equivalent of `i = i / v`
-- `i += v`: which is the equivalent of `i = i + v`
+## Assignment Operators
 
-For `strings`, `arrays` and `dictionaries`, the `+=` sign operator is permissible. Example:
-```
-list1 += list2 // this is equivalent to list1 = list1 + list2
-```
+Assignment operators are used to assign values to variables. The following are supported in Vint:
 
-## ARITHMETIC OPERATORS
+- `i = v`: Assigns the value of `v` to `i`.
+- `i += v`: Equivalent to `i = i + v`.
+- `i -= v`: Equivalent to `i = i - v`.
+- `i *= v`: Equivalent to `i = i * v`.
+- `i /= v`: Equivalent to `i = i / v`.
 
-vint supports the following arithmetic operators:
+For strings, arrays, and dictionaries, the `+=` operator is also valid. For example:
 
-- `+`: Additon
-- `-`: Subtraction
-- `*`: Multiplication
-- `/`: Division
-- `%`: Modulo (ie the remainder of a division)
-- `**`: Exponential power (eg: `2**3 = 8`)
-
-## COMPARISON OPERATORS
-
-vint supports the following comparison operators:
-
-- `==`: Equal to
-- `!=`: Not equal to
-- `>`: Greater than
-- `>=`: Greater than or equal to
-- `<`: Less than
-- `<=`: Less than or equal to
-
-## MEMBER OPERATOR
-
-The member operator in vint is `in`. It will check if an object exists in another object:
-```go
-let majina = ['juma', 'asha', 'haruna']
-
-"haruna" in majina // true
-"halima" in majina // false
+```vint
+list1 += list2 // Equivalent to list1 = list1 + list2
 ```
 
-## LOGIC OPERATORS
+---
 
-vint supports the following logic operators:
+## Arithmetic Operators
 
-- `&&`: Logical `AND`. It will evaluate to true if both are true, otherwise it will evaluate to false.
-- `||`: Logical `OR`. It will evaluate to false if both are false, otherwise it will evaluate to true.
-- `!`: Logical `NOT`. It will evaluate to the opposite of a given expression.
+Vint supports the following arithmetic operations:
 
-## PRECEDENCE OF OPERATORS
+| Operator | Description                          | Example          |
+|----------|--------------------------------------|------------------|
+| `+`      | Addition                             | `2 + 3 = 5`      |
+| `-`      | Subtraction                          | `5 - 2 = 3`      |
+| `*`      | Multiplication                       | `3 * 4 = 12`     |
+| `/`      | Division                             | `10 / 2 = 5`     |
+| `%`      | Modulo (remainder of a division)     | `7 % 3 = 1`      |
+| `**`     | Exponential power                   | `2 ** 3 = 8`     |
 
-Operators have the following precedence, starting from the highest priority to the lowest:
+---
 
-- `()` : Items in paranthesis have the highest priority
-- `!`: Negation
-- `%`: Modulo
-- `**`: Exponential power
-- `/, *`: Division and Multiplication
-- `+, +=, -, -=`: Addition and Subtraction
-- `>, >=, <, <=`: Comparison operators
-- `==, !=`: Equal or Not Equal to
-- `=`: Assignment Operator
-- `in`: Member Operator
-- `&&, ||`: Logical AND and OR
+## Comparison Operators
 
-Understanding operators in vint allows you to create complex expressions, perform calculations, and make decisions based on the values of variables.
+Comparison operators evaluate relationships between two values. These return `true` or `false`:
+
+| Operator | Description                     | Example            |
+|----------|---------------------------------|--------------------|
+| `==`     | Equal to                        | `5 == 5 // true`   |
+| `!=`     | Not equal to                    | `5 != 3 // true`   |
+| `>`      | Greater than                    | `5 > 3 // true`    |
+| `>=`     | Greater than or equal to        | `5 >= 5 // true`   |
+| `<`      | Less than                       | `3 < 5 // true`    |
+| `<=`     | Less than or equal to           | `3 <= 3 // true`   |
+
+---
+
+## Membership Operator
+
+The membership operator `in` checks if an item exists within a collection:
+
+```vint
+names = ['juma', 'asha', 'haruna']
+
+"haruna" in names // true
+"halima" in names // false
+```
+
+---
+
+## Logical Operators
+
+Logical operators allow you to combine or invert conditions:
+
+| Operator | Description              | Example                   |
+|----------|--------------------------|---------------------------|
+| `&&`     | Logical AND              | `true && false // false` |
+| `||`     | Logical OR               | `true || false // true`  |
+| `!`      | Logical NOT (negation)   | `!true // false`         |
+
+---
+
+## Precedence of Operators
+
+When multiple operators are used in an expression, operator precedence determines the order of execution. Below is the precedence order, from highest to lowest:
+
+1. `()` : Parentheses
+2. `!`  : Logical NOT
+3. `%`  : Modulo
+4. `**` : Exponential power
+5. `/`, `*` : Division and multiplication
+6. `+`, `+=`, `-`, `-=` : Addition and subtraction
+7. `>`, `>=`, `<`, `<=` : Comparison operators
+8. `==`, `!=` : Equality and inequality
+9. `=` : Assignment
+10. `in` : Membership operator
+11. `&&`, `||` : Logical AND and OR
+
+---

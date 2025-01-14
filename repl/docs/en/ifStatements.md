@@ -1,38 +1,46 @@
-# Conditional Statements in vint
+# Conditional Statements in Vint
 
-Conditional statements in vint are used to perform different actions based on different conditions. The if/else statement is a ffuncmental control structure that allows you to execute code based on specific conditions. This page covers the basics of if/else statements in vint.
+Conditional statements in **Vint** allow you to perform different actions based on specific conditions. The `if/else` structure is fundamental for controlling the flow of your code. Here's a simple guide to using conditional statements in **Vint**.
 
-## If Statement (if)
+## If Statement (`if`)
 
-An if statement starts with the if keyword, followed by a condition in parentheses (). If the condition is true, the code inside the curly braces {} will be executed.
+The `if` statement checks a condition inside parentheses `()`. If the condition evaluates to true, the code block inside curly braces `{}` will execute:
 
-```s
+```vint
 if (2 > 1) {
-    print(true) // true
+    print(true)  // Output: true
 }
 ```
 
-In this example, the condition 2 > 1 is true, so the print(true) statement is executed, and the output is true.
+In this example, the condition `2 > 1` is true, so `print(true)` is executed, and the output is `true`.
 
-## Else If and Else Blocks (Au if and else)
+## Else If and Else Blocks (`else if` and `else`)
 
-You can use au if to test multiple conditions and else to specify a default block of code to be executed when none of the conditions are true.
+You can use `else if` to test additional conditions after an `if` statement. The `else` block specifies code to execute if none of the previous conditions are met:
 
-```s
-
+```vint
 let a = 10
 
 if (a > 100) {
-    print("a imezidi 100")
-} au if (a < 10) {
-    print("a ndogo kuliko 10")
+    print("a is greater than 100")
+} else if (a < 10) {
+    print("a is less than 10")
 } else {
-    print("Thamani ya a ni", a)
+    print("The value of a is", a)
 }
 
-// The output will be 'Thamani ya a ni 10'
+// Output: The value of a is 10
 ```
 
-In this example, the first condition a > 100 is false, and the second condition a < 10 is also false. Therefore, the code inside the else block is executed, and the output is 'Thamani ya a ni 10'.
+### Explanation:
+1. The condition `a > 100` is false.
+2. The next condition `a < 10` is also false.
+3. Therefore, the `else` block is executed, and the output is `The value of a is 10`.
 
-By using if/else statements with the if, au if, and else keywords, you can control the flow of your vint code based on different conditions.
+## Summary
+
+- **`if`**: Executes code if the condition is true.
+- **`else if`**: Tests another condition if the previous `if` condition is false.
+- **`else`**: Executes code if none of the above conditions are true.
+
+By using `if`, `else if`, and `else`, you can make decisions and control the flow of your **Vint** programs based on dynamic conditions.

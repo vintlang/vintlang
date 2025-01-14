@@ -1,107 +1,111 @@
-# Dictionaries in vint
+Here’s a detailed explanation of dictionaries in Vint, without the Swahili terms:
 
-Dictionaries in vint, also known as "kamusi," are powerful and flexible data structures that store key-value pairs. This page provides a comprehensive overview of dictionaries in vint, including how to create, access, modify, and iterate over them.
+### Dictionaries in Vint
 
-## Creating Dictionaries
+In the Vint programming language, dictionaries are key-value data structures that allow you to store and manage data efficiently. These dictionaries can store any type of value (such as strings, integers, booleans, or even functions) and are incredibly useful for organizing and accessing data. 
 
-Dictionaries are enclosed in curly braces {} and consist of keys and values separated by colons. Here's an example of defining a dictionary:
+### Creating Dictionaries
 
-```s
+In Vint, dictionaries are created using curly braces `{}`. Each key is followed by a colon `:` and the corresponding value. Here's an example of a dictionary:
 
-dict = {"jina": "Juma", "umri": 25}
+```vint
+dict = {"name": "John", "age": 30}
 ```
 
-Keys can be strings, integers, floats, or booleans, while values can be any data type, including strings, integers, floats, booleans, null, or functions:
+In this dictionary:
+- `"name"` is the key, and `"John"` is the value.
+- `"age"` is the key, and `30` is the value.
 
-```s
-k = {
-    "jina": "Juma",
-    "umri": 25,
-    true: "true",
-    "salimu": func(x) { print("habari", x) },
-    "sina value": tupu
+Keys can be of various data types like strings, integers, floats, or booleans, and values can be anything, including strings, integers, booleans, `null`, or even functions.
+
+### Accessing Elements
+
+You can access individual elements in a dictionary by using the key. For example:
+
+```vint
+print(dict["name"]) // John
+```
+
+This will print `"John"`, the value associated with the key `"name"`.
+
+### Updating Elements
+
+To update the value of an existing key, simply assign a new value to the key:
+
+```vint
+dict["age"] = 35
+print(dict["age"]) // 35
+```
+
+This updates the `"age"` key to have the value `35`.
+
+### Adding New Elements
+
+To add a new key-value pair to a dictionary, assign a value to a new key:
+
+```vint
+dict["city"] = "Dar es Salaam"
+print(dict["city"]) // Dar es Salaam
+```
+
+This adds a new key `"city"` with the value `"Dar es Salaam"`.
+
+### Concatenating Dictionaries
+
+You can combine two dictionaries into one using the `+` operator:
+
+```vint
+dict1 = {"a": "apple", "b": "banana"}
+dict2 = {"c": "cherry", "d": "date"}
+combined = dict1 + dict2
+print(combined) // {"a": "apple", "b": "banana", "c": "cherry", "d": "date"}
+```
+
+In this case, `dict1` and `dict2` are merged into a new dictionary called `combined`.
+
+### Checking If a Key Exists in a Dictionary
+
+To check if a particular key exists in a dictionary, you can use the `in` keyword:
+
+```vint
+"age" in dict // true
+"salary" in dict // false
+```
+
+This checks whether the key `"age"` exists in the dictionary, which returns `true`, and checks whether the key `"salary"` exists, which returns `false`.
+
+### Looping Over a Dictionary
+
+You can loop over the keys and values of a dictionary using the `for` keyword:
+
+```vint
+hobby = {"a": "reading", "b": "cycling", "c": "eating"}
+for key, value in hobby {
+    print(key, "=>", value)
 }
 ```
 
-## Accessing Elements
+This will output:
 
-Access individual elements in a dictionary using their keys:
-
-```s
-
-print(k[true]) // true
-print(k["salimu"]("Juma")) // habari Juma
+```
+a => reading
+b => cycling
+c => eating
 ```
 
-## Updating Elements
+You can also loop over just the values without the keys:
 
-Update the value of an element by assigning a new value to its key:
-
-```s
-k['umri'] = 30
-print(k['umri']) // 30
-```
-
-## Adding New Elements
-
-Add a new key-value pair to a dictionary by assigning a value to a non-existent key:
-
-```s
-k["lugha"] = "Kiswahili"
-print(k["lugha"]) // Kiswahili
-```
-
-## Concatenating Dictionaries
-
-Combine two dictionaries using the + operator:
-
-```s
-matfunc = {"a": "apple", "b": "banana"}
-mboga = {"c": "carrot", "d": "daikon"}
-vyakula = matfunc + mboga
-print(vyakula) // {"a": "apple", "b": "banana", "c": "carrot", "d": "daikon"}
-```
-
-## Checking If a Key Exists in a Dictionary
-
-Use the in keyword to check if a key exists in a dictionary:
-
-```s
-
-"umri" in k // true
-"urefu" in k // false
-```
-
-## Looping Over a Dictionary
-
-Loop over a dictionary to access its keys and values:
-
-```s
-
-hobby = {"a": "asili", "b": "baiskeli", "c": "chakula"}
-for i, v in hobby {
-    print(i, "=>", v)
+```vint
+for value in hobby {
+    print(value)
 }
 ```
-Output
-```s
-a => asili
-b => baiskeli
-c => chakula
+
+This will output:
+
+```
+reading
+cycling
+eating
 ```
 
-Loop over just the values:
-
-```s
-for v in hobby {
-    print(v)
-}
-```
-Output
-```s
-asili
-baiskeli
-chakula
-```
-
-With this knowledge, you can now effectively use dictionaries in vint to store and manage key-value pairs, offering a flexible way to organize and access data in your programs.
