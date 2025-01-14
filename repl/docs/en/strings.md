@@ -1,148 +1,248 @@
-# Strings in vint
+# Strings in Vint
 
-Strings are a sequence of characters that can represent text in the vint programming language. This page covers the basics of strings, their manipulation, and some built-in methods.
+Strings are a sequence of characters used to represent text in the Vint programming language. Here’s a detailed explanation of how to work with strings, including syntax, manipulation, and useful built-in methods.
 
 ## Basic Syntax
 
-Strings can be enclosed in either single quotes '' or double quotes "":
+In Vint, strings can be enclosed in either single quotes (`''`) or double quotes (`""`):
 
-```s
-print("mambo") // mambo
+```vint
+print("Hello")  // Output: Hello
 
-let a = 'niaje'
+let name = 'Tachera'
 
-print("mambo", a) // mambo niaje
+print("Hello", name)  // Output: Hello Tachera
 ```
 
 ## Concatenating Strings
 
-Strings can be concatenated using the + operator:
+Strings can be concatenated using the `+` operator:
 
-```s
-let a = "habari" + " " + "yako"
+```vint
+let greeting = "Hello" + " " + "World"
+print(greeting)  // Output: Hello World
 
-print(a) // habari yako
-
-let b = "habari"
-
-b += " yako"
-
-// habari yako
+let message = "Hello"
+message += " World"
+// Output: Hello World
 ```
 
-You can also repeat a string n number of times using the * operator:
+You can also repeat a string a specific number of times using the `*` operator:
 
-```s
-print("mambo " * 4)
+```vint
+print("Hello " * 3)  // Output: Hello Hello Hello
 
-// mambo mambo mambo mambo
-
-let a = "habari"
-
-a *= 4
-
-// habarihabarihabarihabari
+let repeated = "World"
+repeated *= 2
+// Output: WorldWorld
 ```
 
-## Looping over a String
+## Looping Over a String
 
-You can loop through a string using the for keyword:
+You can loop through each character of a string using the `for` keyword:
 
-```s
-let jina = "avicenna"
+```vint
+let name = "Avicenna"
 
-for i in jina {print(i)}
-```
-Output
-```s 
-a
-v
-i
-c
-e
-n
-n
-a  
-```
-
-And for key-value pairs:
-
-```s
-for i, v in jina {
-	print(i, "=>", v)
+for char in name {
+    print(char)
 }
+// Output:
+// A
+// v
+// i
+// c
+// e
+// n
+// n
+// a
 ```
-Output
-```s
-0 => a
-1 => v
-2 => i
-3 => c
-4 => e
-5 => n
-6 => n
-7 => a
+
+You can also loop through the string using its index and character:
+
+```vint
+for i, char in name {
+    print(i, "=>", char)
+}
+// Output:
+// 0 => A
+// 1 => v
+// 2 => i
+// 3 => c
+// 4 => e
+// 5 => n
+// 6 => n
+// 7 => a
 ```
 
 ## Comparing Strings
 
-You can compare two strings using the == operator:
+You can compare two strings using the `==` operator:
 
-```s
-let a = "vint"
-
-print(a == "vint") // true
-
-print(a == "mambo") // false
+```vint
+let a = "Vint"
+print(a == "Vint")  // Output: true
+print(a == "vint")  // Output: false
 ```
 
 ## String Methods
 
-### idadi()
+### Length of a String (`length`)
 
-You can find the length of a string using the idadi method. It does not accept any parameters.
+You can find the length of a string using the `length` method. It does not accept any parameters:
 
-```s
-let a = "mambo"
-a.idadi() // 5
+```vint
+let message = "Vint"
+print(message.length())  // Output: 4
 ```
 
-### herufikubwa()
+### Convert to Uppercase (`upper`)
 
-This method converts a string to uppercase. It does not accept any parameters.
+This method converts the string to uppercase:
 
-```s
-let a = "vint"
-a.herufikubwa() // vint
+```vint
+let text = "vint"
+print(text.upper())  // Output: VINT
 ```
 
-### herufindogo
+### Convert to Lowercase (`lower`)
 
-This method converts a string to lowercase. It does not accept any parameters.
+This method converts the string to lowercase:
 
-```s
-let a = "vint"
-a.herufindogo() // vint
+```vint
+let text = "VINT"
+print(text.lower())  // Output: vint
 ```
 
-### gawa
+### Split a String (`split`)
 
-The gawa method splits a string into an array based on a specified delimiter. If no argument is provided, it will split the string according to whitespace.
+The `split` method splits a string into an array based on a specified delimiter. If no delimiter is provided, it splits by whitespace.
 
-Example without a parameter:
+Example without a delimiter:
 
-```s
-let a = "vint mambo habari"
-let b = a.gawa()
-print(b) // ["vint", "mambo", "habari"]
+```vint
+let sentence = "Vint programming language"
+let words = sentence.split()
+print(words)  // Output: ["Vint", "programming", "language"]
 ```
 
-Example with a parameter:
+Example with a delimiter:
 
-```s
-let a = "vint,mambo,habari"
-let b = a.gawa(",")
-print(b) // ["vint", "mambo", "habari"]
+```vint
+let sentence = "Vint,programming,language"
+let words = sentence.split(",")
+print(words)  // Output: ["Vint", "programming", "language"]
 ```
 
-By understanding strings and their manipulation in vint, you can effectively work with text data in your programs.
+### Replace Substrings (`replace`)
+
+You can replace a substring with another string using the `replace` method:
+
+```vint
+let greeting = "Hello World"
+let newGreeting = greeting.replace("World", "Vint")
+print(newGreeting)  // Output: Hello Vint
+```
+
+### Trim Whitespace (`trim`)
+
+You can remove whitespace from the start and end of a string using the `trim` method:
+
+```vint
+let message = "  Hello World  "
+print(message.trim())  // Output: Hello World
+```
+
+### Get a Substring (`substring`)
+
+You can extract a substring from a string by specifying the starting and ending indices:
+
+```vint
+let sentence = "Vint programming"
+print(sentence.substring(0, 4))  // Output: Vint
+```
+
+### Find the Index of a Substring (`indexOf`)
+
+You can find the index of a substring within a string using the `indexOf` method:
+
+```vint
+let sentence = "Vint programming"
+print(sentence.indexOf("programming"))  // Output: 5
+```
+
+### Slugify a String (`slug`)
+
+You can convert a string into a URL-friendly format (slug) using the `slug` method:
+
+```vint
+let title = "Creating a Slug String"
+print(title.slug())  // Output: creating-a-slug-string
+```
+
+### Checking Substring Presence (`contains`)
+
+Check if a string contains a specific substring:
+
+```vint
+let name = "Tachera Sasi"
+print(name.contains("Sasi"))  // Output: true
+```
+
+## Example Usage
+
+Here’s an example of how you might use these string operations in Vint:
+
+```vint
+import "string"
+
+// Example: Trim whitespace
+let trimmed = string.trim("  Hello, World!  ")
+print(trimmed)  // Output: "Hello, World!"
+
+// Example: Check if a string contains a substring
+let containsResult = string.contains("Hello, World!", "World")
+print(containsResult)  // Output: true
+
+// Example: Convert to uppercase
+let upperResult = string.toUpper("hello")
+print(upperResult)  // Output: "HELLO"
+
+// Example: Convert to lowercase
+let lowerResult = string.toLower("HELLO")
+print(lowerResult)  // Output: "hello"
+
+// Example: Replace a substring
+let replaceResult = string.replace("Hello, World!", "World", "Vint")
+print(replaceResult)  // Output: "Hello, Vint!"
+
+// Example: Split a string into parts
+let splitResult = string.split("a,b,c,d", ",")
+print(splitResult)  // Output: ["a", "b", "c", "d"]
+
+// Example: Join string parts
+let joinResult = string.join(["a", "b", "c"], "-")
+print(joinResult)  // Output: "a-b-c"
+
+// Example: Get the length of a string
+let lengthResult = string.length("Hello")
+print(lengthResult)  // Output: 5
+```
+
+## Example with Vint Data
+
+Here's an example using Vint-specific strings:
+
+```vint
+let name = "Tachera Sasi"
+let reversed = name.reverse()
+print(reversed)  // Output: "isaS arehcaT"
+
+let upperName = name.upper()
+print(upperName)  // Output: "TACHERA SASI"
+
+let trimmedName = name.trim("T")
+print(trimmedName)  // Output: "achera Sasi"
+```
+
+Understanding how to manipulate and work with strings in Vint allows you to efficiently handle text data in your programs.
