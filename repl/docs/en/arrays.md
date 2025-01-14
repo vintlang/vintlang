@@ -59,7 +59,7 @@ for value in num {
 To loop over both index and value pairs, use this syntax:
 
 ```s
-man = ["Juma", "Asha", "Haruna"]
+man = ["Tach", "ekilie", "Tachera Sasi"]
 
 for idx, n in man {
     print(idx, "-", n)
@@ -129,5 +129,3 @@ b = a.filter(func(x){
 
 print(b) // [2, 4]
 ```
-
-With this information, you can now effectively work with arrays in vint, making it easy to manipulate collections of data in your programs.
