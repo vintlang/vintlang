@@ -49,6 +49,14 @@ print(true && true) // Output: `true`
 print(true && false) // Output: `false`
 ```
 
+### The and() function
+
+```s
+print(and(true,true)) // Output: `true`
+
+print(and(true,false)) // Output: `false`
+```
+
 ### The || Operator
 
 The || operator evaluates to true if at least one of the operands is true. Here's an example:
@@ -57,6 +65,12 @@ The || operator evaluates to true if at least one of the operands is true. Here'
 print(true || false) // Output: `true`
 
 print(false || false) // Output: `false`
+```
+### The or() Function
+```s
+print(or(true,false)) // Output: `true`
+
+print(or(false,false)) // Output: `false`
 ```
 
 ### The ! Operator
@@ -67,6 +81,14 @@ The ! operator negates the value of the operand. Here's an example:
 print(!true) // Output: `false`
 
 print(!false) // Output: `true`
+```
+
+### The not() function
+
+```s
+print(not(true)) // Output: `false`
+
+print(not(false)) // Output: `true`
 ```
 
 ## Working with Boolean Values in Loops
@@ -91,7 +113,3 @@ for v in num {
 // 5 is odd
 ```
 
-Here, we create an array num with the values 1 through 5. We then loop over each value in the array and use the % operator to determine if it is even or odd. The output will be "is even" for even numbers and "is odd" for odd numbers.
-
-
-Boolean objects in vint can be used to evaluate expressions that return true or false values. You can use boolean operators to evaluate complex expressions and control the behavior of loops. Understanding how to work with boolean values is an essential skill for any vint programmer.

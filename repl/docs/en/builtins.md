@@ -1,6 +1,6 @@
 # Built-in Functions in vint
 
-vint has several built-in functions that perform specific tasks.
+Vint has several built-in functions that perform specific tasks.
 
 ## The print() Function
 
@@ -15,23 +15,23 @@ print(1, 2, 3) // Output: "1 2 3"
 The input() function is used to get input from the user. It can take zero or one argument, which is a string that will be used as a prompt for the user. Here's an example:
 
 ```s
-let salamu = func() {
-    let jina = input("Unaitwa nani? ")
-    print("Mambo vipi", jina)
+let greet = func() {
+    let name = input("What's your name? ")
+    print("How are you", name)
 }
 
-salamu()
+greet()
 ```
 
-In this example, we define a function `salamu()` that prompts the user to enter their name using the `input()` function. We then use the `print()` function to print out a message that includes the user's name.
+In this example, we define a function `greet()` that prompts the user to enter their name using the `input()` function. We then use the `print()` function to print out a message that includes the user's name.
 
 ## The type() Function
 
 The `type()` function is used to determine the type of an object. It accepts one argument, and the return value will be a string indicating the type of the object. Here's an example:
 
 ```s
-type(2) // Output: "NAMBA"
-type("vint") // Output: "NENO"
+type(2) // Output: "NUMBER"
+type("vint") // Output: "STRING"
 ```
 
 ## The open() Function
