@@ -4,7 +4,7 @@ import (
 	"os/exec"
 	// "strings"
 
-	"github.com/ekilie/vint-lang/object"
+	"github.com/vintlang/vintlang/object"
 )
 
 var ShellFunctions = map[string]object.ModuleFunction{}

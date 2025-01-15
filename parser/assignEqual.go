@@ -3,7 +3,7 @@ package parser
 import (
 	"fmt"
 
-	"github.com/ekilie/vint-lang/ast"
+	"github.com/vintlang/vintlang/ast"
 )
 
 func (p *Parser) parseAssignEqualExpression(exp ast.Expression) ast.Expression {

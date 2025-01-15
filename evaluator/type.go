@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"strconv"
 
-	"github.com/ekilie/vint-lang/object"
+	"github.com/vintlang/vintlang/object"
 )
 
 // Converts an object to an integer, if possible

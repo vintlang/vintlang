@@ -3,7 +3,7 @@ package ast
 import (
 	"testing"
 
-	"github.com/ekilie/vint-lang/token"
+	"github.com/vintlang/vintlang/token"
 )
 
 func TestString(t *testing.T) {

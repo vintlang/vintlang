@@ -3,7 +3,7 @@ package lexer
 import (
 	"testing"
 
-	"github.com/ekilie/vint-lang/token"
+	"github.com/vintlang/vintlang/token"
 )
 
 func TestNextToken(t *testing.T) {

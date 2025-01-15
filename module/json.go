@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"strings"
 
-	"github.com/ekilie/vint-lang/object"
+	"github.com/vintlang/vintlang/object"
 )
 
 var JsonFunctions = map[string]object.ModuleFunction{}
