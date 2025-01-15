@@ -25,11 +25,13 @@ var (
 
 	// CLI metadata
 	Version = styles.VersionStyle.Render("v"+VINT_VERSION)
-	Author  = styles.AuthorStyle.Render("by Tachera Sasi")
+	Author  = styles.AuthorStyle.Render("Tachera W")
 
 	// Combined logo with title, author, and version
 	NewLogo = lipgloss.JoinVertical(lipgloss.Center, Title,
 		lipgloss.JoinHorizontal(lipgloss.Center, Author, " | ", Version))
+	
+	
 
 	// Help message for the CLI usage
 	Help = styles.HelpStyle.Italic(false).Render(fmt.Sprintf(`💡 How to use vint:
@@ -45,6 +47,8 @@ var (
 )
 
 func main() {
+	versionMsg := lipgloss.JoinVertical(lipgloss.Center,
+		lipgloss.JoinHorizontal(lipgloss.Center, "VintLang", " : ", Version))
 	// Retrieve command-line arguments
 	args := os.Args
 
@@ -56,13 +60,13 @@ func main() {
 		return
 	}
 
-	// Single argument provided: Handle specific commands
+	
 	if len(args) >= 2 {//Greater or equal accounting for the cli-args and the package manager for vint 
 		switch args[1] {
 		case "help", "-help", "--help", "-h":
 			fmt.Println(Help)
 		case "version", "-version", "--version", "-v", "v":
-			fmt.Println(NewLogo)
+			fmt.Println(versionMsg)
 		case "--docs", "-docs":
 			repl.Docs()
 		case "get":
