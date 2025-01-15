@@ -13,9 +13,9 @@ func (p *Parser) parseAssignEqualExpression(exp ast.Expression) ast.Expression {
 			Token: p.curToken,
 			Left:  exp.(*ast.Identifier),
 		}
-		precendence := p.curPrecedence()
+		precedence := p.curPrecedence()
 		p.nextToken()
-		e.Value = p.parseExpression(precendence)
+		e.Value = p.parseExpression(precedence)
 		return e
 	case *ast.IndexExpression:
 		ae := &ast.AssignmentExpression{Token: p.curToken, Left: exp}
@@ -27,10 +27,10 @@ func (p *Parser) parseAssignEqualExpression(exp ast.Expression) ast.Expression {
 		return ae
 	default:
 		if node != nil {
-			msg := fmt.Sprintf("Line %d:Tulitegemea kupata kitambulishi au array, badala yake tumepata: %s", p.curToken.Line, node.TokenLiteral())
+			msg := fmt.Sprintf("Line %d: Expected an identifier or array, but found: %s", p.curToken.Line, node.TokenLiteral())
 			p.errors = append(p.errors, msg)
 		} else {
-			msg := fmt.Sprintf("Line %d: Umekosea mkuu", p.curToken.Line)
+			msg := fmt.Sprintf("Line %d: Unexpected syntax encountered during parsing.", p.curToken.Line)
 			p.errors = append(p.errors, msg)
 		}
 		return nil
