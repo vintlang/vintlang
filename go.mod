@@ -1,4 +1,4 @@
-module github.com/ekilie/vint-lang
+module github.com/vintlang/vintlang
 
 go 1.18
 
