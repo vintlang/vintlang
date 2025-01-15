@@ -5,8 +5,8 @@ import "testing"
 func TestStringHashKey(t *testing.T) {
 	hello1 := &String{Value: "Hello World"}
 	hello2 := &String{Value: "Hello World"}
-	diff1 := &String{Value: "My name is Avi"}
-	diff2 := &String{Value: "My name is Avi"}
+	diff1 := &String{Value: "My name is Tach"}
+	diff2 := &String{Value: "My name is Tach"}
 
 	if hello1.HashKey() != hello2.HashKey() {
 		t.Errorf("string with the same content have different dict keys")

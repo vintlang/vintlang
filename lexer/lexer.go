@@ -130,6 +130,7 @@ func (l *Lexer) NextToken() token.Token {
 		} else {
 			tok = newToken(token.GT, l.line, l.ch)
 		}
+		
 	case rune('"'):
 		tok.Type = token.STRING
 		tok.Literal = l.readString()
