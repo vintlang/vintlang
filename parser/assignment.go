@@ -30,10 +30,10 @@ func (p *Parser) parseAssignmentExpression(exp ast.Expression) ast.Expression {
 		return e
 	default:
 		if node != nil {
-			msg := fmt.Sprintf("Line %d:Tulitegemea kupata kitambulishi au array, badala yake tumepata: %s", p.curToken.Line, node.TokenLiteral())
+			msg := fmt.Sprintf("Line %d: Expected an identifier or an array, but found: %s", p.curToken.Line, node.TokenLiteral())
 			p.errors = append(p.errors, msg)
 		} else {
-			msg := fmt.Sprintf("Line %d: Umekosea mkuu", p.curToken.Line)
+			msg := fmt.Sprintf("Line %d: Unexpected syntax encountered during parsing.", p.curToken.Line)
 			p.errors = append(p.errors, msg)
 		}
 		return nil
