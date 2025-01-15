@@ -2,6 +2,17 @@
 import greetings_module
 import time
 
+let x = 42
+let ptr = _&(x)
+print(ptr) // Output: Pointer(42)
+
+let y = _*(p)tr
+print(y)  // Output: 42
+
+x = 100
+print(_*(ptr)) // Output: 100
+
+
 // Print a greeting
 print("Hello, VintLang World! it currently",time.now())
 

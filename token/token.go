@@ -17,6 +17,9 @@ const (
 	INT    = "INT"
 	STRING = "STRING"
 	FLOAT  = "FLOAT"
+	
+	POINTER = "POINTER" // *
+    ADDRESS = "ADDRESS" // &
 
 	// Operators
 	ASSIGN          = "="
