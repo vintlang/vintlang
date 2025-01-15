@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"testing"
 
-	"github.com/ekilie/vint-lang/ast"
-	"github.com/ekilie/vint-lang/lexer"
+	"github.com/vintlang/vintlang/ast"
+	"github.com/vintlang/vintlang/lexer"
 )
 
 func TestLetStatements(t *testing.T) {

@@ -3,7 +3,7 @@ package module
 import (
 	"fmt"
 
-	"github.com/ekilie/vint-lang/object"
+	"github.com/vintlang/vintlang/object"
 )
 
 var ColorsFunctions = map[string]object.ModuleFunction{}

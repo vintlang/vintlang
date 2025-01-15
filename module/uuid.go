@@ -2,7 +2,7 @@ package module
 
 import (
 	"github.com/google/uuid"
-	"github.com/ekilie/vint-lang/object"
+	"github.com/vintlang/vintlang/object"
 )
 
 var UuidFunctions = map[string]object.ModuleFunction{}

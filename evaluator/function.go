@@ -1,8 +1,8 @@
 package evaluator
 
 import (
-	"github.com/ekilie/vint-lang/ast"
-	"github.com/ekilie/vint-lang/object"
+	"github.com/vintlang/vintlang/ast"
+	"github.com/vintlang/vintlang/object"
 )
 
 func evalFunction(node *ast.FunctionLiteral, env *object.Environment) object.Object {

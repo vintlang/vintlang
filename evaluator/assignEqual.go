@@ -3,8 +3,8 @@ package evaluator
 import (
 	"strings"
 
-	"github.com/ekilie/vint-lang/ast"
-	"github.com/ekilie/vint-lang/object"
+	"github.com/vintlang/vintlang/ast"
+	"github.com/vintlang/vintlang/object"
 )
 
 func evalAssignEqual(node *ast.AssignEqual, env *object.Environment) object.Object {

@@ -6,7 +6,7 @@ import (
 	// "fmt"
 	"io/ioutil"
 	"net/http"
-	"github.com/ekilie/vint-lang/object"
+	"github.com/vintlang/vintlang/object"
 )
 
 var NetFunctions = map[string]object.ModuleFunction{}
