@@ -11,10 +11,10 @@ This is a syntax highliting extension for vint on vscode. It detects `.nr` and `
 
 ### Windows
 
-- Copy the whole [vint folder](https://github.com/ekilie/vint-lang/tree/main/extensions/vscode/vint) and paste it in the VSCode extensions directory found in `%USERPROFILE%\.vscode\extensions`
+- Copy the whole [vint folder](https://github.com/vintlang/vintlang/tree/main/extensions/vscode/vint) and paste it in the VSCode extensions directory found in `%USERPROFILE%\.vscode\extensions`
 - Restart VSCode
 
 ### Linux and MacOS
 
-- Copy the whole [vint folder](https://github.com/ekilie/vint-lang/tree/main/extensions/vscode/vint) and paste it in the VSCode extensions directory found in `~/.vscode/extensions`
+- Copy the whole [vint folder](https://github.com/vintlang/vintlang/tree/main/extensions/vscode/vint) and paste it in the VSCode extensions directory found in `~/.vscode/extensions`
 - Restart VSCode

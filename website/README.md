@@ -9,7 +9,7 @@ You can install **vintLang** on your Linux computer using the following steps. T
 First, download the binary release of vintLang for Linux using the following `curl` command:
 
 ```bash
-curl -O -L https://github.com/ekilie/vint-lang/releases/download/0.1.0/vintLang_linux_amd64_v0.1.2.tar.gz
+curl -O -L https://github.com/vintlang/vintlang/releases/download/0.1.0/vintLang_linux_amd64_v0.1.2.tar.gz
 ```
 
 ### Step 2: Extract the Binary to a Global Location
