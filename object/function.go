@@ -4,7 +4,7 @@ import (
 	"bytes"
 	"strings"
 
-	"github.com/ekilie/vint-lang/ast"
+	"github.com/vintlang/vintlang/ast"
 )
 
 type Function struct {

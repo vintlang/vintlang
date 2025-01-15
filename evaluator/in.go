@@ -3,7 +3,7 @@ package evaluator
 import (
 	"strings"
 
-	"github.com/ekilie/vint-lang/object"
+	"github.com/vintlang/vintlang/object"
 )
 
 func evalInExpression(left, right object.Object, line int) object.Object {

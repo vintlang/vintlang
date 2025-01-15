@@ -7,7 +7,7 @@ import (
 	"crypto/sha256"
 	"encoding/hex"
 	// "errors"
-	"github.com/ekilie/vint-lang/object"
+	"github.com/vintlang/vintlang/object"
 )
 
 // CryptoFunctions is a map that holds the available functions in the Crypto module.

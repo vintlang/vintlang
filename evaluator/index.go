@@ -1,6 +1,6 @@
 package evaluator
 
-import "github.com/ekilie/vint-lang/object"
+import "github.com/vintlang/vintlang/object"
 
 // evalIndexExpression handles indexing operations for arrays and dictionaries.
 func evalIndexExpression(left, index object.Object, line int) object.Object {

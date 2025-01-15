@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"strconv"
 
-	"github.com/ekilie/vint-lang/ast"
+	"github.com/vintlang/vintlang/ast"
 )
 
 func (p *Parser) parseFloatLiteral() ast.Expression {

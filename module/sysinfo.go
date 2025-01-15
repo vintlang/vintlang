@@ -3,7 +3,7 @@ package module
 import (
 	"runtime"
 
-	"github.com/ekilie/vint-lang/object"
+	"github.com/vintlang/vintlang/object"
 )
 
 var SysInfoFunctions = map[string]object.ModuleFunction{}

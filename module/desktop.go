@@ -8,7 +8,7 @@ package module
 // 	"fyne.io/fyne/v2/widget"
 // 	"fyne.io/fyne/v2/theme"
 
-// 	"github.com/ekilie/vint-lang/object"
+// 	"github.com/vintlang/vintlang/object"
 // )
 
 // var DesktopAppFunctions = map[string]object.ModuleFunction{}

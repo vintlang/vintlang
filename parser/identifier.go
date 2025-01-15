@@ -1,7 +1,7 @@
 package parser
 
 import (
-	"github.com/ekilie/vint-lang/ast"
+	"github.com/vintlang/vintlang/ast"
 )
 
 func (p *Parser) parseIdentifier() ast.Expression {

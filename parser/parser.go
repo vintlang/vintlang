@@ -3,9 +3,9 @@ package parser
 import (
 	"fmt"
 
-	"github.com/ekilie/vint-lang/ast"
-	"github.com/ekilie/vint-lang/lexer"
-	"github.com/ekilie/vint-lang/token"
+	"github.com/vintlang/vintlang/ast"
+	"github.com/vintlang/vintlang/lexer"
+	"github.com/vintlang/vintlang/token"
 )
 
 const (

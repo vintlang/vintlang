@@ -5,7 +5,7 @@ import (
 	"net/http"
 	"sync"
 
-	"github.com/ekilie/vint-lang/object"
+	"github.com/vintlang/vintlang/object"
 )
 
 var VintSocketFunctions = map[string]object.ModuleFunction{}

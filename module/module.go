@@ -1,6 +1,6 @@
 package module
 
-import "github.com/ekilie/vint-lang/object"
+import "github.com/vintlang/vintlang/object"
 
 var Mapper = map[string]*object.Module{}
 

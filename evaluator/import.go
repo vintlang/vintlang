@@ -6,11 +6,11 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/ekilie/vint-lang/ast"
-	"github.com/ekilie/vint-lang/lexer"
-	"github.com/ekilie/vint-lang/module"
-	"github.com/ekilie/vint-lang/object"
-	"github.com/ekilie/vint-lang/parser"
+	"github.com/vintlang/vintlang/ast"
+	"github.com/vintlang/vintlang/lexer"
+	"github.com/vintlang/vintlang/module"
+	"github.com/vintlang/vintlang/object"
+	"github.com/vintlang/vintlang/parser"
 )
 
 var searchPaths []string

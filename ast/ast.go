@@ -4,7 +4,7 @@ import (
 	"bytes"
 	"strings"
 
-	"github.com/ekilie/vint-lang/token"
+	"github.com/vintlang/vintlang/token"
 )
 
 type Node interface {

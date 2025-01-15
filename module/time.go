@@ -5,7 +5,7 @@ import (
 	"strconv"
 	"time"
 
-	"github.com/ekilie/vint-lang/object"
+	"github.com/vintlang/vintlang/object"
 )
 
 var TimeFunctions = map[string]object.ModuleFunction{}

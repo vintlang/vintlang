@@ -3,7 +3,7 @@ package module
 import (
 	"encoding/base64"
 
-	"github.com/ekilie/vint-lang/object"
+	"github.com/vintlang/vintlang/object"
 )
 
 var EncodingFunctions = map[string]object.ModuleFunction{}

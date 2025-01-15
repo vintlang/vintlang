@@ -7,7 +7,7 @@ import (
 	"os"
 	"strings"
 
-	"github.com/ekilie/vint-lang/object"
+	"github.com/vintlang/vintlang/object"
 )
 
 var builtins = map[string]*object.Builtin{

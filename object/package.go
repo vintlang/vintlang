@@ -3,7 +3,7 @@ package object
 import (
 	"fmt"
 
-	"github.com/ekilie/vint-lang/ast"
+	"github.com/vintlang/vintlang/ast"
 )
 
 type Package struct {

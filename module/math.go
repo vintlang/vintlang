@@ -5,7 +5,7 @@ import (
 	"math/rand"
 	"time"
 
-	"github.com/ekilie/vint-lang/object"
+	"github.com/vintlang/vintlang/object"
 )
 
 var MathFunctions = map[string]object.ModuleFunction{

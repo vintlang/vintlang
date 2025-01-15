@@ -1,7 +1,7 @@
 package lexer
 
 import (
-	"github.com/ekilie/vint-lang/token"
+	"github.com/vintlang/vintlang/token"
 )
 
 type Lexer struct {

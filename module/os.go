@@ -6,7 +6,7 @@ import (
 	"strings"
 	"io/ioutil"
 
-	"github.com/ekilie/vint-lang/object"
+	"github.com/vintlang/vintlang/object"
 )
 
 var OsFunctions = map[string]object.ModuleFunction{}

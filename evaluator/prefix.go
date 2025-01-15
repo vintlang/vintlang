@@ -1,6 +1,6 @@
 package evaluator
 
-import "github.com/ekilie/vint-lang/object"
+import "github.com/vintlang/vintlang/object"
 
 func evalMinusPrefixOperatorExpression(right object.Object, line int) object.Object {
 	switch obj := right.(type) {

@@ -1,6 +1,6 @@
 package evaluator
 
-import "github.com/ekilie/vint-lang/object"
+import "github.com/vintlang/vintlang/object"
 
 func evalBangOperatorExpression(right object.Object) object.Object {
 	switch right {
