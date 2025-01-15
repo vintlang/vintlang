@@ -4,7 +4,7 @@ import (
 	"regexp"
 	"strings"
 
-	"github.com/ekilie/vint-lang/object"
+	"github.com/vintlang/vintlang/object"
 	"github.com/xrash/smetrics" // string metrics, like Levenshtein
 )
 

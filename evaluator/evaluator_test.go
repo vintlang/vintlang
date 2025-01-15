@@ -5,9 +5,9 @@ import (
 	"testing"
 	"time"
 
-	"github.com/ekilie/vint-lang/lexer"
-	"github.com/ekilie/vint-lang/object"
-	"github.com/ekilie/vint-lang/parser"
+	"github.com/vintlang/vintlang/lexer"
+	"github.com/vintlang/vintlang/object"
+	"github.com/vintlang/vintlang/parser"
 )
 
 func TestEvalIntegerExpression(t *testing.T) {

@@ -6,9 +6,9 @@ import (
 	"strings"
 
 	"github.com/charmbracelet/lipgloss"
-	"github.com/ekilie/vint-lang/repl"
-	"github.com/ekilie/vint-lang/styles"
-	"github.com/ekilie/vint-lang/toolkit"
+	"github.com/vintlang/vintlang/repl"
+	"github.com/vintlang/vintlang/styles"
+	"github.com/vintlang/vintlang/toolkit"
 )
 const VINT_VERSION = "0.1.4"
 // Constants for styled output

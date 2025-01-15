@@ -3,8 +3,8 @@ package evaluator
 import (
 	"fmt"
 
-	"github.com/ekilie/vint-lang/ast"
-	"github.com/ekilie/vint-lang/object"
+	"github.com/vintlang/vintlang/ast"
+	"github.com/vintlang/vintlang/object"
 )
 
 var (

@@ -11,11 +11,11 @@ import (
 	"github.com/charmbracelet/bubbles/list"
 	tea "github.com/charmbracelet/bubbletea"
 	"github.com/charmbracelet/lipgloss"
-	"github.com/ekilie/vint-lang/evaluator"
-	"github.com/ekilie/vint-lang/lexer"
-	"github.com/ekilie/vint-lang/object"
-	"github.com/ekilie/vint-lang/parser"
-	"github.com/ekilie/vint-lang/styles"
+	"github.com/vintlang/vintlang/evaluator"
+	"github.com/vintlang/vintlang/lexer"
+	"github.com/vintlang/vintlang/object"
+	"github.com/vintlang/vintlang/parser"
+	"github.com/vintlang/vintlang/styles"
 	zone "github.com/lrstanley/bubblezone"
 )
 

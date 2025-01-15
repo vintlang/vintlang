@@ -2,7 +2,7 @@ package module
 
 import (
 	"regexp"
-	"github.com/ekilie/vint-lang/object"
+	"github.com/vintlang/vintlang/object"
 )
 
 // RegexFunctions is a map that holds the available functions in the Regex module.

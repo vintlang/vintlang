@@ -4,8 +4,8 @@ import (
 	"os"
 	"strings"
 
-	"github.com/ekilie/vint-lang/object"
-	"github.com/ekilie/vint-lang/toolkit"
+	"github.com/vintlang/vintlang/object"
+	"github.com/vintlang/vintlang/toolkit"
 )
 
 var CliFunctions = map[string]object.ModuleFunction{}
