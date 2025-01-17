@@ -13,6 +13,7 @@ require (
 	github.com/gorilla/websocket v1.5.3
 	github.com/joho/godotenv v1.5.1
 	github.com/lrstanley/bubblezone v0.0.0-20230303230241-08f906ff62a9
+	github.com/mattn/go-sqlite3 v1.14.24
 	github.com/xrash/smetrics v0.0.0-20240521201337-686a1a2994c1
 )
 
