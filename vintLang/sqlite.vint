@@ -1,0 +1,32 @@
+import sqlite
+
+// Open a database
+db = sqlite.open("example.db")
+
+// Create a table
+sqlite.execute(db, "CREATE TABLE IF NOT EXISTS users (id INTEGER PRIMARY KEY, name TEXT, age INTEGER)")
+
+// Insert data
+sqlite.execute(db, "INSERT INTO users (name, age) VALUES (?, ?)", "Alice", 25)
+sqlite.execute(db, "INSERT INTO users (name, age) VALUES (?, ?)", "Bob", 30)
+
+// Fetch all rows
+print("=== All Users ===")
+users = sqlite.fetchAll(db, "SELECT * FROM users")
+print(users)
+
+// Fetch a single row
+print("\n=== First User ===")
+first_user = sqlite.fetchOne(db, "SELECT * FROM users LIMIT 1")
+print(first_user)
+
+// Update data
+sqlite.execute(db, "UPDATE users SET age = ? WHERE name = ?", 26, "Alice")
+
+// Delete data
+sqlite.execute(db, "DELETE FROM users WHERE name = ?", "Bob")
+
+// Fetch all rows after changes
+print("\n=== Users After Changes ===")
+users_after_changes = sqlite.fetchAll(db, "SELECT * FROM users")
+print(users_after_changes)
