@@ -53,7 +53,7 @@ Here are some sample code snippets that show how to use **vintLang**. More examp
 
 ### Example 1: String Splitting and Printing
 
-```vint
+```js
 // Importing modules
 import net       // Importing networking module for HTTP operations
 import time      // Importing time module to work with date and time
@@ -68,7 +68,7 @@ for i in s {
 
 ### Example 2: Type Conversion and Conditional Statements
 
-```vint
+```js
 // Demonstrating type conversion and conditional statements
 age = "10"
 convert(age, "INTEGER")  // Convert age string to integer
@@ -86,7 +86,7 @@ if (age == 20) {
 
 ### Example 3: Working with Height Variable
 
-```vint
+```js
 // Working with height variable
 height = "6.0" // Height in feet
 print("My name is " + name)
@@ -106,7 +106,7 @@ printDetails(name, age, height)
 
 ### Example 4: Time-Related Operations
 
-```vint
+```js
 // Print the current timestamp
 print(time.now())
 
@@ -134,7 +134,7 @@ greet("John")
 
 ### Example 5: Networking with HTTP GET Request
 
-```vint
+```js
 // Example of a GET request using the net module
 let res = net.get("https://tachera.com")
 print(res)
@@ -142,7 +142,7 @@ print(res)
 
 ### Example 6: Built-in Functions and Output
 
-```vint
+```js
 // Built-in functions
 print(type(123))             // Print the type of an integer
 let a = "123"                // Initialize a string variable

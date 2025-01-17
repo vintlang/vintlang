@@ -6,7 +6,7 @@ Strings are a sequence of characters used to represent text in the Vint programm
 
 In Vint, strings can be enclosed in either single quotes (`''`) or double quotes (`""`):
 
-```vint
+```js
 print("Hello")  // Output: Hello
 
 let name = 'Tachera'
@@ -18,7 +18,7 @@ print("Hello", name)  // Output: Hello Tachera
 
 Strings can be concatenated using the `+` operator:
 
-```vint
+```js
 let greeting = "Hello" + " " + "World"
 print(greeting)  // Output: Hello World
 
@@ -29,7 +29,7 @@ message += " World"
 
 You can also repeat a string a specific number of times using the `*` operator:
 
-```vint
+```js
 print("Hello " * 3)  // Output: Hello Hello Hello
 
 let repeated = "World"
@@ -41,7 +41,7 @@ repeated *= 2
 
 You can loop through each character of a string using the `for` keyword:
 
-```vint
+```js
 let name = "Avicenna"
 
 for char in name {
@@ -60,7 +60,7 @@ for char in name {
 
 You can also loop through the string using its index and character:
 
-```vint
+```js
 for i, char in name {
     print(i, "=>", char)
 }
@@ -79,7 +79,7 @@ for i, char in name {
 
 You can compare two strings using the `==` operator:
 
-```vint
+```js
 let a = "Vint"
 print(a == "Vint")  // Output: true
 print(a == "vint")  // Output: false
@@ -91,7 +91,7 @@ print(a == "vint")  // Output: false
 
 You can find the length of a string using the `length` method. It does not accept any parameters:
 
-```vint
+```js
 let message = "Vint"
 print(message.length())  // Output: 4
 ```
@@ -100,7 +100,7 @@ print(message.length())  // Output: 4
 
 This method converts the string to uppercase:
 
-```vint
+```js
 let text = "vint"
 print(text.upper())  // Output: VINT
 ```
@@ -109,7 +109,7 @@ print(text.upper())  // Output: VINT
 
 This method converts the string to lowercase:
 
-```vint
+```js
 let text = "VINT"
 print(text.lower())  // Output: vint
 ```
@@ -120,7 +120,7 @@ The `split` method splits a string into an array based on a specified delimiter.
 
 Example without a delimiter:
 
-```vint
+```js
 let sentence = "Vint programming language"
 let words = sentence.split()
 print(words)  // Output: ["Vint", "programming", "language"]
@@ -128,7 +128,7 @@ print(words)  // Output: ["Vint", "programming", "language"]
 
 Example with a delimiter:
 
-```vint
+```js
 let sentence = "Vint,programming,language"
 let words = sentence.split(",")
 print(words)  // Output: ["Vint", "programming", "language"]
@@ -138,7 +138,7 @@ print(words)  // Output: ["Vint", "programming", "language"]
 
 You can replace a substring with another string using the `replace` method:
 
-```vint
+```js
 let greeting = "Hello World"
 let newGreeting = greeting.replace("World", "Vint")
 print(newGreeting)  // Output: Hello Vint
@@ -148,7 +148,7 @@ print(newGreeting)  // Output: Hello Vint
 
 You can remove whitespace from the start and end of a string using the `trim` method:
 
-```vint
+```js
 let message = "  Hello World  "
 print(message.trim())  // Output: Hello World
 ```
@@ -157,7 +157,7 @@ print(message.trim())  // Output: Hello World
 
 You can extract a substring from a string by specifying the starting and ending indices:
 
-```vint
+```js
 let sentence = "Vint programming"
 print(sentence.substring(0, 4))  // Output: Vint
 ```
@@ -166,7 +166,7 @@ print(sentence.substring(0, 4))  // Output: Vint
 
 You can find the index of a substring within a string using the `indexOf` method:
 
-```vint
+```js
 let sentence = "Vint programming"
 print(sentence.indexOf("programming"))  // Output: 5
 ```
@@ -175,7 +175,7 @@ print(sentence.indexOf("programming"))  // Output: 5
 
 You can convert a string into a URL-friendly format (slug) using the `slug` method:
 
-```vint
+```js
 let title = "Creating a Slug String"
 print(title.slug())  // Output: creating-a-slug-string
 ```
@@ -184,7 +184,7 @@ print(title.slug())  // Output: creating-a-slug-string
 
 Check if a string contains a specific substring:
 
-```vint
+```js
 let name = "Tachera Sasi"
 print(name.contains("Sasi"))  // Output: true
 ```
@@ -193,7 +193,7 @@ print(name.contains("Sasi"))  // Output: true
 
 Here’s an example of how you might use these string operations in Vint:
 
-```vint
+```js
 import "string"
 
 // Example: Trim whitespace
@@ -233,7 +233,7 @@ print(lengthResult)  // Output: 5
 
 Here's an example using Vint-specific strings:
 
-```vint
+```js
 let name = "Tachera Sasi"
 let reversed = name.reverse()
 print(reversed)  // Output: "isaS arehcaT"

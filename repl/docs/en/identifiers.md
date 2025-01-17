@@ -11,7 +11,7 @@ Identifiers can include letters, numbers, and underscores. However, they must ad
 
 ### Examples of Valid Identifiers:
 
-```vint
+```js
 let birth_year = 2020
 print(birth_year)  // Output: 2020
 
@@ -26,7 +26,7 @@ In the examples above, `birth_year` and `convert_c_to_p` follow all syntax rules
 To make your **Vint** code more readable and maintainable, follow these best practices:
 
 1. **Use Descriptive Names:** Choose names that clearly describe the purpose or content of the variable or function.
-   ```vint
+   ```js
    let total_score = 85
    let calculate_average = func() { /* logic */ }
    ```
@@ -36,7 +36,7 @@ To make your **Vint** code more readable and maintainable, follow these best pra
    - **snake_case**: `my_variable_name`
 
 3. **Avoid Ambiguity:** Use meaningful names instead of single letters, except for common cases like loop counters:
-   ```vint
+   ```js
    for (let i = 0; i < 10; i++) {
        print(i)
    }

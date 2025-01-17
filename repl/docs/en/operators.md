@@ -16,7 +16,7 @@ Assignment operators are used to assign values to variables. The following are s
 
 For strings, arrays, and dictionaries, the `+=` operator is also valid. For example:
 
-```vint
+```js
 list1 += list2 // Equivalent to list1 = list1 + list2
 ```
 
@@ -56,7 +56,7 @@ Comparison operators evaluate relationships between two values. These return `tr
 
 The membership operator `in` checks if an item exists within a collection:
 
-```vint
+```js
 names = ['juma', 'asha', 'haruna']
 
 "haruna" in names // true

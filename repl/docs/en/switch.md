@@ -9,7 +9,7 @@ A switch statement starts with the `switch` keyword, followed by the expression 
 Each case uses the keyword `case`, followed by a value to check. Multiple values in a case can be separated by commas `,`. The block of code to execute if the condition is met is placed within curly braces `{}`.
 
 ### Example:
-```vint
+```js
 let a = 2
 
 switch (a) {
@@ -27,7 +27,7 @@ switch (a) {
 A single `case` can handle multiple possible values. These values are separated by commas `,`.
 
 ### Example:
-```vint
+```js
 switch (a) {
 	case 1, 2, 3 {
 		print("a is one, two, or three")
@@ -43,7 +43,7 @@ switch (a) {
 The `default` statement is executed when none of the specified cases match. It is represented by the `default` keyword.
 
 ### Example:
-```vint
+```js
 let z = 20
 
 switch(z) {
@@ -64,7 +64,7 @@ switch(z) {
 Switch statements can be nested to handle more complex conditions.
 
 ### Example:
-```vint
+```js
 let x = 1
 let y = 2
 
@@ -90,7 +90,7 @@ switch (x) {
 Cases can also be used with logical conditions.
 
 ### Example:
-```vint
+```js
 let isTrue = true
 let isFalse = false
 

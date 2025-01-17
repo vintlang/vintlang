@@ -6,7 +6,7 @@ Functions in **Vint** allow you to encapsulate code and execute it when needed. 
 
 You can define and immediately execute a function:
 
-```vint
+```js
 let go = func() {
     print("this is a function")
 }()
@@ -18,7 +18,7 @@ This function `go` is defined and executed immediately upon declaration.
 
 Functions can also be declared without being executed immediately:
 
-```vint
+```js
 let vint = func() {
     print("This is also a function\nBut not invoked immediately after being declared")
 }
@@ -32,7 +32,7 @@ The function `vint` is called later using `vint()`.
 
 Functions in **Vint** can be passed as arguments to other functions:
 
-```vint
+```js
 let w = func() {
     print("w function")
 }

@@ -3,7 +3,7 @@
 ## Importing Time
 
 To use time-related functionalities in Vint, you first need to import the `time` module as follows:
-```vint
+```js
 import time
 ```
 
@@ -12,7 +12,7 @@ import time
 ### `now()`
 
 To get the current time, use the `time.now()` method. This will return the current time as a `time` object:
-```vint
+```js
 import time
 
 current_time = time.now()
@@ -22,7 +22,7 @@ current_time = time.now()
 
 Use this method to get the total time since in seconds. It accepts a time object or a string in the format `HH:mm:ss dd-MM-YYYY`:
 
-```vint
+```js
 import time
 
 now = time.now()
@@ -38,7 +38,7 @@ now.since("00:00:00 01-01-1900") // returns the since time in seconds since that
 
 Use `sleep()` if you want your program to pause or "sleep." It accepts one argument, which is the total time to sleep in seconds:
 
-```vint
+```js
 time.sleep(10) // will pause the program for ten seconds
 ```
 
@@ -46,7 +46,7 @@ time.sleep(10) // will pause the program for ten seconds
 
 Use the `add()` method to add to the current time, explained with an example:
 
-```vint
+```js
 import time
 
 now = time.now()
@@ -64,12 +64,12 @@ It will return a `time` object with the specified time added.
 ## Example Usage
 
 ### Print the current timestamp
-```vint
+```js
 print(time.now())
 ```
 
 ### Function to greet a user based on the time of the day
-```vint
+```js
 let greet = func(name) {
     let current_time = time.now()  // Get the current time
     print(current_time)            // Print the current time
@@ -82,7 +82,7 @@ let greet = func(name) {
 ```
 
 ### Time-related operations
-```vint
+```js
 year = 2024
 print("Is", year, "Leap year:", time.isLeapYear(year))
 print(time.format(time.now(), "02-01-2006 15:04:05"))

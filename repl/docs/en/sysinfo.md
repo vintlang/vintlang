@@ -8,7 +8,7 @@ The `sysinfo` module in Vint provides information about the system, such as the 
 
 To use the Sysinfo module, import it as follows:
 
-```vint
+```js
 import sysinfo
 ```
 
@@ -20,14 +20,14 @@ import sysinfo
 The `os` function returns the name of the operating system on which the Vint program is running.
 
 **Syntax**:
-```vint
+```js
 os()
 ```
 
 - Returns a string representing the operating system (e.g., `"Linux"`, `"Windows"`, `"macOS"`).
 
 **Example**:
-```vint
+```js
 import sysinfo
 
 os_name = sysinfo.os()
@@ -41,14 +41,14 @@ print("Operating System:", os_name)
 The `arch` function returns the architecture of the system (e.g., 32-bit or 64-bit).
 
 **Syntax**:
-```vint
+```js
 arch()
 ```
 
 - Returns a string representing the architecture (e.g., `"x86_64"` for 64-bit or `"i386"` for 32-bit).
 
 **Example**:
-```vint
+```js
 import sysinfo
 
 architecture = sysinfo.arch()
@@ -62,7 +62,7 @@ print("System Architecture:", architecture)
 You can combine both the `os()` and `arch()` functions to display comprehensive system information.
 
 **Example**:
-```vint
+```js
 import sysinfo
 
 os_name = sysinfo.os()

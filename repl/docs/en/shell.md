@@ -8,7 +8,7 @@ The Shell module in Vint provides a way to interact with the system's shell envi
 
 To use the Shell module, import it as follows:
 
-```vint
+```js
 import shell
 ```
 
@@ -20,14 +20,14 @@ import shell
 The `run` function allows you to execute a shell command and capture its output.
 
 **Syntax**:
-```vint
+```js
 run(command)
 ```
 
 - `command` (string): The shell command to execute (e.g., `echo Hello` or `ls`).
 
 **Example**:
-```vint
+```js
 import shell
 
 output = shell.run("echo Hello, Shell!")
@@ -43,14 +43,14 @@ In the example, the `echo` command prints the string `Hello, Shell!` to the term
 The `exists` function checks whether a given command is available on the system.
 
 **Syntax**:
-```vint
+```js
 exists(command)
 ```
 
 - `command` (string): The name of the command to check (e.g., `ls`, `python`, `echo`).
 
 **Example**:
-```vint
+```js
 import shell
 
 exists_ls = shell.exists("ls")
@@ -74,7 +74,7 @@ In the example, `exists("ls")` checks if the `ls` command is available, returnin
 You can also pass arguments to shell commands within the `run` function.
 
 **Example**:
-```vint
+```js
 import shell
 
 output = shell.run("ls -l")

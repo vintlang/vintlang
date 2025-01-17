@@ -7,13 +7,13 @@ To use the `math` in-built module follow the steps below:
 
 1. You directly import the `math` in-built module and any required in-built modules in your vint code using the `import` keyword.
 
-   ```vint
+   ```js
    import math
    ```
 
 2. Calling the in-built module methods:
 
-   ```vint
+   ```js
    print(math.e())
    ```
 

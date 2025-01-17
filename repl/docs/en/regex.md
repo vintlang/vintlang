@@ -8,7 +8,7 @@ The `regex` module in Vint provides powerful functionality to perform regular ex
 
 To use the Regex module, import it as follows:
 
-```vint
+```js
 import regex
 ```
 
@@ -20,14 +20,14 @@ import regex
 The `match` function checks if a string matches a specified pattern. It returns `true` if the string matches the pattern and `false` if it does not.
 
 **Syntax**:
-```vint
+```js
 match(pattern, string)
 ```
 - `pattern`: The regular expression pattern.
 - `string`: The string to match against the pattern.
 
 **Example**:
-```vint
+```js
 import regex
 
 result = regex.match("^Hello", "Hello World")
@@ -41,7 +41,7 @@ In this case, the string starts with `"Hello"`, so it matches the pattern.
 You can use `match` to check if a string does *not* match a given pattern. If the pattern is not found at the beginning of the string, it will return `false`.
 
 **Example**:
-```vint
+```js
 import regex
 
 result = regex.match("^World", "Hello World")
@@ -55,7 +55,7 @@ Since the string does not start with `"World"`, the result is `false`.
 The `replaceString` function replaces parts of a string that match a pattern with a new value.
 
 **Syntax**:
-```vint
+```js
 replaceString(pattern, replacement, string)
 ```
 - `pattern`: The regular expression pattern.
@@ -63,7 +63,7 @@ replaceString(pattern, replacement, string)
 - `string`: The input string.
 
 **Example**:
-```vint
+```js
 import regex
 
 newString = regex.replaceString("World", "VintLang", "Hello World")
@@ -77,14 +77,14 @@ In this case, `"World"` is replaced by `"VintLang"`, resulting in `"Hello VintLa
 The `splitString` function splits a string into a list of substrings based on a regular expression pattern.
 
 **Syntax**:
-```vint
+```js
 splitString(pattern, string)
 ```
 - `pattern`: The regular expression pattern used as a delimiter.
 - `string`: The string to be split.
 
 **Example**:
-```vint
+```js
 import regex
 
 words = regex.splitString("\\s+", "Hello World VintLang")
@@ -98,7 +98,7 @@ Here, `\\s+` matches one or more whitespace characters, so the string is split i
 You can also split a string by a specific delimiter, such as a comma, using `splitString`.
 
 **Example**:
-```vint
+```js
 import regex
 
 csv = regex.splitString(",", "apple,banana,orange")
@@ -112,7 +112,7 @@ The string `"apple,banana,orange"` is split at each comma.
 You can match more complex patterns, such as an email address, using `match` with a regex pattern.
 
 **Example**:
-```vint
+```js
 import regex
 
 emailMatch = regex.match("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$", "test@example.com")
@@ -126,7 +126,7 @@ This pattern matches valid email addresses, so `"test@example.com"` matches succ
 You can use `replaceString` to replace parts of a string that match a pattern, such as replacing digits with asterisks.
 
 **Example**:
-```vint
+```js
 import regex
 
 maskedString = regex.replaceString("\\d", "*", "My phone number is 123456789")
