@@ -6,7 +6,7 @@ The `range` function in Vint generates a sequence of numbers and is commonly use
 
 ## Syntax
 
-```vint
+```js
 range(end)
 range(start, end)
 range(start, end, step)
@@ -31,7 +31,7 @@ The function returns an array of integers.
 ## Examples
 
 ### Basic Usage
-```vint
+```js
 // Generate numbers from 0 to 4
 for i in range(5) {
     print(i)
@@ -40,7 +40,7 @@ for i in range(5) {
 ```
 
 ### Specifying a Start and End
-```vint
+```js
 // Generate numbers from 1 to 9
 for i in range(1, 10) {
     print(i)
@@ -49,7 +49,7 @@ for i in range(1, 10) {
 ```
 
 ### Using a Step Value
-```vint
+```js
 // Generate even numbers from 0 to 8
 for i in range(0, 10, 2) {
     print(i)
@@ -58,7 +58,7 @@ for i in range(0, 10, 2) {
 ```
 
 ### Generating a Reverse Sequence
-```vint
+```js
 // Generate numbers in reverse order
 for i in range(10, 0, -1) {
     print(i)

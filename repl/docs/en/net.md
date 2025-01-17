@@ -6,7 +6,7 @@ The `net` module in Vint provides functionalities for performing HTTP requests. 
 
 To use the functionality provided by the `net` module in your Vint program, you must first import it:
 
-```vint
+```js
 import net
 ```
 
@@ -30,13 +30,13 @@ Performs an HTTP GET request. The method accepts a URL and optional headers or b
 
 #### Usage
 
-```vint
+```js
 response = net.get("http://example.com")
 ```
 
 Or with keyword arguments:
 
-```vint
+```js
 response = net.get(url="http://mysite.com", headers={"Authorization": "Bearer token"}, body={"key": "value"})
 ```
 
@@ -56,7 +56,7 @@ Performs an HTTP POST request. This is useful for sending data to a server.
 
 #### Usage
 
-```vint
+```js
 response = net.post("http://example.com", headers={"Content-Type": "application/json"}, body={"key": "value"})
 ```
 
@@ -76,7 +76,7 @@ Performs an HTTP PUT request to update resources on a server.
 
 #### Usage
 
-```vint
+```js
 response = net.put("http://example.com/resource", headers={"Authorization": "Bearer token"}, body={"updated_key": "new_value"})
 ```
 
@@ -96,7 +96,7 @@ Performs an HTTP DELETE request to remove a resource from the server.
 
 #### Usage
 
-```vint
+```js
 response = net.delete("http://example.com/resource", headers={"Authorization": "Bearer token"})
 ```
 
@@ -116,7 +116,7 @@ Performs an HTTP PATCH request to partially update a resource on the server.
 
 #### Usage
 
-```vint
+```js
 response = net.patch("http://example.com/resource", headers={"Authorization": "Bearer token"}, body={"key": "updated_value"})
 ```
 
@@ -135,7 +135,7 @@ A `string` containing the response body.
 
 ### Basic GET Request
 
-```vint
+```js
 import net
 
 response = net.get("http://example.com")
@@ -144,7 +144,7 @@ print(response)
 
 ### POST Request with Headers and Body
 
-```vint
+```js
 import net
 
 url = "http://example.com/api"

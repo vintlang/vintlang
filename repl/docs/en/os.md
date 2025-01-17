@@ -6,7 +6,7 @@ In **Vint**, the `os` module provides functions to interact with the operating s
 
 You can exit a program and return a status code using `os.exit()`. A non-zero status code generally indicates an error.
 
-```vint
+```js
 os.exit(1)  // Exit with status code 1
 ```
 
@@ -14,14 +14,14 @@ os.exit(1)  // Exit with status code 1
 
 Use `os.run()` to execute a shell command. It returns the result of the command as a string.
 
-```vint
+```js
 result = os.run("ls -la")
 print(result)  // Outputs the directory listing
 ```
 
 You can also run other commands, like:
 
-```vint
+```js
 // print(os.run("go run . vintLang/main.vint"))
 ```
 
@@ -30,12 +30,12 @@ You can also run other commands, like:
 Environment variables can be set and retrieved with `os.setEnv()` and `os.getEnv()`.
 
 ### Set Environment Variable:
-```vint
+```js
 os.setEnv("API_KEY", "12345")
 ```
 
 ### Get Environment Variable:
-```vint
+```js
 api_key = os.getEnv("API_KEY")
 print(api_key)  // Outputs: "12345"
 ```
@@ -43,12 +43,12 @@ print(api_key)  // Outputs: "12345"
 ## Read and Write Files
 
 ### Write to a File:
-```vint
+```js
 os.writeFile("example.txt", "Hello, Vint!")
 ```
 
 ### Read from a File:
-```vint
+```js
 content = os.readFile("example.txt")
 print(content)  // Outputs: "Hello, Vint!"
 ```
@@ -57,7 +57,7 @@ print(content)  // Outputs: "Hello, Vint!"
 
 You can list the files in a directory using `os.listDir()`:
 
-```vint
+```js
 files = os.listDir(".")
 print(files)  // Outputs a list of files in the current directory
 ```
@@ -66,7 +66,7 @@ print(files)  // Outputs a list of files in the current directory
 
 Use `os.makeDir()` to create a new directory:
 
-```vint
+```js
 os.makeDir("new_folder")
 ```
 
@@ -74,7 +74,7 @@ os.makeDir("new_folder")
 
 To check if a file exists, use `os.fileExists()`:
 
-```vint
+```js
 exists = os.fileExists("example.txt")
 print(exists)  // Outputs: false (if the file doesn't exist)
 ```
@@ -83,7 +83,7 @@ print(exists)  // Outputs: false (if the file doesn't exist)
 
 To read a file and get its lines in a list, use `os.readLines()`:
 
-```vint
+```js
 os.writeFile("example.txt", "Hello\nWorld")
 lines = os.readLines("example.txt")
 print(lines)  // Outputs: ["Hello", "World"]
@@ -93,7 +93,7 @@ print(lines)  // Outputs: ["Hello", "World"]
 
 To delete a file, use `os.deleteFile()`:
 
-```vint
+```js
 // os.deleteFile("example.txt")
 ```
 

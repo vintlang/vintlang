@@ -10,13 +10,13 @@ You can open a file using the `open` keyword. This will return an object of type
 
 ### Syntax
 
-```vint
+```js
 fileObject = open("filename.txt")
 ```
 
 ### Example
 
-```vint
+```js
 myFile = open("file.txt")
 
 aina(myFile) // Output: FAILI
@@ -30,13 +30,13 @@ After opening a file, you can read its contents using the `read()` method. This 
 
 ### Syntax
 
-```vint
+```js
 fileObject.read()
 ```
 
 ### Example
 
-```vint
+```js
 myFile = open("file.txt")
 
 contents = myFile.read()
@@ -57,7 +57,7 @@ print(contents)
 
 ### Reading and Printing File Contents
 
-```vint
+```js
 fileName = "example.txt"
 file = open(fileName)
 

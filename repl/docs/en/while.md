@@ -6,7 +6,7 @@ While loops in Vint are used to execute a block of code repeatedly, as long as a
 
 A while loop is executed when a specified condition is true. You initialize a while loop with the `while` keyword followed by the condition in parentheses `()`. The consequence of the loop should be enclosed in curly braces `{}`.
 
-```vint
+```js
 let i = 1
 
 while (i <= 5) {
@@ -16,7 +16,7 @@ while (i <= 5) {
 ```
 
 ### Output:
-```vint
+```js
 1
 2
 3
@@ -30,7 +30,7 @@ while (i <= 5) {
 
 Use the `break` keyword to terminate a loop:
 
-```vint
+```js
 let i = 1
 
 while (i < 5) {
@@ -44,7 +44,7 @@ while (i < 5) {
 ```
 
 ### Output:
-```vint
+```js
 1
 2
 broken
@@ -54,7 +54,7 @@ broken
 
 Use the `continue` keyword to skip a specific iteration:
 
-```vint
+```js
 let i = 0
 
 while (i < 5) {
@@ -68,7 +68,7 @@ while (i < 5) {
 ```
 
 ### Output:
-```vint
+```js
 1
 2
 skipped

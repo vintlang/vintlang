@@ -6,7 +6,7 @@ The `null` data type in Vint represents the absence of a value or the concept of
 
 A `null` data type is a data type with no value, defined with the `null` keyword:
 
-```vint
+```js
 let a = null
 ```
 
@@ -14,7 +14,7 @@ let a = null
 
 When evaluating a `null` data type in a conditional expression, it will evaluate to `false`:
 
-```vint
+```js
 if (a) {
     print("a is null")
 } else {

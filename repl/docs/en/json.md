@@ -7,7 +7,7 @@ The JSON module in Vint provides powerful and straightforward functions for work
 ## Importing the JSON Module
 
 To use the JSON module, simply import it:
-```vint
+```js
 import json
 ```
 
@@ -19,12 +19,12 @@ import json
 The `decode` function parses a JSON string into a Vint dictionary or array.
 
 **Syntax**:
-```vint
+```js
 decode(jsonString)
 ```
 
 **Example**:
-```vint
+```js
 import json
 
 print("=== Example 1: Decode ===")
@@ -40,12 +40,12 @@ print("Decoded Object:", decoded)
 The `encode` function converts a Vint dictionary or array into a JSON string. It optionally supports pretty formatting with an `indent` parameter.
 
 **Syntax**:
-```vint
+```js
 encode(data, indent = 0)
 ```
 
 **Example**:
-```vint
+```js
 import json
 
 print("\n=== Example 2: Encode ===")
@@ -70,12 +70,12 @@ print("Encoded JSON:", encoded_json)
 The `pretty` function reformats a JSON string into a human-readable format with proper indentation.
 
 **Syntax**:
-```vint
+```js
 pretty(jsonString)
 ```
 
 **Example**:
-```vint
+```js
 import json
 
 print("\n=== Example 3: Pretty Print ===")
@@ -97,12 +97,12 @@ print("Pretty JSON:\n", pretty_json)
 The `merge` function combines two JSON objects. If both objects have the same key, the value from the second object overwrites the first.
 
 **Syntax**:
-```vint
+```js
 merge(json1, json2)
 ```
 
 **Example**:
-```vint
+```js
 import json
 
 print("\n=== Example 4: Merge ===")
@@ -119,12 +119,12 @@ print("Merged JSON:", merged_json)
 The `get` function retrieves a value associated with a key from a JSON object. If the key is not found, it returns `null`.
 
 **Syntax**:
-```vint
+```js
 get(jsonObject, key)
 ```
 
 **Example**:
-```vint
+```js
 import json
 
 print("\n=== Example 5: Get Value by Key ===")

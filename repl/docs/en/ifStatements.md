@@ -6,7 +6,7 @@ Conditional statements in **Vint** allow you to perform different actions based 
 
 The `if` statement checks a condition inside parentheses `()`. If the condition evaluates to true, the code block inside curly braces `{}` will execute:
 
-```vint
+```js
 if (2 > 1) {
     print(true)  // Output: true
 }
@@ -18,7 +18,7 @@ In this example, the condition `2 > 1` is true, so `print(true)` is executed, an
 
 You can use `else if` to test additional conditions after an `if` statement. The `else` block specifies code to execute if none of the previous conditions are met:
 
-```vint
+```js
 let a = 10
 
 if (a > 100) {
