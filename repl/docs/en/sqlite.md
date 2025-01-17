@@ -6,7 +6,7 @@ In **VintLang**, the `sqlite` module allows interaction with SQLite databases. Y
 
 Use `sqlite.open()` to open a connection to an SQLite database.
 
-```vint
+```js
 db = sqlite.open("example.db")
 ```
 
@@ -14,7 +14,7 @@ db = sqlite.open("example.db")
 
 To close the database connection, use `sqlite.close()`.
 
-```vint
+```js
 sqlite.close(db)
 ```
 
@@ -24,13 +24,13 @@ You can execute `INSERT`, `UPDATE`, `DELETE`, and other queries using `sqlite.ex
 
 ### Insert Data:
 
-```vint
+```js
 sqlite.execute(db, "INSERT INTO users (name, age) VALUES (?, ?)", "Alice", 25)
 ```
 
 ### Update Data:
 
-```vint
+```js
 sqlite.execute(db, "UPDATE users SET age = ? WHERE name = ?", 26, "Alice")
 ```
 
@@ -38,14 +38,14 @@ sqlite.execute(db, "UPDATE users SET age = ? WHERE name = ?", 26, "Alice")
 
 Use `sqlite.fetchAll()` to retrieve all rows from a query.
 
-```vint
+```js
 users = sqlite.fetchAll(db, "SELECT * FROM users")
 print(users)
 ```
 
 You can also fetch a single row with `sqlite.fetchOne()`.
 
-```vint
+```js
 first_user = sqlite.fetchOne(db, "SELECT * FROM users LIMIT 1")
 print(first_user)
 ```
@@ -54,7 +54,7 @@ print(first_user)
 
 To create a new table, use `sqlite.createTable()`.
 
-```vint
+```js
 sqlite.createTable(db, "CREATE TABLE IF NOT EXISTS users (id INTEGER PRIMARY KEY, name TEXT, age INTEGER)")
 ```
 
@@ -62,13 +62,13 @@ sqlite.createTable(db, "CREATE TABLE IF NOT EXISTS users (id INTEGER PRIMARY KEY
 
 Use `sqlite.dropTable()` to delete a table from the database.
 
-```vint
+```js
 sqlite.dropTable(db, "users")
 ```
 
 ## Example Usage
 
-```vint
+```js
 import sqlite
 
 // Open a database

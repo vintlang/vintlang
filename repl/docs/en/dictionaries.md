@@ -8,7 +8,7 @@ In the Vint programming language, dictionaries are key-value data structures tha
 
 In Vint, dictionaries are created using curly braces `{}`. Each key is followed by a colon `:` and the corresponding value. Here's an example of a dictionary:
 
-```vint
+```js
 dict = {"name": "John", "age": 30}
 ```
 
@@ -22,7 +22,7 @@ Keys can be of various data types like strings, integers, floats, or booleans, a
 
 You can access individual elements in a dictionary by using the key. For example:
 
-```vint
+```js
 print(dict["name"]) // John
 ```
 
@@ -32,7 +32,7 @@ This will print `"John"`, the value associated with the key `"name"`.
 
 To update the value of an existing key, simply assign a new value to the key:
 
-```vint
+```js
 dict["age"] = 35
 print(dict["age"]) // 35
 ```
@@ -43,7 +43,7 @@ This updates the `"age"` key to have the value `35`.
 
 To add a new key-value pair to a dictionary, assign a value to a new key:
 
-```vint
+```js
 dict["city"] = "Dar es Salaam"
 print(dict["city"]) // Dar es Salaam
 ```
@@ -54,7 +54,7 @@ This adds a new key `"city"` with the value `"Dar es Salaam"`.
 
 You can combine two dictionaries into one using the `+` operator:
 
-```vint
+```js
 dict1 = {"a": "apple", "b": "banana"}
 dict2 = {"c": "cherry", "d": "date"}
 combined = dict1 + dict2
@@ -67,7 +67,7 @@ In this case, `dict1` and `dict2` are merged into a new dictionary called `combi
 
 To check if a particular key exists in a dictionary, you can use the `in` keyword:
 
-```vint
+```js
 "age" in dict // true
 "salary" in dict // false
 ```
@@ -78,7 +78,7 @@ This checks whether the key `"age"` exists in the dictionary, which returns `tru
 
 You can loop over the keys and values of a dictionary using the `for` keyword:
 
-```vint
+```js
 hobby = {"a": "reading", "b": "cycling", "c": "eating"}
 for key, value in hobby {
     print(key, "=>", value)
@@ -95,7 +95,7 @@ c => eating
 
 You can also loop over just the values without the keys:
 
-```vint
+```js
 for value in hobby {
     print(value)
 }

@@ -8,7 +8,7 @@ The `encoding` module in Vint provides functions for encoding and decoding data 
 
 To use the `encoding` module, import it as follows:
 
-```vint
+```js
 import encoding
 ```
 
@@ -20,13 +20,13 @@ import encoding
 The `base64Encode` function encodes a string into Base64 format. Base64 encoding is often used for encoding binary data as text, making it suitable for transmission over text-based protocols such as email or HTTP.
 
 **Syntax**:
-```vint
+```js
 base64Encode(inputString)
 ```
 - `inputString`: The string you want to encode.
 
 **Example**:
-```vint
+```js
 import encoding
 
 encoded = encoding.base64Encode("Hello, World!")
@@ -40,13 +40,13 @@ In this example, the string `"Hello, World!"` is encoded into Base64 format.
 The `base64Decode` function decodes a Base64-encoded string back into its original format.
 
 **Syntax**:
-```vint
+```js
 base64Decode(encodedString)
 ```
 - `encodedString`: The Base64-encoded string that you want to decode.
 
 **Example**:
-```vint
+```js
 import encoding
 
 encoded = encoding.base64Encode("Hello, World!")
