@@ -8,7 +8,7 @@ The `dotenv` module in Vint is designed to load environment variables from a `.e
 
 To use the `dotenv` module, import it as follows:
 
-```vint
+```js
 import dotenv
 ```
 
@@ -20,13 +20,13 @@ import dotenv
 The `load` function loads environment variables from a `.env` file into the application's environment. This function should be called at the start of your application to ensure all the necessary environment variables are available.
 
 **Syntax**:
-```vint
+```js
 load(filePath)
 ```
 - `filePath`: The path to the `.env` file (relative or absolute).
 
 **Example**:
-```vint
+```js
 import dotenv
 
 dotenv.load(".env")
@@ -39,13 +39,13 @@ This loads the environment variables from the `.env` file located in the current
 After loading the environment variables, you can access specific variables using the `get` function. This function retrieves the value of a given environment variable by its name.
 
 **Syntax**:
-```vint
+```js
 get(variableName)
 ```
 - `variableName`: The name of the environment variable to retrieve.
 
 **Example**:
-```vint
+```js
 import dotenv
 
 dotenv.load(".env")

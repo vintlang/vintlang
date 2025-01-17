@@ -158,7 +158,7 @@ printDetails(name, age, height)
 
 ### Example 4: Time-Related Operations
 
-```vint
+```js
 // Print the current timestamp
 print(time.now())
 
@@ -186,7 +186,7 @@ greet("John")
 
 ### Example 5: Networking with HTTP GET Request
 
-```vint
+```js
 // Example of a GET request using the net module
 let res = net.get("https://tachera.com")
 print(res)
@@ -194,7 +194,7 @@ print(res)
 
 ### Example 6: Built-in Functions and Output
 
-```vint
+```js
 // Built-in functions
 print(type(123))             // Print the type of an integer
 let a = "123"                // Initialize a string variable

@@ -12,7 +12,7 @@ Welcome to the **Vint** extension for Visual Studio Code! This extension enhance
 
 Quickly create a function with the `func` snippet:
 
-```vint
+```js
 
 // Main logic to split and print characters of a string
 let name = "VintLang"

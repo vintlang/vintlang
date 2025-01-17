@@ -8,7 +8,7 @@ You can generate a new UUID using the `uuid.generate()` function. It returns a u
 
 ### Example:
 
-```vint
+```js
 import uuid
 
 // Generate and print a new UUID
