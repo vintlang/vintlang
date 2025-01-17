@@ -29,6 +29,7 @@ const (
 	BYTE_OBJ         = "BYTE"
 	PACKAGE_OBJ      = "PACKAGE"
 	INSTANCE         = "INSTANCE"
+	NATIVE_OBJ         = "NATIVE_OBJ"
 	AT               = "@"
 )
 
