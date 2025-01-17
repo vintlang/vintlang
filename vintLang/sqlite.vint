@@ -4,7 +4,7 @@ import sqlite
 db = sqlite.open("example.db")
 
 // Create a table
-sqlite.execute(db, "CREATE TABLE IF NOT EXISTS users (id INTEGER PRIMARY KEY, name TEXT, age INTEGER)")
+sqlite.createTable(db, "CREATE TABLE IF NOT EXISTS users (id INTEGER PRIMARY KEY, name TEXT, age INTEGER)")
 
 // Insert data
 sqlite.execute(db, "INSERT INTO users (name, age) VALUES (?, ?)", "Alice", 25)
@@ -30,3 +30,9 @@ sqlite.execute(db, "DELETE FROM users WHERE name = ?", "Bob")
 print("\n=== Users After Changes ===")
 users_after_changes = sqlite.fetchAll(db, "SELECT * FROM users")
 print(users_after_changes)
+
+// Drop a table
+sqlite.dropTable(db, "users")
+
+// Close the database connection
+sqlite.close(db)

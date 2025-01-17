@@ -2,10 +2,9 @@ package module
 
 import (
 	"database/sql"
-	// "errors"
 	"fmt"
 
-	_ "github.com/mattn/go-sqlite3" 
+	_ "github.com/mattn/go-sqlite3"
 	"github.com/vintlang/vintlang/object"
 )
 
@@ -13,9 +12,12 @@ var SQLiteFunctions = map[string]object.ModuleFunction{}
 
 func init() {
 	SQLiteFunctions["open"] = openDatabase
+	SQLiteFunctions["close"] = closeDatabase
 	SQLiteFunctions["execute"] = executeQuery
 	SQLiteFunctions["fetchAll"] = fetchAll
 	SQLiteFunctions["fetchOne"] = fetchOne
+	SQLiteFunctions["createTable"] = createTable
+	SQLiteFunctions["dropTable"] = dropTable
 }
 
 type SQLiteConnection struct {
@@ -25,13 +27,13 @@ type SQLiteConnection struct {
 // Open a SQLite database
 func openDatabase(args []object.Object, defs map[string]object.Object) object.Object {
 	if len(args) != 1 || args[0].Type() != object.STRING_OBJ {
-		return &object.Error{Message: "Usage: open(path)"}
+		return &object.Error{Message: "Invalid arguments: Expected 'open(path)' where 'path' is a string"}
 	}
 
 	dbPath := args[0].(*object.String).Value
 	db, err := sql.Open("sqlite3", dbPath)
 	if err != nil {
-		return &object.Error{Message: fmt.Sprintf("Failed to open database: %s", err)}
+		return &object.Error{Message: fmt.Sprintf("Failed to open database at '%s': %s", dbPath, err)}
 	}
 
 	conn := &SQLiteConnection{db: db}
@@ -40,10 +42,10 @@ func openDatabase(args []object.Object, defs map[string]object.Object) object.Ob
 	}
 }
 
-// Execute a query (INSERT, UPDATE, DELETE)
-func executeQuery(args []object.Object, defs map[string]object.Object) object.Object {
-	if len(args) < 2 {
-		return &object.Error{Message: "Usage: execute(conn, query, [params...])"}
+// Close the database connection
+func closeDatabase(args []object.Object, defs map[string]object.Object) object.Object {
+	if len(args) != 1 {
+		return &object.Error{Message: "Invalid arguments: Expected 'close(conn)'"}
 	}
 
 	conn, ok := args[0].(*object.NativeObject)
@@ -51,12 +53,34 @@ func executeQuery(args []object.Object, defs map[string]object.Object) object.Ob
 		return &object.Error{Message: "Invalid database connection"}
 	}
 
-	query := args[1].(*object.String).Value
-	params := convertObjectsToParams(args[2:])
-
-	_, err := conn.Value.(*SQLiteConnection).db.Exec(query, params...)
+	err := conn.Value.(*SQLiteConnection).db.Close()
 	if err != nil {
-		return &object.Error{Message: fmt.Sprintf("Query failed: %s", err)}
+		return &object.Error{Message: fmt.Sprintf("Failed to close database connection: %s", err)}
+	}
+
+	return &object.Null{}
+}
+
+// Execute a query (INSERT, UPDATE, DELETE)
+func executeQuery(args []object.Object, defs map[string]object.Object) object.Object {
+	if len(args) < 2 {
+		return &object.Error{Message: "Invalid arguments: Expected 'execute(conn, query, [params...])'"}
+	}
+
+	conn, ok := args[0].(*object.NativeObject)
+	if !ok || conn.Value.(*SQLiteConnection).db == nil {
+		return &object.Error{Message: "Invalid database connection"}
+	}
+
+	query, ok := args[1].(*object.String)
+	if !ok {
+		return &object.Error{Message: "Query must be a string"}
+	}
+
+	params := convertObjectsToParams(args[2:])
+	_, err := conn.Value.(*SQLiteConnection).db.Exec(query.Value, params...)
+	if err != nil {
+		return &object.Error{Message: fmt.Sprintf("Query execution failed: %s", err)}
 	}
 
 	return &object.Null{}
@@ -65,7 +89,7 @@ func executeQuery(args []object.Object, defs map[string]object.Object) object.Ob
 // Fetch all rows (SELECT)
 func fetchAll(args []object.Object, defs map[string]object.Object) object.Object {
 	if len(args) < 2 {
-		return &object.Error{Message: "Usage: fetchAll(conn, query, [params...])"}
+		return &object.Error{Message: "Invalid arguments: Expected 'fetchAll(conn, query, [params...])'"}
 	}
 
 	conn, ok := args[0].(*object.NativeObject)
@@ -73,12 +97,15 @@ func fetchAll(args []object.Object, defs map[string]object.Object) object.Object
 		return &object.Error{Message: "Invalid database connection"}
 	}
 
-	query := args[1].(*object.String).Value
-	params := convertObjectsToParams(args[2:])
+	query, ok := args[1].(*object.String)
+	if !ok {
+		return &object.Error{Message: "Query must be a string"}
+	}
 
-	rows, err := conn.Value.(*SQLiteConnection).db.Query(query, params...)
+	params := convertObjectsToParams(args[2:])
+	rows, err := conn.Value.(*SQLiteConnection).db.Query(query.Value, params...)
 	if err != nil {
-		return &object.Error{Message: fmt.Sprintf("Query failed: %s", err)}
+		return &object.Error{Message: fmt.Sprintf("Query execution failed: %s", err)}
 	}
 	defer rows.Close()
 
@@ -92,7 +119,7 @@ func fetchAll(args []object.Object, defs map[string]object.Object) object.Object
 		}
 
 		if err := rows.Scan(scanArgs...); err != nil {
-			return &object.Error{Message: fmt.Sprintf("Row scan failed: %s", err)}
+			return &object.Error{Message: fmt.Sprintf("Failed to scan row: %s", err)}
 		}
 
 		row := &object.Dict{Pairs: make(map[object.HashKey]object.DictPair)}
@@ -117,6 +144,55 @@ func fetchOne(args []object.Object, defs map[string]object.Object) object.Object
 			return array.Elements[0]
 		}
 	}
+	return &object.Null{}
+}
+
+// Create a table
+func createTable(args []object.Object, defs map[string]object.Object) object.Object {
+	if len(args) != 2 {
+		return &object.Error{Message: "Invalid arguments: Expected 'createTable(conn, query)'"}
+	}
+
+	conn, ok := args[0].(*object.NativeObject)
+	if !ok || conn.Value.(*SQLiteConnection).db == nil {
+		return &object.Error{Message: "Invalid database connection"}
+	}
+
+	query, ok := args[1].(*object.String)
+	if !ok {
+		return &object.Error{Message: "Query must be a string"}
+	}
+
+	_, err := conn.Value.(*SQLiteConnection).db.Exec(query.Value)
+	if err != nil {
+		return &object.Error{Message: fmt.Sprintf("Failed to create table: %s", err)}
+	}
+
+	return &object.Null{}
+}
+
+// Drop a table
+func dropTable(args []object.Object, defs map[string]object.Object) object.Object {
+	if len(args) != 2 {
+		return &object.Error{Message: "Invalid arguments: Expected 'dropTable(conn, tableName)'"}
+	}
+
+	conn, ok := args[0].(*object.NativeObject)
+	if !ok || conn.Value.(*SQLiteConnection).db == nil {
+		return &object.Error{Message: "Invalid database connection"}
+	}
+
+	tableName, ok := args[1].(*object.String)
+	if !ok {
+		return &object.Error{Message: "Table name must be a string"}
+	}
+
+	query := fmt.Sprintf("DROP TABLE IF EXISTS %s", tableName.Value)
+	_, err := conn.Value.(*SQLiteConnection).db.Exec(query)
+	if err != nil {
+		return &object.Error{Message: fmt.Sprintf("Failed to drop table '%s': %s", tableName.Value, err)}
+	}
+
 	return &object.Null{}
 }
 
