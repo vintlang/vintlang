@@ -24,7 +24,7 @@ print(first_user)
 sqlite.execute(db, "UPDATE users SET age = ? WHERE name = ?", 26, "Alice")
 
 // Delete data
-sqlite.execute(db, "DELETE FROM users WHERE name = ?", "Bob")
+//sqlite.execute(db, "DELETE FROM users WHERE name = ?", "Bob")
 
 // Fetch all rows after changes
 print("\n=== Users After Changes ===")
@@ -32,7 +32,7 @@ users_after_changes = sqlite.fetchAll(db, "SELECT * FROM users")
 print(users_after_changes)
 
 // Drop a table
-sqlite.dropTable(db, "users")
+//sqlite.dropTable(db, "users")
 
 // Close the database connection
 sqlite.close(db)
