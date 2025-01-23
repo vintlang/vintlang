@@ -19,7 +19,7 @@ const (
 	FLOAT  = "FLOAT"
 	
 	POINTER = "POINTER" // *
-    ADDRESS = "ADDRESS" // &
+    	ADDRESS = "ADDRESS" // &
 
 	// Operators
 	ASSIGN          = "="

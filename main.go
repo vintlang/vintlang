@@ -11,6 +11,7 @@ import (
 	"github.com/vintlang/vintlang/toolkit"
 )
 const VINT_VERSION = "0.1.4"
+
 // Constants for styled output
 var (
 	// Title banner for the CLI
