@@ -92,7 +92,7 @@ print(a)  // will print [1, 2, 3, "s", "g"]
 
 ### last()
 
-last() returns the last item in an array, or tupu if the array is empty:
+last() returns the last item in an array, or null if the array is empty:
 
 ```s
 a = [1, 2, 3]

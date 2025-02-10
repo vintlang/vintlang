@@ -10,7 +10,7 @@ build_linux:
 	@echo 'building linux binary...'
 	env GOOS=linux GOARCH=amd64 go build -ldflags="-s -w" -o vint
 	@echo 'shrinking binary...'
-	./upx --brute vint
+	./upx_build --brute vint
 	@echo 'zipping build...'
 	tar -zcvf binaries/vintLang_linux_amd64.tar.gz vint
 	@echo 'cleaning up...'
@@ -20,13 +20,13 @@ build_windows:
 	@echo 'building windows executable...'
 	env GOOS=windows GOARCH=amd64 go build -ldflags="-s -w" -o vint_windows_amd64.exe
 	@echo 'shrinking build...'
-	./upx --brute binaries/vintLang_windows_amd64.exe
+	./upx_build --brute binaries/vintLang_windows_amd64.exe
 
 build_mac:
 	@echo 'building mac binary...'
 	env GOOS=darwin GOARCH=amd64 go build -ldflags="-s -w" -o vint
 	@echo 'shrinking binary...'
-	./upx --brute vint
+	./upx_build --brute vint
 	@echo 'zipping build...'
 	tar -zcvf binaries/vintLang_mac_amd64.tar.gz vint
 	@echo 'cleaning up...'
