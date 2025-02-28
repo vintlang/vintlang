@@ -14,7 +14,7 @@ build_linux:
 	@echo 'zipping build...'
 	tar -zcvf binaries/vintLang_linux_amd64.tar.gz vint
 	@echo 'cleaning up...'
-	rm vint
+	rm vint     
 
 build_windows:
 	@echo 'building windows executable...'
