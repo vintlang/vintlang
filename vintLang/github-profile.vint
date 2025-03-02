@@ -6,6 +6,7 @@ let githubUsername = "tacheraSasi"
 let url = "https://camo.githubusercontent.com/b53ec94d48abfb67ae979b046d1980e04133e2e6374c2dfe123d3b9d7ee95a7d/68747470733a2f2f6b6f6d617265762e636f6d2f67687076632f3f757365726e616d653d7461636865726153617369266c6162656c3d50726f66696c65253230566965777326636f6c6f723d626c7565267374796c653d666c6174"
 
 time  = time.now()
+print(time)
 for i in range(100) {
     print(":",i+1)
     res = net.get(url)
