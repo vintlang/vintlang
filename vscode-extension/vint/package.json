@@ -1,7 +1,7 @@
 {
   "name": "vint",
-  "displayName": "vintlang",
-  "description": "The official vint language support extension",
+  "displayName": "VintLang",
+  "description": "The official Vint language support extension",
   "version": "0.0.1",
   "publisher": "tacheraSasi",
   "engines": {
@@ -14,13 +14,8 @@
     "languages": [
       {
         "id": "vint",
-        "aliases": [
-          "vint",
-          "vint"
-        ],
-        "extensions": [
-          ".vint"
-        ],
+        "aliases": ["Vint"],
+        "extensions": [".vint"],
         "configuration": "./language-configuration.json"
       }
     ],
