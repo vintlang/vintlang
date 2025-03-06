@@ -11,16 +11,32 @@
     "Programming Languages"
   ],
   "contributes": {
-    "languages": [{
-      "id": "vint",
-      "aliases": ["vint", "vint"],
-      "extensions": [".vint"],
-      "configuration": "./language-configuration.json"
-    }],
-    "grammars": [{
-      "language": "vint",
-      "scopeName": "source.vint",
-      "path": "./syntaxes/vint.tmLanguage.json"
-    }]
+    "languages": [
+      {
+        "id": "vint",
+        "aliases": [
+          "vint",
+          "vint"
+        ],
+        "extensions": [
+          ".vint"
+        ],
+        "configuration": "./language-configuration.json"
+      }
+    ],
+    "iconThemes": [
+      {
+        "id": "vintIcons",
+        "label": "Vint Icons",
+        "path": "./file-icons.json"
+      }
+    ],
+    "grammars": [
+      {
+        "language": "vint",
+        "scopeName": "source.vint",
+        "path": "./syntaxes/vint.tmLanguage.json"
+      }
+    ]
   }
 }
