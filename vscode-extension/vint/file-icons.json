@@ -1,0 +1,11 @@
+{
+    "iconDefinitions": {
+      "vintFile": {
+        "iconPath": "./icons/favicon.png"
+      }
+    },
+    "fileExtensions": {
+      "vint": "vintFile"
+    }
+  }
+  
