@@ -91,7 +91,7 @@ export default function Hero() {
           animate={{ opacity: 1 }}
           transition={{ duration: 0.5, delay: 1.2 }}
         >
-          Built with ❤️ by Tachera Sasi, CEO at <a href="https://ekilie.com" target="_blank" rel="noopener noreferrer" className="underline hover:text-taupe-500 dark:hover:text-taupe-400">ekilie.com</a>
+          Built with ❤️ by Tachera Sasi
         </motion.div>
       </div>
     </section>
