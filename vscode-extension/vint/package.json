@@ -33,5 +33,18 @@
         "path": "./syntaxes/vint.tmLanguage.json"
       }
     ]
-  }
+  },
+  "commands": [
+    {
+      "command": "extension.vintComplete",
+      "title": "Vint Auto-Complete"
+    }
+  ],
+  "keybindings": [
+    {
+      "command": "extension.vintComplete",
+      "key": "ctrl+space",
+      "when": "editorTextFocus"
+    }
+  ]
 }
