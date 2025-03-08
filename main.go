@@ -45,15 +45,15 @@ var (
 		styles.HelpStyle.Bold(true).Render("vint filename.vint"),
 		styles.HelpStyle.Bold(true).Render("vint --docs"),
 		styles.HelpStyle.Bold(true).Render("vint --version")))
-)
+)   
 
 func main() {
 	versionMsg := lipgloss.JoinVertical(lipgloss.Center,
 		lipgloss.JoinHorizontal(lipgloss.Center, "VintLang", " : ", Version))
-	// Retrieve command-line arguments
+
 	args := os.Args
 
-	// No arguments provided: Start REPL mode
+	
 	if len(args) < 2 {
 		help := styles.HelpStyle.Render("💡 Use exit() to exit")
 		fmt.Println(lipgloss.JoinVertical(lipgloss.Left, NewLogo, "\n", help))
@@ -68,8 +68,8 @@ func main() {
 			fmt.Println(Help)
 		case "version", "-version", "--version", "-v", "v":
 			fmt.Println(versionMsg)
-		case "--docs", "-docs":
-			repl.Docs()
+		// case "--docs", "-docs":
+		// 	repl.Docs()
 		case "get":
 			toolkit.Get(args[2])
 		case "init":
