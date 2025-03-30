@@ -71,6 +71,60 @@ var builtins = map[string]*object.Builtin{
 			}
 		},
 	},
+	"println": {
+		Fn: func(args ...object.Object) object.Object {
+			if len(args) == 0 {
+				fmt.Println("")
+			} else {
+				var arr []string
+				for _, arg := range args {
+					if arg == nil {
+						return newError("Operation cannot be performed on nil")
+					}
+					arr = append(arr, arg.Inspect())
+				}
+				str := strings.Join(arr, " ")
+				fmt.Println(str) 
+			}
+			return nil
+		},
+	},
+	"printErr": {
+		Fn: func(args ...object.Object) object.Object {
+			if len(args) == 0 {
+				fmt.Fprint(os.Stderr, "")
+			} else {
+				var arr []string
+				for _, arg := range args {
+					if arg == nil {
+						return newError("Operation cannot be performed on nil")
+					}
+					arr = append(arr, arg.Inspect())
+				}
+				str := strings.Join(arr, " ")
+				fmt.Fprint(os.Stderr, str)
+			}
+			return nil
+		},
+	},
+	"printlnErr": {
+		Fn: func(args ...object.Object) object.Object {
+			if len(args) == 0 {
+				fmt.Fprintln(os.Stderr, "")
+			} else {
+				var arr []string
+				for _, arg := range args {
+					if arg == nil {
+						return newError("Operation cannot be performed on nil")
+					}
+					arr = append(arr, arg.Inspect())
+				}
+				str := strings.Join(arr, " ")
+				fmt.Fprintln(os.Stderr, str) 
+			}
+			return nil
+		},
+	},
 	"type": {
 		Fn: func(args ...object.Object) object.Object {
 			if len(args) != 1 {
