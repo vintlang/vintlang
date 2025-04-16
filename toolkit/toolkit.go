@@ -61,7 +61,7 @@ func getBinaryName(platform string) string {
 }
 
 func fetchLatestReleaseURL(binaryName string) (string, error) {
-	resp, err := http.Get("https://api.github.com/repos/ekilie/vintpm/releases/latest")
+	resp, err := http.Get("https://api.github.com/repos/vintlang/vintpm/releases/latest")
 	if err != nil {
 		return "", err
 	}
