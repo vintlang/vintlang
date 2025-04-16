@@ -17,9 +17,9 @@ const (
 	INT    = "INT"
 	STRING = "STRING"
 	FLOAT  = "FLOAT"
-	
+
 	POINTER = "POINTER" // *
-    	ADDRESS = "ADDRESS" // &
+	ADDRESS = "ADDRESS" // &
 
 	// Operators
 	ASSIGN          = "="
@@ -82,25 +82,25 @@ const (
 )
 
 var keywords = map[string]TokenType{
-	"func":    FUNCTION,
-	"let":     LET,
-	"true":    TRUE,
-	"false":   FALSE,
-	"if":      IF,
-	"else":    ELSE,
-	"while":   WHILE,
-	"return":  RETURN,
-	"break":   BREAK,
+	"func":     FUNCTION,
+	"let":      LET,
+	"true":     TRUE,
+	"false":    FALSE,
+	"if":       IF,
+	"else":     ELSE,
+	"while":    WHILE,
+	"return":   RETURN,
+	"break":    BREAK,
 	"continue": CONTINUE,
 	"null":     NULL,
-	"in":      IN,
-	"for":     FOR,
-	"switch":  SWITCH,
-	"case":    CASE,
-	"default": DEFAULT,
-	"import":  IMPORT,
-	"package": PACKAGE,
-	"@":       AT,
+	"in":       IN,
+	"for":      FOR,
+	"switch":   SWITCH,
+	"case":     CASE,
+	"default":  DEFAULT,
+	"import":   IMPORT,
+	"package":  PACKAGE,
+	"@":        AT,
 }
 
 func LookupIdent(ident string) TokenType {

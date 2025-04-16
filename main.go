@@ -10,6 +10,7 @@ import (
 	"github.com/vintlang/vintlang/styles"
 	"github.com/vintlang/vintlang/toolkit"
 )
+
 const VINT_VERSION = "0.1.4"
 
 // Constants for styled output
@@ -18,21 +19,19 @@ var (
 	Title = styles.TitleStyle.Render(`
                         ██╗   ██╗██╗███╗   ██╗████████╗
                         ██║   ██║██║████╗  ██║╚══██╔══╝
-                        ██║   ██║██║██╔██╗ ██║   ██║   
-                        ╚██╗ ██╔╝██║██║╚██╗██║   ██║   
-                         ╚████╔╝ ██║██║ ╚████║   ██║   
-                          ╚═══╝  ╚═╝╚═╝  ╚═══╝   ╚═╝ 
+                        ██║   ██║██║██╔██╗ ██║   ██║
+                        ╚██╗ ██╔╝██║██║╚██╗██║   ██║
+                         ╚████╔╝ ██║██║ ╚████║   ██║
+                          ╚═══╝  ╚═╝╚═╝  ╚═══╝   ╚═╝
 `)
 
 	// CLI metadata
-	Version = styles.VersionStyle.Render("v"+VINT_VERSION)
+	Version = styles.VersionStyle.Render("v" + VINT_VERSION)
 	Author  = styles.AuthorStyle.Render("Tachera W")
 
 	// Combined logo with title, author, and version
 	NewLogo = lipgloss.JoinVertical(lipgloss.Center, Title,
 		lipgloss.JoinHorizontal(lipgloss.Center, Author, " | ", Version))
-	
-	
 
 	// Help message for the CLI usage
 	Help = styles.HelpStyle.Italic(false).Render(fmt.Sprintf(`💡 How to use vint:
@@ -45,7 +44,7 @@ var (
 		styles.HelpStyle.Bold(true).Render("vint filename.vint"),
 		styles.HelpStyle.Bold(true).Render("vint --docs"),
 		styles.HelpStyle.Bold(true).Render("vint --version")))
-)   
+)
 
 func main() {
 	versionMsg := lipgloss.JoinVertical(lipgloss.Center,
@@ -53,7 +52,6 @@ func main() {
 
 	args := os.Args
 
-	
 	if len(args) < 2 {
 		help := styles.HelpStyle.Render("💡 Use exit() to exit")
 		fmt.Println(lipgloss.JoinVertical(lipgloss.Left, NewLogo, "\n", help))
@@ -61,8 +59,7 @@ func main() {
 		return
 	}
 
-	
-	if len(args) >= 2 {//Greater or equal accounting for the cli-args and the package manager for vint 
+	if len(args) >= 2 { //Greater or equal accounting for the cli-args and the package manager for vint
 		switch args[1] {
 		case "help", "-help", "--help", "-h":
 			fmt.Println(Help)
@@ -96,7 +93,7 @@ func run(file string) {
 		// Appends all arguments after the first two directly to toolkit.CLI_ARGS
 		toolkit.CLI_ARGS = append(toolkit.CLI_ARGS, os.Args[2:]...)
 	}
-	
+
 	// Ensures the file has a .vint extension
 	if strings.HasSuffix(file, ".vint") {
 		contents, err := os.ReadFile(file)
