@@ -12,6 +12,7 @@ func init() {
 	Mapper["json"] = &object.Module{Name: "json", Functions: JsonFunctions}
 	Mapper["math"] = &object.Module{Name: "math", Functions: MathFunctions}
 	Mapper["cli"] = &object.Module{Name: "cli", Functions: CliFunctions}
+	Mapper["term"] = &object.Module{Name: "term", Functions: TermFunctions}
 	Mapper["uuid"] = &object.Module{Name: "uuid", Functions: UuidFunctions}
 	Mapper["string"] = &object.Module{Name: "string", Functions: StringFunctions}
 	Mapper["crypto"] = &object.Module{Name: "crypto", Functions: CryptoFunctions}

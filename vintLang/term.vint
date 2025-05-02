@@ -1,0 +1,70 @@
+import term
+
+// Colored output
+term.print("Hello in red!", "red")
+term.println("Hello in green!", "green")
+term.println("Hello in blue!", "blue")
+
+// Styled text
+let styled = term.style("Bold and underlined text", {
+    "color": "yellow",
+    "bold": "true",
+    "underline": "true"
+})
+term.println(styled)
+
+// Boxed text
+let boxed = term.box("This text is in a box!")
+term.println(boxed)
+
+// Table
+let table = term.table([
+    ["Name", "Age", "City"],
+    ["John", "25", "New York"],
+    ["Alice", "30", "London"],
+    ["Bob", "28", "Paris"]
+])
+term.println(table)
+
+// Progress bar
+let progress = term.progress(100)
+for i in range(1, 100) {
+    progress(i)
+    time.sleep(50) // Sleep for 50ms
+}
+term.println("")
+
+// Spinner
+let spinner = term.spinner("Loading...")
+time.sleep(2000) // Wait for 2 seconds
+spinner() // Stop the spinner
+
+// Cursor control
+term.cursor(false) // Hide cursor
+time.sleep(1000)
+term.cursor(true) // Show cursor
+
+// Clear screen
+term.clear()
+
+// Beep
+term.beep()
+
+// Example of a loading process with spinner and progress
+term.println("Starting process...")
+
+let spinner = term.spinner("Initializing...")
+time.sleep(1000)
+spinner()
+
+let progress = term.progress(50)
+for i in range(1, 50) {
+    progress(i)
+    time.sleep(50)
+}
+term.println("")
+
+term.println(term.style("Process completed!", {
+    "color": "green",
+    "bold": "true"
+})) 
