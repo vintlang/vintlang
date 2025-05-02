@@ -23,6 +23,24 @@ func init() {
 	TermFunctions["style"] = termStyle
 	TermFunctions["cursor"] = termCursor
 	TermFunctions["beep"] = termBeep
+	TermFunctions["moveCursor"] = termMoveCursor
+	TermFunctions["getSize"] = termGetSize
+	TermFunctions["input"] = termInput
+	TermFunctions["menu"] = termMenu
+	TermFunctions["alert"] = termAlert
+	TermFunctions["banner"] = termBanner
+	TermFunctions["countdown"] = termCountdown
+	TermFunctions["select"] = termSelect
+	TermFunctions["checkbox"] = termCheckbox
+	TermFunctions["radio"] = termRadio
+	TermFunctions["password"] = termPassword
+	TermFunctions["confirm"] = termConfirm
+	TermFunctions["loading"] = termLoading
+	TermFunctions["notify"] = termNotify
+	TermFunctions["error"] = termError
+	TermFunctions["success"] = termSuccess
+	TermFunctions["info"] = termInfo
+	TermFunctions["warning"] = termWarning
 }
 
 // termPrint prints a message with optional color
@@ -306,5 +324,484 @@ func termBeep(args []object.Object, defs map[string]object.Object) object.Object
 	}
 
 	fmt.Print("\a")
+	return &object.Null{}
+}
+
+// termMoveCursor moves the cursor to a specific position
+func termMoveCursor(args []object.Object, defs map[string]object.Object) object.Object {
+	if len(args) != 2 {
+		return &object.Error{Message: "term.moveCursor requires exactly two arguments: x and y coordinates"}
+	}
+
+	x, ok := args[0].(*object.Integer)
+	if !ok {
+		return &object.Error{Message: "x coordinate must be an integer"}
+	}
+
+	y, ok := args[1].(*object.Integer)
+	if !ok {
+		return &object.Error{Message: "y coordinate must be an integer"}
+	}
+
+	fmt.Printf("\033[%d;%dH", y.Value+1, x.Value+1)
+	return &object.Null{}
+}
+
+// termGetSize returns the terminal size
+func termGetSize(args []object.Object, defs map[string]object.Object) object.Object {
+	if len(args) > 0 {
+		return &object.Error{Message: "term.getSize does not accept any arguments"}
+	}
+
+	// Get terminal size
+	width := 80  // Default width
+	height := 24 // Default height
+
+	return &object.Dict{
+		Pairs: map[object.HashKey]object.DictPair{
+			{Type: object.STRING_OBJ, Value: 0}: {
+				Key:   &object.String{Value: "width"},
+				Value: &object.Integer{Value: int64(width)},
+			},
+			{Type: object.STRING_OBJ, Value: 1}: {
+				Key:   &object.String{Value: "height"},
+				Value: &object.Integer{Value: int64(height)},
+			},
+		},
+	}
+}
+
+// termInput gets user input with a prompt
+func termInput(args []object.Object, defs map[string]object.Object) object.Object {
+	if len(args) != 1 {
+		return &object.Error{Message: "term.input requires exactly one argument: the prompt message"}
+	}
+
+	prompt, ok := args[0].(*object.String)
+	if !ok {
+		return &object.Error{Message: "prompt must be a string"}
+	}
+
+	fmt.Print(prompt.Value)
+	var input string
+	fmt.Scanln(&input)
+	return &object.String{Value: input}
+}
+
+// termMenu creates an interactive menu
+func termMenu(args []object.Object, defs map[string]object.Object) object.Object {
+	if len(args) != 1 {
+		return &object.Error{Message: "term.menu requires exactly one argument: an array of menu items"}
+	}
+
+	items, ok := args[0].(*object.Array)
+	if !ok {
+		return &object.Error{Message: "menu items must be an array"}
+	}
+
+	// Print menu items
+	for i, item := range items.Elements {
+		fmt.Printf("%d. %s\n", i+1, item.Inspect())
+	}
+
+	// Get user selection
+	var choice int
+	fmt.Print("Select an option: ")
+	fmt.Scanln(&choice)
+
+	if choice < 1 || choice > len(items.Elements) {
+		return &object.Error{Message: "Invalid selection"}
+	}
+
+	return items.Elements[choice-1]
+}
+
+// termAlert shows an alert message
+func termAlert(args []object.Object, defs map[string]object.Object) object.Object {
+	if len(args) != 1 {
+		return &object.Error{Message: "term.alert requires exactly one argument: the message"}
+	}
+
+	msg, ok := args[0].(*object.String)
+	if !ok {
+		return &object.Error{Message: "message must be a string"}
+	}
+
+	style := lipgloss.NewStyle().
+		Foreground(lipgloss.Color("red")).
+		Bold(true).
+		Padding(1, 2).
+		BorderStyle(lipgloss.RoundedBorder()).
+		BorderForeground(lipgloss.Color("red"))
+
+	fmt.Println(style.Render("⚠️ " + msg.Value))
+	return &object.Null{}
+}
+
+// termBanner creates a banner text
+func termBanner(args []object.Object, defs map[string]object.Object) object.Object {
+	if len(args) != 1 {
+		return &object.Error{Message: "term.banner requires exactly one argument: the text"}
+	}
+
+	text, ok := args[0].(*object.String)
+	if !ok {
+		return &object.Error{Message: "text must be a string"}
+	}
+
+	style := lipgloss.NewStyle().
+		Bold(true).
+		Foreground(lipgloss.Color("205")).
+		Padding(1, 2).
+		BorderStyle(lipgloss.RoundedBorder()).
+		BorderForeground(lipgloss.Color("205"))
+
+	return &object.String{Value: style.Render(text.Value)}
+}
+
+// termCountdown creates a countdown timer
+func termCountdown(args []object.Object, defs map[string]object.Object) object.Object {
+	if len(args) != 1 {
+		return &object.Error{Message: "term.countdown requires exactly one argument: the duration in seconds"}
+	}
+
+	duration, ok := args[0].(*object.Integer)
+	if !ok {
+		return &object.Error{Message: "duration must be an integer"}
+	}
+
+	style := lipgloss.NewStyle().
+		Bold(true).
+		Foreground(lipgloss.Color("yellow"))
+
+	for i := int(duration.Value); i > 0; i-- {
+		fmt.Printf("\r%s", style.Render(fmt.Sprintf("Time remaining: %d seconds", i)))
+		time.Sleep(time.Second)
+	}
+	fmt.Println()
+
+	return &object.Null{}
+}
+
+// termSelect creates a select menu with arrow key navigation
+func termSelect(args []object.Object, defs map[string]object.Object) object.Object {
+	if len(args) != 1 {
+		return &object.Error{Message: "term.select requires exactly one argument: an array of options"}
+	}
+
+	options, ok := args[0].(*object.Array)
+	if !ok {
+		return &object.Error{Message: "options must be an array"}
+	}
+
+	selected := 0
+	style := lipgloss.NewStyle().
+		Foreground(lipgloss.Color("205")).
+		Bold(true)
+
+	for {
+		// Clear screen
+		fmt.Print("\033[H\033[2J")
+
+		// Print options
+		for i, option := range options.Elements {
+			if i == selected {
+				fmt.Println(style.Render("→ " + option.Inspect()))
+			} else {
+				fmt.Println("  " + option.Inspect())
+			}
+		}
+
+		// Get key press
+		var key string
+		fmt.Scanln(&key)
+
+		switch key {
+		case "up":
+			if selected > 0 {
+				selected--
+			}
+		case "down":
+			if selected < len(options.Elements)-1 {
+				selected++
+			}
+		case "enter":
+			return options.Elements[selected]
+		}
+	}
+}
+
+// termCheckbox creates a checkbox list
+func termCheckbox(args []object.Object, defs map[string]object.Object) object.Object {
+	if len(args) != 1 {
+		return &object.Error{Message: "term.checkbox requires exactly one argument: an array of options"}
+	}
+
+	options, ok := args[0].(*object.Array)
+	if !ok {
+		return &object.Error{Message: "options must be an array"}
+	}
+
+	selected := make(map[int]bool)
+	current := 0
+
+	for {
+		// Clear screen
+		fmt.Print("\033[H\033[2J")
+
+		// Print options
+		for i, option := range options.Elements {
+			mark := " "
+			if selected[i] {
+				mark = "✓"
+			}
+			if i == current {
+				fmt.Printf("→ [%s] %s\n", mark, option.Inspect())
+			} else {
+				fmt.Printf("  [%s] %s\n", mark, option.Inspect())
+			}
+		}
+
+		// Get key press
+		var key string
+		fmt.Scanln(&key)
+
+		switch key {
+		case "up":
+			if current > 0 {
+				current--
+			}
+		case "down":
+			if current < len(options.Elements)-1 {
+				current++
+			}
+		case "space":
+			selected[current] = !selected[current]
+		case "enter":
+			var result []object.Object
+			for i, option := range options.Elements {
+				if selected[i] {
+					result = append(result, option)
+				}
+			}
+			return &object.Array{Elements: result}
+		}
+	}
+}
+
+// termRadio creates a radio button list
+func termRadio(args []object.Object, defs map[string]object.Object) object.Object {
+	if len(args) != 1 {
+		return &object.Error{Message: "term.radio requires exactly one argument: an array of options"}
+	}
+
+	options, ok := args[0].(*object.Array)
+	if !ok {
+		return &object.Error{Message: "options must be an array"}
+	}
+
+	selected := 0
+
+	for {
+		// Clear screen
+		fmt.Print("\033[H\033[2J")
+
+		// Print options
+		for i, option := range options.Elements {
+			mark := "○"
+			if i == selected {
+				mark = "●"
+			}
+			if i == selected {
+				fmt.Printf("→ %s %s\n", mark, option.Inspect())
+			} else {
+				fmt.Printf("  %s %s\n", mark, option.Inspect())
+			}
+		}
+
+		// Get key press
+		var key string
+		fmt.Scanln(&key)
+
+		switch key {
+		case "up":
+			if selected > 0 {
+				selected--
+			}
+		case "down":
+			if selected < len(options.Elements)-1 {
+				selected++
+			}
+		case "enter":
+			return options.Elements[selected]
+		}
+	}
+}
+
+// termPassword gets password input with hidden characters
+func termPassword(args []object.Object, defs map[string]object.Object) object.Object {
+	if len(args) != 1 {
+		return &object.Error{Message: "term.password requires exactly one argument: the prompt message"}
+	}
+
+	prompt, ok := args[0].(*object.String)
+	if !ok {
+		return &object.Error{Message: "prompt must be a string"}
+	}
+
+	fmt.Print(prompt.Value)
+
+	// Disable terminal echo
+	fmt.Print("\033[8m")
+
+	var input string
+	fmt.Scanln(&input)
+
+	// Re-enable terminal echo
+	fmt.Print("\033[28m")
+
+	return &object.String{Value: input}
+}
+
+// termConfirm asks for yes/no confirmation
+func termConfirm(args []object.Object, defs map[string]object.Object) object.Object {
+	if len(args) != 1 {
+		return &object.Error{Message: "term.confirm requires exactly one argument: the prompt message"}
+	}
+
+	prompt, ok := args[0].(*object.String)
+	if !ok {
+		return &object.Error{Message: "prompt must be a string"}
+	}
+
+	fmt.Printf("%s (y/n): ", prompt.Value)
+	var input string
+	fmt.Scanln(&input)
+
+	return &object.Boolean{Value: strings.ToLower(input) == "y"}
+}
+
+// termLoading shows a loading message with spinner
+func termLoading(args []object.Object, defs map[string]object.Object) object.Object {
+	if len(args) != 1 {
+		return &object.Error{Message: "term.loading requires exactly one argument: the message"}
+	}
+
+	msg, ok := args[0].(*object.String)
+	if !ok {
+		return &object.Error{Message: "message must be a string"}
+	}
+
+	spinner := termSpinner([]object.Object{msg}, defs)
+	return spinner
+}
+
+// termNotify shows a notification message
+func termNotify(args []object.Object, defs map[string]object.Object) object.Object {
+	if len(args) != 1 {
+		return &object.Error{Message: "term.notify requires exactly one argument: the message"}
+	}
+
+	msg, ok := args[0].(*object.String)
+	if !ok {
+		return &object.Error{Message: "message must be a string"}
+	}
+
+	style := lipgloss.NewStyle().
+		Foreground(lipgloss.Color("blue")).
+		Bold(true).
+		Padding(1, 2).
+		BorderStyle(lipgloss.RoundedBorder()).
+		BorderForeground(lipgloss.Color("blue"))
+
+	fmt.Println(style.Render("ℹ️ " + msg.Value))
+	return &object.Null{}
+}
+
+// termError shows an error message
+func termError(args []object.Object, defs map[string]object.Object) object.Object {
+	if len(args) != 1 {
+		return &object.Error{Message: "term.error requires exactly one argument: the message"}
+	}
+
+	msg, ok := args[0].(*object.String)
+	if !ok {
+		return &object.Error{Message: "message must be a string"}
+	}
+
+	style := lipgloss.NewStyle().
+		Foreground(lipgloss.Color("red")).
+		Bold(true).
+		Padding(1, 2).
+		BorderStyle(lipgloss.RoundedBorder()).
+		BorderForeground(lipgloss.Color("red"))
+
+	fmt.Println(style.Render("❌ " + msg.Value))
+	return &object.Null{}
+}
+
+// termSuccess shows a success message
+func termSuccess(args []object.Object, defs map[string]object.Object) object.Object {
+	if len(args) != 1 {
+		return &object.Error{Message: "term.success requires exactly one argument: the message"}
+	}
+
+	msg, ok := args[0].(*object.String)
+	if !ok {
+		return &object.Error{Message: "message must be a string"}
+	}
+
+	style := lipgloss.NewStyle().
+		Foreground(lipgloss.Color("green")).
+		Bold(true).
+		Padding(1, 2).
+		BorderStyle(lipgloss.RoundedBorder()).
+		BorderForeground(lipgloss.Color("green"))
+
+	fmt.Println(style.Render("✓ " + msg.Value))
+	return &object.Null{}
+}
+
+// termInfo shows an info message
+func termInfo(args []object.Object, defs map[string]object.Object) object.Object {
+	if len(args) != 1 {
+		return &object.Error{Message: "term.info requires exactly one argument: the message"}
+	}
+
+	msg, ok := args[0].(*object.String)
+	if !ok {
+		return &object.Error{Message: "message must be a string"}
+	}
+
+	style := lipgloss.NewStyle().
+		Foreground(lipgloss.Color("cyan")).
+		Bold(true).
+		Padding(1, 2).
+		BorderStyle(lipgloss.RoundedBorder()).
+		BorderForeground(lipgloss.Color("cyan"))
+
+	fmt.Println(style.Render("ℹ️ " + msg.Value))
+	return &object.Null{}
+}
+
+// termWarning shows a warning message
+func termWarning(args []object.Object, defs map[string]object.Object) object.Object {
+	if len(args) != 1 {
+		return &object.Error{Message: "term.warning requires exactly one argument: the message"}
+	}
+
+	msg, ok := args[0].(*object.String)
+	if !ok {
+		return &object.Error{Message: "message must be a string"}
+	}
+
+	style := lipgloss.NewStyle().
+		Foreground(lipgloss.Color("yellow")).
+		Bold(true).
+		Padding(1, 2).
+		BorderStyle(lipgloss.RoundedBorder()).
+		BorderForeground(lipgloss.Color("yellow"))
+
+	fmt.Println(style.Render("⚠️ " + msg.Value))
 	return &object.Null{}
 }

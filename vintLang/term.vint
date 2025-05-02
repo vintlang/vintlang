@@ -1,70 +1,102 @@
 import term
+import time
 
-// Colored output
-term.print("Hello in red!", "red")
-term.println("Hello in green!", "green")
-term.println("Hello in blue!", "blue")
+// Display a banner
+let banner = term.banner("Welcome to VintLang Terminal Demo!")
+term.println(banner)
 
-// Styled text
-let styled = term.style("Bold and underlined text", {
-    "color": "yellow",
-    "bold": "true",
-    "underline": "true"
-})
-term.println(styled)
+// Get terminal size
+let size = term.getSize()
+term.println("Terminal size: " + size["width"] + "x" + size["height"])
 
-// Boxed text
-let boxed = term.box("This text is in a box!")
-term.println(boxed)
+// Create a select menu
+term.println("Select an option:")
+let choice = term.select([
+    "Start Game",
+    "Show Settings",
+    "Exit"
+])
+term.println("You selected: " + choice)
 
-// Table
+// Create a checkbox list
+term.println("Select multiple options:")
+let selected = term.checkbox([
+    "Option 1",
+    "Option 2",
+    "Option 3",
+    "Option 4"
+])
+term.println("Selected options: " + selected)
+
+// Create a radio button list
+term.println("Select one option:")
+let radioChoice = term.radio([
+    "Yes",
+    "No",
+    "Maybe"
+])
+term.println("You selected: " + radioChoice)
+
+// Get password input
+let password = term.password("Enter your password: ")
+term.println("Password length: " + len(password))
+
+// Ask for confirmation
+let confirmed = term.confirm("Do you want to proceed?")
+if (confirmed) {
+    term.success("Proceeding...")
+} else {
+    term.error("Operation cancelled")
+}
+
+// Show different types of messages
+term.info("This is an information message")
+term.warning("This is a warning message")
+term.error("This is an error message")
+term.success("This is a success message")
+term.notify("This is a notification")
+
+// Show a loading spinner
+let loading = term.loading("Processing...")
+time.sleep(2000)
+loading()
+
+// Create a styled table
 let table = term.table([
-    ["Name", "Age", "City"],
-    ["John", "25", "New York"],
-    ["Alice", "30", "London"],
-    ["Bob", "28", "Paris"]
+    ["Feature", "Status"],
+    ["Select Menu", "✓"],
+    ["Checkbox", "✓"],
+    ["Radio Buttons", "✓"],
+    ["Password Input", "✓"],
+    ["Confirmations", "✓"],
+    ["Messages", "✓"]
 ])
 term.println(table)
 
-// Progress bar
+// Create a progress bar
 let progress = term.progress(100)
 for i in range(1, 100) {
-    progress(i)
-    time.sleep(50) // Sleep for 50ms
-}
-term.println("")
-
-// Spinner
-let spinner = term.spinner("Loading...")
-time.sleep(2000) // Wait for 2 seconds
-spinner() // Stop the spinner
-
-// Cursor control
-term.cursor(false) // Hide cursor
-time.sleep(1000)
-term.cursor(true) // Show cursor
-
-// Clear screen
-term.clear()
-
-// Beep
-term.beep()
-
-// Example of a loading process with spinner and progress
-term.println("Starting process...")
-
-let spinner = term.spinner("Initializing...")
-time.sleep(1000)
-spinner()
-
-let progress = term.progress(50)
-for i in range(1, 50) {
     progress(i)
     time.sleep(50)
 }
 term.println("")
 
-term.println(term.style("Process completed!", {
+// Create a boxed message
+let message = term.box("Thank you for trying the terminal features!")
+term.println(message)
+
+// Hide cursor, show message, then show cursor
+term.cursor(false)
+term.println("Cursor is hidden")
+time.sleep(1000)
+term.cursor(true)
+
+// Play a beep
+term.beep()
+
+// Clear screen and show final message
+term.clear()
+term.println(term.style("Demo completed!", {
     "color": "green",
     "bold": "true"
 })) 
