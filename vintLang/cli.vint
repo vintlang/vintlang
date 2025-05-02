@@ -1,19 +1,30 @@
-//This module is still experimental
-
-import utils
 import cli
 
-utils.printer("Hello from module printer")
+// Get all command-line arguments
+let args = cli.getArgs()
 
-args = cli.parseArgs("arg1=val1 arg2=val2")
-print(args) // Outputs the list of arguments
+// Parse flags
+let flags = cli.getFlags()
+if (flags["verbose"]) {
+    print("Verbose mode enabled")
+}
 
-value = cli.getArgValue("arg1")
-print(value) // Outputs "val1" if arg1 was provided as an argument
+// Get a specific argument value
+let output = cli.getArgValue("output")
+if (output != null) {
+    print("Output file:", output)
+}
 
-hasArg = cli.hasArg("arg2")
-print(hasArg) // Outputs true if arg2 exists in the arguments
+// Prompt for user input
+let name = cli.prompt("Enter your name: ")
+print("Hello,", name)
 
-args = cli.getArgs()
+// Confirm an action
+if (cli.confirm("Do you want to proceed?")) {
+    // Execute a command
+    let result = cli.execCommand("ls -l")
+    print(result)
+}
 
-print(args)
+// Exit with status code
+cli.cliExit(0)
