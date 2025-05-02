@@ -3,7 +3,7 @@
 import { useEffect, useRef } from 'react'
 import { motion, useAnimation, useInView } from 'motion/react'
 import { Button } from '@/components/ui/button'
-import { ArrowRight, Code2 } from 'lucide-react'
+import { ArrowRight, Code2, Github } from 'lucide-react'
 import { AnimatedBackground } from './AnimatedBackground'
 import Link from 'next/link'
 
@@ -77,13 +77,18 @@ export default function Hero() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 1 }}
         >
-          <Button size="lg" className="bg-taupe-900 hover:bg-taupe-800 text-white text-lg px-8 py-6 w-full sm:w-auto">
-            <Link href="/docs">Get Started</Link>
-            <ArrowRight className="ml-2 h-5 w-5" />
-          </Button>
-          <Button size="lg" variant="outline" className="text-lg px-8 py-6 w-full sm:w-auto">
-            <Link href="#code-example">View Examples</Link>
-          </Button>
+          <Link href="/docs">
+            <Button size="lg" className="bg-taupe-900 hover:bg-taupe-800 text-white text-lg px-8 py-6 w-full sm:w-auto">
+              Get Started
+              <ArrowRight className="ml-2 h-5 w-5" />
+            </Button>
+          </Link>
+          <a href="https://github.com/vintlang/vintlang" target="_blank" rel="noopener noreferrer">
+            <Button size="lg" variant="outline" className="text-lg px-8 py-6 w-full sm:w-auto">
+              Github
+              <Github className="ml-2 h-5 w-5" />
+            </Button>
+          </a>
         </motion.div>
         <motion.div
           className="mt-16 text-sm text-muted-foreground text-center"
@@ -91,7 +96,7 @@ export default function Hero() {
           animate={{ opacity: 1 }}
           transition={{ duration: 0.5, delay: 1.2 }}
         >
-          Built with ❤️ by Tachera Sasi
+          Built with ❤️ by <a href="https://tachera.vercel.app" target='blank' >Tachera Sasi</a>
         </motion.div>
       </div>
     </section>
