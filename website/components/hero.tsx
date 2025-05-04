@@ -96,7 +96,7 @@ export default function Hero() {
           animate={{ opacity: 1 }}
           transition={{ duration: 0.5, delay: 1.2 }}
         >
-          Built with ❤️ by <a href="https://tachera.vercel.app" target='blank' >Tachera Sasi</a>
+          Built with ❤️ by <a href="https://tachera.vercel.app" target='blank' className='underline' >Tachera Sasi / tach</a>
         </motion.div>
       </div>
     </section>
