@@ -5,17 +5,16 @@ import (
 	"os"
 	"path/filepath"
 	"strings"
-
-	// "text/template"
+	"text/template"
 	"time"
 
 	"github.com/vintlang/vintlang/utils"
 )
 
+//Bundles the vintlang code to a go binary
 func Bundle(vintFile string) error {
 	fmt.Printf("📦 Starting build for '%s'\n", filepath.Base(vintFile))
 
-	// Read Vint source code
 	fmt.Print("🔍 Reading source file... ")
 	data, err := os.ReadFile(vintFile)
 	if err != nil {
@@ -23,7 +22,6 @@ func Bundle(vintFile string) error {
 	}
 	fmt.Println("✅")
 
-	// Create temporary directory
 	fmt.Print("📁 Creating temp build directory... ")
 	tempDir, err := os.MkdirTemp("", "vint-bundle-*")
 	if err != nil {
@@ -32,8 +30,9 @@ func Bundle(vintFile string) error {
 	defer os.RemoveAll(tempDir)
 	fmt.Println("✅")
 
-	// Generate main.go
-	fmt.Print("⚙️  Generating Go code... ")
+	escapedCode := strings.ReplaceAll(string(data), "`", "` + \"`\" + `")
+
+	// Define Go template
 	const goTemplate = `package main
 
 import (
@@ -46,20 +45,28 @@ func main() {
 }
 `
 
-	escaped := strings.ReplaceAll(string(data), "`", "`+\"`\"+`")
+	// Generate main.go using template
+	fmt.Print("⚙️  Generating Go code... ")
 	mainPath := filepath.Join(tempDir, "main.go")
-	if err := os.WriteFile(mainPath, []byte(fmt.Sprintf(goTemplate, escaped)), 0644); err != nil {
+	mainFile, err := os.Create(mainPath)
+	if err != nil {
 		return fmt.Errorf("failed to create main.go: %w", err)
+	}
+	defer mainFile.Close()
+
+	t := template.Must(template.New("main").Parse(goTemplate))
+	if err := t.Execute(mainFile, map[string]string{"Code": escapedCode}); err != nil {
+		return fmt.Errorf("failed to execute template: %w", err)
 	}
 	fmt.Println("✅")
 
-	// Generate minimal go.mod
+	// Generate go.mod
 	fmt.Print("📦 Initializing modules... ")
 	goMod := `module vint-bundled
 
 go 1.24
 
-require github.com/vintlang/vintlang v0.0.0
+require github.com/vintlang/vintlang v0.2.0
 `
 	if err := os.WriteFile(filepath.Join(tempDir, "go.mod"), []byte(goMod), 0644); err != nil {
 		return fmt.Errorf("failed to create go.mod: %w", err)
@@ -69,7 +76,7 @@ require github.com/vintlang/vintlang v0.0.0
 	// Build binary
 	binaryName := strings.TrimSuffix(filepath.Base(vintFile), ".vint")
 	fmt.Printf("🔨 Building binary '%s'...\n", binaryName)
-	
+
 	spinner := []string{"⣾", "⣽", "⣻", "⢿", "⡿", "⣟", "⣯", "⣷"}
 	done := make(chan bool)
 	go func() {
@@ -89,16 +96,16 @@ require github.com/vintlang/vintlang v0.0.0
 		done <- true
 		return fmt.Errorf("\n❌ Build failed: %w", err)
 	}
-	
+
 	done <- true
 	fmt.Printf("\r🎉 Build successful! Moving binary... ")
 
-	// Move binary to current directory
+	// Move binary to working directory
 	finalBinary := filepath.Join(tempDir, binaryName)
-	if err := os.Rename(finalBinary, binaryName); err != nil {
+	if err := os.Rename(finalBinary, filepath.Join(".", binaryName)); err != nil {
 		return fmt.Errorf("\n❌ Failed to move binary: %w", err)
 	}
-	
+
 	fmt.Println("✅")
 	fmt.Printf("\n✨ Successfully created binary: ./%s\n", binaryName)
 	return nil
