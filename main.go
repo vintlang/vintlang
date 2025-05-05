@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"os"
+	"os/exec"
 	"strings"
 
 	"github.com/charmbracelet/lipgloss"
@@ -30,7 +31,6 @@ var (
 	Version = styles.VersionStyle.Render("v" + VINT_VERSION)
 	Author  = styles.AuthorStyle.Render("Tachera W")
 
-	// Combined logo with title, author, and version
 	NewLogo = lipgloss.JoinVertical(lipgloss.Center, Title,
 		lipgloss.JoinHorizontal(lipgloss.Center, Author, " | ", Version))
 
@@ -38,13 +38,23 @@ var (
 	Help = styles.HelpStyle.Italic(false).Render(fmt.Sprintf(`💡 How to use vint:
     %s: Start the vint program
     %s: Run a vint file
-    %s: Read vint documentation
-    %s: Know vint version
+    %s: Build a vint file into binary
+    %s: Initialize a new vint project
+    %s: Install a vint package
+    %s: Run tests in current directory
+    %s: Format vint code
+    %s: Show vint version
+    %s: Show this help message
 `,
 		styles.HelpStyle.Bold(true).Render("vint"),
 		styles.HelpStyle.Bold(true).Render("vint filename.vint"),
-		styles.HelpStyle.Bold(true).Render("vint --docs"),
-		styles.HelpStyle.Bold(true).Render("vint --version")))
+		styles.HelpStyle.Bold(true).Render("vint build filename.vint"),
+		styles.HelpStyle.Bold(true).Render("vint init"),
+		styles.HelpStyle.Bold(true).Render("vint get package"),
+		styles.HelpStyle.Bold(true).Render("vint test"),
+		styles.HelpStyle.Bold(true).Render("vint fmt filename.vint"),
+		styles.HelpStyle.Bold(true).Render("vint version"),
+		styles.HelpStyle.Bold(true).Render("vint help")))
 )
 
 func main() {
@@ -77,9 +87,21 @@ func main() {
 			}
 			fmt.Println(styles.HelpStyle.Render("Build successful!"))
 		case "get":
+			if len(args) < 3 {
+				fmt.Println(styles.ErrorStyle.Render("Error: Please specify a package to install"))
+				os.Exit(1)
+			}
 			toolkit.Get(args[2])
 		case "init":
 			toolkit.Init(args)
+		case "test", "-test", "--test", "-t":
+			runTests()
+		case "fmt", "-fmt", "--fmt", "-f":
+			if len(args) < 3 {
+				fmt.Println(styles.ErrorStyle.Render("Error: Please specify a Vint file to format"))
+				os.Exit(1)
+			}
+			formatFile(args[2])
 		case ".":
 			run("main.vint")
 		default:
@@ -115,4 +137,36 @@ func run(file string) {
 		fmt.Println(styles.ErrorStyle.Render("'"+file+"'", "is not a correct file type. Use '.vint'"))
 		os.Exit(1)
 	}
+}
+
+// runTests executes all tests in the current directory
+func runTests() {
+	fmt.Println(styles.HelpStyle.Render("Running tests..."))
+	cmd := exec.Command("go", "test", "./...")
+	cmd.Stdout = os.Stdout
+	cmd.Stderr = os.Stderr
+	if err := cmd.Run(); err != nil {
+		fmt.Println(styles.ErrorStyle.Render("Tests failed"))
+		os.Exit(1)
+	}
+	fmt.Println(styles.HelpStyle.Render("All tests passed!"))
+}
+
+// formatFile formats a Vint source file
+func formatFile(file string) {
+	if !strings.HasSuffix(file, ".vint") {
+		fmt.Println(styles.ErrorStyle.Render("Error: Can only format .vint files"))
+		os.Exit(1)
+	}
+
+	_, err := os.ReadFile(file)
+	if err != nil {
+		fmt.Println(styles.ErrorStyle.Render("Error: Failed to read file:", file))
+		os.Exit(1)
+	}
+
+	// TODO: Implement actual formatting logic
+	// For now, just show a placeholder message
+	fmt.Println(styles.HelpStyle.Render("Formatting", file))
+	fmt.Println(styles.HelpStyle.Render("Note: Formatting is not yet implemented"))
 }
