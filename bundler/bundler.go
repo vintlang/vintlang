@@ -13,7 +13,7 @@ import (
 
 //Bundles the vintlang code to a go binary
 func Bundle(vintFile string) error {
-	fmt.Printf("📦 Starting build for '%s'\n", filepath.Base(vintFile))
+	fmt.Printf("📦 Starting Bundle for '%s'\n", filepath.Base(vintFile))
 
 	fmt.Print("🔍 Reading source file... ")
 	data, err := os.ReadFile(vintFile)
@@ -22,7 +22,7 @@ func Bundle(vintFile string) error {
 	}
 	fmt.Println("✅")
 
-	fmt.Print("📁 Creating temp build directory... ")
+	fmt.Print("📁 Creating temp Bundle directory... ")
 	tempDir, err := os.MkdirTemp("", "vint-bundle-*")
 	if err != nil {
 		return fmt.Errorf("failed to create temp dir: %w", err)
@@ -70,9 +70,9 @@ require github.com/vintlang/vintlang v0.2.0
 	}
 	fmt.Println("✅")
 
-	// Build binary
+	// Bundle binary
 	binaryName := strings.TrimSuffix(filepath.Base(vintFile), ".vint")
-	fmt.Printf("🔨 Building binary '%s'...\n", binaryName)
+	fmt.Printf("🔨 Bundling binary '%s'...\n", binaryName)
 
 	spinner := []string{"⣾", "⣽", "⣻", "⢿", "⡿", "⣟", "⣯", "⣷"}
 	done := make(chan bool)
@@ -82,20 +82,20 @@ require github.com/vintlang/vintlang v0.2.0
 			case <-done:
 				return
 			default:
-				fmt.Printf("\r%s Building...", spinner[i%len(spinner)])
+				fmt.Printf("\r%s Bundling...", spinner[i%len(spinner)])
 				time.Sleep(100 * time.Millisecond)
 			}
 		}
 	}()
 
-	buildCmd := fmt.Sprintf("cd %s && go mod tidy && go build -o %s", tempDir, binaryName)
-	if err := utils.RunShell(buildCmd); err != nil {
+	BundleCmd := fmt.Sprintf("cd %s && go mod tidy && go Bundle -o %s", tempDir, binaryName)
+	if err := utils.RunShell(BundleCmd); err != nil {
 		done <- true
-		return fmt.Errorf("\n❌ Build failed: %w", err)
+		return fmt.Errorf("\n❌ Bundle failed: %w", err)
 	}
 
 	done <- true
-	fmt.Printf("\r🎉 Build successful! Moving binary... ")
+	fmt.Printf("\r🎉 Bundle successful! Moving binary... ")
 
 	finalBinary := filepath.Join(tempDir, binaryName)
 	if err := os.Rename(finalBinary, filepath.Join(".", binaryName)); err != nil {
