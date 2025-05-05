@@ -13,7 +13,7 @@ import (
 	"github.com/vintlang/vintlang/toolkit"
 )
 
-const VINT_VERSION = "0.1.8"
+const VINT_VERSION = "0.1.9"
 
 // Constants for styled output
 var (
@@ -76,9 +76,9 @@ func main() {
 			fmt.Println(Help)
 		case "version", "-version", "--version", "-v", "v":
 			fmt.Println(versionMsg)
-		case "build", "-build", "--build", "-b":
+		case "bundle", "-bundle", "--bundle", "-b":
 			if len(args) < 3 {
-				fmt.Println(styles.ErrorStyle.Render("Error: Please specify a Vint file to build"))
+				fmt.Println(styles.ErrorStyle.Render("Error: Please specify a Vint file to bundle"))
 				os.Exit(1)
 			}
 			if err := bundler.Bundle(args[2]); err != nil {
