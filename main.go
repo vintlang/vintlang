@@ -6,6 +6,7 @@ import (
 	"strings"
 
 	"github.com/charmbracelet/lipgloss"
+	"github.com/vintlang/vintlang/bundler"
 	"github.com/vintlang/vintlang/repl"
 	"github.com/vintlang/vintlang/styles"
 	"github.com/vintlang/vintlang/toolkit"
@@ -59,28 +60,33 @@ func main() {
 		return
 	}
 
-	if len(args) >= 2 { //Greater or equal accounting for the cli-args and the package manager for vint
+	if len(args) >= 2 {
 		switch args[1] {
 		case "help", "-help", "--help", "-h":
 			fmt.Println(Help)
 		case "version", "-version", "--version", "-v", "v":
 			fmt.Println(versionMsg)
-		// case "--docs", "-docs":
-		// 	repl.Docs()
+		case "build", "-build", "--build", "-b":
+			if len(args) < 3 {
+				fmt.Println(styles.ErrorStyle.Render("Error: Please specify a Vint file to build"))
+				os.Exit(1)
+			}
+			if err := bundler.Bundle(args[2]); err != nil {
+				fmt.Println(styles.ErrorStyle.Render(fmt.Sprintf("Build failed: %v", err)))
+				os.Exit(1)
+			}
+			fmt.Println(styles.HelpStyle.Render("Build successful!"))
 		case "get":
 			toolkit.Get(args[2])
 		case "init":
 			toolkit.Init(args)
 		case ".":
-			// Runs default main.vint file
 			run("main.vint")
 		default:
-			// Attempts to run the specified file
 			file := args[1]
 			run(file)
 		}
 	} else {
-		// Invalid usage: Displays error and help
 		fmt.Println(styles.ErrorStyle.Render("Error: Operation failed."))
 		fmt.Println(Help)
 		os.Exit(1)
