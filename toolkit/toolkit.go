@@ -241,6 +241,10 @@ func Init(args []string) {
 		Description: "I love VintLang",
 	}
 
+	// creating the project directory
+	os.Mkdir(projectName, 0755)
+	os.Chdir(projectName)
+
 	// Creating vintconfig.json
 	fmt.Println("🫠 Creating vintconfig.json...")
 	vintFile, err := os.Create("vintconfig.json")
