@@ -41,6 +41,27 @@ func init() {
 	TermFunctions["success"] = termSuccess
 	TermFunctions["info"] = termInfo
 	TermFunctions["warning"] = termWarning
+	TermFunctions["layout"] = termLayout
+	TermFunctions["grid"] = termGrid
+	TermFunctions["tabs"] = termTabs
+	TermFunctions["accordion"] = termAccordion
+	TermFunctions["tree"] = termTree
+	TermFunctions["chart"] = termChart
+	TermFunctions["gauge"] = termGauge
+	TermFunctions["heatmap"] = termHeatmap
+	TermFunctions["calendar"] = termCalendar
+	TermFunctions["timeline"] = termTimeline
+	TermFunctions["kanban"] = termKanban
+	TermFunctions["split"] = termSplit
+	TermFunctions["modal"] = termModal
+	TermFunctions["tooltip"] = termTooltip
+	TermFunctions["badge"] = termBadge
+	TermFunctions["avatar"] = termAvatar
+	TermFunctions["card"] = termCard
+	TermFunctions["list"] = termList
+	TermFunctions["form"] = termForm
+	TermFunctions["wizard"] = termWizard
+	TermFunctions["dashboard"] = termDashboard
 }
 
 // termPrint prints a message with optional color
@@ -804,4 +825,612 @@ func termWarning(args []object.Object, defs map[string]object.Object) object.Obj
 
 	fmt.Println(style.Render("⚠️ " + msg.Value))
 	return &object.Null{}
+}
+
+// termLayout creates a flexible layout system
+func termLayout(args []object.Object, defs map[string]object.Object) object.Object {
+	if len(args) != 1 {
+		return &object.Error{Message: "term.layout requires exactly one argument: layout configuration"}
+	}
+
+	config, ok := args[0].(*object.Dict)
+	if !ok {
+		return &object.Error{Message: "layout configuration must be a dictionary"}
+	}
+
+	// Parse layout configuration
+	layout := lipgloss.NewStyle()
+	for _, pair := range config.Pairs {
+		key := pair.Key.(*object.String).Value
+		value := pair.Value.(*object.String).Value
+
+		switch key {
+		case "direction":
+			switch value {
+			case "horizontal":
+				layout = layout.Width(80).Height(24)
+			case "vertical":
+				layout = layout.Width(24).Height(80)
+			}
+		case "padding":
+			layout = layout.Padding(1, 2)
+		case "border":
+			layout = layout.BorderStyle(lipgloss.RoundedBorder())
+		}
+	}
+
+	return &object.String{Value: layout.Render("")}
+}
+
+// termGrid creates a grid layout
+func termGrid(args []object.Object, defs map[string]object.Object) object.Object {
+	if len(args) != 2 {
+		return &object.Error{Message: "term.grid requires exactly two arguments: items array and grid configuration"}
+	}
+
+	items, ok := args[0].(*object.Array)
+	if !ok {
+		return &object.Error{Message: "items must be an array"}
+	}
+
+	config, ok := args[1].(*object.Dict)
+	if !ok {
+		return &object.Error{Message: "grid configuration must be a dictionary"}
+	}
+
+	// Parse grid configuration
+	columns := 3 // default
+	for _, pair := range config.Pairs {
+		key := pair.Key.(*object.String).Value
+		if key == "columns" {
+			columns = int(pair.Value.(*object.Integer).Value)
+		}
+	}
+
+	// Create grid layout
+	var grid []string
+	for i := 0; i < len(items.Elements); i += columns {
+		var row []string
+		for j := 0; j < columns && i+j < len(items.Elements); j++ {
+			row = append(row, items.Elements[i+j].Inspect())
+		}
+		grid = append(grid, strings.Join(row, " | "))
+	}
+
+	return &object.String{Value: strings.Join(grid, "\n")}
+}
+
+// termTabs creates a tabbed interface
+func termTabs(args []object.Object, defs map[string]object.Object) object.Object {
+	if len(args) != 1 {
+		return &object.Error{Message: "term.tabs requires exactly one argument: tabs configuration"}
+	}
+
+	tabs, ok := args[0].(*object.Dict)
+	if !ok {
+		return &object.Error{Message: "tabs configuration must be a dictionary"}
+	}
+
+	// Create tab style
+	style := lipgloss.NewStyle().
+		BorderStyle(lipgloss.RoundedBorder()).
+		BorderForeground(lipgloss.Color("240"))
+
+	// Create tabs
+	var tabNames []string
+	for _, pair := range tabs.Pairs {
+		tabNames = append(tabNames, pair.Key.(*object.String).Value)
+	}
+
+	return &object.String{Value: style.Render(strings.Join(tabNames, " | "))}
+}
+
+// termAccordion creates a collapsible accordion
+func termAccordion(args []object.Object, defs map[string]object.Object) object.Object {
+	if len(args) != 1 {
+		return &object.Error{Message: "term.accordion requires exactly one argument: sections configuration"}
+	}
+
+	sections, ok := args[0].(*object.Dict)
+	if !ok {
+		return &object.Error{Message: "sections configuration must be a dictionary"}
+	}
+
+	// Create accordion style
+	style := lipgloss.NewStyle().
+		BorderStyle(lipgloss.RoundedBorder()).
+		BorderForeground(lipgloss.Color("240"))
+
+	// Create sections
+	var content []string
+	for _, pair := range sections.Pairs {
+		title := pair.Key.(*object.String).Value
+		content = append(content, fmt.Sprintf("▼ %s", title))
+		content = append(content, pair.Value.Inspect())
+	}
+
+	return &object.String{Value: style.Render(strings.Join(content, "\n"))}
+}
+
+// termTree creates a tree view
+func termTree(args []object.Object, defs map[string]object.Object) object.Object {
+	if len(args) != 1 {
+		return &object.Error{Message: "term.tree requires exactly one argument: tree configuration"}
+	}
+
+	tree, ok := args[0].(*object.Dict)
+	if !ok {
+		return &object.Error{Message: "tree configuration must be a dictionary"}
+	}
+
+	// Create tree style
+	style := lipgloss.NewStyle().
+		BorderStyle(lipgloss.RoundedBorder()).
+		BorderForeground(lipgloss.Color("240"))
+
+	// Create tree structure
+	var content []string
+	for _, pair := range tree.Pairs {
+		content = append(content, fmt.Sprintf("├─ %s", pair.Key.(*object.String).Value))
+		if subTree, ok := pair.Value.(*object.Dict); ok {
+			for _, subPair := range subTree.Pairs {
+				content = append(content, fmt.Sprintf("│  └─ %s", subPair.Key.(*object.String).Value))
+			}
+		}
+	}
+
+	return &object.String{Value: style.Render(strings.Join(content, "\n"))}
+}
+
+// termChart creates a simple chart
+func termChart(args []object.Object, defs map[string]object.Object) object.Object {
+	if len(args) != 1 {
+		return &object.Error{Message: "term.chart requires exactly one argument: data array"}
+	}
+
+	data, ok := args[0].(*object.Array)
+	if !ok {
+		return &object.Error{Message: "data must be an array"}
+	}
+
+	// Create chart
+	var chart []string
+	maxValue := 0
+	for _, item := range data.Elements {
+		if num, ok := item.(*object.Integer); ok {
+			if int(num.Value) > maxValue {
+				maxValue = int(num.Value)
+			}
+		}
+	}
+
+	for _, item := range data.Elements {
+		if num, ok := item.(*object.Integer); ok {
+			bar := strings.Repeat("█", int(float64(num.Value)/float64(maxValue)*20))
+			chart = append(chart, bar)
+		}
+	}
+
+	return &object.String{Value: strings.Join(chart, "\n")}
+}
+
+// termGauge creates a gauge/progress indicator
+func termGauge(args []object.Object, defs map[string]object.Object) object.Object {
+	if len(args) != 1 {
+		return &object.Error{Message: "term.gauge requires exactly one argument: value (0-100)"}
+	}
+
+	value, ok := args[0].(*object.Integer)
+	if !ok {
+		return &object.Error{Message: "value must be an integer"}
+	}
+
+	// Create gauge
+	width := 20
+	filled := int(float64(value.Value) / 100.0 * float64(width))
+	bar := strings.Repeat("█", filled) + strings.Repeat("░", width-filled)
+
+	return &object.String{Value: fmt.Sprintf("[%s] %d%%", bar, value.Value)}
+}
+
+// termHeatmap creates a heatmap visualization
+func termHeatmap(args []object.Object, defs map[string]object.Object) object.Object {
+	if len(args) != 1 {
+		return &object.Error{Message: "term.heatmap requires exactly one argument: data array"}
+	}
+
+	data, ok := args[0].(*object.Array)
+	if !ok {
+		return &object.Error{Message: "data must be an array"}
+	}
+
+	// Create heatmap
+	var heatmap []string
+	maxValue := 0
+	for _, item := range data.Elements {
+		if num, ok := item.(*object.Integer); ok {
+			if int(num.Value) > maxValue {
+				maxValue = int(num.Value)
+			}
+		}
+	}
+
+	colors := []string{"░", "▒", "▓", "█"}
+	for _, item := range data.Elements {
+		if num, ok := item.(*object.Integer); ok {
+			colorIndex := int(float64(num.Value) / float64(maxValue) * float64(len(colors)-1))
+			heatmap = append(heatmap, colors[colorIndex])
+		}
+	}
+
+	return &object.String{Value: strings.Join(heatmap, "")}
+}
+
+// termCalendar creates a calendar view
+func termCalendar(args []object.Object, defs map[string]object.Object) object.Object {
+	if len(args) != 1 {
+		return &object.Error{Message: "term.calendar requires exactly one argument: month configuration"}
+	}
+
+	config, ok := args[0].(*object.Dict)
+	if !ok {
+		return &object.Error{Message: "month configuration must be a dictionary"}
+	}
+
+	// Create calendar
+	now := time.Now()
+	year := now.Year()
+	month := now.Month()
+
+	for _, pair := range config.Pairs {
+		key := pair.Key.(*object.String).Value
+		if key == "year" {
+			year = int(pair.Value.(*object.Integer).Value)
+		} else if key == "month" {
+			month = time.Month(pair.Value.(*object.Integer).Value)
+		}
+	}
+
+	// Generate calendar
+	firstDay := time.Date(year, month, 1, 0, 0, 0, 0, time.Local)
+	lastDay := firstDay.AddDate(0, 1, -1)
+
+	calendar := fmt.Sprintf("%s %d\n", month, year)
+	calendar += "Su Mo Tu We Th Fr Sa\n"
+
+	// Add leading spaces
+	for i := 0; i < int(firstDay.Weekday()); i++ {
+		calendar += "   "
+	}
+
+	// Add days
+	for day := 1; day <= lastDay.Day(); day++ {
+		calendar += fmt.Sprintf("%2d ", day)
+		if (int(firstDay.Weekday())+day)%7 == 0 {
+			calendar += "\n"
+		}
+	}
+
+	return &object.String{Value: calendar}
+}
+
+// termTimeline creates a timeline view
+func termTimeline(args []object.Object, defs map[string]object.Object) object.Object {
+	if len(args) != 1 {
+		return &object.Error{Message: "term.timeline requires exactly one argument: events array"}
+	}
+
+	events, ok := args[0].(*object.Array)
+	if !ok {
+		return &object.Error{Message: "events must be an array"}
+	}
+
+	// Create timeline
+	var timeline []string
+	for i, event := range events.Elements {
+		if eventDict, ok := event.(*object.Dict); ok {
+			var title, time string
+			for _, pair := range eventDict.Pairs {
+				key := pair.Key.(*object.String).Value
+				if key == "title" {
+					title = pair.Value.(*object.String).Value
+				} else if key == "time" {
+					time = pair.Value.(*object.String).Value
+				}
+			}
+			timeline = append(timeline, fmt.Sprintf("%s | %s", time, title))
+			if i < len(events.Elements)-1 {
+				timeline = append(timeline, "    |")
+			}
+		}
+	}
+
+	return &object.String{Value: strings.Join(timeline, "\n")}
+}
+
+// termKanban creates a kanban board
+func termKanban(args []object.Object, defs map[string]object.Object) object.Object {
+	if len(args) != 1 {
+		return &object.Error{Message: "term.kanban requires exactly one argument: columns configuration"}
+	}
+
+	columns, ok := args[0].(*object.Dict)
+	if !ok {
+		return &object.Error{Message: "columns configuration must be a dictionary"}
+	}
+
+	// Create kanban board
+	var board []string
+	for _, pair := range columns.Pairs {
+		title := pair.Key.(*object.String).Value
+		items := pair.Value.(*object.Array)
+
+		column := fmt.Sprintf("=== %s ===\n", title)
+		for _, item := range items.Elements {
+			column += fmt.Sprintf("• %s\n", item.Inspect())
+		}
+		board = append(board, column)
+	}
+
+	return &object.String{Value: strings.Join(board, "\n")}
+}
+
+// termSplit creates a split view
+func termSplit(args []object.Object, defs map[string]object.Object) object.Object {
+	if len(args) != 2 {
+		return &object.Error{Message: "term.split requires exactly two arguments: left content and right content"}
+	}
+
+	left, ok := args[0].(*object.String)
+	if !ok {
+		return &object.Error{Message: "left content must be a string"}
+	}
+
+	right, ok := args[1].(*object.String)
+	if !ok {
+		return &object.Error{Message: "right content must be a string"}
+	}
+
+	// Create split view
+	width := 80
+	leftWidth := width / 2
+	rightWidth := width - leftWidth
+
+	leftStyle := lipgloss.NewStyle().Width(leftWidth)
+	rightStyle := lipgloss.NewStyle().Width(rightWidth)
+
+	return &object.String{Value: leftStyle.Render(left.Value) + rightStyle.Render(right.Value)}
+}
+
+// termModal creates a modal dialog
+func termModal(args []object.Object, defs map[string]object.Object) object.Object {
+	if len(args) != 1 {
+		return &object.Error{Message: "term.modal requires exactly one argument: modal configuration"}
+	}
+
+	config, ok := args[0].(*object.Dict)
+	if !ok {
+		return &object.Error{Message: "modal configuration must be a dictionary"}
+	}
+
+	// Create modal style
+	style := lipgloss.NewStyle().
+		BorderStyle(lipgloss.RoundedBorder()).
+		BorderForeground(lipgloss.Color("240")).
+		Padding(1, 2)
+
+	// Create modal content
+	var title, content string
+	for _, pair := range config.Pairs {
+		key := pair.Key.(*object.String).Value
+		if key == "title" {
+			title = pair.Value.(*object.String).Value
+		} else if key == "content" {
+			content = pair.Value.(*object.String).Value
+		}
+	}
+
+	modal := fmt.Sprintf("%s\n%s", title, content)
+	return &object.String{Value: style.Render(modal)}
+}
+
+// termTooltip creates a tooltip
+func termTooltip(args []object.Object, defs map[string]object.Object) object.Object {
+	if len(args) != 2 {
+		return &object.Error{Message: "term.tooltip requires exactly two arguments: text and tooltip message"}
+	}
+
+	text, ok := args[0].(*object.String)
+	if !ok {
+		return &object.Error{Message: "text must be a string"}
+	}
+
+	tooltip, ok := args[1].(*object.String)
+	if !ok {
+		return &object.Error{Message: "tooltip message must be a string"}
+	}
+
+	// Create tooltip style
+	style := lipgloss.NewStyle().
+		Foreground(lipgloss.Color("240"))
+
+	return &object.String{Value: text.Value + style.Render(" [?] "+tooltip.Value)}
+}
+
+// termBadge creates a badge
+func termBadge(args []object.Object, defs map[string]object.Object) object.Object {
+	if len(args) != 1 {
+		return &object.Error{Message: "term.badge requires exactly one argument: badge text"}
+	}
+
+	text, ok := args[0].(*object.String)
+	if !ok {
+		return &object.Error{Message: "badge text must be a string"}
+	}
+
+	// Create badge style
+	style := lipgloss.NewStyle().
+		Background(lipgloss.Color("240")).
+		Foreground(lipgloss.Color("255")).
+		Padding(0, 1)
+
+	return &object.String{Value: style.Render(text.Value)}
+}
+
+// termAvatar creates an avatar
+func termAvatar(args []object.Object, defs map[string]object.Object) object.Object {
+	if len(args) != 1 {
+		return &object.Error{Message: "term.avatar requires exactly one argument: avatar text"}
+	}
+
+	text, ok := args[0].(*object.String)
+	if !ok {
+		return &object.Error{Message: "avatar text must be a string"}
+	}
+
+	// Create avatar style
+	style := lipgloss.NewStyle().
+		Background(lipgloss.Color("240")).
+		Foreground(lipgloss.Color("255")).
+		Padding(0, 1)
+
+	return &object.String{Value: style.Render(text.Value[:1])}
+}
+
+// termCard creates a card component
+func termCard(args []object.Object, defs map[string]object.Object) object.Object {
+	if len(args) != 1 {
+		return &object.Error{Message: "term.card requires exactly one argument: card configuration"}
+	}
+
+	config, ok := args[0].(*object.Dict)
+	if !ok {
+		return &object.Error{Message: "card configuration must be a dictionary"}
+	}
+
+	// Create card style
+	style := lipgloss.NewStyle().
+		BorderStyle(lipgloss.RoundedBorder()).
+		BorderForeground(lipgloss.Color("240")).
+		Padding(1, 2)
+
+	// Create card content
+	var title, content string
+	for _, pair := range config.Pairs {
+		key := pair.Key.(*object.String).Value
+		if key == "title" {
+			title = pair.Value.(*object.String).Value
+		} else if key == "content" {
+			content = pair.Value.(*object.String).Value
+		}
+	}
+
+	card := fmt.Sprintf("%s\n%s", title, content)
+	return &object.String{Value: style.Render(card)}
+}
+
+// termList creates a list component
+func termList(args []object.Object, defs map[string]object.Object) object.Object {
+	if len(args) != 1 {
+		return &object.Error{Message: "term.list requires exactly one argument: items array"}
+	}
+
+	items, ok := args[0].(*object.Array)
+	if !ok {
+		return &object.Error{Message: "items must be an array"}
+	}
+
+	// Create list style
+	style := lipgloss.NewStyle().
+		BorderStyle(lipgloss.RoundedBorder()).
+		BorderForeground(lipgloss.Color("240"))
+
+	// Create list items
+	var list []string
+	for _, item := range items.Elements {
+		list = append(list, fmt.Sprintf("• %s", item.Inspect()))
+	}
+
+	return &object.String{Value: style.Render(strings.Join(list, "\n"))}
+}
+
+// termForm creates a form component
+func termForm(args []object.Object, defs map[string]object.Object) object.Object {
+	if len(args) != 1 {
+		return &object.Error{Message: "term.form requires exactly one argument: form configuration"}
+	}
+
+	config, ok := args[0].(*object.Dict)
+	if !ok {
+		return &object.Error{Message: "form configuration must be a dictionary"}
+	}
+
+	// Create form style
+	style := lipgloss.NewStyle().
+		BorderStyle(lipgloss.RoundedBorder()).
+		BorderForeground(lipgloss.Color("240")).
+		Padding(1, 2)
+
+	// Create form fields
+	var form []string
+	for _, pair := range config.Pairs {
+		field := pair.Key.(*object.String).Value
+		form = append(form, fmt.Sprintf("%s: [          ]", field))
+	}
+
+	return &object.String{Value: style.Render(strings.Join(form, "\n"))}
+}
+
+// termWizard creates a wizard/step-by-step form
+func termWizard(args []object.Object, defs map[string]object.Object) object.Object {
+	if len(args) != 1 {
+		return &object.Error{Message: "term.wizard requires exactly one argument: steps array"}
+	}
+
+	steps, ok := args[0].(*object.Array)
+	if !ok {
+		return &object.Error{Message: "steps must be an array"}
+	}
+
+	// Create wizard style
+	style := lipgloss.NewStyle().
+		BorderStyle(lipgloss.RoundedBorder()).
+		BorderForeground(lipgloss.Color("240")).
+		Padding(1, 2)
+
+	// Create wizard steps
+	var wizard []string
+	for i, step := range steps.Elements {
+		wizard = append(wizard, fmt.Sprintf("Step %d: %s", i+1, step.Inspect()))
+	}
+
+	return &object.String{Value: style.Render(strings.Join(wizard, "\n"))}
+}
+
+// termDashboard creates a dashboard layout
+func termDashboard(args []object.Object, defs map[string]object.Object) object.Object {
+	if len(args) != 1 {
+		return &object.Error{Message: "term.dashboard requires exactly one argument: widgets configuration"}
+	}
+
+	widgets, ok := args[0].(*object.Dict)
+	if !ok {
+		return &object.Error{Message: "widgets configuration must be a dictionary"}
+	}
+
+	// Create dashboard style
+	style := lipgloss.NewStyle().
+		BorderStyle(lipgloss.RoundedBorder()).
+		BorderForeground(lipgloss.Color("240")).
+		Padding(1, 2)
+
+	// Create dashboard widgets
+	var dashboard []string
+	for _, pair := range widgets.Pairs {
+		title := pair.Key.(*object.String).Value
+		content := pair.Value.Inspect()
+		dashboard = append(dashboard, fmt.Sprintf("=== %s ===\n%s", title, content))
+	}
+
+	return &object.String{Value: style.Render(strings.Join(dashboard, "\n"))}
 }
