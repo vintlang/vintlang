@@ -57,7 +57,6 @@ config.json
 # For vint executables
 /vint
 /vint
-
-/nuru_examples
+/vendor
 
 dist/
