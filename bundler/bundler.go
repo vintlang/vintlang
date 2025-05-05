@@ -32,7 +32,6 @@ func Bundle(vintFile string) error {
 
 	escapedCode := strings.ReplaceAll(string(data), "`", "` + \"`\" + `")
 
-	// Define Go template
 	const goTemplate = `package main
 
 import (
@@ -45,7 +44,6 @@ func main() {
 }
 `
 
-	// Generate main.go using template
 	fmt.Print("⚙️  Generating Go code... ")
 	mainPath := filepath.Join(tempDir, "main.go")
 	mainFile, err := os.Create(mainPath)
@@ -60,7 +58,6 @@ func main() {
 	}
 	fmt.Println("✅")
 
-	// Generate go.mod
 	fmt.Print("📦 Initializing modules... ")
 	goMod := `module vint-bundled
 
@@ -100,7 +97,6 @@ require github.com/vintlang/vintlang v0.2.0
 	done <- true
 	fmt.Printf("\r🎉 Build successful! Moving binary... ")
 
-	// Move binary to working directory
 	finalBinary := filepath.Join(tempDir, binaryName)
 	if err := os.Rename(finalBinary, filepath.Join(".", binaryName)); err != nil {
 		return fmt.Errorf("\n❌ Failed to move binary: %w", err)
