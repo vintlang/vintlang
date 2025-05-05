@@ -1,15 +1,25 @@
-package bund_test
+package bundler
 
 import (
 	"fmt"
 	"os"
+	"path/filepath"
 	"strings"
 	"text/template"
 
 	"github.com/vintlang/vintlang/utils"
 )
 
-const skeleton = `package main
+// Bundle compiles a Vint file into a standalone Go binary
+func Bundle(vintFile string) error {
+	// Read Vint source code
+	data, err := os.ReadFile(vintFile)
+	if err != nil {
+		return fmt.Errorf("failed to read file: %w", err)
+	}
+
+	// Create Go template for the bundled code
+	const goTemplate = `package main
 
 import (
 	"github.com/vintlang/vintlang/repl"
@@ -21,45 +31,32 @@ func main() {
 }
 `
 
-func main() {
-	if len(os.Args) < 2 {
-		fmt.Println("Usage: vintbuild <file.vint>")
-		os.Exit(1)
-	}
+	// Escape backticks in Vint code to prevent template parsing issues
+	escaped := strings.ReplaceAll(string(data), "`", "`+\"`\"+`")
 
-	vintFile := os.Args[1]
-
-	data, err := os.ReadFile(vintFile)
+	// Create temporary Go file
+	goFile := "bundled.go"
+	f, err := os.Create(goFile)
 	if err != nil {
-		fmt.Println("Error reading file:", err)
-		os.Exit(1)
-	}
-
-	escaped := strings.ReplaceAll(string(data), "`", "`+\"`\"+`") // handle backticks in Vint code
-
-	f, err := os.Create("compiled.go")
-	if err != nil {
-		fmt.Println("Error creating compiled.go:", err)
-		os.Exit(1)
+		return fmt.Errorf("failed to create Go file: %w", err)
 	}
 	defer f.Close()
 
-	tmpl := template.Must(template.New("main").Parse(skeleton))
-	err = tmpl.Execute(f, map[string]string{"Code": escaped})
-	if err != nil {
-		fmt.Println("Template error:", err)
-		os.Exit(1)
+	// Generate Go code from template
+	tmpl := template.Must(template.New("main").Parse(goTemplate))
+	if err := tmpl.Execute(f, map[string]string{"Code": escaped}); err != nil {
+		return fmt.Errorf("failed to generate Go code: %w", err)
 	}
 
 	// Build binary
-	binaryName := strings.TrimSuffix(vintFile, ".vint")
-	buildCmd := fmt.Sprintf("go build -o %s compiled.go", binaryName)
-	fmt.Println("Building:", buildCmd)
-	err = utils.RunShell(buildCmd)
-	if err != nil {
-		fmt.Println("Build failed:", err)
-		os.Exit(1)
+	binaryName := strings.TrimSuffix(filepath.Base(vintFile), ".vint")
+	buildCmd := fmt.Sprintf("go build -o %s %s", binaryName, goFile)
+	if err := utils.RunShell(buildCmd); err != nil {
+		return fmt.Errorf("failed to build binary: %w", err)
 	}
 
-	fmt.Println("Built binary:", binaryName)
+	// Clean up temporary Go file
+	os.Remove(goFile)
+
+	return nil
 }
