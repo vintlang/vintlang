@@ -234,32 +234,32 @@ func Init(args []string) {
 		projectName = args[2]
 	}
 
-	// Structure for vint.json
+	// Structure for vintconfig.json
 	var vintConfig = VintConfig{
 		Name:        projectName,
 		Version:     "1.0.0",
 		Description: "I love VintLang",
 	}
 
-	// Creating vint.json
-	fmt.Println("🫠 Creating vint.json...")
-	vintFile, err := os.Create("vint.json")
+	// Creating vintconfig.json
+	fmt.Println("🫠 Creating vintconfig.json...")
+	vintFile, err := os.Create("vintconfig.json")
 	if err != nil {
-		fmt.Printf("❌ Error creating vint.json: %v\n", err)
+		fmt.Printf("❌ Error creating vintconfig.json: %v\n", err)
 		return
 	}
 	defer vintFile.Close()
 
 	vintData, err := json.MarshalIndent(vintConfig, "", "  ")
 	if err != nil {
-		fmt.Printf("❌ Error marshalling vint.json: %v\n", err)
+		fmt.Printf("❌ Error marshalling vintconfig.json: %v\n", err)
 		return
 	}
 	if _, err := vintFile.Write(vintData); err != nil {
-		fmt.Printf("❌ Error writing to vint.json: %v\n", err)
+		fmt.Printf("❌ Error writing to vintconfig.json: %v\n", err)
 		return
 	}
-	fmt.Println("✅ vint.json created successfully!")
+	fmt.Println("✅ vintconfig.json created successfully!")
 
 	// Creating main.vint
 	fmt.Println("🫠 Creating main.vint...")
