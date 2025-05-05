@@ -7,7 +7,8 @@ term.println(banner)
 
 // Get terminal size
 let size = term.getSize()
-term.println("Terminal size: " + size["width"] + "x" + size["height"])
+print(size)
+// term.println("Terminal size: " + size["width"] + "x" + size["height"])
 
 // Create a select menu
 term.println("Select an option:")
@@ -100,3 +101,38 @@ term.println(term.style("Demo completed!", {
     "color": "green",
     "bold": "true"
 })) 
+
+// Create a dashboard
+let dashboard = term.dashboard({
+    "Stats": term.grid([10, 20, 30], {"columns": 3}),
+    "Progress": term.gauge(75),
+    "Tasks": term.kanban({
+        "Todo": ["Task 1", "Task 2"],
+        "In Progress": ["Task 3"],
+        "Done": ["Task 4"]
+    })
+})
+
+// Create a form
+let form = term.form({
+    "Name": "",
+    "Email": "",
+    "Age": ""
+})
+
+// Create a wizard
+let wizard = term.wizard([
+    "Step 1: Basic Info",
+    "Step 2: Preferences",
+    "Step 3: Confirmation"
+])
+
+// Create a chart
+let data = [10, 20, 30, 40, 50]
+let chart = term.chart(data)
+
+// Create a modal
+let modal = term.modal({
+    "title": "Confirmation",
+    "content": "Are you sure you want to proceed?"
+})
