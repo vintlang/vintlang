@@ -101,6 +101,62 @@ Follow the steps below to easily install **VintLang** on your Linux or macOS sys
 4. **Initialize a vintlang project** by running `vint init <projectname>`.
 5. **Install the vintlang extension from vscode** install vintlang extension in vscode
 
+## Terminal Application Capabilities
+
+VintLang is designed to be an excellent language for building terminal applications. It provides a rich set of modules and functions specifically designed for terminal interaction, making it easy to create powerful command-line tools, text-based user interfaces, and interactive applications.
+
+### Terminal Modules
+
+VintLang includes several modules for terminal application development:
+
+#### Term Module
+
+The `term` module provides functions for terminal UI manipulation:
+
+- **Colors and styling**: Apply colors, bold, italic, and other styles to text
+- **Cursor control**: Move the cursor, clear the screen, and control terminal appearance
+- **Interactive input**: Get keypresses, handle special keys, and read user input
+- **Progress indicators**: Display spinners, progress bars, and loading animations
+- **Tables and layouts**: Create formatted tables, boxes, and structured layouts
+
+#### Argparse Module
+
+The `argparse` module provides a powerful command-line argument parsing system:
+
+- Define positional arguments with validation
+- Define optional flags with short and long names
+- Type checking and validation
+- Automatic help text generation
+- Version information support
+
+#### FileWatcher Module
+
+The `filewatcher` module allows monitoring files and directories for changes:
+
+- Watch individual files for modifications
+- Watch directories for file creation, modification, and deletion
+- Recursive directory watching
+- File extension filtering
+- Event-based callbacks with detailed information
+
+#### Editor Module
+
+The `editor` module provides a simple text editor component:
+
+- Create and manage text editors within your applications
+- Set and get text content
+- Line-based operations (insert, delete, update, get)
+- Vim-like modal editing (normal, insert, command modes)
+- File loading and saving
+
+### Examples
+
+Check out the `examples/terminal` directory for sample applications demonstrating these capabilities:
+
+- `argparse_example.vint`: Command-line argument parsing
+- `filewatcher_example.vint`: File system monitoring
+- `editor_example.vint`: Text editor implementation
+
 ## Sample Code
 
 ### Example 1: String Splitting and Printing

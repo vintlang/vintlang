@@ -60,3 +60,4 @@ config.json
 /vendor
 
 dist/
+.idea
