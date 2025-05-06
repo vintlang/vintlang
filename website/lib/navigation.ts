@@ -1,4 +1,4 @@
-import { Hand, ArrowDownToLine, FileText, BookOpen, HelpCircle } from "lucide-react";
+import { Hand, ArrowDownToLine, FileText, BookOpen, HelpCircle, PackageCheck } from "lucide-react";
 
 export const navigation = [
     {
@@ -17,9 +17,9 @@ export const navigation = [
       icon: FileText,
     },
     {
-      name: "Tutorial",
-      href: "#tutorial",
-      icon: BookOpen,
+      name: "Bundler",
+      href: "/docs/bundler",
+      icon: PackageCheck,
     },
     {
       name: "Sponsor",
