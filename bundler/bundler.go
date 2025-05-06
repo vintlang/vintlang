@@ -88,7 +88,7 @@ require github.com/vintlang/vintlang v0.2.0
 		}
 	}()
 
-	BundleCmd := fmt.Sprintf("cd %s && go mod tidy && go Bundle -o %s", tempDir, binaryName)
+	BundleCmd := fmt.Sprintf("cd %s && go mod tidy && go build -o %s", tempDir, binaryName)
 	if err := utils.RunShell(BundleCmd); err != nil {
 		done <- true
 		return fmt.Errorf("\n❌ Bundle failed: %w", err)

@@ -1,4 +1,4 @@
-VERSION=0.1.4
+VERSION=0.1.9
 
 # UPX installation instructions
 # macOS: brew install upx
