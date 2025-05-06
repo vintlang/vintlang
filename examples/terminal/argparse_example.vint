@@ -1,0 +1,75 @@
+// argparse_example.vint - Example of using the argparse module
+// Run with: vint argparse_example.vint [arguments]
+
+import argparse
+
+// Create a new argument parser
+let parser = argparse.newParser("argparse_example", "Example of using the argparse module")
+
+// Add positional arguments
+argparse.addArgument(parser, "input", {
+    description: "Input file",
+    required: true
+})
+
+// Add optional flags
+argparse.addFlag(parser, "verbose", {
+    short: "v",
+    description: "Enable verbose output"
+})
+
+argparse.addFlag(parser, "output", {
+    short: "o",
+    description: "Output file",
+    type: "string"
+})
+
+argparse.addFlag(parser, "count", {
+    short: "c",
+    description: "Number of iterations",
+    type: "integer",
+    default: 1
+})
+
+// Set version information
+argparse.version(parser, "1.0.0")
+
+// Parse arguments
+print("Parsing command line arguments...")
+let args = argparse.parse(parser)
+
+// Display the parsed arguments
+print("\nParsed arguments:")
+print("----------------")
+print("Input file:", args["input"])
+print("Verbose mode:", args["verbose"])
+print("Output file:", args["output"] ? args["output"] : "(not specified)")
+print("Count:", args["count"])
+
+// Use the arguments in the program
+if (args["verbose"]) {
+    print("\nVerbose mode enabled. Additional information will be displayed.")
+}
+
+print("\nProcessing input file:", args["input"])
+print("Running", args["count"], "iterations...")
+
+// Simulate processing
+for (let i = 0; i < args["count"]; i++) {
+    print("  Processing iteration", i + 1)
+    // Simulate some work
+    // ...
+}
+
+// Handle output
+if (args["output"]) {
+    print("\nWriting results to output file:", args["output"])
+    // Simulate writing to output file
+    // ...
+} else {
+    print("\nNo output file specified. Results will be displayed on screen.")
+    // Display results
+    // ...
+}
+
+print("\nProcessing complete!")

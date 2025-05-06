@@ -1,0 +1,120 @@
+// filewatcher_example.vint - Example of using the filewatcher module
+// Run with: vint filewatcher_example.vint
+
+import filewatcher
+import os
+import time
+
+// Create a test file to watch
+let testFile = "test_file.txt"
+let testDir = "test_dir"
+
+// Create the test file if it doesn't exist
+if (!os.exists(testFile)) {
+    print("Creating test file:", testFile)
+    os.writeFile(testFile, "Initial content\n")
+} else {
+    print("Using existing test file:", testFile)
+}
+
+// Create the test directory if it doesn't exist
+if (!os.exists(testDir)) {
+    print("Creating test directory:", testDir)
+    os.mkdir(testDir)
+} else {
+    print("Using existing test directory:", testDir)
+}
+
+// Function to handle file changes
+let handleFileChange = func(event) {
+    print("\n[File Change Event]")
+    print("Path:", event["path"])
+    print("Type:", event["type"])
+    print("Time:", event["time"])
+    
+    // Read the file content if it's a modification
+    if (event["type"] == "modified") {
+        let content = open(event["path"])
+        print("Content:", content)
+    }
+}
+
+// Function to handle directory changes
+let handleDirChange = func(event) {
+    print("\n[Directory Change Event]")
+    print("Path:", event["path"])
+    print("Type:", event["type"])
+    print("Time:", event["time"])
+}
+
+// Start watching the file
+print("\nStarting to watch file:", testFile)
+let fileWatcherId = filewatcher.watch(testFile, handleFileChange, {
+    interval: 500 // Check every 500ms
+})
+
+// Start watching the directory
+print("Starting to watch directory:", testDir)
+let dirWatcherId = filewatcher.watchDir(testDir, handleDirChange, {
+    recursive: true,
+    interval: 500 // Check every 500ms
+})
+
+// Display instructions
+print("\n=== File Watcher Example ===")
+print("1. Modify the file '" + testFile + "' to see file change events")
+print("2. Create, modify, or delete files in the '" + testDir + "' directory to see directory change events")
+print("3. The program will automatically make some changes after 5 seconds")
+print("4. Press Ctrl+C to exit")
+print("===========================\n")
+
+// Wait for 5 seconds
+print("Waiting 5 seconds before making automatic changes...")
+time.sleep(5000)
+
+// Make some changes to the test file
+print("\nAppending to test file...")
+let fileHandle = os.openFile(testFile, "a")
+fileHandle.write("New content added at " + time.now() + "\n")
+fileHandle.close()
+
+// Create a new file in the test directory
+print("Creating a new file in the test directory...")
+os.writeFile(testDir + "/new_file.txt", "This is a new file created at " + time.now() + "\n")
+
+// Wait for 2 seconds
+time.sleep(2000)
+
+// Modify the new file
+print("Modifying the new file...")
+os.writeFile(testDir + "/new_file.txt", "This file was modified at " + time.now() + "\n")
+
+// Wait for 2 seconds
+time.sleep(2000)
+
+// Delete the new file
+print("Deleting the new file...")
+os.remove(testDir + "/new_file.txt")
+
+// Wait for 5 seconds to see all events
+print("\nWaiting 5 seconds to see all events...")
+time.sleep(5000)
+
+// Stop watching
+print("\nStopping file watcher...")
+filewatcher.stopWatch(fileWatcherId)
+
+print("Stopping directory watcher...")
+filewatcher.stopWatch(dirWatcherId)
+
+print("\nWatchers stopped. Example complete!")
+
+// Clean up (optional)
+print("\nDo you want to clean up the test file and directory? (y/n)")
+let answer = input()
+if (answer.toLowerCase() == "y") {
+    print("Cleaning up...")
+    os.remove(testFile)
+    os.removeDir(testDir)
+    print("Cleanup complete!")
+}
