@@ -1,10 +1,3 @@
-import '@/app/globals.css';
-import { Analytics } from '@vercel/analytics/next';
-import { Inter } from 'next/font/google';
-import { ThemeProvider } from '@/components/theme-provider';
-
-const inter = Inter({ subsets: ['latin'] });
-
 export const metadata = {
     title: 'VintLang Bundler – Compile & Ship VintLang Code as Binaries',
     description:
@@ -33,7 +26,7 @@ export default function BundlerPageLayout({
         <meta name="keywords" content={metadata.keywords} />
         <meta name="author" content={metadata.author} />
       </head>
-      <body className={`${inter.className}  mx-auto`}>
+      <body>
           {children}
       </body>
     </html>
