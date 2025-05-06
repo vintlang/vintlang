@@ -2,104 +2,95 @@
 
 ## Overview
 
-The **VintLang Bundler** compiles `.vint` source code files into standalone Go binaries.
+The **VintLang Bundler** compiles `.vint` source files into standalone Go binaries.
 
-This means you can **write code in VintLang**, bundle it into an executable, and run it anywhere — **without needing the Vint interpreter installed** on the target machine.
-
----
-
-## ✨ Why Use the Bundler?
-
-* ✅ **Distribute VintLang programs as standalone executables**
-* ✅ **No need for the end-user to install Go or VintLang**
-* ✅ Useful for **deployment, automation, and sharing your VintLang tools**
-* ✅ Integrates seamlessly with `vintlang/repl` under the hood
+This allows you to write code in VintLang, bundle it into an executable, and run it on any system—without requiring the VintLang interpreter or Go to be installed on the target machine.
 
 ---
 
-## 📥 Installation Requirements
+## Why Use the Bundler?
 
-To use the bundler, you must have the following installed:
+* Package and distribute VintLang scripts as self-contained executables
+* End-users don’t need to install Go or VintLang
+* Ideal for deploying scripts, shipping CLI tools, and automating workflows
+* Internally powered by the `vintlang/repl` package for code execution
 
-### 1. 🛠️ Go (version 1.18 or later)
+---
 
-Install Go from the official site:
+## Installation Requirements
+
+You need the following tools installed on your system:
+
+### 1. Go (version 1.18+)
+
+Download and install from the official site:
 [https://go.dev/dl/](https://go.dev/dl/)
 
-Once installed, confirm with:
+Verify installation:
 
 ```sh
 go version
 ```
 
-### 2. 🌐 Git & Go Modules Support
+### 2. Git and Go Modules
 
-Make sure Go modules are enabled:
+Ensure Go modules are enabled:
 
 ```sh
 go env -w GO111MODULE=on
 ```
 
-### 3. 🧠 Install VintLang
+### 3. VintLang and the Bundler CLI
 
-Install VintLang globally (if you haven’t already):
+Install VintLang globally (includes the bundler):
 
 ```sh
 go install github.com/vintlang/vintlang@latest
 ```
 
-Or add it to your Go project:
-
-```sh
-go get github.com/vintlang/vintlang
-```
+This makes the `vint` CLI available, including the `bundle` command.
 
 ---
 
-## 🏗️ How the Bundler Works
+## Usage
 
-The bundler does the following under the hood:
+To bundle a `.vint` file into a binary:
 
-1. **Reads** your `.vint` source file.
-2. **Escapes** any backticks in your source to safely embed it in Go code.
-3. **Generates a `main.go`** file that embeds the source and calls `repl.Read(...)`.
-4. **Creates a temporary Go module**, initializes it with `go.mod`, and builds a binary.
-5. **Outputs a self-contained executable** with the same name as your `.vint` file.
+```sh
+vint bundle hello.vint
+```
 
-You get a file like `hello` or `myapp` — which you can run directly:
+This creates a standalone executable named `hello` in the same directory.
+
+To run the binary:
 
 ```sh
 ./hello
 ```
 
-No external dependencies. Just run it.
-
 ---
 
-## 📂 Example
+## Example
 
-Assume you have a VintLang file called `hello.vint`:
+Given a simple `hello.vint` file:
 
 ```vint
 print("Hello, World!")
 ```
 
-Now bundle it:
+Run:
 
-```go
-err := bundler.Bundle("hello.vint")
-if err != nil {
-	fmt.Println("Bundle failed:", err)
-}
+```sh
+vint bundle hello.vint
 ```
 
-You’ll get an executable named `hello`. Run it:
+This generates a binary `hello`. Execute it:
 
 ```sh
 ./hello
 ```
 
-✅ Output:
+Expected output:
 
 ```
 Hello, World!
@@ -107,9 +98,23 @@ Hello, World!
 
 ---
 
-## 🔍 What’s Inside the Generated Code?
+## How It Works
 
-A temporary `main.go` is generated that looks like this:
+The bundler performs the following steps internally:
+
+1. Reads the `.vint` source file
+2. Escapes characters as needed for embedding in Go
+3. Generates a temporary `main.go` that runs the embedded code via `repl.Read(...)`
+4. Initializes a temporary Go module and compiles the binary using `go build`
+5. Outputs a binary named after the original `.vint` file
+
+No external dependencies are required to run the resulting binary.
+
+---
+
+## Output Structure
+
+The generated Go code looks like this:
 
 ```go
 package main
@@ -119,43 +124,46 @@ import (
 )
 
 func main() {
-	code := ` + "`<your original Vint code>`" + `
+	code := ` + "`<your VintLang source code>`" + `
 	repl.Read(code)
 }
 ```
 
-It is compiled using Go’s `go build`, resulting in a binary that includes your Vint source embedded at compile time.
+---
+
+## Use Cases
+
+* Distribute command-line tools built in VintLang
+* Deploy scripts on systems where VintLang is not installed
+* Share portable binaries for automation or education
+* Build lightweight tools using VintLang and Go’s compiler
 
 ---
 
-## 🚀 Use Cases
+## Notes for Developers
 
-* Ship **CLI tools** written in VintLang.
-* Create **portable binaries** for VintLang scripts.
-* Deploy VintLang logic on servers **without installing VintLang there**.
-* Experiment with building **VintLang-based applications** while keeping your Go toolchain.
-
----
-
-## 🧰 Developer Notes
-
-* The bundler uses `text/template` to safely embed Vint code.
-* It uses a loading spinner for nicer CLI feedback.
-* It auto-generates and cleans up temp build folders.
-* The embedded Go module is local and isolated to avoid polluting your workspace.
+* Temporary build directories are automatically created and cleaned
+* Uses `text/template` for safe source code embedding
+* The Go module created during bundling is isolated from your current project
+* Spinner and CLI output are available for build feedback
 
 ---
 
-## ❗ Important
+## Important Details
 
-* The bundled binary **still depends on Go at build time**, but **not at runtime**.
-* You must run `go mod tidy` and `go build` during bundling — make sure your system Go installation is working.
+* Go is required only during **build time**
+* The resulting binary is portable and self-contained
+* Cross-compilation is not supported out-of-the-box; build on the target OS/arch
 
 ---
 
-## 📌 Conclusion
+## Conclusion
 
-The **VintLang Bundler** brings the power of binary distribution to VintLang.
+The **VintLang Bundler** lets you turn `.vint` files into standalone executables using a simple command:
 
-Whether you're building tools, scripts, or micro-apps — bundle them once, run them anywhere.
+```sh
+vint bundle yourfile.vint
+```
+
+Build once. Run anywhere. No dependencies. No interpreter. Just execution.
 
