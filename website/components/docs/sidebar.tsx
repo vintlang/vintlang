@@ -12,34 +12,9 @@ import {
   HelpCircle,
   ArrowDownToLine,
 } from "lucide-react";
+import { navigation } from "@/lib/navigation";
 
-const navigation = [
-  {
-    name: "Introduction",
-    href: "#",
-    icon: Hand,
-  },
-  {
-    name: "Installation",
-    href: "#installation",
-    icon: ArrowDownToLine,
-  },
-  {
-    name: "Documentation",
-    href: "#docs",
-    icon: FileText,
-  },
-  {
-    name: "Tutorial",
-    href: "#tutorial",
-    icon: BookOpen,
-  },
-  {
-    name: "Sponsor",
-    href: "#sponsor",
-    icon: HelpCircle,
-  },
-];
+
 
 export function Sidebar() {
   const pathname = usePathname();
