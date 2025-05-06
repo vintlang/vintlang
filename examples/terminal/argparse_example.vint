@@ -43,7 +43,7 @@ print("\nParsed arguments:")
 print("----------------")
 print("Input file:", args["input"])
 print("Verbose mode:", args["verbose"])
-print("Output file:", args["output"] ? args["output"] : "(not specified)")
+print("Output file:", args["output"])
 print("Count:", args["count"])
 
 // Use the arguments in the program
