@@ -1,0 +1,141 @@
+// editor_example.vint - Example of using the editor module
+// Run with: vint editor_example.vint [filename]
+
+import editor
+import term
+import os
+
+// Function to display help
+let displayHelp = func() {
+    term.clear()
+    term.println("=== VintLang Simple Editor ===", "#ffcc00")
+    term.println("A simple text editor example using the editor module", "#88ff88")
+    term.println("")
+    term.println("Keyboard shortcuts:", "#ffcc00")
+    term.println("  Ctrl+S: Save file", "#88ff88")
+    term.println("  Ctrl+Q: Quit", "#88ff88")
+    term.println("  Ctrl+H: Show this help", "#88ff88")
+    term.println("")
+    term.println("Editor modes:", "#ffcc00")
+    term.println("  Normal mode (default):", "#88ff88")
+    term.println("    h/j/k/l: Move cursor left/down/up/right", "#88ff88")
+    term.println("    i: Enter insert mode", "#88ff88")
+    term.println("    x: Delete character under cursor", "#88ff88")
+    term.println("    dd: Delete current line", "#88ff88")
+    term.println("    o/O: Insert new line below/above", "#88ff88")
+    term.println("    :: Enter command mode", "#88ff88")
+    term.println("")
+    term.println("  Insert mode:", "#88ff88")
+    term.println("    Escape: Return to normal mode", "#88ff88")
+    term.println("    Arrow keys: Move cursor", "#88ff88")
+    term.println("    Any other key: Insert character", "#88ff88")
+    term.println("")
+    term.println("  Command mode:", "#88ff88")
+    term.println("    w: Write (save) file", "#88ff88")
+    term.println("    q: Quit", "#88ff88")
+    term.println("    q!: Force quit", "#88ff88")
+    term.println("    wq: Write and quit", "#88ff88")
+    term.println("")
+    term.println("Press any key to return to the editor", "#ffcc00")
+    term.getKey()
+}
+
+// Get filename from command line arguments or prompt user
+let filename = ""
+if (args.length > 1) {
+    filename = args[1]
+} else {
+    term.clear()
+    term.println("=== VintLang Simple Editor ===", "#ffcc00")
+    term.println("")
+    term.print("Enter filename (or leave blank for new file): ")
+    filename = input()
+}
+
+// Create a new editor
+let ed = editor.newEditor({
+    filename: filename,
+    width: term.getSize().width,
+    height: term.getSize().height - 2,
+    showLineNum: true,
+    syntax: "text"
+})
+
+// If no filename was provided, set some welcome text
+if (filename == "") {
+    editor.setText(ed, "Welcome to VintLang Simple Editor!\n\nThis is a basic text editor example using the editor module.\nYou can type and edit text, save to a file, and more.\n\nPress Ctrl+H for help on keyboard shortcuts and commands.")
+}
+
+// Main editor loop
+let running = true
+let showHelp = true
+
+// Show help on first run
+if (showHelp) {
+    displayHelp()
+    showHelp = false
+}
+
+while (running) {
+    // Render the editor
+    term.clear()
+    
+    // Show header
+    let headerText = "VintLang Simple Editor"
+    if (filename != "") {
+        headerText += " - " + filename
+    }
+    term.println(headerText, "#ffcc00")
+    term.println("Ctrl+S: Save | Ctrl+Q: Quit | Ctrl+H: Help", "#88ff88")
+    
+    // Render editor content
+    let content = editor.render(ed)
+    print(content)
+    
+    // Get keypress
+    let key = term.getKey()
+    
+    // Handle special keys
+    if (key == "Ctrl+Q") {
+        // Check if there are unsaved changes
+        if (editor.isModified(ed)) {
+            term.println("There are unsaved changes. Press Y to quit anyway, or any other key to cancel.", "#ff5555")
+            let confirm = term.getKey()
+            if (confirm.toLowerCase() != "y") {
+                continue
+            }
+        }
+        running = false
+        continue
+    } else if (key == "Ctrl+S") {
+        // Save file
+        if (filename == "") {
+            term.println("Enter filename to save: ", "#ffcc00")
+            filename = input()
+            if (filename == "") {
+                term.println("No filename provided. File not saved.", "#ff5555")
+                term.println("Press any key to continue", "#88ff88")
+                term.getKey()
+                continue
+            }
+        }
+        
+        // Save the file
+        editor.save(ed, filename)
+        term.println("File saved: " + filename, "#88ff88")
+        term.println("Press any key to continue", "#88ff88")
+        term.getKey()
+        continue
+    } else if (key == "Ctrl+H") {
+        // Show help
+        displayHelp()
+        continue
+    }
+    
+    // Pass the key to the editor
+    editor.handleKeypress(ed, key)
+}
+
+// Clean up and exit
+term.clear()
+term.println("Thank you for using VintLang Simple Editor!", "#88ff88")
