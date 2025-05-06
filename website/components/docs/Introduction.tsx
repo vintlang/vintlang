@@ -3,7 +3,7 @@ import SectionHeader from "./SectionHeader";
 export function Introduction() {
   return (
     <div className="space-y-4 mt-10 max-w-prose" id="">
-      <SectionHeader title="Bundler" />
+      <SectionHeader title="Introduction" />
       <p className="text-xs md:text-xl text-muted-foreground">
         VintLang is a lightweight, expressive programming language designed to
         simplify modern development. With its clean syntax and powerful core
