@@ -3,17 +3,17 @@ import { Hand, ArrowDownToLine, FileText, BookOpen, HelpCircle, PackageCheck } f
 export const navigation = [
     {
       name: "Introduction",
-      href: "#",
+      href: "/docs#",
       icon: Hand,
     },
     {
       name: "Installation",
-      href: "#installation",
+      href: "/docs#installation",
       icon: ArrowDownToLine,
     },
     {
       name: "Documentation",
-      href: "#docs",
+      href: "/docs#docs",
       icon: FileText,
     },
     {
@@ -23,7 +23,7 @@ export const navigation = [
     },
     {
       name: "Sponsor",
-      href: "#sponsor",
+      href: "/docs#sponsor",
       icon: HelpCircle,
     },
   ];
