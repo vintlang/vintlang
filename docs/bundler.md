@@ -4,7 +4,11 @@
 
 The **VintLang Bundler** compiles `.vint` source files into standalone Go binaries.
 
-This allows you to write code in VintLang, bundle it into an executable, and run it on any system—without requiring the VintLang interpreter or Go to be installed on the target machine.
+```sh
+vint bundle yourfile.vint
+```
+
+This allows you to write code in VintLang, bundle it into an executable, and run it on any system without requiring the VintLang interpreter or Go to be installed on the target machine.
 
 ---
 
