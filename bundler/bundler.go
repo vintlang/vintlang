@@ -1,6 +1,7 @@
 package bundler
 
 import (
+	"flag"
 	"fmt"
 	"os"
 	"path/filepath"
@@ -13,6 +14,12 @@ import (
 
 //Bundles the vintlang code to a go binary
 func Bundle(vintFile string) error {
+	name := flag.String("name", "", "Name of the output binary")
+	flag.Parse()
+
+	// if *name != "" {
+	// 	fmt.Printf("🔧 Custom binary name set to '%s'\n", *name)
+	// }
 	fmt.Printf("📦 Starting Bundle for '%s'\n", filepath.Base(vintFile))
 
 	fmt.Print("🔍 Reading source file... ")
@@ -72,6 +79,10 @@ require github.com/vintlang/vintlang v0.2.0
 
 	// Bundle binary
 	binaryName := strings.TrimSuffix(filepath.Base(vintFile), ".vint")
+	fmt.Println(*name)
+	if *name != "" {
+		binaryName = *name
+	}
 	fmt.Printf("🔨 Bundling binary '%s'...\n", binaryName)
 
 	spinner := []string{"⣾", "⣽", "⣻", "⢿", "⡿", "⣟", "⣯", "⣷"}
