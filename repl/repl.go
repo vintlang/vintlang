@@ -21,7 +21,7 @@ import (
 
 const PROMPT = ">>> "
 
-//go:embed docs
+// go:embed docs
 var res embed.FS
 
 func Read(contents string) {
