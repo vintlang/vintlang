@@ -81,7 +81,7 @@ func main() {
 				fmt.Println(styles.ErrorStyle.Render("Error: Please specify a Vint file to bundle"))
 				os.Exit(1)
 			}
-			if err := bundler.Bundle(args[2]); err != nil {
+			if err := bundler.Bundle(args[2:]); err != nil {
 				fmt.Println(styles.ErrorStyle.Render(fmt.Sprintf("Build failed: %v", err)))
 				os.Exit(1)
 			}
