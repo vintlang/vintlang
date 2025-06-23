@@ -7,6 +7,13 @@ type Module struct {
 	Functions map[string]ModuleFunction
 }
 
+func NewModule(name string, functions map[string]ModuleFunction) *Module {
+	return &Module{
+		name,
+		functions,
+	}
+}
+
 func (m *Module) Type() ObjectType {
 	switch m.Name {
 	case "time":
