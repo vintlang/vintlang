@@ -3,6 +3,9 @@ import greetings_module
 import time
 
 let x = 42
+// let i = 7
+// print(i.is_odd())  // true
+// print((8).is_odd())  // false
 // let ptr = _&(x)
 // print(ptr) // Output: Pointer(42)
 
