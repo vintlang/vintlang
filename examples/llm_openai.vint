@@ -1,0 +1,25 @@
+// Example: Using the LLM/OpenAI module in VintLang
+
+import llm
+
+// Chat example
+messages = [
+    {"role": "system", "content": "You are a helpful assistant."},
+    {"role": "user", "content": "What is the capital of France?"}
+]
+
+response, err = llm.chat(messages)
+if err != null {
+    print("Chat error: ", err)
+} else {
+    print("Chat response: ", response)
+}
+
+// Completion example
+prompt = "Write a haiku about the ocean."
+completion, err = llm.completion(prompt)
+if err != null {
+    print("Completion error: ", err)
+} else {
+    print("Completion: ", completion)
+} 
