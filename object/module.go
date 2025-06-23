@@ -7,6 +7,7 @@ type Module struct {
 	Functions map[string]ModuleFunction
 }
 
+//Returns a new Module
 func NewModule(name string, functions map[string]ModuleFunction) *Module {
 	return &Module{
 		name,
