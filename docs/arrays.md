@@ -104,14 +104,69 @@ last_el = b.last()
 print(last_el)  // will print tupu
 ```
 
-### map()
+### pop()
 
-map() goes through every element in the array and applies the passed function to each element. It will then return a new array with the updated elements:
+pop() removes and returns the last item in the array. If the array is empty, it returns null:
+
 ```s
 a = [1, 2, 3]
+last = a.pop()
+print(last)  // will print 3
+print(a)     // will print [1, 2]
+```
 
-b = a.map(func(x){return x*2})
+### shift()
 
+shift() removes and returns the first item in the array. If the array is empty, it returns null:
+
+```s
+a = [1, 2, 3]
+first = a.shift()
+print(first)  // will print 1
+print(a)      // will print [2, 3]
+```
+
+### unshift()
+
+unshift() adds one or more items to the beginning of the array:
+
+```s
+a = [3, 4]
+a.unshift(1, 2)
+print(a)  // will print [1, 2, 3, 4]
+```
+
+### reverse()
+
+reverse() reverses the array in place:
+
+```s
+a = [1, 2, 3]
+a.reverse()
+print(a)  // will print [3, 2, 1]
+```
+
+### sort()
+
+sort() sorts the array in place. It only works for arrays of integers or strings:
+
+```s
+a = [3, 1, 2]
+a.sort()
+print(a)  // will print [1, 2, 3]
+
+b = ["banana", "apple", "cherry"]
+b.sort()
+print(b)  // will print ["apple", "banana", "cherry"]
+```
+
+### map()
+
+map() goes through every element in the array and applies the passed function to each element. It returns a new array with the updated elements:
+
+```s
+a = [1, 2, 3]
+b = a.map(func(x){ return x * 2 })
 print(b) // [2, 4, 6]
 ```
 
