@@ -9,6 +9,12 @@ type Error struct {
 	Message string
 }
 
+func NewError(msg string) *Error {
+	return &Error{
+		msg,
+	}
+}
+
 // Inspect returns a formatted string representation of the error.
 func (e *Error) Inspect() string {
 	return fmt.Sprintf("\x1b[1;31mError:\x1b[0m %s", e.Message)
