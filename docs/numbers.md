@@ -74,3 +74,55 @@ Output:
 8
 9 
 ```
+
+## Integer Methods
+
+Integers in vint have several built-in methods:
+
+### abs()
+
+Returns the absolute value of the integer:
+
+```s
+let i = -42
+print(i.abs())  // 42
+```
+
+### is_even()
+
+Returns true if the integer is even, false otherwise:
+
+```s
+let i = 4
+print(i.is_even())  // true
+print((5).is_even())  // false
+```
+
+### is_odd()
+
+Returns true if the integer is odd, false otherwise:
+
+```s
+let i = 7
+print(i.is_odd())  // true
+print((8).is_odd())  // false
+```
+
+### to_string()
+
+Converts the integer to a string:
+
+```s
+let i = 123
+print(i.to_string())  // "123"
+```
+
+### sign()
+
+Returns 1 if the integer is positive, -1 if negative, or 0 if zero:
+
+```s
+print((10).sign())   // 1
+print((-5).sign())   // -1
+print((0).sign())    // 0
+```
