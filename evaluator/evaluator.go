@@ -3,7 +3,6 @@ package evaluator
 import (
 	"fmt"
 	"os"
-	"strings"
 
 	"github.com/vintlang/vintlang/ast"
 	"github.com/vintlang/vintlang/lexer"
