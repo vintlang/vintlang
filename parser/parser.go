@@ -120,6 +120,8 @@ func New(l *lexer.Lexer) *Parser {
 	p.registerPrefix(token.IMPORT, p.parseImport)
 	p.registerPrefix(token.PACKAGE, p.parsePackage)
 	p.registerPrefix(token.TODO, p.parseTodoStatement)
+	p.registerPrefix(token.WARN, p.parseWarnStatement)
+	p.registerPrefix(token.ERROR, p.parseErrorStatement)
 	p.registerPrefix(token.AT, p.parseAt)
 
 	p.infixParseFns = make(map[token.TokenType]infixParseFn)
@@ -327,6 +329,44 @@ func (p *Parser) parseTodoStatement() ast.Expression {
 
 	if !p.peekTokenIs(token.STRING) {
 		p.addError(fmt.Sprintf("Line %d: todo statement must be followed by a string", p.curToken.Line))
+		return nil
+	}
+
+	p.nextToken()
+
+	stmt.Value = p.parseStringLiteral()
+
+	if p.peekTokenIs(token.SEMICOLON) {
+		p.nextToken()
+	}
+
+	return stmt
+}
+
+func (p *Parser) parseWarnStatement() ast.Expression {
+	stmt := &ast.WarnStatement{Token: p.curToken}
+
+	if !p.peekTokenIs(token.STRING) {
+		p.addError(fmt.Sprintf("Line %d: warn statement must be followed by a string", p.curToken.Line))
+		return nil
+	}
+
+	p.nextToken()
+
+	stmt.Value = p.parseStringLiteral()
+
+	if p.peekTokenIs(token.SEMICOLON) {
+		p.nextToken()
+	}
+
+	return stmt
+}
+
+func (p *Parser) parseErrorStatement() ast.Expression {
+	stmt := &ast.ErrorStatement{Token: p.curToken}
+
+	if !p.peekTokenIs(token.STRING) {
+		p.addError(fmt.Sprintf("Line %d: error statement must be followed by a string", p.curToken.Line))
 		return nil
 	}
 

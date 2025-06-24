@@ -11,9 +11,9 @@ type WarnStatement struct {
 	Value Expression
 }
 
-func (ts *WarnStatement) statementNode()       {}
-func (ts *WarnStatement) expressionNode()      {}
-func (ts *WarnStatement) TokenLiteral() string { return ts.Token.Literal }
-func (ts *WarnStatement) String() string {
-	return fmt.Sprintf("WARN %s", ts.Value.String())
+func (ws *WarnStatement) statementNode()       {}
+func (ws *WarnStatement) expressionNode()      {}
+func (ws *WarnStatement) TokenLiteral() string { return ws.Token.Literal }
+func (ws *WarnStatement) String() string {
+	return fmt.Sprintf("warn %s", ws.Value.String())
 }

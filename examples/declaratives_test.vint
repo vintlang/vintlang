@@ -1,0 +1,5 @@
+warn "This is a warning. The script should continue."
+println("This line should execute after the warning.")
+
+error "This is a fatal error. The script should stop here."
+println("This line should NOT execute.") 
