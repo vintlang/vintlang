@@ -1,5 +1,5 @@
-print("POINTERs IN VINTLANG")
-let x = 42
+print("POINTERS IN VINTLANG")
+let x = 42 * 2
 let p = &x
 print(p)
 print("POINTER is",p)
