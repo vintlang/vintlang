@@ -73,7 +73,7 @@ type Parser struct {
 	postfixParseFns map[token.TokenType]postfixParseFn
 }
 
-//adds error
+// adds error
 func (p *Parser) addError(msg string) {
 	p.errors = append(p.errors, msg)
 }
@@ -104,6 +104,7 @@ func New(l *lexer.Lexer) *Parser {
 	p.registerPrefix(token.BANG, p.parsePrefixExpression)
 	p.registerPrefix(token.MINUS, p.parsePrefixExpression)
 	p.registerPrefix(token.PLUS, p.parsePrefixExpression)
+	p.registerPrefix(token.AMPERSAND, p.parsePrefixExpression)
 	p.registerPrefix(token.TRUE, p.parseBoolean)
 	p.registerPrefix(token.FALSE, p.parseBoolean)
 	p.registerPrefix(token.LPAREN, p.parseGroupedExpression)
