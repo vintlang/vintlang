@@ -38,11 +38,14 @@ func evalPrefixExpression(operator string, right object.Object, line int) object
 	case "+":
 		return evalPlusPrefixOperatorExpression(right, line)
 	case "*":
-		// Dereference: expect a Pointer object, return its Ref
+		// derefences a pointer to get the value
 		if p, ok := right.(*object.Pointer); ok {
 			return p.Ref
 		}
 		return newError("Line %d: cannot dereference non-pointer", line)
+	case "&":
+		// Creates a new Pointer object that points to the value
+		return &object.Pointer{Ref: right}
 	default:
 		return newError("Line %d: Unknown operation: %s%s", line, operator, right.Type())
 	}
