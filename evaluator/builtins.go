@@ -247,35 +247,6 @@ var builtins = map[string]*object.Builtin{
 			}
 		},
 	},
-	"_&": {
-		Fn: func(args ...object.Object) object.Object {
-			// Ensure exactly one argument
-			if len(args) != 1 {
-				return newError("_&() requires exactly 1 argument, you provided %d", len(args))
-			}
-
-			// Return a Pointer object pointing to the provided argument
-			return &object.Pointer{Ref: args[0]}
-		},
-	},
-	"_*": {
-		Fn: func(args ...object.Object) object.Object {
-			// Ensure exactly one argument
-			if len(args) != 1 {
-				return newError("*() requires exactly 1 argument, you provided %d", len(args))
-			}
-
-			// Ensure the argument is a Pointer object
-			ptr, ok := args[0].(*object.Pointer)
-			if !ok {
-				return newError("_*() argument must be a pointer")
-			}
-
-			// Dereference and return the value stored at the pointer
-			return ptr.Ref
-		},
-	},
-
 	"string": {
 		// Converts a given object to a string representation
 		Fn: func(args ...object.Object) object.Object {
