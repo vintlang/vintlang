@@ -42,20 +42,12 @@ func evalPropertyAssignment(name *ast.PropertyExpression, val object.Object, env
 	case *object.Instance:
 		obj := left.(*object.Instance)
 		prop := name.Property.(*ast.Identifier).Value
-		if _, ok := obj.Env.Get(prop); ok {
-			obj.Env.Set(prop, val)
-			return NULL
-		}
-		obj.Env.Set(prop, val)
+		obj.Env.SetScoped(prop, val)
 		return NULL
 	case *object.Package:
 		obj := left.(*object.Package)
 		prop := name.Property.(*ast.Identifier).Value
-		if _, ok := obj.Env.Get(prop); ok {
-			obj.Env.Set(prop, val)
-			return NULL
-		}
-		obj.Env.Set(prop, val)
+		obj.Env.SetScoped(prop, val)
 		return NULL
 	default:
 		return newError("Failed to set in package %s", left.Type())
