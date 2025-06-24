@@ -1,8 +1,6 @@
 package evaluator
 
 import (
-	"fmt"
-
 	"github.com/vintlang/vintlang/object"
 )
 
@@ -34,8 +32,6 @@ func evalPlusPrefixOperatorExpression(right object.Object, line int) object.Obje
 }
 
 func evalPrefixExpression(operator string, right object.Object, line int) object.Object {
-	fmt.Printf("DEBUG: operator=%s, right=%T, value=%v\n", operator, right, right)
-
 	switch operator {
 	case "!":
 		return evalBangOperatorExpression(right)
