@@ -79,6 +79,7 @@ const (
 	IMPORT   = "IMPORT"
 	PACKAGE  = "PACKAGE"
 	INCLUDE  = "INCLUDE"
+	TODO     = "TODO"
 )
 
 var keywords = map[string]TokenType{
@@ -102,6 +103,7 @@ var keywords = map[string]TokenType{
 	"import":   IMPORT,
 	"package":  PACKAGE,
 	"include":  INCLUDE,
+	"todo":     TODO,
 	"@":        AT,
 }
 
