@@ -81,7 +81,7 @@ const (
 	INCLUDE  = "INCLUDE"
 	TODO     = "TODO"
 	WARN     = "WARN"
-	ERROR     = "ERROR"
+	ERROR    = "ERROR"
 )
 
 var keywords = map[string]TokenType{
@@ -107,7 +107,7 @@ var keywords = map[string]TokenType{
 	"include":  INCLUDE,
 	"todo":     TODO,
 	"warn":     WARN,
-	"error":     ERROR,
+	"error":    ERROR,
 	"@":        AT,
 }
 
