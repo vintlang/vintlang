@@ -69,12 +69,12 @@ func evalImportFile(name string, ident *ast.Identifier, env *object.Environment)
 		return newError(ErrModuleNotFound, name, formattedPaths)
 	}
 
-	scope, err := evaluateFile(filename, env)
+	importedObject, err := evaluateFile(filename)
 	if err != nil {
 		return newError(ErrImportFailed, name, err.Inspect())
 	}
 
-	return importFile(name, ident, env, scope)
+	return importFile(name, ident, env, importedObject)
 }
 
 // Adds "./modules" to the search path only if it exists, otherwise warns the user
@@ -138,7 +138,7 @@ func fileExists(file string) bool {
 	return !info.IsDir()
 }
 
-func evaluateFile(file string, env *object.Environment) (*object.Environment, object.Object) {
+func evaluateFile(file string) (object.Object, object.Object) {
 	source, err := os.ReadFile(file)
 	if err != nil {
 		return nil, newError(ErrFileReadFailed, file, err.Error())
@@ -161,16 +161,12 @@ func evaluateFile(file string, env *object.Environment) (*object.Environment, ob
 		return nil, newError(ErrRuntimeError, file, result.Inspect())
 	}
 
-	return scope, nil
+	return result, nil
 }
 
-func importFile(name string, ident *ast.Identifier, env *object.Environment, scope *object.Environment) object.Object {
-	value, found := scope.Get(ident.Value)
-	if !found {
-		return newError(ErrIdentifierNotFound, ident.Value, name)
-	}
-	env.Define(name, value)
-	return NULL
+func importFile(name string, ident *ast.Identifier, env *object.Environment, imported object.Object) object.Object {
+	env.Define(name, imported)
+	return imported
 }
 
 // Helper functions for better error formatting
