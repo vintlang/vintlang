@@ -6,6 +6,7 @@ import (
 	"io"
 	"os"
 	"strings"
+	"time"
 
 	"github.com/vintlang/vintlang/object"
 )
@@ -84,7 +85,7 @@ var builtins = map[string]*object.Builtin{
 					arr = append(arr, arg.Inspect())
 				}
 				str := strings.Join(arr, " ")
-				fmt.Println(str) 
+				fmt.Println(str)
 			}
 			return nil
 		},
@@ -120,7 +121,7 @@ var builtins = map[string]*object.Builtin{
 					arr = append(arr, arg.Inspect())
 				}
 				str := strings.Join(arr, " ")
-				fmt.Fprintln(os.Stderr, str) 
+				fmt.Fprintln(os.Stderr, str)
 			}
 			return nil
 		},
@@ -342,6 +343,160 @@ var builtins = map[string]*object.Builtin{
 
 			// Perform the logical NOT operation and return the result as a boolean
 			return &object.Boolean{Value: !boolVal}
+		},
+	},
+	"len": {
+		Fn: func(args ...object.Object) object.Object {
+			if len(args) != 1 {
+				return newError("wrong number of arguments. got=%d, want=1", len(args))
+			}
+			switch arg := args[0].(type) {
+			case *object.String:
+				return &object.Integer{Value: int64(len(arg.Value))}
+			case *object.Array:
+				return &object.Integer{Value: int64(len(arg.Elements))}
+			case *object.Dict:
+				return &object.Integer{Value: int64(len(arg.Pairs))}
+			default:
+				return newError("argument to `len` not supported, got %s", args[0].Type())
+			}
+		},
+	},
+	"append": {
+		Fn: func(args ...object.Object) object.Object {
+			if len(args) < 2 {
+				return newError("wrong number of arguments. got=%d, want>=2", len(args))
+			}
+			if args[0].Type() != object.ARRAY_OBJ {
+				return newError("first argument to `append` must be an array, got %s", args[0].Type())
+			}
+			arr := args[0].(*object.Array)
+			newElements := make([]object.Object, len(arr.Elements), len(arr.Elements)+len(args)-1)
+			copy(newElements, arr.Elements)
+			newElements = append(newElements, args[1:]...)
+			return &object.Array{Elements: newElements}
+		},
+	},
+	"pop": {
+		Fn: func(args ...object.Object) object.Object {
+			if len(args) != 1 {
+				return newError("wrong number of arguments. got=%d, want=1", len(args))
+			}
+			if args[0].Type() != object.ARRAY_OBJ {
+				return newError("argument to `pop` must be an array, got %s", args[0].Type())
+			}
+			arr := args[0].(*object.Array)
+			length := len(arr.Elements)
+			if length == 0 {
+				return newError("cannot pop from an empty array")
+			}
+			popped := arr.Elements[length-1]
+			arr.Elements = arr.Elements[:length-1]
+			return popped
+		},
+	},
+	"keys": {
+		Fn: func(args ...object.Object) object.Object {
+			if len(args) != 1 {
+				return newError("wrong number of arguments. got=%d, want=1", len(args))
+			}
+			if args[0].Type() != object.DICT_OBJ {
+				return newError("argument to `keys` must be a dictionary, got %s", args[0].Type())
+			}
+			dict := args[0].(*object.Dict)
+			keys := make([]object.Object, 0, len(dict.Pairs))
+			for _, pair := range dict.Pairs {
+				keys = append(keys, pair.Key)
+			}
+			return &object.Array{Elements: keys}
+		},
+	},
+	"values": {
+		Fn: func(args ...object.Object) object.Object {
+			if len(args) != 1 {
+				return newError("wrong number of arguments. got=%d, want=1", len(args))
+			}
+			if args[0].Type() != object.DICT_OBJ {
+				return newError("argument to `values` must be a dictionary, got %s", args[0].Type())
+			}
+			dict := args[0].(*object.Dict)
+			values := make([]object.Object, 0, len(dict.Pairs))
+			for _, pair := range dict.Pairs {
+				values = append(values, pair.Value)
+			}
+			return &object.Array{Elements: values}
+		},
+	},
+	"sleep": {
+		Fn: func(args ...object.Object) object.Object {
+			if len(args) != 1 {
+				return newError("wrong number of arguments. got=%d, want=1", len(args))
+			}
+			if args[0].Type() != object.INTEGER_OBJ {
+				return newError("argument to `sleep` must be an integer, got %s", args[0].Type())
+			}
+			ms := args[0].(*object.Integer).Value
+			time.Sleep(time.Duration(ms) * time.Millisecond)
+			return nil
+		},
+	},
+	"exit": {
+		Fn: func(args ...object.Object) object.Object {
+			if len(args) != 1 {
+				return newError("wrong number of arguments. got=%d, want=1", len(args))
+			}
+			if args[0].Type() != object.INTEGER_OBJ {
+				return newError("argument to `exit` must be an integer, got %s", args[0].Type())
+			}
+			code := args[0].(*object.Integer).Value
+			os.Exit(int(code))
+			return nil
+		},
+	},
+	"chr": {
+		Fn: func(args ...object.Object) object.Object {
+			if len(args) != 1 {
+				return newError("wrong number of arguments. got=%d, want=1", len(args))
+			}
+			if args[0].Type() != object.INTEGER_OBJ {
+				return newError("argument to `chr` must be an integer, got %s", args[0].Type())
+			}
+			code := args[0].(*object.Integer).Value
+			return &object.String{Value: string(rune(code))}
+		},
+	},
+	"ord": {
+		Fn: func(args ...object.Object) object.Object {
+			if len(args) != 1 {
+				return newError("wrong number of arguments. got=%d, want=1", len(args))
+			}
+			if args[0].Type() != object.STRING_OBJ {
+				return newError("argument to `ord` must be a string, got %s", args[0].Type())
+			}
+			s := args[0].(*object.String).Value
+			if len(s) != 1 {
+				return newError("argument to `ord` must be a single character string")
+			}
+			return &object.Integer{Value: int64(s[0])}
+		},
+	},
+	"has_key": {
+		Fn: func(args ...object.Object) object.Object {
+			if len(args) != 2 {
+				return newError("wrong number of arguments. got=%d, want=2", len(args))
+			}
+			if args[0].Type() != object.DICT_OBJ {
+				return newError("first argument to `has_key` must be a dictionary, got %s", args[0].Type())
+			}
+			dict := args[0].(*object.Dict)
+			key, ok := args[1].(object.Hashable)
+			if !ok {
+				return newError("second argument to `has_key` must be hashable, got %s", args[1].Type())
+			}
+			if _, ok := dict.Pairs[key.HashKey()]; ok {
+				return TRUE
+			}
+			return FALSE
 		},
 	},
 }

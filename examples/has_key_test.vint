@@ -1,0 +1,13 @@
+// examples/has_key_test.vint
+
+let myDict = {"name": "Alex", "age": 30};
+
+// Test global has_key() function
+println("Testing global has_key():");
+println("has 'name'?", has_key(myDict, "name"));   // Expected: true
+println("has 'city'?", has_key(myDict, "city"));   // Expected: false
+
+// Test has_key() as a dictionary method
+println("\nTesting dict.has_key():");
+println("has 'age'?", myDict.has_key("age"));    // Expected: true
+println("has 'country'?", myDict.has_key("country")); // Expected: false 
