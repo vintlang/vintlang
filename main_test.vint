@@ -1,3 +1,0 @@
-import test_pkg
-
-test_pkg.printMessage() 
