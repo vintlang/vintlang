@@ -46,14 +46,14 @@ func applyMethod(obj object.Object, method ast.Expression, args []object.Object,
 		}
 	case *object.Instance:
 		if fn, ok := obj.Package.Scope.Get(method.(*ast.Identifier).Value); ok {
-			fn.(*object.Function).Env.Set("@", obj)
+			fn.(*object.Function).Env.Define("@", obj)
 			ret := applyFunction(fn, args, l)
 			fn.(*object.Function).Env.Del("@")
 			return ret
 		}
 	case *object.Package:
 		if fn, ok := obj.Scope.Get(method.(*ast.Identifier).Value); ok {
-			fn.(*object.Function).Env.Set("@", obj)
+			fn.(*object.Function).Env.Define("@", obj)
 			ret := applyFunction(fn, args, l)
 			fn.(*object.Function).Env.Del("@")
 			return ret
@@ -74,10 +74,10 @@ func maap(a *object.Array, args []object.Object) object.Object {
 	if !ok {
 		return newError("Sorry, the argument is not valid")
 	}
-	env := object.NewEnvironment()
 	newArr := object.Array{Elements: []object.Object{}}
 	for _, obj := range a.Elements {
-		env.Set(fn.Parameters[0].Value, obj)
+		env := object.NewEnvironment()
+		env.Define(fn.Parameters[0].Value, obj)
 		r := Eval(fn.Body, env)
 		if o, ok := r.(*object.ReturnValue); ok {
 			r = o.Value
@@ -96,10 +96,10 @@ func filter(a *object.Array, args []object.Object) object.Object {
 	if !ok {
 		return newError("Sorry, the argument is not valid")
 	}
-	env := object.NewEnvironment()
 	newArr := object.Array{Elements: []object.Object{}}
 	for _, obj := range a.Elements {
-		env.Set(fn.Parameters[0].Value, obj)
+		env := object.NewEnvironment()
+		env.Define(fn.Parameters[0].Value, obj)
 		cond := Eval(fn.Body, env)
 		if cond.Inspect() == "true" {
 			newArr.Elements = append(newArr.Elements, obj)
