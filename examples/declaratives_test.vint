@@ -2,4 +2,6 @@ warn "This is a warning. The script should continue."
 println("This line should execute after the warning.")
 let errMSG = "This is a fatal error. The script should stop here."
 error errMSG
+
+//unreachable code
 println("This line should NOT execute.") 
