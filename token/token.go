@@ -78,6 +78,7 @@ const (
 	DEFAULT  = "DEFAULT"
 	IMPORT   = "IMPORT"
 	PACKAGE  = "PACKAGE"
+	INCLUDE  = "INCLUDE"
 )
 
 var keywords = map[string]TokenType{
@@ -100,6 +101,7 @@ var keywords = map[string]TokenType{
 	"default":  DEFAULT,
 	"import":   IMPORT,
 	"package":  PACKAGE,
+	"include":  INCLUDE,
 	"@":        AT,
 }
 
