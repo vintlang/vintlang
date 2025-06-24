@@ -2,9 +2,12 @@ package evaluator
 
 import (
 	"fmt"
+	"os"
 
 	"github.com/vintlang/vintlang/ast"
+	"github.com/vintlang/vintlang/lexer"
 	"github.com/vintlang/vintlang/object"
+	"github.com/vintlang/vintlang/parser"
 )
 
 var (
@@ -209,6 +212,8 @@ func Eval(node ast.Node, env *object.Environment) object.Object {
 		} else {
 			return newError("Use an identifier instead of %T", node.Left)
 		}
+	case *ast.IncludeStatement:
+		return evalIncludeStatement(node, env)
 
 	}
 
@@ -423,4 +428,31 @@ func loopIterable(
 		k, v = next()
 	}
 	return NULL
+}
+
+func evalIncludeStatement(node *ast.IncludeStatement, env *object.Environment) object.Object {
+	pathObj := Eval(node.Path, env)
+	if isError(pathObj) {
+		return pathObj
+	}
+	path, ok := pathObj.(*object.String)
+	if !ok {
+		return newError("include path must be a string, got %s", pathObj.Type())
+	}
+
+	// Read file content
+	content, err := os.ReadFile(path.Value)
+	if err != nil {
+		return newError("could not include file '%s': %s", path.Value, err)
+	}
+
+	// Create a new lexer, parser and evaluate the program
+	l := lexer.New(string(content))
+	p := parser.New(l)
+	program := p.ParseProgram()
+	if len(p.Errors()) != 0 {
+		return newError("errors parsing included file '%s': %s", path.Value, p.Errors()[0])
+	}
+
+	return Eval(program, env)
 }
