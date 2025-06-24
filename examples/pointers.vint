@@ -1,0 +1,9 @@
+print("POINTERS IN VINTLANG")
+let x = 42 * 2
+let p = &x
+print(p)
+print("POINTER is",p)
+print("VALUE is",*p)
+
+//Will Output something like
+// POINTER is Pointer(addr=0x14000010560, value=42)

@@ -303,7 +303,6 @@ func applyFunction(fn object.Object, args []object.Object, line int) object.Obje
 	}
 }
 
-
 func extendedFunctionEnv(fn *object.Function, args []object.Object) *object.Environment {
 	env := object.NewEnclosedEnvironment(fn.Env)
 
