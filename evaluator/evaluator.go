@@ -289,13 +289,10 @@ func applyFunction(fn object.Object, args []object.Object, line int) object.Obje
 		evaluated := Eval(fn.Body, extendedEnv)
 		return unwrapReturnValue(evaluated)
 	case *object.Builtin:
-		return fn.Fn(line, args...)
-	case *object.NativeMethod:
-		obj := fn.Instance
-		if fn.Method != nil {
-			return fn.Method(obj, fn.Env, line, args...)
+		if result := fn.Fn(args...); result != nil {
+			return result
 		}
-		return newError("method is nil")
+		return NULL
 	case *object.Package:
 		obj := &object.Instance{
 			Package: fn,
@@ -315,12 +312,16 @@ func applyFunction(fn object.Object, args []object.Object, line int) object.Obje
 	}
 }
 
-func extendedFunctionEnv(fn *object.Function, args []object.Object) *object.Environment {
+func extendedFunctionEnv(
+	fn *object.Function,
+	args []object.Object,
+) *object.Environment {
 	env := object.NewEnclosedEnvironment(fn.Env)
-
-	for paramIdx, param := range fn.Parameters {
-		if paramIdx < len(args) {
-			env.Define(param.Value, args[paramIdx])
+	for i, param := range fn.Parameters {
+		if i < len(args) {
+			env.Define(param.Value, args[i])
+		} else if _, ok := fn.Defaults[param.Value]; ok {
+			env.Define(param.Value, Eval(fn.Defaults[param.Value], env))
 		}
 	}
 	return env
@@ -393,25 +394,30 @@ func evalContinue(node *ast.Continue) object.Object {
 // 	return NULL
 // }
 
-func loopIterable(next func() (object.Object, object.Object), env *object.Environment, fi *ast.ForIn) object.Object {
+func loopIterable(
+	next func() (object.Object, object.Object),
+	env *object.Environment,
+	fi *ast.ForIn,
+) object.Object {
+	var ret object.Object
 	k, v := next()
-	for k != nil && v != nil {
-		env.Define(fi.Key, k)
-		env.Define(fi.Value, v)
-		res := Eval(fi.Block, env)
-		if isError(res) {
-			return res
+	for k != nil {
+		loopEnv := object.NewEnclosedEnvironment(env)
+		loopEnv.Define(fi.Key, k)
+		if fi.Value != "" {
+			loopEnv.Define(fi.Value, v)
 		}
-		if res != nil {
-			if res.Type() == object.BREAK_OBJ {
+		ret = Eval(fi.Block, loopEnv)
+		if ret != nil {
+			if ret.Type() == object.BREAK_OBJ {
 				return NULL
 			}
-			if res.Type() == object.CONTINUE_OBJ {
+			if ret.Type() == object.CONTINUE_OBJ {
 				k, v = next()
 				continue
 			}
-			if res.Type() == object.RETURN_VALUE_OBJ {
-				return res
+			if ret.Type() == object.RETURN_VALUE_OBJ {
+				return ret
 			}
 		}
 		k, v = next()
