@@ -20,7 +20,7 @@ func evalPropertyExpression(node *ast.PropertyExpression, env *object.Environmen
 	case *object.Package:
 		obj := left.(*object.Package)
 		prop := node.Property.(*ast.Identifier).Value
-		if val, ok := obj.Env.Get(prop); ok {
+		if val, ok := obj.Scope.Get(prop); ok {
 			return val
 		}
 		// case *object.Module:
@@ -47,7 +47,7 @@ func evalPropertyAssignment(name *ast.PropertyExpression, val object.Object, env
 	case *object.Package:
 		obj := left.(*object.Package)
 		prop := name.Property.(*ast.Identifier).Value
-		obj.Env.SetScoped(prop, val)
+		obj.Scope.SetScoped(prop, val)
 		return NULL
 	default:
 		return newError("Failed to set in package %s", left.Type())

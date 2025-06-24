@@ -1,0 +1,27 @@
+package greeter {
+    let message = "Hello"
+    let initializedAt = ""
+
+    // This init function will be called automatically when the package is imported.
+    let init = func() {
+        // Use the '@' operator to modify the package's internal state.
+        @.initializedAt = time.now()
+        print("Greeter package initialized successfully!")
+    }
+
+    // A simple function that uses the package's state.
+    let sayHello = func(name) {
+        print(@.message + ", " + name + "!")
+    }
+
+    // A function to change the package's internal state.
+    let setGreeting = func(newMessage) {
+        @.message = newMessage
+        print("Greeting has been updated.")
+    }
+
+    // A function that shows when the package was initialized.
+    let showInitTime = func() {
+        print("This package was initialized at: " + @.initializedAt)
+    }
+} 
