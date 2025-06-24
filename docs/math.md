@@ -1,247 +1,169 @@
-# Module math
-
+# Math Module
 
 ## Usage
 
-To use the `math` in-built module follow the steps below:
+To use the `math` module, import it into your Vint script:
 
-1. You directly import the `math` in-built module and any required in-built modules in your vint code using the `import` keyword.
+```vint
+import math
+```
 
-   ```js
-   import math
-   ```
+You can then call functions and access constants from the module:
 
-2. Calling the in-built module methods:
+```vint
+println(math.PI())
+println(math.sqrt(16))
+```
 
-   ```js
-   print(math.e())
-   ```
+## Contents
 
-## Yaliyomo
+This module provides a wide range of mathematical functions and constants, including:
 
-This in-built module covers a wide range of mathematical operations, including :
+- Basic Mathematical Functions
+- Hyperbolic & Trigonometric Functions
+- Exponential & Logarithmic Functions
+- Rounding & Comparison Functions
 
-- `Basic Mathematical Functions:`
-- `Hyperbolic` & `Trigonometric Functions`
-- `Exponential` & `Logarithmic Functions`
-- `Rounding` & `Comparison Functions`
+Here is a complete list of the available functions and constants:
 
-Here is an in-depth classification of the methods:
+### Constants
 
-1. Trigonometric Functions:
+- **PI**: Represents the mathematical constant `π` (3.14159...).
+- **e**: Represents Euler's Number (2.71828...).
+- **phi**: Represents the Golden Ratio (1.61803...).
+- **ln10**: Represents the natural logarithm of 10.
+- **ln2**: Represents the natural logarithm of 2.
+- **log10e**: Represents the base-10 logarithm of `e`.
+- **log2e**: Represents the base-2 logarithm of `e`.
+- **sqrt1_2**: Represents the square root of 1/2.
+- **sqrt2**: Represents the square root of 2.
+- **sqrt3**: Represents the square root of 3.
+- **sqrt5**: Represents the square root of 5.
+- **EPSILON**: Represents a very small number, often used for float comparisons.
 
-   - `cos(n)`
-   - `sin(n)`
-   - `tan(n)`
-   - `acos(n)`
-   - `asin(n)`
-   - `atan(n)`
-   - `hypot(numbers)`
+### Functions
 
-2. Hyperbolic Functions:
+#### `abs(n)`
+- **Description**: Calculates the absolute value of a number.
+- **Example**: `math.abs(-42)` returns `42`.
 
-   - `cosh(n)`
-   - `sinh(n)`
-   - `tanh(n)`
-   - `acosh(n)`
-   - `asinh(n)`
-   - `atanh(n)`
+#### `acos(n)`
+- **Description**: Calculates the arccosine (inverse cosine) of a number in radians.
+- **Example**: `math.acos(0.5)` returns `1.047...`.
 
-3. Exponential and Logarithmic Functions:
+#### `acosh(n)`
+- **Description**: Calculates the inverse hyperbolic cosine of a number.
+- **Example**: `math.acosh(2.0)` returns `1.316...`.
 
-   - `exp(n)`
-   - `expm1(n)`
-   - `log(n)`
-   - `log2(n)`
-   - `log10(n)`
-   - `log1p(n)`
+#### `asin(n)`
+- **Description**: Calculates the arcsine (inverse sine) of a number in radians.
+- **Example**: `math.asin(0.5)` returns `0.523...`.
 
-4. Basic Mathematical Functions:
+#### `asinh(n)`
+- **Description**: Calculates the inverse hyperbolic sine of a number.
+- **Example**: `math.asinh(2.0)` returns `1.443...`.
 
-   - `abs(n)`
-   - `sqrt(n)`
-   - `cbrt(n)`
-   - `root(x, n)`
-   - `factorial(n)`
-   - `sign(n)`
+#### `atan(n)`
+- **Description**: Calculates the arctangent (inverse tangent) of a number in radians.
+- **Example**: `math.atan(1.0)` returns `0.785...`.
 
-5. Rounding and Comparison Functions:
+#### `atan2(y, x)`
+- **Description**: Calculates the arctangent of the quotient of its arguments (`y/x`) in radians.
+- **Example**: `math.atan2(1.0, 1.0)` returns `0.785...`.
 
-   - `ceil(n)`
-   - `floor(n)`
-   - `round(n)`
-   - `max(numbers)`
-   - `min(numbers)`
+#### `atanh(n)`
+- **Description**: Calculates the inverse hyperbolic tangent of a number.
+- **Example**: `math.atanh(0.5)` returns `0.549...`.
 
-### 1. Constants:
+#### `cbrt(n)`
+- **Description**: Calculates the cube root of a number.
+- **Example**: `math.cbrt(8)` returns `2.0`.
 
-- **PI**: Represents the mathematical constant `π`.
-- **e**: Represents `Euler's Number`.
-- **phi**: Represents the `Golden Ratio`.
-- **ln10**: Represents the `natural logarithm of 10`.
-- **ln2**: Represents the `natural logarithm of 2`.
-- **log10e**: Represents the `base 10 logarithms` of Euler's number `(e)`.
-- **log2e**: Represents the `base 2 logarithm` of Euler's number` (e)`.
-- **sqrt1_2**: Represents the `square root` of `1/2`.
-- **sqrt2**: Represents the `square root` of `2`.
-- **sqrt3**: Represents the `square root` of `3`.
-- **sqrt5**: Represents the `square root` of `5`.
-- **EPSILON**: Represents a small value `2.220446049250313e-16`.
+#### `ceil(n)`
+- **Description**: Rounds a number up to the nearest integer.
+- **Example**: `math.ceil(4.3)` returns `5`.
 
-### 2. Methods:
+#### `cos(n)`
+- **Description**: Calculates the cosine of an angle (in radians).
+- **Example**: `math.cos(0.0)` returns `1.0`.
 
-1. **abs(namba)**
+#### `cosh(n)`
+- **Description**: Calculates the hyperbolic cosine of a number.
+- **Example**: `math.cosh(0.0)` returns `1.0`.
 
-   - Description: Calculates the absolute value of a number.
-   - Example: `math.abs(-42)` returns `42`.
+#### `exp(n)`
+- **Description**: Calculates `e` raised to the power of `n`.
+- **Example**: `math.exp(2.0)` returns `7.389...`.
 
-2. **acos(n)**
+#### `expm1(n)`
+- **Description**: Calculates `e` raised to the power of a number, minus 1.
+- **Example**: `math.expm1(1.0)` returns `1.718...`.
 
-   - Description: Calculates the arccosine of a number.
-   - Example: `math.acos(0.5)` returns `1.0471975511965979`.
+#### `factorial(n)`
+- **Description**: Calculates the factorial of a non-negative integer.
+- **Example**: `math.factorial(5)` returns `120`.
 
-3. **acosh(n)**
+#### `floor(n)`
+- **Description**: Rounds a number down to the nearest integer.
+- **Example**: `math.floor(4.7)` returns `4`.
 
-   - Description: Calculates the inverse hyperbolic cosine of a number.
-   - Example: `math.acosh(2.0)` returns `1.3169578969248166`.
+#### `hypot(numbers)`
+- **Description**: Calculates the square root of the sum of the squares of the numbers in an array.
+- **Example**: `math.hypot([3, 4])` returns `5.0`.
 
-4. **asin(n)**
+#### `log10(n)`
+- **Description**: Calculates the base-10 logarithm of a number.
+- **Example**: `math.log10(100.0)` returns `2.0`.
 
-   - Description: Calculates the arcsine of a number using the Taylor series.
-   - Example: `math.arcsin(0.5)` returns `0.5235987755982988`.
+#### `log1p(n)`
+- **Description**: Calculates the natural logarithm of 1 plus the given number.
+- **Example**: `math.log1p(1.0)` returns `0.693...`.
 
-5. **asinh(n)**
+#### `log2(n)`
+- **Description**: Calculates the base-2 logarithm of a number.
+- **Example**: `math.log2(8)` returns `3.0`.
 
-   - Description: Calculates the inverse hyperbolic sine of a number.
-   - Example: `math.arsinh(2.0)` returns `1.4436354751788103`.
+#### `max(numbers)`
+- **Description**: Finds the maximum value in an array of numbers.
+- **Example**: `math.max([4, 2, 9, 5])` returns `9.0`.
 
-6. **atan(n)**
+#### `min(numbers)`
+- **Description**: Finds the minimum value in an array of numbers.
+- **Example**: `math.min([4, 2, 9, 5])` returns `2.0`.
 
-   - Description: Calculates the arctangent of a number using the Taylor series.
-   - Example: `math.atan(1.0)` returns `0.7853981633974483`.
+#### `random()`
+- **Description**: Returns a random floating-point number between 0.0 and 1.0.
+- **Example**: `math.random()` returns a value like `0.12345...`.
 
-7. **atan2(y, x)**
+#### `round(n)`
+- **Description**: Rounds a floating-point number to the nearest integer.
+- **Example**: `math.round(4.6)` returns `5`.
 
-   - Description: Calculates the arctangent of the quotient of its arguments.
-   - Example: `math.atan2(1.0, 1.0)` returns `0.7853981633974483`.
+#### `root(x, n)`
+- **Description**: Calculates the nth root of a number `x`.
+- **Example**: `math.root(27, 3)` returns `3.0`.
 
-8. **atanh(n)**
+#### `sign(n)`
+- **Description**: Returns the sign of a number (`-1` for negative, `0` for zero, `1` for positive).
+- **Example**: `math.sign(-5)` returns `-1`.
 
-   - Description: Calculates the inverse hyperbolic tangent of a number.
-   - Example: `math.atanh(0.5)` returns `0.5493061443340549`.
+#### `sin(n)`
+- **Description**: Calculates the sine of an angle (in radians).
+- **Example**: `math.sin(1.0)` returns `0.841...`.
 
-9. **cbrt(n)**
+#### `sinh(n)`
+- **Description**: Calculates the hyperbolic sine of a number.
+- **Example**: `math.sinh(1.0)` returns `1.175...`.
 
-   - Description: Calculates the cube root of a number.
-   - Example: `math.cbrt(8)` returns `2`.
+#### `sqrt(n)`
+- **Description**: Calculates the square root of a number.
+- **Example**: `math.sqrt(4)` returns `2.0`.
 
-10. **root(x, n)**
+#### `tan(n)`
+- **Description**: Calculates the tangent of an angle (in radians).
+- **Example**: `math.tan(1.0)` returns `1.557...`.
 
-    - Description: Calculates the nth root of a number using the Newton-Raphson method.
-    - Example: `math.root(27, 3)` returns `3`.
-
-11. **ceil(n)**
-
-    - Description: Rounds up to the smallest integer greater than or equal to a given number.
-    - Example: `math.ceil(4.3)` returns `5`.
-
-12. **cos(n)**
-
-    - Description: Calculates the cosine of an angle in radians using the Taylor series.
-    - Example: `math.cos(0.0)` returns `1`.
-
-13. **cosh(n)**
-
-    - Description: Calculates the hyperbolic cosine of a number.
-    - Example: `math.cosh(0.0)` returns `1`.
-
-14. **exp(n)**
-
-    - Description: Calculates the value of Euler's number raised to the power of a given number.
-    - Example: `math.exp(2.0)` returns `7.38905609893065`.
-
-15. **expm1(n)**
-
-    - Description: Calculates Euler's number raised to the power of a number minus 1.
-    - Example: `math.expm1(1.0)` returns `1.718281828459045`.
-
-16. **floor(n)**
-
-    - Description: Rounds down to the largest integer less than or equal to a given number.
-    - Example: `math.floor(4.7)` returns `4`.
-
-17. **hypot(values)**
-
-    - Description: Calculates the square root of the sum of squares of the given values.
-    - Example: `math.hypot([3, 4])` returns `5`.
-
-18. **log(n)**
-
-    - Description: Calculates the natural logarithm of a number.
-    - Example: `math.log(1.0)` returns `0`.
-
-19. **log10(n)**
-
-    - Description: Calculates the base 10 logarithm of a number.
-    - Example: `math.log10(100.0)` returns `2`.
-
-20. **log1p(n)**
-
-    - Description: Calculates the natural logarithm of 1 plus the given number.
-    - Example: `math.log1p(1.0)` returns `0.6931471805599453`.
-
-21. **log2(n)**
-
-    - Description: Calculates the base 2 logarithm of a number.
-    - Example: `math.log2(8)` returns `3`.
-
-22. **max(numbers)**
-
-    - Description: Finds the maximum value in a list of numbers.
-    - Example: `math.max([4, 2, 9, 5])` returns `9`.
-
-23. **min(numbers)**
-
-    - Description: Finds the minimum value in a list of numbers.
-    - Example: `math.min([4, 2, 9, 5])` returns `2`.
-
-24. **round(x, method)**
-
-    - Description: Rounds a number to the nearest integer using the specified method.
-    - Example: `math.round(4.6)` returns `5`.
-
-25. **sign(n)**
-
-    - Description: Determines the sign of a number.
-    - Example: `math.sign(-5)` returns `-1`.
-
-26. **sin(n)**
-
-    - Description: Calculates the sine of an angle in radians using the Taylor series.
-    - Example: `math.sin(1.0)` returns `0.8414709848078965`.
-
-27. **sinh(n)**
-
-    - Description: Calculates the hyperbolic sine of a number.
-    - Example: `math.sinh(1.0)` returns `1.1752011936438014`.
-
-28. **sqrt(n)**
-
-    - Description: Calculates the square root of a number.
-    - Example: `math.sqrt(4)` returns `2`.
-
-29. **tan(n)**
-
-    - Description: Calculates the tangent of an angle in radians.
-    - Example: `math.tan(1.0)` returns `1.557407724654902`.
-
-30. **tanh(n)**
-
-    - Description: Calculates the hyperbolic tangent of a number.
-    - Example: `math.tanh(1.0)` returns `0.7615941559557649`.
-
-31. **factorial(n)**
-
-    - Description: Calculates the factorial of a number.
-    - Example: `math.factorial(5)` returns `120`.
+#### `tanh(n)`
+- **Description**: Calculates the hyperbolic tangent of a number.
+- **Example**: `math.tanh(1.0)` returns `0.761...`.
 
