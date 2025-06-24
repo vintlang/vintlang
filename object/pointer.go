@@ -13,5 +13,3 @@ func (p *Pointer) Type() ObjectType {
 func (p *Pointer) Inspect() string {
 	return fmt.Sprintf("Pointer(%s)", p.Ref.Inspect())
 }
-
-const POINTER_OBJ = "POINTER"
