@@ -58,6 +58,14 @@ func (e *Environment) Assign(name string, val Object) (Object, bool) {
 	return nil, false
 }
 
+func (e *Environment) SetScoped(name string, val Object) Object {
+	if e.constants[name] {
+		return NewError("Cannot assign to constant '" + name + "'")
+	}
+	e.store[name] = val
+	return val
+}
+
 func (e *Environment) Del(name string) bool {
 	_, ok := e.store[name]
 	if ok {

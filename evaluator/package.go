@@ -13,6 +13,6 @@ func evalPackage(node *ast.Package, env *object.Environment) object.Object {
 	}
 
 	Eval(node.Block, Package.Scope)
-	env.Set(node.Name.Value, Package)
+	env.Define(node.Name.Value, Package)
 	return Package
 }

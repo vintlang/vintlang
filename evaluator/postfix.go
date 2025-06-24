@@ -10,15 +10,24 @@ func evalPostfixExpression(env *object.Environment, operator string, node *ast.P
 	if !ok {
 		return newError("Use a NUMBER or DECIMAL IDENTIFIER, not %s", node.Token.Type)
 	}
+
+	assign := func(val object.Object) object.Object {
+		newVal, ok := env.Assign(node.Token.Literal, val)
+		if !ok {
+			return newError("assignment to undeclared variable '%s'", node.Token.Literal)
+		}
+		return newVal
+	}
+
 	switch operator {
 	case "++":
 		switch arg := val.(type) {
 		case *object.Integer:
 			v := arg.Value + 1
-			return env.Set(node.Token.Literal, &object.Integer{Value: v})
+			return assign(&object.Integer{Value: v})
 		case *object.Float:
 			v := arg.Value + 1
-			return env.Set(node.Token.Literal, &object.Float{Value: v})
+			return assign(&object.Float{Value: v})
 		default:
 			return newError("Line %d: %s is not a numeric identifier. Use '++' with a number or decimal identifier.\nExample:\tlet i = 2; i++", node.Token.Line, node.Token.Literal)
 		}
@@ -26,10 +35,10 @@ func evalPostfixExpression(env *object.Environment, operator string, node *ast.P
 		switch arg := val.(type) {
 		case *object.Integer:
 			v := arg.Value - 1
-			return env.Set(node.Token.Literal, &object.Integer{Value: v})
+			return assign(&object.Integer{Value: v})
 		case *object.Float:
 			v := arg.Value - 1
-			return env.Set(node.Token.Literal, &object.Float{Value: v})
+			return assign(&object.Float{Value: v})
 		default:
 			return newError("Line %d: %s is not a numeric identifier. Use '--' with a number or decimal identifier.\nExample:\tlet i = 2; i--", node.Token.Line, node.Token.Literal)
 		}
