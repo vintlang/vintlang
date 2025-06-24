@@ -16,7 +16,6 @@ var (
 )
 
 func Eval(node ast.Node, env *object.Environment) object.Object {
-	fmt.Printf("EVAL DEBUG: node type=%T, node=%#v\n", node, node)
 	switch node := node.(type) {
 	case *ast.Program:
 		return evalProgram(node, env)
