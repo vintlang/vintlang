@@ -119,6 +119,7 @@ func New(l *lexer.Lexer) *Parser {
 	p.registerPrefix(token.SWITCH, p.parseSwitchStatement)
 	p.registerPrefix(token.IMPORT, p.parseImport)
 	p.registerPrefix(token.PACKAGE, p.parsePackage)
+	p.registerPrefix(token.TODO, p.parseTodoStatement)
 	p.registerPrefix(token.AT, p.parseAt)
 
 	p.infixParseFns = make(map[token.TokenType]infixParseFn)
@@ -319,4 +320,23 @@ func (p *Parser) parsePostfixExpression() ast.Expression {
 		Operator: p.curToken.Literal,
 	}
 	return expression
+}
+
+func (p *Parser) parseTodoStatement() ast.Expression {
+	stmt := &ast.TodoStatement{Token: p.curToken}
+
+	if !p.peekTokenIs(token.STRING) {
+		p.addError(fmt.Sprintf("Line %d: todo statement must be followed by a string", p.curToken.Line))
+		return nil
+	}
+
+	p.nextToken()
+
+	stmt.Value = p.parseStringLiteral()
+
+	if p.peekTokenIs(token.SEMICOLON) {
+		p.nextToken()
+	}
+
+	return stmt
 }

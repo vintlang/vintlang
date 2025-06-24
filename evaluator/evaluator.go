@@ -73,6 +73,9 @@ func Eval(node ast.Node, env *object.Environment) object.Object {
 		if isError(val) {
 			return val
 		}
+		if f, ok := val.(*object.Function); ok {
+			f.Name = node.Name.Value
+		}
 		return env.Define(node.Name.Value, val)
 
 	case *ast.ConstStatement:
@@ -215,6 +218,13 @@ func Eval(node ast.Node, env *object.Environment) object.Object {
 	case *ast.IncludeStatement:
 		return evalIncludeStatement(node, env)
 
+	case *ast.TodoStatement:
+		val := Eval(node.Value, env)
+		if isError(val) {
+			return val
+		}
+		fmt.Printf("\u001b[33mTODO\u001b[0m: %s\n", val.Inspect())
+		return NULL
 	}
 
 	return nil
