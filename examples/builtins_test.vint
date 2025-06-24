@@ -1,0 +1,46 @@
+// examples/builtins_test.vint
+
+// Test len()
+let myArray = [1, 2, 3, 4];
+println("Length of array [1, 2, 3, 4] is:", len(myArray)); // Expected: 4
+
+let myString = "hello";
+println("Length of string 'hello' is:", len(myString)); // Expected: 5
+
+let myDict = {"a": 1, "b": 2};
+println("Length of dict {'a': 1, 'b': 2} is:", len(myDict)); // Expected: 2
+
+// Test append() and pop()
+let arr = [1, 2];
+arr = append(arr, 3, 4);
+println("After append: ", arr); // Expected: [1, 2, 3, 4]
+
+let popped = pop(arr);
+println("Popped element:", popped); // Expected: 4
+println("Array after pop:", arr);   // Expected: [1, 2, 3]
+
+// Test keys() and values()
+let dict = {"name": "Alex", "age": 30};
+let keys_arr = keys(dict);
+println("Keys of dict:", keys_arr); // Expected: ["name", "age"] (order may vary)
+
+let values_arr = values(dict);
+println("Values of dict:", values_arr); // Expected: ["Alex", 30] (order may vary)
+
+// Test chr() and ord()
+let char_A = chr(65);
+println("chr(65) is:", char_A); // Expected: "A"
+
+let code_A = ord("A");
+println("ord('A') is:", code_A); // Expected: 65
+
+// Test sleep()
+println("Waiting for 1 second...");
+sleep(1000);
+println("Done waiting.");
+
+println("All built-in function tests passed!");
+
+// The exit() function is not called here because it would stop the script.
+// To test it, you would run a line like:
+// exit(0); 
