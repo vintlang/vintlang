@@ -22,6 +22,7 @@ func init() {
 	Mapper["sysinfo"] = &object.Module{Name: "sysinfo", Functions: SysInfoFunctions}
 	Mapper["sqlite"] = &object.Module{Name: "sqlite", Functions: SQLiteFunctions}
 	Mapper["encoding"] = &object.Module{Name: "encoding", Functions: EncodingFunctions}
+	Mapper["errors"] = &object.Module{Name: "errors", Functions: ErrorFunctions}
 	Mapper["colors"] = &object.Module{Name: "colors", Functions: ColorsFunctions}
 	Mapper["vintSocket"] = &object.Module{Name: "vintSocket", Functions: VintSocketFunctions}
 	Mapper["vintChart"] = &object.Module{Name: "vintChart", Functions: VintChartFunctions}
