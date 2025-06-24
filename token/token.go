@@ -18,15 +18,13 @@ const (
 	STRING = "STRING"
 	FLOAT  = "FLOAT"
 
-	POINTER = "POINTER" // *
-	ADDRESS = "ADDRESS" // &
-
 	// Operators
 	ASSIGN          = "="
 	PLUS            = "+"
 	MINUS           = "-"
 	BANG            = "!"
 	ASTERISK        = "*"
+	AMPERSAND       = "&"
 	POW             = "**"
 	SLASH           = "/"
 	MODULUS         = "%"
