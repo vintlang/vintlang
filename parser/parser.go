@@ -271,8 +271,6 @@ func (p *Parser) parsePrefixExpression() ast.Expression {
 
 	expression.Right = p.parseExpression(PREFIX)
 
-	fmt.Printf("PARSER DEBUG: PrefixExpression Operator=%s, Right=%#v\n", expression.Operator, expression.Right)
-
 	return expression
 }
 
