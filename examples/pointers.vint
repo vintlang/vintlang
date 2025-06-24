@@ -1,4 +1,5 @@
+print("POINTER IN VINTLANG")
 let x = 42
 let p = &x
 print(*p)
-# Should print 42 
+// Should print 42 
