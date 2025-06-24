@@ -48,7 +48,7 @@ func evalImport(node *ast.Import, env *object.Environment) object.Object {
 		importedModules[modName.Value] = true
 
 		if mod, exists := module.Mapper[modName.Value]; exists {
-			env.Set(alias, mod)
+			env.Define(alias, mod)
 		} else {
 			result := evalImportFile(alias, modName, env)
 			if isError(result) {
@@ -154,7 +154,7 @@ func importFile(name string, ident *ast.Identifier, env *object.Environment, sco
 	if !found {
 		return newError(ErrIdentifierNotFound, ident.Value, name)
 	}
-	env.Set(name, value)
+	env.Define(name, value)
 	return NULL
 }
 
