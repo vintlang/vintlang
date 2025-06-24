@@ -28,20 +28,20 @@ const (
 	ErrCircularImport     = "Circular import detected: '%s' is already being imported"
 )
 
-// Track imported modules to detect circular imports
+// Tracks imported modules to detect circular imports
 var importedModules = make(map[string]bool)
 
 func evalImport(node *ast.Import, env *object.Environment) object.Object {
-	// Reset imported modules for new import chain
+	// Resets imported modules for new import chain
 	importedModules = make(map[string]bool)
 
 	for alias, modName := range node.Identifiers {
-		// Validate module name
+		// Validates module name
 		if !isValidModuleName(modName.Value) {
 			return newError(ErrInvalidModule, modName.Value)
 		}
 
-		// Check for circular imports
+		// Checks for circular imports
 		if importedModules[modName.Value] {
 			return newError(ErrCircularImport, modName.Value)
 		}
@@ -114,8 +114,9 @@ func addSearchPath(path string) {
 }
 
 func findFile(name string) string {
-	// Try different file extensions
-	extensions := []string{".vint", ".VINT", ".Vint"}
+	// Tries different file extensions
+	extensions := []string{".vint", ".VINT", ".Vint"} //Just incase the user is really stupid
+	//Vintlang for dummies.
 	basename := name
 
 	for _, ext := range extensions {
