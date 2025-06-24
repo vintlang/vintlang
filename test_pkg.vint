@@ -1,0 +1,12 @@
+package test_pkg {
+    let message = "default message"
+
+    let init = func() {
+        @.message = "initialized by the auto-running init function!"
+        print("test package's init function called.")
+    }
+
+    let printMessage = func() {
+        print("Message from package:", @.message)
+    }
+} 
