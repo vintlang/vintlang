@@ -1,76 +1,104 @@
-# Packages in vint
+# Packages in VintLang
 
-You can use third packages written in vint with the following conditions:
+Packages in VintLang provide a powerful way to organize, encapsulate, and reuse your code. They allow you to group related functions, variables, and state into a single, importable unit, similar to modules or libraries in other languages.
 
-- The package file MUST be in the same directory
-- The package file MUST end with `nr`
-- The package name and package file MUST have the same name (eg: if `pakeji hesabu` then the file name must be `hesabu.nr`)
-- The package must have the following structure:
+---
+
+## Defining a Package
+
+You can define a package using the `package` keyword, followed by the package name and a block of code enclosed in curly braces `{}`.
+
+A single `.vint` file can contain one package definition. The name of the file does not need to match the package name, but it is good practice to keep them related.
+
+**Syntax:**
+```vint
+package MyPackage {
+    // ... package members ...
+}
 ```
-// imports if any
 
-pakeji [name of package] {
-        andaa = func() { // the andaa function is mandatory even if its empty
+### Package Members
 
-            }
-        [body of package]
+Inside a package block, you can define:
+- **Variables**: To hold the package's state.
+- **Functions**: To provide the package's functionality.
+
+All members defined with `let` inside a package are public and can be accessed after the package is imported.
+
+---
+
+## The Automatic `init` Function
+
+VintLang's package system includes a special feature for initialization. If you define a function named `init` inside your package, the Vint interpreter will **automatically execute it** when the package is first loaded.
+
+This is useful for setting up initial state, connecting to services, or performing any other setup work the package needs before it can be used.
+
+**Example:**
+```vint
+package Counter {
+    let count = 0
+
+    // This function will run automatically
+    let init = func() {
+        print("Counter package has been initialized!")
+        @.count = 100 // Set initial state
     }
-```
-- The package must be initialized with the `andaa` keyword (see above).
 
-The `andaa` keyword is for initializing your package. This is also where you'd put your global variables. The global variables should be prefixed with `@.` Eg: `@.myGlobalVar`.
-
-A variable being globally available means that the variable can be accessed and manipulated by all other methods in the package.
-
-
-Below is an example Sarufi package:
-```
-// import modules
-import mtandao
-import jsoni
-
-// package body
-pakeji sarufi {
-
-        // initialize function
-        andaa = func(file) {
-            config = fungua(file) // read passwords from json file
-            configString = config.soma()
-
-            configDict = jsoni.dikodi(configString) // convert it to a dict
-            clientID = configDict["client_id"]
-            clientSecret = configDict["client_secret"]
-
-            //  fill in params
-            params = {"client_id": clientID, "client_secret": clientSecret}
-
-            // get response
-            resp = mtandao.tuma(yuareli="https://api.sarufi.io/api/access_token", mwili=params)
-            tokenDict = jsoni.dikodi(resp)
-
-            // extract token and make it globally available
-            @.token = tokenDict["access_token"]
-
-            // make the "Bearer <token>" globally available
-            @.Auth = "Bearer " + @.token
-            }
-
-        // a method to get token
-        tokenYangu = func() {
-                rudisha @.token
-            }
-
-        // a method to create new chatbots.
-        // the data should be a dict
-        tengenezaChatbot = func(data) {
-                majibu = mtandao.tuma(yuareli="https://api.sarufi.io/chatbot", vichwa={"Authorization": @.Auth}, mwili = data)
-                rudisha majibu
-            }
-
-        // a method to get all available chatbots
-        pataChatbotZote = func() {
-                majibu = mtandao.peruzi(yuareli="https://api.sarufi.io/chatbots", vichwa={"Authorization": @.Auth})
-                rudisha majibu
-            }
+    let getCount = func() {
+        return @.count
     }
+}
 ```
+
+---
+
+## The `@` Operator: Self-Reference
+
+Inside a package, you may need to refer to the package's own members or state. VintLang provides the special `@` operator for this purpose. The `@` operator is a reference to the package's own scope.
+
+This is similar to `this` or `self` in other object-oriented languages.
+
+You use it with dot notation to access other members within the same package.
+
+**Example:**
+```vint
+package Greeter {
+    let greeting = "Hello"
+
+    let setGreeting = func(newGreeting) {
+        // Use @ to access the 'greeting' variable
+        @.greeting = newGreeting
+    }
+
+    let sayHello = func(name) {
+        // Use @ to access the 'greeting' variable
+        print(@.greeting + ", " + name + "!")
+    }
+}
+```
+Using `@` is necessary to distinguish between a package-level variable and a local variable with the same name.
+
+---
+
+## Importing and Using Packages
+
+To use a package, you import the file that contains its definition. The package object is then assigned to a variable with the same name as the package.
+
+1.  **Create your package file** (e.g., `utils.vint`).
+2.  **Import it in another file** (e.g., `main.vint`).
+3.  **Access its members** using dot notation.
+
+If `utils.vint` contains `package utils { ... }`, you would use it like this:
+
+```vint
+// main.vint
+
+// Import the file containing the package
+import "utils"
+
+// Now you can use the 'utils' package
+utils.doSomething()
+```
+
+---
+For a complete, runnable example, see the files in the `examples/packages_example/` directory.
