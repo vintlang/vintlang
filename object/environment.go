@@ -8,12 +8,14 @@ func NewEnclosedEnvironment(outer *Environment) *Environment {
 
 func NewEnvironment() *Environment {
 	s := make(map[string]Object)
-	return &Environment{store: s, outer: nil}
+	c := make(map[string]bool)
+	return &Environment{store: s, constants: c, outer: nil}
 }
 
 type Environment struct {
-	store map[string]Object
-	outer *Environment
+	store     map[string]Object
+	constants map[string]bool
+	outer     *Environment
 }
 
 func (e *Environment) Get(name string) (Object, bool) {
@@ -25,7 +27,41 @@ func (e *Environment) Get(name string) (Object, bool) {
 	return obj, ok
 }
 
-func (e *Environment) Set(name string, val Object) Object {
+func (e *Environment) Define(name string, val Object) Object {
+	if _, ok := e.store[name]; ok {
+		return NewError("Identifier '" + name + "' has already been declared")
+	}
+	e.store[name] = val
+	return val
+}
+
+func (e *Environment) DefineConst(name string, val Object) Object {
+	if _, ok := e.store[name]; ok {
+		return NewError("Identifier '" + name + "' has already been declared")
+	}
+	e.constants[name] = true
+	e.store[name] = val
+	return val
+}
+
+func (e *Environment) Assign(name string, val Object) (Object, bool) {
+	if e.constants[name] {
+		return NewError("Cannot assign to constant '" + name + "'"), true
+	}
+	if _, ok := e.store[name]; ok {
+		e.store[name] = val
+		return val, true
+	}
+	if e.outer != nil {
+		return e.outer.Assign(name, val)
+	}
+	return nil, false
+}
+
+func (e *Environment) SetScoped(name string, val Object) Object {
+	if e.constants[name] {
+		return NewError("Cannot assign to constant '" + name + "'")
+	}
 	e.store[name] = val
 	return val
 }
