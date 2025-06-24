@@ -40,6 +40,21 @@ func applyMethod(obj object.Object, method ast.Expression, args []object.Object,
 		default:
 			return obj.Method(method.(*ast.Identifier).Value, args)
 		}
+	case *object.Dict:
+		switch method.(*ast.Identifier).Value {
+		case "has_key":
+			if len(args) != 1 {
+				return newError("wrong number of arguments. got=%d, want=1", len(args))
+			}
+			key, ok := args[0].(object.Hashable)
+			if !ok {
+				return newError("argument to `has_key` must be hashable, got %s", args[0].Type())
+			}
+			if _, ok := obj.Pairs[key.HashKey()]; ok {
+				return TRUE
+			}
+			return FALSE
+		}
 	case *object.Module:
 		if fn, ok := obj.Functions[method.(*ast.Identifier).Value]; ok {
 			return fn(args, defs)
