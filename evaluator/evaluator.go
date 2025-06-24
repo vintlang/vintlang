@@ -3,6 +3,7 @@ package evaluator
 import (
 	"fmt"
 	"os"
+	"strings"
 
 	"github.com/vintlang/vintlang/ast"
 	"github.com/vintlang/vintlang/lexer"
@@ -223,7 +224,8 @@ func Eval(node ast.Node, env *object.Environment) object.Object {
 		if isError(val) {
 			return val
 		}
-		fmt.Printf("\u001b[33mTODO\u001b[0m: %s\n", val.Inspect())
+		msg := val.Inspect()
+		fmt.Printf("\n\u001b[1;33m[TODO]\u001b[0m: %s\n\n", msg)
 		return NULL
 	}
 
