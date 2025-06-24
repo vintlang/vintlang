@@ -1,3 +1,4 @@
 let x = 42
 let p = &x
-print(*p)  # Should print 42 
+print(*p)
+# Should print 42 
