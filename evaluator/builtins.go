@@ -480,6 +480,25 @@ var builtins = map[string]*object.Builtin{
 			return &object.Integer{Value: int64(s[0])}
 		},
 	},
+	"has_key": {
+		Fn: func(args ...object.Object) object.Object {
+			if len(args) != 2 {
+				return newError("wrong number of arguments. got=%d, want=2", len(args))
+			}
+			if args[0].Type() != object.DICT_OBJ {
+				return newError("first argument to `has_key` must be a dictionary, got %s", args[0].Type())
+			}
+			dict := args[0].(*object.Dict)
+			key, ok := args[1].(object.Hashable)
+			if !ok {
+				return newError("second argument to `has_key` must be hashable, got %s", args[1].Type())
+			}
+			if _, ok := dict.Pairs[key.HashKey()]; ok {
+				return TRUE
+			}
+			return FALSE
+		},
+	},
 }
 
 func getIntValue(obj object.Object) (int64, error) {
