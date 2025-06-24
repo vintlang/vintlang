@@ -668,3 +668,17 @@ type PropertyExpression struct {
 func (pe *PropertyExpression) expressionNode()      {}
 func (pe *PropertyExpression) TokenLiteral() string { return pe.Token.Literal }
 func (pe *PropertyExpression) String() string       { return "Tach two" }
+
+type IncludeStatement struct {
+	Token token.Token // the 'include' token
+	Path  Expression
+}
+
+func (is *IncludeStatement) statementNode()       {}
+func (is *IncludeStatement) TokenLiteral() string { return is.Token.Literal }
+func (is *IncludeStatement) String() string {
+	var out bytes.Buffer
+	out.WriteString(is.TokenLiteral() + " ")
+	out.WriteString(is.Path.String())
+	return out.String()
+}

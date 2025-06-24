@@ -19,6 +19,8 @@ func (p *Parser) parseStatement() ast.Statement {
 		return p.parseBreak()
 	case token.CONTINUE:
 		return p.parseContinue()
+	case token.INCLUDE:
+		return p.parseIncludeStatement()
 	default:
 		return p.parseExpressionStatement()
 	}
@@ -103,4 +105,20 @@ func (p *Parser) parseBlockStatement() *ast.BlockStatement {
 	}
 
 	return block
+}
+
+func (p *Parser) parseIncludeStatement() *ast.IncludeStatement {
+	stmt := &ast.IncludeStatement{Token: p.curToken}
+
+	if !p.expectPeek(token.STRING) {
+		return nil
+	}
+
+	stmt.Path = &ast.StringLiteral{Token: p.curToken, Value: p.curToken.Literal}
+
+	if p.peekTokenIs(token.SEMICOLON) {
+		p.nextToken()
+	}
+
+	return stmt
 }
