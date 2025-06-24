@@ -1,0 +1,14 @@
+println("Starting the program...")
+
+let name = "Vint"
+println("Hello, " + name)
+
+todo "Refactor this section later"
+
+let greet = func (person) {
+    println("Greetings, " + person + "!")
+}
+
+greet("developer")
+
+println("Program finished.") 
