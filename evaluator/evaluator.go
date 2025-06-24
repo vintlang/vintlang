@@ -70,8 +70,14 @@ func Eval(node ast.Node, env *object.Environment) object.Object {
 		if isError(val) {
 			return val
 		}
+		return env.Define(node.Name.Value, val)
 
-		env.Set(node.Name.Value, val)
+	case *ast.ConstStatement:
+		val := Eval(node.Value, env)
+		if isError(val) {
+			return val
+		}
+		return env.DefineConst(node.Name.Value, val)
 
 	case *ast.Identifier:
 		return evalIdentifier(node, env)
@@ -162,7 +168,11 @@ func Eval(node ast.Node, env *object.Environment) object.Object {
 		}
 
 		if ident, ok := node.Left.(*ast.Identifier); ok {
-			env.Set(ident.Value, value)
+			newVal, ok := env.Assign(ident.Value, value)
+			if !ok {
+				return newError("assignment to undeclared variable '%s'", ident.Value)
+			}
+			return newVal
 		} else if ie, ok := node.Left.(*ast.IndexExpression); ok {
 			obj := Eval(ie.Left, env)
 			if isError(obj) {
@@ -272,34 +282,36 @@ func evalExpressions(exps []ast.Expression, env *object.Environment) []object.Ob
 func applyFunction(fn object.Object, args []object.Object, line int) object.Object {
 	switch fn := fn.(type) {
 	case *object.Function:
+		if fn.Name != "" {
+			fn.Env.Define(fn.Name, fn)
+		}
 		extendedEnv := extendedFunctionEnv(fn, args)
 		evaluated := Eval(fn.Body, extendedEnv)
 		return unwrapReturnValue(evaluated)
 	case *object.Builtin:
-		if result := fn.Fn(args...); result != nil {
-			return result
+		return fn.Fn(line, args...)
+	case *object.NativeMethod:
+		obj := fn.Instance
+		if fn.Method != nil {
+			return fn.Method(obj, fn.Env, line, args...)
 		}
-		return NULL
+		return newError("method is nil")
 	case *object.Package:
 		obj := &object.Instance{
 			Package: fn,
 			Env:     object.NewEnclosedEnvironment(fn.Env),
 		}
-		obj.Env.Set("@", obj)
+		obj.Env.Define("@", obj)
 		node, ok := fn.Scope.Get("init")
 		if !ok {
 			return newError("Line %d: The package does not have an 'init' function", line)
 		}
-		node.(*object.Function).Env.Set("@", obj)
+		node.(*object.Function).Env.Define("@", obj)
 		applyFunction(node, args, fn.Name.Token.Line)
 		node.(*object.Function).Env.Del("@")
 		return obj
 	default:
-		if fn != nil {
-			return newError("Line %d: Unsupported operator or function type: %s", line, fn.Type())
-		} else {
-			return newError("Line %d: Unexpected error: Function object is nil. Contact the language developer.", line)
-		}
+		return newError("not a function: %s", fn.Type())
 	}
 }
 
@@ -308,7 +320,7 @@ func extendedFunctionEnv(fn *object.Function, args []object.Object) *object.Envi
 
 	for paramIdx, param := range fn.Parameters {
 		if paramIdx < len(args) {
-			env.Set(param.Value, args[paramIdx])
+			env.Define(param.Value, args[paramIdx])
 		}
 	}
 	return env
@@ -384,15 +396,15 @@ func evalContinue(node *ast.Continue) object.Object {
 func loopIterable(next func() (object.Object, object.Object), env *object.Environment, fi *ast.ForIn) object.Object {
 	k, v := next()
 	for k != nil && v != nil {
-		env.Set(fi.Key, k)
-		env.Set(fi.Value, v)
+		env.Define(fi.Key, k)
+		env.Define(fi.Value, v)
 		res := Eval(fi.Block, env)
 		if isError(res) {
 			return res
 		}
 		if res != nil {
 			if res.Type() == object.BREAK_OBJ {
-				break
+				return NULL
 			}
 			if res.Type() == object.CONTINUE_OBJ {
 				k, v = next()

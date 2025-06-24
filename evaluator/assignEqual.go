@@ -18,6 +18,14 @@ func evalAssignEqual(node *ast.AssignEqual, env *object.Environment) object.Obje
 		return value
 	}
 
+	assign := func(val object.Object) object.Object {
+		newVal, ok := env.Assign(node.Left.Token.Literal, val)
+		if !ok {
+			return newError("assignment to undeclared variable '%s'", node.Left.Token.Literal)
+		}
+		return newVal
+	}
+
 	switch node.Token.Literal {
 	case "+=":
 		switch arg := left.(type) {
@@ -25,10 +33,10 @@ func evalAssignEqual(node *ast.AssignEqual, env *object.Environment) object.Obje
 			switch val := value.(type) {
 			case *object.Integer:
 				v := arg.Value + val.Value
-				return env.Set(node.Left.Token.Literal, &object.Integer{Value: v})
+				return assign(&object.Integer{Value: v})
 			case *object.Float:
 				v := float64(arg.Value) + val.Value
-				return env.Set(node.Left.Token.Literal, &object.Float{Value: v})
+				return assign(&object.Float{Value: v})
 			default:
 				// Check for invalid operation between different types
 				return newError("Line %d: Cannot use '+=' to add %v and %v", node.Token.Line, arg.Type(), val.Type())
@@ -37,10 +45,10 @@ func evalAssignEqual(node *ast.AssignEqual, env *object.Environment) object.Obje
 			switch val := value.(type) {
 			case *object.Integer:
 				v := arg.Value + float64(val.Value)
-				return env.Set(node.Left.Token.Literal, &object.Float{Value: v})
+				return assign(&object.Float{Value: v})
 			case *object.Float:
 				v := arg.Value + val.Value
-				return env.Set(node.Left.Token.Literal, &object.Float{Value: v})
+				return assign(&object.Float{Value: v})
 			default:
 				// Check for invalid operation between different types
 				return newError("Line %d: Cannot use '+=' to add %v and %v", node.Token.Line, arg.Type(), val.Type())
@@ -49,7 +57,7 @@ func evalAssignEqual(node *ast.AssignEqual, env *object.Environment) object.Obje
 			switch val := value.(type) {
 			case *object.String:
 				v := arg.Value + val.Value
-				return env.Set(node.Left.Token.Literal, &object.String{Value: v})
+				return assign(&object.String{Value: v})
 			default:
 				// Check for invalid operation for non-strings
 				return newError("Line %d: Cannot use '+=' with %v and %v", node.Token.Line, arg.Type(), val.Type())
@@ -64,10 +72,10 @@ func evalAssignEqual(node *ast.AssignEqual, env *object.Environment) object.Obje
 			switch val := value.(type) {
 			case *object.Integer:
 				v := arg.Value - val.Value
-				return env.Set(node.Left.Token.Literal, &object.Integer{Value: v})
+				return assign(&object.Integer{Value: v})
 			case *object.Float:
 				v := float64(arg.Value) - val.Value
-				return env.Set(node.Left.Token.Literal, &object.Float{Value: v})
+				return assign(&object.Float{Value: v})
 			default:
 				// Check for invalid operation between different types
 				return newError("Line %d: Cannot use '-=' to subtract %v and %v", node.Token.Line, arg.Type(), val.Type())
@@ -76,10 +84,10 @@ func evalAssignEqual(node *ast.AssignEqual, env *object.Environment) object.Obje
 			switch val := value.(type) {
 			case *object.Integer:
 				v := arg.Value - float64(val.Value)
-				return env.Set(node.Left.Token.Literal, &object.Float{Value: v})
+				return assign(&object.Float{Value: v})
 			case *object.Float:
 				v := arg.Value - val.Value
-				return env.Set(node.Left.Token.Literal, &object.Float{Value: v})
+				return assign(&object.Float{Value: v})
 			default:
 				// Check for invalid operation between different types
 				return newError("Line %d: Cannot use '-=' to subtract %v and %v", node.Token.Line, arg.Type(), val.Type())
@@ -94,13 +102,13 @@ func evalAssignEqual(node *ast.AssignEqual, env *object.Environment) object.Obje
 			switch val := value.(type) {
 			case *object.Integer:
 				v := arg.Value * val.Value
-				return env.Set(node.Left.Token.Literal, &object.Integer{Value: v})
+				return assign(&object.Integer{Value: v})
 			case *object.Float:
 				v := float64(arg.Value) * val.Value
-				return env.Set(node.Left.Token.Literal, &object.Float{Value: v})
+				return assign(&object.Float{Value: v})
 			case *object.String:
 				v := strings.Repeat(val.Value, int(arg.Value))
-				return env.Set(node.Left.Token.Literal, &object.String{Value: v})
+				return assign(&object.String{Value: v})
 			default:
 				// Check for invalid operation between different types
 				return newError("Line %d: Cannot use '*=' to multiply %v and %v", node.Token.Line, arg.Type(), val.Type())
@@ -109,10 +117,10 @@ func evalAssignEqual(node *ast.AssignEqual, env *object.Environment) object.Obje
 			switch val := value.(type) {
 			case *object.Integer:
 				v := arg.Value * float64(val.Value)
-				return env.Set(node.Left.Token.Literal, &object.Float{Value: v})
+				return assign(&object.Float{Value: v})
 			case *object.Float:
 				v := arg.Value * val.Value
-				return env.Set(node.Left.Token.Literal, &object.Float{Value: v})
+				return assign(&object.Float{Value: v})
 			default:
 				// Check for invalid operation between different types
 				return newError("Line %d: Cannot use '*=' to multiply %v and %v", node.Token.Line, arg.Type(), val.Type())
@@ -121,7 +129,7 @@ func evalAssignEqual(node *ast.AssignEqual, env *object.Environment) object.Obje
 			switch val := value.(type) {
 			case *object.Integer:
 				v := strings.Repeat(arg.Value, int(val.Value))
-				return env.Set(node.Left.Token.Literal, &object.String{Value: v})
+				return assign(&object.String{Value: v})
 			default:
 				// Check for invalid operation for non-integer multiplications
 				return newError("Line %d: Cannot use '*=' with %v and %v", node.Token.Line, arg.Type(), val.Type())
@@ -136,10 +144,10 @@ func evalAssignEqual(node *ast.AssignEqual, env *object.Environment) object.Obje
 			switch val := value.(type) {
 			case *object.Integer:
 				v := arg.Value / val.Value
-				return env.Set(node.Left.Token.Literal, &object.Integer{Value: v})
+				return assign(&object.Integer{Value: v})
 			case *object.Float:
 				v := float64(arg.Value) / val.Value
-				return env.Set(node.Left.Token.Literal, &object.Float{Value: v})
+				return assign(&object.Float{Value: v})
 			default:
 				// Check for invalid operation between different types
 				return newError("Line %d: Cannot use '/=' to divide %v and %v", node.Token.Line, arg.Type(), val.Type())
@@ -148,10 +156,10 @@ func evalAssignEqual(node *ast.AssignEqual, env *object.Environment) object.Obje
 			switch val := value.(type) {
 			case *object.Integer:
 				v := arg.Value / float64(val.Value)
-				return env.Set(node.Left.Token.Literal, &object.Float{Value: v})
+				return assign(&object.Float{Value: v})
 			case *object.Float:
 				v := arg.Value / val.Value
-				return env.Set(node.Left.Token.Literal, &object.Float{Value: v})
+				return assign(&object.Float{Value: v})
 			default:
 				// Check for invalid operation between different types
 				return newError("Line %d: Cannot use '/=' to divide %v and %v", node.Token.Line, arg.Type(), val.Type())
