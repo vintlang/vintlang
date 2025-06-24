@@ -79,6 +79,9 @@ const (
 	IMPORT   = "IMPORT"
 	PACKAGE  = "PACKAGE"
 	INCLUDE  = "INCLUDE"
+	TODO     = "TODO"
+	WARN     = "WARN"
+	ERROR    = "ERROR"
 )
 
 var keywords = map[string]TokenType{
@@ -102,6 +105,9 @@ var keywords = map[string]TokenType{
 	"import":   IMPORT,
 	"package":  PACKAGE,
 	"include":  INCLUDE,
+	"todo":     TODO,
+	"warn":     WARN,
+	"error":    ERROR,
 	"@":        AT,
 }
 

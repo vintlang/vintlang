@@ -119,6 +119,9 @@ func New(l *lexer.Lexer) *Parser {
 	p.registerPrefix(token.SWITCH, p.parseSwitchStatement)
 	p.registerPrefix(token.IMPORT, p.parseImport)
 	p.registerPrefix(token.PACKAGE, p.parsePackage)
+	p.registerPrefix(token.TODO, p.parseTodoStatement)
+	p.registerPrefix(token.WARN, p.parseWarnStatement)
+	p.registerPrefix(token.ERROR, p.parseErrorStatement)
 	p.registerPrefix(token.AT, p.parseAt)
 
 	p.infixParseFns = make(map[token.TokenType]infixParseFn)
@@ -319,4 +322,34 @@ func (p *Parser) parsePostfixExpression() ast.Expression {
 		Operator: p.curToken.Literal,
 	}
 	return expression
+}
+
+func (p *Parser) parseTodoStatement() ast.Expression {
+	stmt := &ast.TodoStatement{Token: p.curToken}
+	p.nextToken()
+	stmt.Value = p.parseExpression(LOWEST)
+	if p.peekTokenIs(token.SEMICOLON) {
+		p.nextToken()
+	}
+	return stmt
+}
+
+func (p *Parser) parseWarnStatement() ast.Expression {
+	stmt := &ast.WarnStatement{Token: p.curToken}
+	p.nextToken()
+	stmt.Value = p.parseExpression(LOWEST)
+	if p.peekTokenIs(token.SEMICOLON) {
+		p.nextToken()
+	}
+	return stmt
+}
+
+func (p *Parser) parseErrorStatement() ast.Expression {
+	stmt := &ast.ErrorStatement{Token: p.curToken}
+	p.nextToken()
+	stmt.Value = p.parseExpression(LOWEST)
+	if p.peekTokenIs(token.SEMICOLON) {
+		p.nextToken()
+	}
+	return stmt
 }
