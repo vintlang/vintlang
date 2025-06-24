@@ -60,14 +60,11 @@ func evalImport(node *ast.Import, env *object.Environment) object.Object {
 }
 
 func evalImportFile(name string, ident *ast.Identifier, env *object.Environment) object.Object {
-	// Add default search paths
 	addSearchPath("")
-	addSearchPath("./modules")
-	addSearchPath("./vintLang/modules")
+	checkAndAddModulesDir()
 
 	filename := findFile(name)
 	if filename == "" {
-		// Format search paths for better readability
 		formattedPaths := formatSearchPaths()
 		return newError(ErrModuleNotFound, name, formattedPaths)
 	}
@@ -78,6 +75,24 @@ func evalImportFile(name string, ident *ast.Identifier, env *object.Environment)
 	}
 
 	return importFile(name, ident, env, scope)
+}
+
+// Adds "./modules" to the search path only if it exists, otherwise warns the user
+func checkAndAddModulesDir() {
+	modulesPath := "./modules"
+	if dirExists(modulesPath) {
+		addSearchPath(modulesPath)
+	} else {
+		fmt.Fprintf(os.Stderr, "\x1b[33m[Warning]\x1b[0m Recommended: Create a 'modules' directory for your custom VintLang modules.\n")
+	}
+}
+
+func dirExists(path string) bool {
+	info, err := os.Stat(path)
+	if err != nil {
+		return false
+	}
+	return info.IsDir()
 }
 
 func addSearchPath(path string) {
