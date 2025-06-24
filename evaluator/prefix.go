@@ -1,6 +1,10 @@
 package evaluator
 
-import "github.com/vintlang/vintlang/object"
+import (
+	"fmt"
+
+	"github.com/vintlang/vintlang/object"
+)
 
 func evalMinusPrefixOperatorExpression(right object.Object, line int) object.Object {
 	switch obj := right.(type) {
@@ -30,6 +34,8 @@ func evalPlusPrefixOperatorExpression(right object.Object, line int) object.Obje
 }
 
 func evalPrefixExpression(operator string, right object.Object, line int) object.Object {
+	fmt.Printf("DEBUG: operator=%s, right=%T, value=%v\n", operator, right, right)
+
 	switch operator {
 	case "!":
 		return evalBangOperatorExpression(right)
@@ -38,13 +44,20 @@ func evalPrefixExpression(operator string, right object.Object, line int) object
 	case "+":
 		return evalPlusPrefixOperatorExpression(right, line)
 	case "*":
-		// derefences a pointer to get the value
+		if right == nil {
+			return newError("Line %d: cannot dereference nil", line)
+		}
 		if p, ok := right.(*object.Pointer); ok {
+			if p.Ref == nil {
+				return newError("Line %d: pointer is nil", line)
+			}
 			return p.Ref
 		}
 		return newError("Line %d: cannot dereference non-pointer", line)
 	case "&":
-		// Creates a new Pointer object that points to the value
+		if right == nil {
+			return newError("Line %d: cannot take address of nil", line)
+		}
 		return &object.Pointer{Ref: right}
 	default:
 		return newError("Line %d: Unknown operation: %s%s", line, operator, right.Type())
