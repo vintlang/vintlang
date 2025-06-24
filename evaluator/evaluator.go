@@ -16,6 +16,7 @@ var (
 )
 
 func Eval(node ast.Node, env *object.Environment) object.Object {
+	fmt.Printf("EVAL DEBUG: node type=%T, node=%#v\n", node, node)
 	switch node := node.(type) {
 	case *ast.Program:
 		return evalProgram(node, env)
@@ -302,7 +303,6 @@ func applyFunction(fn object.Object, args []object.Object, line int) object.Obje
 		}
 	}
 }
-
 
 func extendedFunctionEnv(fn *object.Function, args []object.Object) *object.Environment {
 	env := object.NewEnclosedEnvironment(fn.Env)
