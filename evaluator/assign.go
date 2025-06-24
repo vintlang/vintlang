@@ -11,6 +11,9 @@ func evalAssign(node *ast.Assign, env *object.Environment) object.Object {
 		return val
 	}
 
-	obj := env.Set(node.Name.Value, val)
-	return obj
+	newVal, ok := env.Assign(node.Name.Value, val)
+	if !ok {
+		return newError("assignment to undeclared variable '%s'", node.Name.Value)
+	}
+	return newVal
 }

@@ -8,19 +8,19 @@ import (
 func evalForInExpression(fie *ast.ForIn, env *object.Environment, line int) object.Object {
 	// Evaluates the iterable expression and checks for existing key and value identifiers in the environment
 	iterable := Eval(fie.Iterable, env)
-	existingKeyIdentifier, okk := env.Get(fie.Key) // Check if key identifier exists
+	existingKeyIdentifier, okk := env.Get(fie.Key)     // Check if key identifier exists
 	existingValueIdentifier, okv := env.Get(fie.Value) // Check if value identifier exists
-	
+
 	// Ensure the original key and value identifiers are restored after execution
-	defer func() { 
+	defer func() {
 		if okk {
-			env.Set(fie.Key, existingKeyIdentifier) // Restore key identifier
+			env.Assign(fie.Key, existingKeyIdentifier) // Restore key identifier
 		}
 		if okv {
-			env.Set(fie.Value, existingValueIdentifier) // Restore value identifier
+			env.Assign(fie.Value, existingValueIdentifier) // Restore value identifier
 		}
 	}()
-	
+
 	// Check if the iterable object supports iteration
 	switch i := iterable.(type) {
 	case object.Iterable:
