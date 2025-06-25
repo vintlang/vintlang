@@ -11,18 +11,18 @@ import (
 var MySQLFunctions = map[string]object.ModuleFunction{}
 
 func init() {
-	MySQLFunctions["open"] = openConnection
-	MySQLFunctions["close"] = closeConnection
-	MySQLFunctions["execute"] = executeQuery
-	MySQLFunctions["fetchAll"] = fetchAll
-	MySQLFunctions["fetchOne"] = fetchOne
+	MySQLFunctions["open"] = openMySQLConnection
+	MySQLFunctions["close"] = closeMySQLConnection
+	MySQLFunctions["execute"] = executeMySQLQuery
+	MySQLFunctions["fetchAll"] = fetchAllMySQL
+	MySQLFunctions["fetchOne"] = fetchOneMySQL
 }
 
 type MySQLConnection struct {
 	db *sql.DB
 }
 
-func openConnection(args []object.Object, defs map[string]object.Object) object.Object {
+func openMySQLConnection(args []object.Object, defs map[string]object.Object) object.Object {
 	if len(args) != 1 || args[0].Type() != object.STRING_OBJ {
 		return &object.Error{Message: "Invalid arguments: Expected 'open(connectionString)' where 'connectionString' is a string"}
 	}
@@ -44,7 +44,7 @@ func openConnection(args []object.Object, defs map[string]object.Object) object.
 	}
 }
 
-func closeConnection(args []object.Object, defs map[string]object.Object) object.Object {
+func closeMySQLConnection(args []object.Object, defs map[string]object.Object) object.Object {
 	if len(args) != 1 {
 		return &object.Error{Message: "Invalid arguments: Expected 'close(conn)'"}
 	}
@@ -62,7 +62,7 @@ func closeConnection(args []object.Object, defs map[string]object.Object) object
 	return &object.Null{}
 }
 
-func executeQuery(args []object.Object, defs map[string]object.Object) object.Object {
+func executeMySQLQuery(args []object.Object, defs map[string]object.Object) object.Object {
 	if len(args) < 2 {
 		return &object.Error{Message: "Invalid arguments: Expected 'execute(conn, query, [params...])'"}
 	}
@@ -77,7 +77,7 @@ func executeQuery(args []object.Object, defs map[string]object.Object) object.Ob
 		return &object.Error{Message: "Query must be a string"}
 	}
 
-	params := convertObjectsToParams(args[2:])
+	params := convertObjectsToMySQLParams(args[2:])
 	_, err := conn.Value.(*MySQLConnection).db.Exec(query.Value, params...)
 	if err != nil {
 		return &object.Error{Message: fmt.Sprintf("Query execution failed: %s", err)}
@@ -86,7 +86,7 @@ func executeQuery(args []object.Object, defs map[string]object.Object) object.Ob
 	return &object.Null{}
 }
 
-func fetchAll(args []object.Object, defs map[string]object.Object) object.Object {
+func fetchAllMySQL(args []object.Object, defs map[string]object.Object) object.Object {
 	if len(args) < 2 {
 		return &object.Error{Message: "Invalid arguments: Expected 'fetchAll(conn, query, [params...])'"}
 	}
@@ -101,7 +101,7 @@ func fetchAll(args []object.Object, defs map[string]object.Object) object.Object
 		return &object.Error{Message: "Query must be a string"}
 	}
 
-	params := convertObjectsToParams(args[2:])
+	params := convertObjectsToMySQLParams(args[2:])
 	rows, err := conn.Value.(*MySQLConnection).db.Query(query.Value, params...)
 	if err != nil {
 		return &object.Error{Message: fmt.Sprintf("Query execution failed: %s", err)}
@@ -124,7 +124,7 @@ func fetchAll(args []object.Object, defs map[string]object.Object) object.Object
 		row := &object.Dict{Pairs: make(map[object.HashKey]object.DictPair)}
 		for i, col := range cols {
 			key := &object.String{Value: col}
-			value := convertToObject(values[i])
+			value := convertMySQLToObject(values[i])
 			row.Pairs[key.HashKey()] = object.DictPair{Key: key, Value: value}
 		}
 
@@ -134,8 +134,8 @@ func fetchAll(args []object.Object, defs map[string]object.Object) object.Object
 	return &object.Array{Elements: result}
 }
 
-func fetchOne(args []object.Object, defs map[string]object.Object) object.Object {
-	result := fetchAll(args, defs)
+func fetchOneMySQL(args []object.Object, defs map[string]object.Object) object.Object {
+	result := fetchAllMySQL(args, defs)
 	if result.Type() == object.ARRAY_OBJ {
 		array := result.(*object.Array)
 		if len(array.Elements) > 0 {
@@ -145,7 +145,7 @@ func fetchOne(args []object.Object, defs map[string]object.Object) object.Object
 	return &object.Null{}
 }
 
-func convertToObject(val interface{}) object.Object {
+func convertMySQLToObject(val interface{}) object.Object {
 	switch v := val.(type) {
 	case int64:
 		return &object.Integer{Value: v}
@@ -164,7 +164,7 @@ func convertToObject(val interface{}) object.Object {
 	}
 }
 
-func convertObjectsToParams(objects []object.Object) []interface{} {
+func convertObjectsToMySQLParams(objects []object.Object) []interface{} {
 	params := make([]interface{}, len(objects))
 	for i, obj := range objects {
 		switch v := obj.(type) {
