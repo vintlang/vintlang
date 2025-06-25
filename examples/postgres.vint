@@ -1,0 +1,40 @@
+import postgres
+
+// NOTE: Please replace the placeholder credentials with your actual PostgreSQL database credentials.
+// The connection string should be in the format: "user=youruser password=yourpassword dbname=yourdbname sslmode=disable"
+
+conn = postgres.open("user=postgres password=password dbname=testdb sslmode=disable")
+
+if conn.type() == "ERROR" {
+    print("Error connecting to PostgreSQL:", conn.message())
+} else {
+    print("Successfully connected to PostgreSQL")
+
+    // Create a table
+    create_table_query = "CREATE TABLE IF NOT EXISTS users (id SERIAL PRIMARY KEY, name VARCHAR(255), age INT)"
+    err = postgres.execute(conn, create_table_query)
+    if err {
+        print("Error creating table:", err.message())
+    }
+
+    // Insert data
+    insert_query = "INSERT INTO users (name, age) VALUES ($1, $2)"
+    postgres.execute(conn, insert_query, "Alice", 25)
+    postgres.execute(conn, insert_query, "Bob", 30)
+
+    // Fetch all rows
+    print("\n=== All Users ===")
+    fetch_all_query = "SELECT * FROM users"
+    users = postgres.fetchAll(conn, fetch_all_query)
+    print(users)
+
+    // Fetch a single row
+    print("\n=== First User ===")
+    fetch_one_query = "SELECT * FROM users LIMIT 1"
+    first_user = postgres.fetchOne(conn, fetch_one_query)
+    print(first_user)
+
+    // Close the connection
+    postgres.close(conn)
+    print("\nConnection closed")
+} 

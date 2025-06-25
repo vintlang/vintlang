@@ -1,0 +1,40 @@
+import mysql
+
+// NOTE: Please replace the placeholder credentials with your actual MySQL database credentials.
+// The connection string should be in the format: "user:password@tcp(127.0.0.1:3306)/dbname"
+
+conn = mysql.open("user:password@tcp(127.0.0.1:3306)/testdb")
+
+if conn.type() == "ERROR" {
+    print("Error connecting to MySQL:", conn.message())
+} else {
+    print("Successfully connected to MySQL")
+
+    // Create a table
+    create_table_query = "CREATE TABLE IF NOT EXISTS users (id INT AUTO_INCREMENT PRIMARY KEY, name VARCHAR(255), age INT)"
+    err = mysql.execute(conn, create_table_query)
+    if err {
+        print("Error creating table:", err.message())
+    }
+
+    // Insert data
+    insert_query = "INSERT INTO users (name, age) VALUES (?, ?)"
+    mysql.execute(conn, insert_query, "Alice", 25)
+    mysql.execute(conn, insert_query, "Bob", 30)
+
+    // Fetch all rows
+    print("\n=== All Users ===")
+    fetch_all_query = "SELECT * FROM users"
+    users = mysql.fetchAll(conn, fetch_all_query)
+    print(users)
+
+    // Fetch a single row
+    print("\n=== First User ===")
+    fetch_one_query = "SELECT * FROM users LIMIT 1"
+    first_user = mysql.fetchOne(conn, fetch_one_query)
+    print(first_user)
+
+    // Close the connection
+    mysql.close(conn)
+    print("\nConnection closed")
+} 
