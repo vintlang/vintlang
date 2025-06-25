@@ -67,7 +67,7 @@ var builtins = map[string]*object.Builtin{
 				var arr []string
 				for _, arg := range args {
 					if arg == nil {
-						return newError("Operation cannot be performed on nil")
+						return newError("Operation cannot be performed on null")
 					}
 					arr = append(arr, arg.Inspect())
 				}
