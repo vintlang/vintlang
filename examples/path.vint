@@ -1,0 +1,16 @@
+import path
+
+full_path = path.join("/home", "user", "documents", "report.pdf")
+print("Joined path:", full_path)
+
+base = path.basename(full_path)
+print("Basename:", base)
+
+dir = path.dirname(full_path)
+print("Dirname:", dir)
+
+extension = path.ext(full_path)
+print("Extension:", extension)
+
+print("Is absolute?", path.isAbs(full_path))
+print("Is 'relative/path' absolute?", path.isAbs("relative/path")) 

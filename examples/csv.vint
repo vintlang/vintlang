@@ -1,0 +1,30 @@
+import csv
+import os
+
+// --- Writing to a CSV file ---
+data_to_write = [
+    ["id", "name", "score"],
+    ["1", "Alice", "88"],
+    ["2", "Bob", "92"],
+    ["3", "Charlie", "75"]
+]
+
+filename = "scores.csv"
+csv.write(filename, data_to_write)
+
+print("Wrote data to", filename)
+
+
+// --- Reading from a CSV file ---
+read_data = csv.read(filename)
+
+if read_data.type() == "ERROR" {
+    print("Error reading file:", read_data.message())
+} else {
+    print("Read data from", filename, ":")
+    print(read_data)
+}
+
+// --- Clean up the created file ---
+os.remove(filename)
+print("Cleaned up", filename) 
