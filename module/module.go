@@ -23,6 +23,9 @@ func init() {
 	Mapper["sqlite"] = &object.Module{Name: "sqlite", Functions: SQLiteFunctions}
 	Mapper["mysql"] = &object.Module{Name: "mysql", Functions: MySQLFunctions}
 	Mapper["postgres"] = &object.Module{Name: "postgres", Functions: PostGresFunctions}
+	Mapper["path"] = &object.Module{Name: "path", Functions: PathFunctions}
+	Mapper["random"] = &object.Module{Name: "random", Functions: RandomFunctions}
+	Mapper["csv"] = &object.Module{Name: "csv", Functions: CsvFunctions}
 	Mapper["encoding"] = &object.Module{Name: "encoding", Functions: EncodingFunctions}
 	Mapper["errors"] = &object.Module{Name: "errors", Functions: ErrorFunctions}
 	Mapper["colors"] = &object.Module{Name: "colors", Functions: ColorsFunctions}
