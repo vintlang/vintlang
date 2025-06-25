@@ -77,7 +77,7 @@ func executePqQuery(args []object.Object, defs map[string]object.Object) object.
 		return &object.Error{Message: "Query must be a string"}
 	}
 
-	params := convertObjectsToParams(args[2:])
+	params := convertObjectsToPqParams(args[2:])
 	_, err := conn.Value.(*PostGresConnection).db.Exec(query.Value, params...)
 	if err != nil {
 		return &object.Error{Message: fmt.Sprintf("Query execution failed: %s", err)}
@@ -101,7 +101,7 @@ func fetchAllPq(args []object.Object, defs map[string]object.Object) object.Obje
 		return &object.Error{Message: "Query must be a string"}
 	}
 
-	params := convertObjectsToParams(args[2:])
+	params := convertObjectsToPqParams(args[2:])
 	rows, err := conn.Value.(*PostGresConnection).db.Query(query.Value, params...)
 	if err != nil {
 		return &object.Error{Message: fmt.Sprintf("Query execution failed: %s", err)}
@@ -124,7 +124,7 @@ func fetchAllPq(args []object.Object, defs map[string]object.Object) object.Obje
 		row := &object.Dict{Pairs: make(map[object.HashKey]object.DictPair)}
 		for i, col := range cols {
 			key := &object.String{Value: col}
-			value := convertToObject(values[i])
+			value := convertPqToObject(values[i])
 			row.Pairs[key.HashKey()] = object.DictPair{Key: key, Value: value}
 		}
 
@@ -143,4 +143,42 @@ func fetchOnePq(args []object.Object, defs map[string]object.Object) object.Obje
 		}
 	}
 	return &object.Null{}
+}
+
+func convertPqToObject(val interface{}) object.Object {
+	switch v := val.(type) {
+	case int64:
+		return &object.Integer{Value: v}
+	case float64:
+		return &object.Float{Value: v}
+	case []byte:
+		return &object.String{Value: string(v)}
+	case string:
+		return &object.String{Value: v}
+	case bool:
+		return &object.Boolean{Value: v}
+	case nil:
+		return &object.Null{}
+	default:
+		return &object.String{Value: fmt.Sprintf("%v", v)}
+	}
+}
+
+func convertObjectsToPqParams(objects []object.Object) []interface{} {
+	params := make([]interface{}, len(objects))
+	for i, obj := range objects {
+		switch v := obj.(type) {
+		case *object.String:
+			params[i] = v.Value
+		case *object.Integer:
+			params[i] = v.Value
+		case *object.Float:
+			params[i] = v.Value
+		case *object.Boolean:
+			params[i] = v.Value
+		default:
+			params[i] = nil
+		}
+	}
+	return params
 }
