@@ -1,0 +1,10 @@
+import random
+
+print("Random integer between 10 and 20:", random.int(10, 20))
+
+print("Random float:", random.float())
+
+print("Random string of length 8:", random.string(8))
+
+options = ["rock", "paper", "scissors"]
+print("Random choice from", options, ":", random.choice(options)) 
