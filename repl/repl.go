@@ -11,12 +11,12 @@ import (
 	"github.com/charmbracelet/bubbles/list"
 	tea "github.com/charmbracelet/bubbletea"
 	"github.com/charmbracelet/lipgloss"
+	zone "github.com/lrstanley/bubblezone"
 	"github.com/vintlang/vintlang/evaluator"
 	"github.com/vintlang/vintlang/lexer"
 	"github.com/vintlang/vintlang/object"
 	"github.com/vintlang/vintlang/parser"
 	"github.com/vintlang/vintlang/styles"
-	zone "github.com/lrstanley/bubblezone"
 )
 
 const PROMPT = ">>> "
@@ -142,6 +142,8 @@ var (
 		item{title: "If Statements", desc: "🔮 Control the flow with 'if' statements in vint", filename: "ifStatements.md"},
 		item{title: "JSON", desc: "📄 Master the art of JSON in vint", filename: "json.md"},
 		item{title: "Keywords", desc: "🔑 Learn the secret language of vint's keywords", filename: "keywords.md"},
+		item{title: "MySQL", desc: "🗄️ Interact with MySQL databases", filename: "mysql.md"},
+		item{title: "PostgreSQL", desc: "🐘 Work with PostgreSQL databases", filename: "postgres.md"},
 		item{title: "Net", desc: "🌐 Explore the world of networking in vint", filename: "net.md"},
 		item{title: "Null", desc: "🌌 Embrace the void with Null in vint", filename: "null.md"},
 		item{title: "Numbers", desc: "🔢 Discover the magic of numbers in vint", filename: "numbers.md"},
@@ -165,6 +167,8 @@ var (
 		item{title: "If Statements", desc: "🔮 Control the flow with 'if' statements in vint", filename: "ifStatements.md"},
 		item{title: "JSON", desc: "📄 Master the art of JSON in vint", filename: "json.md"},
 		item{title: "Keywords", desc: "🔑 Learn the secret language of vint's keywords", filename: "keywords.md"},
+		item{title: "MySQL", desc: "🗄️ Interact with MySQL databases", filename: "mysql.md"},
+		item{title: "PostgreSQL", desc: "🐘 Work with PostgreSQL databases", filename: "postgres.md"},
 		item{title: "Net", desc: "🌐 Explore the world of networking in vint", filename: "net.md"},
 		item{title: "Null", desc: "🌌 Embrace the void with Null in vint", filename: "null.md"},
 		item{title: "Numbers", desc: "🔢 Discover the magic of numbers in vint", filename: "numbers.md"},
