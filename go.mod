@@ -1,6 +1,8 @@
 module github.com/vintlang/vintlang
 
-go 1.18
+go 1.21.0
+
+toolchain go1.24.4
 
 require (
 	github.com/AvicennaJr/GoPrompt v0.0.0-20230411215003-be2316d88e2d
@@ -10,15 +12,18 @@ require (
 	github.com/charmbracelet/lipgloss v0.7.1
 	github.com/fatih/color v1.18.0
 	github.com/go-echarts/go-echarts/v2 v2.4.5
+	github.com/go-sql-driver/mysql v1.9.3
 	github.com/google/uuid v1.6.0
 	github.com/gorilla/websocket v1.5.3
 	github.com/joho/godotenv v1.5.1
+	github.com/lib/pq v1.10.9
 	github.com/lrstanley/bubblezone v0.0.0-20230303230241-08f906ff62a9
 	github.com/mattn/go-sqlite3 v1.14.24
 	github.com/xrash/smetrics v0.0.0-20240521201337-686a1a2994c1
 )
 
 require (
+	filippo.io/edwards25519 v1.1.0 // indirect
 	github.com/alecthomas/chroma v0.10.0 // indirect
 	github.com/atotto/clipboard v0.1.4 // indirect
 	github.com/aymanbagabas/go-osc52/v2 v2.0.1 // indirect
