@@ -11,6 +11,23 @@ import (
 	"github.com/vintlang/vintlang/object"
 )
 
+func handlePrint(w io.Writer, args []object.Object, addNewline bool) object.Object {
+	var arr []string
+	for _, arg := range args {
+		if arg == nil {
+			return newError("Operation cannot be performed on nil")
+		}
+		arr = append(arr, arg.Inspect())
+	}
+	str := strings.Join(arr, " ")
+	if addNewline {
+		fmt.Fprintln(w, str)
+	} else {
+		fmt.Fprint(w, str)
+	}
+	return nil
+}
+
 var builtins = map[string]*object.Builtin{
 	"input": {
 		Fn: func(args ...object.Object) object.Object {
@@ -39,20 +56,7 @@ var builtins = map[string]*object.Builtin{
 	},
 	"print": {
 		Fn: func(args ...object.Object) object.Object {
-			if len(args) == 0 {
-				fmt.Println("")
-			} else {
-				var arr []string
-				for _, arg := range args {
-					if arg == nil {
-						return newError("Operation cannot be performed on nil")
-					}
-					arr = append(arr, arg.Inspect())
-				}
-				str := strings.Join(arr, " ")
-				fmt.Println(str)
-			}
-			return nil
+			return handlePrint(os.Stdout, args, false)
 		},
 	},
 	"write": {
@@ -74,56 +78,17 @@ var builtins = map[string]*object.Builtin{
 	},
 	"println": {
 		Fn: func(args ...object.Object) object.Object {
-			if len(args) == 0 {
-				fmt.Println("")
-			} else {
-				var arr []string
-				for _, arg := range args {
-					if arg == nil {
-						return newError("Operation cannot be performed on nil")
-					}
-					arr = append(arr, arg.Inspect())
-				}
-				str := strings.Join(arr, " ")
-				fmt.Println(str)
-			}
-			return nil
+			return handlePrint(os.Stdout, args, true)
 		},
 	},
 	"printErr": {
 		Fn: func(args ...object.Object) object.Object {
-			if len(args) == 0 {
-				fmt.Fprint(os.Stderr, "")
-			} else {
-				var arr []string
-				for _, arg := range args {
-					if arg == nil {
-						return newError("Operation cannot be performed on nil")
-					}
-					arr = append(arr, arg.Inspect())
-				}
-				str := strings.Join(arr, " ")
-				fmt.Fprint(os.Stderr, str)
-			}
-			return nil
+			return handlePrint(os.Stderr, args, false)
 		},
 	},
 	"printlnErr": {
 		Fn: func(args ...object.Object) object.Object {
-			if len(args) == 0 {
-				fmt.Fprintln(os.Stderr, "")
-			} else {
-				var arr []string
-				for _, arg := range args {
-					if arg == nil {
-						return newError("Operation cannot be performed on nil")
-					}
-					arr = append(arr, arg.Inspect())
-				}
-				str := strings.Join(arr, " ")
-				fmt.Fprintln(os.Stderr, str)
-			}
-			return nil
+			return handlePrint(os.Stderr, args, true)
 		},
 	},
 	"type": {
