@@ -21,6 +21,8 @@ func init() {
 	Mapper["dotenv"] = &object.Module{Name: "dotenv", Functions: DotenvFunctions}
 	Mapper["sysinfo"] = &object.Module{Name: "sysinfo", Functions: SysInfoFunctions}
 	Mapper["sqlite"] = &object.Module{Name: "sqlite", Functions: SQLiteFunctions}
+	Mapper["mysql"] = &object.Module{Name: "mysql", Functions: MySQLFunctions}
+	Mapper["postgres"] = &object.Module{Name: "postgres", Functions: PostGresFunctions}
 	Mapper["encoding"] = &object.Module{Name: "encoding", Functions: EncodingFunctions}
 	Mapper["errors"] = &object.Module{Name: "errors", Functions: ErrorFunctions}
 	Mapper["colors"] = &object.Module{Name: "colors", Functions: ColorsFunctions}
