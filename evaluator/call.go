@@ -8,7 +8,8 @@ import (
 // evalCall evaluates a function call expression by:
 // 1. Evaluating the function to be called.
 // 2. Evaluating the arguments for the function.
-// 3. Applying the function with the evaluated arguments.
+// 3. Resolving overloads by arity (and later, by type).
+// 4. Applying the function with the evaluated arguments.
 func evalCall(node *ast.CallExpression, env *object.Environment) object.Object {
 	// Evaluate the function expression
 	function := Eval(node.Function, env)
@@ -19,6 +20,24 @@ func evalCall(node *ast.CallExpression, env *object.Environment) object.Object {
 	}
 
 	var args []object.Object
+
+	// Overload resolution: if the function is an identifier, check for overloads
+	if ident, ok := node.Function.(*ast.Identifier); ok {
+		overloads := env.GetAllFunctions(ident.Value)
+		if len(overloads) > 0 {
+			matched := false
+			for _, fn := range overloads {
+				if len(fn.Parameters) == len(node.Arguments) {
+					function = fn
+					matched = true
+					break
+				}
+			}
+			if !matched {
+				return newError("No matching overload for function '%s' with %d arguments", ident.Value, len(node.Arguments))
+			}
+		}
+	}
 
 	// Evaluate the arguments based on the function type
 	switch fn := function.(type) {
