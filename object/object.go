@@ -32,6 +32,7 @@ const (
 	NATIVE_OBJ       = "NATIVE_OBJ"
 	POINTER_OBJ      = "POINTER"
 	AT               = "@"
+	DEFERRED_CALL_OBJ = "DEFERRED_CALL"
 )
 
 // Object interface represents any object in the system
@@ -61,4 +62,16 @@ type Iterable interface {
 func newError(format string, a ...interface{}) *Error {
 	redFormat := fmt.Sprintf("\x1b[%dm%s\x1b[0m", 31, format) // Red-colored error message
 	return &Error{Message: fmt.Sprintf(redFormat, a...)}
+}
+
+// DeferredCall represents a function call that has been deferred
+
+type DeferredCall struct {
+	Fn   Object
+	Args []Object
+}
+
+func (dc *DeferredCall) Type() ObjectType { return DEFERRED_CALL_OBJ }
+func (dc *DeferredCall) Inspect() string {
+	return "deferred call"
 }
