@@ -1,0 +1,34 @@
+// Function overloading by arity
+let greet = func(name) {
+    print("Hello, ", name)
+}
+
+let greet = func(name, times) {
+    for i in range(times) {
+        print("Hello, ", name)
+    }
+}
+
+let greet = func() {
+    print("Hello, world!")
+}
+
+greet("Alice")      // Should print: Hello, Alice
+print("---")
+greet("Bob", 3)      // Should print: Hello, Bob (3 times)
+print("---")
+greet()             // Should print: Hello, world!
+
+// Normal (non-overloaded) functions
+let add = func(a, b) {
+    return a + b
+}
+
+let result = add(2, 3)
+print("add(2, 3) =", result) // Should print: add(2, 3) = 5
+
+let say_hello = func() {
+    print("Hello from a normal function!")
+}
+
+say_hello() // Should print: Hello from a normal function! 
