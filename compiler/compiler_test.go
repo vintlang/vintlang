@@ -237,3 +237,4 @@ func parse(input string) *ast.Program {
 	p := parser.New(l)
 	return p.ParseProgram()
 }
+ 
