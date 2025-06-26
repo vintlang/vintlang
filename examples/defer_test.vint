@@ -1,0 +1,7 @@
+let test_defer = func() {
+    defer println("deferred message");
+    println("function body");
+};
+
+test_defer();
+println("after function call");
