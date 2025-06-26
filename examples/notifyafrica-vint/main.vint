@@ -1,0 +1,93 @@
+import notifyafrica_pkg
+import os
+import time
+import uuid
+import dotenv
+import json
+
+// Load environment variables
+dotenv.load(".env")
+
+// Helper: log to file
+let logResult = func(logMessage) {
+    let log_file = "notifyafrica.log"
+    let timestamp = time.now().toString()
+    os.writeFile(log_file, "[" + timestamp + "] " + logMessage + "\n", "append")
+}
+
+// Helper: get recipients from user
+let getRecipients = func() {
+    let recipients = []
+    print("\nEnter recipient numbers (comma separated, e.g. 2557654321,2557123456):")
+    let inputStr = input()
+    let nums = inputStr.split(",")
+    for n in nums {
+        let trimmed = n.trim()
+        if (trimmed != "") {
+            recipients.push({"number": int(trimmed)})
+        }
+    }
+    return recipients
+}
+
+// Main menu
+let mainMenu = func() {
+    println("\n=========================")
+    println(" NotifyAfrica SMS Sender")
+    println("=========================")
+    println("1. Send SMS")
+    println("2. View Log")
+    println("3. Exit")
+    let choice = input("Choose an option: ")
+    return choice
+}
+
+// Send SMS flow
+let sendSMSFlow = func() {
+    let sender_id = input("Enter sender ID (number): ")
+    let sms = input("Enter SMS message: ")
+    let recipients = getRecipients()
+    let schedule = input("Enter schedule (or 'none'): ")
+    if (schedule == "") { schedule = "none" }
+    
+    let request_id = uuid.generate()
+    print("\nSending SMS... [Request ID: " + request_id + "]")
+    
+    let response = notifyafrica_pkg.sendSMS(sender_id, sms, recipients, schedule)
+    
+    // Check if the response is an error object
+    if (response.type && response.type() == "ERROR") {
+        print("[ERROR] Failed to send SMS: " + response.message())
+        logResult("[ERROR] " + response.message() + " [Request ID: " + request_id + "]")
+    } else {
+        print("[SUCCESS] SMS sent! Response: " + response.inspect())
+        logResult("[SUCCESS] SMS sent to " + string(len(recipients)) + " recipients. [Request ID: " + request_id + "]")
+    }
+}
+
+// View log
+let viewLog = func() {
+    let log_file = "notifyafrica.log"
+    print("\n=== Log History ===")
+    if (os.exists(log_file)) {
+        let logs = os.readFile(log_file)
+        print(logs)
+    } else {
+        print("No logs available yet.")
+    }
+}
+
+// Main loop
+while (true) {
+    let choice = mainMenu()
+    if (choice == "1") {
+        sendSMSFlow()
+    } else if (choice == "2") {
+        viewLog()
+    } else if (choice == "3") {
+        print("\nGoodbye!")
+        break
+    } else {
+        print("\n[WARNING] Invalid choice. Try again.")
+    }
+}
