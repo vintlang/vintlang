@@ -124,6 +124,10 @@ func New(l *lexer.Lexer) *Parser {
 	p.registerPrefix(token.ERROR, p.parseErrorStatement)
 	p.registerPrefix(token.DEFER, p.parseDeferStatement)
 	p.registerPrefix(token.AT, p.parseAt)
+	p.registerPrefix(token.INFO, p.parseInfoStatement)
+	p.registerPrefix(token.DEBUG, p.parseDebugStatement)
+	p.registerPrefix(token.NOTE, p.parseNoteStatement)
+	p.registerPrefix(token.SUCCESS, p.parseSuccessStatement)
 
 	p.infixParseFns = make(map[token.TokenType]infixParseFn)
 	p.registerInfix(token.AND, p.parseInfixExpression)
@@ -359,6 +363,46 @@ func (p *Parser) parseDeferStatement() ast.Expression {
 	stmt := &ast.DeferStatement{Token: p.curToken}
 	p.nextToken()
 	stmt.Call = p.parseExpression(LOWEST)
+	if p.peekTokenIs(token.SEMICOLON) {
+		p.nextToken()
+	}
+	return stmt
+}
+
+func (p *Parser) parseInfoStatement() ast.Expression {
+	stmt := &ast.InfoStatement{Token: p.curToken}
+	p.nextToken()
+	stmt.Value = p.parseExpression(LOWEST)
+	if p.peekTokenIs(token.SEMICOLON) {
+		p.nextToken()
+	}
+	return stmt
+}
+
+func (p *Parser) parseDebugStatement() ast.Expression {
+	stmt := &ast.DebugStatement{Token: p.curToken}
+	p.nextToken()
+	stmt.Value = p.parseExpression(LOWEST)
+	if p.peekTokenIs(token.SEMICOLON) {
+		p.nextToken()
+	}
+	return stmt
+}
+
+func (p *Parser) parseNoteStatement() ast.Expression {
+	stmt := &ast.NoteStatement{Token: p.curToken}
+	p.nextToken()
+	stmt.Value = p.parseExpression(LOWEST)
+	if p.peekTokenIs(token.SEMICOLON) {
+		p.nextToken()
+	}
+	return stmt
+}
+
+func (p *Parser) parseSuccessStatement() ast.Expression {
+	stmt := &ast.SuccessStatement{Token: p.curToken}
+	p.nextToken()
+	stmt.Value = p.parseExpression(LOWEST)
 	if p.peekTokenIs(token.SEMICOLON) {
 		p.nextToken()
 	}
