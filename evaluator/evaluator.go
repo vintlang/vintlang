@@ -261,6 +261,34 @@ func Eval(node ast.Node, env *object.Environment) object.Object {
 		deferredCalls = append(deferredCalls, deferredCall)
 
 		return NULL
+	case *ast.InfoStatement:
+		val := Eval(node.Value, env)
+		if isError(val) {
+			return val
+		}
+		fmt.Printf("\n\u001b[1;36m[INFO]\u001b[0m: %s\n\n", val.Inspect())
+		return NULL
+	case *ast.DebugStatement:
+		val := Eval(node.Value, env)
+		if isError(val) {
+			return val
+		}
+		fmt.Printf("\n\u001b[1;35m[DEBUG]\u001b[0m: %s\n\n", val.Inspect())
+		return NULL
+	case *ast.NoteStatement:
+		val := Eval(node.Value, env)
+		if isError(val) {
+			return val
+		}
+		fmt.Printf("\n\u001b[1;34m[NOTE]\u001b[0m: %s\n\n", val.Inspect())
+		return NULL
+	case *ast.SuccessStatement:
+		val := Eval(node.Value, env)
+		if isError(val) {
+			return val
+		}
+		fmt.Printf("\n\u001b[1;32m[SUCCESS]\u001b[0m: %s\n\n", val.Inspect())
+		return NULL
 	}
 
 	return nil
