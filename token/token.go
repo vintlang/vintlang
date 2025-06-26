@@ -83,6 +83,7 @@ const (
 	WARN     = "WARN"
 	ERROR    = "ERROR"
 	DEFER    = "DEFER"
+	REPEAT    = "REPEAT"
 )
 
 var keywords = map[string]TokenType{
@@ -111,6 +112,7 @@ var keywords = map[string]TokenType{
 	"error":    ERROR,
 	"@":        AT,
 	"defer":    DEFER,
+	"repeat": REPEAT,
 }
 
 func LookupIdent(ident string) TokenType {
