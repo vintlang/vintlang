@@ -682,3 +682,22 @@ func (is *IncludeStatement) String() string {
 	out.WriteString(is.Path.String())
 	return out.String()
 }
+
+type RepeatStatement struct {
+	Token token.Token // the 'repeat' token
+	Count Expression
+	Block *BlockStatement
+}
+
+func (rs *RepeatStatement) statementNode()       {}
+func (rs *RepeatStatement) TokenLiteral() string { return rs.Token.Literal }
+func (rs *RepeatStatement) String() string {
+	var out bytes.Buffer
+
+	out.WriteString("repeat ")
+	out.WriteString(rs.Count.String())
+	out.WriteString(" ")
+	out.WriteString(rs.Block.String())
+
+	return out.String()
+}
