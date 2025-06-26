@@ -127,3 +127,4 @@ func ReadOperands(def *Definition, ins Instructions) ([]int, int) {
 
 	return operands, offset
 }
+ 
