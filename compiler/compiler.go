@@ -116,3 +116,4 @@ func (c *Compiler) emit(op code.Opcode, operands ...int) int {
 	c.instructions = append(c.instructions, ins...)
 	return pos
 }
+ 
