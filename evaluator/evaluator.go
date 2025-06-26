@@ -16,6 +16,8 @@ var (
 	FALSE    = &object.Boolean{Value: false}
 	BREAK    = &object.Break{}
 	CONTINUE = &object.Continue{}
+
+	deferredCalls []*object.DeferredCall
 )
 
 func Eval(node ast.Node, env *object.Environment) object.Object {
@@ -239,6 +241,26 @@ func Eval(node ast.Node, env *object.Environment) object.Object {
 			return val
 		}
 		return newError(val.Inspect())
+	case *ast.DeferStatement:
+		call, ok := node.Call.(*ast.CallExpression)
+		if !ok {
+			return newError("defer statement must be followed by a function call")
+		}
+
+		fn := Eval(call.Function, env)
+		if isError(fn) {
+			return fn
+		}
+
+		args := evalExpressions(call.Arguments, env)
+		if len(args) == 1 && isError(args[0]) {
+			return args[0]
+		}
+
+		deferredCall := &object.DeferredCall{Fn: fn, Args: args}
+		deferredCalls = append(deferredCalls, deferredCall)
+
+		return NULL
 	}
 
 	return nil
@@ -311,6 +333,18 @@ func evalExpressions(exps []ast.Expression, env *object.Environment) []object.Ob
 func applyFunction(fn object.Object, args []object.Object, line int) object.Object {
 	switch fn := fn.(type) {
 	case *object.Function:
+		prevDefersCount := len(deferredCalls)
+		defer func() {
+			if len(deferredCalls) > prevDefersCount {
+				callsToExecute := deferredCalls[prevDefersCount:]
+				for i := len(callsToExecute) - 1; i >= 0; i-- {
+					dc := callsToExecute[i]
+					applyFunction(dc.Fn, dc.Args, 0)
+				}
+				deferredCalls = deferredCalls[:prevDefersCount]
+			}
+		}()
+
 		if fn.Name != "" {
 			fn.Env.Define(fn.Name, fn)
 		}

@@ -41,3 +41,15 @@ func (es *ErrorStatement) TokenLiteral() string { return es.Token.Literal }
 func (es *ErrorStatement) String() string {
 	return fmt.Sprintf("error %s", es.Value.String())
 }
+
+type DeferStatement struct {
+	Token token.Token // the 'defer' token
+	Call  Expression
+}
+
+func (ds *DeferStatement) statementNode()       {}
+func (ds *DeferStatement) expressionNode()      {}
+func (ds *DeferStatement) TokenLiteral() string { return ds.Token.Literal }
+func (ds *DeferStatement) String() string {
+	return fmt.Sprintf("defer %s", ds.Call.String())
+}

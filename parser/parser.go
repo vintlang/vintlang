@@ -122,6 +122,7 @@ func New(l *lexer.Lexer) *Parser {
 	p.registerPrefix(token.TODO, p.parseTodoStatement)
 	p.registerPrefix(token.WARN, p.parseWarnStatement)
 	p.registerPrefix(token.ERROR, p.parseErrorStatement)
+	p.registerPrefix(token.DEFER, p.parseDeferStatement)
 	p.registerPrefix(token.AT, p.parseAt)
 
 	p.infixParseFns = make(map[token.TokenType]infixParseFn)
@@ -348,6 +349,16 @@ func (p *Parser) parseErrorStatement() ast.Expression {
 	stmt := &ast.ErrorStatement{Token: p.curToken}
 	p.nextToken()
 	stmt.Value = p.parseExpression(LOWEST)
+	if p.peekTokenIs(token.SEMICOLON) {
+		p.nextToken()
+	}
+	return stmt
+}
+
+func (p *Parser) parseDeferStatement() ast.Expression {
+	stmt := &ast.DeferStatement{Token: p.curToken}
+	p.nextToken()
+	stmt.Call = p.parseExpression(LOWEST)
 	if p.peekTokenIs(token.SEMICOLON) {
 		p.nextToken()
 	}
