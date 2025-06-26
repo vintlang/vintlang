@@ -1,0 +1,15 @@
+// Example: Using if as a statement (classic)
+let x = 0
+if (true) {
+    x = 42
+}
+print("Classic if statement result: ", x)
+
+// Example: Using if as an expression (new)
+let status = ""
+status = if (x > 0) { "Online" } else { "Offline" }
+print("If as an expression result: ", status)
+
+// Example: if as an expression with no else
+let y = if (false) { 123 }
+print("If as an expression with no else: ", y) 
