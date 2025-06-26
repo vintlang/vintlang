@@ -44,3 +44,68 @@ if (a > 100) {
 - **`else`**: Executes code if none of the above conditions are true.
 
 By using `if`, `else if`, and `else`, you can make decisions and control the flow of your **Vint** programs based on dynamic conditions.
+
+# If Statements and If Expressions in Vint
+
+Vint supports both classic if statements and the new if expressions, allowing you to use conditional logic in both statement and expression positions.
+
+---
+
+## Classic If Statement
+
+The classic if statement executes a block of code if a condition is true. You can optionally provide an `else` block.
+
+**Syntax:**
+```vint
+if (condition) {
+    // code to run if condition is true
+} else {
+    // code to run if condition is false
+}
+```
+
+**Example:**
+```vint
+let x = 0
+if (true) {
+    x = 42
+}
+print("Classic if statement result: ", x)
+```
+
+---
+
+## If as an Expression (New Feature)
+
+You can now use `if` as an expression, which returns a value. This allows you to assign the result of a conditional directly to a variable, or use it in any expression context.
+
+**Syntax:**
+```vint
+let result = if (condition) { valueIfTrue } else { valueIfFalse }
+```
+
+- The `if` expression evaluates to the value of the first block if the condition is true, or the value of the `else` block if provided.
+- If the condition is false and there is no `else`, the result is `null`.
+
+**Examples:**
+```vint
+let status = ""
+status = if (x > 0) { "Online" } else { "Offline" }
+print("If as an expression result: ", status)
+
+let y = if (false) { 123 }
+print("If as an expression with no else: ", y) // prints: null
+```
+
+---
+
+## Notes
+- Parentheses around the condition are required: `if (condition) { ... }`.
+- Both the classic statement and the new expression form are fully supported and can be mixed in your code.
+- Use `//` for single-line comments and `/* ... */` for multi-line comments in Vint.
+
+---
+
+## See Also
+- [Switch Statements](switch.md)
+- [Operators](operators.md)
