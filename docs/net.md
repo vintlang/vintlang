@@ -1,164 +1,134 @@
-# Vint NET Module Documentation (`net`)
+# Net Module
 
-The `net` module in Vint provides functionalities for performing HTTP requests. This module allows you to make various types of HTTP requests such as GET, POST, PUT, DELETE, and PATCH. It supports adding headers and request bodies, and the responses from the HTTP requests are returned as strings.
+The `net` module provides functions for making HTTP requests (GET, POST, PUT, DELETE, PATCH) from your Vint scripts. Each function supports both simple and advanced usage, allowing you to specify URLs, headers, and request bodies.
 
-## Importing the `net` Module
+## Functions
 
-To use the functionality provided by the `net` module in your Vint program, you must first import it:
+### 1. `net.get`
 
-```js
-import net
+**Description:**
+Sends an HTTP GET request.
+
+**Usage:**
+```vint
+net.get("https://api.example.com/data")
+```
+Or with named arguments:
+```vint
+net.get(
+  url: "https://api.example.com/data",
+  headers: {"Authorization": "Bearer token"},
+  body: {"key": "value"}  # Optional, rarely used for GET
+)
 ```
 
-## Methods Overview
+**Arguments:**
+- `url` (string, required): The URL to request.
+- `headers` (dict, optional): HTTP headers as key-value pairs.
+- `body` (dict, optional): Data to send as JSON (rare for GET).
 
-The following HTTP methods are available in the `net` module:
-
-- **`net.get()`**: Perform a GET request.
-- **`net.post()`**: Perform a POST request.
-- **`net.put()`**: Perform a PUT request.
-- **`net.delete()`**: Perform a DELETE request.
-- **`net.patch()`**: Perform a PATCH request.
+**Returns:**
+Response body as a string, or an error object.
 
 ---
 
-## Method Details
+### 2. `net.post`
 
-### `net.get()`
+**Description:**
+Sends an HTTP POST request.
 
-Performs an HTTP GET request. The method accepts a URL and optional headers or body data.
-
-#### Usage
-
-```js
-response = net.get("http://example.com")
+**Usage:**
+```vint
+net.post(
+  url: "https://api.example.com/data",
+  headers: {"Authorization": "Bearer token"},
+  body: {"key": "value"}
+)
 ```
 
-Or with keyword arguments:
+**Arguments:**
+- `url` (string, required): The URL to request.
+- `headers` (dict, optional): HTTP headers as key-value pairs.
+- `body` (dict, optional): Data to send as JSON.
 
-```js
-response = net.get(url="http://mysite.com", headers={"Authorization": "Bearer token"}, body={"key": "value"})
-```
-
-#### Parameters
-- **`url`** *(string)*: The URL for the GET request.
-- **`headers`** *(dictionary, optional)*: Headers to include in the request.
-- **`body`** *(dictionary, optional)*: Data to send in the request body.
-
-#### Returns
-A `string` containing the response body.
+**Returns:**
+Response body as a string, or an error object.
 
 ---
 
-### `net.post()`
+### 3. `net.put`
 
-Performs an HTTP POST request. This is useful for sending data to a server.
+**Description:**
+Sends an HTTP PUT request.
 
-#### Usage
-
-```js
-response = net.post("http://example.com", headers={"Content-Type": "application/json"}, body={"key": "value"})
+**Usage:**
+```vint
+net.put(
+  url: "https://api.example.com/data/1",
+  headers: {"Authorization": "Bearer token"},
+  body: {"key": "new value"}
+)
 ```
 
-#### Parameters
-- **`url`** *(string)*: The URL for the POST request.
-- **`headers`** *(dictionary, optional)*: Headers to include in the request.
-- **`body`** *(dictionary, optional)*: Data to send in the request body.
+**Arguments:**
+- `url` (string, required): The URL to request.
+- `headers` (dict, optional): HTTP headers as key-value pairs.
+- `body` (dict, optional): Data to send as JSON.
 
-#### Returns
-A `string` containing the response body.
+**Returns:**
+Response body as a string, or an error object.
 
 ---
 
-### `net.put()`
+### 4. `net.delete`
 
-Performs an HTTP PUT request to update resources on a server.
+**Description:**
+Sends an HTTP DELETE request.
 
-#### Usage
-
-```js
-response = net.put("http://example.com/resource", headers={"Authorization": "Bearer token"}, body={"updated_key": "new_value"})
+**Usage:**
+```vint
+net.delete(
+  url: "https://api.example.com/data/1",
+  headers: {"Authorization": "Bearer token"}
+)
 ```
 
-#### Parameters
-- **`url`** *(string)*: The URL for the PUT request.
-- **`headers`** *(dictionary, optional)*: Headers to include in the request.
-- **`body`** *(dictionary, optional)*: Data to send in the request body.
+**Arguments:**
+- `url` (string, required): The URL to request.
+- `headers` (dict, optional): HTTP headers as key-value pairs.
 
-#### Returns
-A `string` containing the response body.
+**Returns:**
+Response body as a string, or an error object.
 
 ---
 
-### `net.delete()`
+### 5. `net.patch`
 
-Performs an HTTP DELETE request to remove a resource from the server.
+**Description:**
+Sends an HTTP PATCH request.
 
-#### Usage
-
-```js
-response = net.delete("http://example.com/resource", headers={"Authorization": "Bearer token"})
+**Usage:**
+```vint
+net.patch(
+  url: "https://api.example.com/data/1",
+  headers: {"Authorization": "Bearer token"},
+  body: {"key": "patched value"}
+)
 ```
 
-#### Parameters
-- **`url`** *(string)*: The URL for the DELETE request.
-- **`headers`** *(dictionary, optional)*: Headers to include in the request.
-- **`body`** *(dictionary, optional)*: Data to send in the request body, if supported by the API.
+**Arguments:**
+- `url` (string, required): The URL to request.
+- `headers` (dict, optional): HTTP headers as key-value pairs.
+- `body` (dict, optional): Data to send as JSON.
 
-#### Returns
-A `string` containing the response body.
+**Returns:**
+Response body as a string, or an error object.
 
 ---
 
-### `net.patch()`
+## Notes
 
-Performs an HTTP PATCH request to partially update a resource on the server.
-
-#### Usage
-
-```js
-response = net.patch("http://example.com/resource", headers={"Authorization": "Bearer token"}, body={"key": "updated_value"})
-```
-
-#### Parameters
-- **`url`** *(string)*: The URL for the PATCH request.
-- **`headers`** *(dictionary, optional)*: Headers to include in the request.
-- **`body`** *(dictionary, optional)*: Data to send in the request body.
-
-#### Returns
-A `string` containing the response body.
-
----
-
-
-## Example Usage
-
-### Basic GET Request
-
-```js
-import net
-
-response = net.get("http://example.com")
-print(response)
-```
-
-### POST Request with Headers and Body
-
-```js
-import net
-
-url = "http://example.com/api"
-headers = {"Authorization": "Bearer token"}
-data = {"key": "value"}
-
-response = net.post(url=url, headers=headers, body=data)
-print(response)
-```
-
----
-
-## Return Type
-
-All methods return a `string` containing the response body. In case of an error, an error object is returned with the error details.
-
----
+- All functions return the response body as a string, or an error object if something goes wrong.
+- Named arguments (`url`, `headers`, `body`) are recommended for clarity.
+- Headers and body must be dictionaries.
+- For GET requests, the body is rarely used and may not be supported by all servers.
