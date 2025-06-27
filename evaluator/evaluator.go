@@ -299,8 +299,14 @@ func Eval(node ast.Node, env *object.Environment) object.Object {
 			return newError("repeat expects an integer count, got %s", countObj.Type())
 		}
 		var result object.Object = NULL
+		varName := node.VarName
+		if varName == "" {
+			varName = "i"
+		}
 		for i := int64(0); i < count.Value; i++ {
-			res := Eval(node.Block, env)
+			loopEnv := object.NewEnclosedEnvironment(env)
+			loopEnv.Define(varName, &object.Integer{Value: i})
+			res := Eval(node.Block, loopEnv)
 			if isError(res) {
 				return res
 			}

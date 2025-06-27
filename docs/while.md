@@ -77,3 +77,36 @@ skipped
 ```
 
 By understanding while loops in Vint, you can create code that repeats a specific action or checks for certain conditions, offering more flexibility and control over your code execution.
+
+## Repeat Loops
+
+The `repeat` keyword allows you to execute a block of code a specific number of times. The default loop variable `i` is available inside the block, representing the current iteration (starting from 0).
+
+### Syntax
+
+```vint
+repeat 5 {
+    println("Iteration:", i)
+}
+```
+
+This will print:
+
+```
+Iteration: 0
+Iteration: 1
+Iteration: 2
+Iteration: 3
+Iteration: 4
+```
+
+You can also use an expression for the count:
+
+```vint
+let n = 3
+repeat n {
+    println(i)
+}
+```
+
+The variable `i` is always available in the scope of the repeat block.

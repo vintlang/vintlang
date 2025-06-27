@@ -411,8 +411,23 @@ func (p *Parser) parseSuccessStatement() ast.Expression {
 }
 
 func (p *Parser) parseRepeatStatement() ast.Expression {
-	stmt := &ast.RepeatStatement{Token: p.curToken}
-	p.nextToken()
+	stmt := &ast.RepeatStatement{Token: p.curToken, VarName: "i"}
+	// Check for optional (varname)
+	if p.peekTokenIs(token.LPAREN) {
+		p.nextToken() // consume '('
+		p.nextToken() // move to identifier
+		if p.curToken.Type == token.IDENT {
+			stmt.VarName = p.curToken.Literal
+		} else {
+			return nil // syntax error
+		}
+		if !p.expectPeek(token.RPAREN) {
+			return nil
+		}
+		// Do NOT call p.nextToken() here; the next token should be the count expression
+	} else {
+		p.nextToken()
+	}
 	stmt.Count = p.parseExpression(LOWEST)
 	if !p.expectPeek(token.LBRACE) {
 		return nil
