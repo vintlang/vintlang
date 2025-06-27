@@ -1,9 +1,6 @@
 import Link from "next/link"
 import { Code2 } from 'lucide-react'
 
-// import { cn } from "@/lib/utils"
-// import { buttonVariants } from "@/components/ui/button"
-// import { MainNav } from "@/components/docs/main-nav"
 import { MobileNav } from "@/components/docs/mobile-nav"
 import { ModeToggle } from "@/components/docs/mode-toggle"
 
