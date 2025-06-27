@@ -22,6 +22,11 @@ export const navigation = [
       icon: PackageCheck,
     },
     {
+      name: "Changelog",
+      href: "/docs/changelog",
+      icon: PackageCheck,
+    },
+    {
       name: "Sponsor",
       href: "/docs#sponsor",
       icon: HelpCircle,
