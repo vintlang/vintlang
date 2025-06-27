@@ -1,4 +1,4 @@
-import { Hand, ArrowDownToLine, FileText, BookOpen, HelpCircle, PackageCheck } from "lucide-react";
+import { Hand, ArrowDownToLine, FileText, BookOpen, HelpCircle, PackageCheck, ReplaceAll } from "lucide-react";
 
 export const navigation = [
     {
@@ -24,7 +24,7 @@ export const navigation = [
     {
       name: "Changelog",
       href: "/docs/changelog",
-      icon: PackageCheck,
+      icon: ReplaceAll,
     },
     {
       name: "Sponsor",
