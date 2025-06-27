@@ -2,7 +2,7 @@ import { fetchMarkdown } from "@/lib/utils";
 import SectionHeader from "./SectionHeader";
 import { Markdown } from "../Markdown";
   
-export default async function Bundler(){
+export default async function Changelog(){
   const markdown = await fetchMarkdown("CHANGELOG.md");
   return (
     <div className="p-6" id="docs">
