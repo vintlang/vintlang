@@ -690,6 +690,7 @@ type RepeatStatement struct {
 }
 
 func (rs *RepeatStatement) statementNode()       {}
+func (rs *RepeatStatement) expressionNode()      {}
 func (rs *RepeatStatement) TokenLiteral() string { return rs.Token.Literal }
 func (rs *RepeatStatement) String() string {
 	var out bytes.Buffer
