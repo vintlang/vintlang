@@ -51,7 +51,8 @@ func evalCall(node *ast.CallExpression, env *object.Environment) object.Object {
 				}
 			}
 			if !matched {
-				return newError("No matching overload for function '%s' with %d arguments", ident.Value, len(node.Arguments))
+				// Improved error message with line number and code snippet
+				return newError("No matching overload for function '%s' with %d arguments at line %d. Source: %s", ident.Value, len(node.Arguments), node.Token.Line, node.Function.String())
 			}
 		}
 	}
