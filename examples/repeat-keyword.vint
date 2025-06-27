@@ -1,0 +1,9 @@
+let num = 5
+
+repeat num {
+    println("Hello there")
+}
+
+repeat 3 {
+    println("Default i:", i)
+}
