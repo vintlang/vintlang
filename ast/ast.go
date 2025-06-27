@@ -684,9 +684,10 @@ func (is *IncludeStatement) String() string {
 }
 
 type RepeatStatement struct {
-	Token token.Token // the 'repeat' token
-	Count Expression
-	Block *BlockStatement
+	Token   token.Token // the 'repeat' token
+	VarName string      // loop variable name, default: "i"
+	Count   Expression
+	Block   *BlockStatement
 }
 
 func (rs *RepeatStatement) statementNode()       {}
@@ -694,11 +695,12 @@ func (rs *RepeatStatement) expressionNode()      {}
 func (rs *RepeatStatement) TokenLiteral() string { return rs.Token.Literal }
 func (rs *RepeatStatement) String() string {
 	var out bytes.Buffer
-
 	out.WriteString("repeat ")
+	if rs.VarName != "" {
+		out.WriteString("(" + rs.VarName + ") ")
+	}
 	out.WriteString(rs.Count.String())
 	out.WriteString(" ")
 	out.WriteString(rs.Block.String())
-
 	return out.String()
 }
