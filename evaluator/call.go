@@ -27,10 +27,27 @@ func evalCall(node *ast.CallExpression, env *object.Environment) object.Object {
 		if len(overloads) > 0 {
 			matched := false
 			for _, fn := range overloads {
-				if len(fn.Parameters) == len(node.Arguments) {
+				paramCount := len(fn.Parameters)
+				argCount := len(node.Arguments)
+				// Allow match if all missing params have defaults
+				if argCount == paramCount {
 					function = fn
 					matched = true
 					break
+				} else if argCount < paramCount {
+					missing := paramCount - argCount
+					missingWithDefaults := 0
+					for i := argCount; i < paramCount; i++ {
+						paramName := fn.Parameters[i].Value
+						if _, ok := fn.Defaults[paramName]; ok {
+							missingWithDefaults++
+						}
+					}
+					if missingWithDefaults == missing {
+						function = fn
+						matched = true
+						break
+					}
 				}
 			}
 			if !matched {
