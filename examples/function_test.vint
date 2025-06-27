@@ -1,0 +1,22 @@
+// Test default parameter
+let greet = func(name = "Guest") {
+    println("Hello, " + name)
+}
+
+greet()        // Should print: Hello, Guest
+greet("Alice") // Should print: Hello, Alice
+
+// Test multiple parameters with one default
+let add = func(a, b = 10) {
+    return a + b
+}
+
+println(add(5))      // Should print: 15
+println(add(5, 2))   // Should print: 7
+
+// Test function returning a value
+let square = func(x) {
+    return x * x
+}
+
+println(square(4))   // Should print: 16 
