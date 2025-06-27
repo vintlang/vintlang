@@ -1,3 +1,20 @@
+// Info statement
+info "This is an informational message."
+println("Info should print above.")
+
+// Debug statement
+debug "Debugging value: " + "123"
+println("Debug should print above.")
+
+// Note statement
+note "This is a note for the user."
+println("Note should print above.")
+
+// Success statement
+success "Operation completed successfully!"
+println("Success should print above.")
+
+// Existing warn and error tests
 warn "This is a warning. The script should continue."
 println("This line should execute after the warning.")
 let errMSG = "This is a fatal error. The script should stop here."
