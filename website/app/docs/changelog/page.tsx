@@ -4,7 +4,8 @@ import { Metadata } from "next";
 
 export const metadata: Metadata = {
   title: "Changelog - VintLang",
-  description: "VintLang Changelog",
+  description:
+    "Stay up-to-date with the latest features and improvements in VintLang. Our changelog covers updates to language features like declarative statements, repeat loops, and function overloading, as well as enhancements to our compiler, VM, and documentation.",
 };
 
 export default function ChangelogPage() {
