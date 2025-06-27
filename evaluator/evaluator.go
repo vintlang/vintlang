@@ -289,6 +289,40 @@ func Eval(node ast.Node, env *object.Environment) object.Object {
 		}
 		fmt.Printf("\n\u001b[1;32m[SUCCESS]\u001b[0m: %s\n\n", val.Inspect())
 		return NULL
+	case *ast.RepeatStatement:
+		countObj := Eval(node.Count, env)
+		if isError(countObj) {
+			return countObj
+		}
+		count, ok := countObj.(*object.Integer)
+		if !ok {
+			return newError("repeat expects an integer count, got %s", countObj.Type())
+		}
+		var result object.Object = NULL
+		varName := node.VarName
+		if varName == "" {
+			varName = "i"
+		}
+		for i := int64(0); i < count.Value; i++ {
+			loopEnv := object.NewEnclosedEnvironment(env)
+			loopEnv.Define(varName, &object.Integer{Value: i})
+			res := Eval(node.Block, loopEnv)
+			if isError(res) {
+				return res
+			}
+			if res != nil {
+				switch res.Type() {
+				case object.BREAK_OBJ:
+					return NULL
+				case object.CONTINUE_OBJ:
+					continue
+				case object.RETURN_VALUE_OBJ:
+					return res
+				}
+			}
+			result = res
+		}
+		return result
 	}
 
 	return nil
