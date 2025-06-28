@@ -139,7 +139,7 @@ if (age == 20) {
 
 ### Example 3: Working with Height Variable
 
-```ja
+```js
 // Working with height variable
 height = "6.0" // Height in feet
 print("My name is " + name)
