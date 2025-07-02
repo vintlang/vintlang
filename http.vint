@@ -1,7 +1,5 @@
 import http
 
-PORT = "3000"
-
 dir = "/var/www/html"
 // dir="/home/tach/Documents/homeFirefox/"
 
