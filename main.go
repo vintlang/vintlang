@@ -96,6 +96,8 @@ func main() {
 			toolkit.Get(args[2])
 		case "init":
 			toolkit.Init(args)
+		case "new":
+			toolkit.New(args)
 		case "test", "-test", "--test", "-t":
 			runTests()
 		case "fmt", "-fmt", "--fmt", "-f":
