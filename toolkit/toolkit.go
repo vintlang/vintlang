@@ -228,12 +228,8 @@ package greetings_module{
 }
 `
 
-func Init(args []string) {
-	projectName := "vint-project"
-	if len(args) >= 2 {
-		projectName = args[2]
-	}
-
+// createProject scaffolds a new Vint project in the given directory
+func createProject(projectName string) {
 	// Structure for vintconfig.json
 	var vintConfig = VintConfig{
 		Name:        projectName,
@@ -294,4 +290,22 @@ func Init(args []string) {
 
 	// Success message
 	fmt.Printf("🚀 Project '%s' initialized successfully!\n", projectName)
+}
+
+// Init is the legacy project initializer, now uses createProject
+func Init(args []string) {
+	projectName := "vint-project"
+	if len(args) >= 3 {
+		projectName = args[2]
+	}
+	createProject(projectName)
+}
+
+// New is the new project initializer for 'vint new'
+func New(args []string) {
+	projectName := "vint-project"
+	if len(args) >= 3 {
+		projectName = args[2]
+	}
+	createProject(projectName)
 }
