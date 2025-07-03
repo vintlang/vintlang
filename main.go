@@ -8,6 +8,8 @@ import (
 
 	"github.com/charmbracelet/lipgloss"
 	"github.com/vintlang/vintlang/bundler"
+	"github.com/vintlang/vintlang/lexer"
+	"github.com/vintlang/vintlang/parser"
 	"github.com/vintlang/vintlang/repl"
 	"github.com/vintlang/vintlang/styles"
 	"github.com/vintlang/vintlang/toolkit"
@@ -159,14 +161,32 @@ func formatFile(file string) {
 		os.Exit(1)
 	}
 
-	_, err := os.ReadFile(file)
+	contents, err := os.ReadFile(file)
 	if err != nil {
 		fmt.Println(styles.ErrorStyle.Render("Error: Failed to read file:", file))
 		os.Exit(1)
 	}
 
-	// TODO: Implement actual formatting logic
-	// For now, just show a placeholder message
-	fmt.Println(styles.HelpStyle.Render("Formatting", file))
-	fmt.Println(styles.HelpStyle.Render("Note: Formatting is not yet implemented"))
+	// Parse the file using the lexer and parser
+	l := lexer.New(string(contents))
+	p := parser.New(l)
+	program := p.ParseProgram()
+
+	if len(p.Errors()) > 0 {
+		fmt.Println(styles.ErrorStyle.Render("Error: Failed to parse file. Cannot format."))
+		for _, msg := range p.Errors() {
+			fmt.Println(styles.ErrorStyle.Render(msg))
+		}
+		os.Exit(1)
+	}
+
+	formatted := program.String()
+
+	err = os.WriteFile(file, []byte(formatted), 0644)
+	if err != nil {
+		fmt.Println(styles.ErrorStyle.Render("Error: Failed to write formatted code to file."))
+		os.Exit(1)
+	}
+
+	fmt.Println(styles.HelpStyle.Render("Formatted", file))
 }
