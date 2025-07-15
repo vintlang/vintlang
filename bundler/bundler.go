@@ -194,5 +194,18 @@ require github.com/vintlang/vintlang v0.2.0
 
 	printlnVerbose(verbose, "✅")
 	fmt.Printf("\n✨ Successfully created binary: %s\n", outputPath)
+
+	// Cleanup option: keep temp directory if 'keep' flag is provided
+	keepTemp := false
+	if len(args) >= 8 && args[7] == "keep" {
+		keepTemp = true
+	}
+
+	if !keepTemp {
+		defer os.RemoveAll(tempDir)
+	}
+	if keepTemp {
+		printlnVerbose(verbose, "Temp directory kept for debugging:", tempDir)
+	}
 	return nil
 }
