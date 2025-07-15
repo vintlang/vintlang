@@ -76,13 +76,21 @@ func Bundle(args []string) error {
 
 	escapedCode := strings.ReplaceAll(string(data), "`", "` + \"`\" + `")
 
+	bundlerVersion := "v0.1.0"
+	buildTime := time.Now().Format(time.RFC3339)
+
 	const goTemplate = `package main
 
 import (
+	"fmt"
 	"github.com/vintlang/vintlang/repl"
 )
 
+var BundlerVersion = "{{.BundlerVersion}}"
+var BuildTime = "{{.BuildTime}}"
+
 func main() {
+	fmt.Printf("[Bundler Version: %s | Build Time: %s]\n", BundlerVersion, BuildTime)
 	code := ` + "`{{.Code}}`" + `
 	repl.Read(code)
 }
@@ -99,7 +107,7 @@ func main() {
 	defer mainFile.Close()
 
 	t := template.Must(template.New("main").Parse(goTemplate))
-	if err := t.Execute(mainFile, map[string]string{"Code": escapedCode}); err != nil {
+	if err := t.Execute(mainFile, map[string]string{"Code": escapedCode, "BundlerVersion": bundlerVersion, "BuildTime": buildTime}); err != nil {
 		err = fmt.Errorf("failed to execute template for main.go: %w", err)
 		logError(err)
 		return err
