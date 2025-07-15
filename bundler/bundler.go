@@ -23,6 +23,18 @@ func logError(err error) {
 	f.WriteString(fmt.Sprintf("[%s] %v\n", timestamp, err))
 }
 
+// printVerbose prints only if verbose mode is enabled
+func printVerbose(verbose bool, a ...interface{}) {
+	if verbose {
+		fmt.Print(a...)
+	}
+}
+func printlnVerbose(verbose bool, a ...interface{}) {
+	if verbose {
+		fmt.Println(a...)
+	}
+}
+
 // Bundles the vintlang code to a go binary
 func Bundle(args []string) error {
 	if len(args) == 0 {
@@ -36,18 +48,23 @@ func Bundle(args []string) error {
 	// if *name != "" {
 	// 	fmt.Printf("🔧 Custom binary name set to '%s'\n", *name)
 	// }
-	fmt.Printf("📦 Starting Bundle for '%s'\n", filepath.Base(vintFile))
+	// Verbose/Quiet mode
+	verbose := true
+	if len(args) >= 7 && args[6] == "quiet" {
+		verbose = false
+	}
+	printlnVerbose(verbose, "📦 Starting Bundle for '", filepath.Base(vintFile), "'")
 
-	fmt.Print("🔍 Reading source file... ")
+	printVerbose(verbose, "🔍 Reading source file... ")
 	data, err := os.ReadFile(vintFile)
 	if err != nil {
 		err = fmt.Errorf("failed to read file '%s': %w", vintFile, err)
 		logError(err)
 		return err
 	}
-	fmt.Println("✅")
+	printlnVerbose(verbose, "✅")
 
-	fmt.Print("📁 Creating temp Bundle directory... ")
+	printVerbose(verbose, "📁 Creating temp Bundle directory... ")
 	tempDir, err := os.MkdirTemp("", "vint-bundle-*")
 	if err != nil {
 		err = fmt.Errorf("failed to create temp dir: %w", err)
@@ -55,7 +72,7 @@ func Bundle(args []string) error {
 		return err
 	}
 	defer os.RemoveAll(tempDir)
-	fmt.Println("✅")
+	printlnVerbose(verbose, "✅")
 
 	escapedCode := strings.ReplaceAll(string(data), "`", "` + \"`\" + `")
 
@@ -71,7 +88,7 @@ func main() {
 }
 `
 
-	fmt.Print("⚙️  Generating Go code... ")
+	printVerbose(verbose, "⚙️  Generating Go code... ")
 	mainPath := filepath.Join(tempDir, "main.go")
 	mainFile, err := os.Create(mainPath)
 	if err != nil {
@@ -87,9 +104,9 @@ func main() {
 		logError(err)
 		return err
 	}
-	fmt.Println("✅")
+	printlnVerbose(verbose, "✅")
 
-	fmt.Print("📦 Initializing modules... ")
+	printVerbose(verbose, "📦 Initializing modules... ")
 	goMod := `module vint-bundled
 
 go 1.24
@@ -101,30 +118,32 @@ require github.com/vintlang/vintlang v0.2.0
 		logError(err)
 		return err
 	}
-	fmt.Println("✅")
+	printlnVerbose(verbose, "✅")
 
 	// Bundle binary
 	binaryName := strings.TrimSuffix(filepath.Base(vintFile), ".vint")
 
-	fmt.Println(args)
+	printlnVerbose(verbose, args)
 	if len(args) == 3 {
 		binaryName = args[2]
 	}
-	fmt.Printf("🔨 Bundling binary '%s'...\n", binaryName)
+	printlnVerbose(verbose, "🔨 Bundling binary '", binaryName, "'...")
 
 	spinner := []string{"⣾", "⣽", "⣻", "⢿", "⡿", "⣟", "⣯", "⣷"}
 	done := make(chan bool)
-	go func() {
-		for i := 0; ; i++ {
-			select {
-			case <-done:
-				return
-			default:
-				fmt.Printf("\r%s Bundling...", spinner[i%len(spinner)])
-				time.Sleep(100 * time.Millisecond)
+	if verbose {
+		go func() {
+			for i := 0; ; i++ {
+				select {
+				case <-done:
+					return
+				default:
+					fmt.Printf("\r%s Bundling...", spinner[i%len(spinner)])
+					time.Sleep(100 * time.Millisecond)
+				}
 			}
-		}
-	}()
+		}()
+	}
 
 	// Cross-compilation: GOOS and GOARCH
 	goos := ""
@@ -153,7 +172,7 @@ require github.com/vintlang/vintlang v0.2.0
 	}
 
 	done <- true
-	fmt.Printf("\r🎉 Bundle successful! Moving binary... ")
+	printVerbose(verbose, "\r🎉 Bundle successful! Moving binary... ")
 
 	// Determine output directory
 	outputDir := "."
@@ -173,7 +192,7 @@ require github.com/vintlang/vintlang v0.2.0
 		return fmt.Errorf("\n❌ Failed to move binary: %w", err)
 	}
 
-	fmt.Println("✅")
+	printlnVerbose(verbose, "✅")
 	fmt.Printf("\n✨ Successfully created binary: %s\n", outputPath)
 	return nil
 }
