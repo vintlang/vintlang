@@ -126,7 +126,25 @@ require github.com/vintlang/vintlang v0.2.0
 		}
 	}()
 
-	BundleCmd := fmt.Sprintf("cd %s && go mod tidy && go build -o %s", tempDir, binaryName)
+	// Cross-compilation: GOOS and GOARCH
+	goos := ""
+	goarch := ""
+	if len(args) >= 5 && args[4] != "" {
+		goos = args[4]
+	}
+	if len(args) >= 6 && args[5] != "" {
+		goarch = args[5]
+	}
+
+	// Build command with cross-compilation support
+	buildEnv := ""
+	if goos != "" {
+		buildEnv += fmt.Sprintf("GOOS=%s ", goos)
+	}
+	if goarch != "" {
+		buildEnv += fmt.Sprintf("GOARCH=%s ", goarch)
+	}
+	BundleCmd := fmt.Sprintf("cd %s && go mod tidy && %sgo build -o %s", tempDir, buildEnv, binaryName)
 	if err := utils.RunShell(BundleCmd); err != nil {
 		err = fmt.Errorf("bundle command failed: %w", err)
 		logError(err)
