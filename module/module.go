@@ -33,4 +33,5 @@ func init() {
 	Mapper["vintChart"] = &object.Module{Name: "vintChart", Functions: VintChartFunctions}
 	Mapper["llm"] = &object.Module{Name: "llm", Functions: LLMFunctions}
 	Mapper["openai"] = &object.Module{Name: "openai", Functions: OpenAIFunctions}
+	Mapper["schedule"] = &object.Module{Name: "schedule", Functions: ScheduleFunctions}
 }

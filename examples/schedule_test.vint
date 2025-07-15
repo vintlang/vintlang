@@ -1,0 +1,15 @@
+import schedule
+
+// Test ticker (should return error about callback execution)
+let tickerResult = schedule.ticker(1, func() { print("Tick!") })
+print("ticker result:", tickerResult)
+
+// Test schedule (should return error about callback execution)
+let scheduleResult = schedule.schedule("0 0 9 * * *", func() { print("Good morning!") })
+print("schedule result:", scheduleResult)
+
+// Test stopTicker and stopSchedule with dummy objects (should not error, but do nothing)
+let dummyTicker = null
+let dummySchedule = null
+print("stopTicker result:", schedule.stopTicker(dummyTicker))
+print("stopSchedule result:", schedule.stopSchedule(dummySchedule)) 
