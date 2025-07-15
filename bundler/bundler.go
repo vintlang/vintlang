@@ -137,14 +137,25 @@ require github.com/vintlang/vintlang v0.2.0
 	done <- true
 	fmt.Printf("\r🎉 Bundle successful! Moving binary... ")
 
+	// Determine output directory
+	outputDir := "."
+	if len(args) >= 4 && args[3] != "" {
+		outputDir = args[3]
+		if _, err := os.Stat(outputDir); os.IsNotExist(err) {
+			err = fmt.Errorf("output directory '%s' does not exist", outputDir)
+			logError(err)
+			return err
+		}
+	}
 	finalBinary := filepath.Join(tempDir, binaryName)
-	if err := os.Rename(finalBinary, filepath.Join(".", binaryName)); err != nil {
-		err = fmt.Errorf("failed to move binary from '%s' to current directory: %w", finalBinary, err)
+	outputPath := filepath.Join(outputDir, binaryName)
+	if err := os.Rename(finalBinary, outputPath); err != nil {
+		err = fmt.Errorf("failed to move binary from '%s' to '%s': %w", finalBinary, outputPath, err)
 		logError(err)
 		return fmt.Errorf("\n❌ Failed to move binary: %w", err)
 	}
 
 	fmt.Println("✅")
-	fmt.Printf("\n✨ Successfully created binary: ./%s\n", binaryName)
+	fmt.Printf("\n✨ Successfully created binary: %s\n", outputPath)
 	return nil
 }
