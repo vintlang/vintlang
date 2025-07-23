@@ -82,18 +82,25 @@ func Bundle(args []string) error {
 	const goTemplate = `package main
 
 import (
-	"fmt"
-	"github.com/vintlang/vintlang/repl"
+		"flag"
+		"fmt"
+
+		"github.com/vintlang/vintlang/repl"
 )
 
 var BundlerVersion = "{{.BundlerVersion}}"
 var BuildTime = "{{.BuildTime}}"
 
 func main() {
-	fmt.Printf("[Bundler Version: %s | Build Time: %s]\n", BundlerVersion, BuildTime)
-	code := ` + "`{{.Code}}`" + `
-	repl.Read(code)
+		bundledDetails := flag.Bool("i", false, "Show the bundle details of the app")
+		if *bundledDetails {
+			fmt.Printf("[Bundler Version: %s | Build Time: %s]\n", BundlerVersion, BuildTime)
+			return
+		}
+		code := ` + "`{{.Code}}`" + `
+		repl.Read(code)
 }
+
 `
 
 	printVerbose(verbose, "⚙️  Generating Go code... ")
