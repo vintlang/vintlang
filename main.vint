@@ -4,28 +4,28 @@ import time
 
 let x = 42
 // let i = 7
-// print(i.is_odd())  // true
-// print((8).is_odd())  // false
+// println(i.is_odd())  // true
+// println((8).is_odd())  // false
 // let ptr = _&(x)
-// print(ptr) // Output: Pointer(42)
+// println(ptr) // Output: Pointer(42)
 
 // let y = _*(p)tr
-// print(y)  // Output: 42
+// println(y)  // Output: 42
 
 // x = 100
-// print(_*(ptr)) // Output: 100
+// println(_*(ptr)) // Output: 100
 
 
-print('This is a simple VintLang program')
+println('This is a simple VintLang program')
 
 // Print a greeting
-print("Hello, VintLang World! it currently",time.now())
+println("Hello, VintLang World! it currently",time.now())
 
 // Demonstrate string splitting
 let phrase = "VintLang"
 let letters = phrase.split("")
 for letter in letters {
-    print(letter)
+    println(letter)
 }
 
 //from the greetings_module
