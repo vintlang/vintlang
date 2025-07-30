@@ -3,18 +3,6 @@ import greetings_module
 import time
 
 let x = 42
-// let i = 7
-// println(i.is_odd())  // true
-// println((8).is_odd())  // false
-// let ptr = _&(x)
-// println(ptr) // Output: Pointer(42)
-
-// let y = _*(p)tr
-// println(y)  // Output: 42
-
-// x = 100
-// println(_*(ptr)) // Output: 100
-
 
 println('This is a simple VintLang program')
 
