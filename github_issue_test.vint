@@ -1,4 +1,3 @@
-// Test exactly what was requested in the GitHub issue:
 // Get all arguments
 let allArgs = args()
 println(allArgs)
