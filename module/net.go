@@ -7,95 +7,96 @@ import (
 	"io/ioutil"
 	"net/http"
 	"strings"
+
 	"github.com/vintlang/vintlang/object"
 )
 
 var NetFunctions = map[string]object.ModuleFunction{}
 
 func init() {
-    NetFunctions["get"] = getRequest
-    NetFunctions["post"] = postRequest
-    NetFunctions["put"] = putRequest
-    NetFunctions["delete"] = deleteRequest
-    NetFunctions["patch"] = patchRequest
-    // NetFunctions["http"] = httpServer
+	NetFunctions["get"] = getRequest
+	NetFunctions["post"] = postRequest
+	NetFunctions["put"] = putRequest
+	NetFunctions["delete"] = deleteRequest
+	NetFunctions["patch"] = patchRequest
+	// NetFunctions["http"] = httpServer
 }
 
 func deleteRequest(args []object.Object, defs map[string]object.Object) object.Object {
-    return handleRequest("DELETE", args, defs)
+	return handleRequest("DELETE", args, defs)
 }
 
 func patchRequest(args []object.Object, defs map[string]object.Object) object.Object {
-    return handleRequest("PATCH", args, defs)
+	return handleRequest("PATCH", args, defs)
 }
 
 func handleRequest(method string, args []object.Object, defs map[string]object.Object) object.Object {
-    var url *object.String
-    var headers, params *object.Dict
+	var url *object.String
+	var headers, params *object.Dict
 
-    for k, v := range defs {
-        switch k {
-        case "url":
-            strUrl, ok := v.(*object.String)
-            if !ok {
-                return &object.Error{Message: fmt.Sprintf("net.%s() 'url' parameter must be a string, but received %s. Usage: net.%s(url=\"https://example.com\")", method, v.Type(), strings.ToLower(method))}
-            }
-            url = strUrl
-        case "headers":
-            dictHead, ok := v.(*object.Dict)
-            if !ok {
-                return &object.Error{Message: fmt.Sprintf("net.%s() 'headers' parameter must be a dictionary, but received %s. Usage: net.%s(headers={\"Content-Type\": \"application/json\"})", method, v.Type(), strings.ToLower(method))}
-            }
-            headers = dictHead
-        case "body":
-            dictBody, ok := v.(*object.Dict)
-            if !ok {
-                return &object.Error{Message: fmt.Sprintf("net.%s() 'body' parameter must be a dictionary, but received %s. Usage: net.%s(body={\"key\": \"value\"})", method, v.Type(), strings.ToLower(method))}
-            }
-            params = dictBody
-        default:
-            return &object.Error{Message: fmt.Sprintf("net.%s() received invalid parameter '%s'. Valid parameters are: 'url', 'headers', 'body'. Usage: net.%s(url=\"https://example.com\", headers={...}, body={...})", method, k, strings.ToLower(method))}
-        }
-    }
+	for k, v := range defs {
+		switch k {
+		case "url":
+			strUrl, ok := v.(*object.String)
+			if !ok {
+				return &object.Error{Message: fmt.Sprintf("net.%s() 'url' parameter must be a string, but received %s. Usage: net.%s(url=\"https://example.com\")", method, v.Type(), strings.ToLower(method))}
+			}
+			url = strUrl
+		case "headers":
+			dictHead, ok := v.(*object.Dict)
+			if !ok {
+				return &object.Error{Message: fmt.Sprintf("net.%s() 'headers' parameter must be a dictionary, but received %s. Usage: net.%s(headers={\"Content-Type\": \"application/json\"})", method, v.Type(), strings.ToLower(method))}
+			}
+			headers = dictHead
+		case "body":
+			dictBody, ok := v.(*object.Dict)
+			if !ok {
+				return &object.Error{Message: fmt.Sprintf("net.%s() 'body' parameter must be a dictionary, but received %s. Usage: net.%s(body={\"key\": \"value\"})", method, v.Type(), strings.ToLower(method))}
+			}
+			params = dictBody
+		default:
+			return &object.Error{Message: fmt.Sprintf("net.%s() received invalid parameter '%s'. Valid parameters are: 'url', 'headers', 'body'. Usage: net.%s(url=\"https://example.com\", headers={...}, body={...})", method, k, strings.ToLower(method))}
+		}
+	}
 
-    if url == nil || url.Value == "" {
-        return &object.Error{Message: fmt.Sprintf("net.%s() requires a valid URL. Usage: net.%s(url=\"https://example.com\") or provide the URL as the first argument: net.%s(\"https://example.com\")", method, strings.ToLower(method), strings.ToLower(method))}
-    }
+	if url == nil || url.Value == "" {
+		return &object.Error{Message: fmt.Sprintf("net.%s() requires a valid URL. Usage: net.%s(url=\"https://example.com\") or provide the URL as the first argument: net.%s(\"https://example.com\")", method, strings.ToLower(method), strings.ToLower(method))}
+	}
 
-    var requestBody *bytes.Buffer
-    if params != nil {
-        bodyContent := convertObjectToWhatever(params)
-        jsonBody, err := json.Marshal(bodyContent)
-        if err != nil {
-            return &object.Error{Message: fmt.Sprintf("net.%s() failed to serialize request body to JSON: %v. Please ensure your body contains valid JSON-serializable data.", method, err)}
-        }
-        requestBody = bytes.NewBuffer(jsonBody)
-    }
+	var requestBody *bytes.Buffer
+	if params != nil {
+		bodyContent := convertObjectToWhatever(params)
+		jsonBody, err := json.Marshal(bodyContent)
+		if err != nil {
+			return &object.Error{Message: fmt.Sprintf("net.%s() failed to serialize request body to JSON: %v. Please ensure your body contains valid JSON-serializable data.", method, err)}
+		}
+		requestBody = bytes.NewBuffer(jsonBody)
+	}
 
-    req, err := http.NewRequest(method, url.Value, requestBody)
-    if err != nil {
-        return &object.Error{Message: fmt.Sprintf("net.%s() failed to create HTTP request to '%s': %v. Please check if the URL is valid and properly formatted.", method, url.Value, err)}
-    }
+	req, err := http.NewRequest(method, url.Value, requestBody)
+	if err != nil {
+		return &object.Error{Message: fmt.Sprintf("net.%s() failed to create HTTP request to '%s': %v. Please check if the URL is valid and properly formatted.", method, url.Value, err)}
+	}
 
-    if headers != nil {
-        for _, val := range headers.Pairs {
-            req.Header.Set(val.Key.Inspect(), val.Value.Inspect())
-        }
-    }
+	if headers != nil {
+		for _, val := range headers.Pairs {
+			req.Header.Set(val.Key.Inspect(), val.Value.Inspect())
+		}
+	}
 
-    client := &http.Client{}
-    resp, err := client.Do(req)
-    if err != nil {
-        return &object.Error{Message: fmt.Sprintf("net.%s() failed to execute HTTP request to '%s': %v. Please check your internet connection and ensure the server is accessible.", method, url.Value, err)}
-    }
-    defer resp.Body.Close()
+	client := &http.Client{}
+	resp, err := client.Do(req)
+	if err != nil {
+		return &object.Error{Message: fmt.Sprintf("net.%s() failed to execute HTTP request to '%s': %v. Please check your internet connection and ensure the server is accessible.", method, url.Value, err)}
+	}
+	defer resp.Body.Close()
 
-    respBody, err := ioutil.ReadAll(resp.Body)
-    if err != nil {
-        return &object.Error{Message: fmt.Sprintf("net.%s() failed to read HTTP response from '%s': %v. The connection may have been interrupted.", method, url.Value, err)}
-    }
+	respBody, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		return &object.Error{Message: fmt.Sprintf("net.%s() failed to read HTTP response from '%s': %v. The connection may have been interrupted.", method, url.Value, err)}
+	}
 
-    return &object.String{Value: string(respBody)}
+	return &object.String{Value: string(respBody)}
 }
 
 func getRequest(args []object.Object, defs map[string]object.Object) object.Object {
@@ -356,5 +357,3 @@ func putRequest(args []object.Object, defs map[string]object.Object) object.Obje
 	}
 	return &object.Error{Message: "Arguments are incorrect. Use url and headers."}
 }
-
-

@@ -22,7 +22,7 @@ func init() {
 
 func now(args []object.Object, defs map[string]object.Object) object.Object {
 	if len(args) != 0 || len(defs) != 0 {
-		return &object.Error{Message: "No arguments required here"}
+		return &object.Error{Message: fmt.Sprintf("time.now() expects no arguments, but received %d arguments. Usage: time.now()", len(args))}
 	}
 
 	tn := time.Now()
@@ -33,17 +33,21 @@ func now(args []object.Object, defs map[string]object.Object) object.Object {
 
 func sleep(args []object.Object, defs map[string]object.Object) object.Object {
 	if len(defs) != 0 {
-		return &object.Error{Message: "This argument is not allowed"}
+		return &object.Error{Message: "time.sleep() does not accept keyword arguments. Usage: time.sleep(5)"}
 	}
 	if len(args) != 1 {
-		return &object.Error{Message: "We only need one argument"}
+		return &object.Error{Message: fmt.Sprintf("time.sleep() expects exactly 1 argument (seconds), but received %d. Usage: time.sleep(5)", len(args))}
 	}
 
 	objvalue := args[0].Inspect()
 	inttime, err := strconv.Atoi(objvalue)
 
 	if err != nil {
-		return &object.Error{Message: "Only numbers are allowed as arguments"}
+		return &object.Error{Message: fmt.Sprintf("time.sleep() expects a number argument, but received '%s'. Usage: time.sleep(5) to sleep for 5 seconds", objvalue)}
+	}
+
+	if inttime < 0 {
+		return &object.Error{Message: fmt.Sprintf("time.sleep() cannot sleep for negative duration (%d seconds). Please provide a positive number.", inttime)}
 	}
 
 	time.Sleep(time.Duration(inttime) * time.Second)
@@ -204,6 +208,3 @@ func subtract(args []object.Object, defs map[string]object.Object) object.Object
 	newTime := t.Add(-duration)
 	return &object.Time{TimeValue: newTime.Format("15:04:05 02-01-2006")}
 }
-
-
-

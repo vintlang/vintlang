@@ -208,12 +208,21 @@ func parseArgs(args []object.Object, defs map[string]object.Object) object.Objec
 // getArgValue gets the value of a named argument
 func getArgValue(args []object.Object, defs map[string]object.Object) object.Object {
 	if len(args) != 1 || len(defs) != 0 {
-		return &object.Error{Message: "We need exactly one argument: the argument name"}
+		return &object.Error{Message: fmt.Sprintf("cli.getArgValue() expects exactly 1 argument (flag name), but received %d arguments. Usage: cli.getArgValue(\"--output\")", len(args))}
 	}
 
-	argName := args[0].Inspect()
+	argNameObj, ok := args[0].(*object.String)
+	if !ok {
+		return &object.Error{Message: fmt.Sprintf("cli.getArgValue() expects a string argument, but received %s. Usage: cli.getArgValue(\"--output\")", args[0].Type())}
+	}
+
+	argName := argNameObj.Value
 	// Remove quotes if present
 	argName = strings.Trim(argName, `"'`)
+
+	if strings.TrimSpace(argName) == "" {
+		return &object.Error{Message: "cli.getArgValue() cannot search for an empty flag name. Please provide a valid flag like \"--output\" or \"-o\"."}
+	}
 
 	cliArgs := toolkit.GetCliArgs()
 
@@ -240,12 +249,21 @@ func getArgValue(args []object.Object, defs map[string]object.Object) object.Obj
 // hasArg checks if a named argument is present
 func hasArg(args []object.Object, defs map[string]object.Object) object.Object {
 	if len(args) != 1 || len(defs) != 0 {
-		return &object.Error{Message: "We need exactly one argument: the argument name"}
+		return &object.Error{Message: fmt.Sprintf("cli.hasArg() expects exactly 1 argument (flag name), but received %d arguments. Usage: cli.hasArg(\"--verbose\")", len(args))}
 	}
 
-	argName := args[0].Inspect()
+	argNameObj, ok := args[0].(*object.String)
+	if !ok {
+		return &object.Error{Message: fmt.Sprintf("cli.hasArg() expects a string argument, but received %s. Usage: cli.hasArg(\"--verbose\")", args[0].Type())}
+	}
+
+	argName := argNameObj.Value
 	// Remove quotes if present
 	argName = strings.Trim(argName, `"'`)
+
+	if strings.TrimSpace(argName) == "" {
+		return &object.Error{Message: "cli.hasArg() cannot search for an empty flag name. Please provide a valid flag like \"--verbose\" or \"-v\"."}
+	}
 
 	cliArgs := toolkit.GetCliArgs()
 
