@@ -1,6 +1,7 @@
 package module
 
 import (
+	"fmt"
 	"math"
 	"math/rand"
 	"time"
@@ -119,13 +120,13 @@ func epsilon(args []object.Object, defs map[string]object.Object) object.Object 
 }
 func abs(args []object.Object, defs map[string]object.Object) object.Object {
 	if len(defs) != 0 {
-		return &object.Error{Message: "This operation does not allow definitions."}
+		return &object.Error{Message: "math.abs() does not accept keyword arguments. Usage: math.abs(-5)"}
 	}
 	if len(args) != 1 {
-		return &object.Error{Message: "This operation requires exactly one argument."}
+		return &object.Error{Message: fmt.Sprintf("math.abs() expects exactly 1 argument (number), but received %d. Usage: math.abs(-5)", len(args))}
 	}
 	if args[0].Type() != object.INTEGER_OBJ && args[0].Type() != object.FLOAT_OBJ {
-		return &object.Error{Message: "The argument must be a number."}
+		return &object.Error{Message: fmt.Sprintf("math.abs() expects a number argument, but received %s. Usage: math.abs(-5)", args[0].Type())}
 	}
 	switch arg := args[0].(type) {
 	case *object.Integer:
@@ -139,7 +140,7 @@ func abs(args []object.Object, defs map[string]object.Object) object.Object {
 		}
 		return arg
 	default:
-		return &object.Error{Message: "The argument must be a number."}
+		return &object.Error{Message: fmt.Sprintf("math.abs() internal error: unexpected argument type %s", args[0].Type())}
 	}
 }
 

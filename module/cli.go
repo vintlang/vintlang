@@ -76,7 +76,7 @@ func getFlags(args []object.Object, defs map[string]object.Object) object.Object
 // getPositional returns an array of positional (non-flag) arguments
 func getPositional(args []object.Object, defs map[string]object.Object) object.Object {
 	if len(args) > 0 {
-		return &object.Error{Message: "getPositional does not accept any arguments"}
+		return &object.Error{Message: fmt.Sprintf("cli.getPositional() expects no arguments, but received %d. Usage: cli.getPositional()", len(args))}
 	}
 
 	positional := &object.Array{}
@@ -101,19 +101,19 @@ func getPositional(args []object.Object, defs map[string]object.Object) object.O
 // prompt displays a message and reads user input
 func prompt(args []object.Object, defs map[string]object.Object) object.Object {
 	if len(args) != 1 {
-		return &object.Error{Message: "prompt requires exactly one argument: the prompt message"}
+		return &object.Error{Message: fmt.Sprintf("cli.prompt() expects exactly 1 argument (prompt message), but received %d. Usage: cli.prompt(\"Enter your name: \")", len(args))}
 	}
 
 	message, ok := args[0].(*object.String)
 	if !ok {
-		return &object.Error{Message: "prompt message must be a string"}
+		return &object.Error{Message: fmt.Sprintf("cli.prompt() expects a string argument, but received %s. Usage: cli.prompt(\"Enter your name: \")", args[0].Type())}
 	}
 
 	fmt.Print(message.Value)
 	reader := bufio.NewReader(os.Stdin)
 	input, err := reader.ReadString('\n')
 	if err != nil {
-		return &object.Error{Message: fmt.Sprintf("Error reading input: %v", err)}
+		return &object.Error{Message: fmt.Sprintf("cli.prompt() failed to read user input: %v. Please check your terminal settings and try again.", err)}
 	}
 
 	return &object.String{Value: strings.TrimSpace(input)}
@@ -122,19 +122,19 @@ func prompt(args []object.Object, defs map[string]object.Object) object.Object {
 // confirm prompts the user for a yes/no response
 func confirm(args []object.Object, defs map[string]object.Object) object.Object {
 	if len(args) != 1 {
-		return &object.Error{Message: "confirm requires exactly one argument: the prompt message"}
+		return &object.Error{Message: fmt.Sprintf("cli.confirm() expects exactly 1 argument (confirmation message), but received %d. Usage: cli.confirm(\"Continue with operation?\")", len(args))}
 	}
 
 	message, ok := args[0].(*object.String)
 	if !ok {
-		return &object.Error{Message: "confirm message must be a string"}
+		return &object.Error{Message: fmt.Sprintf("cli.confirm() expects a string argument, but received %s. Usage: cli.confirm(\"Continue with operation?\")", args[0].Type())}
 	}
 
 	fmt.Printf("%s (y/n): ", message.Value)
 	reader := bufio.NewReader(os.Stdin)
 	input, err := reader.ReadString('\n')
 	if err != nil {
-		return &object.Error{Message: fmt.Sprintf("Error reading input: %v", err)}
+		return &object.Error{Message: fmt.Sprintf("cli.confirm() failed to read user input: %v. Please check your terminal settings and try again.", err)}
 	}
 
 	input = strings.ToLower(strings.TrimSpace(input))
@@ -144,18 +144,26 @@ func confirm(args []object.Object, defs map[string]object.Object) object.Object 
 // execCommand executes a shell command and returns its output
 func execCommand(args []object.Object, defs map[string]object.Object) object.Object {
 	if len(args) != 1 {
-		return &object.Error{Message: "execCommand requires exactly one argument: the command to execute"}
+		return &object.Error{Message: fmt.Sprintf("cli.execCommand() expects exactly 1 argument (command string), but received %d. Usage: cli.execCommand(\"ls -la\")", len(args))}
 	}
 
 	command, ok := args[0].(*object.String)
 	if !ok {
-		return &object.Error{Message: "command must be a string"}
+		return &object.Error{Message: fmt.Sprintf("cli.execCommand() expects a string argument, but received %s. Usage: cli.execCommand(\"ls -la\")", args[0].Type())}
+	}
+
+	if strings.TrimSpace(command.Value) == "" {
+		return &object.Error{Message: "cli.execCommand() cannot execute an empty command. Please provide a valid shell command."}
 	}
 
 	cmd := exec.Command("sh", "-c", command.Value)
 	output, err := cmd.CombinedOutput()
 	if err != nil {
-		return &object.Error{Message: fmt.Sprintf("Error executing command: %v", err)}
+		exitErr, isExitError := err.(*exec.ExitError)
+		if isExitError {
+			return &object.Error{Message: fmt.Sprintf("cli.execCommand() failed to execute '%s': command exited with status %d. Output: %s", command.Value, exitErr.ExitCode(), string(output))}
+		}
+		return &object.Error{Message: fmt.Sprintf("cli.execCommand() failed to execute '%s': %v", command.Value, err)}
 	}
 
 	return &object.String{Value: string(output)}
@@ -164,12 +172,16 @@ func execCommand(args []object.Object, defs map[string]object.Object) object.Obj
 // cliExit terminates the program with the given status code
 func cliExit(args []object.Object, defs map[string]object.Object) object.Object {
 	if len(args) != 1 {
-		return &object.Error{Message: "exit requires exactly one argument: the status code"}
+		return &object.Error{Message: fmt.Sprintf("cli.exit() expects exactly 1 argument (status code), but received %d. Usage: cli.exit(0) or cli.exit(1)", len(args))}
 	}
 
 	code, ok := args[0].(*object.Integer)
 	if !ok {
-		return &object.Error{Message: "status code must be an integer"}
+		return &object.Error{Message: fmt.Sprintf("cli.exit() expects an integer status code, but received %s. Usage: cli.exit(0) for success or cli.exit(1) for error", args[0].Type())}
+	}
+
+	if code.Value < 0 || code.Value > 255 {
+		return &object.Error{Message: fmt.Sprintf("cli.exit() status code must be between 0 and 255, but received %d. Use 0 for success, 1-255 for various error conditions.", code.Value)}
 	}
 
 	os.Exit(int(code.Value))
