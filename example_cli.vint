@@ -1,0 +1,57 @@
+// Example: A simple CLI tool that processes files
+// Usage: vint example_cli.vint input.txt --output result.txt --verbose --format json
+
+import cli
+
+// Get all command line arguments
+let allArgs = args()
+print("All arguments:", allArgs)
+
+// Get positional arguments (non-flags)
+let positional = cli.getPositional()
+print("Positional arguments:", positional)
+
+// Check if help was requested
+if (cli.hasArg("--help") || cli.hasArg("-h")) {
+    print("Usage: vint example_cli.vint <input_file> [options]")
+    print("Options:")
+    print("  --output <file>    Output file (default: stdout)")
+    print("  --format <format>  Output format: json, csv, txt (default: txt)")
+    print("  --verbose, -v      Enable verbose output")
+    print("  --help, -h         Show this help message")
+    exit(0)
+}
+
+// Get input file from positional arguments
+let inputFile = "stdin"
+if (len(positional) > 0) {
+    inputFile = positional[0]
+}
+
+// Get output file from flags
+let outputFile = cli.getArgValue("--output")
+if (!outputFile) {
+    outputFile = "stdout"
+}
+
+// Get format
+let format = cli.getArgValue("--format")
+if (!format) {
+    format = "txt"
+}
+
+// Check for verbose mode
+let verbose = cli.hasArg("--verbose") || cli.hasArg("-v")
+
+// Display configuration
+print("\nProcessing configuration:")
+print("Input file:", inputFile)
+print("Output file:", outputFile)
+print("Format:", format)
+print("Verbose mode:", verbose)
+
+if (verbose) {
+    print("\nVerbose: Processing", inputFile, "->", outputFile, "in", format, "format")
+}
+
+print("\n✓ CLI argument parsing working correctly!")
