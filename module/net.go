@@ -3,9 +3,10 @@ package module
 import (
 	"bytes"
 	"encoding/json"
-	// "fmt"
+	"fmt"
 	"io/ioutil"
 	"net/http"
+	"strings"
 	"github.com/vintlang/vintlang/object"
 )
 
@@ -37,28 +38,28 @@ func handleRequest(method string, args []object.Object, defs map[string]object.O
         case "url":
             strUrl, ok := v.(*object.String)
             if !ok {
-                return &object.Error{Message: "URL must be a string"}
+                return &object.Error{Message: fmt.Sprintf("net.%s() 'url' parameter must be a string, but received %s. Usage: net.%s(url=\"https://example.com\")", method, v.Type(), strings.ToLower(method))}
             }
             url = strUrl
         case "headers":
             dictHead, ok := v.(*object.Dict)
             if !ok {
-                return &object.Error{Message: "Headers must be a dictionary"}
+                return &object.Error{Message: fmt.Sprintf("net.%s() 'headers' parameter must be a dictionary, but received %s. Usage: net.%s(headers={\"Content-Type\": \"application/json\"})", method, v.Type(), strings.ToLower(method))}
             }
             headers = dictHead
         case "body":
             dictBody, ok := v.(*object.Dict)
             if !ok {
-                return &object.Error{Message: "Body must be a dictionary"}
+                return &object.Error{Message: fmt.Sprintf("net.%s() 'body' parameter must be a dictionary, but received %s. Usage: net.%s(body={\"key\": \"value\"})", method, v.Type(), strings.ToLower(method))}
             }
             params = dictBody
         default:
-            return &object.Error{Message: "Invalid argument. Use url, headers, or body."}
+            return &object.Error{Message: fmt.Sprintf("net.%s() received invalid parameter '%s'. Valid parameters are: 'url', 'headers', 'body'. Usage: net.%s(url=\"https://example.com\", headers={...}, body={...})", method, k, strings.ToLower(method))}
         }
     }
 
     if url == nil || url.Value == "" {
-        return &object.Error{Message: "URL is required"}
+        return &object.Error{Message: fmt.Sprintf("net.%s() requires a valid URL. Usage: net.%s(url=\"https://example.com\") or provide the URL as the first argument: net.%s(\"https://example.com\")", method, strings.ToLower(method), strings.ToLower(method))}
     }
 
     var requestBody *bytes.Buffer
@@ -66,14 +67,14 @@ func handleRequest(method string, args []object.Object, defs map[string]object.O
         bodyContent := convertObjectToWhatever(params)
         jsonBody, err := json.Marshal(bodyContent)
         if err != nil {
-            return &object.Error{Message: "Body serialization failed"}
+            return &object.Error{Message: fmt.Sprintf("net.%s() failed to serialize request body to JSON: %v. Please ensure your body contains valid JSON-serializable data.", method, err)}
         }
         requestBody = bytes.NewBuffer(jsonBody)
     }
 
     req, err := http.NewRequest(method, url.Value, requestBody)
     if err != nil {
-        return &object.Error{Message: "Failed to create HTTP request"}
+        return &object.Error{Message: fmt.Sprintf("net.%s() failed to create HTTP request to '%s': %v. Please check if the URL is valid and properly formatted.", method, url.Value, err)}
     }
 
     if headers != nil {
@@ -85,13 +86,13 @@ func handleRequest(method string, args []object.Object, defs map[string]object.O
     client := &http.Client{}
     resp, err := client.Do(req)
     if err != nil {
-        return &object.Error{Message: "Failed to execute HTTP request"}
+        return &object.Error{Message: fmt.Sprintf("net.%s() failed to execute HTTP request to '%s': %v. Please check your internet connection and ensure the server is accessible.", method, url.Value, err)}
     }
     defer resp.Body.Close()
 
     respBody, err := ioutil.ReadAll(resp.Body)
     if err != nil {
-        return &object.Error{Message: "Failed to read HTTP response"}
+        return &object.Error{Message: fmt.Sprintf("net.%s() failed to read HTTP response from '%s': %v. The connection may have been interrupted.", method, url.Value, err)}
     }
 
     return &object.String{Value: string(respBody)}
