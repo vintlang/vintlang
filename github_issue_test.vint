@@ -1,0 +1,20 @@
+// Test exactly what was requested in the GitHub issue:
+// Get all arguments
+let allArgs = args()
+println(allArgs)
+
+// Parse flags  
+import cli
+
+if (cli.hasArg("--verbose")) {
+    println("Verbose mode enabled")
+}
+
+// Additional tests to show full functionality
+let outputFile = cli.getArgValue("--output")
+if (outputFile) {
+    println("Output file:", outputFile)
+}
+
+let positional = cli.getPositional()
+println("Positional arguments:", positional)
