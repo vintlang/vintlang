@@ -1,40 +1,40 @@
 // Test the args functionality
-print("Testing args() builtin function:")
+println("Testing args() builtin function:")
 
 // Get all arguments
 let allArgs = args()
-print("All args:", allArgs)
+println("All args:", allArgs)
 
 // Test CLI module functions
 import cli
 
-print("\nTesting cli.args():")
+println("\nTesting cli.args():")
 let cliArgs = cli.args()
-print("CLI args:", cliArgs)
+println("CLI args:", cliArgs)
 
-print("\nTesting cli.getFlags():")
+println("\nTesting cli.getFlags():")
 let flags = cli.getFlags()
-print("Flags:", flags)
+println("Flags:", flags)
 
-print("\nTesting cli.getPositional():")
+println("\nTesting cli.getPositional():")
 let positional = cli.getPositional()
-print("Positional args:", positional)
+println("Positional args:", positional)
 
-print("\nTesting individual flag checks:")
+println("\nTesting individual flag checks:")
 // Check for verbose flag
 if (cli.hasArg("--verbose")) {
-    print("Verbose mode enabled via hasArg")
+    println("Verbose mode enabled via hasArg")
 }
 
 // Get a specific flag value
 let outputValue = cli.getArgValue("--output")
 if (outputValue) {
-    print("Output file from getArgValue:", outputValue)
+    println("Output file from getArgValue:", outputValue)
 }
 
 // Demonstrate the simple usage pattern from the GitHub issue:
-print("\nSimple usage pattern:")
-print("args() =", args())
+println("\nSimple usage pattern:")
+println("args() =", args())
 if (cli.hasArg("--verbose")) {
-    print("Verbose mode enabled")
+    println("Verbose mode enabled")
 }
