@@ -19,6 +19,7 @@ func init() {
 	CliFunctions["hasArg"] = hasArg
 	CliFunctions["getArgs"] = getArgs
 	CliFunctions["getFlags"] = getFlags
+	CliFunctions["getPositional"] = getPositional
 	CliFunctions["args"] = args
 	CliFunctions["parse"] = argsParse
 	CliFunctions["prompt"] = prompt
@@ -70,6 +71,31 @@ func getFlags(args []object.Object, defs map[string]object.Object) object.Object
 	}
 
 	return flags
+}
+
+// getPositional returns an array of positional (non-flag) arguments
+func getPositional(args []object.Object, defs map[string]object.Object) object.Object {
+	if len(args) > 0 {
+		return &object.Error{Message: "getPositional does not accept any arguments"}
+	}
+
+	positional := &object.Array{}
+	cliArgs := toolkit.GetCliArgs()
+
+	for i := 0; i < len(cliArgs); i++ {
+		arg := cliArgs[i]
+		if !strings.HasPrefix(arg, "-") {
+			// This is a positional argument
+			positional.Elements = append(positional.Elements, &object.String{Value: arg})
+		} else if strings.HasPrefix(arg, "--") {
+			// Skip the next argument if it's a value for this flag
+			if i+1 < len(cliArgs) && !strings.HasPrefix(cliArgs[i+1], "-") {
+				i++ // Skip the value
+			}
+		}
+	}
+
+	return positional
 }
 
 // prompt displays a message and reads user input
@@ -174,9 +200,25 @@ func getArgValue(args []object.Object, defs map[string]object.Object) object.Obj
 	}
 
 	argName := args[0].Inspect()
-	for _, arg := range os.Args[1:] {
+	// Remove quotes if present
+	argName = strings.Trim(argName, `"'`)
+	
+	cliArgs := toolkit.GetCliArgs()
+	
+	// Check for --flag=value format first
+	for _, arg := range cliArgs {
 		if strings.HasPrefix(arg, argName+"=") {
 			return &object.String{Value: strings.Split(arg, "=")[1]}
+		}
+	}
+	
+	// Check for --flag value format
+	for i, arg := range cliArgs {
+		if arg == argName && i+1 < len(cliArgs) {
+			// Make sure next arg is not another flag
+			if !strings.HasPrefix(cliArgs[i+1], "-") {
+				return &object.String{Value: cliArgs[i+1]}
+			}
 		}
 	}
 
@@ -190,8 +232,14 @@ func hasArg(args []object.Object, defs map[string]object.Object) object.Object {
 	}
 
 	argName := args[0].Inspect()
-	for _, arg := range os.Args[1:] {
-		if strings.HasPrefix(arg, argName+"=") {
+	// Remove quotes if present
+	argName = strings.Trim(argName, `"'`)
+	
+	cliArgs := toolkit.GetCliArgs()
+	
+	for _, arg := range cliArgs {
+		// Check for exact match or --flag=value format
+		if arg == argName || strings.HasPrefix(arg, argName+"=") {
 			return &object.Boolean{Value: true}
 		}
 	}
