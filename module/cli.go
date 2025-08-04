@@ -202,16 +202,16 @@ func getArgValue(args []object.Object, defs map[string]object.Object) object.Obj
 	argName := args[0].Inspect()
 	// Remove quotes if present
 	argName = strings.Trim(argName, `"'`)
-	
+
 	cliArgs := toolkit.GetCliArgs()
-	
+
 	// Check for --flag=value format first
 	for _, arg := range cliArgs {
 		if strings.HasPrefix(arg, argName+"=") {
 			return &object.String{Value: strings.Split(arg, "=")[1]}
 		}
 	}
-	
+
 	// Check for --flag value format
 	for i, arg := range cliArgs {
 		if arg == argName && i+1 < len(cliArgs) {
@@ -234,9 +234,9 @@ func hasArg(args []object.Object, defs map[string]object.Object) object.Object {
 	argName := args[0].Inspect()
 	// Remove quotes if present
 	argName = strings.Trim(argName, `"'`)
-	
+
 	cliArgs := toolkit.GetCliArgs()
-	
+
 	for _, arg := range cliArgs {
 		// Check for exact match or --flag=value format
 		if arg == argName || strings.HasPrefix(arg, argName+"=") {
@@ -259,14 +259,14 @@ func argsParse(args []object.Object, defs map[string]object.Object) object.Objec
 	}
 
 	cliArgs := toolkit.GetCliArgs()
-	
+
 	// Create a dictionary with parsed arguments and helper methods
 	result := &object.Dict{Pairs: make(map[object.HashKey]object.DictPair)}
-	
+
 	// Add flags to the result
 	flags := make(map[string]object.Object)
 	positionalArgs := []object.Object{}
-	
+
 	for i := 0; i < len(cliArgs); i++ {
 		arg := cliArgs[i]
 		if strings.HasPrefix(arg, "--") {
@@ -288,14 +288,14 @@ func argsParse(args []object.Object, defs map[string]object.Object) object.Objec
 			positionalArgs = append(positionalArgs, &object.String{Value: arg})
 		}
 	}
-	
+
 	// Add flags to result dict
 	flagsHashKey := object.HashKey{Type: object.STRING_OBJ, Value: 0}
 	result.Pairs[flagsHashKey] = object.DictPair{
 		Key:   &object.String{Value: "flags"},
 		Value: createDictFromMap(flags),
 	}
-	
+
 	// Add positional arguments
 	posArgsArray := &object.Array{Elements: positionalArgs}
 	posHashKey := object.HashKey{Type: object.STRING_OBJ, Value: 1}
@@ -303,28 +303,28 @@ func argsParse(args []object.Object, defs map[string]object.Object) object.Objec
 		Key:   &object.String{Value: "positional"},
 		Value: posArgsArray,
 	}
-	
+
 	// Add has method
 	hasHashKey := object.HashKey{Type: object.STRING_OBJ, Value: 2}
 	result.Pairs[hasHashKey] = object.DictPair{
 		Key:   &object.String{Value: "has"},
 		Value: &object.Builtin{Fn: createHasFunction(flags)},
 	}
-	
+
 	// Add get method
 	getHashKey := object.HashKey{Type: object.STRING_OBJ, Value: 3}
 	result.Pairs[getHashKey] = object.DictPair{
 		Key:   &object.String{Value: "get"},
 		Value: &object.Builtin{Fn: createGetFunction(flags)},
 	}
-	
+
 	// Add positional method
 	positionalHashKey := object.HashKey{Type: object.STRING_OBJ, Value: 4}
 	result.Pairs[positionalHashKey] = object.DictPair{
 		Key:   &object.String{Value: "positional"},
 		Value: &object.Builtin{Fn: createPositionalFunction(positionalArgs)},
 	}
-	
+
 	return result
 }
 
@@ -349,12 +349,12 @@ func createHasFunction(flags map[string]object.Object) func(...object.Object) ob
 		if len(args) != 1 {
 			return &object.Error{Message: "has requires exactly one argument: the flag name"}
 		}
-		
+
 		flagName, ok := args[0].(*object.String)
 		if !ok {
 			return &object.Error{Message: "flag name must be a string"}
 		}
-		
+
 		name := strings.TrimPrefix(strings.TrimPrefix(flagName.Value, "--"), "-")
 		_, exists := flags[name]
 		return &object.Boolean{Value: exists}
@@ -367,12 +367,12 @@ func createGetFunction(flags map[string]object.Object) func(...object.Object) ob
 		if len(args) != 1 {
 			return &object.Error{Message: "get requires exactly one argument: the flag name"}
 		}
-		
+
 		flagName, ok := args[0].(*object.String)
 		if !ok {
 			return &object.Error{Message: "flag name must be a string"}
 		}
-		
+
 		name := strings.TrimPrefix(strings.TrimPrefix(flagName.Value, "--"), "-")
 		if value, exists := flags[name]; exists {
 			return value
@@ -387,7 +387,7 @@ func createPositionalFunction(positionalArgs []object.Object) func(...object.Obj
 		if len(args) > 0 {
 			return &object.Error{Message: "positional does not accept any arguments"}
 		}
-		
+
 		return &object.Array{Elements: positionalArgs}
 	}
 }
