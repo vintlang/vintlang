@@ -57,11 +57,11 @@ func run(args []object.Object, defs map[string]object.Object) object.Object {
 	if !ok {
 		return &object.Error{Message: fmt.Sprintf("os.run() expects a string argument, but received %s. Usage: os.run(\"ls -la\")", args[0].Type())}
 	}
-	
+
 	if strings.TrimSpace(cmd.Value) == "" {
 		return &object.Error{Message: "os.run() cannot execute an empty command. Please provide a valid shell command."}
 	}
-	
+
 	cmdParts := strings.Split(cmd.Value, " ")
 	command := cmdParts[0]
 	cmdArgs := cmdParts[1:]
@@ -193,8 +193,8 @@ func deleteFile(args []object.Object, defs map[string]object.Object) object.Obje
 	return &object.String{Value: "File deleted successfully"}
 }
 
-//This makeDir method Still has an issue with what 
-//path the new dir is saved will fix this
+// This makeDir method Still has an issue with what
+// path the new dir is saved will fix this
 func makeDir(args []object.Object, defs map[string]object.Object) object.Object {
 	if len(args) != 1 {
 		return &object.Error{Message: "Incorrect number of arguments"}
