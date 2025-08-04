@@ -19,6 +19,8 @@ func init() {
 	CliFunctions["hasArg"] = hasArg
 	CliFunctions["getArgs"] = getArgs
 	CliFunctions["getFlags"] = getFlags
+	CliFunctions["args"] = args
+	CliFunctions["parse"] = argsParse
 	CliFunctions["prompt"] = prompt
 	CliFunctions["confirm"] = confirm
 	CliFunctions["execCommand"] = execCommand
@@ -195,4 +197,149 @@ func hasArg(args []object.Object, defs map[string]object.Object) object.Object {
 	}
 
 	return &object.Boolean{Value: false}
+}
+
+// args returns an array of all command line arguments (alias for getArgs)
+func args(args []object.Object, defs map[string]object.Object) object.Object {
+	return getArgs(args, defs)
+}
+
+// argsParse returns a parsed arguments object with helper methods
+func argsParse(args []object.Object, defs map[string]object.Object) object.Object {
+	if len(args) > 0 {
+		return &object.Error{Message: "parse does not accept any arguments"}
+	}
+
+	cliArgs := toolkit.GetCliArgs()
+	
+	// Create a dictionary with parsed arguments and helper methods
+	result := &object.Dict{Pairs: make(map[object.HashKey]object.DictPair)}
+	
+	// Add flags to the result
+	flags := make(map[string]object.Object)
+	positionalArgs := []object.Object{}
+	
+	for i := 0; i < len(cliArgs); i++ {
+		arg := cliArgs[i]
+		if strings.HasPrefix(arg, "--") {
+			key := strings.TrimPrefix(arg, "--")
+			var value object.Object = &object.Boolean{Value: true}
+
+			// Check if next arg is a value (not a flag)
+			if i+1 < len(cliArgs) && !strings.HasPrefix(cliArgs[i+1], "--") && !strings.HasPrefix(cliArgs[i+1], "-") {
+				value = &object.String{Value: cliArgs[i+1]}
+				i++ // Skip the value in next iteration
+			}
+			flags[key] = value
+		} else if strings.HasPrefix(arg, "-") && len(arg) > 1 {
+			// Handle short flags like -v
+			key := strings.TrimPrefix(arg, "-")
+			flags[key] = &object.Boolean{Value: true}
+		} else {
+			// Positional argument
+			positionalArgs = append(positionalArgs, &object.String{Value: arg})
+		}
+	}
+	
+	// Add flags to result dict
+	flagsHashKey := object.HashKey{Type: object.STRING_OBJ, Value: 0}
+	result.Pairs[flagsHashKey] = object.DictPair{
+		Key:   &object.String{Value: "flags"},
+		Value: createDictFromMap(flags),
+	}
+	
+	// Add positional arguments
+	posArgsArray := &object.Array{Elements: positionalArgs}
+	posHashKey := object.HashKey{Type: object.STRING_OBJ, Value: 1}
+	result.Pairs[posHashKey] = object.DictPair{
+		Key:   &object.String{Value: "positional"},
+		Value: posArgsArray,
+	}
+	
+	// Add has method
+	hasHashKey := object.HashKey{Type: object.STRING_OBJ, Value: 2}
+	result.Pairs[hasHashKey] = object.DictPair{
+		Key:   &object.String{Value: "has"},
+		Value: &object.Builtin{Fn: createHasFunction(flags)},
+	}
+	
+	// Add get method
+	getHashKey := object.HashKey{Type: object.STRING_OBJ, Value: 3}
+	result.Pairs[getHashKey] = object.DictPair{
+		Key:   &object.String{Value: "get"},
+		Value: &object.Builtin{Fn: createGetFunction(flags)},
+	}
+	
+	// Add positional method
+	positionalHashKey := object.HashKey{Type: object.STRING_OBJ, Value: 4}
+	result.Pairs[positionalHashKey] = object.DictPair{
+		Key:   &object.String{Value: "positional"},
+		Value: &object.Builtin{Fn: createPositionalFunction(positionalArgs)},
+	}
+	
+	return result
+}
+
+// Helper function to create a dictionary from a map
+func createDictFromMap(flags map[string]object.Object) *object.Dict {
+	dict := &object.Dict{Pairs: make(map[object.HashKey]object.DictPair)}
+	i := uint64(0)
+	for key, value := range flags {
+		hashKey := object.HashKey{Type: object.STRING_OBJ, Value: i}
+		dict.Pairs[hashKey] = object.DictPair{
+			Key:   &object.String{Value: key},
+			Value: value,
+		}
+		i++
+	}
+	return dict
+}
+
+// Helper function to create the has method
+func createHasFunction(flags map[string]object.Object) func(...object.Object) object.Object {
+	return func(args ...object.Object) object.Object {
+		if len(args) != 1 {
+			return &object.Error{Message: "has requires exactly one argument: the flag name"}
+		}
+		
+		flagName, ok := args[0].(*object.String)
+		if !ok {
+			return &object.Error{Message: "flag name must be a string"}
+		}
+		
+		name := strings.TrimPrefix(strings.TrimPrefix(flagName.Value, "--"), "-")
+		_, exists := flags[name]
+		return &object.Boolean{Value: exists}
+	}
+}
+
+// Helper function to create the get method
+func createGetFunction(flags map[string]object.Object) func(...object.Object) object.Object {
+	return func(args ...object.Object) object.Object {
+		if len(args) != 1 {
+			return &object.Error{Message: "get requires exactly one argument: the flag name"}
+		}
+		
+		flagName, ok := args[0].(*object.String)
+		if !ok {
+			return &object.Error{Message: "flag name must be a string"}
+		}
+		
+		name := strings.TrimPrefix(strings.TrimPrefix(flagName.Value, "--"), "-")
+		if value, exists := flags[name]; exists {
+			return value
+		}
+		return &object.Null{}
+	}
+}
+
+// Helper function to create the positional method
+func createPositionalFunction(positionalArgs []object.Object) func(...object.Object) object.Object {
+	return func(args ...object.Object) object.Object {
+		if len(args) > 0 {
+			return &object.Error{Message: "positional does not accept any arguments"}
+		}
+		
+		return &object.Array{Elements: positionalArgs}
+	}
 }
