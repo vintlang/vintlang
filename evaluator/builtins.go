@@ -9,6 +9,7 @@ import (
 	"time"
 
 	"github.com/vintlang/vintlang/object"
+	"github.com/vintlang/vintlang/toolkit"
 )
 
 func handlePrint(w io.Writer, args []object.Object, addNewline bool) object.Object {
@@ -462,6 +463,19 @@ var builtins = map[string]*object.Builtin{
 				return TRUE
 			}
 			return FALSE
+		},
+	},
+	"args": {
+		Fn: func(args ...object.Object) object.Object {
+			if len(args) > 0 {
+				return newError("args does not accept any arguments")
+			}
+
+			cliArgs := &object.Array{}
+			for _, arg := range toolkit.GetCliArgs() {
+				cliArgs.Elements = append(cliArgs.Elements, &object.String{Value: arg})
+			}
+			return cliArgs
 		},
 	},
 }
