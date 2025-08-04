@@ -1,10 +1,11 @@
 package module
 
 import (
+	"fmt"
+	"io/ioutil"
 	"os"
 	"os/exec"
 	"strings"
-	"io/ioutil"
 
 	"github.com/vintlang/vintlang/object"
 )
@@ -49,20 +50,29 @@ func exit(args []object.Object, defs map[string]object.Object) object.Object {
 
 func run(args []object.Object, defs map[string]object.Object) object.Object {
 	if len(args) != 1 {
-		return &object.Error{Message: "Incorrect number of arguments"}
+		return &object.Error{Message: fmt.Sprintf("os.run() expects exactly 1 argument (command string), but received %d. Usage: os.run(\"ls -la\")", len(args))}
 	}
 
 	cmd, ok := args[0].(*object.String)
 	if !ok {
-		return &object.Error{Message: "Argument must be a string"}
+		return &object.Error{Message: fmt.Sprintf("os.run() expects a string argument, but received %s. Usage: os.run(\"ls -la\")", args[0].Type())}
 	}
+	
+	if strings.TrimSpace(cmd.Value) == "" {
+		return &object.Error{Message: "os.run() cannot execute an empty command. Please provide a valid shell command."}
+	}
+	
 	cmdParts := strings.Split(cmd.Value, " ")
 	command := cmdParts[0]
 	cmdArgs := cmdParts[1:]
 
 	out, err := exec.Command(command, cmdArgs...).Output()
 	if err != nil {
-		return &object.Error{Message: "Failed to execute command: " + err.Error()}
+		exitErr, isExitError := err.(*exec.ExitError)
+		if isExitError {
+			return &object.Error{Message: fmt.Sprintf("os.run() failed to execute '%s': command exited with non-zero status %d. This usually indicates the command encountered an error.", cmd.Value, exitErr.ExitCode())}
+		}
+		return &object.Error{Message: fmt.Sprintf("os.run() failed to execute '%s': %v. Please check if the command exists and is executable.", cmd.Value, err)}
 	}
 
 	return &object.String{Value: string(out)}
@@ -70,12 +80,16 @@ func run(args []object.Object, defs map[string]object.Object) object.Object {
 
 func getEnv(args []object.Object, defs map[string]object.Object) object.Object {
 	if len(args) != 1 {
-		return &object.Error{Message: "Incorrect number of arguments"}
+		return &object.Error{Message: fmt.Sprintf("os.getEnv() expects exactly 1 argument (environment variable name), but received %d. Usage: os.getEnv(\"PATH\")", len(args))}
 	}
 
 	key, ok := args[0].(*object.String)
 	if !ok {
-		return &object.Error{Message: "Argument must be a string"}
+		return &object.Error{Message: fmt.Sprintf("os.getEnv() expects a string argument, but received %s. Usage: os.getEnv(\"PATH\")", args[0].Type())}
+	}
+
+	if strings.TrimSpace(key.Value) == "" {
+		return &object.Error{Message: "os.getEnv() cannot retrieve an environment variable with an empty name. Please provide a valid variable name."}
 	}
 
 	value := os.Getenv(key.Value)
