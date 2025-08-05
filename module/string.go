@@ -1,7 +1,6 @@
 package module
 
 import (
-	"fmt"
 	"regexp"
 	"strings"
 
@@ -26,214 +25,191 @@ func init() {
 	StringFunctions["slug"] = slug
 }
 
-// Creates a slug string from a normal string
+// slug creates a URL-friendly slug from a normal string
 func slug(args []object.Object, defs map[string]object.Object) object.Object {
-	// Ensures exactly one argument is passed
-	if len(args) != 1 {
+	if len(defs) != 0 || len(args) != 1 || args[0].Type() != object.STRING_OBJ {
 		return ErrorMessage(
 			"string", "slug",
 			"1 string argument (text to convert to slug)",
-			fmt.Sprintf("%d arguments", len(args)),
+			formatArgs(args),
 			`string.slug("Hello World!") -> "hello-world"`,
 		)
 	}
 
-	if args[0].Type() != object.STRING_OBJ {
-		return ErrorMessage(
-			"string", "slug",
-			"string argument for text to convert",
-			string(args[0].Type()),
-			`string.slug("Hello World!") -> "hello-world"`,
-		)
-	}
-
-	// Inspects the argument and convert it to a string
-	input := args[0].(*object.String).Value
-
-	// Converts the input to lowercase
-	input = strings.ToLower(input)
-
-	// Removes all non-alphanumeric characters except spaces and hyphens
+	input := strings.ToLower(args[0].(*object.String).Value)
 	re := regexp.MustCompile(`[^a-z0-9\s-]+`)
 	input = re.ReplaceAllString(input, "")
-
-	// Replaces spaces and multiple hyphens with a single hyphen
 	re = regexp.MustCompile(`[\s-]+`)
 	input = re.ReplaceAllString(input, "-")
-
-	// Trims leading and trailing hyphens
 	input = strings.Trim(input, "-")
 
-	// Returns the result as a Vint object string
 	return &object.String{Value: input}
 }
 
 // similarity computes a similarity score between two strings
 func similarity(args []object.Object, defs map[string]object.Object) object.Object {
-	if len(args) != 2 {
-		return &object.Error{Message: "We need two arguments: the first string and the second string"}
+	if len(defs) != 0 || len(args) != 2 || args[0].Type() != object.STRING_OBJ || args[1].Type() != object.STRING_OBJ {
+		return ErrorMessage(
+			"string", "similarity",
+			"2 string arguments (string1, string2)",
+			formatArgs(args),
+			`string.similarity("hello", "hallo") -> 0.8`,
+		)
 	}
 
-	str1 := args[0].Inspect()
-	str2 := args[1].Inspect()
-
-	// Using Levenshtein distance to calculate similarity
+	str1 := args[0].(*object.String).Value
+	str2 := args[1].(*object.String).Value
 	distance := smetrics.WagnerFischer(str1, str2, 1, 1, 2)
 	maxLen := len(str1)
 	if len(str2) > maxLen {
 		maxLen = len(str2)
 	}
-
-	// Avoid division by zero
 	if maxLen == 0 {
-		return &object.Float{Value: 1.0} // Perfect match for empty strings
+		return &object.Float{Value: 1.0}
 	}
-
-	// Calculate similarity as 1 - (normalized distance)
-	similarityScore := 1.0 - float64(distance)/float64(maxLen)
-
-	return &object.Float{Value: similarityScore}
+	return &object.Float{Value: 1.0 - float64(distance)/float64(maxLen)}
 }
 
-// trim removes leading and trailing whitespaces
 func trim(args []object.Object, defs map[string]object.Object) object.Object {
-	if len(args) != 1 {
-		return &object.Error{Message: "We need one argument: the string to trim"}
+	if len(defs) != 0 || len(args) != 1 || args[0].Type() != object.STRING_OBJ {
+		return ErrorMessage(
+			"string", "trim",
+			"1 string argument",
+			formatArgs(args),
+			`string.trim("  hi  ") -> "hi"`,
+		)
 	}
-
-	str := args[0].Inspect()
-	return &object.String{Value: strings.TrimSpace(str)}
+	return &object.String{Value: strings.TrimSpace(args[0].(*object.String).Value)}
 }
 
-// contains checks if the substring exists in the string
 func contains(args []object.Object, defs map[string]object.Object) object.Object {
-	if len(args) != 2 {
-		return &object.Error{Message: "We need two arguments: the string and the substring"}
+	if len(defs) != 0 || len(args) != 2 || args[0].Type() != object.STRING_OBJ || args[1].Type() != object.STRING_OBJ {
+		return ErrorMessage(
+			"string", "contains",
+			"2 string arguments (string, substring)",
+			formatArgs(args),
+			`string.contains("hello world", "world") -> true`,
+		)
 	}
-
-	str := args[0].Inspect()
-	substr := args[1].Inspect()
-	return &object.Boolean{Value: strings.Contains(str, substr)}
+	return &object.Boolean{Value: strings.Contains(args[0].(*object.String).Value, args[1].(*object.String).Value)}
 }
 
-// toUpper converts the string to uppercase
 func toUpper(args []object.Object, defs map[string]object.Object) object.Object {
-	if len(args) != 1 {
-		return &object.Error{Message: "We need one argument: the string to convert"}
+	if len(defs) != 0 || len(args) != 1 || args[0].Type() != object.STRING_OBJ {
+		return ErrorMessage(
+			"string", "toUpper",
+			"1 string argument",
+			formatArgs(args),
+			`string.toUpper("hello") -> "HELLO"`,
+		)
 	}
-
-	str := args[0].Inspect()
-	return &object.String{Value: strings.ToUpper(str)}
+	return &object.String{Value: strings.ToUpper(args[0].(*object.String).Value)}
 }
 
-// toLower converts the string to lowercase
 func toLower(args []object.Object, defs map[string]object.Object) object.Object {
-	if len(args) != 1 {
-		return &object.Error{Message: "We need one argument: the string to convert"}
+	if len(defs) != 0 || len(args) != 1 || args[0].Type() != object.STRING_OBJ {
+		return ErrorMessage(
+			"string", "toLower",
+			"1 string argument",
+			formatArgs(args),
+			`string.toLower("HELLO") -> "hello"`,
+		)
 	}
-
-	str := args[0].Inspect()
-	return &object.String{Value: strings.ToLower(str)}
+	return &object.String{Value: strings.ToLower(args[0].(*object.String).Value)}
 }
 
-// replace replaces occurrences of the old substring with the new one
 func replace(args []object.Object, defs map[string]object.Object) object.Object {
-	if len(args) != 3 {
-		return &object.Error{Message: "We need three arguments: the string, the substring to replace, and the new substring"}
+	if len(defs) != 0 || len(args) != 3 || args[0].Type() != object.STRING_OBJ || args[1].Type() != object.STRING_OBJ || args[2].Type() != object.STRING_OBJ {
+		return ErrorMessage(
+			"string", "replace",
+			"3 string arguments (original, old, new)",
+			formatArgs(args),
+			`string.replace("hello world", "world", "gophers") -> "hello gophers"`,
+		)
 	}
-
-	str := args[0].Inspect()
-	old := args[1].Inspect()
-	new := args[2].Inspect()
-
-	return &object.String{Value: strings.ReplaceAll(str, old, new)}
+	return &object.String{Value: strings.ReplaceAll(args[0].(*object.String).Value, args[1].(*object.String).Value, args[2].(*object.String).Value)}
 }
 
-// split splits a string into a slice based on the delimiter
 func split(args []object.Object, defs map[string]object.Object) object.Object {
-	if len(args) != 2 {
-		return &object.Error{Message: "We need two arguments: the string and the delimiter"}
+	if len(defs) != 0 || len(args) != 2 || args[0].Type() != object.STRING_OBJ || args[1].Type() != object.STRING_OBJ {
+		return ErrorMessage(
+			"string", "split",
+			"2 string arguments (string, delimiter)",
+			formatArgs(args),
+			`string.split("a,b,c", ",") -> ["a","b","c"]`,
+		)
 	}
-
-	str := args[0].Inspect()
-	delimiter := args[1].Inspect()
-
-	// Split the string by the delimiter
-	parts := strings.Split(str, delimiter)
-	// Convert the parts into a list of strings
-	list := &object.Array{}
-	for _, part := range parts {
-		list.Elements = append(list.Elements, &object.String{Value: part})
+	parts := strings.Split(args[0].(*object.String).Value, args[1].(*object.String).Value)
+	elements := make([]object.Object, len(parts))
+	for i, part := range parts {
+		elements[i] = &object.String{Value: part}
 	}
-
-	return list
+	return &object.Array{Elements: elements}
 }
 
-// join joins a slice of strings into a single string with a delimiter
 func join(args []object.Object, defs map[string]object.Object) object.Object {
-	if len(args) != 2 {
-		return &object.Error{Message: "We need two arguments: the list of strings and the delimiter"}
+	if len(defs) != 0 || len(args) != 2 || args[0].Type() != object.ARRAY_OBJ || args[1].Type() != object.STRING_OBJ {
+		return ErrorMessage(
+			"string", "join",
+			"array of strings and delimiter",
+			formatArgs(args),
+			`string.join(["a","b"], ",") -> "a,b"`,
+		)
 	}
-
-	list := args[0].(*object.Array)
-	delimiter := args[1].Inspect()
-
-	var result string
-	for i, elem := range list.Elements {
-		if i > 0 {
-			result += delimiter
+	array := args[0].(*object.Array)
+	delim := args[1].(*object.String).Value
+	var parts []string
+	for _, elem := range array.Elements {
+		if elem.Type() != object.STRING_OBJ {
+			return &object.Error{Message: "join expects an array of strings"}
 		}
-		result += elem.(*object.String).Value
+		parts = append(parts, elem.(*object.String).Value)
 	}
-
-	return &object.String{Value: result}
+	return &object.String{Value: strings.Join(parts, delim)}
 }
 
-// substring extracts a substring from the string
 func substring(args []object.Object, defs map[string]object.Object) object.Object {
-	if len(args) != 3 {
-		return &object.Error{Message: "We need three arguments: the string, the start index, and the end index"}
+	if len(defs) != 0 || len(args) != 3 || args[0].Type() != object.STRING_OBJ || args[1].Type() != object.INTEGER_OBJ || args[2].Type() != object.INTEGER_OBJ {
+		return ErrorMessage(
+			"string", "substring",
+			"string, int start, int end",
+			formatArgs(args),
+			`string.substring("hello", 0, 4) -> "hell"`,
+		)
 	}
-
-	str := args[0].Inspect()                 // Get the string value
-	start := args[1].(*object.Integer).Value // Get the start index as int64
-	end := args[2].(*object.Integer).Value   // Get the end index as int64
-
-	// Convert int64 to int for string indexing
-	startIdx := int(start)
-	endIdx := int(end)
-
-	// Ensure indices are valid
-	if startIdx < 0 || endIdx > len(str) || startIdx >= endIdx {
+	str := args[0].(*object.String).Value
+	start := int(args[1].(*object.Integer).Value)
+	end := int(args[2].(*object.Integer).Value)
+	if start < 0 || end > len(str) || start >= end {
 		return &object.Error{Message: "Invalid start or end index"}
 	}
-
-	return &object.String{Value: str[startIdx:endIdx]}
+	return &object.String{Value: str[start:end]}
 }
 
-// length returns the length of the string
 func length(args []object.Object, defs map[string]object.Object) object.Object {
-	if len(args) != 1 {
-		return &object.Error{Message: "We need one argument: the string to measure"}
+	if len(defs) != 0 || len(args) != 1 || args[0].Type() != object.STRING_OBJ {
+		return ErrorMessage(
+			"string", "length",
+			"1 string argument",
+			formatArgs(args),
+			`string.length("hello") -> 5`,
+		)
 	}
-
-	str := args[0].Inspect()
-	return &object.Integer{Value: int64(len(str))}
+	return &object.Integer{Value: int64(len(args[0].(*object.String).Value))}
 }
 
-// indexOf finds the index of the first occurrence of a substring
 func indexOf(args []object.Object, defs map[string]object.Object) object.Object {
-	if len(args) != 2 {
-		return &object.Error{Message: "We need two arguments: the string and the substring to find"}
+	if len(defs) != 0 || len(args) != 2 || args[0].Type() != object.STRING_OBJ || args[1].Type() != object.STRING_OBJ {
+		return ErrorMessage(
+			"string", "indexOf",
+			"string, substring",
+			formatArgs(args),
+			`string.indexOf("hello", "e") -> 1`,
+		)
 	}
-
-	str := args[0].Inspect()
-	substr := args[1].Inspect()
-
-	index := strings.Index(str, substr)
+	index := strings.Index(args[0].(*object.String).Value, args[1].(*object.String).Value)
 	if index == -1 {
 		return &object.Error{Message: "Substring not found"}
 	}
-
 	return &object.Integer{Value: int64(index)}
 }
