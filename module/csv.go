@@ -2,6 +2,7 @@ package module
 
 import (
 	"encoding/csv"
+	"fmt"
 	"os"
 
 	"github.com/vintlang/vintlang/object"
@@ -16,20 +17,36 @@ func init() {
 
 func readCsv(args []object.Object, defs map[string]object.Object) object.Object {
 	if len(args) != 1 || args[0].Type() != object.STRING_OBJ {
-		return &object.Error{Message: "read() expects a single string argument for the file path"}
+		return ErrorMessage(
+			"csv", "read",
+			"1 string argument (file path to read)",
+			fmt.Sprintf("%d arguments", len(args)),
+			`csv.read("data.csv") -> returns an array of arrays with CSV data`,
+		)
 	}
+
 	filePath := args[0].(*object.String).Value
 
 	file, err := os.Open(filePath)
 	if err != nil {
-		return &object.Error{Message: "Error opening file: " + err.Error()}
+		return ErrorMessage(
+			"csv", "read",
+			"valid file path",
+			fmt.Sprintf("error: %v", err),
+			`csv.read("data.csv") -> returns an array of arrays with CSV data`,
+		)
 	}
 	defer file.Close()
 
 	reader := csv.NewReader(file)
 	records, err := reader.ReadAll()
 	if err != nil {
-		return &object.Error{Message: "Error reading CSV: " + err.Error()}
+		return ErrorMessage(
+			"csv", "read",
+			"valid CSV file",
+			fmt.Sprintf("error: %v", err),
+			`csv.read("data.csv") -> returns an array of arrays with CSV data`,
+		)
 	}
 
 	var rows []object.Object
@@ -46,14 +63,24 @@ func readCsv(args []object.Object, defs map[string]object.Object) object.Object 
 
 func writeCsv(args []object.Object, defs map[string]object.Object) object.Object {
 	if len(args) != 2 || args[0].Type() != object.STRING_OBJ || args[1].Type() != object.ARRAY_OBJ {
-		return &object.Error{Message: "write() expects a file path (string) and data (array of arrays)"}
+		return ErrorMessage(
+			"csv", "write",
+			"1 string argument (file path) and 1 array argument (data)",
+			fmt.Sprintf("%d arguments", len(args)),
+			`csv.write("data.csv", [["header1", "header2"], ["value1", "value2"]]) -> writes CSV data to a file`,
+		)
 	}
 	filePath := args[0].(*object.String).Value
 	data := args[1].(*object.Array)
 
 	file, err := os.Create(filePath)
 	if err != nil {
-		return &object.Error{Message: "Error creating file: " + err.Error()}
+		return ErrorMessage(
+			"csv", "write",
+			"valid file path",
+			fmt.Sprintf("error: %v", err),
+			`csv.write("data.csv", [["header1", "header2"], ["value1", "value2"]]) -> writes CSV data to a file`,
+		)
 	}
 	defer file.Close()
 
@@ -62,18 +89,33 @@ func writeCsv(args []object.Object, defs map[string]object.Object) object.Object
 
 	for _, rowObj := range data.Elements {
 		if rowObj.Type() != object.ARRAY_OBJ {
-			return &object.Error{Message: "All elements of data must be arrays"}
+			return ErrorMessage(
+				"csv", "write",
+				"valid array of arrays",
+				fmt.Sprintf("error: %v", err),
+				`csv.write("data.csv", [["header1", "header2"], ["value1", "value2"]]) -> writes CSV data to a file`,
+			)
 		}
 		rowArr := rowObj.(*object.Array)
 		var record []string
 		for _, valueObj := range rowArr.Elements {
 			if valueObj.Type() != object.STRING_OBJ {
-				return &object.Error{Message: "All cell values must be strings"}
+				return ErrorMessage(
+					"csv", "write",
+					"valid string values",
+					fmt.Sprintf("error: %v", err),
+					`csv.write("data.csv", [["header1", "header2"], ["value1", "value2"]]) -> writes CSV data to a file`,
+				)
 			}
 			record = append(record, valueObj.(*object.String).Value)
 		}
 		if err := writer.Write(record); err != nil {
-			return &object.Error{Message: "Error writing record to CSV: " + err.Error()}
+			return ErrorMessage(
+				"csv", "write",
+				"valid CSV file",
+				fmt.Sprintf("error: %v", err),
+				`csv.write("data.csv", [["header1", "header2"], ["value1", "value2"]]) -> writes CSV data to a file`,
+			)
 		}
 	}
 

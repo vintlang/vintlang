@@ -1,6 +1,7 @@
 package module
 
 import (
+	"fmt"
 	"os"
 	"strings"
 
@@ -17,7 +18,13 @@ func init() {
 
 func loadEnv(args []object.Object, defs map[string]object.Object) object.Object {
 	if len(args) > 1 || len(defs) != 0 {
-		return &object.Error{Message: "load requires zero or one argument: the .env file path"}
+		return ErrorMessage(
+			"dotenv", "load",
+			"0 or 1 string argument (optional file path to .env)",
+			fmt.Sprintf("%d arguments", len(args)),
+			`dotenv.load() -> loads environment variables from .env file in current directory
+dotenv.load("path/to/.env") -> loads from specified file`,
+		)
 	}
 
 	filePath := ""
@@ -27,7 +34,13 @@ func loadEnv(args []object.Object, defs map[string]object.Object) object.Object 
 
 	err := godotenv.Load(filePath)
 	if err != nil {
-		return &object.Error{Message: "Failed to load .env file"}
+		return ErrorMessage(
+			"dotenv", "load",
+			"valid .env file path",
+			fmt.Sprintf("error: %v", err),
+			`dotenv.load() -> loads environment variables from .env file in current directory
+dotenv.load("path/to/.env") -> loads from specified file`,
+		)
 	}
 
 	return &object.Boolean{Value: true}
@@ -35,7 +48,12 @@ func loadEnv(args []object.Object, defs map[string]object.Object) object.Object 
 
 func getDotenvValue(args []object.Object, defs map[string]object.Object) object.Object {
 	if len(args) != 1 || len(defs) != 0 {
-		return &object.Error{Message: "get requires exactly one argument: the key name"}
+		return ErrorMessage(
+			"dotenv", "get",
+			"1 string argument (environment variable key)",
+			fmt.Sprintf("%d arguments", len(args)),
+			`dotenv.get("MY_VAR") -> returns the value of MY_VAR from the environment`,
+		)
 	}
 
 	key := args[0].Inspect()
