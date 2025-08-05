@@ -39,28 +39,55 @@ func handleRequest(method string, args []object.Object, defs map[string]object.O
 		case "url":
 			strUrl, ok := v.(*object.String)
 			if !ok {
-				return &object.Error{Message: fmt.Sprintf("net.%s() 'url' parameter must be a string, but received %s. Usage: net.%s(url=\"https://example.com\")", method, v.Type(), strings.ToLower(method))}
+				return ErrorMessage(
+					"net", method,
+					"string value for 'url' parameter",
+					string(v.Type()),
+					fmt.Sprintf(`net.%s(url="https://example.com")`, strings.ToLower(method)),
+				)
 			}
 			url = strUrl
 		case "headers":
 			dictHead, ok := v.(*object.Dict)
 			if !ok {
-				return &object.Error{Message: fmt.Sprintf("net.%s() 'headers' parameter must be a dictionary, but received %s. Usage: net.%s(headers={\"Content-Type\": \"application/json\"})", method, v.Type(), strings.ToLower(method))}
+				return ErrorMessage(
+					"net", method,
+					"dictionary value for 'headers' parameter",
+					string(v.Type()),
+					fmt.Sprintf(`net.%s(headers={"Content-Type": "application/json"})`, strings.ToLower(method)),
+				)
 			}
 			headers = dictHead
 		case "body":
 			dictBody, ok := v.(*object.Dict)
 			if !ok {
-				return &object.Error{Message: fmt.Sprintf("net.%s() 'body' parameter must be a dictionary, but received %s. Usage: net.%s(body={\"key\": \"value\"})", method, v.Type(), strings.ToLower(method))}
+				return ErrorMessage(
+					"net", method,
+					"dictionary value for 'body' parameter",
+					string(v.Type()),
+					fmt.Sprintf(`net.%s(body={"key": "value"})`, strings.ToLower(method)),
+				)
 			}
 			params = dictBody
 		default:
-			return &object.Error{Message: fmt.Sprintf("net.%s() received invalid parameter '%s'. Valid parameters are: 'url', 'headers', 'body'. Usage: net.%s(url=\"https://example.com\", headers={...}, body={...})", method, k, strings.ToLower(method))}
+			return &object.Error{
+				Message: fmt.Sprintf("\033[1;31mError in net.%s()\033[0m:\n"+
+					"  Invalid parameter '%s'.\n"+
+					"  Valid parameters are: 'url', 'headers', 'body'.\n"+
+					"  Usage: net.%s(url=\"https://example.com\", headers={...}, body={...})\n",
+					method, k, strings.ToLower(method)),
+			}
 		}
 	}
 
 	if url == nil || url.Value == "" {
-		return &object.Error{Message: fmt.Sprintf("net.%s() requires a valid URL. Usage: net.%s(url=\"https://example.com\") or provide the URL as the first argument: net.%s(\"https://example.com\")", method, strings.ToLower(method), strings.ToLower(method))}
+		return &object.Error{
+			Message: fmt.Sprintf("\033[1;31mError in net.%s()\033[0m:\n"+
+				"  Missing required 'url' parameter.\n"+
+				"  Please provide a valid URL for the HTTP request.\n"+
+				"  Usage: net.%s(url=\"https://example.com\") or net.%s(\"https://example.com\")\n",
+				method, strings.ToLower(method), strings.ToLower(method)),
+		}
 	}
 
 	var requestBody *bytes.Buffer

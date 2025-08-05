@@ -120,13 +120,27 @@ func epsilon(args []object.Object, defs map[string]object.Object) object.Object 
 }
 func abs(args []object.Object, defs map[string]object.Object) object.Object {
 	if len(defs) != 0 {
-		return &object.Error{Message: "math.abs() does not accept keyword arguments. Usage: math.abs(-5)"}
+		return &object.Error{
+			Message: "\033[1;31mError in math.abs()\033[0m:\n" +
+				"  This function does not accept keyword arguments.\n" +
+				"  Usage: math.abs(-5) -> 5\n",
+		}
 	}
 	if len(args) != 1 {
-		return &object.Error{Message: fmt.Sprintf("math.abs() expects exactly 1 argument (number), but received %d. Usage: math.abs(-5)", len(args))}
+		return ErrorMessage(
+			"math", "abs",
+			"1 numeric argument (number to get absolute value)",
+			fmt.Sprintf("%d arguments", len(args)),
+			"math.abs(-5) -> 5",
+		)
 	}
 	if args[0].Type() != object.INTEGER_OBJ && args[0].Type() != object.FLOAT_OBJ {
-		return &object.Error{Message: fmt.Sprintf("math.abs() expects a number argument, but received %s. Usage: math.abs(-5)", args[0].Type())}
+		return ErrorMessage(
+			"math", "abs",
+			"numeric argument (integer or float)",
+			string(args[0].Type()),
+			"math.abs(-5) -> 5",
+		)
 	}
 	switch arg := args[0].(type) {
 	case *object.Integer:

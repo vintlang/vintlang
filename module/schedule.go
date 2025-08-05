@@ -1,3 +1,7 @@
+//Experimental module for scheduling tasks using ticker and cron-like expressions
+// This module provides functions to create periodic tasks and one-time scheduled tasks
+// using a simple cron-like syntax. It is not fully implemented yet, but provides a structure
+// for future development.
 package module
 
 import (
