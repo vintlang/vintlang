@@ -99,7 +99,7 @@ func encryptAES(args []object.Object, defs map[string]object.Object) object.Obje
 	encrypted, err := aesEncrypt([]byte(data), []byte(key))
 	if err != nil {
 		return &object.Error{
-			Message: fmt.Sprintf("\033[1;31mError in crypto.encryptAES()\033[0m:\n"+
+			Message: fmt.Sprintf("\033[1;31m -> crypto.encryptAES()\033[0m:\n"+
 				"  Failed to encrypt data: %v\n"+
 				"  Please ensure your key is valid for AES encryption.\n"+
 				"  Usage: crypto.encryptAES(\"secret data\", \"mykey123\") -> returns encrypted hex\n",
@@ -115,6 +115,10 @@ func encryptAES(args []object.Object, defs map[string]object.Object) object.Obje
 func decryptAES(args []object.Object, defs map[string]object.Object) object.Object {
 	if len(args) != 2 {
 		return &object.Error{Message: "We need two arguments: the data to decrypt and the key"}
+		// return ErrorMessage(
+		// 	"crypto", "decryptAES",
+
+		// )
 	}
 
 	// Get the encrypted data and key values
