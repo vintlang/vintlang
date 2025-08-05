@@ -10,7 +10,7 @@ All modules now use a centralized `ErrorMessage` function from `module/module.go
 func ErrorMessage(module, function, expected, received, usage string) *object.Error {
     return &object.Error{
         Message: fmt.Sprintf(
-            "\033[1;31mError in %s.%s()\033[0m:\n"+
+            "\033[1;31m -> %s.%s()\033[0m:\n"+
                 "  Expected: %s\n"+
                 "  Received: %s\n"+
                 "  Usage: %s\n"+

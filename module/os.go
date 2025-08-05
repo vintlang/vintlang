@@ -70,7 +70,7 @@ func run(args []object.Object, defs map[string]object.Object) object.Object {
 
 	if strings.TrimSpace(cmd.Value) == "" {
 		return &object.Error{
-			Message: "\033[1;31mError in os.run()\033[0m:\n" +
+			Message: "\033[1;31m -> os.run()\033[0m:\n" +
 				"  Cannot execute an empty command.\n" +
 				"  Please provide a valid shell command.\n" +
 				"  Usage: os.run(\"ls -la\") -> returns command output\n",
@@ -86,7 +86,7 @@ func run(args []object.Object, defs map[string]object.Object) object.Object {
 		exitErr, isExitError := err.(*exec.ExitError)
 		if isExitError {
 			return &object.Error{
-				Message: fmt.Sprintf("\033[1;31mError in os.run()\033[0m:\n"+
+				Message: fmt.Sprintf("\033[1;31m -> os.run()\033[0m:\n"+
 					"  Command '%s' exited with status %d.\n"+
 					"  This usually indicates the command encountered an error.\n"+
 					"  Usage: os.run(\"ls -la\") -> returns command output\n",
@@ -94,7 +94,7 @@ func run(args []object.Object, defs map[string]object.Object) object.Object {
 			}
 		}
 		return &object.Error{
-			Message: fmt.Sprintf("\033[1;31mError in os.run()\033[0m:\n"+
+			Message: fmt.Sprintf("\033[1;31m -> os.run()\033[0m:\n"+
 				"  Failed to execute '%s': %v\n"+
 				"  Please check if the command exists and is executable.\n"+
 				"  Usage: os.run(\"ls -la\") -> returns command output\n",
@@ -127,7 +127,7 @@ func getEnv(args []object.Object, defs map[string]object.Object) object.Object {
 
 	if strings.TrimSpace(key.Value) == "" {
 		return &object.Error{
-			Message: "\033[1;31mError in os.getEnv()\033[0m:\n" +
+			Message: "\033[1;31m -> os.getEnv()\033[0m:\n" +
 				"  Cannot retrieve an environment variable with an empty name.\n" +
 				"  Please provide a valid variable name.\n" +
 				"  Usage: os.getEnv(\"PATH\") -> returns environment variable value\n",

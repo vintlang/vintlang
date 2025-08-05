@@ -71,7 +71,7 @@ func handleRequest(method string, args []object.Object, defs map[string]object.O
 			params = dictBody
 		default:
 			return &object.Error{
-				Message: fmt.Sprintf("\033[1;31mError in net.%s()\033[0m:\n"+
+				Message: fmt.Sprintf("\033[1;31m -> net.%s()\033[0m:\n"+
 					"  Invalid parameter '%s'.\n"+
 					"  Valid parameters are: 'url', 'headers', 'body'.\n"+
 					"  Usage: net.%s(url=\"https://example.com\", headers={...}, body={...})\n",
@@ -82,7 +82,7 @@ func handleRequest(method string, args []object.Object, defs map[string]object.O
 
 	if url == nil || url.Value == "" {
 		return &object.Error{
-			Message: fmt.Sprintf("\033[1;31mError in net.%s()\033[0m:\n"+
+			Message: fmt.Sprintf("\033[1;31m -> net.%s()\033[0m:\n"+
 				"  Missing required 'url' parameter.\n"+
 				"  Please provide a valid URL for the HTTP request.\n"+
 				"  Usage: net.%s(url=\"https://example.com\") or net.%s(\"https://example.com\")\n",
