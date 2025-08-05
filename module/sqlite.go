@@ -24,86 +24,76 @@ type SQLiteConnection struct {
 	db *sql.DB
 }
 
-// Open a SQLite database
 func openDatabase(args []object.Object, defs map[string]object.Object) object.Object {
-	if len(args) != 1 || args[0].Type() != object.STRING_OBJ {
-		return &object.Error{Message: "Invalid arguments: Expected 'open(path)' where 'path' is a string"}
+	if len(defs) != 0 || len(args) != 1 || args[0].Type() != object.STRING_OBJ {
+		return ErrorMessage(
+			"sqlite",
+			"open",
+			"1 string argument (path)",
+			formatArgs(args),
+			`sqlite.open("my.db") -> connection`,
+		)
 	}
-
 	dbPath := args[0].(*object.String).Value
 	db, err := sql.Open("sqlite3", dbPath)
 	if err != nil {
 		return &object.Error{Message: fmt.Sprintf("Failed to open database at '%s': %s", dbPath, err)}
 	}
-
-	conn := &SQLiteConnection{db: db}
-	return &object.NativeObject{
-		Value: conn,
-	}
+	return &object.NativeObject{Value: &SQLiteConnection{db: db}}
 }
 
-// Close the database connection
 func closeDatabase(args []object.Object, defs map[string]object.Object) object.Object {
-	if len(args) != 1 {
-		return &object.Error{Message: "Invalid arguments: Expected 'close(conn)'"}
+	if len(defs) != 0 || len(args) != 1 || args[0].Type() != object.NATIVE_OBJ {
+		return ErrorMessage(
+			"sqlite",
+			"close",
+			"1 connection argument",
+			formatArgs(args),
+			`sqlite.close(conn) -> null`,
+		)
 	}
-
 	conn, ok := args[0].(*object.NativeObject)
 	if !ok || conn.Value.(*SQLiteConnection).db == nil {
 		return &object.Error{Message: "Invalid database connection"}
 	}
-
 	err := conn.Value.(*SQLiteConnection).db.Close()
 	if err != nil {
 		return &object.Error{Message: fmt.Sprintf("Failed to close database connection: %s", err)}
 	}
-
 	return &object.Null{}
 }
 
-// Execute a query (INSERT, UPDATE, DELETE)
 func executeQuery(args []object.Object, defs map[string]object.Object) object.Object {
-	if len(args) < 2 {
-		return &object.Error{Message: "Invalid arguments: Expected 'execute(conn, query, [params...])'"}
+	if len(args) < 2 || args[0].Type() != object.NATIVE_OBJ || args[1].Type() != object.STRING_OBJ {
+		return ErrorMessage(
+			"sqlite",
+			"execute",
+			"connection, query, [params...]",
+			formatArgs(args),
+			`sqlite.execute(conn, "INSERT INTO users(name) VALUES(?)", "John") -> null`,
+		)
 	}
-
-	conn, ok := args[0].(*object.NativeObject)
-	if !ok || conn.Value.(*SQLiteConnection).db == nil {
-		return &object.Error{Message: "Invalid database connection"}
-	}
-
-	query, ok := args[1].(*object.String)
-	if !ok {
-		return &object.Error{Message: "Query must be a string"}
-	}
-
+	conn := args[0].(*object.NativeObject).Value.(*SQLiteConnection)
 	params := convertObjectsToParams(args[2:])
-	_, err := conn.Value.(*SQLiteConnection).db.Exec(query.Value, params...)
+	_, err := conn.db.Exec(args[1].(*object.String).Value, params...)
 	if err != nil {
 		return &object.Error{Message: fmt.Sprintf("Query execution failed: %s", err)}
 	}
-
 	return &object.Null{}
 }
 
-// Fetch all rows (SELECT)
 func fetchAll(args []object.Object, defs map[string]object.Object) object.Object {
-	if len(args) < 2 {
-		return &object.Error{Message: "Invalid arguments: Expected 'fetchAll(conn, query, [params...])'"}
+	if len(args) < 2 || args[0].Type() != object.NATIVE_OBJ || args[1].Type() != object.STRING_OBJ {
+		return ErrorMessage(
+			"sqlite",
+			"fetchAll",
+			"connection, query, [params...]",
+			formatArgs(args),
+			`sqlite.fetchAll(conn, "SELECT * FROM users") -> [{...}]`,
+		)
 	}
-
-	conn, ok := args[0].(*object.NativeObject)
-	if !ok || conn.Value.(*SQLiteConnection).db == nil {
-		return &object.Error{Message: "Invalid database connection"}
-	}
-
-	query, ok := args[1].(*object.String)
-	if !ok {
-		return &object.Error{Message: "Query must be a string"}
-	}
-
-	params := convertObjectsToParams(args[2:])
-	rows, err := conn.Value.(*SQLiteConnection).db.Query(query.Value, params...)
+	conn := args[0].(*object.NativeObject).Value.(*SQLiteConnection)
+	rows, err := conn.db.Query(args[1].(*object.String).Value, convertObjectsToParams(args[2:])...)
 	if err != nil {
 		return &object.Error{Message: fmt.Sprintf("Query execution failed: %s", err)}
 	}
@@ -117,25 +107,20 @@ func fetchAll(args []object.Object, defs map[string]object.Object) object.Object
 		for i := range values {
 			scanArgs[i] = &values[i]
 		}
-
 		if err := rows.Scan(scanArgs...); err != nil {
 			return &object.Error{Message: fmt.Sprintf("Failed to scan row: %s", err)}
 		}
-
 		row := &object.Dict{Pairs: make(map[object.HashKey]object.DictPair)}
 		for i, col := range cols {
 			key := &object.String{Value: col}
 			value := convertToObject(values[i])
 			row.Pairs[key.HashKey()] = object.DictPair{Key: key, Value: value}
 		}
-
 		result = append(result, row)
 	}
-
 	return &object.Array{Elements: result}
 }
 
-// Fetch a single row
 func fetchOne(args []object.Object, defs map[string]object.Object) object.Object {
 	result := fetchAll(args, defs)
 	if result.Type() == object.ARRAY_OBJ {
@@ -147,56 +132,43 @@ func fetchOne(args []object.Object, defs map[string]object.Object) object.Object
 	return &object.Null{}
 }
 
-// Create a table
 func createTable(args []object.Object, defs map[string]object.Object) object.Object {
-	if len(args) != 2 {
-		return &object.Error{Message: "Invalid arguments: Expected 'createTable(conn, query)'"}
+	if len(args) != 2 || args[0].Type() != object.NATIVE_OBJ || args[1].Type() != object.STRING_OBJ {
+		return ErrorMessage(
+			"sqlite",
+			"createTable",
+			"connection, query",
+			formatArgs(args),
+			`sqlite.createTable(conn, "CREATE TABLE IF NOT EXISTS users(id INTEGER PRIMARY KEY, name TEXT)") -> null`,
+		)
 	}
-
-	conn, ok := args[0].(*object.NativeObject)
-	if !ok || conn.Value.(*SQLiteConnection).db == nil {
-		return &object.Error{Message: "Invalid database connection"}
-	}
-
-	query, ok := args[1].(*object.String)
-	if !ok {
-		return &object.Error{Message: "Query must be a string"}
-	}
-
-	_, err := conn.Value.(*SQLiteConnection).db.Exec(query.Value)
+	conn := args[0].(*object.NativeObject).Value.(*SQLiteConnection)
+	_, err := conn.db.Exec(args[1].(*object.String).Value)
 	if err != nil {
 		return &object.Error{Message: fmt.Sprintf("Failed to create table: %s", err)}
 	}
-
 	return &object.Null{}
 }
 
-// Drop a table
 func dropTable(args []object.Object, defs map[string]object.Object) object.Object {
-	if len(args) != 2 {
-		return &object.Error{Message: "Invalid arguments: Expected 'dropTable(conn, tableName)'"}
+	if len(args) != 2 || args[0].Type() != object.NATIVE_OBJ || args[1].Type() != object.STRING_OBJ {
+		return ErrorMessage(
+			"sqlite",
+			"dropTable",
+			"connection, tableName",
+			formatArgs(args),
+			`sqlite.dropTable(conn, "users") -> null`,
+		)
 	}
-
-	conn, ok := args[0].(*object.NativeObject)
-	if !ok || conn.Value.(*SQLiteConnection).db == nil {
-		return &object.Error{Message: "Invalid database connection"}
-	}
-
-	tableName, ok := args[1].(*object.String)
-	if !ok {
-		return &object.Error{Message: "Table name must be a string"}
-	}
-
-	query := fmt.Sprintf("DROP TABLE IF EXISTS %s", tableName.Value)
-	_, err := conn.Value.(*SQLiteConnection).db.Exec(query)
+	conn := args[0].(*object.NativeObject).Value.(*SQLiteConnection)
+	query := fmt.Sprintf("DROP TABLE IF EXISTS %s", args[1].(*object.String).Value)
+	_, err := conn.db.Exec(query)
 	if err != nil {
-		return &object.Error{Message: fmt.Sprintf("Failed to drop table '%s': %s", tableName.Value, err)}
+		return &object.Error{Message: fmt.Sprintf("Failed to drop table '%s': %s", args[1].(*object.String).Value, err)}
 	}
-
 	return &object.Null{}
 }
 
-// Utility to convert Go values to Vint objects
 func convertToObject(val interface{}) object.Object {
 	switch v := val.(type) {
 	case int64:
@@ -214,7 +186,6 @@ func convertToObject(val interface{}) object.Object {
 	}
 }
 
-// Utility to convert Vint objects to Go parameters
 func convertObjectsToParams(objects []object.Object) []interface{} {
 	params := make([]interface{}, len(objects))
 	for i, obj := range objects {
