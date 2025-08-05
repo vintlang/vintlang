@@ -6,6 +6,8 @@ import (
 	"crypto/md5"
 	"crypto/sha256"
 	"encoding/hex"
+	"fmt"
+
 	// "errors"
 	"github.com/vintlang/vintlang/object"
 )
@@ -21,20 +23,19 @@ var CryptoFunctions = map[string]object.ModuleFunction{
 // hashMD5 takes a string as input and returns the MD5 hash of that string.
 // The MD5 hash is commonly used for checksums or for detecting duplicate data.
 func hashMD5(args []object.Object, defs map[string]object.Object) object.Object {
-	if len(args) != 1 {
-		return &object.Error{Message: "We need one argument: the string to hash"}
-	}
-
-	// Get the string value to hash
-	str := args[0].Inspect()
-
-	// Compute the MD5 hash of the string
-	hash := md5.New()
-	hash.Write([]byte(str))
-
-	// Return the MD5 hash as a hexadecimal string
-	return &object.String{Value: hex.EncodeToString(hash.Sum(nil))}
+    if len(args) != 1 || args[0].Type() != object.STRING_OBJ {
+        return ErrorMessage(
+            "crypto", "hashMD5",
+            "1 string argument (data to hash)",
+            fmt.Sprintf("%d arguments or wrong type", len(args)),
+            `crypto.hashMD5("hello") -> "5d41402abc4b2a76b9719d911017c592"`,
+        )
+    }
+    str := args[0].(*object.String).Value
+    hash := md5.Sum([]byte(str))
+    return &object.String{Value: hex.EncodeToString(hash[:])}
 }
+
 
 // hashSHA256 takes a string as input and returns the SHA-256 hash of that string.
 // SHA-256 is a more secure cryptographic hash function than MD5.
