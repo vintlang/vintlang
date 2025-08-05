@@ -5,83 +5,74 @@ import (
 	"github.com/vintlang/vintlang/object"
 )
 
-// RegexFunctions is a map that holds the available functions in the Regex module.
 var RegexFunctions = map[string]object.ModuleFunction{
-	"match":        match,
+	"match":         match,
 	"replaceString": replaceString,
 	"splitString":   splitString,
 }
 
-
-// match checks if the given pattern matches the input string.
-// It returns true if there is a match, otherwise returns false.
 func match(args []object.Object, defs map[string]object.Object) object.Object {
-	if len(args) != 2 {
-		return &object.Error{Message: "We need two arguments: the pattern and the input string"}
+	if len(args) != 2 || args[0].Type() != object.STRING_OBJ || args[1].Type() != object.STRING_OBJ {
+		return ErrorMessage(
+			"regex",
+			"match",
+			"2 string arguments (pattern, text)",
+			formatArgs(args),
+			`regex.match("\\d+", "abc123") -> true`,
+		)
 	}
+	pattern := args[0].(*object.String).Value
+	input := args[1].(*object.String).Value
 
-	
-	// Get the regex pattern and input string values
-	pattern := args[0].Inspect()
-	input := args[1].Inspect()
-
-	// Compile the regex pattern
 	re, err := regexp.Compile(pattern)
 	if err != nil {
-		return &object.Error{Message: err.Error()}
+		return &object.Error{Message: "Invalid regex pattern: " + err.Error()}
 	}
-
-	// Check if the pattern matches the input string
 	return &object.Boolean{Value: re.MatchString(input)}
 }
 
-// replaceString replaces the first occurrence of the regex pattern in the input string with the replacement string.
 func replaceString(args []object.Object, defs map[string]object.Object) object.Object {
-	if len(args) != 3 {
-		return &object.Error{Message: "We need three arguments: the pattern, the replacement, and the input string"}
+	if len(args) != 3 || args[0].Type() != object.STRING_OBJ || args[1].Type() != object.STRING_OBJ || args[2].Type() != object.STRING_OBJ {
+		return ErrorMessage(
+			"regex",
+			"replaceString",
+			"3 string arguments (pattern, replacement, text)",
+			formatArgs(args),
+			`regex.replaceString("\\d+", "#", "abc123") -> "abc#"`,
+		)
 	}
+	pattern := args[0].(*object.String).Value
+	replacement := args[1].(*object.String).Value
+	input := args[2].(*object.String).Value
 
-	// Get the regex pattern, replacement string, and input string
-	pattern := args[0].Inspect()
-	replacement := args[1].Inspect()
-	input := args[2].Inspect()
-
-	// Compile the regex pattern
 	re, err := regexp.Compile(pattern)
 	if err != nil {
-		return &object.Error{Message: err.Error()}
+		return &object.Error{Message: "Invalid regex pattern: " + err.Error()}
 	}
-
-	// Replace the first occurrence of the pattern with the replacement
 	return &object.String{Value: re.ReplaceAllString(input, replacement)}
 }
 
-// splitString splits the input string by the regex pattern and returns an array of substrings.
 func splitString(args []object.Object, defs map[string]object.Object) object.Object {
-	if len(args) != 2 {
-		return &object.Error{Message: "We need two arguments: the pattern and the input string"}
+	if len(args) != 2 || args[0].Type() != object.STRING_OBJ || args[1].Type() != object.STRING_OBJ {
+		return ErrorMessage(
+			"regex",
+			"splitString",
+			"2 string arguments (pattern, text)",
+			formatArgs(args),
+			`regex.splitString("\\s+", "a b  c") -> ["a", "b", "c"]`,
+		)
 	}
+	pattern := args[0].(*object.String).Value
+	input := args[1].(*object.String).Value
 
-	// Get the regex pattern and input string
-	pattern := args[0].Inspect()
-	input := args[1].Inspect()
-
-	// Compile the regex pattern
 	re, err := regexp.Compile(pattern)
 	if err != nil {
-		return &object.Error{Message: err.Error()}
+		return &object.Error{Message: "Invalid regex pattern: " + err.Error()}
 	}
-
-	// Split the input string by the pattern
 	result := re.Split(input, -1)
-
-	// Convert the result to an array of strings
-	var resultObjects []object.Object
-	for _, item := range result {
-		resultObjects = append(resultObjects, &object.String{Value: item})
+	var objs []object.Object
+	for _, s := range result {
+		objs = append(objs, &object.String{Value: s})
 	}
-
-	// Return the array of substrings
-	return &object.Array{Elements: resultObjects}
+	return &object.Array{Elements: objs}
 }
-
