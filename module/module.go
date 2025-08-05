@@ -1,6 +1,10 @@
 package module
 
-import "github.com/vintlang/vintlang/object"
+import (
+	"fmt"
+
+	"github.com/vintlang/vintlang/object"
+)
 
 var Mapper = map[string]*object.Module{}
 
@@ -34,4 +38,20 @@ func init() {
 	Mapper["llm"] = &object.Module{Name: "llm", Functions: LLMFunctions}
 	Mapper["openai"] = &object.Module{Name: "openai", Functions: OpenAIFunctions}
 	Mapper["schedule"] = &object.Module{Name: "schedule", Functions: ScheduleFunctions}
+}
+
+// ErrorMessage formats an error message for module functions
+// It provides a consistent error format for incorrect usage of module functions
+// including the module name, function name, expected arguments, received arguments, and usage instructions.
+func ErrorMessage(module, function, expected, received, usage string) *object.Error {
+    return &object.Error{
+        Message: fmt.Sprintf(
+            "\033[1;31mError in %s.%s()\033[0m:\n"+
+                "  Expected: %s\n"+
+                "  Received: %s\n"+
+                "  Usage: %s\n"+
+                "  See documentation for details.\n",
+            module, function, expected, received, usage,
+        ),
+    }
 }
