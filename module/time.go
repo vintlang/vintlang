@@ -39,7 +39,7 @@ func now(args []object.Object, defs map[string]object.Object) object.Object {
 func sleep(args []object.Object, defs map[string]object.Object) object.Object {
 	if len(defs) != 0 {
 		return &object.Error{
-			Message: "\033[1;31mError in time.sleep()\033[0m:\n" +
+			Message: "\033[1;31m -> time.sleep()\033[0m:\n" +
 				"  This function does not accept keyword arguments.\n" +
 				"  Usage: time.sleep(5) -> sleeps for 5 seconds\n",
 		}
@@ -67,7 +67,7 @@ func sleep(args []object.Object, defs map[string]object.Object) object.Object {
 
 	if inttime < 0 {
 		return &object.Error{
-			Message: fmt.Sprintf("\033[1;31mError in time.sleep()\033[0m:\n"+
+			Message: fmt.Sprintf("\033[1;31m -> time.sleep()\033[0m:\n"+
 				"  Cannot sleep for negative duration (%d seconds).\n"+
 				"  Please provide a positive number.\n"+
 				"  Usage: time.sleep(5) -> sleeps for 5 seconds\n",

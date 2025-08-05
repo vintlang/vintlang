@@ -121,7 +121,7 @@ func epsilon(args []object.Object, defs map[string]object.Object) object.Object 
 func abs(args []object.Object, defs map[string]object.Object) object.Object {
 	if len(defs) != 0 {
 		return &object.Error{
-			Message: "\033[1;31mError in math.abs()\033[0m:\n" +
+			Message: "\033[1;31m -> math.abs()\033[0m:\n" +
 				"  This function does not accept keyword arguments.\n" +
 				"  Usage: math.abs(-5) -> 5\n",
 		}

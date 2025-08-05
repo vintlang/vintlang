@@ -129,7 +129,7 @@ func prompt(args []object.Object, defs map[string]object.Object) object.Object {
 	input, err := reader.ReadString('\n')
 	if err != nil {
 		return &object.Error{
-			Message: "\033[1;31mError in cli.prompt()\033[0m:\n" +
+			Message: "\033[1;31m -> cli.prompt()\033[0m:\n" +
 				"  Failed to read user input from terminal.\n" +
 				"  This may indicate terminal settings or input stream issues.\n" +
 				"  Usage: cli.prompt(\"Enter your name: \") -> returns user input\n",
@@ -262,7 +262,7 @@ func getArgValue(args []object.Object, defs map[string]object.Object) object.Obj
 
 	if strings.TrimSpace(argName) == "" {
 		return &object.Error{
-			Message: "\033[1;31mError in cli.getArgValue()\033[0m:\n" +
+			Message: "\033[1;31m -> cli.getArgValue()\033[0m:\n" +
 				"  Cannot search for an empty flag name.\n" +
 				"  Please provide a valid flag like \"--output\" or \"-o\".\n" +
 				"  Usage: cli.getArgValue(\"--output\") -> returns flag value or null\n",
@@ -318,7 +318,7 @@ func hasArg(args []object.Object, defs map[string]object.Object) object.Object {
 
 	if strings.TrimSpace(argName) == "" {
 		return &object.Error{
-			Message: "\033[1;31mError in cli.hasArg()\033[0m:\n" +
+			Message: "\033[1;31m -> cli.hasArg()\033[0m:\n" +
 				"  Cannot search for an empty flag name.\n" +
 				"  Please provide a valid flag like \"--verbose\" or \"-v\".\n" +
 				"  Usage: cli.hasArg(\"--verbose\") -> returns true/false\n",
