@@ -22,7 +22,12 @@ func init() {
 
 func now(args []object.Object, defs map[string]object.Object) object.Object {
 	if len(args) != 0 || len(defs) != 0 {
-		return &object.Error{Message: fmt.Sprintf("time.now() expects no arguments, but received %d arguments. Usage: time.now()", len(args))}
+		return ErrorMessage(
+			"time", "now",
+			"no arguments",
+			fmt.Sprintf("%d arguments", len(args)),
+			"time.now() -> returns current timestamp",
+		)
 	}
 
 	tn := time.Now()
@@ -33,21 +38,41 @@ func now(args []object.Object, defs map[string]object.Object) object.Object {
 
 func sleep(args []object.Object, defs map[string]object.Object) object.Object {
 	if len(defs) != 0 {
-		return &object.Error{Message: "time.sleep() does not accept keyword arguments. Usage: time.sleep(5)"}
+		return &object.Error{
+			Message: "\033[1;31mError in time.sleep()\033[0m:\n" +
+				"  This function does not accept keyword arguments.\n" +
+				"  Usage: time.sleep(5) -> sleeps for 5 seconds\n",
+		}
 	}
 	if len(args) != 1 {
-		return &object.Error{Message: fmt.Sprintf("time.sleep() expects exactly 1 argument (seconds), but received %d. Usage: time.sleep(5)", len(args))}
+		return ErrorMessage(
+			"time", "sleep",
+			"1 numeric argument (seconds to sleep)",
+			fmt.Sprintf("%d arguments", len(args)),
+			"time.sleep(5) -> sleeps for 5 seconds",
+		)
 	}
 
 	objvalue := args[0].Inspect()
 	inttime, err := strconv.Atoi(objvalue)
 
 	if err != nil {
-		return &object.Error{Message: fmt.Sprintf("time.sleep() expects a number argument, but received '%s'. Usage: time.sleep(5) to sleep for 5 seconds", objvalue)}
+		return ErrorMessage(
+			"time", "sleep",
+			"numeric argument for sleep duration",
+			fmt.Sprintf("'%s' (not a number)", objvalue),
+			"time.sleep(5) -> sleeps for 5 seconds",
+		)
 	}
 
 	if inttime < 0 {
-		return &object.Error{Message: fmt.Sprintf("time.sleep() cannot sleep for negative duration (%d seconds). Please provide a positive number.", inttime)}
+		return &object.Error{
+			Message: fmt.Sprintf("\033[1;31mError in time.sleep()\033[0m:\n"+
+				"  Cannot sleep for negative duration (%d seconds).\n"+
+				"  Please provide a positive number.\n"+
+				"  Usage: time.sleep(5) -> sleeps for 5 seconds\n",
+				inttime),
+		}
 	}
 
 	time.Sleep(time.Duration(inttime) * time.Second)

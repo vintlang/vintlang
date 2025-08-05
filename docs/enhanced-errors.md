@@ -1,139 +1,213 @@
 # Enhanced Error Messages in Vint Core Modules
 
-This document describes the enhanced error handling system implemented across Vint's core modules. The improvements provide more descriptive, helpful error messages that guide users toward correct usage.
+This document describes the enhanced error handling system implemented across Vint's core modules using the new `ErrorMessage` helper function. The improvements provide consistent, colorized, and highly descriptive error messages that guide users toward correct usage.
+
+## New ErrorMessage Helper Function
+
+All modules now use a centralized `ErrorMessage` function from `module/module.go`:
+
+```go
+func ErrorMessage(module, function, expected, received, usage string) *object.Error {
+    return &object.Error{
+        Message: fmt.Sprintf(
+            "\033[1;31mError in %s.%s()\033[0m:\n"+
+                "  Expected: %s\n"+
+                "  Received: %s\n"+
+                "  Usage: %s\n"+
+                "  See documentation for details.\n",
+            module, function, expected, received, usage,
+        ),
+    }
+}
+```
 
 ## What Was Enhanced
 
 ### 1. **CLI Module** (`import cli`)
-- **Function**: `cli.prompt()`, `cli.confirm()`, `cli.execCommand()`, `cli.exit()`, `cli.hasArg()`, `cli.getArgValue()`, `cli.getPositional()`
+- **Functions**: `cli.prompt()`, `cli.confirm()`, `cli.execCommand()`, `cli.exit()`, `cli.hasArg()`, `cli.getArgValue()`, `cli.getPositional()`
 - **Improvements**:
-  - Specific argument count errors with usage examples
-  - Type validation with expected types
-  - Empty string validation
-  - Status code range validation for `exit()`
-  - Command existence checks
+  - Consistent error formatting with colors
+  - Clear expected vs received information
+  - Practical usage examples
+  - Descriptive parameter names
 
-**Before**: `"Argument must be a string"`
-**After**: `"cli.prompt() expects a string argument, but received INTEGER. Usage: cli.prompt(\"Enter your name: \")"`
+**New Format Example**:
+```
+Error in cli.prompt():
+  Expected: 1 string argument (prompt message)
+  Received: 2 arguments
+  Usage: cli.prompt("Enter your name: ") -> returns user input
+  See documentation for details.
+```
 
 ### 2. **Net Module** (`import net`)
 - **Functions**: `net.get()`, `net.post()`, `net.put()`, `net.delete()`, `net.patch()`
 - **Improvements**:
   - Parameter-specific error messages
-  - URL validation with examples
-  - Body serialization error details
-  - Network connectivity guidance
-  - HTTP status context
+  - Network operation context
+  - HTTP method-specific examples
 
-**Before**: `"URL must be a string"`
-**After**: `"net.get() 'url' parameter must be a string, but received INTEGER. Usage: net.get(url=\"https://example.com\")"`
+**New Format Example**:
+```
+Error in net.get():
+  Expected: string value for 'url' parameter
+  Received: INTEGER
+  Usage: net.get(url="https://example.com")
+  See documentation for details.
+```
 
 ### 3. **OS Module** (`import os`)
 - **Functions**: `os.run()`, `os.getEnv()`
 - **Improvements**:
-  - Command execution error details
-  - Exit code information
-  - Empty command validation
-  - Environment variable name validation
-
-**Before**: `"Failed to execute command: error"`
-**After**: `"os.run() failed to execute 'invalidcmd': command exited with status 127. This usually indicates the command encountered an error."`
+  - Command execution context
+  - System operation guidance
+  - Clear parameter descriptions
 
 ### 4. **Math Module** (`import math`)
 - **Functions**: `math.abs()` and similar numeric functions
 - **Improvements**:
-  - Function-specific error messages
-  - Usage examples
-  - Type expectations
-  - Keyword argument validation
-
-**Before**: `"The argument must be a number"`
-**After**: `"math.abs() expects a number argument, but received STRING. Usage: math.abs(-5)"`
+  - Mathematical operation context
+  - Numeric type specifications
+  - Calculation examples
 
 ### 5. **Time Module** (`import time`)
 - **Functions**: `time.now()`, `time.sleep()`
 - **Improvements**:
-  - No-argument validation for `now()`
-  - Negative duration validation
-  - Type checking with examples
+  - Time operation context
+  - Duration specifications
+  - Temporal examples
 
-**Before**: `"Only numbers are allowed as arguments"`
-**After**: `"time.sleep() expects a number argument, but received 'not a number'. Usage: time.sleep(5) to sleep for 5 seconds"`
+### 6. **Crypto Module** (`import crypto`)
+- **Functions**: `crypto.hashMD5()`, `crypto.hashSHA256()`, `crypto.encryptAES()`, `crypto.decryptAES()`
+- **Improvements**:
+  - Cryptographic operation context
+  - Security-related guidance
+  - Encryption examples
+
+### 7. **Colors Module** (`import colors`)
+- **Functions**: `colors.rgbToHex()`
+- **Improvements**:
+  - Color value specifications
+  - Range validation
+  - Visual examples
+
+### 8. **String Module** (`import string`)
+- **Functions**: `string.slug()` and others
+- **Improvements**:
+  - Text processing context
+  - String manipulation examples
 
 ## Error Message Format
 
 All enhanced error messages follow this consistent pattern:
 
 ```
-[module].[function]() [description of issue] [received vs expected] [usage example]
+Error in [module].[function]():
+  Expected: [clear description of expected input]
+  Received: [what was actually provided]
+  Usage: [practical example with expected output]
+  See documentation for details.
 ```
 
-### Examples:
+### Key Features:
 
-1. **Argument Count Errors**:
-   ```
-   cli.prompt() expects exactly 1 argument (prompt message), but received 2. 
-   Usage: cli.prompt("Enter your name: ")
-   ```
+1. **🎨 Color Coding**: Red highlighting for error identification
+2. **📝 Clear Structure**: Consistent four-line format
+3. **🔍 Specific Details**: Exact expected vs received information
+4. **💡 Usage Examples**: Practical code examples
+5. **📚 Documentation Reference**: Pointer to additional help
 
-2. **Type Errors**:
-   ```
-   math.abs() expects a number argument, but received STRING. 
-   Usage: math.abs(-5)
-   ```
-
-3. **Value Validation Errors**:
-   ```
-   time.sleep() cannot sleep for negative duration (-5 seconds). 
-   Please provide a positive number.
-   ```
-
-4. **Network Errors**:
-   ```
-   net.get() failed to execute HTTP request to 'https://invalid.url': 
-   connection timeout. Please check your internet connection and ensure the server is accessible.
-   ```
-
-## Benefits of Enhanced Errors
+## Benefits of the New System
 
 ### For Developers:
-- **Faster Debugging**: Immediate understanding of what went wrong
-- **Learning Aid**: Usage examples help learn correct syntax
-- **Context Awareness**: Understand why something failed, not just that it failed
-- **Type Safety**: Clear indication of expected vs received types
+- **Instant Recognition**: Red coloring makes errors immediately visible
+- **Clear Guidance**: Know exactly what's expected vs what was provided
+- **Learn by Example**: Usage examples teach correct syntax
+- **Consistent Experience**: Same error format across all modules
+- **Reduced Debugging Time**: Precise error information speeds up fixes
 
 ### For the Language:
-- **Better Developer Experience**: Reduces frustration and development time
-- **Self-Documenting**: Error messages serve as inline documentation
-- **Consistency**: All modules follow the same error message patterns
-- **Professionalism**: Makes Vint feel more polished and production-ready
+- **Professional Appearance**: Consistent, polished error messages
+- **Better Learning Curve**: New users learn faster with clear examples
+- **Maintainability**: Centralized error formatting makes updates easier
+- **Extensibility**: Easy to add new modules using the same pattern
+
+## Examples by Category
+
+### Argument Count Errors:
+```
+Error in time.sleep():
+  Expected: 1 numeric argument (seconds to sleep)
+  Received: 2 arguments
+  Usage: time.sleep(5) -> sleeps for 5 seconds
+  See documentation for details.
+```
+
+### Type Errors:
+```
+Error in math.abs():
+  Expected: numeric argument (integer or float)
+  Received: STRING
+  Usage: math.abs(-5) -> 5
+  See documentation for details.
+```
+
+### Parameter-Specific Errors:
+```
+Error in net.post():
+  Expected: dictionary value for 'headers' parameter
+  Received: STRING
+  Usage: net.post(headers={"Content-Type": "application/json"})
+  See documentation for details.
+```
+
+### Range Validation Errors:
+```
+Error in colors.rgbToHex():
+  RGB values must be in the range 0-255.
+  Usage: colors.rgbToHex(255, 0, 128) -> "#FF0080"
+```
 
 ## Testing Enhanced Errors
 
-Use the provided `enhanced_error_test.vint` file to see all the improved error messages in action:
+Use the provided `new_error_format_test.vint` file to see all the improved error messages in action:
 
 ```bash
-vint enhanced_error_test.vint
+vint new_error_format_test.vint
+```
+
+## Implementation Guidelines
+
+When adding new functions or modules, use the `ErrorMessage` helper:
+
+```go
+if len(args) != expectedCount {
+    return ErrorMessage(
+        "moduleName", "functionName",
+        "description of expected arguments",
+        fmt.Sprintf("%d arguments", len(args)),
+        "usage.example() -> expected output",
+    )
+}
+
+if args[0].Type() != expectedType {
+    return ErrorMessage(
+        "moduleName", "functionName", 
+        "description of expected type",
+        string(args[0].Type()),
+        "usage.example() -> expected output",
+    )
+}
 ```
 
 ## Future Enhancements
 
-The error enhancement framework is designed to be extensible. Future improvements could include:
+The ErrorMessage system enables future improvements:
 
-1. **Error Codes**: Numeric codes for programmatic error handling
-2. **Suggestions**: Auto-suggestions for common mistakes
-3. **Stack Traces**: Better debugging with call stack information
-4. **Localization**: Multi-language error messages
-5. **Error Recovery**: Suggested fixes or alternatives
+1. **Error Codes**: Add numeric codes for programmatic handling
+2. **Suggestions**: Auto-suggest corrections for common mistakes
+3. **Localization**: Multi-language error messages
+4. **Context Awareness**: Errors that understand the calling context
+5. **Interactive Help**: Links to relevant documentation sections
 
-## Contributing
-
-When adding new functions or modules, follow these error message guidelines:
-
-1. Always include the module and function name
-2. Specify exactly what was expected vs what was received
-3. Provide a concrete usage example
-4. Include context about why the error occurred when possible
-5. Use consistent formatting and terminology
-
-This enhanced error system makes Vint more user-friendly and professional, helping developers write better code faster.
+This enhanced error system represents a significant improvement in Vint's developer experience, making the language more approachable and professional.
