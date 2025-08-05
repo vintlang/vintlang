@@ -1,8 +1,6 @@
 package module
 
 import (
-	"fmt"
-
 	"github.com/vintlang/vintlang/object"
 )
 
@@ -13,15 +11,24 @@ func init() {
 }
 
 func errorsNew(args []object.Object, defs map[string]object.Object) object.Object {
-	if len(args) != 1 {
-		return &object.Error{Message: fmt.Sprintf("errors.new() expects 1 argument, got %d", len(args))}
-	}
 	if len(defs) != 0 {
-		return &object.Error{Message: "errors.new() does not support keyword arguments"}
+		return ErrorMessage(
+			"errors",
+			"new",
+			"1 string argument",
+			"keyword arguments provided",
+			`errors.new("Something went wrong") -> error`,
+		)
 	}
-	msg, ok := args[0].(*object.String)
-	if !ok {
-		return &object.Error{Message: fmt.Sprintf("errors.new() expects a string argument, got %s", args[0].Type())}
+	if len(args) != 1 || args[0].Type() != object.STRING_OBJ {
+		return ErrorMessage(
+			"errors",
+			"new",
+			"1 string argument",
+			formatArgs(args),
+			`errors.new("Something went wrong") -> error`,
+		)
 	}
-	return &object.Error{Message: msg.Value}
+	msg := args[0].(*object.String).Value
+	return &object.Error{Message: msg}
 }
