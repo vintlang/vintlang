@@ -46,11 +46,11 @@ func init() {
 func ErrorMessage(module, function, expected, received, usage string) *object.Error {
     return &object.Error{
         Message: fmt.Sprintf(
-            "\033[1;31mError in %s.%s()\033[0m:\n"+
+            "\033[1; -> %s.%s()\033[0m:\n"+
                 "  Expected: %s\n"+
                 "  Received: %s\n"+
                 "  Usage: %s\n"+
-                "  See documentation for details.\n",
+                "  See documentation for details. https://vintlang.ekilie.com/docs\n",
             module, function, expected, received, usage,
         ),
     }
