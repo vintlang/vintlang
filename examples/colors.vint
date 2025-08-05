@@ -1,4 +1,4 @@
 import colors
 
-hex = colors.rgbToHex(255, 255, 255)
+let hex = colors.rgbToHex(255, 255, 255)
 print(hex) // Outputs "#ffffff"

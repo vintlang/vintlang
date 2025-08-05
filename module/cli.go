@@ -76,7 +76,12 @@ func getFlags(args []object.Object, defs map[string]object.Object) object.Object
 // getPositional returns an array of positional (non-flag) arguments
 func getPositional(args []object.Object, defs map[string]object.Object) object.Object {
 	if len(args) > 0 {
-		return &object.Error{Message: fmt.Sprintf("cli.getPositional() expects no arguments, but received %d. Usage: cli.getPositional()", len(args))}
+		return ErrorMessage(
+			"cli", "getPositional",
+			"no arguments",
+			fmt.Sprintf("%d arguments", len(args)),
+			"cli.getPositional() -> returns array of positional arguments",
+		)
 	}
 
 	positional := &object.Array{}
@@ -101,19 +106,34 @@ func getPositional(args []object.Object, defs map[string]object.Object) object.O
 // prompt displays a message and reads user input
 func prompt(args []object.Object, defs map[string]object.Object) object.Object {
 	if len(args) != 1 {
-		return &object.Error{Message: fmt.Sprintf("cli.prompt() expects exactly 1 argument (prompt message), but received %d. Usage: cli.prompt(\"Enter your name: \")", len(args))}
+		return ErrorMessage(
+			"cli", "prompt",
+			"1 string argument (prompt message)",
+			fmt.Sprintf("%d arguments", len(args)),
+			`cli.prompt("Enter your name: ") -> returns user input`,
+		)
 	}
 
 	message, ok := args[0].(*object.String)
 	if !ok {
-		return &object.Error{Message: fmt.Sprintf("cli.prompt() expects a string argument, but received %s. Usage: cli.prompt(\"Enter your name: \")", args[0].Type())}
+		return ErrorMessage(
+			"cli", "prompt",
+			"string argument for prompt message",
+			string(args[0].Type()),
+			`cli.prompt("Enter your name: ") -> returns user input`,
+		)
 	}
 
 	fmt.Print(message.Value)
 	reader := bufio.NewReader(os.Stdin)
 	input, err := reader.ReadString('\n')
 	if err != nil {
-		return &object.Error{Message: fmt.Sprintf("cli.prompt() failed to read user input: %v. Please check your terminal settings and try again.", err)}
+		return &object.Error{
+			Message: "\033[1;31mError in cli.prompt()\033[0m:\n" +
+				"  Failed to read user input from terminal.\n" +
+				"  This may indicate terminal settings or input stream issues.\n" +
+				"  Usage: cli.prompt(\"Enter your name: \") -> returns user input\n",
+		}
 	}
 
 	return &object.String{Value: strings.TrimSpace(input)}
@@ -122,12 +142,22 @@ func prompt(args []object.Object, defs map[string]object.Object) object.Object {
 // confirm prompts the user for a yes/no response
 func confirm(args []object.Object, defs map[string]object.Object) object.Object {
 	if len(args) != 1 {
-		return &object.Error{Message: fmt.Sprintf("cli.confirm() expects exactly 1 argument (confirmation message), but received %d. Usage: cli.confirm(\"Continue with operation?\")", len(args))}
+		return ErrorMessage(
+			"cli", "confirm",
+			"1 string argument (confirmation message)",
+			fmt.Sprintf("%d arguments", len(args)),
+			`cli.confirm("Continue with operation?") -> returns true/false`,
+		)
 	}
 
 	message, ok := args[0].(*object.String)
 	if !ok {
-		return &object.Error{Message: fmt.Sprintf("cli.confirm() expects a string argument, but received %s. Usage: cli.confirm(\"Continue with operation?\")", args[0].Type())}
+		return ErrorMessage(
+			"cli", "confirm",
+			"string argument for confirmation message",
+			string(args[0].Type()),
+			`cli.confirm("Continue with operation?") -> returns true/false`,
+		)
 	}
 
 	fmt.Printf("%s (y/n): ", message.Value)
@@ -208,12 +238,22 @@ func parseArgs(args []object.Object, defs map[string]object.Object) object.Objec
 // getArgValue gets the value of a named argument
 func getArgValue(args []object.Object, defs map[string]object.Object) object.Object {
 	if len(args) != 1 || len(defs) != 0 {
-		return &object.Error{Message: fmt.Sprintf("cli.getArgValue() expects exactly 1 argument (flag name), but received %d arguments. Usage: cli.getArgValue(\"--output\")", len(args))}
+		return ErrorMessage(
+			"cli", "getArgValue",
+			"1 string argument (flag name)",
+			fmt.Sprintf("%d arguments", len(args)),
+			`cli.getArgValue("--output") -> returns flag value or null`,
+		)
 	}
 
 	argNameObj, ok := args[0].(*object.String)
 	if !ok {
-		return &object.Error{Message: fmt.Sprintf("cli.getArgValue() expects a string argument, but received %s. Usage: cli.getArgValue(\"--output\")", args[0].Type())}
+		return ErrorMessage(
+			"cli", "getArgValue",
+			"string argument for flag name",
+			string(args[0].Type()),
+			`cli.getArgValue("--output") -> returns flag value or null`,
+		)
 	}
 
 	argName := argNameObj.Value
@@ -221,7 +261,12 @@ func getArgValue(args []object.Object, defs map[string]object.Object) object.Obj
 	argName = strings.Trim(argName, `"'`)
 
 	if strings.TrimSpace(argName) == "" {
-		return &object.Error{Message: "cli.getArgValue() cannot search for an empty flag name. Please provide a valid flag like \"--output\" or \"-o\"."}
+		return &object.Error{
+			Message: "\033[1;31mError in cli.getArgValue()\033[0m:\n" +
+				"  Cannot search for an empty flag name.\n" +
+				"  Please provide a valid flag like \"--output\" or \"-o\".\n" +
+				"  Usage: cli.getArgValue(\"--output\") -> returns flag value or null\n",
+		}
 	}
 
 	cliArgs := toolkit.GetCliArgs()
@@ -249,12 +294,22 @@ func getArgValue(args []object.Object, defs map[string]object.Object) object.Obj
 // hasArg checks if a named argument is present
 func hasArg(args []object.Object, defs map[string]object.Object) object.Object {
 	if len(args) != 1 || len(defs) != 0 {
-		return &object.Error{Message: fmt.Sprintf("cli.hasArg() expects exactly 1 argument (flag name), but received %d arguments. Usage: cli.hasArg(\"--verbose\")", len(args))}
+		return ErrorMessage(
+			"cli", "hasArg",
+			"1 string argument (flag name)",
+			fmt.Sprintf("%d arguments", len(args)),
+			`cli.hasArg("--verbose") -> returns true/false`,
+		)
 	}
 
 	argNameObj, ok := args[0].(*object.String)
 	if !ok {
-		return &object.Error{Message: fmt.Sprintf("cli.hasArg() expects a string argument, but received %s. Usage: cli.hasArg(\"--verbose\")", args[0].Type())}
+		return ErrorMessage(
+			"cli", "hasArg",
+			"string argument for flag name",
+			string(args[0].Type()),
+			`cli.hasArg("--verbose") -> returns true/false`,
+		)
 	}
 
 	argName := argNameObj.Value
@@ -262,7 +317,12 @@ func hasArg(args []object.Object, defs map[string]object.Object) object.Object {
 	argName = strings.Trim(argName, `"'`)
 
 	if strings.TrimSpace(argName) == "" {
-		return &object.Error{Message: "cli.hasArg() cannot search for an empty flag name. Please provide a valid flag like \"--verbose\" or \"-v\"."}
+		return &object.Error{
+			Message: "\033[1;31mError in cli.hasArg()\033[0m:\n" +
+				"  Cannot search for an empty flag name.\n" +
+				"  Please provide a valid flag like \"--verbose\" or \"-v\".\n" +
+				"  Usage: cli.hasArg(\"--verbose\") -> returns true/false\n",
+		}
 	}
 
 	cliArgs := toolkit.GetCliArgs()

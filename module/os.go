@@ -50,19 +50,32 @@ func exit(args []object.Object, defs map[string]object.Object) object.Object {
 
 func run(args []object.Object, defs map[string]object.Object) object.Object {
 	if len(args) != 1 {
-		return &object.Error{Message: fmt.Sprintf("os.run() expects exactly 1 argument (command string), but received %d. Usage: os.run(\"ls -la\")", len(args))}
+		return ErrorMessage(
+			"os", "run",
+			"1 string argument (command to execute)",
+			fmt.Sprintf("%d arguments", len(args)),
+			`os.run("ls -la") -> returns command output`,
+		)
 	}
 
 	cmd, ok := args[0].(*object.String)
 	if !ok {
-		return &object.Error{Message: fmt.Sprintf("os.run() expects a string argument, but received %s. Usage: os.run(\"ls -la\")", args[0].Type())}
+		return ErrorMessage(
+			"os", "run",
+			"string argument for shell command",
+			string(args[0].Type()),
+			`os.run("ls -la") -> returns command output`,
+		)
 	}
-
+	
 	if strings.TrimSpace(cmd.Value) == "" {
-		return &object.Error{Message: "os.run() cannot execute an empty command. Please provide a valid shell command."}
-	}
-
-	cmdParts := strings.Split(cmd.Value, " ")
+		return &object.Error{
+			Message: "\033[1;31mError in os.run()\033[0m:\n" +
+				"  Cannot execute an empty command.\n" +
+				"  Please provide a valid shell command.\n" +
+				"  Usage: os.run(\"ls -la\") -> returns command output\n",
+		}
+	}	cmdParts := strings.Split(cmd.Value, " ")
 	command := cmdParts[0]
 	cmdArgs := cmdParts[1:]
 
