@@ -67,7 +67,7 @@ func run(args []object.Object, defs map[string]object.Object) object.Object {
 			`os.run("ls -la") -> returns command output`,
 		)
 	}
-	
+
 	if strings.TrimSpace(cmd.Value) == "" {
 		return &object.Error{
 			Message: "\033[1;31mError in os.run()\033[0m:\n" +
@@ -75,7 +75,9 @@ func run(args []object.Object, defs map[string]object.Object) object.Object {
 				"  Please provide a valid shell command.\n" +
 				"  Usage: os.run(\"ls -la\") -> returns command output\n",
 		}
-	}	cmdParts := strings.Split(cmd.Value, " ")
+	}
+
+	cmdParts := strings.Split(cmd.Value, " ")
 	command := cmdParts[0]
 	cmdArgs := cmdParts[1:]
 
@@ -83,9 +85,21 @@ func run(args []object.Object, defs map[string]object.Object) object.Object {
 	if err != nil {
 		exitErr, isExitError := err.(*exec.ExitError)
 		if isExitError {
-			return &object.Error{Message: fmt.Sprintf("os.run() failed to execute '%s': command exited with non-zero status %d. This usually indicates the command encountered an error.", cmd.Value, exitErr.ExitCode())}
+			return &object.Error{
+				Message: fmt.Sprintf("\033[1;31mError in os.run()\033[0m:\n"+
+					"  Command '%s' exited with status %d.\n"+
+					"  This usually indicates the command encountered an error.\n"+
+					"  Usage: os.run(\"ls -la\") -> returns command output\n",
+					cmd.Value, exitErr.ExitCode()),
+			}
 		}
-		return &object.Error{Message: fmt.Sprintf("os.run() failed to execute '%s': %v. Please check if the command exists and is executable.", cmd.Value, err)}
+		return &object.Error{
+			Message: fmt.Sprintf("\033[1;31mError in os.run()\033[0m:\n"+
+				"  Failed to execute '%s': %v\n"+
+				"  Please check if the command exists and is executable.\n"+
+				"  Usage: os.run(\"ls -la\") -> returns command output\n",
+				cmd.Value, err),
+		}
 	}
 
 	return &object.String{Value: string(out)}
@@ -93,16 +107,31 @@ func run(args []object.Object, defs map[string]object.Object) object.Object {
 
 func getEnv(args []object.Object, defs map[string]object.Object) object.Object {
 	if len(args) != 1 {
-		return &object.Error{Message: fmt.Sprintf("os.getEnv() expects exactly 1 argument (environment variable name), but received %d. Usage: os.getEnv(\"PATH\")", len(args))}
+		return ErrorMessage(
+			"os", "getEnv",
+			"1 string argument (environment variable name)",
+			fmt.Sprintf("%d arguments", len(args)),
+			`os.getEnv("PATH") -> returns environment variable value`,
+		)
 	}
 
 	key, ok := args[0].(*object.String)
 	if !ok {
-		return &object.Error{Message: fmt.Sprintf("os.getEnv() expects a string argument, but received %s. Usage: os.getEnv(\"PATH\")", args[0].Type())}
+		return ErrorMessage(
+			"os", "getEnv",
+			"string argument for environment variable name",
+			string(args[0].Type()),
+			`os.getEnv("PATH") -> returns environment variable value`,
+		)
 	}
 
 	if strings.TrimSpace(key.Value) == "" {
-		return &object.Error{Message: "os.getEnv() cannot retrieve an environment variable with an empty name. Please provide a valid variable name."}
+		return &object.Error{
+			Message: "\033[1;31mError in os.getEnv()\033[0m:\n" +
+				"  Cannot retrieve an environment variable with an empty name.\n" +
+				"  Please provide a valid variable name.\n" +
+				"  Usage: os.getEnv(\"PATH\") -> returns environment variable value\n",
+		}
 	}
 
 	value := os.Getenv(key.Value)

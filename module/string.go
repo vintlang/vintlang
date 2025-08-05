@@ -1,6 +1,7 @@
 package module
 
 import (
+	"fmt"
 	"regexp"
 	"strings"
 
@@ -21,19 +22,33 @@ func init() {
 	StringFunctions["substring"] = substring
 	StringFunctions["length"] = length
 	StringFunctions["indexOf"] = indexOf
-	StringFunctions["similarity"] = similarity 
-	StringFunctions["slug"] = slug 
+	StringFunctions["similarity"] = similarity
+	StringFunctions["slug"] = slug
 }
 
 // Creates a slug string from a normal string
 func slug(args []object.Object, defs map[string]object.Object) object.Object {
 	// Ensures exactly one argument is passed
 	if len(args) != 1 {
-		return &object.Error{Message: "string.slug requires exactly one argument"}
+		return ErrorMessage(
+			"string", "slug",
+			"1 string argument (text to convert to slug)",
+			fmt.Sprintf("%d arguments", len(args)),
+			`string.slug("Hello World!") -> "hello-world"`,
+		)
+	}
+
+	if args[0].Type() != object.STRING_OBJ {
+		return ErrorMessage(
+			"string", "slug",
+			"string argument for text to convert",
+			string(args[0].Type()),
+			`string.slug("Hello World!") -> "hello-world"`,
+		)
 	}
 
 	// Inspects the argument and convert it to a string
-	input := args[0].Inspect()
+	input := args[0].(*object.String).Value
 
 	// Converts the input to lowercase
 	input = strings.ToLower(input)
@@ -52,7 +67,6 @@ func slug(args []object.Object, defs map[string]object.Object) object.Object {
 	// Returns the result as a Vint object string
 	return &object.String{Value: input}
 }
-
 
 // similarity computes a similarity score between two strings
 func similarity(args []object.Object, defs map[string]object.Object) object.Object {
@@ -181,9 +195,9 @@ func substring(args []object.Object, defs map[string]object.Object) object.Objec
 		return &object.Error{Message: "We need three arguments: the string, the start index, and the end index"}
 	}
 
-	str := args[0].Inspect() // Get the string value
+	str := args[0].Inspect()                 // Get the string value
 	start := args[1].(*object.Integer).Value // Get the start index as int64
-	end := args[2].(*object.Integer).Value // Get the end index as int64
+	end := args[2].(*object.Integer).Value   // Get the end index as int64
 
 	// Convert int64 to int for string indexing
 	startIdx := int(start)
@@ -196,7 +210,6 @@ func substring(args []object.Object, defs map[string]object.Object) object.Objec
 
 	return &object.String{Value: str[startIdx:endIdx]}
 }
-
 
 // length returns the length of the string
 func length(args []object.Object, defs map[string]object.Object) object.Object {
