@@ -20,6 +20,7 @@ func match(args []object.Object, defs map[string]object.Object) object.Object {
 		return &object.Error{Message: "We need two arguments: the pattern and the input string"}
 	}
 
+	
 	// Get the regex pattern and input string values
 	pattern := args[0].Inspect()
 	input := args[1].Inspect()
