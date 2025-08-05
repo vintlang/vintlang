@@ -64,7 +64,7 @@ func formatArgs(args []object.Object) string {
 		if i > 0 {
 			result += ", "
 		}
-		result += arg.Type()
+		result += string(arg.Type())
 	}
 	return result
 }
