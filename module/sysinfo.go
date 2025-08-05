@@ -1,6 +1,7 @@
 package module
 
 import (
+	"fmt"
 	"runtime"
 
 	"github.com/vintlang/vintlang/object"
@@ -14,9 +15,26 @@ func init() {
 }
 
 func getOS(args []object.Object, defs map[string]object.Object) object.Object {
-	return &object.String{Value: runtime.GOOS}
+    if len(args) != 0 {
+        return ErrorMessage(
+            "sysinfo", "os",
+            "No arguments",
+            fmt.Sprintf("%d arguments", len(args)),
+            `sysinfo.os() -> "linux"`,
+        )
+    }
+    return &object.String{Value: runtime.GOOS}
 }
+	
 
 func getArch(args []object.Object, defs map[string]object.Object) object.Object {
-	return &object.String{Value: runtime.GOARCH}
+    if len(args) != 0 {
+        return ErrorMessage(
+            "sysinfo", "arch",
+            "No arguments",
+            fmt.Sprintf("%d arguments", len(args)),
+            `sysinfo.arch() -> "amd64"`,
+        )
+    }
+    return &object.String{Value: runtime.GOARCH}
 }
