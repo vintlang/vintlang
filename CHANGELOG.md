@@ -1,8 +1,11 @@
-# Changelog
+# Changelog - [August-2025]
 
 ## [Unreleased] – Recent Major & Minor Updates
 
 ### Language Features
+
+- **Println**
+  - `println`: Print value with a newline which was something `print` could do but now `print` just prints the value without new-lines
 
 - **Declarative Statements**
   Introduced new declarative keywords for expressive, styled runtime messages:
