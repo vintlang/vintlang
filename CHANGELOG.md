@@ -13,7 +13,7 @@
   - `debug`: Print debug messages in magenta for troubleshooting.
   - `note`: Print general notes in blue for context or reminders.
   - `success`: Print success messages in green to indicate successful operations.
-  
+
   **Sample:**
   ```vint
   info "Starting backup..."
