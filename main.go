@@ -15,7 +15,7 @@ import (
 	"github.com/vintlang/vintlang/toolkit"
 )
 
-const VINT_VERSION = "0.1.9"
+const VINT_VERSION = "0.2.1"
 
 // Constants for styled output
 var (
