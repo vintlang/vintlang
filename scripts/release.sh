@@ -42,15 +42,7 @@ if ! git diff-index --quiet HEAD --; then
     exit 1
 fi
 
-# Update version in main.go
-echo "📝 Updating version in main.go..."
-sed -i.bak "s/const VINT_VERSION = \".*\"/const VINT_VERSION = \"${VERSION#v}\"/" main.go
-rm main.go.bak
-
-# Commit version update
-git add main.go
-git commit -m "chore: bump version to $VERSION"
-
+# Version is injected at build time using Go's ldflags. No need to update main.go.
 # Create and push tag
 echo "🏷️  Creating and pushing tag..."
 git tag -a "$VERSION" -m "Release $VERSION"
