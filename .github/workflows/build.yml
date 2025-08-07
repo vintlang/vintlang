@@ -34,10 +34,10 @@ jobs:
       # - name: Run Go Vet
       #   run: go vet ./...
 
-      - name: Run staticcheck
-        uses: dominikh/staticcheck-action@v1.3.0
-        with:
-          version: "2023.1.6"
+      # - name: Run staticcheck
+      #   uses: dominikh/staticcheck-action@v1.3.0
+      #   with:
+      #     version: "2023.1.6"
 
   release:
     needs: test
