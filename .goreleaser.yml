@@ -1,0 +1,121 @@
+# GoReleaser configuration for VintLang
+# See https://goreleaser.com for documentation
+
+version: 2
+
+before:
+  hooks:
+    - go mod tidy
+    - go test ./...
+
+builds:
+  - id: vintlang
+    binary: vint
+    env:
+      - CGO_ENABLED=0
+    goos:
+      - linux
+      - darwin
+      - windows
+    goarch:
+      - amd64
+      - arm64
+      - "386"
+    ignore:
+      - goos: windows
+        goarch: arm64
+      - goos: darwin
+        goarch: "386"
+    main: ./
+    ldflags:
+      - -s -w -X main.VINT_VERSION={{.Version}}
+
+archives:
+  - id: vintlang-archives
+    builds:
+      - vintlang
+    format: tar.gz
+    name_template: >-
+      vintLang_
+      {{- title .Os }}_
+      {{- if eq .Arch "amd64" }}x86_64
+      {{- else if eq .Arch "386" }}i386
+      {{- else }}{{ .Arch }}{{ end }}
+    format_overrides:
+      - goos: windows
+        format: zip
+    files:
+      - README.md
+      - docs/**/*
+      - examples/**/*
+      - "*.md"
+
+checksum:
+  name_template: 'checksums.txt'
+  algorithm: sha256
+
+snapshot:
+  name_template: "{{ incpatch .Version }}-next"
+
+changelog:
+  sort: asc
+  use: github
+  filters:
+    exclude:
+      - '^docs:'
+      - '^test:'
+      - '^ci:'
+      - '^chore:'
+      - '^style:'
+      - '^refactor:'
+      - Merge pull request
+      - Merge branch
+  groups:
+    - title: Features
+      regexp: '^.*?feat(\([[:word:]]+\))??!?:.+$'
+      order: 0
+    - title: 'Bug fixes'
+      regexp: '^.*?fix(\([[:word:]]+\))??!?:.+$'
+      order: 1
+    - title: 'Performance improvements'
+      regexp: '^.*?perf(\([[:word:]]+\))??!?:.+$'
+      order: 2
+    - title: Others
+      order: 999
+
+release:
+  github:
+    owner: vintlang
+    name: vintlang
+  prerelease: auto
+  draft: false
+  footer: |
+    ## Installation
+    
+    ### Download binary
+    Download the appropriate binary for your platform from the assets below.
+    
+    ### Using Go install
+    ```bash
+    go install github.com/vintlang/vintlang@{{ .Tag }}
+    ```
+    
+    ## What's Changed
+    * Full Changelog: https://github.com/vintlang/vintlang/compare/{{ .PreviousTag }}...{{ .Tag }}
+
+nfpms:
+  - id: vintlang
+    package_name: vintlang
+    vendor: VintLang
+    homepage: https://vintlang.org
+    maintainer: VintLang Team <team@vintlang.org>
+    description: "VintLang Programming Language - A modern, expressive programming language"
+    license: MIT
+    formats:
+      - deb
+      - rpm
+      - apk
+    bindir: /usr/bin
+    contents:
+      - src: README.md
+        dst: /usr/share/doc/vintlang/README.md
