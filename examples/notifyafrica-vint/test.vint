@@ -1,8 +1,0 @@
-import crypto
-
-let test = func() {
-    let hash = crypto.hashMD5("test")
-    print(hash)
-}
-
-test()
