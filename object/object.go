@@ -38,6 +38,11 @@ const (
 	PROMISE_OBJ      = "PROMISE"
 	CHANNEL_OBJ      = "CHANNEL"
 	ASYNC_FUNC_OBJ   = "ASYNC_FUNCTION"
+	
+	// HTTP Objects
+	HTTP_APP_OBJ      = "HTTP_APP"
+	HTTP_REQUEST_OBJ  = "HTTP_REQUEST"
+	HTTP_RESPONSE_OBJ = "HTTP_RESPONSE"
 )
 
 // Object interface represents any object in the system
