@@ -1,0 +1,93 @@
+// Comprehensive async test showcasing various patterns
+
+print("=== Testing Async Functions ===")
+
+// Simple async function
+let greet = async func(name) {
+    return "Hello, " + name + "!"
+}
+
+let promise1 = greet("Vint")
+print("Promise1:", promise1)
+let result1 = await promise1
+print("Result1:", result1)
+
+print("\n=== Testing Concurrent Execution ===")
+
+// Multiple concurrent async functions
+let fetchData = async func(id) {
+    return "Data for ID: " + id
+}
+
+let p1 = fetchData("1")
+let p2 = fetchData("2") 
+let p3 = fetchData("3")
+
+print("All promises created, now awaiting...")
+
+let r1 = await p1
+let r2 = await p2  
+let r3 = await p3
+
+print("R1:", r1)
+print("R2:", r2)
+print("R3:", r3)
+
+print("\n=== Testing Channels ===")
+
+// Producer-consumer pattern
+let dataChan = chan(3)  // Buffered channel
+
+// Producer
+go func() {
+    print("Producer: Starting...")
+    send(dataChan, "Message 1")
+    send(dataChan, "Message 2")
+    send(dataChan, "Message 3")
+    close(dataChan)
+    print("Producer: Done")
+}()
+
+// Consumer
+print("Consumer: Starting...")
+let msg1 = receive(dataChan)
+print("Consumer received:", msg1)
+
+let msg2 = receive(dataChan)
+print("Consumer received:", msg2)
+
+let msg3 = receive(dataChan)
+print("Consumer received:", msg3)
+
+print("Consumer: Done")
+
+print("\n=== Testing Error Handling ===")
+
+let errorFunc = async func() {
+    return "This should work"
+}
+
+let errorPromise = errorFunc()
+let errorResult = await errorPromise
+print("Error test result:", errorResult)
+
+print("\n=== Testing Complex Async Pattern ===")
+
+// Async function that uses channels internally
+let processData = async func(data) {
+    let resultChan = chan
+    
+    go func() {
+        let processed = "Processed: " + data
+        send(resultChan, processed)
+    }()
+    
+    let result = receive(resultChan)
+    return result
+}
+
+let complexPromise = processData("complex data")
+let complexResult = await complexPromise
+print("Complex result:", complexResult)
+
+print("\n=== All tests completed! ===")
