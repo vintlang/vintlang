@@ -60,4 +60,4 @@ config.json
 /vendor
 
 dist/
-.idea
+.idea./vintlang
