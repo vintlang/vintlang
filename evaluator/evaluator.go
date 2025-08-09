@@ -112,6 +112,8 @@ func Eval(node ast.Node, env *object.Environment) object.Object {
 			return elements[0]
 		}
 		return &object.Array{Elements: elements}
+	case *ast.RangeExpression:
+		return evalRangeExpression(node, env)
 	case *ast.IndexExpression:
 		left := Eval(node.Left, env)
 		if isError(left) {
@@ -629,4 +631,32 @@ func evalIncludeStatement(node *ast.IncludeStatement, env *object.Environment) o
 	}
 
 	return Eval(program, env)
+}
+
+func evalRangeExpression(node *ast.RangeExpression, env *object.Environment) object.Object {
+	start := Eval(node.Start, env)
+	if isError(start) {
+		return start
+	}
+
+	end := Eval(node.End, env)
+	if isError(end) {
+		return end
+	}
+
+	startInt, ok := start.(*object.Integer)
+	if !ok {
+		return newError("range start must be an integer, got %T", start)
+	}
+
+	endInt, ok := end.(*object.Integer)
+	if !ok {
+		return newError("range end must be an integer, got %T", end)
+	}
+
+	return &object.Range{
+		Start:   startInt.Value,
+		End:     endInt.Value,
+		Current: startInt.Value,
+	}
 }

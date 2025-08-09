@@ -146,7 +146,13 @@ func (l *Lexer) NextToken() token.Token {
 	case rune('@'):
 		tok = newToken(token.AT, l.line, l.ch)
 	case rune('.'):
-		tok = newToken(token.DOT, l.line, l.ch)
+		if l.peekChar() == rune('.') {
+			ch := l.ch
+			l.readChar()
+			tok = token.Token{Type: token.RANGE, Literal: string(ch) + string(l.ch), Line: l.line}
+		} else {
+			tok = newToken(token.DOT, l.line, l.ch)
+		}
 	case rune('&'):
 		if l.peekChar() == rune('&') {
 			ch := l.ch
