@@ -89,6 +89,14 @@
                     "match": "\\b(func|declare|return)\\b"
                 },
                 {
+                    "name": "storage.type.vint",
+                    "match": "\\b(let|package|import)\\b"
+                },
+                {
+                    "name": "support.function.builtin.vint",
+                    "match": "\\b(print|println|convert|type|write)\\b"
+                },
+                {
                     "name": "keyword.control.vint",
                     "match": "\\b(if|else|while|break|continue|for|switch|case|default|in)\\b"
                 }
