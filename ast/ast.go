@@ -914,5 +914,3 @@ func (me *MatchExpression) String() string {
 	out.WriteString("}")
 	return out.String()
 }
-	return out.String()
-}
