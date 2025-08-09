@@ -12,6 +12,7 @@ type Promise struct {
 	Done      bool
 	mu        sync.Mutex
 	callbacks []func(Object, Object)
+	waitChan  chan struct{}
 }
 
 func (p *Promise) Type() ObjectType {
@@ -43,6 +44,9 @@ func (p *Promise) Resolve(value Object) {
 	p.Value = value
 	p.Done = true
 	
+	// Notify waiting goroutines
+	close(p.waitChan)
+	
 	for _, callback := range p.callbacks {
 		go callback(value, nil)
 	}
@@ -60,6 +64,9 @@ func (p *Promise) Reject(err Object) {
 	
 	p.Error = err
 	p.Done = true
+	
+	// Notify waiting goroutines
+	close(p.waitChan)
 	
 	for _, callback := range p.callbacks {
 		go callback(nil, err)
@@ -80,10 +87,16 @@ func (p *Promise) Then(callback func(Object, Object)) {
 	p.callbacks = append(p.callbacks, callback)
 }
 
+// Wait blocks until the promise is resolved or rejected
+func (p *Promise) Wait() {
+	<-p.waitChan
+}
+
 // NewPromise creates a new Promise
 func NewPromise() *Promise {
 	return &Promise{
 		Done:      false,
 		callbacks: make([]func(Object, Object), 0),
+		waitChan:  make(chan struct{}),
 	}
 }

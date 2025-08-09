@@ -343,11 +343,8 @@ func Eval(node ast.Node, env *object.Environment) object.Object {
 			return newError("await can only be used with promises, got %T", promise)
 		}
 		
-		// Block until promise resolves
-		for !promiseObj.Done {
-			// In a real implementation, this would yield to other goroutines
-			// For now, we'll just busy wait (not ideal but functional)
-		}
+		// Block until promise resolves using channel-based waiting
+		promiseObj.Wait()
 		
 		if promiseObj.Error != nil {
 			return promiseObj.Error
