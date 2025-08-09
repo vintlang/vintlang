@@ -16,6 +16,65 @@ func evalIndexExpression(left, index object.Object, line int) object.Object {
 	}
 }
 
+// evalSliceExpression handles slicing operations for arrays.
+func evalSliceExpression(left, start, end object.Object, line int) object.Object {
+	if left.Type() != object.ARRAY_OBJ {
+		return newError("Line %d: Slicing is only supported for arrays, not: %s", line, left.Type())
+	}
+
+	arrayObject := left.(*object.Array)
+	arrayLen := len(arrayObject.Elements)
+
+	// Default values for start and end
+	startIdx := 0
+	endIdx := arrayLen
+
+	// Parse start index
+	if start != nil {
+		if start.Type() != object.INTEGER_OBJ {
+			return newError("Line %d: Slice start index must be an integer, not: %s", line, start.Type())
+		}
+		startIdx = int(start.(*object.Integer).Value)
+		if startIdx < 0 {
+			startIdx = arrayLen + startIdx // Handle negative indices
+		}
+		if startIdx < 0 {
+			startIdx = 0
+		}
+		if startIdx > arrayLen {
+			startIdx = arrayLen
+		}
+	}
+
+	// Parse end index
+	if end != nil {
+		if end.Type() != object.INTEGER_OBJ {
+			return newError("Line %d: Slice end index must be an integer, not: %s", line, end.Type())
+		}
+		endIdx = int(end.(*object.Integer).Value)
+		if endIdx < 0 {
+			endIdx = arrayLen + endIdx // Handle negative indices
+		}
+		if endIdx < 0 {
+			endIdx = 0
+		}
+		if endIdx > arrayLen {
+			endIdx = arrayLen
+		}
+	}
+
+	// Ensure start <= end
+	if startIdx > endIdx {
+		startIdx = endIdx
+	}
+
+	// Create the sliced array
+	slicedElements := make([]object.Object, endIdx-startIdx)
+	copy(slicedElements, arrayObject.Elements[startIdx:endIdx])
+
+	return &object.Array{Elements: slicedElements}
+}
+
 // evalArrayIndexExpression evaluates an array index expression.
 func evalArrayIndexExpression(array, index object.Object) object.Object {
 	arrayObject := array.(*object.Array)
