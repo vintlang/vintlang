@@ -1,4 +1,0 @@
-import random
-
-let code = random.int(100000, 999999)
-print("Code: " + string(code))
