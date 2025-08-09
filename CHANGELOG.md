@@ -2,6 +2,84 @@
 
 ## [Unreleased] – Recent Major & Minor Updates
 
+### New Features (Week of August 9, 2025)
+
+- **Dict Pattern Matching**
+  Introduced a powerful new `match` statement for pattern matching on dictionaries:
+  - Syntax: `match value { pattern => action }`
+  - Supports dictionary pattern matching with specific key-value pairs
+  - Wildcard pattern `_` for default cases
+  - Full lexer, parser, and evaluator integration with new `MATCH` keyword and `=>` arrow token
+  
+  **Sample:**
+  ```vint
+  let user = {"role": "admin", "active": true}
+  match user {
+      {"role": "admin"} => print("Admin user!")
+      {"active": false} => print("Inactive user")
+      _ => print("Regular user")
+  }
+  ```
+
+- **Enhanced Scheduling Module**
+  Complete rewrite of the schedule module with full ticker and cron functionality:
+  - `ticker(intervalSeconds, callback)` - executes functions at regular intervals
+  - `schedule(cronExpr, callback)` - cron-based scheduling with proper expression parsing
+  - Helper functions: `everySecond()`, `everyMinute()`, `everyHour()`, `daily(hour, minute)`
+  - Support for step values in cron expressions (e.g., `*/5` for every 5 seconds)
+  - Comprehensive error handling and validation
+  - Proper cleanup with `stopTicker()` and `stopSchedule()` functions
+  
+  **Sample:**
+  ```vint
+  import schedule
+  
+  // Every 5 seconds
+  let ticker = schedule.ticker(5, func() {
+      print("Tick!")
+  })
+  
+  // Daily at 9:30 AM
+  let job = schedule.schedule("0 30 9 * * *", func() {
+      print("Good morning!")
+  })
+  
+  // Using helper functions
+  let minutely = schedule.everyMinute(func() {
+      print("New minute!")
+  })
+  ```
+
+- **HTTP Module Improvements**
+  Enhanced Express.js-like HTTP server functionality:
+  - `http.app()` - creates Express-like application instances
+  - Route registration methods: `http.get()`, `http.post()`, `http.put()`, `http.delete()`, `http.patch()`
+  - Middleware support with `http.use()`
+  - Improved request/response handling with better route matching
+  - Enhanced HTTP handler execution with request information display
+  - Better 404 handling and error responses
+  
+  **Sample:**
+  ```vint
+  import http
+  
+  http.app()
+  
+  http.get("/", func(req, res) {
+      print("Home page accessed")
+  })
+  
+  http.post("/api/users", func(req, res) {
+      print("Creating new user")
+  })
+  
+  http.use(func(req, res, next) {
+      print("Middleware executed")
+  })
+  
+  http.listen(3000, "Server running on port 3000")
+  ```
+
 ### Language Features
 
 - **Declarative Statements**
