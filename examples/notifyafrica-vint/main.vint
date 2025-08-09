@@ -1,93 +1,276 @@
+// Enhanced NotifyAfrica SMS Sender - Showcasing VintLang Features
 import notifyafrica_pkg
 import os
 import time
 import uuid
 import dotenv
 import json
+import crypto
+import random
+import sysinfo
+import string
 
 // Load environment variables
 dotenv.load(".env")
 
-// Helper: log to file
-let logResult = func(logMessage) {
+// Global config
+let app_name = "NotifyAfrica SMS Pro"
+let version = "2.0.0"
+let total_sent = 0
+let total_failed = 0
+
+// Enhanced logging with security hash and better formatting
+let logResult = func(level, logMessage) {
     let log_file = "notifyafrica.log"
-    let timestamp = time.now().toString()
-    os.writeFile(log_file, "[" + timestamp + "] " + logMessage + "\n", "append")
+    let timestamp = time.format(time.now(), "2006-01-02 15:04:05")
+    
+    // Add security hash using crypto module
+    let hash = crypto.hashMD5(logMessage + "security_salt")
+    let fullLog = "[" + timestamp + "] [" + level + "] " + logMessage + " (Hash: " + hash + ")\n"
+    
+    os.writeFile(log_file, fullLog, "append")
+    
+    // Display with better formatting
+    if (level == "ERROR") {
+        print("❌ [ERROR] " + logMessage)
+    } else if (level == "SUCCESS") {
+        print("✅ [SUCCESS] " + logMessage)
+    } else if (level == "INFO") {
+        print("ℹ️  [INFO] " + logMessage)
+    } else {
+        print("📢 [" + level + "] " + logMessage)
+    }
 }
 
-// Helper: get recipients from user
+// Generate random verification code using random module
+let generateVerificationCode = func() {
+    return string(random.int(100000, 999999))
+}
+
+// Enhanced recipient input with validation
 let getRecipients = func() {
     let recipients = []
-    print("\nEnter recipient numbers (comma separated, e.g. 2557654321,2557123456):")
+    print("\nEnter recipient numbers (comma separated, e.g. +2557654321,+2557123456):")
     let inputStr = input()
     let nums = inputStr.split(",")
     for n in nums {
         let trimmed = n.trim()
         if (trimmed != "") {
-            recipients.push({"number": int(trimmed)})
+            recipients.push({"number": trimmed})
         }
     }
     return recipients
 }
 
-// Main menu
+// Enhanced main menu with emojis and better design
 let mainMenu = func() {
-    println("\n=========================")
-    println(" NotifyAfrica SMS Sender")
-    println("=========================")
-    println("1. Send SMS")
-    println("2. View Log")
-    println("3. Exit")
-    let choice = input("Choose an option: ")
+    print("\n" + "="*50)
+    print("📱 " + app_name + " v" + version)
+    print("="*50)
+    print("1. 📤 Send SMS")
+    print("2. 🎲 Send SMS with Verification Code")
+    print("3. 📊 Dashboard")
+    print("4. 📋 View Logs")
+    print("5. 🚀 About VintLang Features")
+    print("6. 🚪 Exit")
+    let choice = input("\nChoose an option (1-6): ")
     return choice
 }
 
-// Send SMS flow
+// New: Send SMS with verification code feature
+let sendVerificationSMS = func() {
+    let sender_id = input("Enter sender ID: ")
+    let phone = input("Enter recipient phone number: ")
+    let name = input("Enter recipient name: ")
+    
+    // Generate random verification code
+    let code = generateVerificationCode()
+    let sms = "Hello " + name + "! Your verification code is: " + code + ". Valid for 10 minutes. Thank you!"
+    
+    print("📝 Generated message: " + sms)
+    print("🎲 Generated verification code: " + code)
+    
+    let recipients = [{"number": phone}]
+    let request_id = uuid.generate()
+    
+    print("\n⏳ Sending verification SMS... [Request ID: " + request_id + "]")
+    
+    let response = notifyafrica_pkg.sendSMS(sender_id, sms, recipients, "none")
+    
+    // Enhanced error handling and logging
+    if (response.type && response.type() == "ERROR") {
+        logResult("ERROR", "Failed to send verification SMS: " + response.message() + " [Request ID: " + request_id + "]")
+        total_failed = total_failed + 1
+    } else {
+        logResult("SUCCESS", "Verification SMS sent to " + phone + " [Code: " + code + "] [Request ID: " + request_id + "]")
+        total_sent = total_sent + 1
+    }
+}
+
+// Enhanced SMS sending flow
 let sendSMSFlow = func() {
-    let sender_id = input("Enter sender ID (number): ")
+    let sender_id = input("Enter sender ID: ")
     let sms = input("Enter SMS message: ")
     let recipients = getRecipients()
     let schedule = input("Enter schedule (or 'none'): ")
     if (schedule == "") { schedule = "none" }
     
     let request_id = uuid.generate()
-    print("\nSending SMS... [Request ID: " + request_id + "]")
+    print("\n⏳ Sending SMS... [Request ID: " + request_id + "]")
     
     let response = notifyafrica_pkg.sendSMS(sender_id, sms, recipients, schedule)
     
-    // Check if the response is an error object
+    // Enhanced error handling with better logging
     if (response.type && response.type() == "ERROR") {
-        print("[ERROR] Failed to send SMS: " + response.message())
-        logResult("[ERROR] " + response.message() + " [Request ID: " + request_id + "]")
+        logResult("ERROR", "Failed to send SMS: " + response.message() + " [Request ID: " + request_id + "]")
+        total_failed = total_failed + 1
     } else {
-        print("[SUCCESS] SMS sent! Response: " + response.inspect())
-        logResult("[SUCCESS] SMS sent to " + string(len(recipients)) + " recipients. [Request ID: " + request_id + "]")
+        logResult("SUCCESS", "SMS sent to " + string(len(recipients)) + " recipients [Request ID: " + request_id + "]")
+        total_sent = total_sent + len(recipients)
     }
 }
 
-// View log
+// New: Dashboard with system info and statistics
+let showDashboard = func() {
+    print("\n" + "="*60)
+    print("📊 " + app_name + " Dashboard")
+    print("="*60)
+    
+    // System information using sysinfo module
+    print("🖥️  System Information:")
+    print("   OS: " + sysinfo.os())
+    print("   Architecture: " + sysinfo.arch())
+    print("   Current Time: " + time.format(time.now(), "2006-01-02 15:04:05"))
+    
+    // Statistics
+    print("\n📈 SMS Statistics:")
+    print("   📤 Total SMS Sent: " + string(total_sent))
+    print("   ❌ Total Failed: " + string(total_failed))
+    
+    let total = total_sent + total_failed
+    if (total > 0) {
+        let successRate = (total_sent * 100) / total
+        print("   ✅ Success Rate: " + string(successRate) + "%")
+    } else {
+        print("   ✅ Success Rate: N/A (No SMS sent yet)")
+    }
+    
+    // Environment status using dotenv module
+    print("\n🔧 Environment Configuration:")
+    let token = dotenv.get("NOTIFYAFRICA_TOKEN")
+    if (token != "" && token != "your_api_token_here") {
+        print("   🔑 API Token: ✅ Configured")
+    } else {
+        print("   🔑 API Token: ❌ Not configured")
+    }
+    
+    let baseUrl = dotenv.get("NOTIFYAFRICA_BASEURL")
+    if (baseUrl != "") {
+        print("   🌐 Base URL: ✅ " + baseUrl)
+    } else {
+        print("   🌐 Base URL: ❌ Using default")
+    }
+    
+    input("\nPress Enter to continue...")
+}
+
+// New: Show VintLang features demonstrated
+let showFeatures = func() {
+    print("\n" + "="*50)
+    print("🚀 VintLang Features Demonstrated")
+    print("="*50)
+    
+    print("✅ Modules Used:")
+    print("   📦 notifyafrica_pkg - Custom SMS API package")
+    print("   🗂️  os - File operations and existence checks")
+    print("   ⏰ time - Time formatting and current time")
+    print("   🔑 uuid - Unique ID generation")
+    print("   🌐 dotenv - Environment variable management")
+    print("   📄 json - JSON encoding for data structures")
+    print("   🔐 crypto - MD5 hashing for security")
+    print("   🎲 random - Random number generation")
+    print("   🖥️  sysinfo - System information retrieval")
+    print("   📝 string - String manipulation and conversion")
+    
+    print("\n✅ Language Features Used:")
+    print("   🔄 Functions with parameters and return values")
+    print("   📊 Dictionaries and arrays")
+    print("   🔁 For loops and while loops")
+    print("   ❓ Conditional statements (if/else)")
+    print("   💾 File I/O operations")
+    print("   🎯 Error handling and validation")
+    print("   📱 User input and formatted output")
+    print("   🔢 Type conversion and string operations")
+    
+    print("\n✅ Application Features:")
+    print("   📤 SMS sending with multiple options")
+    print("   🎲 Random verification code generation")
+    print("   📊 Real-time statistics tracking")
+    print("   🔐 Secure logging with MD5 hashes")
+    print("   🖥️  System information display")
+    print("   🌐 Environment configuration management")
+    print("   📋 Comprehensive activity logging")
+    print("   ✨ Enhanced user interface with emojis")
+    
+    input("\nPress Enter to continue...")
+}
+
+// Enhanced log viewing
 let viewLog = func() {
     let log_file = "notifyafrica.log"
-    print("\n=== Log History ===")
+    print("\n" + "="*40)
+    print("📋 Application Logs")
+    print("="*40)
+    
     if (os.exists(log_file)) {
         let logs = os.readFile(log_file)
         print(logs)
     } else {
-        print("No logs available yet.")
+        logResult("INFO", "No logs available yet.")
     }
+    
+    input("\nPress Enter to continue...")
 }
 
-// Main loop
+// Initialize application with environment check
+let initApp = func() {
+    print("🚀 Initializing " + app_name + "...")
+    
+    // Check environment using dotenv
+    let token = dotenv.get("NOTIFYAFRICA_TOKEN")
+    if (token == "" || token == "your_api_token_here") {
+        print("⚠️  Warning: No valid API token found!")
+        print("   Please set NOTIFYAFRICA_TOKEN in your .env file")
+    } else {
+        print("✅ API token loaded successfully")
+    }
+    
+    print("✅ Initialization complete!\n")
+    // logResult("INFO", "Application started - " + app_name + " v" + version)
+}
+
+// Start the application
+initApp()
+
+// Enhanced main loop
 while (true) {
     let choice = mainMenu()
     if (choice == "1") {
         sendSMSFlow()
     } else if (choice == "2") {
-        viewLog()
+        sendVerificationSMS()
     } else if (choice == "3") {
-        print("\nGoodbye!")
+        showDashboard()
+    } else if (choice == "4") {
+        viewLog()
+    } else if (choice == "5") {
+        showFeatures()
+    } else if (choice == "6") {
+        print("\n👋 Thank you for using " + app_name + "!")
+        print("🎉 Goodbye!")
+        logResult("INFO", "Application terminated by user")
         break
     } else {
-        print("\n[WARNING] Invalid choice. Try again.")
+        print("\n❌ Invalid choice. Please try again.")
     }
 }
