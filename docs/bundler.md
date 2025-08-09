@@ -56,6 +56,47 @@ This makes the `vint` CLI available, including the `bundle` command.
 
 ---
 
+## Multi-File Package Support (NEW!)
+
+The VintLang Bundler now supports bundling multi-file packages with imports! 
+
+### Key Features
+
+* ✅ **Automatic Dependency Discovery**: Finds all imported `.vint` files recursively
+* ✅ **Package System Integration**: Handles `package` declarations and `import` statements
+* ✅ **Self-Contained Binaries**: No external `.vint` files needed at runtime
+* ✅ **Compatible with Built-ins**: Works with all VintLang built-in modules
+
+### Example Multi-File Project
+
+**main.vint**:
+```vint
+import my_utils
+import os
+
+print("Starting application...")
+let result = my_utils.process_data("hello")
+print("Result:", result)
+```
+
+**my_utils.vint**:
+```vint
+package my_utils {
+    let process_data = func(input) {
+        return "processed: " + input
+    }
+}
+```
+
+Bundle the entire project:
+```sh
+vint bundle main.vint
+```
+
+The bundler automatically discovers `my_utils.vint`, processes the package structure, and creates a single binary containing both files.
+
+---
+
 ## Usage
 
 To bundle a `.vint` file into a binary:

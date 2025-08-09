@@ -1,0 +1,86 @@
+// Express.js-like HTTP Server Example for VintLang
+// This example demonstrates how to create a REST API server using VintLang's http module
+
+import http
+
+// Create the Express-like app instance
+http.app()
+
+// Basic routes
+http.get("/", func(req, res) {
+    println(req.headers)
+    // This function will be registered as the handler for GET /
+    print("Home page accessed")
+})
+
+http.get("/about", func(req, res) {
+    print("About page accessed") 
+})
+
+// API routes
+http.get("/api/status", func(req, res) {
+    print("API status check")
+})
+
+http.get("/api/users", func(req, res) {
+    print("Getting all users")
+})
+
+http.post("/api/users", func(req, res) {
+    print("Creating a new user")
+})
+
+http.put("/api/users/123", func(req, res) {
+    print("Updating user with ID 123")
+})
+
+http.delete("/api/users/123", func(req, res) {
+    print("Deleting user with ID 123")
+})
+
+// Middleware (currently registered but execution pending full evaluator integration)
+http.use(func(req, res, next) {
+    print("Middleware: Request logged")
+})
+
+// Display configured routes
+print("🚀 VintLang Express-like HTTP Server")
+print("====================================")
+print("Routes configured:")
+print("  GET    /")
+print("  GET    /about") 
+print("  GET    /api/status")
+print("  GET    /api/users")
+print("  POST   /api/users") 
+print("  PUT    /api/users/123")
+print("  DELETE /api/users/123")
+print("")
+
+// Start the server
+print("Starting server...")
+http.listen(3000, "🌟 Server running at http://localhost:3000")
+
+/*
+Usage examples:
+  curl http://localhost:3000/
+  curl http://localhost:3000/about
+  curl http://localhost:3000/api/status
+  curl http://localhost:3000/api/users
+  curl -X POST http://localhost:3000/api/users
+  curl -X PUT http://localhost:3000/api/users/123
+  curl -X DELETE http://localhost:3000/api/users/123
+
+Features implemented:
+✓ Express.js-like syntax with http.app()
+✓ Route registration: GET, POST, PUT, DELETE, PATCH
+✓ Server listening with graceful shutdown
+✓ Route matching and 404 handling
+✓ Function handler registration
+✓ Middleware registration (http.use)
+
+Coming soon:
+- Full function handler execution with req/res objects
+- Request body parsing and response methods
+- Route parameters and query string support
+- Enhanced middleware execution
+*/

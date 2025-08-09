@@ -7,6 +7,7 @@ import (
 	"strings"
 
 	"github.com/vintlang/vintlang/ast"
+	"github.com/vintlang/vintlang/bundle"
 	"github.com/vintlang/vintlang/lexer"
 	"github.com/vintlang/vintlang/module"
 	"github.com/vintlang/vintlang/object"
@@ -114,9 +115,35 @@ func addSearchPath(path string) {
 }
 
 func findFile(name string) string {
-	// Tries different file extensions
-	extensions := []string{".vint", ".VINT", ".Vint"} //Just incase the user is really stupid
-	//Vintlang for dummies.
+	// First check in bundled files if available
+	bundledFiles := bundle.GetBundledFiles()
+	if bundledFiles != nil {
+		extensions := []string{".vint", ".VINT", ".Vint"}
+		basename := name
+		
+		for _, ext := range extensions {
+			filename := basename + ext
+			
+			// Check if the exact filename exists in bundled files
+			for bundledPath := range bundledFiles {
+				if filepath.Base(bundledPath) == filename {
+					return bundledPath
+				}
+			}
+			
+			// Also check if the name matches without extension
+			for bundledPath := range bundledFiles {
+				bundledBase := filepath.Base(bundledPath)
+				bundledName := strings.TrimSuffix(bundledBase, filepath.Ext(bundledBase))
+				if bundledName == basename {
+					return bundledPath
+				}
+			}
+		}
+	}
+	
+	// If not found in bundled files, use the original file search logic
+	extensions := []string{".vint", ".VINT", ".Vint"}
 	basename := name
 
 	for _, ext := range extensions {
@@ -140,9 +167,31 @@ func fileExists(file string) bool {
 }
 
 func evaluateFile(file string) (object.Object, object.Object) {
-	source, err := os.ReadFile(file)
-	if err != nil {
-		return nil, newError(ErrFileReadFailed, file, err.Error())
+	var source []byte
+	var err error
+	
+	// First, check if we have bundled files and if this file is in the bundle
+	bundledFiles := bundle.GetBundledFiles()
+	if bundledFiles != nil {
+		if content, exists := bundledFiles[file]; exists {
+			source = []byte(content)
+		} else {
+			// Try to find the file in bundled files by matching the filename
+			for bundledPath, content := range bundledFiles {
+				if filepath.Base(bundledPath) == filepath.Base(file) {
+					source = []byte(content)
+					break
+				}
+			}
+		}
+	}
+	
+	// If not found in bundled files, try to read from filesystem
+	if source == nil {
+		source, err = os.ReadFile(file)
+		if err != nil {
+			return nil, newError(ErrFileReadFailed, file, err.Error())
+		}
 	}
 
 	l := lexer.New(string(source))
