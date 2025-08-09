@@ -3,7 +3,6 @@ package main
 import (
 	"fmt"
 	"os"
-	"os/exec"
 	"strings"
 
 	"github.com/charmbracelet/lipgloss"
@@ -98,8 +97,6 @@ func main() {
 			toolkit.Init(args)
 		case "new":
 			toolkit.New(args)
-		case "test", "-test", "--test", "-t":
-			runTests()
 		case "fmt", "-fmt", "--fmt", "-f":
 			if len(args) < 3 {
 				fmt.Println(styles.ErrorStyle.Render("Error: Please specify a Vint file to format"))
@@ -143,18 +140,6 @@ func run(file string) {
 	}
 }
 
-// runTests executes all tests in the current directory
-func runTests() {
-	fmt.Println(styles.HelpStyle.Render("Running tests..."))
-	cmd := exec.Command("go", "test", "./...")
-	cmd.Stdout = os.Stdout
-	cmd.Stderr = os.Stderr
-	if err := cmd.Run(); err != nil {
-		fmt.Println(styles.ErrorStyle.Render("Tests failed"))
-		os.Exit(1)
-	}
-	fmt.Println(styles.HelpStyle.Render("All tests passed!"))
-}
 
 // formatFile formats a Vint source file
 func formatFile(file string) {
