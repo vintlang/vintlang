@@ -1,0 +1,3 @@
+// Test just error declaration
+error FileNotFound(path)
+println("Error type defined successfully")
