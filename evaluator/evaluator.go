@@ -395,6 +395,12 @@ func Eval(node ast.Node, env *object.Environment) object.Object {
 		}
 		
 		return object.NewChannel()
+		
+	case *ast.ErrorDeclaration:
+		return evalErrorDeclaration(node, env)
+		
+	case *ast.ThrowStatement:
+		return evalThrowStatement(node, env)
 	}
 
 	return nil
@@ -678,4 +684,67 @@ func evalRangeExpression(node *ast.RangeExpression, env *object.Environment) obj
 		End:     endInt.Value,
 		Current: startInt.Value,
 	}
+}
+
+func evalErrorDeclaration(node *ast.ErrorDeclaration, env *object.Environment) object.Object {
+	// Extract parameter names
+	paramNames := make([]string, len(node.Parameters))
+	for i, param := range node.Parameters {
+		paramNames[i] = param.Value
+	}
+	
+	// Create error type
+	errorType := &object.ErrorType{
+		Name:       node.Name.Value,
+		Parameters: paramNames,
+	}
+	
+	// Store the error type in the environment
+	result := env.Define(node.Name.Value, errorType)
+	if isError(result) {
+		return result
+	}
+	
+	// Return NULL for declarations (like let statements)
+	return NULL
+}
+
+func evalThrowStatement(node *ast.ThrowStatement, env *object.Environment) object.Object {
+	// Evaluate the error expression
+	errorExpr := Eval(node.ErrorExpr, env)
+	if isError(errorExpr) {
+		return errorExpr
+	}
+	
+	// If it's a call expression to a custom error type, create a custom error instance
+	if call, ok := node.ErrorExpr.(*ast.CallExpression); ok {
+		if ident, ok := call.Function.(*ast.Identifier); ok {
+			if errorType, exists := env.Get(ident.Value); exists {
+				if et, ok := errorType.(*object.ErrorType); ok {
+					// Evaluate arguments
+					args := evalExpressions(call.Arguments, env)
+					if len(args) == 1 && isError(args[0]) {
+						return args[0]
+					}
+					
+					// Check if number of arguments matches parameters
+					if len(args) != len(et.Parameters) {
+						return newError("error %s expects %d arguments, got %d", 
+							et.Name, len(et.Parameters), len(args))
+					}
+					
+					// Create custom error instance
+					customError := &object.CustomError{
+						ErrorType: et,
+						Arguments: args,
+					}
+					
+					return customError
+				}
+			}
+		}
+	}
+	
+	// If it's not a custom error, just return the evaluated expression as a regular error
+	return newError("throw: %s", errorExpr.Inspect())
 }
