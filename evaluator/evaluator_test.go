@@ -126,4 +126,87 @@ func testStringObject(t *testing.T, obj object.Object, expected string) bool {
 	}
 	return true
 }
+
+func TestRangeExpressions(t *testing.T) {
+	tests := []struct {
+		input    string
+		expected string
+	}{
+		{"1..5", "1..5"},
+		{"0..3", "0..3"},
+		{"10..15", "10..15"},
+	}
+
+	for _, tt := range tests {
+		l := lexer.New(tt.input)
+		p := parser.New(l)
+		program := p.ParseProgram()
+		env := object.NewEnvironment()
+		result := Eval(program, env)
+		
+		rangeObj, ok := result.(*object.Range)
+		if !ok {
+			t.Errorf("object is not Range. got=%T (%+v)", result, result)
+			continue
+		}
+		
+		if rangeObj.Inspect() != tt.expected {
+			t.Errorf("range has wrong string representation. got=%q, want=%q",
+				rangeObj.Inspect(), tt.expected)
+		}
+	}
+}
+
+func TestRangeInForLoop(t *testing.T) {
+	tests := []struct {
+		input    string
+		expected []int64
+	}{
+		{
+			`let result = []; for i in 1..3 { result = result.push(i) }; result`,
+			[]int64{1, 2, 3},
+		},
+		{
+			`let result = []; for i in 0..2 { result = result.push(i) }; result`,
+			[]int64{0, 1, 2},
+		},
+		{
+			`let result = []; for i in 5..7 { result = result.push(i) }; result`,
+			[]int64{5, 6, 7},
+		},
+	}
+
+	for _, tt := range tests {
+		l := lexer.New(tt.input)
+		p := parser.New(l)
+		program := p.ParseProgram()
+		env := object.NewEnvironment()
+		result := Eval(program, env)
+		
+		array, ok := result.(*object.Array)
+		if !ok {
+			t.Errorf("object is not Array. got=%T (%+v)", result, result)
+			continue
+		}
+		
+		if len(array.Elements) != len(tt.expected) {
+			t.Errorf("array has wrong length. got=%d, want=%d",
+				len(array.Elements), len(tt.expected))
+			continue
+		}
+		
+		for i, expectedVal := range tt.expected {
+			intObj, ok := array.Elements[i].(*object.Integer)
+			if !ok {
+				t.Errorf("array element %d is not Integer. got=%T (%+v)",
+					i, array.Elements[i], array.Elements[i])
+				continue
+			}
+			if intObj.Value != expectedVal {
+				t.Errorf("array element %d has wrong value. got=%d, want=%d",
+					i, intObj.Value, expectedVal)
+			}
+		}
+	}
+}
  
