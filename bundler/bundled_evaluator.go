@@ -23,15 +23,15 @@ func (be *BundledEvaluator) GenerateBundledCode(bundlerVersion, buildTime string
 		return "", fmt.Errorf("no files in bundle")
 	}
 
-	// Process the bundle to extract packages and modify imports
-	processor := NewPackageProcessor(be.bundle)
-	processed, err := processor.ProcessBundle()
+	// Process the bundle using string manipulation
+	processor := NewStringProcessor(be.bundle)
+	processedCode, err := processor.ProcessBundle()
 	if err != nil {
 		return "", fmt.Errorf("failed to process bundle: %w", err)
 	}
 
 	// Escape the processed content
-	escapedProcessedContent := strings.ReplaceAll(processed.ProcessedCode, "`", "` + \"`\" + `")
+	escapedProcessedContent := strings.ReplaceAll(processedCode, "`", "` + \"`\" + `")
 
 	// Generate the Go code template
 	goTemplate := fmt.Sprintf(`package main
