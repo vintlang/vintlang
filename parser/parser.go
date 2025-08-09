@@ -15,6 +15,7 @@ const (
 	COND        // OR or AND
 	EQUALS      // ==
 	LESSGREATER // > OR <
+	RANGE       // ..
 	SUM         // +
 	PRODUCT     // *
 	POWER       // ** we got the power XD
@@ -36,6 +37,7 @@ var precedences = map[token.TokenType]int{
 	token.LTE:             LESSGREATER,
 	token.GT:              LESSGREATER,
 	token.GTE:             LESSGREATER,
+	token.RANGE:           RANGE,
 	token.PLUS:            SUM,
 	token.PLUS_ASSIGN:     SUM,
 	token.MINUS:           SUM,
@@ -160,6 +162,7 @@ func New(l *lexer.Lexer) *Parser {
 	p.registerInfix(token.ASSIGN, p.parseAssignmentExpression)
 	p.registerInfix(token.IN, p.parseInfixExpression)
 	p.registerInfix(token.DOT, p.parseMethod)
+	p.registerInfix(token.RANGE, p.parseRangeExpression)
 
 	p.postfixParseFns = make(map[token.TokenType]postfixParseFn)
 	p.registerPostfix(token.PLUS_PLUS, p.parsePostfixExpression)
@@ -305,6 +308,18 @@ func (p *Parser) parseInfixExpression(left ast.Expression) ast.Expression {
 	precedence := p.curPrecedence()
 	p.nextToken()
 	expression.Right = p.parseExpression(precedence)
+	return expression
+}
+
+func (p *Parser) parseRangeExpression(left ast.Expression) ast.Expression {
+	expression := &ast.RangeExpression{
+		Token: p.curToken,
+		Start: left,
+	}
+
+	precedence := p.curPrecedence()
+	p.nextToken()
+	expression.End = p.parseExpression(precedence)
 	return expression
 }
 
