@@ -246,7 +246,7 @@ let initApp = func() {
     }
     
     print("✅ Initialization complete!\n")
-    logResult("INFO", "Application started - " + app_name + " v" + version)
+    // logResult("INFO", "Application started - " + app_name + " v" + version)
 }
 
 // Start the application
