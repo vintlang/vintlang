@@ -1,0 +1,26 @@
+// Exact example from GitHub issue #11
+
+let user = {"role": "admin", "active": true}
+
+match user {
+    {"role": "admin"} => print("Hello, Admin!")
+    {"active": false} => print("Inactive user")
+    _ => print("Regular user")
+}
+
+// Additional test cases to show flexibility
+print("\n--- Additional Examples ---")
+
+let inactiveUser = {"role": "user", "active": false}
+match inactiveUser {
+    {"role": "admin"} => print("Hello, Admin!")
+    {"active": false} => print("Inactive user")
+    _ => print("Regular user")
+}
+
+let unknownUser = {"name": "Jane"}
+match unknownUser {
+    {"role": "admin"} => print("Hello, Admin!")
+    {"active": false} => print("Inactive user")
+    _ => print("Regular user")
+}
