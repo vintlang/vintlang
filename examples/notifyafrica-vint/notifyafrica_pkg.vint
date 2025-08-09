@@ -11,7 +11,7 @@ package notifyafrica_pkg {
         let baseUrl = dotenv.get("NOTIFYAFRICA_BASEURL")
 
         if (token == null || token == "") {
-            print("[ERROR] API token not found in .env. Please set NOTIFYAFRICA_TOKEN.")
+            error "[ERROR] API token not found in .env. Please set NOTIFYAFRICA_TOKEN."
             return null // Return null to indicate failure
         }
         if (baseUrl == null || baseUrl == "") {
