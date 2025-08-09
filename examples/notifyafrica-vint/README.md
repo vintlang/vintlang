@@ -2,7 +2,7 @@
 
 ## Overview
 
-This is an enhanced version of the NotifyAfrica SMS sender application built with VintLang, showcasing the comprehensive features and capabilities of the VintLang programming language.
+This is an enhanced version of the NotifyAfrica SMS sender application built with VintLang, showcasing the comprehensive features and capabilities of the VintLang programming language. The application uses a classic command-line interface for efficient automation and scripting.
 
 ## Features Demonstrated
 
@@ -18,29 +18,29 @@ This is an enhanced version of the NotifyAfrica SMS sender application built wit
 8. **random** - Random number generation for verification codes
 9. **sysinfo** - System information retrieval
 10. **string** - String manipulation and type conversion
+11. **cli** - Command-line argument parsing
 
 ### Language Features Showcased
 
 - ✅ Functions with parameters and return values
 - ✅ Dictionaries and arrays for data structures
-- ✅ For loops and while loops for iteration
-- ✅ Conditional statements (if/else) for logic flow
+- ✅ For loops and conditional statements for logic flow
 - ✅ File I/O operations for logging and data persistence
 - ✅ Error handling and validation
-- ✅ User input and formatted output
+- ✅ Command-line argument processing
 - ✅ Type conversion and string operations
 
 ### Application Features
 
 1. **Multi-Method SMS Sending**
-   - Direct SMS to multiple recipients
+   - Direct SMS to multiple recipients via command line
    - Verification code SMS with auto-generated codes
-   - Enhanced recipient input with validation
+   - Enhanced recipient parsing with validation
 
 2. **Security & Logging**
    - Secure logging with MD5 hash verification
    - Comprehensive activity logging with timestamps
-   - Error tracking and statistics
+   - Error tracking and persistent statistics
 
 3. **Dashboard & Analytics**
    - Real-time SMS statistics tracking
@@ -48,11 +48,11 @@ This is an enhanced version of the NotifyAfrica SMS sender application built wit
    - Environment configuration status
    - Success rate calculations
 
-4. **Enhanced User Experience**
-   - Emoji-enhanced interface for better UX
-   - Color-coded status messages
-   - Progress indicators and request tracking
-   - Interactive menus with clear options
+4. **Command-Line Interface**
+   - Professional CLI with comprehensive help
+   - Multiple command modes for different operations
+   - Automated scripting support
+   - Clear error messages and usage instructions
 
 5. **Environment Management**
    - Automatic environment configuration detection
@@ -74,28 +74,82 @@ NOTIFYAFRICA_BASEURL=https://notify.africa/api/v2/send-sms
 cp .env.example .env
 ```
 
-### Running the Application
+### Command-Line Interface
+
+The application provides a classic terminal command interface:
 
 ```bash
-vint main.vint
+# Show help and available commands
+vint main.vint help
+
+# Send SMS to multiple recipients
+vint main.vint send --sender-id "MySender" --message "Hello World" --recipients "+1234567890,+0987654321"
+
+# Send verification SMS
+vint main.vint verify --sender-id "MySender" --phone "+1234567890" --name "John Doe"
+
+# View dashboard with statistics
+vint main.vint dashboard
+
+# View application logs
+vint main.vint logs
+
+# Show VintLang features demonstrated
+vint main.vint features
 ```
 
-### Menu Options
+### Command Reference
 
-1. **📤 Send SMS** - Send SMS to multiple recipients
-2. **🎲 Send SMS with Verification Code** - Generate and send verification codes
-3. **📊 Dashboard** - View statistics and system information
-4. **📋 View Logs** - Check application activity logs
-5. **🚀 About VintLang Features** - Learn about features demonstrated
-6. **🚪 Exit** - Close the application
+#### Send SMS
+```bash
+vint main.vint send [options]
+  --sender-id     Sender ID (required)
+  --message       SMS message (required)
+  --recipients    Comma-separated phone numbers (required)
+  --schedule      Schedule (optional, default: none)
+```
+
+#### Send Verification SMS
+```bash
+vint main.vint verify [options]
+  --sender-id     Sender ID (required)
+  --phone         Recipient phone number (required)
+  --name          Recipient name (required)
+```
+
+#### Other Commands
+- `dashboard` - Show system dashboard and statistics
+- `logs` - View application logs  
+- `features` - Show VintLang features demonstrated
+- `help` - Show help message
 
 ## Code Highlights
+
+### Command-Line Argument Processing
+```vint
+// Parse command-line arguments
+let args = cli.getPositional()
+let senderId = cli.getArgValue("--sender-id")
+let message = cli.getArgValue("--message")
+```
 
 ### Security Features
 ```vint
 // Enhanced logging with MD5 hash verification
 let hash = crypto.hashMD5(logMessage + "security_salt")
 let fullLog = "[" + timestamp + "] [" + level + "] " + logMessage + " (Hash: " + hash + ")\n"
+```
+
+### Persistent Statistics
+```vint
+// Load and save statistics with JSON
+let loadStats = func() {
+    if (os.exists(stats_file)) {
+        let statsData = os.readFile(stats_file)
+        return json.decode(statsData)
+    }
+    return {"total_sent": 0, "total_failed": 0}
+}
 ```
 
 ### Random Code Generation
@@ -106,30 +160,12 @@ let generateVerificationCode = func() {
 }
 ```
 
-### System Information Display
-```vint
-// Real-time system information
-print("   OS: " + sysinfo.os())
-print("   Architecture: " + sysinfo.arch())
-print("   Current Time: " + time.format(time.now(), "2006-01-02 15:04:05"))
-```
-
-### Environment Configuration
-```vint
-// Dynamic environment validation
-let token = dotenv.get("NOTIFYAFRICA_TOKEN")
-if (token != "" && token != "your_api_token_here") {
-    print("   🔑 API Token: ✅ Configured")
-} else {
-    print("   🔑 API Token: ❌ Not configured")
-}
-```
-
 ## VintLang Features Showcase
 
 This application serves as a comprehensive demonstration of VintLang's capabilities:
 
 - **Module System**: Importing and using various built-in and custom modules
+- **CLI Processing**: Professional command-line argument handling
 - **Error Handling**: Robust error checking and user feedback
 - **Data Structures**: Working with dictionaries, arrays, and complex data
 - **File Operations**: Reading, writing, and checking file existence
@@ -144,32 +180,37 @@ This application serves as a comprehensive demonstration of VintLang's capabilit
 
 The application follows a modular design with clear separation of concerns:
 
-- **Initialization Layer**: Environment setup and validation
+- **CLI Layer**: Command-line argument parsing and validation
 - **Business Logic Layer**: SMS sending, verification, and logging
-- **Presentation Layer**: User interface and interaction
-- **Data Layer**: File operations and statistics
+- **Data Layer**: File operations and persistent statistics
 - **Security Layer**: Hashing and validation
+- **Environment Layer**: Configuration management
 
-This architecture demonstrates VintLang's capability to build well-structured, maintainable applications with enterprise-grade features.
+This architecture demonstrates VintLang's capability to build well-structured, maintainable CLI applications with enterprise-grade features.
 
 ## Output Examples
 
-The application produces colorful, emoji-enhanced output:
+The application produces clean, professional command-line output:
 
 ```
-🚀 Initializing NotifyAfrica SMS Pro...
-✅ API token loaded successfully
-✅ Initialization complete!
+NotifyAfrica SMS Pro v2.0.0
+Command-line SMS sender showcasing VintLang features
 
-==================================================
-📱 NotifyAfrica SMS Pro v2.0.0
-==================================================
-1. 📤 Send SMS
-2. 🎲 Send SMS with Verification Code
-3. 📊 Dashboard
-4. 📋 View Logs
-5. 🚀 About VintLang Features
-6. 🚪 Exit
+Usage:
+  vint main.vint [command] [options]
+
+Commands:
+  send              Send SMS
+  verify            Send verification SMS
+  dashboard         Show system dashboard and statistics
+  logs              View application logs
+  features          Show VintLang features demonstrated
+  help              Show this help message
+
+Examples:
+  vint main.vint send --sender-id MySender --message "Hello World" --recipients "+1234567890,+0987654321"
+  vint main.vint verify --sender-id MySender --phone "+1234567890" --name "John Doe"
+  vint main.vint dashboard
 ```
 
-This enhanced NotifyAfrica SMS Pro application showcases VintLang as a powerful, feature-rich programming language capable of building professional-grade applications with modern UX and robust functionality.
+This enhanced NotifyAfrica SMS Pro application showcases VintLang as a powerful, feature-rich programming language capable of building professional-grade CLI applications with robust functionality and excellent automation support.
