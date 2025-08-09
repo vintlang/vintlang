@@ -1,0 +1,11 @@
+// Test custom error types
+
+// Define custom error types
+error FileNotFound(path)
+error InvalidInput(reason)
+error NetworkError(host, port)
+
+// Test throwing custom errors
+println("Testing custom error types...")
+
+throw FileNotFound("/missing.txt")
