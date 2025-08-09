@@ -153,6 +153,8 @@ func Eval(node ast.Node, env *object.Environment) object.Object {
 		return evalContinue(node)
 	case *ast.SwitchExpression:
 		return evalSwitchStatement(node, env)
+	case *ast.MatchExpression:
+		return evalMatchExpression(node, env)
 	case *ast.Null:
 		return NULL
 	// case *ast.For:
