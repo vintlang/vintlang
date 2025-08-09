@@ -395,56 +395,47 @@ func (p *Parser) parseErrorStatement() ast.Expression {
 func (p *Parser) parseErrorDeclaration(errorToken token.Token) ast.Expression {
 	decl := &ast.ErrorDeclaration{Token: errorToken}
 	
-	// Parse the error type name
+	// Parse the error type name (current token should be IDENT)
 	if !p.curTokenIs(token.IDENT) {
 		p.addError(fmt.Sprintf("expected identifier for error type name, got %s", p.curToken.Type))
 		return nil
 	}
 	
 	decl.Name = &ast.Identifier{Token: p.curToken, Value: p.curToken.Literal}
-	p.nextToken()
 	
 	// Expect opening parenthesis
-	if !p.curTokenIs(token.LPAREN) {
-		p.addError(fmt.Sprintf("expected '(' after error type name, got %s", p.curToken.Type))
+	if !p.expectPeek(token.LPAREN) {
 		return nil
 	}
-	p.nextToken()
 	
 	// Parse parameters
 	decl.Parameters = []*ast.Identifier{}
 	
-	if !p.curTokenIs(token.RPAREN) {
+	if !p.peekTokenIs(token.RPAREN) {
+		p.nextToken() // advance to first parameter
+		
 		// Parse first parameter
 		if !p.curTokenIs(token.IDENT) {
 			p.addError(fmt.Sprintf("expected parameter name, got %s", p.curToken.Type))
 			return nil
 		}
 		decl.Parameters = append(decl.Parameters, &ast.Identifier{Token: p.curToken, Value: p.curToken.Literal})
-		p.nextToken()
 		
 		// Parse additional parameters
-		for p.curTokenIs(token.COMMA) {
-			p.nextToken()
+		for p.peekTokenIs(token.COMMA) {
+			p.nextToken() // advance to comma
+			p.nextToken() // advance to next parameter
 			if !p.curTokenIs(token.IDENT) {
 				p.addError(fmt.Sprintf("expected parameter name, got %s", p.curToken.Type))
 				return nil
 			}
 			decl.Parameters = append(decl.Parameters, &ast.Identifier{Token: p.curToken, Value: p.curToken.Literal})
-			p.nextToken()
 		}
 	}
 	
 	// Expect closing parenthesis
-	if !p.curTokenIs(token.RPAREN) {
-		p.addError(fmt.Sprintf("expected ')' after error parameters, got %s", p.curToken.Type))
+	if !p.expectPeek(token.RPAREN) {
 		return nil
-	}
-	p.nextToken()
-	
-	// Skip semicolon if present
-	if p.curTokenIs(token.SEMICOLON) {
-		p.nextToken()
 	}
 	
 	return decl

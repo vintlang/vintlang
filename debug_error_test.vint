@@ -1,4 +1,0 @@
-println("Starting test...")
-error FileNotFound(path)
-println("Error declared")
-println("Test complete")
