@@ -124,6 +124,25 @@ func Eval(node ast.Node, env *object.Environment) object.Object {
 			return index
 		}
 		return evalIndexExpression(left, index, node.Token.Line)
+	case *ast.SliceExpression:
+		left := Eval(node.Left, env)
+		if isError(left) {
+			return left
+		}
+		var start, end object.Object
+		if node.Start != nil {
+			start = Eval(node.Start, env)
+			if isError(start) {
+				return start
+			}
+		}
+		if node.End != nil {
+			end = Eval(node.End, env)
+			if isError(end) {
+				return end
+			}
+		}
+		return evalSliceExpression(left, start, end, node.Token.Line)
 	case *ast.DictLiteral:
 		return evalDictLiteral(node, env)
 	case *ast.WhileExpression:
