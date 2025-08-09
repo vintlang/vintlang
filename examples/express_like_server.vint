@@ -8,6 +8,7 @@ http.app()
 
 // Basic routes
 http.get("/", func(req, res) {
+    println(req.headers)
     // This function will be registered as the handler for GET /
     print("Home page accessed")
 })
