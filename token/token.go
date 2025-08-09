@@ -88,6 +88,12 @@ const (
 	DEBUG    = "DEBUG"
 	NOTE     = "NOTE"
 	SUCCESS  = "SUCCESS"
+	
+	// Async/Concurrency Keywords
+	ASYNC    = "ASYNC"
+	AWAIT    = "AWAIT"
+	GO       = "GO"
+	CHAN     = "CHAN"
 )
 
 var keywords = map[string]TokenType{
@@ -121,6 +127,10 @@ var keywords = map[string]TokenType{
 	"debug":    DEBUG,
 	"note":     NOTE,
 	"success":  SUCCESS,
+	"async":    ASYNC,
+	"await":    AWAIT,
+	"go":       GO,
+	"chan":     CHAN,
 }
 
 func LookupIdent(ident string) TokenType {

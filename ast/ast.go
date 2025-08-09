@@ -704,3 +704,80 @@ func (rs *RepeatStatement) String() string {
 	out.WriteString(rs.Block.String())
 	return out.String()
 }
+
+// AsyncFunctionLiteral represents an async function
+type AsyncFunctionLiteral struct {
+	Token      token.Token
+	Name       string
+	Parameters []*Identifier
+	Defaults   map[string]Expression
+	Body       *BlockStatement
+}
+
+func (afl *AsyncFunctionLiteral) expressionNode()      {}
+func (afl *AsyncFunctionLiteral) TokenLiteral() string { return afl.Token.Literal }
+func (afl *AsyncFunctionLiteral) String() string {
+	var out bytes.Buffer
+
+	params := []string{}
+	for _, p := range afl.Parameters {
+		params = append(params, p.String())
+	}
+
+	out.WriteString("async func")
+	out.WriteString("(")
+	out.WriteString(strings.Join(params, ", "))
+	out.WriteString(") ")
+	out.WriteString(afl.Body.String())
+
+	return out.String()
+}
+
+// AwaitExpression represents an await expression
+type AwaitExpression struct {
+	Token token.Token
+	Value Expression
+}
+
+func (ae *AwaitExpression) expressionNode()      {}
+func (ae *AwaitExpression) TokenLiteral() string { return ae.Token.Literal }
+func (ae *AwaitExpression) String() string {
+	var out bytes.Buffer
+	out.WriteString("await ")
+	out.WriteString(ae.Value.String())
+	return out.String()
+}
+
+// GoStatement represents a go statement for concurrent execution
+type GoStatement struct {
+	Token      token.Token
+	Expression Expression
+}
+
+func (gs *GoStatement) statementNode()       {}
+func (gs *GoStatement) TokenLiteral() string { return gs.Token.Literal }
+func (gs *GoStatement) String() string {
+	var out bytes.Buffer
+	out.WriteString("go ")
+	out.WriteString(gs.Expression.String())
+	return out.String()
+}
+
+// ChannelExpression represents a channel creation expression
+type ChannelExpression struct {
+	Token  token.Token
+	Buffer Expression // optional buffer size
+}
+
+func (ce *ChannelExpression) expressionNode()      {}
+func (ce *ChannelExpression) TokenLiteral() string { return ce.Token.Literal }
+func (ce *ChannelExpression) String() string {
+	var out bytes.Buffer
+	out.WriteString("chan")
+	if ce.Buffer != nil {
+		out.WriteString("(")
+		out.WriteString(ce.Buffer.String())
+		out.WriteString(")")
+	}
+	return out.String()
+}

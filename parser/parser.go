@@ -129,6 +129,11 @@ func New(l *lexer.Lexer) *Parser {
 	p.registerPrefix(token.NOTE, p.parseNoteStatement)
 	p.registerPrefix(token.SUCCESS, p.parseSuccessStatement)
 	p.registerPrefix(token.REPEAT, p.parseRepeatStatement)
+	
+	// Async/Concurrency prefix parsers
+	p.registerPrefix(token.ASYNC, p.parseAsyncFunctionLiteral)
+	p.registerPrefix(token.AWAIT, p.parseAwaitExpression)
+	p.registerPrefix(token.CHAN, p.parseChannelExpression)
 
 	p.infixParseFns = make(map[token.TokenType]infixParseFn)
 	p.registerInfix(token.AND, p.parseInfixExpression)
