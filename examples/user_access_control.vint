@@ -1,0 +1,52 @@
+// Comprehensive example: User access control system using dict pattern matching
+
+let users = [
+    {"role": "admin", "active": true, "department": "IT"},
+    {"role": "admin", "active": false, "department": "HR"},
+    {"role": "user", "active": true, "department": "Sales"},
+    {"role": "user", "active": false, "department": "Marketing"},
+    {"role": "guest", "active": true},
+    {"name": "John", "type": "visitor"},
+    {}
+]
+
+print("=== User Access Control System ===")
+
+for user in users {
+    print("\nChecking user:", user)
+    
+    match user {
+        {"role": "admin", "active": true} => {
+            print("ACCESS GRANTED: Active administrator")
+            print("Full system access available")
+        }
+        {"role": "admin", "active": false} => {
+            print("ACCESS DENIED: Inactive administrator")
+            print("Please contact system administrator")
+        }
+        {"role": "user", "active": true} => {
+            print("ACCESS GRANTED: Active user")
+            print("Limited access to user features")
+        }
+        {"role": "user", "active": false} => {
+            print("ACCESS DENIED: Inactive user")
+            print("Account has been suspended")
+        }
+        {"role": "guest"} => {
+            print("ACCESS GRANTED: Guest user")
+            print("Read-only access to public content")
+        }
+        {"name": "John"} => {
+            print("ACCESS GRANTED: Known visitor")
+            print("Limited visitor access")
+        }
+        {} => {
+            print("ACCESS DENIED: Unrecognized user structure")
+            print("User has valid dict structure but unknown pattern")
+        }
+        _ => {
+            print("ACCESS DENIED: Invalid user data")
+            print("Please provide valid user information")
+        }
+    }
+}
