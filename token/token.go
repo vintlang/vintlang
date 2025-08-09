@@ -58,6 +58,7 @@ const (
 	DOT       = "."
 	RANGE     = ".."
 	AT        = "@"
+	ARROW     = "=>"
 
 	// Keywords
 	FUNCTION = "FUNCTION"
@@ -77,6 +78,7 @@ const (
 	SWITCH   = "SWITCH"
 	CASE     = "CASE"
 	DEFAULT  = "DEFAULT"
+	MATCH    = "MATCH"
 	IMPORT   = "IMPORT"
 	PACKAGE  = "PACKAGE"
 	INCLUDE  = "INCLUDE"
@@ -118,6 +120,7 @@ var keywords = map[string]TokenType{
 	"switch":   SWITCH,
 	"case":     CASE,
 	"default":  DEFAULT,
+	"match":    MATCH,
 	"import":   IMPORT,
 	"package":  PACKAGE,
 	"include":  INCLUDE,

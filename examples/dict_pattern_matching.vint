@@ -1,0 +1,27 @@
+// Test dict pattern matching feature
+// This demonstrates the new match statement for flexible dict matching
+
+let user = {"role": "admin", "active": true}
+
+print("Testing dict pattern matching:")
+
+match user {
+    {"role": "admin"} => print("Hello, Admin!")
+    {"active": false} => print("Inactive user") 
+    _ => print("Regular user")
+}
+
+// Test multiple patterns
+let users = [
+    {"role": "admin", "active": true},
+    {"role": "user", "active": false},
+    {"name": "John", "type": "guest"}
+]
+
+for u in users {
+    match u {
+        {"role": "admin"} => print("Admin user found")
+        {"active": false} => print("Found inactive user")
+        _ => print("Other user type")
+    }
+}

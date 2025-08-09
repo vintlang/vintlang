@@ -852,6 +852,24 @@ func (ed *ErrorDeclaration) String() string {
 	return out.String()
 }
 
+type MatchCase struct {
+	Token   token.Token
+	Pattern Expression  // Dict pattern or "_" for wildcard
+	Block   *BlockStatement
+}
+
+func (mc *MatchCase) expressionNode()      {}
+func (mc *MatchCase) TokenLiteral() string { return mc.Token.Literal }
+func (mc *MatchCase) String() string {
+	var out bytes.Buffer
+	
+	out.WriteString(mc.Pattern.String())
+	out.WriteString(" => ")
+	out.WriteString(mc.Block.String())
+	
+	return out.String()
+}
+
 // ThrowStatement represents throw statements like: throw FileNotFound("/missing.txt")
 type ThrowStatement struct {
 	Token     token.Token  // the 'throw' token
@@ -869,5 +887,32 @@ func (ts *ThrowStatement) String() string {
 		out.WriteString(ts.ErrorExpr.String())
 	}
 	
+	return out.String()
+}
+
+type MatchExpression struct {
+	Token token.Token
+	Value Expression
+	Cases []*MatchCase
+}
+
+func (me *MatchExpression) expressionNode()      {}
+func (me *MatchExpression) TokenLiteral() string { return me.Token.Literal }
+func (me *MatchExpression) String() string {
+	var out bytes.Buffer
+	out.WriteString("match ")
+	out.WriteString(me.Value.String())
+	out.WriteString(" {\n")
+	
+	for _, c := range me.Cases {
+		if c != nil {
+			out.WriteString(c.String())
+			out.WriteString("\n")
+		}
+	}
+	
+	out.WriteString("}")
+	return out.String()
+}
 	return out.String()
 }
