@@ -1,0 +1,2 @@
+println("Before error")
+error FileNotFound(path)
