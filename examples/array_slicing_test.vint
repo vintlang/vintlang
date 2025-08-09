@@ -3,48 +3,48 @@
 
 let testArray = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
 
-print("Testing Array Slicing Implementation");
-print("====================================");
+println("Testing Array Slicing Implementation");
+println("====================================");
 
 // Test the original requirement from the issue
 let arr = [1, 2, 3, 4, 5];
 let result = arr[1:4];
-print("arr[1:4] =", result); // Should output: [2, 3, 4]
+println("arr[1:4] =", result); // Should output: [2, 3, 4]
 
 // Basic slicing tests
-print("\nBasic Slicing:");
-print("testArray[2:5] =", testArray[2:5]);   // [3, 4, 5]
-print("testArray[0:3] =", testArray[0:3]);   // [1, 2, 3]
-print("testArray[7:10] =", testArray[7:10]); // [8, 9, 10]
+println("\nBasic Slicing:");
+println("testArray[2:5] =", testArray[2:5]);   // [3, 4, 5]
+println("testArray[0:3] =", testArray[0:3]);   // [1, 2, 3]
+println("testArray[7:10] =", testArray[7:10]); // [8, 9, 10]
 
 // Partial slicing tests  
-print("\nPartial Slicing:");
-print("testArray[5:] =", testArray[5:]);     // [6, 7, 8, 9, 10]
-print("testArray[:4] =", testArray[:4]);     // [1, 2, 3, 4]
-print("testArray[:] =", testArray[:]);       // [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+println("\nPartial Slicing:");
+println("testArray[5:] =", testArray[5:]);     // [6, 7, 8, 9, 10]
+println("testArray[:4] =", testArray[:4]);     // [1, 2, 3, 4]
+println("testArray[:] =", testArray[:]);       // [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
 
 // Edge cases
-print("\nEdge Cases:");
-print("testArray[0:0] =", testArray[0:0]);   // []
-print("testArray[5:5] =", testArray[5:5]);   // []
-print("testArray[9:10] =", testArray[9:10]); // [10]
+println("\nEdge Cases:");
+println("testArray[0:0] =", testArray[0:0]);   // []
+println("testArray[5:5] =", testArray[5:5]);   // []
+println("testArray[9:10] =", testArray[9:10]); // [10]
 
 // Negative indexing  
-print("\nNegative Indexing:");
-print("testArray[-3:] =", testArray[-3:]);   // [8, 9, 10]
-print("testArray[:-3] =", testArray[:-3]);   // [1, 2, 3, 4, 5, 6, 7]
-print("testArray[-5:-2] =", testArray[-5:-2]); // [6, 7, 8]
+println("\nNegative Indexing:");
+println("testArray[-3:] =", testArray[-3:]);   // [8, 9, 10]
+println("testArray[:-3] =", testArray[:-3]);   // [1, 2, 3, 4, 5, 6, 7]
+println("testArray[-5:-2] =", testArray[-5:-2]); // [6, 7, 8]
 
 // Out of bounds handling
-print("\nOut of Bounds Handling:");
-print("testArray[15:] =", testArray[15:]);   // []
-print("testArray[:20] =", testArray[:20]);   // [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
-print("testArray[-20:] =", testArray[-20:]); // [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+println("\nOut of Bounds Handling:");
+println("testArray[15:] =", testArray[15:]);   // []
+println("testArray[:20] =", testArray[:20]);   // [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+println("testArray[-20:] =", testArray[-20:]); // [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
 
 // Verify regular indexing still works
-print("\nRegular Indexing Still Works:");
-print("testArray[0] =", testArray[0]);       // 1
-print("testArray[5] =", testArray[5]);       // 6
-print("testArray[9] =", testArray[9]);       // 10
+println("\nRegular Indexing Still Works:");
+println("testArray[0] =", testArray[0]);       // 1
+println("testArray[5] =", testArray[5]);       // 6
+println("testArray[9] =", testArray[9]);       // 10
 
-print("\nAll array slicing tests completed successfully!");
+println("\nAll array slicing tests completed successfully!");
