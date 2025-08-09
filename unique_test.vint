@@ -1,3 +1,0 @@
-println("Before")
-error MyVeryUniqueErrorType99(param)
-println("After")

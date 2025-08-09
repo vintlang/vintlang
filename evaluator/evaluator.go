@@ -513,6 +513,22 @@ func applyFunction(fn object.Object, args []object.Object, line int) object.Obje
 		applyFunction(node, args, fn.Name.Token.Line)
 		node.(*object.Function).Env.Del("@")
 		return obj
+		
+	case *object.ErrorType:
+		// Check if number of arguments matches parameters
+		if len(args) != len(fn.Parameters) {
+			return newError("error %s expects %d arguments, got %d", 
+				fn.Name, len(fn.Parameters), len(args))
+		}
+		
+		// Create custom error instance
+		customError := &object.CustomError{
+			ErrorType: fn,
+			Arguments: args,
+		}
+		
+		return customError
+		
 	default:
 		return newError("not a function: %s", fn.Type())
 	}
@@ -716,35 +732,11 @@ func evalThrowStatement(node *ast.ThrowStatement, env *object.Environment) objec
 		return errorExpr
 	}
 	
-	// If it's a call expression to a custom error type, create a custom error instance
-	if call, ok := node.ErrorExpr.(*ast.CallExpression); ok {
-		if ident, ok := call.Function.(*ast.Identifier); ok {
-			if errorType, exists := env.Get(ident.Value); exists {
-				if et, ok := errorType.(*object.ErrorType); ok {
-					// Evaluate arguments
-					args := evalExpressions(call.Arguments, env)
-					if len(args) == 1 && isError(args[0]) {
-						return args[0]
-					}
-					
-					// Check if number of arguments matches parameters
-					if len(args) != len(et.Parameters) {
-						return newError("error %s expects %d arguments, got %d", 
-							et.Name, len(et.Parameters), len(args))
-					}
-					
-					// Create custom error instance
-					customError := &object.CustomError{
-						ErrorType: et,
-						Arguments: args,
-					}
-					
-					return customError
-				}
-			}
-		}
+	// If it's a custom error, wrap it in a regular error for propagation
+	if customError, ok := errorExpr.(*object.CustomError); ok {
+		return newError("thrown: %s", customError.Inspect())
 	}
 	
-	// If it's not a custom error, just return the evaluated expression as a regular error
-	return newError("throw: %s", errorExpr.Inspect())
+	// If it's any other type, create a regular error
+	return newError("thrown: %s", errorExpr.Inspect())
 }
