@@ -1,0 +1,33 @@
+// Test basic async function syntax
+let asyncFunc = async func() {
+    return "Hello from async!"
+}
+
+print("Async function created:", asyncFunc)
+
+// Test channel creation
+let ch = chan
+print("Channel created:", ch)
+
+let bufferedCh = chan(5)
+print("Buffered channel created:", bufferedCh)
+
+// Test await expression
+let promise = asyncFunc()
+print("Promise created:", promise)
+
+let result = await promise
+print("Promise result:", result)
+
+// Test go statement
+go print("Hello from goroutine!")
+
+// Test channel operations
+go func() {
+    send(ch, "Hello from channel!")
+}()
+
+let msg = receive(ch)
+print("Received:", msg)
+
+close(ch)
