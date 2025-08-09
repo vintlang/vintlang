@@ -56,6 +56,7 @@ const (
 	RBRACKET  = "]"
 	COLON     = ":"
 	DOT       = "."
+	RANGE     = ".."
 	AT        = "@"
 
 	// Keywords
