@@ -1,3 +1,0 @@
-println("Before")
-error "this is a test error"
-println("After")

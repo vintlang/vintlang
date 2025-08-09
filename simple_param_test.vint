@@ -1,3 +1,0 @@
-println("Before")
-error SimpleError()
-println("After")

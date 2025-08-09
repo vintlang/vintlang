@@ -1,3 +1,0 @@
-println("Before")
-let x = 5
-println("After")

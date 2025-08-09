@@ -1,3 +1,0 @@
-println("Step 1")
-error FileNotFound(path)
-println("Step 2")
