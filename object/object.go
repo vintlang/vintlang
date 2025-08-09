@@ -33,6 +33,11 @@ const (
 	POINTER_OBJ      = "POINTER"
 	AT               = "@"
 	DEFERRED_CALL_OBJ = "DEFERRED_CALL"
+	
+	// Async/Concurrency Objects
+	PROMISE_OBJ      = "PROMISE"
+	CHANNEL_OBJ      = "CHANNEL"
+	ASYNC_FUNC_OBJ   = "ASYNC_FUNCTION"
 )
 
 // Object interface represents any object in the system
