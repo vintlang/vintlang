@@ -40,7 +40,7 @@ var (
 	Help = styles.HelpStyle.Italic(false).Render(fmt.Sprintf(`💡 How to use vint:
     %s: Start the vint program
     %s: Run a vint file
-    %s: Build a vint file into binary
+    %s: Bundle a vint file into binary
     %s: Initialize a new vint project
     %s: Install a vint package
     %s: Run tests in current directory
@@ -50,7 +50,7 @@ var (
 `,
 		styles.HelpStyle.Bold(true).Render("vint"),
 		styles.HelpStyle.Bold(true).Render("vint filename.vint"),
-		styles.HelpStyle.Bold(true).Render("vint build filename.vint"),
+		styles.HelpStyle.Bold(true).Render("vint bundler filename.vint"),
 		styles.HelpStyle.Bold(true).Render("vint init"),
 		styles.HelpStyle.Bold(true).Render("vint get package"),
 		styles.HelpStyle.Bold(true).Render("vint test"),
