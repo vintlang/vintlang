@@ -31,6 +31,12 @@ func applyMethod(obj object.Object, method ast.Expression, args []object.Object,
 		return obj.Method(method.(*ast.Identifier).Value, args)
 	case *object.Time:
 		return obj.Method(method.(*ast.Identifier).Value, args, defs)
+	case *object.Integer:
+		return obj.Method(method.(*ast.Identifier).Value, args)
+	case *object.Float:
+		return obj.Method(method.(*ast.Identifier).Value, args)
+	case *object.Boolean:
+		return obj.Method(method.(*ast.Identifier).Value, args)
 	case *object.Array:
 		switch method.(*ast.Identifier).Value {
 		case "map":
@@ -54,6 +60,8 @@ func applyMethod(obj object.Object, method ast.Expression, args []object.Object,
 				return TRUE
 			}
 			return FALSE
+		default:
+			return obj.Method(method.(*ast.Identifier).Value, args)
 		}
 	case *object.Module:
 		if fn, ok := obj.Functions[method.(*ast.Identifier).Value]; ok {
