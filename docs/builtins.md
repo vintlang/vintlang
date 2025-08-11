@@ -133,3 +133,132 @@ Opens a file and returns a file object. This is typically used for reading file 
 let file = open("data.txt")
 // You can then use methods on the file object
 ```
+
+---
+
+## Additional Built-in Functions
+
+### String Functions
+
+#### `startsWith(string, prefix)`
+Checks if a string starts with the specified prefix.
+```vint
+startsWith("VintLang", "Vint")    // Output: true
+startsWith("hello", "hi")         // Output: false
+```
+
+#### `endsWith(string, suffix)`
+Checks if a string ends with the specified suffix.
+```vint
+endsWith("VintLang", "Lang")      // Output: true
+endsWith("hello", "world")        // Output: false
+```
+
+### Array Functions
+
+#### `indexOf(array, element)`
+Returns the index of the first occurrence of an element in an array, or -1 if not found.
+```vint
+let arr = [1, 2, 3, 2, 4]
+indexOf(arr, 2)    // Output: 1
+indexOf(arr, 5)    // Output: -1
+```
+
+### Type Checking Functions
+
+#### `isInt(value)`
+Returns true if the value is an integer.
+```vint
+isInt(42)          // Output: true
+isInt(3.14)        // Output: false
+isInt("hello")     // Output: false
+```
+
+#### `isFloat(value)`
+Returns true if the value is a float.
+```vint
+isFloat(3.14)      // Output: true
+isFloat(42)        // Output: false
+isFloat("hello")   // Output: false
+```
+
+#### `isString(value)`
+Returns true if the value is a string.
+```vint
+isString("hello")  // Output: true
+isString(42)       // Output: false
+isString(3.14)     // Output: false
+```
+
+#### `isBool(value)`
+Returns true if the value is a boolean.
+```vint
+isBool(true)       // Output: true
+isBool(false)      // Output: true
+isBool(42)         // Output: false
+```
+
+#### `isArray(value)`
+Returns true if the value is an array.
+```vint
+isArray([1, 2, 3]) // Output: true
+isArray("hello")   // Output: false
+isArray(42)        // Output: false
+```
+
+#### `isDict(value)`
+Returns true if the value is a dictionary.
+```vint
+isDict({"key": "value"})  // Output: true
+isDict([1, 2, 3])         // Output: false
+isDict("hello")           // Output: false
+```
+
+#### `isNull(value)`
+Returns true if the value is null.
+```vint
+isNull(null)       // Output: true
+isNull(42)         // Output: false
+isNull("")         // Output: false
+```
+
+### Parsing Functions
+
+#### `parseInt(string)`
+Parses a string and returns an integer.
+```vint
+parseInt("42")     // Output: 42
+parseInt("-10")    // Output: -10
+parseInt("abc")    // Error: cannot parse 'abc' as integer
+```
+
+#### `parseFloat(string)`
+Parses a string and returns a float.
+```vint
+parseFloat("3.14")    // Output: 3.14
+parseFloat("-2.5")    // Output: -2.5
+parseFloat("hello")   // Error: cannot parse 'hello' as float
+```
+
+---
+
+## Note on Existing Modules
+
+VintLang also provides specialized modules for advanced functionality:
+
+- **Math functions** like `abs`, `min`, `max`, `sqrt`, etc. are available in the `math` module
+- **String functions** like `toUpper`, `toLower`, `trim`, `contains`, etc. are available in the `string` module  
+- **Random functions** like `random.int()` and `random.float()` are available in the `random` module
+- **Array methods** like `reverse()` and `sort()` are available as methods on array objects
+
+Use these modules for more advanced functionality:
+```vint
+import math
+import string
+import random
+
+let result = math.abs(-5)        // 5
+let upper = string.toUpper("hi") // "HI"
+let num = random.int(1, 10)      // Random number 1-10
+let arr = [3, 1, 4].sort()       // [1, 3, 4]
+```

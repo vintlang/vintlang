@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"io"
 	"os"
+	"strconv"
 	"strings"
 	"time"
 
@@ -532,6 +533,175 @@ var builtins = map[string]*object.Builtin{
 			
 			ch.Close()
 			return NULL
+		},
+	},
+
+	// String functions that don't exist in string module
+	"startsWith": {
+		Fn: func(args ...object.Object) object.Object {
+			if len(args) != 2 {
+				return newError("startsWith() takes exactly 2 arguments, got %d", len(args))
+			}
+			
+			if args[0].Type() != object.STRING_OBJ || args[1].Type() != object.STRING_OBJ {
+				return newError("both arguments to startsWith() must be strings, got (%s, %s)", 
+					args[0].Type(), args[1].Type())
+			}
+			
+			str := args[0].(*object.String).Value
+			prefix := args[1].(*object.String).Value
+			return &object.Boolean{Value: strings.HasPrefix(str, prefix)}
+		},
+	},
+	
+	"endsWith": {
+		Fn: func(args ...object.Object) object.Object {
+			if len(args) != 2 {
+				return newError("endsWith() takes exactly 2 arguments, got %d", len(args))
+			}
+			
+			if args[0].Type() != object.STRING_OBJ || args[1].Type() != object.STRING_OBJ {
+				return newError("both arguments to endsWith() must be strings, got (%s, %s)", 
+					args[0].Type(), args[1].Type())
+			}
+			
+			str := args[0].(*object.String).Value
+			suffix := args[1].(*object.String).Value
+			return &object.Boolean{Value: strings.HasSuffix(str, suffix)}
+		},
+	},
+
+	// Array function that doesn't exist as built-in
+	"indexOf": {
+		Fn: func(args ...object.Object) object.Object {
+			if len(args) != 2 {
+				return newError("indexOf() takes exactly 2 arguments, got %d", len(args))
+			}
+			
+			if args[0].Type() != object.ARRAY_OBJ {
+				return newError("first argument to indexOf() must be an array, got %s", args[0].Type())
+			}
+			
+			arr := args[0].(*object.Array)
+			for i, element := range arr.Elements {
+				if element.Inspect() == args[1].Inspect() {
+					return &object.Integer{Value: int64(i)}
+				}
+			}
+			
+			return &object.Integer{Value: -1} // Not found
+		},
+	},
+
+	// Type checking functions (not available elsewhere)
+	"isInt": {
+		Fn: func(args ...object.Object) object.Object {
+			if len(args) != 1 {
+				return newError("isInt() takes exactly 1 argument, got %d", len(args))
+			}
+			
+			return &object.Boolean{Value: args[0].Type() == object.INTEGER_OBJ}
+		},
+	},
+	
+	"isFloat": {
+		Fn: func(args ...object.Object) object.Object {
+			if len(args) != 1 {
+				return newError("isFloat() takes exactly 1 argument, got %d", len(args))
+			}
+			
+			return &object.Boolean{Value: args[0].Type() == object.FLOAT_OBJ}
+		},
+	},
+	
+	"isString": {
+		Fn: func(args ...object.Object) object.Object {
+			if len(args) != 1 {
+				return newError("isString() takes exactly 1 argument, got %d", len(args))
+			}
+			
+			return &object.Boolean{Value: args[0].Type() == object.STRING_OBJ}
+		},
+	},
+	
+	"isBool": {
+		Fn: func(args ...object.Object) object.Object {
+			if len(args) != 1 {
+				return newError("isBool() takes exactly 1 argument, got %d", len(args))
+			}
+			
+			return &object.Boolean{Value: args[0].Type() == object.BOOLEAN_OBJ}
+		},
+	},
+	
+	"isArray": {
+		Fn: func(args ...object.Object) object.Object {
+			if len(args) != 1 {
+				return newError("isArray() takes exactly 1 argument, got %d", len(args))
+			}
+			
+			return &object.Boolean{Value: args[0].Type() == object.ARRAY_OBJ}
+		},
+	},
+	
+	"isDict": {
+		Fn: func(args ...object.Object) object.Object {
+			if len(args) != 1 {
+				return newError("isDict() takes exactly 1 argument, got %d", len(args))
+			}
+			
+			return &object.Boolean{Value: args[0].Type() == object.DICT_OBJ}
+		},
+	},
+	
+	"isNull": {
+		Fn: func(args ...object.Object) object.Object {
+			if len(args) != 1 {
+				return newError("isNull() takes exactly 1 argument, got %d", len(args))
+			}
+			
+			return &object.Boolean{Value: args[0].Type() == object.NULL_OBJ}
+		},
+	},
+
+	// Parsing functions (not available as built-ins)
+	"parseInt": {
+		Fn: func(args ...object.Object) object.Object {
+			if len(args) != 1 {
+				return newError("parseInt() takes exactly 1 argument, got %d", len(args))
+			}
+			
+			if args[0].Type() != object.STRING_OBJ {
+				return newError("argument to parseInt() must be a string, got %s", args[0].Type())
+			}
+			
+			str := args[0].(*object.String).Value
+			val, err := strconv.ParseInt(str, 10, 64)
+			if err != nil {
+				return newError("cannot parse '%s' as integer: %s", str, err.Error())
+			}
+			
+			return &object.Integer{Value: val}
+		},
+	},
+	
+	"parseFloat": {
+		Fn: func(args ...object.Object) object.Object {
+			if len(args) != 1 {
+				return newError("parseFloat() takes exactly 1 argument, got %d", len(args))
+			}
+			
+			if args[0].Type() != object.STRING_OBJ {
+				return newError("argument to parseFloat() must be a string, got %s", args[0].Type())
+			}
+			
+			str := args[0].(*object.String).Value
+			val, err := strconv.ParseFloat(str, 64)
+			if err != nil {
+				return newError("cannot parse '%s' as float: %s", str, err.Error())
+			}
+			
+			return &object.Float{Value: val}
 		},
 	},
 }

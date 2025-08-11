@@ -1,0 +1,35 @@
+// Test to verify existing module functions still work
+import math
+import string
+import random
+
+println("Testing existing module functions...")
+
+// Test math module functions
+println("=== Math Module ===")
+println("math.abs(-5):", math.abs(-5))
+println("math.sqrt(16):", math.sqrt(16))
+println("math.round(3.14):", math.round(3.14))
+
+// Test string module functions  
+println("\n=== String Module ===")
+println("string.toUpper('hello'):", string.toUpper("hello"))
+println("string.toLower('WORLD'):", string.toLower("WORLD"))
+println("string.trim('  hi  '):", string.trim("  hi  "))
+println("string.contains('hello', 'ell'):", string.contains("hello", "ell"))
+
+// Test random module functions
+println("\n=== Random Module ===")
+println("random.float():", random.float())
+println("random.int(1, 10):", random.int(1, 10))
+
+// Test array methods
+println("\n=== Array Methods ===")
+let arr = [3, 1, 4, 1, 5]
+println("Original array:", arr)
+println("Sorted array:", arr.sort())
+let arr2 = [1, 2, 3]
+println("Original array 2:", arr2)
+println("Reversed array 2:", arr2.reverse())
+
+println("\nExisting module functions work correctly!")
