@@ -254,6 +254,57 @@ indexOf(arr, 3)   // Output: 2
 indexOf(arr, 6)   // Output: -1
 ```
 
+### `sort(array)`
+Returns a new sorted array. Works with numbers, strings, and mixed arrays.
+```vint
+let numbers = [5, 2, 8, 1, 9]
+sort(numbers)     // Output: [1, 2, 5, 8, 9]
+
+let strings = ["banana", "apple", "cherry"]
+sort(strings)     // Output: ["apple", "banana", "cherry"]
+```
+
+---
+
+## Random Functions
+
+### `rand()`
+Returns a random floating-point number between 0.0 and 1.0.
+```vint
+rand()            // Output: 0.7326588891711826 (example)
+```
+
+### `randInt(max)`
+Returns a random integer from 0 to max-1.
+```vint
+randInt(10)       // Output: 7 (example, 0-9)
+```
+
+### `randInt(min, max)`
+Returns a random integer from min to max-1.
+```vint
+randInt(5, 15)    // Output: 12 (example, 5-14)
+```
+
+---
+
+## String Parsing Functions
+
+### `parseInt(string)`
+Parses a string and returns an integer. Throws an error if the string is not a valid integer.
+```vint
+parseInt("123")   // Output: 123
+parseInt("-456")  // Output: -456
+```
+
+### `parseFloat(string)`
+Parses a string and returns a float. Throws an error if the string is not a valid number.
+```vint
+parseFloat("3.14")  // Output: 3.14
+parseFloat("-2.5")  // Output: -2.5
+parseFloat("123")   // Output: 123.0
+```
+
 ---
 
 ## Type Checking Functions
