@@ -269,12 +269,22 @@ func listDir(args []object.Object, defs map[string]object.Object) object.Object 
 
 func deleteFile(args []object.Object, defs map[string]object.Object) object.Object {
 	if len(args) != 1 {
-		return &object.Error{Message: "Incorrect number of arguments"}
+		return ErrorMessage(
+			"os", "deleteFile",
+			"1 string argument (file path)",
+			fmt.Sprintf("%d arguments", len(args)),
+			`os.deleteFile("file.txt")`,
+		)
 	}
 
 	path, ok := args[0].(*object.String)
 	if !ok {
-		return &object.Error{Message: "Argument must be a string"}
+		return ErrorMessage(
+			"os", "deleteFile",
+			"string argument for file path",
+			string(args[0].Type()),
+			`os.deleteFile("file.txt")`,
+		)
 	}
 
 	err := os.Remove(path.Value)
@@ -289,12 +299,22 @@ func deleteFile(args []object.Object, defs map[string]object.Object) object.Obje
 // path the new dir is saved will fix this
 func makeDir(args []object.Object, defs map[string]object.Object) object.Object {
 	if len(args) != 1 {
-		return &object.Error{Message: "Incorrect number of arguments"}
+		return ErrorMessage(
+			"os", "makeDir",
+			"1 string argument (directory path)",
+			fmt.Sprintf("%d arguments", len(args)),
+			`os.makeDir("new_directory")`,
+		)
 	}
 
 	path, ok := args[0].(*object.String)
 	if !ok {
-		return &object.Error{Message: "Argument must be a string"}
+		return ErrorMessage(
+			"os", "makeDir",
+			"string argument for directory path",
+			string(args[0].Type()),
+			`os.makeDir("new_directory")`,
+		)
 	}
 
 	err := os.Mkdir(path.Value, 0755)
@@ -307,12 +327,22 @@ func makeDir(args []object.Object, defs map[string]object.Object) object.Object 
 
 func removeDir(args []object.Object, defs map[string]object.Object) object.Object {
 	if len(args) != 1 {
-		return &object.Error{Message: "Incorrect number of arguments"}
+		return ErrorMessage(
+			"os", "removeDir",
+			"1 string argument (directory path)",
+			fmt.Sprintf("%d arguments", len(args)),
+			`os.removeDir("directory")`,
+		)
 	}
 
 	path, ok := args[0].(*object.String)
 	if !ok {
-		return &object.Error{Message: "Argument must be a string"}
+		return ErrorMessage(
+			"os", "removeDir",
+			"string argument for directory path",
+			string(args[0].Type()),
+			`os.removeDir("directory")`,
+		)
 	}
 
 	err := os.RemoveAll(path.Value)
@@ -325,7 +355,12 @@ func removeDir(args []object.Object, defs map[string]object.Object) object.Objec
 
 func currentDir(args []object.Object, defs map[string]object.Object) object.Object {
 	if len(args) != 0 {
-		return &object.Error{Message: "Incorrect number of arguments"}
+		return ErrorMessage(
+			"os", "currentDir",
+			"no arguments",
+			fmt.Sprintf("%d arguments", len(args)),
+			"os.currentDir()",
+		)
 	}
 
 	dir, err := os.Getwd()
@@ -338,12 +373,22 @@ func currentDir(args []object.Object, defs map[string]object.Object) object.Obje
 
 func changeDir(args []object.Object, defs map[string]object.Object) object.Object {
 	if len(args) != 1 {
-		return &object.Error{Message: "Incorrect number of arguments"}
+		return ErrorMessage(
+			"os", "changeDir",
+			"1 string argument (directory path)",
+			fmt.Sprintf("%d arguments", len(args)),
+			`os.changeDir("/path/to/directory")`,
+		)
 	}
 
 	path, ok := args[0].(*object.String)
 	if !ok {
-		return &object.Error{Message: "Argument must be a string"}
+		return ErrorMessage(
+			"os", "changeDir",
+			"string argument for directory path",
+			string(args[0].Type()),
+			`os.changeDir("/path/to/directory")`,
+		)
 	}
 
 	err := os.Chdir(path.Value)
@@ -356,12 +401,22 @@ func changeDir(args []object.Object, defs map[string]object.Object) object.Objec
 
 func fileExists(args []object.Object, defs map[string]object.Object) object.Object {
 	if len(args) != 1 {
-		return &object.Error{Message: "Incorrect number of arguments"}
+		return ErrorMessage(
+			"os", "fileExists",
+			"1 string argument (file path)",
+			fmt.Sprintf("%d arguments", len(args)),
+			`os.fileExists("file.txt")`,
+		)
 	}
 
 	path, ok := args[0].(*object.String)
 	if !ok {
-		return &object.Error{Message: "Argument must be a string"}
+		return ErrorMessage(
+			"os", "fileExists",
+			"string argument for file path",
+			string(args[0].Type()),
+			`os.fileExists("file.txt")`,
+		)
 	}
 
 	if _, err := os.Stat(path.Value); os.IsNotExist(err) {
@@ -373,12 +428,22 @@ func fileExists(args []object.Object, defs map[string]object.Object) object.Obje
 
 func readLines(args []object.Object, defs map[string]object.Object) object.Object {
 	if len(args) != 1 {
-		return &object.Error{Message: "Incorrect number of arguments"}
+		return ErrorMessage(
+			"os", "readLines",
+			"1 string argument (file path)",
+			fmt.Sprintf("%d arguments", len(args)),
+			`os.readLines("file.txt")`,
+		)
 	}
 
 	path, ok := args[0].(*object.String)
 	if !ok {
-		return &object.Error{Message: "Argument must be a string"}
+		return ErrorMessage(
+			"os", "readLines",
+			"string argument for file path",
+			string(args[0].Type()),
+			`os.readLines("file.txt")`,
+		)
 	}
 
 	content, err := ioutil.ReadFile(path.Value)
