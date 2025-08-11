@@ -1,0 +1,44 @@
+// Test file for unique built-in functions that don't exist in modules
+// These are the functions that were kept after removing duplicates
+
+println("Testing unique built-in functions...")
+
+// Test string functions
+println("=== String Functions ===")
+println("startsWith('VintLang', 'Vint'):", startsWith("VintLang", "Vint"))
+println("startsWith('hello', 'hi'):", startsWith("hello", "hi"))
+println("endsWith('VintLang', 'Lang'):", endsWith("VintLang", "Lang"))
+println("endsWith('hello', 'world'):", endsWith("hello", "world"))
+
+// Test array function
+println("\n=== Array Functions ===")
+let arr = [1, 2, 3, 2, 4]
+println("Array:", arr)
+println("indexOf(arr, 2):", indexOf(arr, 2))
+println("indexOf(arr, 5):", indexOf(arr, 5))
+
+// Test type checking functions
+println("\n=== Type Checking Functions ===")
+println("isInt(42):", isInt(42))
+println("isInt(3.14):", isInt(3.14))
+println("isFloat(3.14):", isFloat(3.14))
+println("isFloat(42):", isFloat(42))
+println("isString('hello'):", isString("hello"))
+println("isString(42):", isString(42))
+println("isBool(true):", isBool(true))
+println("isBool(42):", isBool(42))
+println("isArray([1,2,3]):", isArray([1, 2, 3]))
+println("isArray('hello'):", isArray("hello"))
+println("isDict({'key': 'value'}):", isDict({"key": "value"}))
+println("isDict([1,2,3]):", isDict([1, 2, 3]))
+println("isNull(null):", isNull(null))
+println("isNull(42):", isNull(42))
+
+// Test parsing functions
+println("\n=== Parsing Functions ===")
+println("parseInt('42'):", parseInt("42"))
+println("parseInt('-10'):", parseInt("-10"))
+println("parseFloat('3.14'):", parseFloat("3.14"))
+println("parseFloat('-2.5'):", parseFloat("-2.5"))
+
+println("\nAll unique built-in functions tested successfully!")
