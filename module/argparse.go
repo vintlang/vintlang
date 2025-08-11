@@ -42,10 +42,10 @@ func newParser(args []object.Object, defs map[string]object.Object) object.Objec
 		return ErrorMessage("argparse", "newParser", "1-2 arguments: name and optional description", "", "")
 	}
 
-	name, ok := args[0].(*object.String)
-	if !ok {
-		return &object.Error{Message: "parser name must be a string"}
-	}
+       name, ok := args[0].(*object.String)
+       if !ok {
+	       return ErrorMessage("argparse", "newParser", "parser name must be a string", "", "")
+       }
 
 	// Create a new parser
 	parserID := name.Value
@@ -54,37 +54,37 @@ func newParser(args []object.Object, defs map[string]object.Object) object.Objec
 	parserFlags[parserID] = []argDef{}
 
 	// Set description if provided
-	if len(args) == 2 {
-		desc, ok := args[1].(*object.String)
-		if !ok {
-			return &object.Error{Message: "description must be a string"}
-		}
-		parserDescriptions[parserID] = desc.Value
-	}
+       if len(args) == 2 {
+	       desc, ok := args[1].(*object.String)
+	       if !ok {
+		       return ErrorMessage("argparse", "newParser", "description must be a string", "", "")
+	       }
+	       parserDescriptions[parserID] = desc.Value
+       }
 
 	return &object.String{Value: parserID}
 }
 
 // addArgument adds a positional argument to the parser
 func addArgument(args []object.Object, defs map[string]object.Object) object.Object {
-	if len(args) < 2 {
-		return &object.Error{Message: "addArgument requires at least 2 arguments: parser and name"}
-	}
+       if len(args) < 2 {
+	       return ErrorMessage("argparse", "addArgument", "addArgument requires at least 2 arguments: parser and name", "", "")
+       }
 
-	parserID, ok := args[0].(*object.String)
-	if !ok {
-		return &object.Error{Message: "parser must be a string"}
-	}
+       parserID, ok := args[0].(*object.String)
+       if !ok {
+	       return ErrorMessage("argparse", "addArgument", "parser must be a string", "", "")
+       }
 
-	name, ok := args[1].(*object.String)
-	if !ok {
-		return &object.Error{Message: "argument name must be a string"}
-	}
+       name, ok := args[1].(*object.String)
+       if !ok {
+	       return ErrorMessage("argparse", "addArgument", "argument name must be a string", "", "")
+       }
 
 	// Check if parser exists
-	if _, exists := parsers[parserID.Value]; !exists {
-		return &object.Error{Message: fmt.Sprintf("parser '%s' not found", parserID.Value)}
-	}
+       if _, exists := parsers[parserID.Value]; !exists {
+	       return ErrorMessage("argparse", "addArgument", fmt.Sprintf("parser '%s' not found", parserID.Value), "", "")
+       }
 
 	// Create argument definition
 	arg := argDef{
@@ -130,24 +130,24 @@ func addArgument(args []object.Object, defs map[string]object.Object) object.Obj
 
 // addFlag adds a flag (optional named argument) to the parser
 func addFlag(args []object.Object, defs map[string]object.Object) object.Object {
-	if len(args) < 2 {
-		return &object.Error{Message: "addFlag requires at least 2 arguments: parser and name"}
-	}
+       if len(args) < 2 {
+	       return ErrorMessage("argparse", "addFlag", "addFlag requires at least 2 arguments: parser and name", "", "")
+       }
 
-	parserID, ok := args[0].(*object.String)
-	if !ok {
-		return &object.Error{Message: "parser must be a string"}
-	}
+       parserID, ok := args[0].(*object.String)
+       if !ok {
+	       return ErrorMessage("argparse", "addFlag", "parser must be a string", "", "")
+       }
 
-	name, ok := args[1].(*object.String)
-	if !ok {
-		return &object.Error{Message: "flag name must be a string"}
-	}
+       name, ok := args[1].(*object.String)
+       if !ok {
+	       return ErrorMessage("argparse", "addFlag", "flag name must be a string", "", "")
+       }
 
 	// Check if parser exists
-	if _, exists := parsers[parserID.Value]; !exists {
-		return &object.Error{Message: fmt.Sprintf("parser '%s' not found", parserID.Value)}
-	}
+       if _, exists := parsers[parserID.Value]; !exists {
+	       return ErrorMessage("argparse", "addFlag", fmt.Sprintf("parser '%s' not found", parserID.Value), "", "")
+       }
 
 	// Create flag definition
 	flag := argDef{
@@ -190,34 +190,34 @@ func addFlag(args []object.Object, defs map[string]object.Object) object.Object 
 
 // parse parses command line arguments according to the parser definition
 func parse(args []object.Object, defs map[string]object.Object) object.Object {
-	if len(args) < 1 {
-		return &object.Error{Message: "parse requires at least 1 argument: parser"}
-	}
+       if len(args) < 1 {
+	       return ErrorMessage("argparse", "parse", "parse requires at least 1 argument: parser", "", "")
+       }
 
-	parserID, ok := args[0].(*object.String)
-	if !ok {
-		return &object.Error{Message: "parser must be a string"}
-	}
+       parserID, ok := args[0].(*object.String)
+       if !ok {
+	       return ErrorMessage("argparse", "parse", "parser must be a string", "", "")
+       }
 
 	// Check if parser exists
-	_, exists := parsers[parserID.Value]
-	if !exists {
-		return &object.Error{Message: fmt.Sprintf("parser '%s' not found", parserID.Value)}
-	}
+       _, exists := parsers[parserID.Value]
+       if !exists {
+	       return ErrorMessage("argparse", "parse", fmt.Sprintf("parser '%s' not found", parserID.Value), "", "")
+       }
 
 	// Get command line arguments
 	var cliArgs []string
 	if len(args) > 1 {
 		// Use provided arguments
-		if arr, ok := args[1].(*object.Array); ok {
-			for _, arg := range arr.Elements {
-				if str, ok := arg.(*object.String); ok {
-					cliArgs = append(cliArgs, str.Value)
-				}
-			}
-		} else {
-			return &object.Error{Message: "arguments must be an array of strings"}
-		}
+	       if arr, ok := args[1].(*object.Array); ok {
+		       for _, arg := range arr.Elements {
+			       if str, ok := arg.(*object.String); ok {
+				       cliArgs = append(cliArgs, str.Value)
+			       }
+		       }
+	       } else {
+		       return ErrorMessage("argparse", "parse", "arguments must be an array of strings", "", "")
+	       }
 	} else {
 		// Use system arguments
 		cliArgs = []string{}
@@ -278,7 +278,7 @@ func parse(args []object.Object, defs map[string]object.Object) object.Object {
 			}
 
 			if flagDef == nil {
-				return &object.Error{Message: fmt.Sprintf("unknown flag: %s", flagName)}
+					   return ErrorMessage("argparse", "parse", fmt.Sprintf("unknown flag: %s", flagName), "", "")
 			}
 
 			// Handle flag value
@@ -292,7 +292,7 @@ func parse(args []object.Object, defs map[string]object.Object) object.Object {
 			} else {
 				// Flag with value
 				if i+1 >= len(cliArgs) {
-					return &object.Error{Message: fmt.Sprintf("flag %s requires a value", flagName)}
+							   return ErrorMessage("argparse", "parse", fmt.Sprintf("flag %s requires a value", flagName), "", "")
 				}
 
 				value := cliArgs[i+1]
@@ -333,7 +333,7 @@ func parse(args []object.Object, defs map[string]object.Object) object.Object {
 			}
 
 			if flagDef == nil {
-				return &object.Error{Message: fmt.Sprintf("unknown flag: -%s", shortName)}
+					   return ErrorMessage("argparse", "parse", fmt.Sprintf("unknown flag: -%s", shortName), "", "")
 			}
 
 			// Handle flag value (same logic as for long flags)
@@ -345,7 +345,7 @@ func parse(args []object.Object, defs map[string]object.Object) object.Object {
 				}
 			} else {
 				if i+1 >= len(cliArgs) {
-					return &object.Error{Message: fmt.Sprintf("flag -%s requires a value", shortName)}
+							   return ErrorMessage("argparse", "parse", fmt.Sprintf("flag -%s requires a value", shortName), "", "")
 				}
 
 				value := cliArgs[i+1]
@@ -374,7 +374,7 @@ func parse(args []object.Object, defs map[string]object.Object) object.Object {
 		} else {
 			// Positional argument
 			if positionalIndex >= len(parserArgs[parserID.Value]) {
-				return &object.Error{Message: fmt.Sprintf("too many positional arguments")}
+					   return ErrorMessage("argparse", "parse", "too many positional arguments", "", "")
 			}
 
 			argDef := parserArgs[parserID.Value][positionalIndex]
@@ -418,7 +418,7 @@ func parse(args []object.Object, defs map[string]object.Object) object.Object {
 			}
 
 			if !found {
-				return &object.Error{Message: fmt.Sprintf("required argument '%s' not provided", arg.name)}
+							   return ErrorMessage("argparse", "parse", fmt.Sprintf("required argument '%s' not provided", arg.name), "", "")
 			}
 		}
 	}
@@ -437,7 +437,7 @@ func parse(args []object.Object, defs map[string]object.Object) object.Object {
 			}
 
 			if !found {
-				return &object.Error{Message: fmt.Sprintf("required flag '--%s' not provided", flag.name)}
+							   return ErrorMessage("argparse", "parse", fmt.Sprintf("required flag '--%s' not provided", flag.name), "", "")
 			}
 		}
 	}
@@ -447,19 +447,19 @@ func parse(args []object.Object, defs map[string]object.Object) object.Object {
 
 // generateHelp generates help text for the parser
 func generateHelp(args []object.Object, defs map[string]object.Object) object.Object {
-	if len(args) != 1 {
-		return &object.Error{Message: "help requires exactly 1 argument: parser"}
-	}
+       if len(args) != 1 {
+	       return ErrorMessage("argparse", "help", "help requires exactly 1 argument: parser", "", "")
+       }
 
-	parserID, ok := args[0].(*object.String)
-	if !ok {
-		return &object.Error{Message: "parser must be a string"}
-	}
+       parserID, ok := args[0].(*object.String)
+       if !ok {
+	       return ErrorMessage("argparse", "help", "parser must be a string", "", "")
+       }
 
 	// Check if parser exists
-	if _, exists := parsers[parserID.Value]; !exists {
-		return &object.Error{Message: fmt.Sprintf("parser '%s' not found", parserID.Value)}
-	}
+       if _, exists := parsers[parserID.Value]; !exists {
+	       return ErrorMessage("argparse", "help", fmt.Sprintf("parser '%s' not found", parserID.Value), "", "")
+       }
 
 	helpText := generateHelpText(parserID.Value)
 	return &object.String{Value: helpText}
@@ -536,24 +536,24 @@ func generateHelpText(parserID string) string {
 
 // setVersion sets the version information for the parser
 func setVersion(args []object.Object, defs map[string]object.Object) object.Object {
-	if len(args) != 2 {
-		return &object.Error{Message: "version requires exactly 2 arguments: parser and version string"}
-	}
+       if len(args) != 2 {
+	       return ErrorMessage("argparse", "version", "version requires exactly 2 arguments: parser and version string", "", "")
+       }
 
-	parserID, ok := args[0].(*object.String)
-	if !ok {
-		return &object.Error{Message: "parser must be a string"}
-	}
+       parserID, ok := args[0].(*object.String)
+       if !ok {
+	       return ErrorMessage("argparse", "version", "parser must be a string", "", "")
+       }
 
-	version, ok := args[1].(*object.String)
-	if !ok {
-		return &object.Error{Message: "version must be a string"}
-	}
+       version, ok := args[1].(*object.String)
+       if !ok {
+	       return ErrorMessage("argparse", "version", "version must be a string", "", "")
+       }
 
 	// Check if parser exists
-	if _, exists := parsers[parserID.Value]; !exists {
-		return &object.Error{Message: fmt.Sprintf("parser '%s' not found", parserID.Value)}
-	}
+       if _, exists := parsers[parserID.Value]; !exists {
+	       return ErrorMessage("argparse", "version", fmt.Sprintf("parser '%s' not found", parserID.Value), "", "")
+       }
 
 	parserVersions[parserID.Value] = version.Value
 	return &object.Boolean{Value: true}
