@@ -109,3 +109,146 @@ cycling
 eating
 ```
 
+## Dictionary Methods
+
+Vint dictionaries come with several powerful built-in methods that make data manipulation easy and efficient:
+
+### keys()
+
+Get all keys from the dictionary as an array:
+
+```js
+contacts = {"Alice": "alice@email.com", "Bob": "bob@email.com"}
+keyList = contacts.keys()
+print(keyList)  // ["Alice", "Bob"]
+```
+
+### values()
+
+Get all values from the dictionary as an array:
+
+```js
+contacts = {"Alice": "alice@email.com", "Bob": "bob@email.com"}
+valueList = contacts.values()
+print(valueList)  // ["alice@email.com", "bob@email.com"]
+```
+
+### size()
+
+Get the number of key-value pairs in the dictionary:
+
+```js
+contacts = {"Alice": "alice@email.com", "Bob": "bob@email.com"}
+print(contacts.size())  // 2
+```
+
+### has()
+
+Check if a key exists in the dictionary:
+
+```js
+contacts = {"Alice": "alice@email.com", "Bob": "bob@email.com"}
+print(contacts.has("Alice"))   // true
+print(contacts.has("Charlie")) // false
+```
+
+### get()
+
+Get a value by key with an optional default value:
+
+```js
+contacts = {"Alice": "alice@email.com", "Bob": "bob@email.com"}
+email = contacts.get("Alice", "unknown")        // "alice@email.com"
+unknownEmail = contacts.get("Charlie", "unknown") // "unknown"
+print(email)        // alice@email.com
+print(unknownEmail) // unknown
+```
+
+### set()
+
+Set a key-value pair in the dictionary:
+
+```js
+contacts = {"Alice": "alice@email.com"}
+contacts.set("Bob", "bob@email.com")
+print(contacts)  // {"Alice": "alice@email.com", "Bob": "bob@email.com"}
+
+// Method chaining is supported
+contacts.set("Charlie", "charlie@email.com").set("Dave", "dave@email.com")
+```
+
+### remove()
+
+Remove a key-value pair from the dictionary:
+
+```js
+contacts = {"Alice": "alice@email.com", "Bob": "bob@email.com"}
+contacts.remove("Bob")
+print(contacts)  // {"Alice": "alice@email.com"}
+```
+
+### clear()
+
+Remove all key-value pairs from the dictionary:
+
+```js
+contacts = {"Alice": "alice@email.com", "Bob": "bob@email.com"}
+contacts.clear()
+print(contacts)  // {}
+```
+
+### merge()
+
+Merge another dictionary into this one:
+
+```js
+contacts = {"Alice": "alice@email.com"}
+newContacts = {"Bob": "bob@email.com", "Charlie": "charlie@email.com"}
+contacts.merge(newContacts)
+print(contacts)  // {"Alice": "alice@email.com", "Bob": "bob@email.com", "Charlie": "charlie@email.com"}
+```
+
+### copy()
+
+Create a shallow copy of the dictionary:
+
+```js
+original = {"Alice": "alice@email.com", "Bob": "bob@email.com"}
+backup = original.copy()
+backup.set("Charlie", "charlie@email.com")
+print(original)  // {"Alice": "alice@email.com", "Bob": "bob@email.com"}
+print(backup)    // {"Alice": "alice@email.com", "Bob": "bob@email.com", "Charlie": "charlie@email.com"}
+```
+
+## Advanced Dictionary Usage
+
+Here are some practical examples of using dictionaries with their methods:
+
+```js
+// Building a user database
+users = {}
+users.set("john", {"name": "John Doe", "age": 30, "city": "New York"})
+users.set("jane", {"name": "Jane Smith", "age": 25, "city": "Los Angeles"})
+
+// Check if user exists
+if (users.has("john")) {
+    user = users.get("john")
+    print("User found:", user["name"])
+}
+
+// Get all usernames
+usernames = users.keys()
+print("All users:", usernames)
+
+// Create settings with defaults
+settings = {"theme": "dark", "notifications": true}
+getTheme = settings.get("theme", "light")           // "dark"
+getLanguage = settings.get("language", "english")   // "english" (default)
+
+// Configuration management
+config = {}
+config.set("database", "localhost")
+      .set("port", 5432)
+      .set("timeout", 30)
+print("Config:", config)
+```

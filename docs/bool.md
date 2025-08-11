@@ -113,3 +113,205 @@ for v in num {
 // 5 is odd
 ```
 
+## Boolean Methods
+
+Boolean values in vint come with several useful built-in methods for conversion and logical operations:
+
+### to_string()
+
+Converts the boolean value to a string representation:
+
+```s
+let flag = true
+print(flag.to_string())     // "true"
+
+let disabled = false
+print(disabled.to_string()) // "false"
+```
+
+### to_int()
+
+Converts the boolean value to an integer (1 for true, 0 for false):
+
+```s
+let enabled = true
+print(enabled.to_int())     // 1
+
+let disabled = false
+print(disabled.to_int())    // 0
+```
+
+### negate()
+
+Returns the logical negation of the boolean value:
+
+```s
+let flag = true
+print(flag.negate())        // false
+
+let condition = false
+print(condition.negate())   // true
+```
+
+### and()
+
+Performs logical AND operation with another boolean:
+
+```s
+let a = true
+let b = false
+print(a.and(b))            // false
+print(a.and(true))         // true
+```
+
+### or()
+
+Performs logical OR operation with another boolean:
+
+```s
+let a = true
+let b = false
+print(a.or(b))             // true
+print(b.or(false))         // false
+```
+
+### xor()
+
+Performs logical XOR (exclusive OR) operation:
+
+```s
+let a = true
+let b = false
+print(a.xor(b))            // true
+print(a.xor(true))         // false
+```
+
+### implies()
+
+Performs logical implication (if A then B):
+
+```s
+let premise = true
+let conclusion = false
+print(premise.implies(conclusion))  // false
+print(false.implies(false))         // true
+```
+
+### equivalent()
+
+Checks if two boolean values are logically equivalent:
+
+```s
+let a = true
+let b = true
+print(a.equivalent(b))     // true
+print(a.equivalent(false)) // false
+```
+
+### nor()
+
+Performs logical NOR operation (NOT OR):
+
+```s
+let a = false
+let b = false
+print(a.nor(b))            // true
+print(a.nor(true))         // false
+```
+
+### nand()
+
+Performs logical NAND operation (NOT AND):
+
+```s
+let a = true
+let b = true
+print(a.nand(b))           // false
+print(a.nand(false))       // true
+```
+
+## Practical Boolean Examples
+
+Here are some practical examples using boolean methods:
+
+```s
+// Feature flags system
+let features = {
+    "dark_mode": true,
+    "notifications": false,
+    "beta_features": true
+}
+
+// Convert to configuration strings
+for key, value in features {
+    config_string = key + "=" + value.to_string()
+    print(config_string)
+}
+// Output:
+// dark_mode=true
+// notifications=false
+// beta_features=true
+
+// Permission system using logical operations
+let is_admin = true
+let is_owner = false
+let can_read = true
+
+// Complex permission checks
+let can_write = is_admin.or(is_owner)
+let can_delete = is_admin.and(is_owner.negate())
+let has_access = can_read.and(can_write.or(is_owner))
+
+print("Can write:", can_write.to_string())     // true
+print("Can delete:", can_delete.to_string())   // true
+print("Has access:", has_access.to_string())   // true
+
+// State machine logic
+let door_open = false
+let key_inserted = true
+let button_pressed = true
+
+// Door can be opened if key is inserted XOR button is pressed (but not both)
+let can_open = key_inserted.xor(button_pressed).and(door_open.negate())
+print("Can open door:", can_open.to_string())  // false
+
+// Validation logic using implications
+let form_valid = true
+let submit_enabled = true
+
+// If form is valid, then submit should be enabled
+let validation_check = form_valid.implies(submit_enabled)
+print("Validation passes:", validation_check.to_string())  // true
+```
+
+## Boolean Method Chaining
+
+Boolean methods support method chaining for complex logical operations:
+
+```s
+// Complex boolean logic with chaining
+let user_active = true
+let subscription_valid = false
+let trial_period = true
+
+// Chain multiple operations
+let has_access = user_active
+    .and(subscription_valid.or(trial_period))
+    .and(false.negate())
+
+print("User has access:", has_access.to_string())  // true
+
+// Truth table generation
+conditions = [true, false]
+for a in conditions {
+    for b in conditions {
+        print("A:", a.to_string(), "B:", b.to_string())
+        print("  AND:", a.and(b).to_string())
+        print("  OR:", a.or(b).to_string())
+        print("  XOR:", a.xor(b).to_string())
+        print("  NAND:", a.nand(b).to_string())
+        print("---")
+    }
+}
+```
+

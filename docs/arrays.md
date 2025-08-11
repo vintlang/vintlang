@@ -184,3 +184,127 @@ b = a.filter(func(x){
 
 print(b) // [2, 4]
 ```
+
+### slice()
+
+slice() extracts a section of an array and returns a new array:
+
+```s
+a = [1, 2, 3, 4, 5]
+sliced = a.slice(1, 3)
+print(sliced)  // [2, 3]
+
+// With just start index
+sliced2 = a.slice(2)
+print(sliced2)  // [3, 4, 5]
+```
+
+### concat()
+
+concat() merges two or more arrays into a new array:
+
+```s
+a = [1, 2]
+b = [3, 4]
+c = [5, 6]
+combined = a.concat(b, c)
+print(combined)  // [1, 2, 3, 4, 5, 6]
+```
+
+### includes()
+
+includes() checks if an array contains a specific element:
+
+```s
+numbers = [1, 2, 3, 4, 5]
+print(numbers.includes(3))  // true
+print(numbers.includes(10)) // false
+```
+
+### every()
+
+every() tests whether all elements pass a test function:
+
+```s
+numbers = [2, 4, 6, 8]
+allEven = numbers.every(func(x){ return x % 2 == 0 })
+print(allEven)  // true
+```
+
+### some()
+
+some() tests whether at least one element passes a test function:
+
+```s
+numbers = [1, 3, 5, 8]
+hasEven = numbers.some(func(x){ return x % 2 == 0 })
+print(hasEven)  // true
+```
+
+### reduce()
+
+reduce() reduces the array to a single value using an accumulator function:
+
+```s
+numbers = [1, 2, 3, 4]
+sum = numbers.reduce(func(acc, val){ return acc + val }, 0)
+print(sum)  // 10
+
+// Without initial value
+product = numbers.reduce(func(acc, val){ return acc * val })
+print(product)  // 24
+```
+
+### flatten()
+
+flatten() flattens nested arrays into a single array:
+
+```s
+nested = [[1, 2], [3, 4], [5]]
+flat = nested.flatten()
+print(flat)  // [1, 2, 3, 4, 5]
+
+// With depth limit
+deep = [[[1, 2]], [3, 4]]
+flatOne = deep.flatten(1)
+print(flatOne)  // [[1, 2], 3, 4]
+```
+
+### unique()
+
+unique() returns a new array with duplicate elements removed:
+
+```s
+numbers = [1, 2, 2, 3, 3, 4]
+uniqueNumbers = numbers.unique()
+print(uniqueNumbers)  // [1, 2, 3, 4]
+```
+
+### fill()
+
+fill() fills all elements of an array with a static value:
+
+```s
+arr = [1, 2, 3, 4]
+arr.fill(0)
+print(arr)  // [0, 0, 0, 0]
+
+// Fill with start and end positions
+arr2 = [1, 2, 3, 4, 5]
+arr2.fill(9, 1, 3)
+print(arr2)  // [1, 9, 9, 4, 5]
+```
+
+### lastIndexOf()
+
+lastIndexOf() returns the last index at which a given element can be found:
+
+```s
+numbers = [1, 2, 3, 2, 4]
+lastIndex = numbers.lastIndexOf(2)
+print(lastIndex)  // 3
+
+// Element not found
+notFound = numbers.lastIndexOf(10)
+print(notFound)  // -1
+```
