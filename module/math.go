@@ -160,10 +160,20 @@ func abs(args []object.Object, defs map[string]object.Object) object.Object {
 
 func sign(args []object.Object, defs map[string]object.Object) object.Object {
 	if len(defs) != 0 {
-		return &object.Error{Message: "This operation does not allow definitions."}
+		return ErrorMessage(
+			"math", "sign",
+			"no definitions allowed",
+			fmt.Sprintf("%d definitions provided", len(defs)),
+			"math.sign(5)",
+		)
 	}
 	if len(args) != 1 {
-		return &object.Error{Message: "This operation requires exactly one argument."}
+		return ErrorMessage(
+			"math", "sign",
+			"1 number argument",
+			fmt.Sprintf("%d arguments", len(args)),
+			"math.sign(5) or math.sign(-3.5)",
+		)
 	}
 	switch arg := args[0].(type) {
 	case *object.Integer:
@@ -183,19 +193,39 @@ func sign(args []object.Object, defs map[string]object.Object) object.Object {
 			return &object.Integer{Value: -1}
 		}
 	default:
-		return &object.Error{Message: "The argument must be a number."}
+		return ErrorMessage(
+			"math", "sign",
+			"number argument (integer or float)",
+			string(args[0].Type()),
+			"math.sign(5) or math.sign(-3.5)",
+		)
 	}
 }
 
 func ceil(args []object.Object, defs map[string]object.Object) object.Object {
 	if len(defs) != 0 {
-		return &object.Error{Message: "This operation does not allow definitions."}
+		return ErrorMessage(
+			"math", "ceil",
+			"no definitions allowed",
+			fmt.Sprintf("%d definitions provided", len(defs)),
+			"math.ceil(4.3)",
+		)
 	}
 	if len(args) != 1 {
-		return &object.Error{Message: "This operation requires exactly one argument."}
+		return ErrorMessage(
+			"math", "ceil",
+			"1 number argument",
+			fmt.Sprintf("%d arguments", len(args)),
+			"math.ceil(4.3)",
+		)
 	}
 	if args[0].Type() != object.INTEGER_OBJ && args[0].Type() != object.FLOAT_OBJ {
-		return &object.Error{Message: "The argument must be a number."}
+		return ErrorMessage(
+			"math", "ceil",
+			"number argument (integer or float)",
+			string(args[0].Type()),
+			"math.ceil(4.3)",
+		)
 	}
 	switch arg := args[0].(type) {
 	case *object.Integer:

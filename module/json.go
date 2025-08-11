@@ -2,6 +2,7 @@ package module
 
 import (
 	"encoding/json"
+	"fmt"
 	"strings"
 
 	"github.com/vintlang/vintlang/object"
@@ -20,14 +21,29 @@ func init() {
 
 func decode(args []object.Object, defs map[string]object.Object) object.Object {
 	if len(defs) != 0 {
-		return &object.Error{Message: "This argument is not allowed"}
+		return ErrorMessage(
+			"json", "decode",
+			"no definitions allowed",
+			fmt.Sprintf("%d definitions provided", len(defs)),
+			`json.decode("{\"key\": \"value\"}")`,
+		)
 	}
 	if len(args) != 1 {
-		return &object.Error{Message: "We only need one argument"}
+		return ErrorMessage(
+			"json", "decode",
+			"1 string argument (JSON string)",
+			fmt.Sprintf("%d arguments", len(args)),
+			`json.decode("{\"key\": \"value\"}")`,
+		)
 	}
 
 	if args[0].Type() != object.STRING_OBJ {
-		return &object.Error{Message: "The argument must be a string"}
+		return ErrorMessage(
+			"json", "decode",
+			"string argument containing JSON",
+			string(args[0].Type()),
+			`json.decode("{\"key\": \"value\"}")`,
+		)
 	}
 
 	var i interface{}
@@ -81,11 +97,21 @@ func convertWhateverToObject(i interface{}) object.Object {
 
 func encode(args []object.Object, defs map[string]object.Object) object.Object {
     if len(defs) != 0 {
-        return &object.Error{Message: "This argument is not allowed"}
+        return ErrorMessage(
+			"json", "encode",
+			"no definitions allowed",
+			fmt.Sprintf("%d definitions provided", len(defs)),
+			`json.encode(data) or json.encode(data, 2)`,
+		)
     }
 
     if len(args) < 1 || len(args) > 2 {
-        return &object.Error{Message: "Expect one or two arguments: data and optional indent"}
+        return ErrorMessage(
+			"json", "encode",
+			"1 or 2 arguments (data and optional indent)",
+			fmt.Sprintf("%d arguments", len(args)),
+			`json.encode(data) or json.encode(data, 2)`,
+		)
     }
 
     input := args[0]
@@ -95,7 +121,12 @@ func encode(args []object.Object, defs map[string]object.Object) object.Object {
     indent := ""
     if len(args) == 2 {
         if args[1].Type() != object.INTEGER_OBJ {
-            return &object.Error{Message: "Indent must be an integer"}
+            return ErrorMessage(
+				"json", "encode",
+				"integer argument for indent",
+				string(args[1].Type()),
+				`json.encode(data, 2) - indent with 2 spaces`,
+			)
         }
         spaces := int(args[1].(*object.Integer).Value)
         indent = strings.Repeat(" ", spaces)
