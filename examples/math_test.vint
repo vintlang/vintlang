@@ -1,0 +1,59 @@
+// examples/math_test.vint
+
+// Test abs() function
+println("Testing abs() function:")
+println("abs(5):", abs(5))           // Expected: 5
+println("abs(-5):", abs(-5))         // Expected: 5
+println("abs(0):", abs(0))           // Expected: 0
+println("abs(-3.14):", abs(-3.14))   // Expected: 3.14
+println("abs(3.14):", abs(3.14))     // Expected: 3.14
+
+// Test min() function
+println("\nTesting min() function:")
+println("min(5, 3, 8, 1):", min(5, 3, 8, 1))    // Expected: 1
+println("min(10):", min(10))                     // Expected: 10
+println("min(-5, -2, -10):", min(-5, -2, -10))  // Expected: -10
+println("min(3.14, 2.5, 4.0):", min(3.14, 2.5, 4.0))  // Expected: 2.5
+println("min(5, 3.14, 8):", min(5, 3.14, 8))    // Expected: 3.14
+
+// Test max() function
+println("\nTesting max() function:")
+println("max(5, 3, 8, 1):", max(5, 3, 8, 1))    // Expected: 8
+println("max(10):", max(10))                     // Expected: 10
+println("max(-5, -2, -10):", max(-5, -2, -10))  // Expected: -2
+println("max(3.14, 2.5, 4.0):", max(3.14, 2.5, 4.0))  // Expected: 4.0
+println("max(5, 3.14, 8):", max(5, 3.14, 8))    // Expected: 8
+
+// Test round() function
+println("\nTesting round() function:")
+println("round(3.14):", round(3.14))     // Expected: 3
+println("round(3.64):", round(3.64))     // Expected: 4
+println("round(-2.3):", round(-2.3))     // Expected: -2
+println("round(-2.7):", round(-2.7))     // Expected: -3
+println("round(5):", round(5))           // Expected: 5
+
+// Test floor() function
+println("\nTesting floor() function:")
+println("floor(3.14):", floor(3.14))     // Expected: 3
+println("floor(3.99):", floor(3.99))     // Expected: 3
+println("floor(-2.1):", floor(-2.1))     // Expected: -3
+println("floor(-2.9):", floor(-2.9))     // Expected: -3
+println("floor(5):", floor(5))           // Expected: 5
+
+// Test ceil() function
+println("\nTesting ceil() function:")
+println("ceil(3.14):", ceil(3.14))       // Expected: 4
+println("ceil(3.01):", ceil(3.01))       // Expected: 4
+println("ceil(-2.9):", ceil(-2.9))       // Expected: -2
+println("ceil(-2.1):", ceil(-2.1))       // Expected: -2
+println("ceil(5):", ceil(5))             // Expected: 5
+
+// Test sqrt() function
+println("\nTesting sqrt() function:")
+println("sqrt(4):", sqrt(4))             // Expected: 2
+println("sqrt(9):", sqrt(9))             // Expected: 3
+println("sqrt(16.0):", sqrt(16.0))       // Expected: 4
+println("sqrt(2):", sqrt(2))             // Expected: ~1.414
+println("sqrt(0):", sqrt(0))             // Expected: 0
+
+println("\nAll math function tests completed!")
