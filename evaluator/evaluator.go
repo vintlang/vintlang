@@ -112,6 +112,8 @@ func Eval(node ast.Node, env *object.Environment) object.Object {
 			return elements[0]
 		}
 		return &object.Array{Elements: elements}
+	case *ast.RangeExpression:
+		return evalRangeExpression(node, env)
 	case *ast.IndexExpression:
 		left := Eval(node.Left, env)
 		if isError(left) {
@@ -122,6 +124,25 @@ func Eval(node ast.Node, env *object.Environment) object.Object {
 			return index
 		}
 		return evalIndexExpression(left, index, node.Token.Line)
+	case *ast.SliceExpression:
+		left := Eval(node.Left, env)
+		if isError(left) {
+			return left
+		}
+		var start, end object.Object
+		if node.Start != nil {
+			start = Eval(node.Start, env)
+			if isError(start) {
+				return start
+			}
+		}
+		if node.End != nil {
+			end = Eval(node.End, env)
+			if isError(end) {
+				return end
+			}
+		}
+		return evalSliceExpression(left, start, end, node.Token.Line)
 	case *ast.DictLiteral:
 		return evalDictLiteral(node, env)
 	case *ast.WhileExpression:
@@ -132,6 +153,8 @@ func Eval(node ast.Node, env *object.Environment) object.Object {
 		return evalContinue(node)
 	case *ast.SwitchExpression:
 		return evalSwitchStatement(node, env)
+	case *ast.MatchExpression:
+		return evalMatchExpression(node, env)
 	case *ast.Null:
 		return NULL
 	// case *ast.For:
@@ -323,6 +346,57 @@ func Eval(node ast.Node, env *object.Environment) object.Object {
 			result = res
 		}
 		return result
+	
+	// Async/Concurrency constructs
+	case *ast.AsyncFunctionLiteral:
+		return &object.AsyncFunction{
+			Parameters: node.Parameters,
+			Body:       node.Body,
+			Env:        env,
+		}
+
+	case *ast.AwaitExpression:
+		promise := Eval(node.Value, env)
+		if isError(promise) {
+			return promise
+		}
+		
+		promiseObj, ok := promise.(*object.Promise)
+		if !ok {
+			return newError("await can only be used with promises, got %T", promise)
+		}
+		
+		// Block until promise resolves using channel-based waiting
+		promiseObj.Wait()
+		
+		if promiseObj.Error != nil {
+			return promiseObj.Error
+		}
+		return promiseObj.Value
+
+	case *ast.GoStatement:
+		// Execute the expression concurrently
+		go func() {
+			Eval(node.Expression, env)
+		}()
+		return NULL
+
+	case *ast.ChannelExpression:
+		if node.Buffer != nil {
+			bufferSize := Eval(node.Buffer, env)
+			if isError(bufferSize) {
+				return bufferSize
+			}
+			
+			size, ok := bufferSize.(*object.Integer)
+			if !ok {
+				return newError("channel buffer size must be an integer, got %T", bufferSize)
+			}
+			
+			return object.NewBufferedChannel(int(size.Value))
+		}
+		
+		return object.NewChannel()
 	}
 
 	return nil
@@ -413,6 +487,9 @@ func applyFunction(fn object.Object, args []object.Object, line int) object.Obje
 		extendedEnv := extendedFunctionEnv(fn, args)
 		evaluated := Eval(fn.Body, extendedEnv)
 		return unwrapReturnValue(evaluated)
+	case *object.AsyncFunction:
+		// Execute async function and return a promise
+		return fn.Execute(args, Eval)
 	case *object.Builtin:
 		if result := fn.Fn(args...); result != nil {
 			return result
@@ -575,4 +652,32 @@ func evalIncludeStatement(node *ast.IncludeStatement, env *object.Environment) o
 	}
 
 	return Eval(program, env)
+}
+
+func evalRangeExpression(node *ast.RangeExpression, env *object.Environment) object.Object {
+	start := Eval(node.Start, env)
+	if isError(start) {
+		return start
+	}
+
+	end := Eval(node.End, env)
+	if isError(end) {
+		return end
+	}
+
+	startInt, ok := start.(*object.Integer)
+	if !ok {
+		return newError("range start must be an integer, got %T", start)
+	}
+
+	endInt, ok := end.(*object.Integer)
+	if !ok {
+		return newError("range end must be an integer, got %T", end)
+	}
+
+	return &object.Range{
+		Start:   startInt.Value,
+		End:     endInt.Value,
+		Current: startInt.Value,
+	}
 }

@@ -3,12 +3,12 @@ import postgres
 // NOTE: Please replace the placeholder credentials with your actual PostgreSQL database credentials.
 // The connection string should be in the format: "user=youruser password=yourpassword dbname=yourdbname sslmode=disable"
 
-conn = postgres.open("user=postgres password=password dbname=testdb sslmode=disable")
+const conn = postgres.open("user=postgres password=password dbname=testdb sslmode=disable")
 
-if conn.type() == "ERROR" {
-    print("Error connecting to PostgreSQL:", conn.message())
+if (conn.type() == "ERROR") {
+    error "Error connecting to PostgreSQL:"+ conn.message()
 } else {
-    print("Successfully connected to PostgreSQL")
+    info "Successfully connected to PostgreSQL"
 
     // Create a table
     create_table_query = "CREATE TABLE IF NOT EXISTS users (id SERIAL PRIMARY KEY, name VARCHAR(255), age INT)"

@@ -335,6 +335,33 @@ func (ie *IndexExpression) String() string {
 	return out.String()
 }
 
+type SliceExpression struct {
+	Token token.Token
+	Left  Expression
+	Start Expression
+	End   Expression
+}
+
+func (se *SliceExpression) expressionNode()      {}
+func (se *SliceExpression) TokenLiteral() string { return se.Token.Literal }
+func (se *SliceExpression) String() string {
+	var out bytes.Buffer
+
+	out.WriteString("(")
+	out.WriteString(se.Left.String())
+	out.WriteString("[")
+	if se.Start != nil {
+		out.WriteString(se.Start.String())
+	}
+	out.WriteString(":")
+	if se.End != nil {
+		out.WriteString(se.End.String())
+	}
+	out.WriteString("])")
+
+	return out.String()
+}
+
 type DictLiteral struct {
 	Token token.Token
 	Pairs map[Expression]Expression
@@ -702,5 +729,141 @@ func (rs *RepeatStatement) String() string {
 	out.WriteString(rs.Count.String())
 	out.WriteString(" ")
 	out.WriteString(rs.Block.String())
+	return out.String()
+}
+
+// AsyncFunctionLiteral represents an async function
+type AsyncFunctionLiteral struct {
+	Token      token.Token
+	Name       string
+	Parameters []*Identifier
+	Defaults   map[string]Expression
+	Body       *BlockStatement
+}
+
+func (afl *AsyncFunctionLiteral) expressionNode()      {}
+func (afl *AsyncFunctionLiteral) TokenLiteral() string { return afl.Token.Literal }
+func (afl *AsyncFunctionLiteral) String() string {
+	var out bytes.Buffer
+
+	params := []string{}
+	for _, p := range afl.Parameters {
+		params = append(params, p.String())
+	}
+
+	out.WriteString("async func")
+	out.WriteString("(")
+	out.WriteString(strings.Join(params, ", "))
+	out.WriteString(") ")
+	out.WriteString(afl.Body.String())
+
+	return out.String()
+}
+
+// AwaitExpression represents an await expression
+type AwaitExpression struct {
+	Token token.Token
+	Value Expression
+}
+
+func (ae *AwaitExpression) expressionNode()      {}
+func (ae *AwaitExpression) TokenLiteral() string { return ae.Token.Literal }
+func (ae *AwaitExpression) String() string {
+	var out bytes.Buffer
+	out.WriteString("await ")
+	out.WriteString(ae.Value.String())
+	return out.String()
+}
+
+// GoStatement represents a go statement for concurrent execution
+type GoStatement struct {
+	Token      token.Token
+	Expression Expression
+}
+
+func (gs *GoStatement) statementNode()       {}
+func (gs *GoStatement) TokenLiteral() string { return gs.Token.Literal }
+func (gs *GoStatement) String() string {
+	var out bytes.Buffer
+	out.WriteString("go ")
+	out.WriteString(gs.Expression.String())
+	return out.String()
+}
+
+// ChannelExpression represents a channel creation expression
+type ChannelExpression struct {
+	Token  token.Token
+	Buffer Expression // optional buffer size
+}
+
+func (ce *ChannelExpression) expressionNode()      {}
+func (ce *ChannelExpression) TokenLiteral() string { return ce.Token.Literal }
+func (ce *ChannelExpression) String() string {
+	var out bytes.Buffer
+	out.WriteString("chan")
+	if ce.Buffer != nil {
+		out.WriteString("(")
+		out.WriteString(ce.Buffer.String())
+		out.WriteString(")")
+	}
+	return out.String()
+}
+
+type RangeExpression struct {
+	Token token.Token // the '..' token
+	Start Expression
+	End   Expression
+}
+
+func (re *RangeExpression) expressionNode()      {}
+func (re *RangeExpression) TokenLiteral() string { return re.Token.Literal }
+func (re *RangeExpression) String() string {
+	var out bytes.Buffer
+	out.WriteString(re.Start.String())
+	out.WriteString("..")
+	out.WriteString(re.End.String())
+	return out.String()
+}
+
+type MatchCase struct {
+	Token   token.Token
+	Pattern Expression  // Dict pattern or "_" for wildcard
+	Block   *BlockStatement
+}
+
+func (mc *MatchCase) expressionNode()      {}
+func (mc *MatchCase) TokenLiteral() string { return mc.Token.Literal }
+func (mc *MatchCase) String() string {
+	var out bytes.Buffer
+	
+	out.WriteString(mc.Pattern.String())
+	out.WriteString(" => ")
+	out.WriteString(mc.Block.String())
+	
+	return out.String()
+}
+
+type MatchExpression struct {
+	Token token.Token
+	Value Expression
+	Cases []*MatchCase
+}
+
+func (me *MatchExpression) expressionNode()      {}
+func (me *MatchExpression) TokenLiteral() string { return me.Token.Literal }
+func (me *MatchExpression) String() string {
+	var out bytes.Buffer
+	out.WriteString("match ")
+	out.WriteString(me.Value.String())
+	out.WriteString(" {\n")
+	
+	for _, c := range me.Cases {
+		if c != nil {
+			out.WriteString(c.String())
+			out.WriteString("\n")
+		}
+	}
+	
+	out.WriteString("}")
 	return out.String()
 }

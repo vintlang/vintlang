@@ -1,7 +1,6 @@
 import net
 import json
-import dotenv
-import os
+import dotenv,os
 
 package notifyafrica_pkg {
     // sendSMS: sends an SMS using Notify Africa API
@@ -11,11 +10,11 @@ package notifyafrica_pkg {
         let baseUrl = dotenv.get("NOTIFYAFRICA_BASEURL")
 
         if (token == null || token == "") {
-            print("[ERROR] API token not found in .env. Please set NOTIFYAFRICA_TOKEN.")
+            error "[ERROR] API token not found in .env. Please set NOTIFYAFRICA_TOKEN."
             return null // Return null to indicate failure
         }
         if (baseUrl == null || baseUrl == "") {
-            baseUrl = "https://notify.africa/api/v2/send-sms" // fallback default
+            baseUrl = "https://api.notify.africa/v2/send-sms" // fallback default
         }
 
         let url = baseUrl
@@ -32,11 +31,7 @@ package notifyafrica_pkg {
         }
 
         // Pass arguments as a single dictionary
-        let response = net.post({
-            "url": url,
-            "headers": headers,
-            "body": payload
-        })
+        let response = net.post("url"=url,"headers"=headers,"body"=payload)
         return response
     }
 } 

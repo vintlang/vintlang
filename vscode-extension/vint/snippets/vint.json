@@ -2,7 +2,7 @@
     "Function": {
       "prefix": "func",
       "body": [
-        "function $1($2) {",
+        "let $1 = func($2) {",
         "\t$3",
         "}"
       ],
@@ -60,30 +60,46 @@
     "VariableDeclaration": {
       "prefix": "let",
       "body": [
-        "let $1 = $2;"
+        "let $1 = $2"
       ],
       "description": "Declare a variable"
     },
     "PrintStatement": {
       "prefix": "print",
       "body": [
-        "print($1);"
+        "print($1)"
       ],
       "description": "Print a value"
     },
     "ImportStatement": {
       "prefix": "import",
       "body": [
-        "import $1 from '$2';"
+        "import $1"
       ],
       "description": "Import a module"
     },
     "PackageDeclaration": {
       "prefix": "package",
       "body": [
-        "package $1;"
+        "package $1 {",
+        "\t$2",
+        "}"
       ],
       "description": "Declare a package"
+    },
+    "PrintlnStatement": {
+      "prefix": "println",
+      "body": [
+        "println($1)"
+      ],
+      "description": "Print a value with newline"
+    },
+    "ConvertStatement": {
+      "prefix": "convert",
+      "body": [
+        "convert($1, \"$2\")"
+      ],
+      "description": "Convert a value to a specific type"
     }
     
   }

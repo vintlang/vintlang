@@ -3,7 +3,6 @@ package main
 import (
 	"fmt"
 	"os"
-	"os/exec"
 	"strings"
 
 	"github.com/charmbracelet/lipgloss"
@@ -15,7 +14,7 @@ import (
 	"github.com/vintlang/vintlang/toolkit"
 )
 
-const VINT_VERSION = "0.1.9"
+const VINT_VERSION = "0.2.1"
 
 // Constants for styled output
 var (
@@ -40,7 +39,7 @@ var (
 	Help = styles.HelpStyle.Italic(false).Render(fmt.Sprintf(`💡 How to use vint:
     %s: Start the vint program
     %s: Run a vint file
-    %s: Build a vint file into binary
+    %s: Bundle a vint file into binary
     %s: Initialize a new vint project
     %s: Install a vint package
     %s: Run tests in current directory
@@ -50,7 +49,7 @@ var (
 `,
 		styles.HelpStyle.Bold(true).Render("vint"),
 		styles.HelpStyle.Bold(true).Render("vint filename.vint"),
-		styles.HelpStyle.Bold(true).Render("vint build filename.vint"),
+		styles.HelpStyle.Bold(true).Render("vint bundler filename.vint"),
 		styles.HelpStyle.Bold(true).Render("vint init"),
 		styles.HelpStyle.Bold(true).Render("vint get package"),
 		styles.HelpStyle.Bold(true).Render("vint test"),
@@ -78,7 +77,7 @@ func main() {
 			fmt.Println(Help)
 		case "version", "-version", "--version", "-v", "v":
 			fmt.Println(versionMsg)
-		case "bundle", "-bundle", "--bundle", "-b":
+		case "bundle", "-bundle", "--bundle", "-b","--b":
 			if len(args) < 3 {
 				fmt.Println(styles.ErrorStyle.Render("Error: Please specify a Vint file to bundle"))
 				os.Exit(1)
@@ -98,8 +97,6 @@ func main() {
 			toolkit.Init(args)
 		case "new":
 			toolkit.New(args)
-		case "test", "-test", "--test", "-t":
-			runTests()
 		case "fmt", "-fmt", "--fmt", "-f":
 			if len(args) < 3 {
 				fmt.Println(styles.ErrorStyle.Render("Error: Please specify a Vint file to format"))
@@ -143,18 +140,6 @@ func run(file string) {
 	}
 }
 
-// runTests executes all tests in the current directory
-func runTests() {
-	fmt.Println(styles.HelpStyle.Render("Running tests..."))
-	cmd := exec.Command("go", "test", "./...")
-	cmd.Stdout = os.Stdout
-	cmd.Stderr = os.Stderr
-	if err := cmd.Run(); err != nil {
-		fmt.Println(styles.ErrorStyle.Render("Tests failed"))
-		os.Exit(1)
-	}
-	fmt.Println(styles.HelpStyle.Render("All tests passed!"))
-}
 
 // formatFile formats a Vint source file
 func formatFile(file string) {
