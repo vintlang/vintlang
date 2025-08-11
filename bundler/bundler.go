@@ -5,7 +5,6 @@ import (
 	"os"
 	"path/filepath"
 	"strings"
-	"text/template"
 	"time"
 
 	"github.com/vintlang/vintlang/utils"
@@ -45,24 +44,23 @@ func Bundle(args []string) error {
 	vintFile := args[0]
 	fmt.Println(len(vintFile))
 
-	// if *name != "" {
-	// 	fmt.Printf("🔧 Custom binary name set to '%s'\n", *name)
-	// }
 	// Verbose/Quiet mode
 	verbose := true
 	if len(args) >= 7 && args[6] == "quiet" {
 		verbose = false
 	}
-	printlnVerbose(verbose, "📦 Starting Bundle for '", filepath.Base(vintFile), "'")
+	printlnVerbose(verbose, "📦 Starting Enhanced Bundle for '", filepath.Base(vintFile), "'")
 
-	printVerbose(verbose, "🔍 Reading source file... ")
-	data, err := os.ReadFile(vintFile)
+	// Analyze dependencies
+	printVerbose(verbose, "🔍 Analyzing dependencies... ")
+	analyzer := NewDependencyAnalyzer()
+	bundle, err := analyzer.AnalyzeDependencies(vintFile)
 	if err != nil {
-		err = fmt.Errorf("failed to read file '%s': %w", vintFile, err)
+		err = fmt.Errorf("failed to analyze dependencies: %w", err)
 		logError(err)
 		return err
 	}
-	printlnVerbose(verbose, "✅")
+	printlnVerbose(verbose, fmt.Sprintf("✅ Found %d files", len(bundle.Files)))
 
 	printVerbose(verbose, "📁 Creating temp Bundle directory... ")
 	tempDir, err := os.MkdirTemp("", "vint-bundle-*")
@@ -74,48 +72,22 @@ func Bundle(args []string) error {
 	defer os.RemoveAll(tempDir)
 	printlnVerbose(verbose, "✅")
 
-	escapedCode := strings.ReplaceAll(string(data), "`", "` + \"`\" + `")
-
 	bundlerVersion := "v0.1.0"
 	buildTime := time.Now().Format(time.RFC3339)
 
-	const goTemplate = `package main
-
-import (
-		"flag"
-		"fmt"
-
-		"github.com/vintlang/vintlang/repl"
-)
-
-var BundlerVersion = "{{.BundlerVersion}}"
-var BuildTime = "{{.BuildTime}}"
-
-func main() {
-		bundledDetails := flag.Bool("i", false, "Show the bundle details of the app")
-		if *bundledDetails {
-			fmt.Printf("[Bundler Version: %s | Build Time: %s]\n", BundlerVersion, BuildTime)
-			return
-		}
-		code := ` + "`{{.Code}}`" + `
-		repl.Read(code)
-}
-
-`
-
-	printVerbose(verbose, "⚙️  Generating Go code... ")
-	mainPath := filepath.Join(tempDir, "main.go")
-	mainFile, err := os.Create(mainPath)
+	// Generate bundled code using the new evaluator
+	printVerbose(verbose, "⚙️  Generating Go code with bundled files... ")
+	bundledEvaluator := NewBundledEvaluator(bundle)
+	goCode, err := bundledEvaluator.GenerateBundledCode(bundlerVersion, buildTime)
 	if err != nil {
-		err = fmt.Errorf("failed to create main.go in temp dir '%s': %w", tempDir, err)
+		err = fmt.Errorf("failed to generate bundled code: %w", err)
 		logError(err)
 		return err
 	}
-	defer mainFile.Close()
 
-	t := template.Must(template.New("main").Parse(goTemplate))
-	if err := t.Execute(mainFile, map[string]string{"Code": escapedCode, "BundlerVersion": bundlerVersion, "BuildTime": buildTime}); err != nil {
-		err = fmt.Errorf("failed to execute template for main.go: %w", err)
+	mainPath := filepath.Join(tempDir, "main.go")
+	if err := os.WriteFile(mainPath, []byte(goCode), 0644); err != nil {
+		err = fmt.Errorf("failed to create main.go in temp dir '%s': %w", tempDir, err)
 		logError(err)
 		return err
 	}
@@ -208,7 +180,7 @@ require github.com/vintlang/vintlang v0.2.0
 	}
 
 	printlnVerbose(verbose, "✅")
-	fmt.Printf("\n✨ Successfully created binary: %s\n", outputPath)
+	fmt.Printf("\n✨ Successfully created binary with %d bundled files: %s\n", len(bundle.Files), outputPath)
 
 	// Cleanup option: keep temp directory if 'keep' flag is provided
 	keepTemp := false

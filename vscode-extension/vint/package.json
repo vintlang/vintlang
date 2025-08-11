@@ -2,10 +2,14 @@
   "name": "vint",
   "displayName": "VintLang",
   "description": "The official Vint language support extension",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "publisher": "tacheraSasi",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/vintlang/vintlang.git"
+  },
   "engines": {
-    "vscode": "^1.95.0"
+    "vscode": "^1.74.0"
   },
   "categories": [
     "Programming Languages"
@@ -14,7 +18,7 @@
     "languages": [
       {
         "id": "vint",
-        "aliases": ["Vint"],
+        "aliases": ["Vint", "VintLang"],
         "extensions": [".vint"],
         "configuration": "./language-configuration.json"
       }
@@ -32,19 +36,12 @@
         "scopeName": "source.vint",
         "path": "./syntaxes/vint.tmLanguage.json"
       }
+    ],
+    "snippets": [
+      {
+        "language": "vint",
+        "path": "./snippets/vint.json"
+      }
     ]
-  },
-  "commands": [
-    {
-      "command": "extension.vintComplete",
-      "title": "Vint Auto-Complete"
-    }
-  ],
-  "keybindings": [
-    {
-      "command": "extension.vintComplete",
-      "key": "ctrl+space",
-      "when": "editorTextFocus"
-    }
-  ]
+  }
 }
