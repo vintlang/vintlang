@@ -39,7 +39,7 @@ var parserDescriptions = make(map[string]string)
 // newParser creates a new argument parser
 func newParser(args []object.Object, defs map[string]object.Object) object.Object {
 	if len(args) < 1 || len(args) > 2 {
-		return &object.Error{Message: "newParser requires 1-2 arguments: name and optional description"}
+		return ErrorMessage("argparse", "newParser", "1-2 arguments: name and optional description", "", "")
 	}
 
 	name, ok := args[0].(*object.String)
@@ -228,7 +228,7 @@ func parse(args []object.Object, defs map[string]object.Object) object.Object {
 
 	// Parse arguments
 	result := &object.Dict{Pairs: make(map[object.HashKey]object.DictPair)}
-	
+
 	// Set default values
 	for _, arg := range parserArgs[parserID.Value] {
 		hashKey := object.HashKey{Type: object.STRING_OBJ, Value: uint64(len(result.Pairs))}
@@ -254,20 +254,20 @@ func parse(args []object.Object, defs map[string]object.Object) object.Object {
 		// Handle flags
 		if strings.HasPrefix(arg, "--") {
 			flagName := strings.TrimPrefix(arg, "--")
-			
+
 			// Check if it's a help flag
 			if flagName == "help" {
 				// Print help and exit
 				fmt.Println(generateHelpText(parserID.Value))
 				return result
 			}
-			
+
 			// Check if it's a version flag
 			if flagName == "version" && parserVersions[parserID.Value] != "" {
 				fmt.Println(parserVersions[parserID.Value])
 				return result
 			}
-			
+
 			// Find the flag definition
 			var flagDef *argDef
 			for j := range parserFlags[parserID.Value] {
@@ -294,10 +294,10 @@ func parse(args []object.Object, defs map[string]object.Object) object.Object {
 				if i+1 >= len(cliArgs) {
 					return &object.Error{Message: fmt.Sprintf("flag %s requires a value", flagName)}
 				}
-				
+
 				value := cliArgs[i+1]
 				i++ // Skip the value in next iteration
-				
+
 				// Convert value based on type
 				var objValue object.Object
 				switch flagDef.valueType {
@@ -312,7 +312,7 @@ func parse(args []object.Object, defs map[string]object.Object) object.Object {
 				default:
 					objValue = &object.String{Value: value}
 				}
-				
+
 				hashKey := object.HashKey{Type: object.STRING_OBJ, Value: uint64(len(result.Pairs))}
 				result.Pairs[hashKey] = object.DictPair{
 					Key:   &object.String{Value: flagDef.name},
@@ -322,7 +322,7 @@ func parse(args []object.Object, defs map[string]object.Object) object.Object {
 		} else if strings.HasPrefix(arg, "-") {
 			// Short flag
 			shortName := strings.TrimPrefix(arg, "-")
-			
+
 			// Find the flag definition
 			var flagDef *argDef
 			for j := range parserFlags[parserID.Value] {
@@ -347,10 +347,10 @@ func parse(args []object.Object, defs map[string]object.Object) object.Object {
 				if i+1 >= len(cliArgs) {
 					return &object.Error{Message: fmt.Sprintf("flag -%s requires a value", shortName)}
 				}
-				
+
 				value := cliArgs[i+1]
 				i++ // Skip the value in next iteration
-				
+
 				var objValue object.Object
 				switch flagDef.valueType {
 				case "string":
@@ -364,7 +364,7 @@ func parse(args []object.Object, defs map[string]object.Object) object.Object {
 				default:
 					objValue = &object.String{Value: value}
 				}
-				
+
 				hashKey := object.HashKey{Type: object.STRING_OBJ, Value: uint64(len(result.Pairs))}
 				result.Pairs[hashKey] = object.DictPair{
 					Key:   &object.String{Value: flagDef.name},
@@ -376,9 +376,9 @@ func parse(args []object.Object, defs map[string]object.Object) object.Object {
 			if positionalIndex >= len(parserArgs[parserID.Value]) {
 				return &object.Error{Message: fmt.Sprintf("too many positional arguments")}
 			}
-			
+
 			argDef := parserArgs[parserID.Value][positionalIndex]
-			
+
 			// Convert value based on type
 			var objValue object.Object
 			switch argDef.valueType {
@@ -393,13 +393,13 @@ func parse(args []object.Object, defs map[string]object.Object) object.Object {
 			default:
 				objValue = &object.String{Value: arg}
 			}
-			
+
 			hashKey := object.HashKey{Type: object.STRING_OBJ, Value: uint64(len(result.Pairs))}
 			result.Pairs[hashKey] = object.DictPair{
 				Key:   &object.String{Value: argDef.name},
 				Value: objValue,
 			}
-			
+
 			positionalIndex++
 		}
 	}
@@ -416,7 +416,7 @@ func parse(args []object.Object, defs map[string]object.Object) object.Object {
 					}
 				}
 			}
-			
+
 			if !found {
 				return &object.Error{Message: fmt.Sprintf("required argument '%s' not provided", arg.name)}
 			}
@@ -435,7 +435,7 @@ func parse(args []object.Object, defs map[string]object.Object) object.Object {
 					}
 				}
 			}
-			
+
 			if !found {
 				return &object.Error{Message: fmt.Sprintf("required flag '--%s' not provided", flag.name)}
 			}
@@ -478,7 +478,7 @@ func generateHelpText(parserID string) string {
 	// Add usage
 	sb.WriteString("Usage:\n")
 	sb.WriteString("  program")
-	
+
 	// Add positional arguments to usage
 	for _, arg := range parserArgs[parserID] {
 		if arg.required {
@@ -487,12 +487,12 @@ func generateHelpText(parserID string) string {
 			sb.WriteString(fmt.Sprintf(" [%s]", arg.name))
 		}
 	}
-	
+
 	// Add flags to usage
 	if len(parserFlags[parserID]) > 0 {
 		sb.WriteString(" [options]")
 	}
-	
+
 	sb.WriteString("\n\n")
 
 	// Add positional arguments section
@@ -517,13 +517,13 @@ func generateHelpText(parserID string) string {
 			} else {
 				sb.WriteString(fmt.Sprintf("      --%-16s %s", flag.name, flag.description))
 			}
-			
+
 			if !flag.required && flag.defaultVal.Type() != object.NULL_OBJ {
 				sb.WriteString(fmt.Sprintf(" (default: %s)", flag.defaultVal.Inspect()))
 			}
 			sb.WriteString("\n")
 		}
-		
+
 		// Add built-in help and version flags
 		sb.WriteString("      --help              Show this help message and exit\n")
 		if parserVersions[parserID] != "" {
