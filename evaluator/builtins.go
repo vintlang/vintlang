@@ -5,13 +5,21 @@ import (
 	"fmt"
 	"io"
 	"math"
+	"math/rand"
 	"os"
+	"sort"
+	"strconv"
 	"strings"
 	"time"
 
 	"github.com/vintlang/vintlang/object"
 	"github.com/vintlang/vintlang/toolkit"
 )
+
+func init() {
+	// Initialize random seed
+	rand.Seed(time.Now().UnixNano())
+}
 
 func handlePrint(w io.Writer, args []object.Object, addNewline bool) object.Object {
 	var arr []string
@@ -963,6 +971,141 @@ var builtins = map[string]*object.Builtin{
 			}
 			
 			return &object.Boolean{Value: args[0].Type() == object.NULL_OBJ}
+		},
+	},
+
+	// Additional Array functions
+	"sort": {
+		Fn: func(args ...object.Object) object.Object {
+			if len(args) != 1 {
+				return newError("sort() takes exactly 1 argument, got %d", len(args))
+			}
+			
+			if args[0].Type() != object.ARRAY_OBJ {
+				return newError("argument to sort() must be an array, got %s", args[0].Type())
+			}
+			
+			arr := args[0].(*object.Array)
+			
+			// Create a copy of the array to avoid modifying the original
+			sortedElements := make([]object.Object, len(arr.Elements))
+			copy(sortedElements, arr.Elements)
+			
+			// Sort based on the type of elements
+			sort.Slice(sortedElements, func(i, j int) bool {
+				a, b := sortedElements[i], sortedElements[j]
+				
+				// Handle different types
+				switch aVal := a.(type) {
+				case *object.Integer:
+					if bVal, ok := b.(*object.Integer); ok {
+						return aVal.Value < bVal.Value
+					} else if bVal, ok := b.(*object.Float); ok {
+						return float64(aVal.Value) < bVal.Value
+					}
+				case *object.Float:
+					if bVal, ok := b.(*object.Float); ok {
+						return aVal.Value < bVal.Value
+					} else if bVal, ok := b.(*object.Integer); ok {
+						return aVal.Value < float64(bVal.Value)
+					}
+				case *object.String:
+					if bVal, ok := b.(*object.String); ok {
+						return aVal.Value < bVal.Value
+					}
+				}
+				
+				// Fallback to string comparison
+				return a.Inspect() < b.Inspect()
+			})
+			
+			return &object.Array{Elements: sortedElements}
+		},
+	},
+
+	// Random number functions
+	"rand": {
+		Fn: func(args ...object.Object) object.Object {
+			if len(args) != 0 {
+				return newError("rand() takes no arguments, got %d", len(args))
+			}
+			
+			return &object.Float{Value: rand.Float64()}
+		},
+	},
+	
+	"randInt": {
+		Fn: func(args ...object.Object) object.Object {
+			if len(args) < 1 || len(args) > 2 {
+				return newError("randInt() takes 1 or 2 arguments, got %d", len(args))
+			}
+			
+			if len(args) == 1 {
+				// randInt(max) - returns 0 to max-1
+				maxVal, err := getIntValue(args[0])
+				if err != nil {
+					return newError("argument to randInt() must be an integer")
+				}
+				if maxVal <= 0 {
+					return newError("argument to randInt() must be positive")
+				}
+				return &object.Integer{Value: rand.Int63n(maxVal)}
+			} else {
+				// randInt(min, max) - returns min to max-1
+				minVal, err := getIntValue(args[0])
+				if err != nil {
+					return newError("first argument to randInt() must be an integer")
+				}
+				maxVal, err := getIntValue(args[1])
+				if err != nil {
+					return newError("second argument to randInt() must be an integer")
+				}
+				if maxVal <= minVal {
+					return newError("max must be greater than min in randInt()")
+				}
+				return &object.Integer{Value: minVal + rand.Int63n(maxVal-minVal)}
+			}
+		},
+	},
+
+	// String conversion functions for numbers
+	"parseFloat": {
+		Fn: func(args ...object.Object) object.Object {
+			if len(args) != 1 {
+				return newError("parseFloat() takes exactly 1 argument, got %d", len(args))
+			}
+			
+			if args[0].Type() != object.STRING_OBJ {
+				return newError("argument to parseFloat() must be a string, got %s", args[0].Type())
+			}
+			
+			str := args[0].(*object.String).Value
+			val, err := strconv.ParseFloat(str, 64)
+			if err != nil {
+				return newError("cannot parse '%s' as float: %s", str, err.Error())
+			}
+			
+			return &object.Float{Value: val}
+		},
+	},
+	
+	"parseInt": {
+		Fn: func(args ...object.Object) object.Object {
+			if len(args) != 1 {
+				return newError("parseInt() takes exactly 1 argument, got %d", len(args))
+			}
+			
+			if args[0].Type() != object.STRING_OBJ {
+				return newError("argument to parseInt() must be a string, got %s", args[0].Type())
+			}
+			
+			str := args[0].(*object.String).Value
+			val, err := strconv.ParseInt(str, 10, 64)
+			if err != nil {
+				return newError("cannot parse '%s' as integer: %s", str, err.Error())
+			}
+			
+			return &object.Integer{Value: val}
 		},
 	},
 }
