@@ -31,7 +31,12 @@ func init() {
 // getArgs returns an array of command line arguments
 func getArgs(args []object.Object, defs map[string]object.Object) object.Object {
 	if len(args) > 0 {
-		return &object.Error{Message: "getArgs does not accept any arguments"}
+		return ErrorMessage(
+			"cli", "getArgs",
+			"no arguments",
+			fmt.Sprintf("%d arguments", len(args)),
+			"cli.getArgs()",
+		)
 	}
 
 	cliArgs := &object.Array{}
@@ -44,7 +49,12 @@ func getArgs(args []object.Object, defs map[string]object.Object) object.Object 
 // getFlags parses command line flags into a dictionary
 func getFlags(args []object.Object, defs map[string]object.Object) object.Object {
 	if len(args) > 0 {
-		return &object.Error{Message: "getFlags does not accept any arguments"}
+		return ErrorMessage(
+			"cli", "getFlags",
+			"no arguments",
+			fmt.Sprintf("%d arguments", len(args)),
+			"cli.getFlags()",
+		)
 	}
 
 	flags := &object.Dict{Pairs: make(map[object.HashKey]object.DictPair)}
@@ -174,16 +184,31 @@ func confirm(args []object.Object, defs map[string]object.Object) object.Object 
 // execCommand executes a shell command and returns its output
 func execCommand(args []object.Object, defs map[string]object.Object) object.Object {
 	if len(args) != 1 {
-		return &object.Error{Message: fmt.Sprintf("cli.execCommand() expects exactly 1 argument (command string), but received %d. Usage: cli.execCommand(\"ls -la\")", len(args))}
+		return ErrorMessage(
+			"cli", "execCommand",
+			"1 string argument (command string)",
+			fmt.Sprintf("%d arguments", len(args)),
+			`cli.execCommand("ls -la")`,
+		)
 	}
 
 	command, ok := args[0].(*object.String)
 	if !ok {
-		return &object.Error{Message: fmt.Sprintf("cli.execCommand() expects a string argument, but received %s. Usage: cli.execCommand(\"ls -la\")", args[0].Type())}
+		return ErrorMessage(
+			"cli", "execCommand",
+			"string argument for shell command",
+			string(args[0].Type()),
+			`cli.execCommand("ls -la")`,
+		)
 	}
 
 	if strings.TrimSpace(command.Value) == "" {
-		return &object.Error{Message: "cli.execCommand() cannot execute an empty command. Please provide a valid shell command."}
+		return ErrorMessage(
+			"cli", "execCommand",
+			"non-empty command string",
+			"empty command",
+			`cli.execCommand("ls -la") - provide a valid shell command`,
+		)
 	}
 
 	cmd := exec.Command("sh", "-c", command.Value)
@@ -202,16 +227,31 @@ func execCommand(args []object.Object, defs map[string]object.Object) object.Obj
 // cliExit terminates the program with the given status code
 func cliExit(args []object.Object, defs map[string]object.Object) object.Object {
 	if len(args) != 1 {
-		return &object.Error{Message: fmt.Sprintf("cli.exit() expects exactly 1 argument (status code), but received %d. Usage: cli.exit(0) or cli.exit(1)", len(args))}
+		return ErrorMessage(
+			"cli", "exit",
+			"1 integer argument (status code)",
+			fmt.Sprintf("%d arguments", len(args)),
+			"cli.exit(0) for success or cli.exit(1) for error",
+		)
 	}
 
 	code, ok := args[0].(*object.Integer)
 	if !ok {
-		return &object.Error{Message: fmt.Sprintf("cli.exit() expects an integer status code, but received %s. Usage: cli.exit(0) for success or cli.exit(1) for error", args[0].Type())}
+		return ErrorMessage(
+			"cli", "exit",
+			"integer status code",
+			string(args[0].Type()),
+			"cli.exit(0) for success or cli.exit(1) for error",
+		)
 	}
 
 	if code.Value < 0 || code.Value > 255 {
-		return &object.Error{Message: fmt.Sprintf("cli.exit() status code must be between 0 and 255, but received %d. Use 0 for success, 1-255 for various error conditions.", code.Value)}
+		return ErrorMessage(
+			"cli", "exit",
+			"status code between 0 and 255",
+			fmt.Sprintf("status code %d", code.Value),
+			"cli.exit(0) for success, 1-255 for various error conditions",
+		)
 	}
 
 	os.Exit(int(code.Value))
@@ -221,7 +261,12 @@ func cliExit(args []object.Object, defs map[string]object.Object) object.Object 
 // parseArgs parses command line arguments into a structured format
 func parseArgs(args []object.Object, defs map[string]object.Object) object.Object {
 	if len(args) != 1 || len(defs) != 0 {
-		return &object.Error{Message: "We need exactly one argument: a slice of strings representing the arguments"}
+		return ErrorMessage(
+			"cli", "parseArgs",
+			"1 array argument (slice of strings representing arguments)",
+			fmt.Sprintf("%d arguments", len(args)),
+			"cli.parseArgs([\"--flag\", \"value\", \"positional\"])",
+		)
 	}
 
 	argStr := args[0].Inspect()
@@ -345,7 +390,12 @@ func args(args []object.Object, defs map[string]object.Object) object.Object {
 // argsParse returns a parsed arguments object with helper methods
 func argsParse(args []object.Object, defs map[string]object.Object) object.Object {
 	if len(args) > 0 {
-		return &object.Error{Message: "parse does not accept any arguments"}
+		return ErrorMessage(
+			"cli", "parse",
+			"no arguments",
+			fmt.Sprintf("%d arguments", len(args)),
+			"cli.parse()",
+		)
 	}
 
 	cliArgs := toolkit.GetCliArgs()
@@ -437,12 +487,22 @@ func createDictFromMap(flags map[string]object.Object) *object.Dict {
 func createHasFunction(flags map[string]object.Object) func(...object.Object) object.Object {
 	return func(args ...object.Object) object.Object {
 		if len(args) != 1 {
-			return &object.Error{Message: "has requires exactly one argument: the flag name"}
+			return ErrorMessage(
+				"cli", "has",
+				"1 string argument (flag name)",
+				fmt.Sprintf("%d arguments", len(args)),
+				"parsed.has(\"flagname\")",
+			)
 		}
 
 		flagName, ok := args[0].(*object.String)
 		if !ok {
-			return &object.Error{Message: "flag name must be a string"}
+			return ErrorMessage(
+				"cli", "has",
+				"string argument for flag name",
+				string(args[0].Type()),
+				"parsed.has(\"flagname\")",
+			)
 		}
 
 		name := strings.TrimPrefix(strings.TrimPrefix(flagName.Value, "--"), "-")
@@ -455,12 +515,22 @@ func createHasFunction(flags map[string]object.Object) func(...object.Object) ob
 func createGetFunction(flags map[string]object.Object) func(...object.Object) object.Object {
 	return func(args ...object.Object) object.Object {
 		if len(args) != 1 {
-			return &object.Error{Message: "get requires exactly one argument: the flag name"}
+			return ErrorMessage(
+				"cli", "get",
+				"1 string argument (flag name)",
+				fmt.Sprintf("%d arguments", len(args)),
+				"parsed.get(\"flagname\")",
+			)
 		}
 
 		flagName, ok := args[0].(*object.String)
 		if !ok {
-			return &object.Error{Message: "flag name must be a string"}
+			return ErrorMessage(
+				"cli", "get",
+				"string argument for flag name",
+				string(args[0].Type()),
+				"parsed.get(\"flagname\")",
+			)
 		}
 
 		name := strings.TrimPrefix(strings.TrimPrefix(flagName.Value, "--"), "-")
@@ -475,7 +545,12 @@ func createGetFunction(flags map[string]object.Object) func(...object.Object) ob
 func createPositionalFunction(positionalArgs []object.Object) func(...object.Object) object.Object {
 	return func(args ...object.Object) object.Object {
 		if len(args) > 0 {
-			return &object.Error{Message: "positional does not accept any arguments"}
+			return ErrorMessage(
+				"cli", "positional",
+				"no arguments",
+				fmt.Sprintf("%d arguments", len(args)),
+				"parsed.positional()",
+			)
 		}
 
 		return &object.Array{Elements: positionalArgs}
