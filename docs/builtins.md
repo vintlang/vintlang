@@ -136,225 +136,129 @@ let file = open("data.txt")
 
 ---
 
-## Math Functions
+## Additional Built-in Functions
 
-### `abs(number)`
-Returns the absolute value of a number (integer or float).
+### String Functions
+
+#### `startsWith(string, prefix)`
+Checks if a string starts with the specified prefix.
 ```vint
-abs(5)      // Output: 5
-abs(-5)     // Output: 5
-abs(-3.14)  // Output: 3.14
+startsWith("VintLang", "Vint")    // Output: true
+startsWith("hello", "hi")         // Output: false
 ```
 
-### `min(number1, number2, ...)`
-Returns the minimum value from the given arguments. Accepts multiple numbers.
+#### `endsWith(string, suffix)`
+Checks if a string ends with the specified suffix.
 ```vint
-min(5, 3, 8, 1)        // Output: 1
-min(-5, -2, -10)       // Output: -10
-min(3.14, 2.5, 4.0)    // Output: 2.5
+endsWith("VintLang", "Lang")      // Output: true
+endsWith("hello", "world")        // Output: false
 ```
 
-### `max(number1, number2, ...)`
-Returns the maximum value from the given arguments. Accepts multiple numbers.
-```vint
-max(5, 3, 8, 1)        // Output: 8
-max(-5, -2, -10)       // Output: -2
-max(3.14, 2.5, 4.0)    // Output: 4.0
-```
+### Array Functions
 
-### `round(number)`
-Rounds a number to the nearest integer.
-```vint
-round(3.14)   // Output: 3
-round(3.64)   // Output: 4
-round(-2.7)   // Output: -3
-```
-
-### `floor(number)`
-Rounds a number down to the nearest integer.
-```vint
-floor(3.99)   // Output: 3
-floor(-2.1)   // Output: -3
-```
-
-### `ceil(number)`
-Rounds a number up to the nearest integer.
-```vint
-ceil(3.01)    // Output: 4
-ceil(-2.9)    // Output: -2
-```
-
-### `sqrt(number)`
-Returns the square root of a number. The number must be non-negative.
-```vint
-sqrt(4)       // Output: 2.0
-sqrt(9)       // Output: 3.0
-sqrt(2)       // Output: 1.4142135623730951
-```
-
----
-
-## Enhanced String Functions
-
-### `upper(string)`
-Converts a string to uppercase.
-```vint
-upper("hello")    // Output: "HELLO"
-```
-
-### `lower(string)`
-Converts a string to lowercase.
-```vint
-lower("WORLD")    // Output: "world"
-```
-
-### `trim(string)`
-Removes leading and trailing whitespace from a string.
-```vint
-trim("  hello  ")  // Output: "hello"
-```
-
-### `contains(string, substring)` or `contains(array, element)`
-Checks if a string contains a substring, or if an array contains an element.
-```vint
-contains("hello", "ell")           // Output: true
-contains(["a", "b", "c"], "b")     // Output: true
-```
-
-### `startsWith(string, prefix)`
-Checks if a string starts with a given prefix.
-```vint
-startsWith("hello", "he")          // Output: true
-startsWith("hello", "lo")          // Output: false
-```
-
-### `endsWith(string, suffix)`
-Checks if a string ends with a given suffix.
-```vint
-endsWith("hello", "lo")            // Output: true
-endsWith("hello", "he")            // Output: false
-```
-
----
-
-## Enhanced Array Functions
-
-### `reverse(array)`
-Returns a new array with elements in reverse order.
-```vint
-let arr = [1, 2, 3, 4, 5]
-reverse(arr)      // Output: [5, 4, 3, 2, 1]
-```
-
-### `indexOf(array, element)`
+#### `indexOf(array, element)`
 Returns the index of the first occurrence of an element in an array, or -1 if not found.
 ```vint
-let arr = [1, 2, 3, 4, 5]
-indexOf(arr, 3)   // Output: 2
-indexOf(arr, 6)   // Output: -1
+let arr = [1, 2, 3, 2, 4]
+indexOf(arr, 2)    // Output: 1
+indexOf(arr, 5)    // Output: -1
 ```
 
-### `sort(array)`
-Returns a new sorted array. Works with numbers, strings, and mixed arrays.
+### Type Checking Functions
+
+#### `isInt(value)`
+Returns true if the value is an integer.
 ```vint
-let numbers = [5, 2, 8, 1, 9]
-sort(numbers)     // Output: [1, 2, 5, 8, 9]
-
-let strings = ["banana", "apple", "cherry"]
-sort(strings)     // Output: ["apple", "banana", "cherry"]
+isInt(42)          // Output: true
+isInt(3.14)        // Output: false
+isInt("hello")     // Output: false
 ```
 
----
-
-## Random Functions
-
-### `rand()`
-Returns a random floating-point number between 0.0 and 1.0.
+#### `isFloat(value)`
+Returns true if the value is a float.
 ```vint
-rand()            // Output: 0.7326588891711826 (example)
+isFloat(3.14)      // Output: true
+isFloat(42)        // Output: false
+isFloat("hello")   // Output: false
 ```
 
-### `randInt(max)`
-Returns a random integer from 0 to max-1.
+#### `isString(value)`
+Returns true if the value is a string.
 ```vint
-randInt(10)       // Output: 7 (example, 0-9)
+isString("hello")  // Output: true
+isString(42)       // Output: false
+isString(3.14)     // Output: false
 ```
 
-### `randInt(min, max)`
-Returns a random integer from min to max-1.
+#### `isBool(value)`
+Returns true if the value is a boolean.
 ```vint
-randInt(5, 15)    // Output: 12 (example, 5-14)
+isBool(true)       // Output: true
+isBool(false)      // Output: true
+isBool(42)         // Output: false
 ```
 
----
-
-## String Parsing Functions
-
-### `parseInt(string)`
-Parses a string and returns an integer. Throws an error if the string is not a valid integer.
-```vint
-parseInt("123")   // Output: 123
-parseInt("-456")  // Output: -456
-```
-
-### `parseFloat(string)`
-Parses a string and returns a float. Throws an error if the string is not a valid number.
-```vint
-parseFloat("3.14")  // Output: 3.14
-parseFloat("-2.5")  // Output: -2.5
-parseFloat("123")   // Output: 123.0
-```
-
----
-
-## Type Checking Functions
-
-### `isInt(value)`
-Returns `true` if the value is an integer, `false` otherwise.
-```vint
-isInt(42)         // Output: true
-isInt(3.14)       // Output: false
-```
-
-### `isFloat(value)`
-Returns `true` if the value is a float, `false` otherwise.
-```vint
-isFloat(3.14)     // Output: true
-isFloat(42)       // Output: false
-```
-
-### `isString(value)`
-Returns `true` if the value is a string, `false` otherwise.
-```vint
-isString("hello") // Output: true
-isString(42)      // Output: false
-```
-
-### `isBool(value)`
-Returns `true` if the value is a boolean, `false` otherwise.
-```vint
-isBool(true)      // Output: true
-isBool("true")    // Output: false
-```
-
-### `isArray(value)`
-Returns `true` if the value is an array, `false` otherwise.
+#### `isArray(value)`
+Returns true if the value is an array.
 ```vint
 isArray([1, 2, 3]) // Output: true
 isArray("hello")   // Output: false
+isArray(42)        // Output: false
 ```
 
-### `isDict(value)`
-Returns `true` if the value is a dictionary, `false` otherwise.
+#### `isDict(value)`
+Returns true if the value is a dictionary.
 ```vint
-isDict({"a": 1})   // Output: true
-isDict([1, 2])     // Output: false
+isDict({"key": "value"})  // Output: true
+isDict([1, 2, 3])         // Output: false
+isDict("hello")           // Output: false
 ```
 
-### `isNull(value)`
-Returns `true` if the value is null, `false` otherwise.
+#### `isNull(value)`
+Returns true if the value is null.
 ```vint
-let nullVar = null
-isNull(nullVar)    // Output: true
+isNull(null)       // Output: true
 isNull(42)         // Output: false
+isNull("")         // Output: false
+```
+
+### Parsing Functions
+
+#### `parseInt(string)`
+Parses a string and returns an integer.
+```vint
+parseInt("42")     // Output: 42
+parseInt("-10")    // Output: -10
+parseInt("abc")    // Error: cannot parse 'abc' as integer
+```
+
+#### `parseFloat(string)`
+Parses a string and returns a float.
+```vint
+parseFloat("3.14")    // Output: 3.14
+parseFloat("-2.5")    // Output: -2.5
+parseFloat("hello")   // Error: cannot parse 'hello' as float
+```
+
+---
+
+## Note on Existing Modules
+
+VintLang also provides specialized modules for advanced functionality:
+
+- **Math functions** like `abs`, `min`, `max`, `sqrt`, etc. are available in the `math` module
+- **String functions** like `toUpper`, `toLower`, `trim`, `contains`, etc. are available in the `string` module  
+- **Random functions** like `random.int()` and `random.float()` are available in the `random` module
+- **Array methods** like `reverse()` and `sort()` are available as methods on array objects
+
+Use these modules for more advanced functionality:
+```vint
+import math
+import string
+import random
+
+let result = math.abs(-5)        // 5
+let upper = string.toUpper("hi") // "HI"
+let num = random.int(1, 10)      // Random number 1-10
+let arr = [3, 1, 4].sort()       // [1, 3, 4]
 ```
