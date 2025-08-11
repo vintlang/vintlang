@@ -222,7 +222,7 @@ let viewLog = func() {
     println("📋 Application Logs")
     println("="*40)
     
-    if (os.exists(log_file)) {
+    if (os.fileExists(log_file)==true) {
         let logs = os.readFile(log_file)
         println(logs)
     } else {
