@@ -4,6 +4,7 @@ import (
 	"bufio"
 	"fmt"
 	"io"
+	"math"
 	"os"
 	"strings"
 	"time"
@@ -534,6 +535,436 @@ var builtins = map[string]*object.Builtin{
 			return NULL
 		},
 	},
+
+	// Math functions
+	"abs": {
+		Fn: func(args ...object.Object) object.Object {
+			if len(args) != 1 {
+				return newError("abs() takes exactly 1 argument, got %d", len(args))
+			}
+			
+			switch arg := args[0].(type) {
+			case *object.Integer:
+				value := arg.Value
+				if value < 0 {
+					value = -value
+				}
+				return &object.Integer{Value: value}
+			case *object.Float:
+				return &object.Float{Value: math.Abs(arg.Value)}
+			default:
+				return newError("argument to abs() must be a number, got %s", arg.Type())
+			}
+		},
+	},
+	
+	"min": {
+		Fn: func(args ...object.Object) object.Object {
+			if len(args) == 0 {
+				return newError("min() requires at least 1 argument")
+			}
+			
+			var minVal object.Object
+			var isFloat bool
+			
+			for i, arg := range args {
+				switch val := arg.(type) {
+				case *object.Integer:
+					if i == 0 {
+						minVal = val
+					} else {
+						if isFloat {
+							currentFloat := float64(val.Value)
+							if currentFloat < minVal.(*object.Float).Value {
+								minVal = &object.Float{Value: currentFloat}
+							}
+						} else {
+							if val.Value < minVal.(*object.Integer).Value {
+								minVal = val
+							}
+						}
+					}
+				case *object.Float:
+					if i == 0 || !isFloat {
+						if i == 0 {
+							minVal = val
+							isFloat = true
+						} else {
+							// Convert previous min to float if it was integer
+							prevInt := minVal.(*object.Integer).Value
+							if val.Value < float64(prevInt) {
+								minVal = val
+							} else {
+								minVal = &object.Float{Value: float64(prevInt)}
+							}
+							isFloat = true
+						}
+					} else {
+						if val.Value < minVal.(*object.Float).Value {
+							minVal = val
+						}
+					}
+				default:
+					return newError("all arguments to min() must be numbers, got %s at position %d", val.Type(), i)
+				}
+			}
+			
+			return minVal
+		},
+	},
+	
+	"max": {
+		Fn: func(args ...object.Object) object.Object {
+			if len(args) == 0 {
+				return newError("max() requires at least 1 argument")
+			}
+			
+			var maxVal object.Object
+			var isFloat bool
+			
+			for i, arg := range args {
+				switch val := arg.(type) {
+				case *object.Integer:
+					if i == 0 {
+						maxVal = val
+					} else {
+						if isFloat {
+							currentFloat := float64(val.Value)
+							if currentFloat > maxVal.(*object.Float).Value {
+								maxVal = &object.Float{Value: currentFloat}
+							}
+						} else {
+							if val.Value > maxVal.(*object.Integer).Value {
+								maxVal = val
+							}
+						}
+					}
+				case *object.Float:
+					if i == 0 || !isFloat {
+						if i == 0 {
+							maxVal = val
+							isFloat = true
+						} else {
+							// Convert previous max to float if it was integer
+							prevInt := maxVal.(*object.Integer).Value
+							if val.Value > float64(prevInt) {
+								maxVal = val
+							} else {
+								maxVal = &object.Float{Value: float64(prevInt)}
+							}
+							isFloat = true
+						}
+					} else {
+						if val.Value > maxVal.(*object.Float).Value {
+							maxVal = val
+						}
+					}
+				default:
+					return newError("all arguments to max() must be numbers, got %s at position %d", val.Type(), i)
+				}
+			}
+			
+			return maxVal
+		},
+	},
+	
+	"round": {
+		Fn: func(args ...object.Object) object.Object {
+			if len(args) != 1 {
+				return newError("round() takes exactly 1 argument, got %d", len(args))
+			}
+			
+			switch arg := args[0].(type) {
+			case *object.Integer:
+				return arg // Already an integer
+			case *object.Float:
+				return &object.Integer{Value: int64(math.Round(arg.Value))}
+			default:
+				return newError("argument to round() must be a number, got %s", arg.Type())
+			}
+		},
+	},
+	
+	"floor": {
+		Fn: func(args ...object.Object) object.Object {
+			if len(args) != 1 {
+				return newError("floor() takes exactly 1 argument, got %d", len(args))
+			}
+			
+			switch arg := args[0].(type) {
+			case *object.Integer:
+				return arg // Already an integer
+			case *object.Float:
+				return &object.Integer{Value: int64(math.Floor(arg.Value))}
+			default:
+				return newError("argument to floor() must be a number, got %s", arg.Type())
+			}
+		},
+	},
+	
+	"ceil": {
+		Fn: func(args ...object.Object) object.Object {
+			if len(args) != 1 {
+				return newError("ceil() takes exactly 1 argument, got %d", len(args))
+			}
+			
+			switch arg := args[0].(type) {
+			case *object.Integer:
+				return arg // Already an integer
+			case *object.Float:
+				return &object.Integer{Value: int64(math.Ceil(arg.Value))}
+			default:
+				return newError("argument to ceil() must be a number, got %s", arg.Type())
+			}
+		},
+	},
+	
+	"sqrt": {
+		Fn: func(args ...object.Object) object.Object {
+			if len(args) != 1 {
+				return newError("sqrt() takes exactly 1 argument, got %d", len(args))
+			}
+			
+			switch arg := args[0].(type) {
+			case *object.Integer:
+				if arg.Value < 0 {
+					return newError("sqrt() of negative number is not supported")
+				}
+				return &object.Float{Value: math.Sqrt(float64(arg.Value))}
+			case *object.Float:
+				if arg.Value < 0 {
+					return newError("sqrt() of negative number is not supported")
+				}
+				return &object.Float{Value: math.Sqrt(arg.Value)}
+			default:
+				return newError("argument to sqrt() must be a number, got %s", arg.Type())
+			}
+		},
+	},
+
+	// String functions
+	"upper": {
+		Fn: func(args ...object.Object) object.Object {
+			if len(args) != 1 {
+				return newError("upper() takes exactly 1 argument, got %d", len(args))
+			}
+			
+			if args[0].Type() != object.STRING_OBJ {
+				return newError("argument to upper() must be a string, got %s", args[0].Type())
+			}
+			
+			str := args[0].(*object.String).Value
+			return &object.String{Value: strings.ToUpper(str)}
+		},
+	},
+	
+	"lower": {
+		Fn: func(args ...object.Object) object.Object {
+			if len(args) != 1 {
+				return newError("lower() takes exactly 1 argument, got %d", len(args))
+			}
+			
+			if args[0].Type() != object.STRING_OBJ {
+				return newError("argument to lower() must be a string, got %s", args[0].Type())
+			}
+			
+			str := args[0].(*object.String).Value
+			return &object.String{Value: strings.ToLower(str)}
+		},
+	},
+	
+	"trim": {
+		Fn: func(args ...object.Object) object.Object {
+			if len(args) != 1 {
+				return newError("trim() takes exactly 1 argument, got %d", len(args))
+			}
+			
+			if args[0].Type() != object.STRING_OBJ {
+				return newError("argument to trim() must be a string, got %s", args[0].Type())
+			}
+			
+			str := args[0].(*object.String).Value
+			return &object.String{Value: strings.TrimSpace(str)}
+		},
+	},
+	
+	"contains": {
+		Fn: func(args ...object.Object) object.Object {
+			if len(args) != 2 {
+				return newError("contains() takes exactly 2 arguments, got %d", len(args))
+			}
+			
+			// Check if both arguments are strings for string.contains
+			if args[0].Type() == object.STRING_OBJ && args[1].Type() == object.STRING_OBJ {
+				str := args[0].(*object.String).Value
+				substr := args[1].(*object.String).Value
+				return &object.Boolean{Value: strings.Contains(str, substr)}
+			}
+			
+			// Check if first argument is array for array.contains
+			if args[0].Type() == object.ARRAY_OBJ {
+				arr := args[0].(*object.Array)
+				for _, element := range arr.Elements {
+					if element.Inspect() == args[1].Inspect() {
+						return TRUE
+					}
+				}
+				return FALSE
+			}
+			
+			return newError("contains() expects (string, string) or (array, element), got (%s, %s)", 
+				args[0].Type(), args[1].Type())
+		},
+	},
+	
+	"startsWith": {
+		Fn: func(args ...object.Object) object.Object {
+			if len(args) != 2 {
+				return newError("startsWith() takes exactly 2 arguments, got %d", len(args))
+			}
+			
+			if args[0].Type() != object.STRING_OBJ || args[1].Type() != object.STRING_OBJ {
+				return newError("both arguments to startsWith() must be strings, got (%s, %s)", 
+					args[0].Type(), args[1].Type())
+			}
+			
+			str := args[0].(*object.String).Value
+			prefix := args[1].(*object.String).Value
+			return &object.Boolean{Value: strings.HasPrefix(str, prefix)}
+		},
+	},
+	
+	"endsWith": {
+		Fn: func(args ...object.Object) object.Object {
+			if len(args) != 2 {
+				return newError("endsWith() takes exactly 2 arguments, got %d", len(args))
+			}
+			
+			if args[0].Type() != object.STRING_OBJ || args[1].Type() != object.STRING_OBJ {
+				return newError("both arguments to endsWith() must be strings, got (%s, %s)", 
+					args[0].Type(), args[1].Type())
+			}
+			
+			str := args[0].(*object.String).Value
+			suffix := args[1].(*object.String).Value
+			return &object.Boolean{Value: strings.HasSuffix(str, suffix)}
+		},
+	},
+
+	// Array functions
+	"reverse": {
+		Fn: func(args ...object.Object) object.Object {
+			if len(args) != 1 {
+				return newError("reverse() takes exactly 1 argument, got %d", len(args))
+			}
+			
+			if args[0].Type() != object.ARRAY_OBJ {
+				return newError("argument to reverse() must be an array, got %s", args[0].Type())
+			}
+			
+			arr := args[0].(*object.Array)
+			length := len(arr.Elements)
+			reversed := make([]object.Object, length)
+			
+			for i, element := range arr.Elements {
+				reversed[length-1-i] = element
+			}
+			
+			return &object.Array{Elements: reversed}
+		},
+	},
+	
+	"indexOf": {
+		Fn: func(args ...object.Object) object.Object {
+			if len(args) != 2 {
+				return newError("indexOf() takes exactly 2 arguments, got %d", len(args))
+			}
+			
+			if args[0].Type() != object.ARRAY_OBJ {
+				return newError("first argument to indexOf() must be an array, got %s", args[0].Type())
+			}
+			
+			arr := args[0].(*object.Array)
+			for i, element := range arr.Elements {
+				if element.Inspect() == args[1].Inspect() {
+					return &object.Integer{Value: int64(i)}
+				}
+			}
+			
+			return &object.Integer{Value: -1} // Not found
+		},
+	},
+
+	// Type checking functions
+	"isInt": {
+		Fn: func(args ...object.Object) object.Object {
+			if len(args) != 1 {
+				return newError("isInt() takes exactly 1 argument, got %d", len(args))
+			}
+			
+			return &object.Boolean{Value: args[0].Type() == object.INTEGER_OBJ}
+		},
+	},
+	
+	"isFloat": {
+		Fn: func(args ...object.Object) object.Object {
+			if len(args) != 1 {
+				return newError("isFloat() takes exactly 1 argument, got %d", len(args))
+			}
+			
+			return &object.Boolean{Value: args[0].Type() == object.FLOAT_OBJ}
+		},
+	},
+	
+	"isString": {
+		Fn: func(args ...object.Object) object.Object {
+			if len(args) != 1 {
+				return newError("isString() takes exactly 1 argument, got %d", len(args))
+			}
+			
+			return &object.Boolean{Value: args[0].Type() == object.STRING_OBJ}
+		},
+	},
+	
+	"isBool": {
+		Fn: func(args ...object.Object) object.Object {
+			if len(args) != 1 {
+				return newError("isBool() takes exactly 1 argument, got %d", len(args))
+			}
+			
+			return &object.Boolean{Value: args[0].Type() == object.BOOLEAN_OBJ}
+		},
+	},
+	
+	"isArray": {
+		Fn: func(args ...object.Object) object.Object {
+			if len(args) != 1 {
+				return newError("isArray() takes exactly 1 argument, got %d", len(args))
+			}
+			
+			return &object.Boolean{Value: args[0].Type() == object.ARRAY_OBJ}
+		},
+	},
+	
+	"isDict": {
+		Fn: func(args ...object.Object) object.Object {
+			if len(args) != 1 {
+				return newError("isDict() takes exactly 1 argument, got %d", len(args))
+			}
+			
+			return &object.Boolean{Value: args[0].Type() == object.DICT_OBJ}
+		},
+	},
+	
+	"isNull": {
+		Fn: func(args ...object.Object) object.Object {
+			if len(args) != 1 {
+				return newError("isNull() takes exactly 1 argument, got %d", len(args))
+			}
+			
+			return &object.Boolean{Value: args[0].Type() == object.NULL_OBJ}
+		},
+	},
 }
 
 func getIntValue(obj object.Object) (int64, error) {
@@ -542,5 +973,27 @@ func getIntValue(obj object.Object) (int64, error) {
 		return obj.Value, nil
 	default:
 		return 0, fmt.Errorf("expected Integer, got %s", obj.Type())
+	}
+}
+
+func getFloatValue(obj object.Object) (float64, error) {
+	switch obj := obj.(type) {
+	case *object.Float:
+		return obj.Value, nil
+	case *object.Integer:
+		return float64(obj.Value), nil
+	default:
+		return 0, fmt.Errorf("expected Float or Integer, got %s", obj.Type())
+	}
+}
+
+func getNumericValue(obj object.Object) (float64, bool, error) {
+	switch obj := obj.(type) {
+	case *object.Integer:
+		return float64(obj.Value), false, nil
+	case *object.Float:
+		return obj.Value, true, nil
+	default:
+		return 0, false, fmt.Errorf("expected numeric type, got %s", obj.Type())
 	}
 }

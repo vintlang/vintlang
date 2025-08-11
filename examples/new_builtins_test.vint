@@ -1,0 +1,170 @@
+// examples/new_builtins_test.vint
+// Comprehensive test for all new built-in functions added to VintLang
+
+println("=== Testing New Built-in Functions ===\n")
+
+// ===== MATH FUNCTIONS =====
+println("=== Math Functions ===")
+
+// Test abs()
+println("abs() function:")
+println("  abs(5) =", abs(5))
+println("  abs(-5) =", abs(-5))
+println("  abs(-3.14) =", abs(-3.14))
+println("  abs(0) =", abs(0))
+
+// Test min()
+println("\nmin() function:")
+println("  min(5, 3, 8, 1) =", min(5, 3, 8, 1))
+println("  min(10) =", min(10))
+println("  min(-5, -2, -10) =", min(-5, -2, -10))
+println("  min(3.14, 2.5, 4.0) =", min(3.14, 2.5, 4.0))
+
+// Test max()
+println("\nmax() function:")
+println("  max(5, 3, 8, 1) =", max(5, 3, 8, 1))
+println("  max(10) =", max(10))
+println("  max(-5, -2, -10) =", max(-5, -2, -10))
+println("  max(3.14, 2.5, 4.0) =", max(3.14, 2.5, 4.0))
+
+// Test round()
+println("\nround() function:")
+println("  round(3.14) =", round(3.14))
+println("  round(3.64) =", round(3.64))
+println("  round(-2.3) =", round(-2.3))
+println("  round(-2.7) =", round(-2.7))
+
+// Test floor()
+println("\nfloor() function:")
+println("  floor(3.99) =", floor(3.99))
+println("  floor(-2.1) =", floor(-2.1))
+println("  floor(5) =", floor(5))
+
+// Test ceil()
+println("\nceil() function:")
+println("  ceil(3.01) =", ceil(3.01))
+println("  ceil(-2.9) =", ceil(-2.9))
+println("  ceil(5) =", ceil(5))
+
+// Test sqrt()
+println("\nsqrt() function:")
+println("  sqrt(4) =", sqrt(4))
+println("  sqrt(9) =", sqrt(9))
+println("  sqrt(16.0) =", sqrt(16.0))
+println("  sqrt(2) =", sqrt(2))
+
+// ===== STRING FUNCTIONS =====
+println("\n=== String Functions ===")
+
+// Test upper()
+println("upper() function:")
+println("  upper('hello') =", upper("hello"))
+println("  upper('World') =", upper("World"))
+
+// Test lower()
+println("\nlower() function:")
+println("  lower('HELLO') =", lower("HELLO"))
+println("  lower('World') =", lower("World"))
+
+// Test trim()
+println("\ntrim() function:")
+println("  trim('  hello  ') = '" + trim("  hello  ") + "'")
+println("  trim('\\t\\ntest\\t\\n') = '" + trim("	test	") + "'")
+
+// Test contains() for strings
+println("\ncontains() function (strings):")
+println("  contains('hello world', 'world') =", contains("hello world", "world"))
+println("  contains('hello', 'xyz') =", contains("hello", "xyz"))
+println("  contains('programming', 'gram') =", contains("programming", "gram"))
+
+// Test startsWith()
+println("\nstartsWith() function:")
+println("  startsWith('hello world', 'hello') =", startsWith("hello world", "hello"))
+println("  startsWith('hello', 'world') =", startsWith("hello", "world"))
+println("  startsWith('VintLang', 'Vint') =", startsWith("VintLang", "Vint"))
+
+// Test endsWith()
+println("\nendsWith() function:")
+println("  endsWith('hello world', 'world') =", endsWith("hello world", "world"))
+println("  endsWith('hello', 'world') =", endsWith("hello", "world"))
+println("  endsWith('VintLang', 'Lang') =", endsWith("VintLang", "Lang"))
+
+// ===== ARRAY FUNCTIONS =====
+println("\n=== Array Functions ===")
+
+let testArray = [1, 2, 3, 4, 5]
+let stringArray = ["apple", "banana", "cherry", "date"]
+
+// Test reverse()
+println("reverse() function:")
+println("  Original array:", testArray)
+println("  reverse(array) =", reverse(testArray))
+
+// Test indexOf()
+println("\nindexOf() function:")
+println("  indexOf([1,2,3,4,5], 3) =", indexOf(testArray, 3))
+println("  indexOf([1,2,3,4,5], 6) =", indexOf(testArray, 6))
+println("  indexOf(stringArray, 'banana') =", indexOf(stringArray, "banana"))
+println("  indexOf(stringArray, 'grape') =", indexOf(stringArray, "grape"))
+
+// Test contains() for arrays
+println("\ncontains() function (arrays):")
+println("  contains([1,2,3,4,5], 3) =", contains(testArray, 3))
+println("  contains([1,2,3,4,5], 6) =", contains(testArray, 6))
+println("  contains(stringArray, 'cherry') =", contains(stringArray, "cherry"))
+println("  contains(stringArray, 'grape') =", contains(stringArray, "grape"))
+
+// ===== TYPE CHECKING FUNCTIONS =====
+println("\n=== Type Checking Functions ===")
+
+let intVal = 42
+let floatVal = 3.14
+let stringVal = "hello"
+let boolVal = true
+let arrayVal = [1, 2, 3]
+let dictVal = {"name": "VintLang", "version": "1.0"}
+let nullVal = null
+
+println("isInt() function:")
+println("  isInt(42) =", isInt(intVal))
+println("  isInt(3.14) =", isInt(floatVal))
+println("  isInt('hello') =", isInt(stringVal))
+
+println("\nisFloat() function:")
+println("  isFloat(3.14) =", isFloat(floatVal))
+println("  isFloat(42) =", isFloat(intVal))
+println("  isFloat('hello') =", isFloat(stringVal))
+
+println("\nisString() function:")
+println("  isString('hello') =", isString(stringVal))
+println("  isString(42) =", isString(intVal))
+println("  isString(true) =", isString(boolVal))
+
+println("\nisBool() function:")
+println("  isBool(true) =", isBool(boolVal))
+println("  isBool('true') =", isBool("true"))
+println("  isBool(1) =", isBool(1))
+
+println("\nisArray() function:")
+println("  isArray([1,2,3]) =", isArray(arrayVal))
+println("  isArray('hello') =", isArray(stringVal))
+println("  isArray({'a': 1}) =", isArray(dictVal))
+
+println("\nisDict() function:")
+println("  isDict({'name': 'VintLang'}) =", isDict(dictVal))
+println("  isDict([1,2,3]) =", isDict(arrayVal))
+println("  isDict('hello') =", isDict(stringVal))
+
+println("\nisNull() function:")
+println("  isNull(null) =", isNull(nullVal))
+println("  isNull(42) =", isNull(intVal))
+println("  isNull('') =", isNull(""))
+
+println("\n=== All New Built-in Function Tests Completed Successfully! ===")
+
+// Summary
+println("\nSummary of new functions added:")
+println("Math: abs, min, max, round, floor, ceil, sqrt")
+println("String: upper, lower, trim, contains, startsWith, endsWith")
+println("Array: reverse, indexOf, contains")
+println("Type checking: isInt, isFloat, isString, isBool, isArray, isDict, isNull")
