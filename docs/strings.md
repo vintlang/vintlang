@@ -189,6 +189,80 @@ let name = "Tachera Sasi"
 print(name.contains("Sasi"))  // Output: true
 ```
 
+### Get Character at Index (`charAt`)
+
+Get the character at a specific index:
+
+```js
+let word = "Hello"
+print(word.charAt(1))  // Output: e
+print(word.charAt(10)) // Output: "" (empty string for out of bounds)
+```
+
+### Repeat String (`times`)
+
+Repeat a string a specified number of times:
+
+```js
+let pattern = "Ha"
+print(pattern.times(3))  // Output: HaHaHa
+```
+
+### Pad String Start (`padStart`)
+
+Pad the string to a target length from the beginning:
+
+```js
+let num = "5"
+print(num.padStart(3, "0"))  // Output: 005
+
+let word = "hi"
+print(word.padStart(5, "*"))  // Output: ***hi
+```
+
+### Pad String End (`padEnd`)
+
+Pad the string to a target length from the end:
+
+```js
+let num = "5"
+print(num.padEnd(3, "0"))  // Output: 500
+
+let word = "hi"
+print(word.padEnd(5, "*"))  // Output: hi***
+```
+
+### Check String Start (`startsWith`)
+
+Check if a string starts with a specified prefix:
+
+```js
+let message = "Hello World"
+print(message.startsWith("Hello"))  // Output: true
+print(message.startsWith("World"))  // Output: false
+```
+
+### Check String End (`endsWith`)
+
+Check if a string ends with a specified suffix:
+
+```js
+let filename = "document.pdf"
+print(filename.endsWith(".pdf"))  // Output: true
+print(filename.endsWith(".txt"))  // Output: false
+```
+
+### Extract Slice (`slice`)
+
+Extract a section of the string:
+
+```js
+let text = "Hello World"
+print(text.slice(0, 5))   // Output: Hello
+print(text.slice(6))      // Output: World
+print(text.slice(-5))     // Output: World
+```
+
 ## Example Usage
 
 Here’s an example of how you might use these string operations in Vint:
