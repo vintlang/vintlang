@@ -14,7 +14,7 @@ package notifyafrica_pkg {
             return null // Return null to indicate failure
         }
         if (baseUrl == null || baseUrl == "") {
-            baseUrl = "https://notify.africa/api/v2/send-sms" // fallback default
+            baseUrl = "https://api.notify.africa/v2/send-sms" // fallback default
         }
 
         let url = baseUrl
