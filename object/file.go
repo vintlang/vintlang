@@ -1,7 +1,10 @@
 package object
 
 import (
+	"io"
 	"os"
+	"path/filepath"
+	"strings"
 )
 
 type File struct {
@@ -20,6 +23,20 @@ func (f *File) Method(method string, args []Object) Object {
 		return f.write(args)
 	case "append":
 		return f.append(args)
+	case "exists":
+		return f.exists(args)
+	case "size":
+		return f.size(args)
+	case "delete":
+		return f.delete(args)
+	case "copy":
+		return f.copy(args)
+	case "move":
+		return f.move(args)
+	case "lines":
+		return f.lines(args)
+	case "extension":
+		return f.extension(args)
 	default:
 		return newError("Method '%s' is not supported for the file object.", method)
 	}
@@ -67,4 +84,116 @@ func (f *File) append(args []Object) Object {
 	}
 	f.Content += content.Value
 	return &Boolean{Value: true}
+}
+
+func (f *File) exists(args []Object) Object {
+	if len(args) != 0 {
+		return newError("exists() expects 0 arguments, got %d", len(args))
+	}
+	
+	_, err := os.Stat(f.Filename)
+	return &Boolean{Value: err == nil}
+}
+
+func (f *File) size(args []Object) Object {
+	if len(args) != 0 {
+		return newError("size() expects 0 arguments, got %d", len(args))
+	}
+	
+	info, err := os.Stat(f.Filename)
+	if err != nil {
+		return newError("Error getting file size: %s", err.Error())
+	}
+	
+	return &Integer{Value: info.Size()}
+}
+
+func (f *File) delete(args []Object) Object {
+	if len(args) != 0 {
+		return newError("delete() expects 0 arguments, got %d", len(args))
+	}
+	
+	err := os.Remove(f.Filename)
+	if err != nil {
+		return newError("Error deleting file: %s", err.Error())
+	}
+	
+	return &Boolean{Value: true}
+}
+
+func (f *File) copy(args []Object) Object {
+	if len(args) != 1 {
+		return newError("copy() expects 1 argument, got %d", len(args))
+	}
+	
+	destination, ok := args[0].(*String)
+	if !ok {
+		return newError("Destination must be a string")
+	}
+	
+	src, err := os.Open(f.Filename)
+	if err != nil {
+		return newError("Error opening source file: %s", err.Error())
+	}
+	defer src.Close()
+	
+	dst, err := os.Create(destination.Value)
+	if err != nil {
+		return newError("Error creating destination file: %s", err.Error())
+	}
+	defer dst.Close()
+	
+	_, err = io.Copy(dst, src)
+	if err != nil {
+		return newError("Error copying file: %s", err.Error())
+	}
+	
+	return &Boolean{Value: true}
+}
+
+func (f *File) move(args []Object) Object {
+	if len(args) != 1 {
+		return newError("move() expects 1 argument, got %d", len(args))
+	}
+	
+	destination, ok := args[0].(*String)
+	if !ok {
+		return newError("Destination must be a string")
+	}
+	
+	err := os.Rename(f.Filename, destination.Value)
+	if err != nil {
+		return newError("Error moving file: %s", err.Error())
+	}
+	
+	f.Filename = destination.Value
+	return &Boolean{Value: true}
+}
+
+func (f *File) lines(args []Object) Object {
+	if len(args) != 0 {
+		return newError("lines() expects 0 arguments, got %d", len(args))
+	}
+	
+	content, err := os.ReadFile(f.Filename)
+	if err != nil {
+		return newError("Error reading file: %s", err.Error())
+	}
+	
+	lines := strings.Split(string(content), "\n")
+	elements := make([]Object, len(lines))
+	for i, line := range lines {
+		elements[i] = &String{Value: line}
+	}
+	
+	return &Array{Elements: elements}
+}
+
+func (f *File) extension(args []Object) Object {
+	if len(args) != 0 {
+		return newError("extension() expects 0 arguments, got %d", len(args))
+	}
+	
+	ext := filepath.Ext(f.Filename)
+	return &String{Value: ext}
 }
