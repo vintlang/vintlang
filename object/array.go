@@ -70,6 +70,26 @@ func (a *Array) Method(method string, args []Object) Object {
 		return a.sort()
 	case "map":
 		return a.mapMethod(args)
+	case "slice":
+		return a.slice(args)
+	case "concat":
+		return a.concat(args)
+	case "includes":
+		return a.includes(args)
+	case "every":
+		return a.every(args)
+	case "some":
+		return a.some(args)
+	case "reduce":
+		return a.reduce(args)
+	case "flatten":
+		return a.flatten(args)
+	case "unique":
+		return a.unique(args)
+	case "fill":
+		return a.fill(args)
+	case "lastIndexOf":
+		return a.lastIndexOf(args)
 	default:
 		return newError("Sorry, the method '%s' is not supported for this object.", method)
 	}
@@ -239,4 +259,319 @@ func (a *Array) mapMethod(args []Object) Object {
 		mapped[i] = result
 	}
 	return &Array{Elements: mapped}
+}
+
+// slice extracts a portion of the array between start and end indices
+func (a *Array) slice(args []Object) Object {
+	if len(args) < 1 || len(args) > 2 {
+		return newError("slice() expects 1 or 2 arguments, got %d", len(args))
+	}
+	
+	start, ok := args[0].(*Integer)
+	if !ok {
+		return newError("slice() start index must be an integer, got %s", args[0].Type())
+	}
+	
+	startIdx := int(start.Value)
+	endIdx := len(a.Elements)
+	
+	if len(args) == 2 {
+		end, ok := args[1].(*Integer)
+		if !ok {
+			return newError("slice() end index must be an integer, got %s", args[1].Type())
+		}
+		endIdx = int(end.Value)
+	}
+	
+	// Handle negative indices
+	length := len(a.Elements)
+	if startIdx < 0 {
+		startIdx = length + startIdx
+	}
+	if endIdx < 0 {
+		endIdx = length + endIdx
+	}
+	
+	// Bound check
+	if startIdx < 0 {
+		startIdx = 0
+	}
+	if endIdx > length {
+		endIdx = length
+	}
+	if startIdx > endIdx {
+		startIdx = endIdx
+	}
+	
+	return &Array{Elements: a.Elements[startIdx:endIdx]}
+}
+
+// concat concatenates multiple arrays together
+func (a *Array) concat(args []Object) Object {
+	newElements := make([]Object, len(a.Elements))
+	copy(newElements, a.Elements)
+	
+	for _, arg := range args {
+		arr, ok := arg.(*Array)
+		if !ok {
+			return newError("concat() arguments must be arrays, got %s", arg.Type())
+		}
+		newElements = append(newElements, arr.Elements...)
+	}
+	
+	return &Array{Elements: newElements}
+}
+
+// includes checks if the array contains a specific element
+func (a *Array) includes(args []Object) Object {
+	if len(args) != 1 {
+		return newError("includes() expects exactly 1 argument, got %d", len(args))
+	}
+	
+	target := args[0]
+	for _, element := range a.Elements {
+		if element.Inspect() == target.Inspect() && element.Type() == target.Type() {
+			return &Boolean{Value: true}
+		}
+	}
+	return &Boolean{Value: false}
+}
+
+// every checks if all elements satisfy a condition function
+func (a *Array) every(args []Object) Object {
+	if len(args) != 1 {
+		return newError("every() expects exactly 1 argument, got %d", len(args))
+	}
+	
+	fn, ok := args[0].(*Function)
+	if !ok {
+		return newError("every() expects a function as its argument")
+	}
+	
+	for _, el := range a.Elements {
+		callObj, found := fn.Env.Get("__call__")
+		if !found {
+			return newError("every() function does not have a __call__ method")
+		}
+		builtin, ok := callObj.(*Builtin)
+		if !ok {
+			return newError("every() function's __call__ is not a builtin function")
+		}
+		result := builtin.Fn(el)
+		
+		// Check if result is truthy
+		if boolResult, ok := result.(*Boolean); ok && !boolResult.Value {
+			return &Boolean{Value: false}
+		}
+	}
+	
+	return &Boolean{Value: true}
+}
+
+// some checks if any element satisfies a condition function
+func (a *Array) some(args []Object) Object {
+	if len(args) != 1 {
+		return newError("some() expects exactly 1 argument, got %d", len(args))
+	}
+	
+	fn, ok := args[0].(*Function)
+	if !ok {
+		return newError("some() expects a function as its argument")
+	}
+	
+	for _, el := range a.Elements {
+		callObj, found := fn.Env.Get("__call__")
+		if !found {
+			return newError("some() function does not have a __call__ method")
+		}
+		builtin, ok := callObj.(*Builtin)
+		if !ok {
+			return newError("some() function's __call__ is not a builtin function")
+		}
+		result := builtin.Fn(el)
+		
+		// Check if result is truthy
+		if boolResult, ok := result.(*Boolean); ok && boolResult.Value {
+			return &Boolean{Value: true}
+		}
+	}
+	
+	return &Boolean{Value: false}
+}
+
+// reduce reduces the array to a single value using an accumulator function
+func (a *Array) reduce(args []Object) Object {
+	if len(args) < 1 || len(args) > 2 {
+		return newError("reduce() expects 1 or 2 arguments, got %d", len(args))
+	}
+	
+	fn, ok := args[0].(*Function)
+	if !ok {
+		return newError("reduce() first argument must be a function")
+	}
+	
+	if len(a.Elements) == 0 {
+		if len(args) == 2 {
+			return args[1] // Return initial value if array is empty
+		}
+		return newError("reduce() of empty array with no initial value")
+	}
+	
+	var accumulator Object
+	startIdx := 0
+	
+	if len(args) == 2 {
+		accumulator = args[1]
+	} else {
+		accumulator = a.Elements[0]
+		startIdx = 1
+	}
+	
+	for i := startIdx; i < len(a.Elements); i++ {
+		callObj, found := fn.Env.Get("__call__")
+		if !found {
+			return newError("reduce() function does not have a __call__ method")
+		}
+		builtin, ok := callObj.(*Builtin)
+		if !ok {
+			return newError("reduce() function's __call__ is not a builtin function")
+		}
+		accumulator = builtin.Fn(accumulator, a.Elements[i], &Integer{Value: int64(i)})
+	}
+	
+	return accumulator
+}
+
+// flatten flattens nested arrays into a single array
+func (a *Array) flatten(args []Object) Object {
+	if len(args) > 1 {
+		return newError("flatten() expects at most 1 argument, got %d", len(args))
+	}
+	
+	depth := 1
+	if len(args) == 1 {
+		depthArg, ok := args[0].(*Integer)
+		if !ok {
+			return newError("flatten() depth must be an integer, got %s", args[0].Type())
+		}
+		depth = int(depthArg.Value)
+		if depth < 0 {
+			depth = -1 // Infinite depth
+		}
+	}
+	
+	flattened := a.flattenHelper(a.Elements, depth)
+	return &Array{Elements: flattened}
+}
+
+// flattenHelper recursively flattens arrays
+func (a *Array) flattenHelper(elements []Object, depth int) []Object {
+	if depth == 0 {
+		return elements
+	}
+	
+	var result []Object
+	for _, element := range elements {
+		if arr, ok := element.(*Array); ok {
+			if depth == -1 {
+				result = append(result, a.flattenHelper(arr.Elements, -1)...)
+			} else {
+				result = append(result, a.flattenHelper(arr.Elements, depth-1)...)
+			}
+		} else {
+			result = append(result, element)
+		}
+	}
+	return result
+}
+
+// unique removes duplicate elements from the array
+func (a *Array) unique(args []Object) Object {
+	if len(args) != 0 {
+		return newError("unique() expects 0 arguments, got %d", len(args))
+	}
+	
+	seen := make(map[string]bool)
+	var unique []Object
+	
+	for _, element := range a.Elements {
+		key := string(element.Type()) + ":" + element.Inspect()
+		if !seen[key] {
+			seen[key] = true
+			unique = append(unique, element)
+		}
+	}
+	
+	return &Array{Elements: unique}
+}
+
+// fill fills the array with a specified value
+func (a *Array) fill(args []Object) Object {
+	if len(args) < 1 || len(args) > 3 {
+		return newError("fill() expects 1 to 3 arguments, got %d", len(args))
+	}
+	
+	value := args[0]
+	start := 0
+	end := len(a.Elements)
+	
+	if len(args) >= 2 {
+		startArg, ok := args[1].(*Integer)
+		if !ok {
+			return newError("fill() start index must be an integer, got %s", args[1].Type())
+		}
+		start = int(startArg.Value)
+	}
+	
+	if len(args) == 3 {
+		endArg, ok := args[2].(*Integer)
+		if !ok {
+			return newError("fill() end index must be an integer, got %s", args[2].Type())
+		}
+		end = int(endArg.Value)
+	}
+	
+	// Handle negative indices
+	length := len(a.Elements)
+	if start < 0 {
+		start = length + start
+	}
+	if end < 0 {
+		end = length + end
+	}
+	
+	// Bound check
+	if start < 0 {
+		start = 0
+	}
+	if end > length {
+		end = length
+	}
+	if start > end {
+		start = end
+	}
+	
+	// Fill the array
+	for i := start; i < end; i++ {
+		a.Elements[i] = value
+	}
+	
+	return a
+}
+
+// lastIndexOf finds the last index of an element in the array
+func (a *Array) lastIndexOf(args []Object) Object {
+	if len(args) != 1 {
+		return newError("lastIndexOf() expects exactly 1 argument, got %d", len(args))
+	}
+	
+	target := args[0]
+	for i := len(a.Elements) - 1; i >= 0; i-- {
+		element := a.Elements[i]
+		if element.Inspect() == target.Inspect() && element.Type() == target.Type() {
+			return &Integer{Value: int64(i)}
+		}
+	}
+	
+	return &Integer{Value: -1} // Not found
 }
