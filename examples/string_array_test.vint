@@ -1,0 +1,47 @@
+// examples/string_array_test.vint
+
+// Test string functions
+println("Testing string functions:")
+println("upper('hello'):", upper("hello"))               // Expected: HELLO
+println("lower('WORLD'):", lower("WORLD"))               // Expected: world
+println("trim('  hello  '):", trim("  hello  "))         // Expected: hello
+println("contains('hello', 'ell'):", contains("hello", "ell"))     // Expected: true
+println("contains('hello', 'xyz'):", contains("hello", "xyz"))     // Expected: false
+println("startsWith('hello', 'he'):", startsWith("hello", "he"))   // Expected: true
+println("startsWith('hello', 'lo'):", startsWith("hello", "lo"))   // Expected: false
+println("endsWith('hello', 'lo'):", endsWith("hello", "lo"))       // Expected: true
+println("endsWith('hello', 'he'):", endsWith("hello", "he"))       // Expected: false
+
+// Test array functions
+println("\nTesting array functions:")
+let arr = [1, 2, 3, 4, 5]
+println("Original array:", arr)
+println("reverse(arr):", reverse(arr))                   // Expected: [5, 4, 3, 2, 1]
+println("indexOf(arr, 3):", indexOf(arr, 3))             // Expected: 2
+println("indexOf(arr, 6):", indexOf(arr, 6))             // Expected: -1
+
+let stringArr = ["apple", "banana", "cherry"]
+println("contains(stringArr, 'banana'):", contains(stringArr, "banana"))  // Expected: true
+println("contains(stringArr, 'grape'):", contains(stringArr, "grape"))    // Expected: false
+
+// Test type checking functions
+println("\nTesting type checking functions:")
+println("isInt(42):", isInt(42))                         // Expected: true
+println("isInt(3.14):", isInt(3.14))                     // Expected: false
+println("isFloat(3.14):", isFloat(3.14))                 // Expected: true
+println("isFloat(42):", isFloat(42))                     // Expected: false
+println("isString('hello'):", isString("hello"))         // Expected: true
+println("isString(42):", isString(42))                   // Expected: false
+println("isBool(true):", isBool(true))                   // Expected: true
+println("isBool('true'):", isBool("true"))               // Expected: false
+println("isArray([1, 2, 3]):", isArray([1, 2, 3]))      // Expected: true
+println("isArray('hello'):", isArray("hello"))           // Expected: false
+println("isDict({'a': 1}):", isDict({"a": 1}))          // Expected: true
+println("isDict([1, 2]):", isDict([1, 2]))               // Expected: false
+
+// Test null checking
+let nullVar = null
+println("isNull(nullVar):", isNull(nullVar))             // Expected: true
+println("isNull(42):", isNull(42))                       // Expected: false
+
+println("\nAll string, array, and type checking tests completed!")
