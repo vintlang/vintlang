@@ -31,13 +31,23 @@ func init() {
 
 func exit(args []object.Object, defs map[string]object.Object) object.Object {
 	if len(args) > 1 {
-		return &object.Error{Message: "Incorrect number of arguments"}
+		return ErrorMessage(
+			"os", "exit",
+			"0 or 1 argument (optional status code)",
+			fmt.Sprintf("%d arguments", len(args)),
+			"os.exit() or os.exit(0)",
+		)
 	}
 
 	if len(args) == 1 {
 		status, ok := args[0].(*object.Integer)
 		if !ok {
-			return &object.Error{Message: "Argument must be a number"}
+			return ErrorMessage(
+				"os", "exit",
+				"integer argument for status code",
+				string(args[0].Type()),
+				"os.exit(0) or os.exit(1)",
+			)
 		}
 		os.Exit(int(status.Value))
 		return nil
@@ -140,13 +150,23 @@ func getEnv(args []object.Object, defs map[string]object.Object) object.Object {
 
 func setEnv(args []object.Object, defs map[string]object.Object) object.Object {
 	if len(args) != 2 {
-		return &object.Error{Message: "Incorrect number of arguments"}
+		return ErrorMessage(
+			"os", "setEnv",
+			"2 string arguments (key, value)",
+			fmt.Sprintf("%d arguments", len(args)),
+			`os.setEnv("PATH", "/usr/bin")`,
+		)
 	}
 
 	key, ok1 := args[0].(*object.String)
 	value, ok2 := args[1].(*object.String)
 	if !ok1 || !ok2 {
-		return &object.Error{Message: "Arguments must be strings"}
+		return ErrorMessage(
+			"os", "setEnv",
+			"2 string arguments for key and value",
+			fmt.Sprintf("key: %s, value: %s", args[0].Type(), args[1].Type()),
+			`os.setEnv("PATH", "/usr/bin")`,
+		)
 	}
 
 	err := os.Setenv(key.Value, value.Value)
@@ -159,12 +179,22 @@ func setEnv(args []object.Object, defs map[string]object.Object) object.Object {
 
 func readFile(args []object.Object, defs map[string]object.Object) object.Object {
 	if len(args) != 1 {
-		return &object.Error{Message: "Incorrect number of arguments"}
+		return ErrorMessage(
+			"os", "readFile",
+			"1 string argument (file path)",
+			fmt.Sprintf("%d arguments", len(args)),
+			`os.readFile("file.txt")`,
+		)
 	}
 
 	path, ok := args[0].(*object.String)
 	if !ok {
-		return &object.Error{Message: "Argument must be a string"}
+		return ErrorMessage(
+			"os", "readFile",
+			"string argument for file path",
+			string(args[0].Type()),
+			`os.readFile("file.txt")`,
+		)
 	}
 
 	content, err := ioutil.ReadFile(path.Value)
@@ -177,13 +207,23 @@ func readFile(args []object.Object, defs map[string]object.Object) object.Object
 
 func writeFile(args []object.Object, defs map[string]object.Object) object.Object {
 	if len(args) != 2 {
-		return &object.Error{Message: "Incorrect number of arguments"}
+		return ErrorMessage(
+			"os", "writeFile",
+			"2 string arguments (file path, content)",
+			fmt.Sprintf("%d arguments", len(args)),
+			`os.writeFile("file.txt", "content")`,
+		)
 	}
 
 	path, ok1 := args[0].(*object.String)
 	content, ok2 := args[1].(*object.String)
 	if !ok1 || !ok2 {
-		return &object.Error{Message: "Arguments must be strings"}
+		return ErrorMessage(
+			"os", "writeFile",
+			"2 string arguments for file path and content",
+			fmt.Sprintf("path: %s, content: %s", args[0].Type(), args[1].Type()),
+			`os.writeFile("file.txt", "content")`,
+		)
 	}
 
 	err := ioutil.WriteFile(path.Value, []byte(content.Value), 0644)
@@ -196,12 +236,22 @@ func writeFile(args []object.Object, defs map[string]object.Object) object.Objec
 
 func listDir(args []object.Object, defs map[string]object.Object) object.Object {
 	if len(args) != 1 {
-		return &object.Error{Message: "Incorrect number of arguments"}
+		return ErrorMessage(
+			"os", "listDir",
+			"1 string argument (directory path)",
+			fmt.Sprintf("%d arguments", len(args)),
+			`os.listDir("/path/to/directory")`,
+		)
 	}
 
 	path, ok := args[0].(*object.String)
 	if !ok {
-		return &object.Error{Message: "Argument must be a string"}
+		return ErrorMessage(
+			"os", "listDir",
+			"string argument for directory path",
+			string(args[0].Type()),
+			`os.listDir("/path/to/directory")`,
+		)
 	}
 
 	files, err := ioutil.ReadDir(path.Value)
