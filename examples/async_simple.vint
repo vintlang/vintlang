@@ -1,0 +1,74 @@
+// Simple async patterns that work with VintLang syntax
+
+print("=== Simple Async Patterns ===")
+
+// Basic async function
+let fetchData = async func(id) {
+    return "Data for " + id
+}
+
+print("1. Basic async function:")
+let promise = fetchData("123")
+let result = await promise
+print("   Result:", result)
+
+print("\n2. Multiple async operations:")
+let p1 = fetchData("A")
+let p2 = fetchData("B")
+let p3 = fetchData("C")
+
+let r1 = await p1
+let r2 = await p2
+let r3 = await p3
+
+print("   Results:", r1, r2, r3)
+
+print("\n3. Channel-based communication:")
+let dataChan = chan(3)
+
+// Producer
+go func() {
+    send(dataChan, "Message 1")
+    send(dataChan, "Message 2")
+    send(dataChan, "Message 3")
+    close(dataChan)
+}()
+
+// Consumer
+let msg1 = receive(dataChan)
+let msg2 = receive(dataChan)
+let msg3 = receive(dataChan)
+
+print("   Received:", msg1, msg2, msg3)
+
+print("\n4. Async with channels:")
+let processAsync = async func(input) {
+    let resultChan = chan
+    
+    go func() {
+        let processed = "Processed: " + input
+        send(resultChan, processed)
+    }()
+    
+    let result = receive(resultChan)
+    return result
+}
+
+let asyncResult = await processAsync("important data")
+print("   Async result:", asyncResult)
+
+print("\n5. Error-free concurrent execution:")
+go print("   Goroutine 1: Hello")
+go print("   Goroutine 2: World")
+go print("   Goroutine 3: From")
+go print("   Goroutine 4: VintLang")
+
+print("   Main thread: Concurrent execution complete")
+
+print("\n=== All patterns demonstrated successfully! ===")
+print("VintLang now supports:")
+print("  - async functions that return promises")
+print("  - await expressions for promise resolution")
+print("  - go statements for concurrent execution")
+print("  - channels for inter-goroutine communication")
+print("  - Built-in functions: send(), receive(), close()")

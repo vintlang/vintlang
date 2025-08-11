@@ -21,6 +21,8 @@ func (p *Parser) parseStatement() ast.Statement {
 		return p.parseContinue()
 	case token.INCLUDE:
 		return p.parseIncludeStatement()
+	case token.GO:
+		return p.parseGoStatement()
 	default:
 		return p.parseExpressionStatement()
 	}
