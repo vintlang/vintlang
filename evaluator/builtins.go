@@ -4,10 +4,7 @@ import (
 	"bufio"
 	"fmt"
 	"io"
-	"math"
-	"math/rand"
 	"os"
-	"sort"
 	"strconv"
 	"strings"
 	"time"
@@ -15,11 +12,6 @@ import (
 	"github.com/vintlang/vintlang/object"
 	"github.com/vintlang/vintlang/toolkit"
 )
-
-func init() {
-	// Initialize random seed
-	rand.Seed(time.Now().UnixNano())
-}
 
 func handlePrint(w io.Writer, args []object.Object, addNewline bool) object.Object {
 	var arr []string
@@ -544,287 +536,7 @@ var builtins = map[string]*object.Builtin{
 		},
 	},
 
-	// Math functions
-	"abs": {
-		Fn: func(args ...object.Object) object.Object {
-			if len(args) != 1 {
-				return newError("abs() takes exactly 1 argument, got %d", len(args))
-			}
-			
-			switch arg := args[0].(type) {
-			case *object.Integer:
-				value := arg.Value
-				if value < 0 {
-					value = -value
-				}
-				return &object.Integer{Value: value}
-			case *object.Float:
-				return &object.Float{Value: math.Abs(arg.Value)}
-			default:
-				return newError("argument to abs() must be a number, got %s", arg.Type())
-			}
-		},
-	},
-	
-	"min": {
-		Fn: func(args ...object.Object) object.Object {
-			if len(args) == 0 {
-				return newError("min() requires at least 1 argument")
-			}
-			
-			var minVal object.Object
-			var isFloat bool
-			
-			for i, arg := range args {
-				switch val := arg.(type) {
-				case *object.Integer:
-					if i == 0 {
-						minVal = val
-					} else {
-						if isFloat {
-							currentFloat := float64(val.Value)
-							if currentFloat < minVal.(*object.Float).Value {
-								minVal = &object.Float{Value: currentFloat}
-							}
-						} else {
-							if val.Value < minVal.(*object.Integer).Value {
-								minVal = val
-							}
-						}
-					}
-				case *object.Float:
-					if i == 0 || !isFloat {
-						if i == 0 {
-							minVal = val
-							isFloat = true
-						} else {
-							// Convert previous min to float if it was integer
-							prevInt := minVal.(*object.Integer).Value
-							if val.Value < float64(prevInt) {
-								minVal = val
-							} else {
-								minVal = &object.Float{Value: float64(prevInt)}
-							}
-							isFloat = true
-						}
-					} else {
-						if val.Value < minVal.(*object.Float).Value {
-							minVal = val
-						}
-					}
-				default:
-					return newError("all arguments to min() must be numbers, got %s at position %d", val.Type(), i)
-				}
-			}
-			
-			return minVal
-		},
-	},
-	
-	"max": {
-		Fn: func(args ...object.Object) object.Object {
-			if len(args) == 0 {
-				return newError("max() requires at least 1 argument")
-			}
-			
-			var maxVal object.Object
-			var isFloat bool
-			
-			for i, arg := range args {
-				switch val := arg.(type) {
-				case *object.Integer:
-					if i == 0 {
-						maxVal = val
-					} else {
-						if isFloat {
-							currentFloat := float64(val.Value)
-							if currentFloat > maxVal.(*object.Float).Value {
-								maxVal = &object.Float{Value: currentFloat}
-							}
-						} else {
-							if val.Value > maxVal.(*object.Integer).Value {
-								maxVal = val
-							}
-						}
-					}
-				case *object.Float:
-					if i == 0 || !isFloat {
-						if i == 0 {
-							maxVal = val
-							isFloat = true
-						} else {
-							// Convert previous max to float if it was integer
-							prevInt := maxVal.(*object.Integer).Value
-							if val.Value > float64(prevInt) {
-								maxVal = val
-							} else {
-								maxVal = &object.Float{Value: float64(prevInt)}
-							}
-							isFloat = true
-						}
-					} else {
-						if val.Value > maxVal.(*object.Float).Value {
-							maxVal = val
-						}
-					}
-				default:
-					return newError("all arguments to max() must be numbers, got %s at position %d", val.Type(), i)
-				}
-			}
-			
-			return maxVal
-		},
-	},
-	
-	"round": {
-		Fn: func(args ...object.Object) object.Object {
-			if len(args) != 1 {
-				return newError("round() takes exactly 1 argument, got %d", len(args))
-			}
-			
-			switch arg := args[0].(type) {
-			case *object.Integer:
-				return arg // Already an integer
-			case *object.Float:
-				return &object.Integer{Value: int64(math.Round(arg.Value))}
-			default:
-				return newError("argument to round() must be a number, got %s", arg.Type())
-			}
-		},
-	},
-	
-	"floor": {
-		Fn: func(args ...object.Object) object.Object {
-			if len(args) != 1 {
-				return newError("floor() takes exactly 1 argument, got %d", len(args))
-			}
-			
-			switch arg := args[0].(type) {
-			case *object.Integer:
-				return arg // Already an integer
-			case *object.Float:
-				return &object.Integer{Value: int64(math.Floor(arg.Value))}
-			default:
-				return newError("argument to floor() must be a number, got %s", arg.Type())
-			}
-		},
-	},
-	
-	"ceil": {
-		Fn: func(args ...object.Object) object.Object {
-			if len(args) != 1 {
-				return newError("ceil() takes exactly 1 argument, got %d", len(args))
-			}
-			
-			switch arg := args[0].(type) {
-			case *object.Integer:
-				return arg // Already an integer
-			case *object.Float:
-				return &object.Integer{Value: int64(math.Ceil(arg.Value))}
-			default:
-				return newError("argument to ceil() must be a number, got %s", arg.Type())
-			}
-		},
-	},
-	
-	"sqrt": {
-		Fn: func(args ...object.Object) object.Object {
-			if len(args) != 1 {
-				return newError("sqrt() takes exactly 1 argument, got %d", len(args))
-			}
-			
-			switch arg := args[0].(type) {
-			case *object.Integer:
-				if arg.Value < 0 {
-					return newError("sqrt() of negative number is not supported")
-				}
-				return &object.Float{Value: math.Sqrt(float64(arg.Value))}
-			case *object.Float:
-				if arg.Value < 0 {
-					return newError("sqrt() of negative number is not supported")
-				}
-				return &object.Float{Value: math.Sqrt(arg.Value)}
-			default:
-				return newError("argument to sqrt() must be a number, got %s", arg.Type())
-			}
-		},
-	},
-
-	// String functions
-	"upper": {
-		Fn: func(args ...object.Object) object.Object {
-			if len(args) != 1 {
-				return newError("upper() takes exactly 1 argument, got %d", len(args))
-			}
-			
-			if args[0].Type() != object.STRING_OBJ {
-				return newError("argument to upper() must be a string, got %s", args[0].Type())
-			}
-			
-			str := args[0].(*object.String).Value
-			return &object.String{Value: strings.ToUpper(str)}
-		},
-	},
-	
-	"lower": {
-		Fn: func(args ...object.Object) object.Object {
-			if len(args) != 1 {
-				return newError("lower() takes exactly 1 argument, got %d", len(args))
-			}
-			
-			if args[0].Type() != object.STRING_OBJ {
-				return newError("argument to lower() must be a string, got %s", args[0].Type())
-			}
-			
-			str := args[0].(*object.String).Value
-			return &object.String{Value: strings.ToLower(str)}
-		},
-	},
-	
-	"trim": {
-		Fn: func(args ...object.Object) object.Object {
-			if len(args) != 1 {
-				return newError("trim() takes exactly 1 argument, got %d", len(args))
-			}
-			
-			if args[0].Type() != object.STRING_OBJ {
-				return newError("argument to trim() must be a string, got %s", args[0].Type())
-			}
-			
-			str := args[0].(*object.String).Value
-			return &object.String{Value: strings.TrimSpace(str)}
-		},
-	},
-	
-	"contains": {
-		Fn: func(args ...object.Object) object.Object {
-			if len(args) != 2 {
-				return newError("contains() takes exactly 2 arguments, got %d", len(args))
-			}
-			
-			// Check if both arguments are strings for string.contains
-			if args[0].Type() == object.STRING_OBJ && args[1].Type() == object.STRING_OBJ {
-				str := args[0].(*object.String).Value
-				substr := args[1].(*object.String).Value
-				return &object.Boolean{Value: strings.Contains(str, substr)}
-			}
-			
-			// Check if first argument is array for array.contains
-			if args[0].Type() == object.ARRAY_OBJ {
-				arr := args[0].(*object.Array)
-				for _, element := range arr.Elements {
-					if element.Inspect() == args[1].Inspect() {
-						return TRUE
-					}
-				}
-				return FALSE
-			}
-			
-			return newError("contains() expects (string, string) or (array, element), got (%s, %s)", 
-				args[0].Type(), args[1].Type())
-		},
-	},
-	
+	// String functions that don't exist in string module
 	"startsWith": {
 		Fn: func(args ...object.Object) object.Object {
 			if len(args) != 2 {
@@ -859,29 +571,7 @@ var builtins = map[string]*object.Builtin{
 		},
 	},
 
-	// Array functions
-	"reverse": {
-		Fn: func(args ...object.Object) object.Object {
-			if len(args) != 1 {
-				return newError("reverse() takes exactly 1 argument, got %d", len(args))
-			}
-			
-			if args[0].Type() != object.ARRAY_OBJ {
-				return newError("argument to reverse() must be an array, got %s", args[0].Type())
-			}
-			
-			arr := args[0].(*object.Array)
-			length := len(arr.Elements)
-			reversed := make([]object.Object, length)
-			
-			for i, element := range arr.Elements {
-				reversed[length-1-i] = element
-			}
-			
-			return &object.Array{Elements: reversed}
-		},
-	},
-	
+	// Array function that doesn't exist as built-in
 	"indexOf": {
 		Fn: func(args ...object.Object) object.Object {
 			if len(args) != 2 {
@@ -903,7 +593,7 @@ var builtins = map[string]*object.Builtin{
 		},
 	},
 
-	// Type checking functions
+	// Type checking functions (not available elsewhere)
 	"isInt": {
 		Fn: func(args ...object.Object) object.Object {
 			if len(args) != 1 {
@@ -974,121 +664,7 @@ var builtins = map[string]*object.Builtin{
 		},
 	},
 
-	// Additional Array functions
-	"sort": {
-		Fn: func(args ...object.Object) object.Object {
-			if len(args) != 1 {
-				return newError("sort() takes exactly 1 argument, got %d", len(args))
-			}
-			
-			if args[0].Type() != object.ARRAY_OBJ {
-				return newError("argument to sort() must be an array, got %s", args[0].Type())
-			}
-			
-			arr := args[0].(*object.Array)
-			
-			// Create a copy of the array to avoid modifying the original
-			sortedElements := make([]object.Object, len(arr.Elements))
-			copy(sortedElements, arr.Elements)
-			
-			// Sort based on the type of elements
-			sort.Slice(sortedElements, func(i, j int) bool {
-				a, b := sortedElements[i], sortedElements[j]
-				
-				// Handle different types
-				switch aVal := a.(type) {
-				case *object.Integer:
-					if bVal, ok := b.(*object.Integer); ok {
-						return aVal.Value < bVal.Value
-					} else if bVal, ok := b.(*object.Float); ok {
-						return float64(aVal.Value) < bVal.Value
-					}
-				case *object.Float:
-					if bVal, ok := b.(*object.Float); ok {
-						return aVal.Value < bVal.Value
-					} else if bVal, ok := b.(*object.Integer); ok {
-						return aVal.Value < float64(bVal.Value)
-					}
-				case *object.String:
-					if bVal, ok := b.(*object.String); ok {
-						return aVal.Value < bVal.Value
-					}
-				}
-				
-				// Fallback to string comparison
-				return a.Inspect() < b.Inspect()
-			})
-			
-			return &object.Array{Elements: sortedElements}
-		},
-	},
-
-	// Random number functions
-	"rand": {
-		Fn: func(args ...object.Object) object.Object {
-			if len(args) != 0 {
-				return newError("rand() takes no arguments, got %d", len(args))
-			}
-			
-			return &object.Float{Value: rand.Float64()}
-		},
-	},
-	
-	"randInt": {
-		Fn: func(args ...object.Object) object.Object {
-			if len(args) < 1 || len(args) > 2 {
-				return newError("randInt() takes 1 or 2 arguments, got %d", len(args))
-			}
-			
-			if len(args) == 1 {
-				// randInt(max) - returns 0 to max-1
-				maxVal, err := getIntValue(args[0])
-				if err != nil {
-					return newError("argument to randInt() must be an integer")
-				}
-				if maxVal <= 0 {
-					return newError("argument to randInt() must be positive")
-				}
-				return &object.Integer{Value: rand.Int63n(maxVal)}
-			} else {
-				// randInt(min, max) - returns min to max-1
-				minVal, err := getIntValue(args[0])
-				if err != nil {
-					return newError("first argument to randInt() must be an integer")
-				}
-				maxVal, err := getIntValue(args[1])
-				if err != nil {
-					return newError("second argument to randInt() must be an integer")
-				}
-				if maxVal <= minVal {
-					return newError("max must be greater than min in randInt()")
-				}
-				return &object.Integer{Value: minVal + rand.Int63n(maxVal-minVal)}
-			}
-		},
-	},
-
-	// String conversion functions for numbers
-	"parseFloat": {
-		Fn: func(args ...object.Object) object.Object {
-			if len(args) != 1 {
-				return newError("parseFloat() takes exactly 1 argument, got %d", len(args))
-			}
-			
-			if args[0].Type() != object.STRING_OBJ {
-				return newError("argument to parseFloat() must be a string, got %s", args[0].Type())
-			}
-			
-			str := args[0].(*object.String).Value
-			val, err := strconv.ParseFloat(str, 64)
-			if err != nil {
-				return newError("cannot parse '%s' as float: %s", str, err.Error())
-			}
-			
-			return &object.Float{Value: val}
-		},
-	},
-	
+	// Parsing functions (not available as built-ins)
 	"parseInt": {
 		Fn: func(args ...object.Object) object.Object {
 			if len(args) != 1 {
@@ -1108,6 +684,26 @@ var builtins = map[string]*object.Builtin{
 			return &object.Integer{Value: val}
 		},
 	},
+	
+	"parseFloat": {
+		Fn: func(args ...object.Object) object.Object {
+			if len(args) != 1 {
+				return newError("parseFloat() takes exactly 1 argument, got %d", len(args))
+			}
+			
+			if args[0].Type() != object.STRING_OBJ {
+				return newError("argument to parseFloat() must be a string, got %s", args[0].Type())
+			}
+			
+			str := args[0].(*object.String).Value
+			val, err := strconv.ParseFloat(str, 64)
+			if err != nil {
+				return newError("cannot parse '%s' as float: %s", str, err.Error())
+			}
+			
+			return &object.Float{Value: val}
+		},
+	},
 }
 
 func getIntValue(obj object.Object) (int64, error) {
@@ -1116,27 +712,5 @@ func getIntValue(obj object.Object) (int64, error) {
 		return obj.Value, nil
 	default:
 		return 0, fmt.Errorf("expected Integer, got %s", obj.Type())
-	}
-}
-
-func getFloatValue(obj object.Object) (float64, error) {
-	switch obj := obj.(type) {
-	case *object.Float:
-		return obj.Value, nil
-	case *object.Integer:
-		return float64(obj.Value), nil
-	default:
-		return 0, fmt.Errorf("expected Float or Integer, got %s", obj.Type())
-	}
-}
-
-func getNumericValue(obj object.Object) (float64, bool, error) {
-	switch obj := obj.(type) {
-	case *object.Integer:
-		return float64(obj.Value), false, nil
-	case *object.Float:
-		return obj.Value, true, nil
-	default:
-		return 0, false, fmt.Errorf("expected numeric type, got %s", obj.Type())
 	}
 }
