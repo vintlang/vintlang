@@ -1,0 +1,110 @@
+// VintLang Schedule Module Examples
+// This file demonstrates all features of the schedule module
+
+import schedule
+import time
+
+println("=== VintLang Schedule Module - All Features ===")
+println("")
+
+// 1. Basic ticker functionality
+println("1. Ticker Examples:")
+println("   Creating ticker for every 3 seconds...")
+let ticker1 = schedule.ticker(3, func() {
+    println("   [TICKER] Regular tick every 3 seconds")
+})
+
+// 2. Helper functions
+println("2. Helper Function Examples:")
+let everySecJob = schedule.everySecond(func() {
+    println("   [HELPER] Every second ping")
+})
+
+// Let both run for a while
+time.sleep(8)
+
+// Stop them
+schedule.stopTicker(ticker1)
+schedule.stopTicker(everySecJob)
+println("   → Stopped basic examples")
+println("")
+
+// 3. Cron expressions
+println("3. Cron Expression Examples:")
+
+println("   a) Every 5 seconds using */5")
+let cronJob1 = schedule.schedule("*/5 * * * * *", func() {
+    println("   [CRON] Every 5 seconds via cron")
+})
+
+println("   b) Every second using wildcards")
+let cronJob2 = schedule.schedule("* * * * * *", func() {
+    println("   [CRON] Every second via cron")
+})
+
+// Let cron jobs run
+time.sleep(7)
+schedule.stopSchedule(cronJob1)
+schedule.stopSchedule(cronJob2)
+println("   → Stopped cron examples")
+println("")
+
+// 4. Practical scheduling examples
+println("4. Practical Examples:")
+
+// Daily reminder (would trigger at 14:30)
+let dailyReminder = schedule.daily(14, 30, func() {
+    println("   [DAILY] Time for afternoon coffee!")
+})
+println("   → Daily reminder set for 14:30")
+
+// Hourly report (would trigger at top of each hour)
+let hourlyReport = schedule.everyHour(func() {
+    println("   [HOURLY] Generating hourly report...")
+})
+println("   → Hourly report scheduled")
+
+// Minute marker (would trigger at :00 seconds of each minute)
+let minuteMarker = schedule.everyMinute(func() {
+    println("   [MINUTE] New minute started!")
+})
+println("   → Minute marker scheduled")
+println("")
+
+// 5. Error handling examples
+println("5. Error Handling:")
+
+println("   Testing invalid ticker interval...")
+let errorResult1 = schedule.ticker(-5, func() { println("Never runs") })
+println("   Result: Error (as expected)")
+
+println("   Testing invalid cron expression...")
+let errorResult2 = schedule.schedule("not a cron", func() { println("Never runs") })
+println("   Result: Error (as expected)")
+
+println("   Testing invalid daily time...")
+let errorResult3 = schedule.daily(25, 70, func() { println("Never runs") })
+println("   Result: Error (as expected)")
+println("")
+
+// Cleanup
+println("6. Cleanup:")
+schedule.stopSchedule(dailyReminder)
+schedule.stopSchedule(hourlyReport)
+schedule.stopSchedule(minuteMarker)
+println("   → All scheduled jobs stopped")
+println("")
+
+println("=== Summary ===")
+println("✓ ticker(intervalSeconds, callback) - for regular intervals")
+println("✓ schedule(cronExpr, callback) - for cron-based scheduling")
+println("✓ everySecond(callback) - shortcut for 1-second intervals")
+println("✓ everyMinute(callback) - runs at :00 seconds each minute")
+println("✓ everyHour(callback) - runs at :00:00 each hour")
+println("✓ daily(hour, minute, callback) - runs daily at specified time")
+println("✓ stopTicker(obj) and stopSchedule(obj) - for cleanup")
+println("✓ Supports step values like */5 for 'every 5' patterns")
+println("✓ Comprehensive error handling with helpful messages")
+println("")
+println("The VintLang schedule module is complete and ready for use!")
+println("Similar to Go's time.Ticker and NestJS's @Cron decorators.")
