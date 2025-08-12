@@ -6,7 +6,7 @@ The `postgres` module in **VintLang** allows you to interact with PostgreSQL dat
 
 To connect to a PostgreSQL database, use `postgres.open()`. The connection string should be in the format: `"user=youruser password=yourpassword dbname=yourdbname sslmode=disable"`.
 
-```vint
+```js
 conn = postgres.open("user=postgres password=password dbname=testdb sslmode=disable")
 ```
 
@@ -14,7 +14,7 @@ conn = postgres.open("user=postgres password=password dbname=testdb sslmode=disa
 
 Make sure to close the connection with `postgres.close()` when you are finished.
 
-```vint
+```js
 postgres.close(conn)
 ```
 
@@ -22,7 +22,7 @@ postgres.close(conn)
 
 Use `postgres.execute()` for `INSERT`, `UPDATE`, `DELETE`, and other statements that do not return data. PostgreSQL uses `$1`, `$2`, etc., as placeholders.
 
-```vint
+```js
 // Inserting data with placeholders
 insert_query = "INSERT INTO users (name, age) VALUES ($1, $2)"
 postgres.execute(conn, insert_query, "Alice", 30)
@@ -34,7 +34,7 @@ postgres.execute(conn, insert_query, "Alice", 30)
 
 To retrieve all rows from a query, use `postgres.fetchAll()`.
 
-```vint
+```js
 users = postgres.fetchAll(conn, "SELECT * FROM users")
 print(users)
 ```
@@ -43,7 +43,7 @@ print(users)
 
 To retrieve just one row, use `postgres.fetchOne()`.
 
-```vint
+```js
 user = postgres.fetchOne(conn, "SELECT * FROM users WHERE id = $1", 1)
 print(user)
 ```
@@ -52,7 +52,7 @@ print(user)
 
 Here is a complete example demonstrating the use of the `postgres` module:
 
-```vint
+```js
 import postgres
 
 // Replace with your actual credentials

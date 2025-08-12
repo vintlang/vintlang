@@ -10,7 +10,7 @@ When the interpreter encounters an `error` statement, it will print a formatted 
 
 ### Example
 
-```vint
+```js
 let file_path = "data.json"
 if !fs.exists(file_path) {
     error "Critical file 'data.json' not found."

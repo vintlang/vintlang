@@ -78,7 +78,7 @@ To run the binary:
 
 Given a simple `hello.vint` file:
 
-```vint
+```js
 print("Hello, World!")
 ```
 

@@ -4,7 +4,7 @@ The `info` keyword allows you to print informational messages at runtime.
 
 ## Syntax
 
-```vint
+```js
 info "Your informational message here"
 ```
 
@@ -12,7 +12,7 @@ When the Vint interpreter encounters an `info` statement, it prints a cyan-color
 
 ### Example
 
-```vint
+```js
 info "Starting the backup process."
 println("Backup in progress...")
 ```

@@ -12,7 +12,7 @@
   - Full lexer, parser, and evaluator integration with new `MATCH` keyword and `=>` arrow token
   
   **Sample:**
-  ```vint
+  ```js
   let user = {"role": "admin", "active": true}
   match user {
       {"role": "admin"} => print("Admin user!")
@@ -31,7 +31,7 @@
   - Proper cleanup with `stopTicker()` and `stopSchedule()` functions
   
   **Sample:**
-  ```vint
+  ```js
   import schedule
   
   // Every 5 seconds
@@ -60,7 +60,7 @@
   - Better 404 handling and error responses
   
   **Sample:**
-  ```vint
+  ```js
   import http
   
   http.app()
@@ -93,7 +93,7 @@
   - `success`: Print success messages in green to indicate successful operations.
 
   **Sample:**
-  ```vint
+  ```js
   info "Starting backup..."
   debug "Current value: " + str(42)
   note "This script was last updated on 2024-06-01."
@@ -107,7 +107,7 @@
   - Supports `break` and `continue` for flexible control flow.
   
   **Sample:**
-  ```vint
+  ```js
   repeat 3 {
       println("Iteration:", i)
   }
@@ -124,7 +124,7 @@
   - Improved error messages for missing or ambiguous arguments, including line numbers and code snippets.
   
   **Sample:**
-  ```vint
+  ```js
   let greet = func(name = "Guest") {
       println("Hello, " + name)
   }
@@ -144,7 +144,7 @@
   - See the updated `pointers.md` for details and best practices.
   
   **Sample:**
-  ```vint
+  ```js
   let x = 10
   let p = &x      // Create a pointer to x
   println(*p)     // Dereference pointer, prints 10
