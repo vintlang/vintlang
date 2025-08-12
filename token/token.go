@@ -36,6 +36,7 @@ const (
 	NOT_EQ          = "!="
 	AND             = "&&"
 	OR              = "||"
+	NULL_COALESCE   = "??"
 	PLUS_ASSIGN     = "+="
 	PLUS_PLUS       = "++"
 	MINUS_ASSIGN    = "-="
