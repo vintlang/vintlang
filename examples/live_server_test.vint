@@ -1,0 +1,59 @@
+// Live Server Test - Demonstrates enhanced HTTP features in action
+import http
+
+print("🔥 Live Enhanced HTTP Server Test")
+print("=" * 35)
+
+// Create and configure the app
+http.app()
+
+// Add interceptors
+http.interceptor("request", func(req) {
+    print("📥 Request interceptor activated")
+})
+
+http.interceptor("response", func(res) {
+    print("📤 Response interceptor activated")
+})
+
+// Add guards
+http.guard(func(req) {
+    print("🛡️ Security guard check passed")
+})
+
+// Add middleware
+http.cors()
+http.bodyParser()
+
+// Define test routes that showcase enhanced features
+http.get("/", func(req, res) {
+    print("🏠 Home route accessed")
+})
+
+http.get("/users/:id", func(req, res) {
+    print("👤 User route with parameter accessed")
+})
+
+http.post("/api/data", func(req, res) {
+    print("💾 API data endpoint accessed")
+})
+
+http.get("/test", func(req, res) {
+    print("🧪 Test endpoint accessed")
+})
+
+print("\n✅ Server configured with enhanced features:")
+print("  • Interceptors for request/response processing")
+print("  • Security guards for protection")
+print("  • CORS and body parser middleware")
+print("  • Routes with parameter support")
+
+print("\n🌐 Starting enhanced HTTP server...")
+print("📡 Visit these endpoints to test:")
+print("  • http://localhost:8080/ (Home)")
+print("  • http://localhost:8080/users/123 (User with ID)")
+print("  • http://localhost:8080/test (Test endpoint)")
+print("  • POST http://localhost:8080/api/data (API endpoint)")
+
+print("\n🚀 Enhanced server starting on port 8080...")
+http.listen(8080, "🎯 Enhanced backend server running with all features!")
