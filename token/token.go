@@ -97,6 +97,9 @@ const (
 	AWAIT    = "AWAIT"
 	GO       = "GO"
 	CHAN     = "CHAN"
+	
+	// Error Handling Keywords
+	THROW    = "THROW"
 )
 
 var keywords = map[string]TokenType{
@@ -135,6 +138,7 @@ var keywords = map[string]TokenType{
 	"await":    AWAIT,
 	"go":       GO,
 	"chan":     CHAN,
+	"throw":    THROW,
 }
 
 func LookupIdent(ident string) TokenType {

@@ -137,6 +137,9 @@ func New(l *lexer.Lexer) *Parser {
 	p.registerPrefix(token.ASYNC, p.parseAsyncFunctionLiteral)
 	p.registerPrefix(token.AWAIT, p.parseAwaitExpression)
 	p.registerPrefix(token.CHAN, p.parseChannelExpression)
+	
+	// Error handling prefix parsers
+	p.registerPrefix(token.THROW, p.parseThrowStatement)
 
 	p.infixParseFns = make(map[token.TokenType]infixParseFn)
 	p.registerInfix(token.AND, p.parseInfixExpression)
@@ -372,12 +375,83 @@ func (p *Parser) parseWarnStatement() ast.Expression {
 }
 
 func (p *Parser) parseErrorStatement() ast.Expression {
-	stmt := &ast.ErrorStatement{Token: p.curToken}
+	errorToken := p.curToken
 	p.nextToken()
+	
+	// Check if this is an error type declaration: error TypeName(param1, param2)
+	if p.curTokenIs(token.IDENT) && p.peekTokenIs(token.LPAREN) {
+		// This is an error type declaration
+		return p.parseErrorDeclaration(errorToken)
+	}
+	
+	// This is a regular declarative error statement: error "message"
+	stmt := &ast.ErrorStatement{Token: errorToken}
 	stmt.Value = p.parseExpression(LOWEST)
 	if p.peekTokenIs(token.SEMICOLON) {
 		p.nextToken()
 	}
+	return stmt
+}
+
+func (p *Parser) parseErrorDeclaration(errorToken token.Token) ast.Expression {
+	decl := &ast.ErrorDeclaration{Token: errorToken}
+	
+	// Parse the error type name (current token should be IDENT)
+	if !p.curTokenIs(token.IDENT) {
+		p.addError(fmt.Sprintf("expected identifier for error type name, got %s", p.curToken.Type))
+		return nil
+	}
+	
+	decl.Name = &ast.Identifier{Token: p.curToken, Value: p.curToken.Literal}
+	
+	// Expect opening parenthesis
+	if !p.expectPeek(token.LPAREN) {
+		return nil
+	}
+	
+	// Parse parameters
+	decl.Parameters = []*ast.Identifier{}
+	
+	if !p.peekTokenIs(token.RPAREN) {
+		p.nextToken() // advance to first parameter
+		
+		// Parse first parameter
+		if !p.curTokenIs(token.IDENT) {
+			p.addError(fmt.Sprintf("expected parameter name, got %s", p.curToken.Type))
+			return nil
+		}
+		decl.Parameters = append(decl.Parameters, &ast.Identifier{Token: p.curToken, Value: p.curToken.Literal})
+		
+		// Parse additional parameters
+		for p.peekTokenIs(token.COMMA) {
+			p.nextToken() // advance to comma
+			p.nextToken() // advance to next parameter
+			if !p.curTokenIs(token.IDENT) {
+				p.addError(fmt.Sprintf("expected parameter name, got %s", p.curToken.Type))
+				return nil
+			}
+			decl.Parameters = append(decl.Parameters, &ast.Identifier{Token: p.curToken, Value: p.curToken.Literal})
+		}
+	}
+	
+	// Expect closing parenthesis
+	if !p.expectPeek(token.RPAREN) {
+		return nil
+	}
+	
+	return decl
+}
+
+func (p *Parser) parseThrowStatement() ast.Expression {
+	stmt := &ast.ThrowStatement{Token: p.curToken}
+	p.nextToken()
+	
+	stmt.ErrorExpr = p.parseExpression(LOWEST)
+	
+	if p.peekTokenIs(token.SEMICOLON) {
+		p.nextToken()
+	}
+	
 	return stmt
 }
 
