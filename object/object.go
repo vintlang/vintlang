@@ -48,6 +48,7 @@ const (
 	HTTP_APP_OBJ      = "HTTP_APP"
 	HTTP_REQUEST_OBJ  = "HTTP_REQUEST"
 	HTTP_RESPONSE_OBJ = "HTTP_RESPONSE"
+	UPLOADED_FILE_OBJ = "UPLOADED_FILE"
 )
 
 // Object interface represents any object in the system

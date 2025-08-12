@@ -13,6 +13,7 @@ type Function struct {
 	Defaults   map[string]ast.Expression
 	Body       *ast.BlockStatement
 	Env        *Environment
+	IsAsync    bool // Support for async handlers
 }
 
 func (f *Function) Type() ObjectType { return FUNCTION_OBJ }
