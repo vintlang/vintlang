@@ -7,6 +7,7 @@ import (
 	"strings"
 	"time"
 
+	"github.com/vintlang/vintlang/config"
 	"github.com/vintlang/vintlang/utils"
 )
 
@@ -72,7 +73,7 @@ func Bundle(args []string) error {
 	defer os.RemoveAll(tempDir)
 	printlnVerbose(verbose, "✅")
 
-	bundlerVersion := "v0.1.0"
+	bundlerVersion := config.VINT_VERSION
 	buildTime := time.Now().Format(time.RFC3339)
 
 	// Generate bundled code using the new evaluator
