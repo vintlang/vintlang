@@ -1,0 +1,50 @@
+// VintLang unique() function demonstration and test
+// This file showcases the new unique() builtin function that removes duplicates from arrays
+
+print("🚀 VintLang unique() Function Showcase")
+print("=" * 40)
+
+// Demonstrate the core "no duplicates" functionality
+print("\n📊 Data Processing with unique():")
+
+// Example 1: Processing survey responses
+print("\n1. Survey Responses (with duplicates):")
+let responses = ["yes", "no", "maybe", "yes", "no", "yes", "maybe"]
+print("Original responses:", responses)
+print("Unique responses:", unique(responses))
+print("Count: " + string(len(responses)) + " -> " + string(len(unique(responses))))
+
+// Example 2: User IDs from multiple sources  
+print("\n2. User IDs from different systems:")
+let userIds = [101, 202, 303, 101, 404, 202, 505, 303, 101]
+print("All IDs:", userIds)
+print("Unique IDs:", unique(userIds))
+
+// Example 3: Feature tags (mixed data types)
+print("\n3. Feature tags with mixed types:")
+let tags = ["cool", 1, true, "awesome", 1, false, "cool", true]
+print("All tags:", tags)
+print("Unique tags:", unique(tags))
+
+// Example 4: Real-world use case - removing duplicate items
+print("\n4. Shopping cart cleanup:")
+let cart = ["apple", "banana", "apple", "orange", "banana", "apple"]
+print("Cart with duplicates:", cart)
+let cleanCart = unique(cart)
+print("Clean cart:", cleanCart)
+print("Items saved: " + string(len(cart) - len(cleanCart)))
+
+// Example 5: Data validation - ensuring no duplicates
+print("\n5. Data validation example:")
+let data = [1, 2, 3, 4, 5]
+let uniqueData = unique(data)
+if (len(data) == len(uniqueData)) {
+    print("✅ Data has no duplicates!")
+} else {
+    print("⚠️  Data contains duplicates - cleaned up")
+}
+
+print("\n🎯 Conclusion:")
+print("The unique() function provides a simple, efficient way to handle")
+print("the 'no duplicates' requirement in data processing workflows!")
+print("\n✨ This is a cool feature that makes VintLang even more powerful! ✨")
