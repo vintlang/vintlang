@@ -6,7 +6,7 @@ The `mysql` module in **VintLang** provides a way to interact with MySQL databas
 
 To connect to a MySQL database, use `mysql.open()`. You need to provide a connection string in the following format: `user:password@tcp(host:port)/dbname`.
 
-```vint
+```js
 conn = mysql.open("user:password@tcp(127.0.0.1:3306)/testdb")
 ```
 
@@ -14,7 +14,7 @@ conn = mysql.open("user:password@tcp(127.0.0.1:3306)/testdb")
 
 Always close the connection when you're done with `mysql.close()`.
 
-```vint
+```js
 mysql.close(conn)
 ```
 
@@ -22,7 +22,7 @@ mysql.close(conn)
 
 Use `mysql.execute()` for `INSERT`, `UPDATE`, `DELETE`, or any other queries that don't return rows.
 
-```vint
+```js
 // Inserting data with placeholders
 insert_query = "INSERT INTO users (name, age) VALUES (?, ?)"
 mysql.execute(conn, insert_query, "Alice", 30)
@@ -34,7 +34,7 @@ mysql.execute(conn, insert_query, "Alice", 30)
 
 To get all rows from a query result, use `mysql.fetchAll()`.
 
-```vint
+```js
 users = mysql.fetchAll(conn, "SELECT * FROM users")
 print(users)
 ```
@@ -43,7 +43,7 @@ print(users)
 
 To get only the first row from a query result, use `mysql.fetchOne()`.
 
-```vint
+```js
 user = mysql.fetchOne(conn, "SELECT * FROM users WHERE id = ?", 1)
 print(user)
 ```
@@ -52,7 +52,7 @@ print(user)
 
 Here's a complete example of how to use the `mysql` module:
 
-```vint
+```js
 import mysql
 
 // Replace with your actual credentials

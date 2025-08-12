@@ -7,7 +7,7 @@ The `csv` module provides functions to read from and write to CSV (Comma-Separat
 ### `csv.read(filePath)`
 Reads a CSV file and returns its contents as an array of arrays.
 
-```vint
+```js
 // Assuming 'data.csv' contains:
 // name,age
 // alice,30
@@ -21,7 +21,7 @@ print(data)
 ### `csv.write(filePath, data)`
 Writes a 2D array to a CSV file. The `data` argument must be an array of arrays, and all cell values must be strings.
 
-```vint
+```js
 users = [
     ["name", "email"],
     ["John Doe", "john.doe@example.com"],

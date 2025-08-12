@@ -92,14 +92,14 @@ vint main.vint
 ## Code Highlights
 
 ### Security Features
-```vint
+```js
 // Enhanced logging with MD5 hash verification
 let hash = crypto.hashMD5(logMessage + "security_salt")
 let fullLog = "[" + timestamp + "] [" + level + "] " + logMessage + " (Hash: " + hash + ")\n"
 ```
 
 ### Random Code Generation
-```vint
+```js
 // Generate secure 6-digit verification codes
 let generateVerificationCode = func() {
     return string(random.int(100000, 999999))
@@ -107,7 +107,7 @@ let generateVerificationCode = func() {
 ```
 
 ### System Information Display
-```vint
+```js
 // Real-time system information
 print("   OS: " + sysinfo.os())
 print("   Architecture: " + sysinfo.arch())
@@ -115,7 +115,7 @@ print("   Current Time: " + time.format(time.now(), "2006-01-02 15:04:05"))
 ```
 
 ### Environment Configuration
-```vint
+```js
 // Dynamic environment validation
 let token = dotenv.get("NOTIFYAFRICA_TOKEN")
 if (token != "" && token != "your_api_token_here") {

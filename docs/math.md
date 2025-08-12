@@ -4,13 +4,13 @@
 
 To use the `math` module, import it into your Vint script:
 
-```vint
+```js
 import math
 ```
 
 You can then call functions and access constants from the module:
 
-```vint
+```js
 println(math.PI())
 println(math.sqrt(16))
 ```

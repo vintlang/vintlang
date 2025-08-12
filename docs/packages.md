@@ -11,7 +11,7 @@ You can define a package using the `package` keyword, followed by the package na
 A single `.vint` file can contain one package definition. The name of the file does not need to match the package name, but it is good practice to keep them related.
 
 **Syntax:**
-```vint
+```js
 package MyPackage {
     // ... package members ...
 }
@@ -34,7 +34,7 @@ VintLang's package system includes a special feature for initialization. If you 
 This is useful for setting up initial state, connecting to services, or performing any other setup work the package needs before it can be used.
 
 **Example:**
-```vint
+```js
 package Counter {
     let count = 0
 
@@ -61,7 +61,7 @@ This is similar to `this` or `self` in other object-oriented languages.
 You use it with dot notation to access other members within the same package.
 
 **Example:**
-```vint
+```js
 package Greeter {
     let greeting = "Hello"
 
@@ -90,7 +90,7 @@ To use a package, you import the file that contains its definition. The package 
 
 If `utils.vint` contains `package utils { ... }`, you would use it like this:
 
-```vint
+```js
 // main.vint
 
 // Import the file containing the package
