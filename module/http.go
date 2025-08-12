@@ -47,6 +47,9 @@ func init() {
 	HttpFunctions["multipart"] = parseMultipart
 	HttpFunctions["async"] = createAsyncHandler
 	HttpFunctions["security"] = securityMiddleware
+	// Streaming and performance features
+	HttpFunctions["stream"] = createStreamHandler
+	HttpFunctions["metrics"] = enableMetrics
 }
 
 // fileServer serves files from a specified directory with directory listing enabled.
@@ -259,6 +262,8 @@ func listenServer(args []object.Object, defs map[string]object.Object) object.Ob
 // createHTTPHandler creates the main HTTP handler for the Express.js-like app
 func createHTTPHandler(app *object.HTTPApp) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
+		startTime := time.Now()
+		
 		// Create enhanced request and response objects
 		req := object.NewHTTPRequest(r)
 
@@ -278,6 +283,11 @@ func createHTTPHandler(app *object.HTTPApp) http.HandlerFunc {
 			if cors.Credentials {
 				w.Header().Set("Access-Control-Allow-Credentials", "true")
 			}
+		}
+
+		// Add performance tracking headers if enabled
+		if app.Performance != nil && app.Performance.RequestTiming {
+			w.Header().Set("X-Request-Start", startTime.Format(time.RFC3339Nano))
 		}
 
 		// Handle preflight requests
@@ -433,9 +443,19 @@ func createHTTPHandler(app *object.HTTPApp) http.HandlerFunc {
 			}
 		}
 
-		// Add async handler indicator
+		// Add handler type indicators
 		if handler.IsAsync {
 			response += "- Handler: Async (non-blocking)\n"
+		}
+		if handler.IsStreaming {
+			response += "- Handler: Streaming (real-time)\n"
+		}
+
+		// Add performance metrics if enabled
+		if app.Performance != nil && app.Performance.RequestTiming {
+			duration := time.Since(startTime)
+			response += fmt.Sprintf("- Request duration: %v\n", duration)
+			w.Header().Set("X-Response-Time", duration.String())
 		}
 
 		// Run response interceptors
@@ -787,4 +807,41 @@ func securityMiddleware(args []object.Object, defs map[string]object.Object) obj
 
 	currentApp.Middleware = append(currentApp.Middleware, securityFunc)
 	return &object.String{Value: "Security middleware registered (CSRF protection, security headers)"}
+}
+
+// createStreamHandler creates a streaming response handler
+func createStreamHandler(args []object.Object, defs map[string]object.Object) object.Object {
+	if len(args) != 1 {
+		return &object.Error{Message: "http.stream() requires exactly 1 argument: stream handler function"}
+	}
+
+	handler, ok := args[0].(*object.Function)
+	if !ok {
+		return &object.Error{Message: "Stream handler must be a function"}
+	}
+
+	// Create a streaming wrapper function
+	streamHandler := &object.Function{
+		Parameters: handler.Parameters,
+		Body:       handler.Body,
+		Env:        handler.Env,
+		IsStreaming: true, // Mark as streaming
+	}
+
+	return streamHandler
+}
+
+// enableMetrics enables performance monitoring and metrics collection
+func enableMetrics(args []object.Object, defs map[string]object.Object) object.Object {
+	if currentApp == nil {
+		return &object.Error{Message: "No app instance found. Call http.app() first."}
+	}
+
+	// Enable metrics in performance config
+	if currentApp.Performance != nil {
+		currentApp.Performance.EnableMetrics = true
+		currentApp.Performance.RequestTiming = true
+	}
+
+	return &object.String{Value: "Performance metrics enabled"}
 }
