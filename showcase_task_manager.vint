@@ -1,0 +1,367 @@
+// VintLang Showcase: Personal Task Management System
+// This application demonstrates VintLang's capabilities with a real-world use case
+
+import time
+import os
+import json
+import uuid
+import "string"
+
+// Color codes for terminal output
+let COLORS = {
+    "reset": "\033[0m",
+    "red": "\033[31m",
+    "green": "\033[32m", 
+    "yellow": "\033[33m",
+    "blue": "\033[34m",
+    "magenta": "\033[35m",
+    "cyan": "\033[36m",
+    "white": "\033[37m"
+}
+
+// Task structure and application state
+let taskManager = {
+    "tasks": [],
+    "categories": ["Work", "Personal", "Study", "Health", "Project"],
+    "priorities": ["Low", "Medium", "High", "Urgent"],
+    "dataFile": "tasks.json"
+}
+
+// Helper function to print colored text
+let printColor = func(color, text) {
+    print(COLORS[color] + text + COLORS["reset"])
+}
+
+// Helper function to print a separator line
+let printSeparator = func() {
+    printColor("cyan", "=" * 50)
+}
+
+// Load tasks from JSON file
+let loadTasks = func() {
+    if (os.fileExists(taskManager["dataFile"])) {
+        let data = os.readFile(taskManager["dataFile"])
+        taskManager["tasks"] = json.decode(data)
+        printColor("green", "✓ Tasks loaded successfully!")
+    } else {
+        printColor("yellow", "⚠ No existing tasks file found. Starting fresh!")
+        taskManager["tasks"] = []
+    }
+}
+
+// Save tasks to JSON file
+let saveTasks = func() {
+    let data = json.encode(taskManager["tasks"])
+    os.writeFile(taskManager["dataFile"], data)
+    printColor("green", "✓ Tasks saved successfully!")
+}
+
+// Create a new task
+let createTask = func() {
+    printSeparator()
+    printColor("blue", "📝 Creating New Task")
+    printSeparator()
+    
+    let title = input("Task title: ")
+    let description = input("Description: ")
+    
+    // Show categories
+    printColor("cyan", "Available categories:")
+    for i, category in taskManager["categories"] {
+        print(string(i + 1) + ". " + category)
+    }
+    let categoryIndex = input("Select category (1-5): ")
+    let categoryNum = int(categoryIndex)
+    let category = taskManager["categories"][categoryNum - 1]
+    
+    // Show priorities
+    printColor("cyan", "Available priorities:")
+    for i, priority in taskManager["priorities"] {
+        print(string(i + 1) + ". " + priority)
+    }
+    let priorityIndex = input("Select priority (1-4): ")
+    let priorityNum = int(priorityIndex)
+    let priority = taskManager["priorities"][priorityNum - 1]
+    
+    let dueDate = input("Due date (YYYY-MM-DD) or press Enter for none: ")
+    
+    let task = {
+        "id": uuid.generate(),
+        "title": title,
+        "description": description,
+        "category": category,
+        "priority": priority,
+        "dueDate": dueDate,
+        "completed": false,
+        "createdAt": time.now(),
+        "completedAt": ""
+    }
+    
+    taskManager["tasks"].push(task)
+    printColor("green", "✓ Task created successfully!")
+}
+
+// List all tasks
+let listTasks = func() {
+    printSeparator()
+    printColor("blue", "📋 Task List")
+    printSeparator()
+    
+    if (len(taskManager["tasks"]) == 0) {
+        printColor("yellow", "No tasks found!")
+        return
+    }
+    
+    for i, task in taskManager["tasks"] {
+        let status = "❌"
+        if (task["completed"]) {
+            status = "✅"
+        }
+        
+        let priorityColor = "white"
+        if (task["priority"] == "Urgent") {
+            priorityColor = "red"
+        } else if (task["priority"] == "High") {
+            priorityColor = "yellow"
+        } else if (task["priority"] == "Medium") {
+            priorityColor = "blue"
+        }
+        
+        print(status + " [" + string(i + 1) + "] " + task["title"])
+        print("    Category: " + task["category"])
+        printColor(priorityColor, "    Priority: " + task["priority"])
+        if (task["dueDate"] != "") {
+            print("    Due: " + task["dueDate"])
+        }
+        if (task["description"] != "") {
+            print("    Description: " + task["description"])
+        }
+        print("    Created: " + task["createdAt"])
+        if (task["completed"] && task["completedAt"] != "") {
+            print("    Completed: " + task["completedAt"])
+        }
+        print("")
+    }
+}
+
+// Mark task as completed
+let completeTask = func() {
+    listTasks()
+    if (len(taskManager["tasks"]) == 0) {
+        return
+    }
+    
+    let taskIndex = input("Enter task number to mark as completed: ")
+    let taskNum = int(taskIndex)
+    
+    if (taskNum > 0 && taskNum <= len(taskManager["tasks"])) {
+        let task = taskManager["tasks"][taskNum - 1]
+        task["completed"] = true
+        task["completedAt"] = time.now()
+        printColor("green", "✓ Task marked as completed!")
+    } else {
+        printColor("red", "❌ Invalid task number!")
+    }
+}
+
+// Filter tasks by category
+let filterByCategory = func() {
+    printColor("cyan", "Available categories:")
+    for i, category in taskManager["categories"] {
+        print(string(i + 1) + ". " + category)
+    }
+    let categoryIndex = input("Select category to filter (1-5): ")
+    let categoryNum = int(categoryIndex)
+    let selectedCategory = taskManager["categories"][categoryNum - 1]
+    
+    printSeparator()
+    printColor("blue", "📋 Tasks in category: " + selectedCategory)
+    printSeparator()
+    
+    let found = false
+    for task in taskManager["tasks"] {
+        if (task["category"] == selectedCategory) {
+            let status = "❌"
+            if (task["completed"]) {
+                status = "✅"
+            }
+            print(status + " " + task["title"] + " (" + task["priority"] + ")")
+            found = true
+        }
+    }
+    
+    if (!found) {
+        printColor("yellow", "No tasks found in this category!")
+    }
+}
+
+// Get task statistics
+let showStatistics = func() {
+    printSeparator()
+    printColor("blue", "📊 Task Statistics")
+    printSeparator()
+    
+    let totalTasks = len(taskManager["tasks"])
+    let completedTasks = 0
+    let pendingTasks = 0
+    let urgentTasks = 0
+    let categoryStats = {}
+    
+    for task in taskManager["tasks"] {
+        if (task["completed"]) {
+            completedTasks += 1
+        } else {
+            pendingTasks += 1
+        }
+        
+        if (task["priority"] == "Urgent") {
+            urgentTasks += 1
+        }
+        
+        let category = task["category"]
+        if (!categoryStats.hasKey(category)) {
+            categoryStats[category] = 0
+        }
+        categoryStats[category] += 1
+    }
+    
+    print("Total Tasks: " + string(totalTasks))
+    printColor("green", "Completed: " + string(completedTasks))
+    printColor("yellow", "Pending: " + string(pendingTasks))
+    printColor("red", "Urgent: " + string(urgentTasks))
+    
+    if (totalTasks > 0) {
+        let completionRate = (completedTasks * 100) / totalTasks
+        print("Completion Rate: " + string(completionRate) + "%")
+    }
+    
+    print("\nTasks by Category:")
+    for category in taskManager["categories"] {
+        let count = 0
+        if (categoryStats.hasKey(category)) {
+            count = categoryStats[category]
+        }
+        print("  " + category + ": " + string(count))
+    }
+}
+
+// Export tasks to a readable format
+let exportTasks = func() {
+    let exportFile = "tasks_export_" + time.format(time.now(), "2006-01-02_15-04-05") + ".txt"
+    let content = "TASK EXPORT - " + time.format(time.now(), "02-01-2006 15:04:05") + "\n"
+    content += "=" * 50 + "\n\n"
+    
+    for i, task in taskManager["tasks"] {
+        let status = "PENDING"
+        if (task["completed"]) {
+            status = "COMPLETED"
+        }
+        
+        content += "[" + string(i + 1) + "] " + task["title"] + "\n"
+        content += "Status: " + status + "\n"
+        content += "Category: " + task["category"] + "\n"
+        content += "Priority: " + task["priority"] + "\n"
+        if (task["dueDate"] != "") {
+            content += "Due Date: " + task["dueDate"] + "\n"
+        }
+        content += "Description: " + task["description"] + "\n"
+        content += "Created: " + task["createdAt"] + "\n"
+        if (task["completed"] && task["completedAt"] != "") {
+            content += "Completed: " + task["completedAt"] + "\n"
+        }
+        content += "\n" + "-" * 30 + "\n\n"
+    }
+    
+    os.writeFile(exportFile, content)
+    printColor("green", "✓ Tasks exported to: " + exportFile)
+}
+
+// Delete a task
+let deleteTask = func() {
+    listTasks()
+    if (len(taskManager["tasks"]) == 0) {
+        return
+    }
+    
+    let taskIndex = input("Enter task number to delete: ")
+    let taskNum = int(taskIndex)
+    
+    if (taskNum > 0 && taskNum <= len(taskManager["tasks"])) {
+        let task = taskManager["tasks"][taskNum - 1]
+        let confirm = input("Are you sure you want to delete '" + task["title"] + "'? (y/N): ")
+        if (confirm == "y" || confirm == "Y") {
+            taskManager["tasks"].splice(taskNum - 1, 1)
+            printColor("green", "✓ Task deleted successfully!")
+        } else {
+            printColor("yellow", "Delete cancelled.")
+        }
+    } else {
+        printColor("red", "❌ Invalid task number!")
+    }
+}
+
+// Main menu
+let showMenu = func() {
+    printSeparator()
+    printColor("magenta", "🎯 VintLang Task Manager")
+    printSeparator()
+    print("1. Create New Task")
+    print("2. List All Tasks")
+    print("3. Mark Task as Completed")
+    print("4. Filter Tasks by Category")
+    print("5. Show Statistics")
+    print("6. Export Tasks")
+    print("7. Delete Task")
+    print("8. Save & Exit")
+    printSeparator()
+}
+
+// Main application loop
+let runTaskManager = func() {
+    printColor("cyan", "🚀 Welcome to VintLang Task Manager!")
+    printColor("cyan", "A showcase of VintLang's capabilities")
+    
+    // Load existing tasks
+    loadTasks()
+    
+    while (true) {
+        showMenu()
+        let choice = input("Select option (1-8): ")
+        
+        if (choice == "1") {
+            createTask()
+        } else if (choice == "2") {
+            listTasks()
+        } else if (choice == "3") {
+            completeTask()
+        } else if (choice == "4") {
+            filterByCategory()
+        } else if (choice == "5") {
+            showStatistics()
+        } else if (choice == "6") {
+            exportTasks()
+        } else if (choice == "7") {
+            deleteTask()
+        } else if (choice == "8") {
+            saveTasks()
+            printColor("cyan", "👋 Thank you for using VintLang Task Manager!")
+            printColor("cyan", "This showcase demonstrated:")
+            print("  • JSON data persistence")
+            print("  • File I/O operations")
+            print("  • Time and date handling")
+            print("  • UUID generation")
+            print("  • String manipulation")
+            print("  • Interactive user input")
+            print("  • Data structures and algorithms")
+            print("  • Modular programming")
+            break
+        } else {
+            printColor("red", "❌ Invalid option! Please select 1-8.")
+        }
+        
+        input("\nPress Enter to continue...")
+    }
+}
+
+// Start the application
+runTaskManager()

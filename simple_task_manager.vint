@@ -1,0 +1,159 @@
+// VintLang Feature Showcase: Simple Task Manager
+// This demonstrates core VintLang features in a working application
+
+import time
+import os
+import json
+import uuid
+
+// Simple task manager state
+let tasks = []
+let dataFile = "simple_tasks.json"
+
+// Load tasks from file
+let loadTasks = func() {
+    if (os.fileExists(dataFile)) {
+        let data = os.readFile(dataFile)
+        tasks = json.decode(data)
+        print("✓ Tasks loaded!")
+    } else {
+        print("⚠ Starting with empty task list")
+        tasks = []
+    }
+}
+
+// Save tasks to file
+let saveTasks = func() {
+    let data = json.encode(tasks)
+    os.writeFile(dataFile, data)
+    print("✓ Tasks saved!")
+}
+
+// Create a new task
+let createTask = func() {
+    print("\n--- Creating New Task ---")
+    let title = input("Task title: ")
+    let description = input("Description: ")
+    
+    let task = {
+        "id": uuid.generate(),
+        "title": title,
+        "description": description,
+        "completed": false,
+        "createdAt": time.now()
+    }
+    
+    tasks.push(task)
+    print("✓ Task created: " + title)
+}
+
+// List all tasks
+let listTasks = func() {
+    print("\n--- Task List ---")
+    if (len(tasks) == 0) {
+        print("No tasks found!")
+        return
+    }
+    
+    for i, task in tasks {
+        let status = "❌"
+        if (task["completed"]) {
+            status = "✅"
+        }
+        print(status + " [" + string(i + 1) + "] " + task["title"])
+        print("    " + task["description"])
+        print("    Created: " + task["createdAt"])
+        print("")
+    }
+}
+
+// Mark task as completed
+let completeTask = func() {
+    listTasks()
+    if (len(tasks) == 0) {
+        return
+    }
+    
+    let taskIndex = input("Enter task number to complete: ")
+    let taskNum = int(taskIndex)
+    
+    if (taskNum > 0 && taskNum <= len(tasks)) {
+        tasks[taskNum - 1]["completed"] = true
+        print("✓ Task completed!")
+    } else {
+        print("❌ Invalid task number!")
+    }
+}
+
+// Show statistics
+let showStats = func() {
+    print("\n--- Statistics ---")
+    let total = len(tasks)
+    let completed = 0
+    
+    for task in tasks {
+        if (task["completed"]) {
+            completed += 1
+        }
+    }
+    
+    print("Total tasks: " + string(total))
+    print("Completed: " + string(completed))
+    print("Pending: " + string(total - completed))
+    
+    if (total > 0) {
+        let rate = (completed * 100) / total
+        print("Completion rate: " + string(rate) + "%")
+    }
+}
+
+// Main menu
+let showMenu = func() {
+    print("\n" + "=" * 30)
+    print("🎯 VintLang Simple Task Manager")
+    print("=" * 30)
+    print("1. Create Task")
+    print("2. List Tasks")  
+    print("3. Complete Task")
+    print("4. Show Statistics")
+    print("5. Save & Exit")
+    print("=" * 30)
+}
+
+// Main application
+let runApp = func() {
+    print("🚀 Welcome to VintLang Task Manager!")
+    print("This showcases VintLang features:")
+    print("  • JSON data handling")
+    print("  • File I/O operations") 
+    print("  • Time functions")
+    print("  • UUID generation")
+    print("  • Interactive input")
+    print("  • Data structures")
+    
+    loadTasks()
+    
+    while (true) {
+        showMenu()
+        let choice = input("Select option (1-5): ")
+        
+        if (choice == "1") {
+            createTask()
+        } else if (choice == "2") {
+            listTasks()
+        } else if (choice == "3") {
+            completeTask()
+        } else if (choice == "4") {
+            showStats()
+        } else if (choice == "5") {
+            saveTasks()
+            print("👋 Thanks for using VintLang Task Manager!")
+            break
+        } else {
+            print("❌ Invalid option!")
+        }
+    }
+}
+
+// Start the application
+runApp()
