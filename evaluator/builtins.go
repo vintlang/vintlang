@@ -704,6 +704,39 @@ var builtins = map[string]*object.Builtin{
 			return &object.Float{Value: val}
 		},
 	},
+
+	// Array deduplication function  
+	"unique": {
+		Fn: func(args ...object.Object) object.Object {
+			if len(args) != 1 {
+				return newError("unique() takes exactly 1 argument, got %d", len(args))
+			}
+			
+			if args[0].Type() != object.ARRAY_OBJ {
+				return newError("argument to unique() must be an array, got %s", args[0].Type())
+			}
+			
+			arr := args[0].(*object.Array)
+			if len(arr.Elements) == 0 {
+				// Return empty array if input is empty
+				return &object.Array{Elements: []object.Object{}}
+			}
+			
+			seen := make(map[string]bool)
+			unique := []object.Object{}
+			
+			for _, element := range arr.Elements {
+				// Use Inspect() method to get string representation for comparison
+				key := element.Inspect()
+				if !seen[key] {
+					seen[key] = true
+					unique = append(unique, element)
+				}
+			}
+			
+			return &object.Array{Elements: unique}
+		},
+	},
 }
 
 func getIntValue(obj object.Object) (int64, error) {
