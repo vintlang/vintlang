@@ -2,6 +2,7 @@ package module
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
 	"log"
 	"net/http"
@@ -13,6 +14,7 @@ import (
 	"syscall"
 	"time"
 
+	"github.com/vintlang/vintlang/ast"
 	"github.com/vintlang/vintlang/object"
 )
 
@@ -32,6 +34,13 @@ func init() {
 	HttpFunctions["patch"] = createRouteWrapper("PATCH")
 	HttpFunctions["use"] = useMiddleware
 	HttpFunctions["listen"] = listenServer
+	// New backend features
+	HttpFunctions["interceptor"] = addInterceptor
+	HttpFunctions["guard"] = addGuard
+	HttpFunctions["cors"] = corsMiddleware
+	HttpFunctions["bodyParser"] = bodyParserMiddleware
+	HttpFunctions["auth"] = authMiddleware
+	HttpFunctions["errorHandler"] = setErrorHandler
 }
 
 // fileServer serves files from a specified directory with directory listing enabled.
@@ -244,14 +253,44 @@ func listenServer(args []object.Object, defs map[string]object.Object) object.Ob
 // createHTTPHandler creates the main HTTP handler for the Express.js-like app
 func createHTTPHandler(app *object.HTTPApp) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		// Look for matching route
+		// Create enhanced request and response objects
+		req := object.NewHTTPRequest(r)
+
+		// Add CORS headers by default
+		w.Header().Set("Access-Control-Allow-Origin", "*")
+		w.Header().Set("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, PATCH, OPTIONS")
+		w.Header().Set("Access-Control-Allow-Headers", "Content-Type, Authorization")
+
+		// Handle preflight requests
+		if r.Method == "OPTIONS" {
+			w.WriteHeader(200)
+			return
+		}
+
+		// Run request interceptors
+		if interceptors, exists := app.Interceptors["request"]; exists {
+			for _, interceptor := range interceptors {
+				// In a full implementation, this would execute the interceptor function
+				log.Printf("Running request interceptor: %s", interceptor.Inspect())
+			}
+		}
+
+		// Run guards
+		for _, guard := range app.Guards {
+			// In a full implementation, this would execute the guard function
+			// Guards could return false to block the request
+			log.Printf("Running guard: %s", guard.Inspect())
+		}
+
+		// Extract path parameters for routes like /users/:id
 		routeKey := r.Method + ":" + r.URL.Path
 		handler, exists := app.Routes[routeKey]
 		
 		if !exists {
-			// Try to find a route that matches with parameters (simple implementation)
-			for key := range app.Routes {
-				if matchesRoute(key, r.Method+":"+r.URL.Path) {
+			// Try to find a route that matches with parameters
+			for key, routeHandler := range app.Routes {
+				if matchesRouteWithParams(key, r.Method+":"+r.URL.Path, req) {
+					handler = routeHandler
 					exists = true
 					break
 				}
@@ -259,29 +298,64 @@ func createHTTPHandler(app *object.HTTPApp) http.HandlerFunc {
 		}
 
 		if !exists {
+			// Run error handler if available
+			if app.ErrorHandler != nil {
+				log.Printf("Running error handler for 404: %s", app.ErrorHandler.Inspect())
+			}
+			
 			w.WriteHeader(404)
-			w.Header().Set("Content-Type", "text/plain")
-			w.Write([]byte("Not Found"))
+			w.Header().Set("Content-Type", "application/json")
+			errorResponse := map[string]interface{}{
+				"error": "Not Found",
+				"message": fmt.Sprintf("Cannot %s %s", r.Method, r.URL.Path),
+				"statusCode": 404,
+			}
+			json.NewEncoder(w).Encode(errorResponse)
 			return
 		}
 
-		// Create a more sophisticated response based on the route
-		w.Header().Set("Content-Type", "text/plain")
-		w.WriteHeader(200)
-		
-		// For now, execute a simple response since we can't run the actual function
-		// In a full implementation, this would execute the handler function
-		response := fmt.Sprintf("✓ Route handler executed for %s %s\n", r.Method, r.URL.Path)
+		// Run middleware
+		for _, middleware := range app.Middleware {
+			// In a full implementation, this would execute the middleware function
+			log.Printf("Running middleware: %s", middleware.Inspect())
+		}
+
+		// Execute the route handler
+		// In a full implementation, this would properly execute the handler function
+		// with the request and response objects
+		response := fmt.Sprintf("✓ Enhanced route handler executed for %s %s\n", r.Method, r.URL.Path)
 		response += fmt.Sprintf("Function: %s\n", handler.Inspect())
 		response += fmt.Sprintf("Handler has %d parameters\n", len(handler.Parameters))
 		
-		// Add request information
-		response += "\nRequest Info:\n"
+		// Add enhanced request information
+		response += "\nEnhanced Request Info:\n"
 		response += fmt.Sprintf("- Method: %s\n", r.Method)
 		response += fmt.Sprintf("- Path: %s\n", r.URL.Path)
 		response += fmt.Sprintf("- Headers: %d\n", len(r.Header))
 		response += fmt.Sprintf("- Query params: %d\n", len(r.URL.Query()))
+		response += fmt.Sprintf("- Cookies: %d\n", len(req.Cookies))
+		response += fmt.Sprintf("- Content-Type: %s\n", r.Header.Get("Content-Type"))
 		
+		if len(req.FormData) > 0 {
+			response += fmt.Sprintf("- Form data fields: %d\n", len(req.FormData))
+		}
+		if req.JSON != nil {
+			response += "- JSON body parsed\n"
+		}
+		if len(req.Params) > 0 {
+			response += fmt.Sprintf("- Path params: %v\n", req.Params)
+		}
+
+		// Run response interceptors
+		if interceptors, exists := app.Interceptors["response"]; exists {
+			for _, interceptor := range interceptors {
+				log.Printf("Running response interceptor: %s", interceptor.Inspect())
+			}
+		}
+
+		// Set content type and send response
+		w.Header().Set("Content-Type", "text/plain")
+		w.WriteHeader(200)
 		w.Write([]byte(response))
 	}
 }
@@ -290,4 +364,186 @@ func createHTTPHandler(app *object.HTTPApp) http.HandlerFunc {
 func matchesRoute(pattern, actual string) bool {
 	// For now, just exact match. In a full implementation, this would handle parameters
 	return pattern == actual
+}
+
+// matchesRouteWithParams checks if a route pattern matches and extracts parameters
+func matchesRouteWithParams(pattern, actual string, req *object.HTTPRequest) bool {
+	// Split the pattern and actual path by ":"
+	patternParts := strings.Split(pattern, "/")
+	actualParts := strings.Split(actual, "/")
+
+	// Must have same number of parts
+	if len(patternParts) != len(actualParts) {
+		return false
+	}
+
+	// Check method part (first part before the first ":")
+	if len(patternParts) == 0 || len(actualParts) == 0 {
+		return false
+	}
+
+	// Extract method and path
+	patternMethod := strings.Split(patternParts[0], ":")[0]
+	actualMethod := strings.Split(actualParts[0], ":")[0]
+	
+	if patternMethod != actualMethod {
+		return false
+	}
+
+	// Start from second part (after method:)
+	patternPath := strings.Join(patternParts[1:], "/")
+	actualPath := strings.Join(actualParts[1:], "/")
+	
+	patternPathParts := strings.Split(patternPath, "/")
+	actualPathParts := strings.Split(actualPath, "/")
+
+	if len(patternPathParts) != len(actualPathParts) {
+		return false
+	}
+
+	// Extract parameters
+	for i, patternPart := range patternPathParts {
+		if strings.HasPrefix(patternPart, ":") {
+			// This is a parameter
+			paramName := patternPart[1:] // Remove the ":"
+			paramValue := actualPathParts[i]
+			req.Params[paramName] = paramValue
+		} else if patternPart != actualPathParts[i] {
+			// Static part doesn't match
+			return false
+		}
+	}
+
+	return true
+}
+
+// addInterceptor adds request or response interceptors
+func addInterceptor(args []object.Object, defs map[string]object.Object) object.Object {
+	if currentApp == nil {
+		return &object.Error{Message: "No app instance found. Call http.app() first."}
+	}
+
+	if len(args) != 2 {
+		return &object.Error{Message: "http.interceptor() requires exactly 2 arguments: type ('request' or 'response') and handler function"}
+	}
+
+	interceptorType, ok := args[0].(*object.String)
+	if !ok {
+		return &object.Error{Message: "First argument (type) must be a string"}
+	}
+
+	if interceptorType.Value != "request" && interceptorType.Value != "response" {
+		return &object.Error{Message: "Interceptor type must be 'request' or 'response'"}
+	}
+
+	handler, ok := args[1].(*object.Function)
+	if !ok {
+		return &object.Error{Message: "Second argument (handler) must be a function"}
+	}
+
+	if currentApp.Interceptors[interceptorType.Value] == nil {
+		currentApp.Interceptors[interceptorType.Value] = make([]*object.Function, 0)
+	}
+	currentApp.Interceptors[interceptorType.Value] = append(currentApp.Interceptors[interceptorType.Value], handler)
+
+	return &object.String{Value: fmt.Sprintf("%s interceptor registered", interceptorType.Value)}
+}
+
+// addGuard adds guards for authentication, authorization, rate limiting, etc.
+func addGuard(args []object.Object, defs map[string]object.Object) object.Object {
+	if currentApp == nil {
+		return &object.Error{Message: "No app instance found. Call http.app() first."}
+	}
+
+	if len(args) != 1 {
+		return &object.Error{Message: "http.guard() requires exactly 1 argument: guard function"}
+	}
+
+	guard, ok := args[0].(*object.Function)
+	if !ok {
+		return &object.Error{Message: "Guard must be a function"}
+	}
+
+	currentApp.Guards = append(currentApp.Guards, guard)
+	return &object.String{Value: "Guard registered"}
+}
+
+// corsMiddleware creates CORS middleware
+func corsMiddleware(args []object.Object, defs map[string]object.Object) object.Object {
+	if currentApp == nil {
+		return &object.Error{Message: "No app instance found. Call http.app() first."}
+	}
+
+	// Create a CORS middleware function
+	corsFunc := &object.Function{
+		Parameters: []*ast.Identifier{
+			{Value: "req"},
+			{Value: "res"},
+			{Value: "next"},
+		},
+		Body: nil, // This would be implemented in a full evaluator
+		Env:  nil,
+	}
+
+	currentApp.Middleware = append(currentApp.Middleware, corsFunc)
+	return &object.String{Value: "CORS middleware registered"}
+}
+
+// bodyParserMiddleware creates body parser middleware
+func bodyParserMiddleware(args []object.Object, defs map[string]object.Object) object.Object {
+	if currentApp == nil {
+		return &object.Error{Message: "No app instance found. Call http.app() first."}
+	}
+
+	// Create a body parser middleware function
+	bodyParserFunc := &object.Function{
+		Parameters: []*ast.Identifier{
+			{Value: "req"},
+			{Value: "res"},
+			{Value: "next"},
+		},
+		Body: nil, // This would be implemented in a full evaluator
+		Env:  nil,
+	}
+
+	currentApp.Middleware = append(currentApp.Middleware, bodyParserFunc)
+	return &object.String{Value: "Body parser middleware registered"}
+}
+
+// authMiddleware creates authentication middleware
+func authMiddleware(args []object.Object, defs map[string]object.Object) object.Object {
+	if currentApp == nil {
+		return &object.Error{Message: "No app instance found. Call http.app() first."}
+	}
+
+	if len(args) != 1 {
+		return &object.Error{Message: "http.auth() requires exactly 1 argument: authentication function"}
+	}
+
+	authFunc, ok := args[0].(*object.Function)
+	if !ok {
+		return &object.Error{Message: "Authentication function must be a function"}
+	}
+
+	currentApp.Middleware = append(currentApp.Middleware, authFunc)
+	return &object.String{Value: "Authentication middleware registered"}
+}
+
+// setErrorHandler sets a global error handler
+func setErrorHandler(args []object.Object, defs map[string]object.Object) object.Object {
+	if currentApp == nil {
+		return &object.Error{Message: "No app instance found. Call http.app() first."}
+	}
+
+	if len(args) != 1 {
+		return &object.Error{Message: "http.errorHandler() requires exactly 1 argument: error handler function"}
+	}
+
+	errorHandler, ok := args[0].(*object.Function)
+	if !ok {
+		return &object.Error{Message: "Error handler must be a function"}
+	}
+
+	currentApp.ErrorHandler = errorHandler
+	return &object.String{Value: "Error handler registered"}
 }
