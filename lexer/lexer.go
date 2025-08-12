@@ -179,6 +179,14 @@ func (l *Lexer) NextToken() token.Token {
 		} else {
 			tok = newToken(token.MODULUS, l.line, l.ch)
 		}
+	case rune('?'):
+		if l.peekChar() == rune('?') {
+			ch := l.ch
+			l.readChar()
+			tok = token.Token{Type: token.NULL_COALESCE, Literal: string(ch) + string(l.ch), Line: l.line}
+		} else {
+			tok = newToken(token.ILLEGAL, l.line, l.ch)
+		}
 	case rune('#'):
 		if l.peekChar() == rune('!') && l.line == 1 {
 			l.skipSingleLineComment()
