@@ -38,6 +38,11 @@ func init() {
 	Mapper["llm"] = &object.Module{Name: "llm", Functions: LLMFunctions}
 	Mapper["openai"] = &object.Module{Name: "openai", Functions: OpenAIFunctions}
 	Mapper["schedule"] = &object.Module{Name: "schedule", Functions: ScheduleFunctions}
+	Mapper["logger"] = &object.Module{Name: "logger", Functions: LoggerFunctions}
+	Mapper["hash"] = &object.Module{Name: "hash", Functions: HashFunctions}
+	Mapper["xml"] = &object.Module{Name: "xml", Functions: XMLFunctions}
+	Mapper["url"] = &object.Module{Name: "url", Functions: URLFunctions}
+	Mapper["email"] = &object.Module{Name: "email", Functions: EmailFunctions}
 }
 
 // ErrorMessage formats an error message for module functions
