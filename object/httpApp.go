@@ -4,16 +4,22 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
+	"io"
 	"log"
 	"net/http"
+	"net/url"
 	"strings"
 )
 
 // HTTPApp represents an Express.js-like application instance
 type HTTPApp struct {
-	Routes     map[string]*Function // key: "METHOD:/path"
-	Middleware []*Function
-	Server     *http.Server
+	Routes       map[string]*Function // key: "METHOD:/path"
+	Middleware   []*Function
+	Server       *http.Server
+	// New features for full backend support
+	Interceptors map[string][]*Function // key: "request" or "response"
+	Guards       []*Function
+	ErrorHandler *Function
 }
 
 func (app *HTTPApp) Type() ObjectType { return HTTP_APP_OBJ }
@@ -21,7 +27,9 @@ func (app *HTTPApp) Inspect() string {
 	var out bytes.Buffer
 	out.WriteString("HTTPApp{")
 	out.WriteString(fmt.Sprintf("routes: %d, ", len(app.Routes)))
-	out.WriteString(fmt.Sprintf("middleware: %d", len(app.Middleware)))
+	out.WriteString(fmt.Sprintf("middleware: %d, ", len(app.Middleware)))
+	out.WriteString(fmt.Sprintf("interceptors: %d, ", len(app.Interceptors)))
+	out.WriteString(fmt.Sprintf("guards: %d", len(app.Guards)))
 	out.WriteString("}")
 	return out.String()
 }
@@ -34,6 +42,12 @@ type HTTPRequest struct {
 	Body       string
 	Query      map[string]string
 	Params     map[string]string
+	// Enhanced features
+	BodyBytes  []byte
+	Cookies    map[string]string
+	FormData   map[string]string
+	JSON       map[string]interface{}
+	RawRequest *http.Request
 }
 
 func (req *HTTPRequest) Type() ObjectType { return HTTP_REQUEST_OBJ }
@@ -67,6 +81,75 @@ func (req *HTTPRequest) Method(name string, args []Object) Object {
 		return &String{Value: req.HTTPMethod}
 	case "path":
 		return &String{Value: req.Path}
+	case "query":
+		if len(args) == 0 {
+			// Return all query parameters as a dict-like structure
+			result := make(map[string]Object)
+			for k, v := range req.Query {
+				result[k] = &String{Value: v}
+			}
+			return &String{Value: fmt.Sprintf("%v", result)} // Simplified for now
+		} else if len(args) == 1 {
+			paramName, ok := args[0].(*String)
+			if !ok {
+				return &Error{Message: "Query parameter name must be a string"}
+			}
+			if value, exists := req.Query[paramName.Value]; exists {
+				return &String{Value: value}
+			}
+			return &String{Value: ""}
+		}
+		return &Error{Message: "req.query() takes 0 or 1 arguments"}
+	case "param":
+		if len(args) != 1 {
+			return &Error{Message: "req.param() requires 1 argument: parameter name"}
+		}
+		paramName, ok := args[0].(*String)
+		if !ok {
+			return &Error{Message: "Parameter name must be a string"}
+		}
+		if value, exists := req.Params[paramName.Value]; exists {
+			return &String{Value: value}
+		}
+		return &String{Value: ""}
+	case "cookie":
+		if len(args) != 1 {
+			return &Error{Message: "req.cookie() requires 1 argument: cookie name"}
+		}
+		cookieName, ok := args[0].(*String)
+		if !ok {
+			return &Error{Message: "Cookie name must be a string"}
+		}
+		if value, exists := req.Cookies[cookieName.Value]; exists {
+			return &String{Value: value}
+		}
+		return &String{Value: ""}
+	case "json":
+		// Parse and return JSON body
+		if req.JSON != nil {
+			jsonStr, _ := json.Marshal(req.JSON)
+			return &String{Value: string(jsonStr)}
+		}
+		return &String{Value: "{}"}
+	case "form":
+		if len(args) == 0 {
+			// Return all form data
+			result := make(map[string]Object)
+			for k, v := range req.FormData {
+				result[k] = &String{Value: v}
+			}
+			return &String{Value: fmt.Sprintf("%v", result)} // Simplified for now
+		} else if len(args) == 1 {
+			fieldName, ok := args[0].(*String)
+			if !ok {
+				return &Error{Message: "Form field name must be a string"}
+			}
+			if value, exists := req.FormData[fieldName.Value]; exists {
+				return &String{Value: value}
+			}
+			return &String{Value: ""}
+		}
+		return &Error{Message: "req.form() takes 0 or 1 arguments"}
 	default:
 		return &Error{Message: fmt.Sprintf("Unknown request method: %s", name)}
 	}
@@ -79,6 +162,8 @@ type HTTPResponse struct {
 	Body       string
 	Writer     http.ResponseWriter
 	Sent       bool
+	// Enhanced features
+	Request    *HTTPRequest
 }
 
 func (res *HTTPResponse) Type() ObjectType { return HTTP_RESPONSE_OBJ }
@@ -139,6 +224,55 @@ func (res *HTTPResponse) Method(name string, args []Object) Object {
 		}
 		res.Headers[key.Value] = value.Value
 		return res // Return self for chaining
+	case "redirect":
+		if len(args) < 1 || len(args) > 2 {
+			return &Error{Message: "res.redirect() requires 1-2 arguments: url and optional status code"}
+		}
+		url, ok := args[0].(*String)
+		if !ok {
+			return &Error{Message: "Redirect URL must be a string"}
+		}
+		statusCode := 302 // Default redirect status
+		if len(args) == 2 {
+			if code, ok := args[1].(*Integer); ok {
+				statusCode = int(code.Value)
+			}
+		}
+		res.Writer.Header().Set("Location", url.Value)
+		res.Writer.WriteHeader(statusCode)
+		res.Sent = true
+		return &String{Value: "Redirect sent"}
+	case "cookie":
+		if len(args) < 2 || len(args) > 3 {
+			return &Error{Message: "res.cookie() requires 2-3 arguments: name, value, and optional options"}
+		}
+		name, ok1 := args[0].(*String)
+		value, ok2 := args[1].(*String)
+		if !ok1 || !ok2 {
+			return &Error{Message: "Cookie name and value must be strings"}
+		}
+		
+		cookie := &http.Cookie{
+			Name:  name.Value,
+			Value: value.Value,
+			Path:  "/",
+		}
+		
+		// TODO: Handle cookie options (expires, secure, httponly, etc.)
+		// For now, set basic cookie
+		http.SetCookie(res.Writer, cookie)
+		return &String{Value: "Cookie set"}
+	case "end":
+		if len(args) > 1 {
+			return &Error{Message: "res.end() takes 0 or 1 arguments: optional message"}
+		}
+		if len(args) == 1 {
+			if message, ok := args[0].(*String); ok {
+				res.Writer.Write([]byte(message.Value))
+			}
+		}
+		res.Sent = true
+		return &String{Value: "Response ended"}
 	default:
 		return &Error{Message: fmt.Sprintf("Unknown response method: %s", name)}
 	}
@@ -147,8 +281,10 @@ func (res *HTTPResponse) Method(name string, args []Object) Object {
 // Helper function to create a new HTTPApp
 func NewHTTPApp() *HTTPApp {
 	return &HTTPApp{
-		Routes:     make(map[string]*Function),
-		Middleware: make([]*Function, 0),
+		Routes:       make(map[string]*Function),
+		Middleware:   make([]*Function, 0),
+		Interceptors: make(map[string][]*Function),
+		Guards:       make([]*Function, 0),
 	}
 }
 
@@ -166,30 +302,58 @@ func NewHTTPRequest(r *http.Request) *HTTPRequest {
 
 	// Read body
 	bodyBytes := make([]byte, 0)
+	bodyString := ""
 	if r.Body != nil {
 		defer r.Body.Close()
-		buf := new(bytes.Buffer)
-		buf.ReadFrom(r.Body)
-		bodyBytes = buf.Bytes()
+		bodyBytes, _ = io.ReadAll(r.Body)
+		bodyString = string(bodyBytes)
+	}
+
+	// Parse cookies
+	cookies := make(map[string]string)
+	for _, cookie := range r.Cookies() {
+		cookies[cookie.Name] = cookie.Value
+	}
+
+	// Parse form data
+	formData := make(map[string]string)
+	if r.Header.Get("Content-Type") == "application/x-www-form-urlencoded" {
+		if parsed, err := url.ParseQuery(bodyString); err == nil {
+			for key, values := range parsed {
+				formData[key] = strings.Join(values, ", ")
+			}
+		}
+	}
+
+	// Parse JSON data
+	var jsonData map[string]interface{}
+	if strings.Contains(r.Header.Get("Content-Type"), "application/json") {
+		json.Unmarshal(bodyBytes, &jsonData)
 	}
 
 	return &HTTPRequest{
 		HTTPMethod: r.Method,
 		Path:       r.URL.Path,
 		Headers:    headers,
-		Body:       string(bodyBytes),
+		Body:       bodyString,
 		Query:      query,
 		Params:     make(map[string]string),
+		BodyBytes:  bodyBytes,
+		Cookies:    cookies,
+		FormData:   formData,
+		JSON:       jsonData,
+		RawRequest: r,
 	}
 }
 
 // Helper function to create HTTPResponse
-func NewHTTPResponse(w http.ResponseWriter) *HTTPResponse {
+func NewHTTPResponse(w http.ResponseWriter, req *HTTPRequest) *HTTPResponse {
 	return &HTTPResponse{
 		StatusCode: 200,
 		Headers:    make(map[string]string),
 		Writer:     w,
 		Sent:       false,
+		Request:    req,
 	}
 }
 
