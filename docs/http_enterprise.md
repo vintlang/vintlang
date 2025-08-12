@@ -32,7 +32,7 @@ The enterprise HTTP module extends the basic HTTP functionality with:
 
 Route groups allow you to organize related routes under a common prefix:
 
-```vint
+```js
 import http
 
 http.app()
@@ -50,7 +50,7 @@ http.group("/api/v2", func() {
 
 ### Nested Route Groups
 
-```vint
+```js
 // Admin routes group
 http.group("/admin", func() {
     // User management routes
@@ -69,7 +69,7 @@ http.group("/admin", func() {
 
 ### Basic File Upload
 
-```vint
+```js
 http.post("/upload", func(req, res) {
     // Parse multipart form data
     http.multipart(req)
@@ -105,7 +105,7 @@ http.post("/upload", func(req, res) {
 
 ### Multiple File Upload
 
-```vint
+```js
 http.post("/multiple-upload", func(req, res) {
     http.multipart(req)
     
@@ -133,7 +133,7 @@ http.post("/multiple-upload", func(req, res) {
 
 ### Form Data with File Upload
 
-```vint
+```js
 http.post("/profile", func(req, res) {
     http.multipart(req)
     
@@ -163,7 +163,7 @@ http.post("/profile", func(req, res) {
 
 Async handlers allow long-running operations without blocking other requests:
 
-```vint
+```js
 // Create async handler for heavy processing
 let processDataAsync = http.async(func(req, res) {
     // This runs asynchronously and won't block other requests
@@ -191,7 +191,7 @@ http.post("/quick", func(req, res) {
 
 ### Security Middleware
 
-```vint
+```js
 // Enable security features
 http.security()
 
@@ -204,7 +204,7 @@ http.security()
 
 ### Custom Security Headers
 
-```vint
+```js
 http.use(func(req, res, next) {
     res.header("Strict-Transport-Security", "max-age=31536000")
     res.header("Content-Security-Policy", "default-src 'self'")
@@ -214,7 +214,7 @@ http.use(func(req, res, next) {
 
 ### CORS Configuration
 
-```vint
+```js
 // Basic CORS
 http.cors()
 
@@ -230,7 +230,7 @@ http.use(func(req, res, next) {
 
 ### Middleware Composition
 
-```vint
+```js
 // Authentication middleware
 let authMiddleware = func(req, res, next) {
     let token = req.get("Authorization")
@@ -262,7 +262,7 @@ http.use(authMiddleware)
 
 ### Route-Specific Middleware
 
-```vint
+```js
 // Apply multiple middlewares to specific routes
 http.post("/protected", [authMiddleware, rateLimitMiddleware], func(req, res) {
     res.json({"message": "Protected resource accessed"})
@@ -273,7 +273,7 @@ http.post("/protected", [authMiddleware, rateLimitMiddleware], func(req, res) {
 
 ### Global Error Handler
 
-```vint
+```js
 http.errorHandler(func(err, req, res) {
     res.status(500).json({
         "error": {
@@ -294,7 +294,7 @@ http.errorHandler(func(err, req, res) {
 
 ### Custom Error Responses
 
-```vint
+```js
 http.get("/users/:id", func(req, res) {
     let userId = req.param("id")
     
@@ -339,7 +339,7 @@ http.get("/users/:id", func(req, res) {
 
 ### Request Timing
 
-```vint
+```js
 // Middleware to track request timing
 let timingMiddleware = func(req, res, next) {
     let startTime = Date.now()
@@ -360,7 +360,7 @@ http.use(timingMiddleware)
 
 ### Metrics Endpoint
 
-```vint
+```js
 http.get("/metrics", func(req, res) {
     res.header("Content-Type", "text/plain")
     res.send(`
@@ -383,7 +383,7 @@ cpu_usage_percent 15.5
 
 ### Production-Ready API Server
 
-```vint
+```js
 import http
 
 // Create application
@@ -494,7 +494,7 @@ http.listen(3000, "Production API server running on port 3000")
 
 ### File Upload Service
 
-```vint
+```js
 import http
 
 http.app()

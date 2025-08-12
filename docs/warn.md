@@ -10,7 +10,7 @@ When the interpreter encounters a `warn` statement, it will print a formatted wa
 
 ### Example
 
-```vint
+```js
 warn "Configuration file not found, using default settings."
 println("Program is running with default configuration.")
 ```

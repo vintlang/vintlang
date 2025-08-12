@@ -6,7 +6,7 @@ Modules are a way to organize and reuse code in VintLang. This guide explains ho
 
 To create a module, use the `module` keyword followed by the module name and a block of code:
 
-```vint
+```js
 module math {
     func add(a, b) {
         return a + b
@@ -29,7 +29,7 @@ To use a module, you need to:
 
 2. Import the module using the `import` statement:
 
-```vint
+```js
 import math
 
 result = math.add(5, 3)
@@ -46,7 +46,7 @@ A module can contain:
 
 Example of a more complex module:
 
-```vint
+```js
 module utils {
     let version = "1.0.0"
     
@@ -93,7 +93,7 @@ Variables and functions defined in a module are only accessible within that modu
 
 Here's a complete example of creating and using a custom module:
 
-```vint
+```js
 // file: modules/calculator.vint
 module calculator {
     func add(a, b) {
