@@ -4,7 +4,7 @@ The `include` keyword is a language construct in Vint that allows you to include
 
 ## Syntax
 
-```vint
+```js
 include "path/to/your/file.vint"
 ```
 
@@ -15,7 +15,7 @@ The path to the file can be relative or absolute. The file extension is not mand
 Let's say you have a file named `greetings.vint` with the following content:
 
 **greetings.vint**
-```vint
+```js
 let greeting = "Hello, Vint!"
 
 func sayHello() {
@@ -26,7 +26,7 @@ func sayHello() {
 You can include this file in another file, for instance, `main.vint`, and use the `greeting` variable and the `sayHello` function:
 
 **main.vint**
-```vint
+```js
 include "greetings.vint"
 
 sayHello() // Output: Hello, Vint!

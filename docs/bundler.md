@@ -70,7 +70,7 @@ The VintLang Bundler now supports bundling multi-file packages with imports!
 ### Example Multi-File Project
 
 **main.vint**:
-```vint
+```js
 import my_utils
 import os
 
@@ -80,7 +80,7 @@ print("Result:", result)
 ```
 
 **my_utils.vint**:
-```vint
+```js
 package my_utils {
     let process_data = func(input) {
         return "processed: " + input
@@ -119,7 +119,7 @@ To run the binary:
 
 Given a simple `hello.vint` file:
 
-```vint
+```js
 print("Hello, World!")
 ```
 

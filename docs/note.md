@@ -4,7 +4,7 @@ The `note` keyword allows you to print general notes at runtime.
 
 ## Syntax
 
-```vint
+```js
 note "Your note message here"
 ```
 
@@ -12,7 +12,7 @@ When the Vint interpreter encounters a `note` statement, it prints a blue-colore
 
 ### Example
 
-```vint
+```js
 note "This script was last updated on 2024-06-01."
 println("Script running...")
 ```

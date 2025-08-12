@@ -10,11 +10,11 @@ The `net` module provides functions for making HTTP requests (GET, POST, PUT, DE
 Sends an HTTP GET request.
 
 **Usage:**
-```vint
+```js
 net.get("https://api.example.com/data")
 ```
 Or with named arguments:
-```vint
+```js
 net.get(
   url: "https://api.example.com/data",
   headers: {"Authorization": "Bearer token"},
@@ -38,7 +38,7 @@ Response body as a string, or an error object.
 Sends an HTTP POST request.
 
 **Usage:**
-```vint
+```js
 net.post(
   url: "https://api.example.com/data",
   headers: {"Authorization": "Bearer token"},
@@ -62,7 +62,7 @@ Response body as a string, or an error object.
 Sends an HTTP PUT request.
 
 **Usage:**
-```vint
+```js
 net.put(
   url: "https://api.example.com/data/1",
   headers: {"Authorization": "Bearer token"},
@@ -86,7 +86,7 @@ Response body as a string, or an error object.
 Sends an HTTP DELETE request.
 
 **Usage:**
-```vint
+```js
 net.delete(
   url: "https://api.example.com/data/1",
   headers: {"Authorization": "Bearer token"}
@@ -108,7 +108,7 @@ Response body as a string, or an error object.
 Sends an HTTP PATCH request.
 
 **Usage:**
-```vint
+```js
 net.patch(
   url: "https://api.example.com/data/1",
   headers: {"Authorization": "Bearer token"},

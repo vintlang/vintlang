@@ -4,7 +4,7 @@ The `todo` keyword allows you to leave compiler-visible TODOs that warn at runti
 
 ## Syntax
 
-```vint
+```js
 todo "Your todo message here"
 ```
 
@@ -12,7 +12,7 @@ When the Vint interpreter encounters a `todo` statement, it will print a warning
 
 ### Example
 
-```vint
+```js
 todo "Implement user authentication"
 
 let x = 10

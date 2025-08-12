@@ -84,7 +84,7 @@ The `repeat` keyword allows you to execute a block of code a specific number of 
 
 ### Syntax
 
-```vint
+```js
 repeat 5 {
     println("Iteration:", i)
 }
@@ -102,7 +102,7 @@ Iteration: 4
 
 You can also use an expression for the count:
 
-```vint
+```js
 let n = 3
 repeat n {
     println(i)

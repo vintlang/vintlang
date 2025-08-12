@@ -10,18 +10,18 @@ VintLang now supports basic pointer operations, allowing you to reference and de
 ## Usage
 
 ### Creating a Pointer
-```vint
+```js
 let x = 42
 let p = &x  # p is now a pointer to the value of x
 ```
 
 ### Dereferencing a Pointer
-```vint
+```js
 print(*p)  # prints 42
 ```
 
 ### Printing a Pointer
-```vint
+```js
 print(p)  # prints something like Pointer(42) or Pointer(addr=0x..., value=42)
 ```
 
@@ -32,7 +32,7 @@ print(p)  # prints something like Pointer(42) or Pointer(addr=0x..., value=42)
 - Pointers to literals (e.g., `let p = &42`) are allowed, but they are just pointers to the value at the time of creation.
 
 ## Example
-```vint
+```js
 let x = 10
 let p = &x
 print(p)    # Pointer(10)

@@ -56,7 +56,7 @@ Vint supports both classic if statements and the new if expressions, allowing yo
 The classic if statement executes a block of code if a condition is true. You can optionally provide an `else` block.
 
 **Syntax:**
-```vint
+```js
 if (condition) {
     // code to run if condition is true
 } else {
@@ -65,7 +65,7 @@ if (condition) {
 ```
 
 **Example:**
-```vint
+```js
 let x = 0
 if (true) {
     x = 42
@@ -80,7 +80,7 @@ print("Classic if statement result: ", x)
 You can now use `if` as an expression, which returns a value. This allows you to assign the result of a conditional directly to a variable, or use it in any expression context.
 
 **Syntax:**
-```vint
+```js
 let result = if (condition) { valueIfTrue } else { valueIfFalse }
 ```
 
@@ -88,7 +88,7 @@ let result = if (condition) { valueIfTrue } else { valueIfFalse }
 - If the condition is false and there is no `else`, the result is `null`.
 
 **Examples:**
-```vint
+```js
 let status = ""
 status = if (x > 0) { "Online" } else { "Offline" }
 print("If as an expression result: ", status)

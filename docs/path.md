@@ -7,7 +7,7 @@ The `path` module provides functions for working with file system paths.
 ### `path.join([...paths])`
 Joins one or more path components intelligently.
 
-```vint
+```js
 p = path.join("/users", "alice", "docs", "file.txt")
 print(p) // Outputs: /users/alice/docs/file.txt
 ```
@@ -15,7 +15,7 @@ print(p) // Outputs: /users/alice/docs/file.txt
 ### `path.basename(path)`
 Returns the last portion of a path.
 
-```vint
+```js
 p = path.basename("/users/alice/docs/file.txt")
 print(p) // Outputs: file.txt
 ```
@@ -23,7 +23,7 @@ print(p) // Outputs: file.txt
 ### `path.dirname(path)`
 Returns the directory name of a path.
 
-```vint
+```js
 p = path.dirname("/users/alice/docs/file.txt")
 print(p) // Outputs: /users/alice/docs
 ```
@@ -31,7 +31,7 @@ print(p) // Outputs: /users/alice/docs
 ### `path.ext(path)`
 Returns the file extension of the path.
 
-```vint
+```js
 p = path.ext("/users/alice/docs/file.txt")
 print(p) // Outputs: .txt
 ```
@@ -39,7 +39,7 @@ print(p) // Outputs: .txt
 ### `path.isAbs(path)`
 Returns `true` if the path is absolute.
 
-```vint
+```js
 p = path.isAbs("/users/alice/docs/file.txt")
 print(p) // Outputs: true
 

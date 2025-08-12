@@ -6,7 +6,7 @@ Vint now provides built-in support for parsing command line arguments, making it
 
 ### Get All Arguments
 
-```vint
+```js
 // Get all command line arguments as an array
 let allArgs = args()
 print(allArgs)  // ["input.txt", "--verbose", "--output", "result.txt"]
@@ -14,7 +14,7 @@ print(allArgs)  // ["input.txt", "--verbose", "--output", "result.txt"]
 
 ### Using the CLI Module
 
-```vint
+```js
 import cli
 
 // Get all arguments (same as args())
@@ -49,7 +49,7 @@ if (outputFile) {
 
 ## Complete Example
 
-```vint
+```js
 // example: vint myapp.vint input.txt --output result.txt --verbose --format json
 
 import cli

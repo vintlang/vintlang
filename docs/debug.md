@@ -4,7 +4,7 @@ The `debug` keyword allows you to print debug messages at runtime for troublesho
 
 ## Syntax
 
-```vint
+```js
 debug "Your debug message here"
 ```
 
@@ -12,7 +12,7 @@ When the Vint interpreter encounters a `debug` statement, it prints a magenta-co
 
 ### Example
 
-```vint
+```js
 let value = 42
 debug "Current value is: " + value
 println("Done.")

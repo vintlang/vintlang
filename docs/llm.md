@@ -28,7 +28,7 @@ This module provides access to OpenAI's GPT models for chat and text completion 
 
 ## Example Usage
 
-```vint
+```js
 import llm
 
 messages = [

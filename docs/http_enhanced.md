@@ -12,7 +12,7 @@ The Vint HTTP module has been significantly enhanced to support full-fledged bac
 - **Path Parameters**: Extract parameters from routes like `/users/:id`
 - **Headers**: Improved header access methods
 
-```vint
+```js
 http.get("/users/:id", func(req, res) {
     let userId = req.param("id")          // Path parameter
     let sort = req.query("sort")          // Query parameter
@@ -31,7 +31,7 @@ http.get("/users/:id", func(req, res) {
 - **JSON Responses**: Improved JSON response handling
 - **Status Helpers**: Easy status code management
 
-```vint
+```js
 http.post("/login", func(req, res) {
     res.status(200)
        .cookie("session", "abc123")
@@ -46,7 +46,7 @@ http.post("/login", func(req, res) {
 ### 3. **Interceptors**
 Request and response interceptors for cross-cutting concerns:
 
-```vint
+```js
 // Request interceptor - runs before route handlers
 http.interceptor("request", func(req) {
     print("Processing request:", req.path())
@@ -63,7 +63,7 @@ http.interceptor("response", func(res) {
 ### 4. **Guards**
 Security guards for authentication, authorization, and rate limiting:
 
-```vint
+```js
 // Authentication guard
 http.guard(func(req) {
     print("Checking authentication")
@@ -86,7 +86,7 @@ http.guard(func(req) {
 ### 5. **Enhanced Middleware**
 Built-in middleware for common backend needs:
 
-```vint
+```js
 // CORS support
 http.cors()
 
@@ -107,7 +107,7 @@ http.errorHandler(func(err, req, res) {
 ### 6. **Route Parameters**
 Support for parameterized routes:
 
-```vint
+```js
 // Single parameter
 http.get("/users/:id", func(req, res) {
     let id = req.param("id")
@@ -128,7 +128,7 @@ http.get("/users/:userId/posts/:postId", func(req, res) {
 
 ## 📖 Complete Example
 
-```vint
+```js
 import http
 
 // Create application

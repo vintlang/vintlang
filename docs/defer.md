@@ -6,7 +6,7 @@ The `defer` keyword provides a convenient way to schedule a function call to be 
 
 The `defer` keyword is followed by a function call:
 
-```vint
+```js
 defer functionCall()
 ```
 
@@ -14,7 +14,7 @@ defer functionCall()
 
 Here’s a simple example that demonstrates how `defer` works. The deferred `println` call is executed after the function body has completed but before the function returns.
 
-```vint
+```js
 let my_function = func() {
     defer println("This will be printed last");
     println("This will be printed first");
@@ -30,7 +30,7 @@ my_function();
 
 If a function has multiple `defer` statements, they are pushed onto a stack. When the function returns, the deferred calls are executed in last-in, first-out (LIFO) order.
 
-```vint
+```js
 let another_function = func() {
     defer println("deferred: 1");
     defer println("deferred: 2");
