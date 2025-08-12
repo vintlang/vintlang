@@ -7,6 +7,7 @@ import (
 
 	"github.com/charmbracelet/lipgloss"
 	"github.com/vintlang/vintlang/bundler"
+	"github.com/vintlang/vintlang/config"
 	"github.com/vintlang/vintlang/lexer"
 	"github.com/vintlang/vintlang/parser"
 	"github.com/vintlang/vintlang/repl"
@@ -14,7 +15,7 @@ import (
 	"github.com/vintlang/vintlang/toolkit"
 )
 
-const VINT_VERSION = "0.2.1"
+const VINT_VERSION = config.VINT_VERSION
 
 // Constants for styled output
 var (
