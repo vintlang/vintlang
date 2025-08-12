@@ -8,6 +8,59 @@ import (
 	"github.com/vintlang/vintlang/parser"
 )
 
+func TestNullCoalescingOperator(t *testing.T) {
+	tests := []struct {
+		input    string
+		expected interface{}
+	}{
+		// Basic null coalescing
+		{"null ?? \"default\"", "default"},
+		{"\"value\" ?? \"default\"", "value"},
+		
+		// Different data types
+		{"null ?? 42", 42},
+		{"null ?? true", true},
+		{"null ?? false", false},
+		
+		// Chained null coalescing
+		{"null ?? null ?? \"final\"", "final"},
+		{"null ?? \"first\" ?? \"second\"", "first"},
+		
+		// Edge cases with non-null "falsy" values
+		{"\"\" ?? \"default\"", ""},
+		{"0 ?? 999", 0},
+		{"false ?? true", false},
+		
+		// Complex expressions
+		{"let a = null; a ?? \"default\"", "default"},
+		{"let a = \"value\"; a ?? \"default\"", "value"},
+	}
+
+	for _, tt := range tests {
+		l := lexer.New(tt.input)
+		p := parser.New(l)
+		program := p.ParseProgram()
+		env := object.NewEnvironment()
+		evaluated := Eval(program, env)
+
+		switch expected := tt.expected.(type) {
+		case int:
+			testIntegerObject(t, evaluated, int64(expected))
+		case string:
+			testStringObject(t, evaluated, expected)
+		case bool:
+			if evaluated.Type() != object.BOOLEAN_OBJ {
+				t.Errorf("input: %q - object is not Boolean. got=%T (%+v)", tt.input, evaluated, evaluated)
+				continue
+			}
+			boolObj := evaluated.(*object.Boolean)
+			if boolObj.Value != expected {
+				t.Errorf("input: %q - object has wrong value. got=%t, want=%t", tt.input, boolObj.Value, expected)
+			}
+		}
+	}
+}
+
 func TestIfExpressionAndStatement(t *testing.T) {
 	cases := []struct {
 		input    string
