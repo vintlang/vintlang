@@ -2,43 +2,43 @@
 import "string"
 
 // Example 1: Trim whitespace
-result = string.trim("  Hello, World!  ")
+let result = string.trim("  Hello, World!  ")
 print(result)  // Output: "Hello, World!"
 
 // Example 2: Check if a string contains a substring
-containsResult = string.contains("Hello, World!", "World")
+let containsResult = string.contains("Hello, World!", "World")
 print(containsResult)  // Output: true
 
 // Example 3: Convert to uppercase
-upperResult = string.toUpper("hello")
+let upperResult = string.toUpper("hello")
 print(upperResult)  // Output: "HELLO"
 
 // Example 4: Convert to lowercase
-lowerResult = string.toLower("HELLO")
+let lowerResult = string.toLower("HELLO")
 print(lowerResult)  // Output: "hello"
 
 // Example 5: Replace a substring
-replaceResult = string.replace("Hello, World!", "World", "Vint")
+let replaceResult = string.replace("Hello, World!", "World", "Vint")
 print(replaceResult)  // Output: "Hello, Vint!"
 
 // Example 6: Split string into parts
-splitResult = string.split("a,b,c,d", ",")
+let splitResult = string.split("a,b,c,d", ",")
 print(splitResult)  // Output: ["a", "b", "c", "d"]
 
 // Example 7: Join string parts
-joinResult = string.join(["a", "b", "c"], "-")
+let joinResult = string.join(["a", "b", "c"], "-")
 print(joinResult)  // Output: "a-b-c"
 
 // Example 8: Get a substring
-substringResult = string.substring("Hello, World!", 7, 12)
+let substringResult = string.substring("Hello, World!", 7, 12)
 print(substringResult)  // Output: "World"
 
 // Example 9: Get the length of a string
-lengthResult = string.length("Hello")
+let lengthResult = string.length("Hello")
 print(lengthResult)  // Output: 5
 
 // Example 10: Find index of a substring
-indexResult = string.indexOf("Hello, World!", "World")
+let indexResult = string.indexOf("Hello, World!", "World")
 print(indexResult)  // Output: 7
 
 // Example 11: Get a substring (valid start and end indices)
@@ -49,7 +49,7 @@ print(result)  // Output: "Hello"
 // result = string.substring("Hello, World!", 7, 3)
 // print(result)  // Output: Error: Invalid start or end index
 
-//Example 12: Generating a slug
+//Example 13: Generating a slug
 result = string.slug("Creates a slug string from a normal string")
 print(result)   //Output: string: creates-a-slug-string-from-a-normal-string
 

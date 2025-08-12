@@ -4,34 +4,34 @@ import os
 // os.exit(1)
  
 // Run a shell command
-result = os.run("ls -la")
+let result = os.run("ls -la")
 print(result)
 // print(os.run("go run . vintLang/main.vint"))
 
 // Get and set environment variables
 // os.setEnv("API_KEY", "12345")
-api_key = os.getEnv("API_KEY")
+let api_key = os.getEnv("API_KEY")
 print(api_key)
 
 // Read and write files
 os.writeFile("example.txt", "Hello, Vint!")
-content = os.readFile("example.txt")
+let content = os.readFile("example.txt")
 print(content)
 
 // List directory contents
-files = os.listDir(".")
+let files = os.listDir(".")
 print(files)
 
 // Create a directory
 os.makeDir("new_folder")
 
 // Check if a file exists
-exists = os.fileExists("example.txt")
+let exists = os.fileExists("example.txt")
 print(exists) // Outputs: false
 
 // Write a file and read it line by line
 os.writeFile("example.txt", "Hello\nWorld")
-lines = os.readLines("example.txt")
+let lines = os.readLines("example.txt")
 print(lines) // Outputs: ["Hello", "World"]
 
 // Delete a file

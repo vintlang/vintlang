@@ -61,3 +61,14 @@ config.json
 
 dist/
 .idea./vintlang
+
+# Generated showcase files (temporary output)
+*_report_*.json
+*_report_*.txt
+*_export_*.csv
+employees.json
+contacts.json
+app_config.json
+processing_log.txt
+test.txt
+config.json

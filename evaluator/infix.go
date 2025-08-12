@@ -19,6 +19,13 @@ func evalInfixExpression(operator string, left, right object.Object, line int) o
 	case operator == "in":
 		return evalInExpression(left, right, line)
 
+	case operator == "??":
+		// Null coalescing: return left if not null, otherwise return right
+		if left.Type() != object.NULL_OBJ {
+			return left
+		}
+		return right
+
 	case left.Type() == object.STRING_OBJ && right.Type() == object.STRING_OBJ:
 		return evalStringInfixExpression(operator, left, right, line)
 

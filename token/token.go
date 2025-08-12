@@ -36,6 +36,7 @@ const (
 	NOT_EQ          = "!="
 	AND             = "&&"
 	OR              = "||"
+	NULL_COALESCE   = "??"
 	PLUS_ASSIGN     = "+="
 	PLUS_PLUS       = "++"
 	MINUS_ASSIGN    = "-="
@@ -97,6 +98,9 @@ const (
 	AWAIT    = "AWAIT"
 	GO       = "GO"
 	CHAN     = "CHAN"
+	
+	// Error Handling Keywords
+	THROW    = "THROW"
 )
 
 var keywords = map[string]TokenType{
@@ -135,6 +139,7 @@ var keywords = map[string]TokenType{
 	"await":    AWAIT,
 	"go":       GO,
 	"chan":     CHAN,
+	"throw":    THROW,
 }
 
 func LookupIdent(ident string) TokenType {
