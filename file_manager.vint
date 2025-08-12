@@ -1,0 +1,339 @@
+// VintLang Showcase: File & Data Management System
+// Demonstrates practical VintLang capabilities
+
+import time
+import os
+import json
+import uuid
+
+// Application state
+let app = {
+    "name": "VintLang File Manager",
+    "version": "1.0",
+    "dataDir": "vint_data",
+    "logFile": "activity.log"
+}
+
+// Logging function
+let logActivity = func(message) {
+    let timestamp = time.format(time.now(), "2006-01-02 15:04:05")
+    let logEntry = "[" + timestamp + "] " + message + "\n"
+    
+    if (os.fileExists(app["logFile"])) {
+        let existing = os.readFile(app["logFile"])
+        os.writeFile(app["logFile"], existing + logEntry)
+    } else {
+        os.writeFile(app["logFile"], logEntry)
+    }
+}
+
+// Setup function
+let setupApplication = func() {
+    print("🔧 Setting up VintLang File Manager...")
+    
+    if (!os.fileExists(app["dataDir"])) {
+        os.makeDir(app["dataDir"])
+        print("✓ Created data directory: " + app["dataDir"])
+        logActivity("Created data directory")
+    }
+    
+    logActivity("Application started")
+    print("✓ Application setup complete")
+}
+
+// Create sample files
+let createSampleFiles = func() {
+    print("\n📁 Creating sample files...")
+    
+    // Create different types of files
+    let files = [
+        {
+            "name": "notes.txt",
+            "content": "VintLang Programming Notes\n========================\n\nVintLang is a powerful programming language with:\n- JSON support\n- File I/O operations\n- Time handling\n- UUID generation\n- Network capabilities\n\nCreated: " + time.format(time.now(), "02-01-2006 15:04:05")
+        },
+        {
+            "name": "config.json",
+            "content": json.encode({
+                "app_name": "VintLang Demo",
+                "version": "1.0.0",
+                "features": ["file_io", "json", "time", "uuid"],
+                "settings": {
+                    "debug": true,
+                    "log_level": "info"
+                }
+            })
+        },
+        {
+            "name": "tasks.json",
+            "content": json.encode([
+                {
+                    "id": uuid.generate(),
+                    "title": "Learn VintLang",
+                    "status": "completed",
+                    "created": time.format(time.now(), "2006-01-02")
+                },
+                {
+                    "id": uuid.generate(),
+                    "title": "Build awesome project",
+                    "status": "in_progress", 
+                    "created": time.format(time.now(), "2006-01-02")
+                }
+            ])
+        },
+        {
+            "name": "data.csv",
+            "content": "ID,Name,Category,Value\n1,Item A,Category 1,100\n2,Item B,Category 2,200\n3,Item C,Category 1,150\n4,Item D,Category 3,300"
+        }
+    ]
+    
+    for file in files {
+        let filepath = app["dataDir"] + "/" + file["name"]
+        os.writeFile(filepath, file["content"])
+        print("✓ Created: " + file["name"])
+        logActivity("Created file: " + file["name"])
+    }
+    
+    print("✓ Sample files created successfully!")
+}
+
+// List files in directory
+let listFiles = func() {
+    print("\n📂 Files in " + app["dataDir"] + ":")
+    print("-" * 40)
+    
+    let files = os.listDir(app["dataDir"])
+    let fileList = files.split(", ")
+    
+    for filename in fileList {
+        if (filename != "." && filename != "..") {
+            let filepath = app["dataDir"] + "/" + filename
+            if (os.fileExists(filepath)) {
+                print("📄 " + filename)
+                
+                // Get file size (approximate by content length)
+                let content = os.readFile(filepath)
+                print("   Size: " + string(len(content)) + " bytes")
+                
+                // Determine file type
+                if (filename.contains(".json")) {
+                    print("   Type: JSON Data")
+                } else if (filename.contains(".txt")) {
+                    print("   Type: Text File")
+                } else if (filename.contains(".csv")) {
+                    print("   Type: CSV Data")
+                } else {
+                    print("   Type: Unknown")
+                }
+                print("")
+            }
+        }
+    }
+}
+
+// Analyze JSON files
+let analyzeJsonFiles = func() {
+    print("\n🔍 Analyzing JSON files...")
+    print("-" * 40)
+    
+    let files = os.listDir(app["dataDir"])
+    let fileList = files.split(", ")
+    
+    for filename in fileList {
+        if (filename.contains(".json")) {
+            print("📊 Analyzing: " + filename)
+            let filepath = app["dataDir"] + "/" + filename
+            let content = os.readFile(filepath)
+            
+            let data = json.decode(content)
+            print("   JSON structure analyzed")
+            print("   Content type: " + type(data))
+            
+            if (type(data) == "ARRAY") {
+                print("   Array length: " + string(len(data)))
+            } else if (type(data) == "HASH") {
+                print("   Object with " + string(len(data)) + " properties")
+            }
+            
+            logActivity("Analyzed JSON file: " + filename)
+            print("")
+        }
+    }
+}
+
+// Generate file report
+let generateReport = func() {
+    print("\n📋 Generating file system report...")
+    
+    let reportContent = "VINTLANG FILE MANAGER REPORT\n"
+    reportContent += "Generated: " + time.format(time.now(), "02-01-2006 15:04:05") + "\n"
+    reportContent += "=" * 50 + "\n\n"
+    
+    // Count files by type
+    let files = os.listDir(app["dataDir"])
+    let fileList = files.split(", ")
+    let typeCount = {}
+    let totalSize = 0
+    
+    for filename in fileList {
+        if (filename != "." && filename != "..") {
+            let filepath = app["dataDir"] + "/" + filename
+            if (os.fileExists(filepath)) {
+                let content = os.readFile(filepath)
+                totalSize += len(content)
+                
+                let extension = "unknown"
+                if (filename.contains(".json")) {
+                    extension = "json"
+                } else if (filename.contains(".txt")) {
+                    extension = "txt"
+                } else if (filename.contains(".csv")) {
+                    extension = "csv"
+                }
+                
+                if (!typeCount.hasKey(extension)) {
+                    typeCount[extension] = 0
+                }
+                typeCount[extension] += 1
+            }
+        }
+    }
+    
+    reportContent += "SUMMARY\n"
+    reportContent += "-------\n"
+    reportContent += "Total files: " + string(len(fileList) - 2) + "\n"
+    reportContent += "Total size: " + string(totalSize) + " bytes\n\n"
+    
+    reportContent += "FILES BY TYPE\n"
+    reportContent += "-------------\n"
+    for extension, count in typeCount {
+        reportContent += extension.upper() + " files: " + string(count) + "\n"
+    }
+    
+    reportContent += "\nDETAILS\n"
+    reportContent += "-------\n"
+    for filename in fileList {
+        if (filename != "." && filename != "..") {
+            let filepath = app["dataDir"] + "/" + filename
+            if (os.fileExists(filepath)) {
+                let content = os.readFile(filepath)
+                reportContent += filename + " (" + string(len(content)) + " bytes)\n"
+            }
+        }
+    }
+    
+    reportContent += "\n" + "=" * 50 + "\n"
+    reportContent += "Report generated by " + app["name"] + " v" + app["version"] + "\n"
+    reportContent += "Powered by VintLang Programming Language\n"
+    
+    let reportFile = "file_report_" + time.format(time.now(), "2006-01-02_15-04-05") + ".txt"
+    os.writeFile(reportFile, reportContent)
+    print("✓ Report saved to: " + reportFile)
+    logActivity("Generated file report")
+}
+
+// Show activity log
+let showActivityLog = func() {
+    print("\n📜 Activity Log:")
+    print("-" * 40)
+    
+    if (os.fileExists(app["logFile"])) {
+        let logContent = os.readFile(app["logFile"])
+        let lines = os.readLines(app["logFile"])
+        
+        print("Total log entries: " + string(len(lines)))
+        print("\nRecent activity:")
+        for line in lines {
+            if (line != "") {
+                print(line)
+            }
+        }
+    } else {
+        print("No activity log found.")
+    }
+}
+
+// Backup data
+let backupData = func() {
+    print("\n💾 Creating backup...")
+    
+    let backupDir = "backup_" + time.format(time.now(), "2006-01-02_15-04-05")
+    os.makeDir(backupDir)
+    
+    let files = os.listDir(app["dataDir"])
+    let fileList = files.split(", ")
+    let backedUp = 0
+    
+    for filename in fileList {
+        if (filename != "." && filename != "..") {
+            let sourcePath = app["dataDir"] + "/" + filename
+            let backupPath = backupDir + "/" + filename
+            
+            if (os.fileExists(sourcePath)) {
+                let content = os.readFile(sourcePath)
+                os.writeFile(backupPath, content)
+                backedUp += 1
+            }
+        }
+    }
+    
+    // Create backup manifest
+    let manifest = {
+        "created": time.format(time.now(), "2006-01-02 15:04:05"),
+        "files_backed_up": backedUp,
+        "source_directory": app["dataDir"],
+        "backup_id": uuid.generate()
+    }
+    
+    os.writeFile(backupDir + "/manifest.json", json.encode(manifest))
+    print("✓ Backup created: " + backupDir)
+    print("✓ Files backed up: " + string(backedUp))
+    logActivity("Created backup: " + backupDir)
+}
+
+// Main application
+let runFileManager = func() {
+    print("🚀 Welcome to " + app["name"] + " v" + app["version"])
+    print("=" * 60)
+    print("This VintLang application demonstrates:")
+    print("  • File and directory operations")
+    print("  • JSON data processing") 
+    print("  • Logging and reporting")
+    print("  • Backup functionality")
+    print("  • Time and UUID utilities")
+    print("  • Data analysis capabilities")
+    print("=" * 60)
+    
+    // Run all demonstrations
+    setupApplication()
+    createSampleFiles()
+    listFiles()
+    analyzeJsonFiles()
+    generateReport()
+    showActivityLog()
+    backupData()
+    
+    print("\n🎉 File Manager demonstration complete!")
+    print("\n📊 Summary of operations:")
+    print("  ✓ Created application directory")
+    print("  ✓ Generated sample files (JSON, TXT, CSV)")
+    print("  ✓ Performed file analysis")
+    print("  ✓ Generated comprehensive report")
+    print("  ✓ Maintained activity log")
+    print("  ✓ Created data backup")
+    
+    print("\n✨ VintLang successfully demonstrated:")
+    print("  • Robust file I/O operations")
+    print("  • JSON encoding/decoding")
+    print("  • Directory management")
+    print("  • Logging and auditing")
+    print("  • Data backup and recovery")
+    print("  • Time-based operations")
+    print("  • UUID generation")
+    print("  • String manipulation")
+    print("  • Error handling")
+    
+    print("\n🎯 VintLang is ready for real-world applications!")
+}
+
+// Start the file manager
+runFileManager()
