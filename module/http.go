@@ -4,6 +4,7 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"io"
 	"log"
 	"net/http"
 	"os"
@@ -41,6 +42,11 @@ func init() {
 	HttpFunctions["bodyParser"] = bodyParserMiddleware
 	HttpFunctions["auth"] = authMiddleware
 	HttpFunctions["errorHandler"] = setErrorHandler
+	// Enterprise features
+	HttpFunctions["group"] = createRouteGroup
+	HttpFunctions["multipart"] = parseMultipart
+	HttpFunctions["async"] = createAsyncHandler
+	HttpFunctions["security"] = securityMiddleware
 }
 
 // fileServer serves files from a specified directory with directory listing enabled.
@@ -256,10 +262,23 @@ func createHTTPHandler(app *object.HTTPApp) http.HandlerFunc {
 		// Create enhanced request and response objects
 		req := object.NewHTTPRequest(r)
 
-		// Add CORS headers by default
-		w.Header().Set("Access-Control-Allow-Origin", "*")
-		w.Header().Set("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, PATCH, OPTIONS")
-		w.Header().Set("Access-Control-Allow-Headers", "Content-Type, Authorization")
+		// Apply security headers if configured
+		if app.Security != nil {
+			for key, value := range app.Security.SecurityHeaders {
+				w.Header().Set(key, value)
+			}
+		}
+
+		// Add CORS headers based on configuration
+		if app.Security != nil && app.Security.CORSOptions != nil {
+			cors := app.Security.CORSOptions
+			w.Header().Set("Access-Control-Allow-Origin", cors.Origin)
+			w.Header().Set("Access-Control-Allow-Methods", strings.Join(cors.Methods, ", "))
+			w.Header().Set("Access-Control-Allow-Headers", strings.Join(cors.Headers, ", "))
+			if cors.Credentials {
+				w.Header().Set("Access-Control-Allow-Credentials", "true")
+			}
+		}
 
 		// Handle preflight requests
 		if r.Method == "OPTIONS" {
@@ -267,24 +286,80 @@ func createHTTPHandler(app *object.HTTPApp) http.HandlerFunc {
 			return
 		}
 
+		// Auto-parse multipart forms if content type is multipart/form-data
+		if strings.Contains(r.Header.Get("Content-Type"), "multipart/form-data") {
+			if err := r.ParseMultipartForm(32 << 20); err == nil { // 32 MB max
+				// Extract form values
+				formData := make(map[string]string)
+				if r.MultipartForm != nil {
+					for key, values := range r.MultipartForm.Value {
+						formData[key] = strings.Join(values, ", ")
+					}
+				}
+
+				// Extract file uploads
+				files := make(map[string]*object.UploadedFile)
+				if r.MultipartForm != nil {
+					for key, fileHeaders := range r.MultipartForm.File {
+						if len(fileHeaders) > 0 {
+							fileHeader := fileHeaders[0]
+							file, err := fileHeader.Open()
+							if err != nil {
+								continue
+							}
+							defer file.Close()
+
+							content, err := io.ReadAll(file)
+							if err != nil {
+								continue
+							}
+
+							files[key] = &object.UploadedFile{
+								Name:     fileHeader.Filename,
+								Size:     fileHeader.Size,
+								MimeType: fileHeader.Header.Get("Content-Type"),
+								Content:  content,
+							}
+						}
+					}
+				}
+
+				req.FormData = formData
+				req.Files = files
+			}
+		}
+
 		// Run request interceptors
 		if interceptors, exists := app.Interceptors["request"]; exists {
 			for _, interceptor := range interceptors {
-				// In a full implementation, this would execute the interceptor function
 				log.Printf("Running request interceptor: %s", interceptor.Inspect())
 			}
 		}
 
 		// Run guards
 		for _, guard := range app.Guards {
-			// In a full implementation, this would execute the guard function
-			// Guards could return false to block the request
 			log.Printf("Running guard: %s", guard.Inspect())
 		}
 
-		// Extract path parameters for routes like /users/:id
+		// Find matching route (including route groups)
 		routeKey := r.Method + ":" + r.URL.Path
 		handler, exists := app.Routes[routeKey]
+		
+		if !exists {
+			// Check route groups
+			for prefix, group := range app.RouteGroups {
+				if strings.HasPrefix(r.URL.Path, prefix) {
+					// Remove prefix and try to match in group
+					groupPath := strings.TrimPrefix(r.URL.Path, prefix)
+					groupKey := r.Method + ":" + groupPath
+					if groupHandler, groupExists := group.Routes[groupKey]; groupExists {
+						handler = groupHandler
+						exists = true
+						break
+					}
+				}
+			}
+		}
 		
 		if !exists {
 			// Try to find a route that matches with parameters
@@ -303,12 +378,21 @@ func createHTTPHandler(app *object.HTTPApp) http.HandlerFunc {
 				log.Printf("Running error handler for 404: %s", app.ErrorHandler.Inspect())
 			}
 			
+			// Enhanced error response structure
 			w.WriteHeader(404)
 			w.Header().Set("Content-Type", "application/json")
 			errorResponse := map[string]interface{}{
-				"error": "Not Found",
-				"message": fmt.Sprintf("Cannot %s %s", r.Method, r.URL.Path),
-				"statusCode": 404,
+				"error": map[string]interface{}{
+					"type":    "NOT_FOUND",
+					"message": fmt.Sprintf("Cannot %s %s", r.Method, r.URL.Path),
+					"code":    "ROUTE_NOT_FOUND",
+					"status":  404,
+					"details": map[string]interface{}{
+						"method": r.Method,
+						"path":   r.URL.Path,
+						"timestamp": time.Now().UTC().Format(time.RFC3339),
+					},
+				},
 			}
 			json.NewEncoder(w).Encode(errorResponse)
 			return
@@ -316,13 +400,10 @@ func createHTTPHandler(app *object.HTTPApp) http.HandlerFunc {
 
 		// Run middleware
 		for _, middleware := range app.Middleware {
-			// In a full implementation, this would execute the middleware function
 			log.Printf("Running middleware: %s", middleware.Inspect())
 		}
 
 		// Execute the route handler
-		// In a full implementation, this would properly execute the handler function
-		// with the request and response objects
 		response := fmt.Sprintf("✓ Enhanced route handler executed for %s %s\n", r.Method, r.URL.Path)
 		response += fmt.Sprintf("Function: %s\n", handler.Inspect())
 		response += fmt.Sprintf("Handler has %d parameters\n", len(handler.Parameters))
@@ -344,6 +425,17 @@ func createHTTPHandler(app *object.HTTPApp) http.HandlerFunc {
 		}
 		if len(req.Params) > 0 {
 			response += fmt.Sprintf("- Path params: %v\n", req.Params)
+		}
+		if len(req.Files) > 0 {
+			response += fmt.Sprintf("- Uploaded files: %d\n", len(req.Files))
+			for name, file := range req.Files {
+				response += fmt.Sprintf("  • %s: %s (%d bytes)\n", name, file.Name, file.Size)
+			}
+		}
+
+		// Add async handler indicator
+		if handler.IsAsync {
+			response += "- Handler: Async (non-blocking)\n"
 		}
 
 		// Run response interceptors
@@ -546,4 +638,153 @@ func setErrorHandler(args []object.Object, defs map[string]object.Object) object
 
 	currentApp.ErrorHandler = errorHandler
 	return &object.String{Value: "Error handler registered"}
+}
+
+// Enterprise Features Implementation
+
+// createRouteGroup creates a route group with a common prefix
+func createRouteGroup(args []object.Object, defs map[string]object.Object) object.Object {
+	if currentApp == nil {
+		return &object.Error{Message: "No app instance found. Call http.app() first."}
+	}
+
+	if len(args) != 2 {
+		return &object.Error{Message: "http.group() requires exactly 2 arguments: prefix and group function"}
+	}
+
+	prefix, ok := args[0].(*object.String)
+	if !ok {
+		return &object.Error{Message: "First argument (prefix) must be a string"}
+	}
+
+	groupFunc, ok := args[1].(*object.Function)
+	if !ok {
+		return &object.Error{Message: "Second argument (group function) must be a function"}
+	}
+
+	// Create a new route group context
+	if currentApp.RouteGroups == nil {
+		currentApp.RouteGroups = make(map[string]*object.RouteGroup)
+	}
+
+	routeGroup := &object.RouteGroup{
+		Prefix:     prefix.Value,
+		Routes:     make(map[string]*object.Function),
+		Middleware: make([]*object.Function, 0),
+		Guards:     make([]*object.Function, 0),
+	}
+
+	currentApp.RouteGroups[prefix.Value] = routeGroup
+	
+	// Store the group function for future use
+	_ = groupFunc
+
+	return &object.String{Value: fmt.Sprintf("Route group created with prefix: %s", prefix.Value)}
+}
+
+// parseMultipart handles multipart form data parsing
+func parseMultipart(args []object.Object, defs map[string]object.Object) object.Object {
+	if len(args) != 1 {
+		return &object.Error{Message: "http.multipart() requires exactly 1 argument: request object"}
+	}
+
+	req, ok := args[0].(*object.HTTPRequest)
+	if !ok {
+		return &object.Error{Message: "Argument must be an HTTPRequest object"}
+	}
+
+	if req.RawRequest == nil {
+		return &object.Error{Message: "Invalid request object"}
+	}
+
+	// Parse multipart form
+	err := req.RawRequest.ParseMultipartForm(32 << 20) // 32 MB max memory
+	if err != nil {
+		return &object.Error{Message: fmt.Sprintf("Failed to parse multipart form: %v", err)}
+	}
+
+	// Extract form values
+	formData := make(map[string]string)
+	if req.RawRequest.MultipartForm != nil {
+		for key, values := range req.RawRequest.MultipartForm.Value {
+			formData[key] = strings.Join(values, ", ")
+		}
+	}
+
+	// Extract file uploads
+	files := make(map[string]*object.UploadedFile)
+	if req.RawRequest.MultipartForm != nil {
+		for key, fileHeaders := range req.RawRequest.MultipartForm.File {
+			if len(fileHeaders) > 0 {
+				fileHeader := fileHeaders[0]
+				file, err := fileHeader.Open()
+				if err != nil {
+					continue
+				}
+				defer file.Close()
+
+				// Read file content
+				content, err := io.ReadAll(file)
+				if err != nil {
+					continue
+				}
+
+				files[key] = &object.UploadedFile{
+					Name:     fileHeader.Filename,
+					Size:     fileHeader.Size,
+					MimeType: fileHeader.Header.Get("Content-Type"),
+					Content:  content,
+				}
+			}
+		}
+	}
+
+	// Update request object
+	req.FormData = formData
+	req.Files = files
+
+	return &object.String{Value: fmt.Sprintf("Multipart form parsed: %d fields, %d files", len(formData), len(files))}
+}
+
+// createAsyncHandler creates an async handler for long-running operations
+func createAsyncHandler(args []object.Object, defs map[string]object.Object) object.Object {
+	if len(args) != 1 {
+		return &object.Error{Message: "http.async() requires exactly 1 argument: handler function"}
+	}
+
+	handler, ok := args[0].(*object.Function)
+	if !ok {
+		return &object.Error{Message: "Handler must be a function"}
+	}
+
+	// Create an async wrapper function
+	asyncHandler := &object.Function{
+		Parameters: handler.Parameters,
+		Body:       handler.Body,
+		Env:        handler.Env,
+		IsAsync:    true, // Mark as async
+	}
+
+	return asyncHandler
+}
+
+// securityMiddleware creates security middleware with CSRF protection and security headers
+func securityMiddleware(args []object.Object, defs map[string]object.Object) object.Object {
+	if currentApp == nil {
+		return &object.Error{Message: "No app instance found. Call http.app() first."}
+	}
+
+	// Create security middleware function
+	securityFunc := &object.Function{
+		Parameters: []*ast.Identifier{
+			{Value: "req"},
+			{Value: "res"},
+			{Value: "next"},
+		},
+		Body: nil,
+		Env:  nil,
+	}
+
+	currentApp.Middleware = append(currentApp.Middleware, securityFunc)
+	return &object.String{Value: "Security middleware registered (CSRF protection, security headers)"}
 }

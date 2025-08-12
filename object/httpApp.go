@@ -8,6 +8,8 @@ import (
 	"log"
 	"net/http"
 	"net/url"
+	"os"
+	"path/filepath"
 	"strings"
 )
 
@@ -20,6 +22,90 @@ type HTTPApp struct {
 	Interceptors map[string][]*Function // key: "request" or "response"
 	Guards       []*Function
 	ErrorHandler *Function
+	// Enterprise features
+	RouteGroups  map[string]*RouteGroup
+	Security     *SecurityConfig
+	Performance  *PerformanceConfig
+}
+
+// RouteGroup represents a group of routes with common prefix and middleware
+type RouteGroup struct {
+	Prefix     string
+	Routes     map[string]*Function
+	Middleware []*Function
+	Guards     []*Function
+}
+
+// SecurityConfig holds security-related configuration
+type SecurityConfig struct {
+	CSRFProtection bool
+	SecurityHeaders map[string]string
+	CORSOptions    *CORSOptions
+}
+
+// CORSOptions holds CORS configuration
+type CORSOptions struct {
+	Origin      string
+	Methods     []string
+	Headers     []string
+	Credentials bool
+}
+
+// PerformanceConfig holds performance monitoring configuration
+type PerformanceConfig struct {
+	EnableMetrics bool
+	MetricsPath   string
+	RequestTiming bool
+}
+
+// UploadedFile represents an uploaded file
+type UploadedFile struct {
+	Name     string
+	Size     int64
+	MimeType string
+	Content  []byte
+}
+
+func (file *UploadedFile) Type() ObjectType { return UPLOADED_FILE_OBJ }
+func (file *UploadedFile) Inspect() string {
+	return fmt.Sprintf("UploadedFile{name: %s, size: %d, type: %s}", file.Name, file.Size, file.MimeType)
+}
+
+// Method to access uploaded file functionality
+func (file *UploadedFile) Method(name string, args []Object) Object {
+	switch name {
+	case "save":
+		if len(args) != 1 {
+			return &Error{Message: "file.save() requires 1 argument: destination path"}
+		}
+		path, ok := args[0].(*String)
+		if !ok {
+			return &Error{Message: "Destination path must be a string"}
+		}
+		
+		// Create directory if it doesn't exist
+		dir := filepath.Dir(path.Value)
+		if err := os.MkdirAll(dir, 0755); err != nil {
+			return &Error{Message: fmt.Sprintf("Failed to create directory: %v", err)}
+		}
+		
+		// Write file
+		if err := os.WriteFile(path.Value, file.Content, 0644); err != nil {
+			return &Error{Message: fmt.Sprintf("Failed to save file: %v", err)}
+		}
+		
+		return &String{Value: fmt.Sprintf("File saved to: %s", path.Value)}
+	case "name":
+		return &String{Value: file.Name}
+	case "size":
+		return &Integer{Value: file.Size}
+	case "type":
+		return &String{Value: file.MimeType}
+	case "content":
+		return &String{Value: string(file.Content)}
+	default:
+		return &Error{Message: fmt.Sprintf("Unknown file method: %s", name)}
+	}
 }
 
 func (app *HTTPApp) Type() ObjectType { return HTTP_APP_OBJ }
@@ -29,7 +115,8 @@ func (app *HTTPApp) Inspect() string {
 	out.WriteString(fmt.Sprintf("routes: %d, ", len(app.Routes)))
 	out.WriteString(fmt.Sprintf("middleware: %d, ", len(app.Middleware)))
 	out.WriteString(fmt.Sprintf("interceptors: %d, ", len(app.Interceptors)))
-	out.WriteString(fmt.Sprintf("guards: %d", len(app.Guards)))
+	out.WriteString(fmt.Sprintf("guards: %d, ", len(app.Guards)))
+	out.WriteString(fmt.Sprintf("routeGroups: %d", len(app.RouteGroups)))
 	out.WriteString("}")
 	return out.String()
 }
@@ -48,6 +135,9 @@ type HTTPRequest struct {
 	FormData   map[string]string
 	JSON       map[string]interface{}
 	RawRequest *http.Request
+	// Enterprise features
+	Files      map[string]*UploadedFile
+	IsAsync    bool
 }
 
 func (req *HTTPRequest) Type() ObjectType { return HTTP_REQUEST_OBJ }
@@ -150,6 +240,25 @@ func (req *HTTPRequest) Method(name string, args []Object) Object {
 			return &String{Value: ""}
 		}
 		return &Error{Message: "req.form() takes 0 or 1 arguments"}
+	case "file":
+		if len(args) != 1 {
+			return &Error{Message: "req.file() requires 1 argument: file field name"}
+		}
+		fieldName, ok := args[0].(*String)
+		if !ok {
+			return &Error{Message: "File field name must be a string"}
+		}
+		if file, exists := req.Files[fieldName.Value]; exists {
+			return file
+		}
+		return &String{Value: ""}
+	case "files":
+		// Return all uploaded files
+		result := make(map[string]Object)
+		for k, v := range req.Files {
+			result[k] = v
+		}
+		return &String{Value: fmt.Sprintf("Files: %d uploaded", len(req.Files))}
 	default:
 		return &Error{Message: fmt.Sprintf("Unknown request method: %s", name)}
 	}
@@ -285,6 +394,25 @@ func NewHTTPApp() *HTTPApp {
 		Middleware:   make([]*Function, 0),
 		Interceptors: make(map[string][]*Function),
 		Guards:       make([]*Function, 0),
+		RouteGroups:  make(map[string]*RouteGroup),
+		Security:     &SecurityConfig{
+			CSRFProtection: false,
+			SecurityHeaders: map[string]string{
+				"X-Content-Type-Options": "nosniff",
+				"X-Frame-Options":        "DENY",
+				"X-XSS-Protection":       "1; mode=block",
+			},
+			CORSOptions: &CORSOptions{
+				Origin:  "*",
+				Methods: []string{"GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"},
+				Headers: []string{"Content-Type", "Authorization"},
+			},
+		},
+		Performance: &PerformanceConfig{
+			EnableMetrics: false,
+			MetricsPath:   "/metrics",
+			RequestTiming: false,
+		},
 	}
 }
 
@@ -343,6 +471,8 @@ func NewHTTPRequest(r *http.Request) *HTTPRequest {
 		FormData:   formData,
 		JSON:       jsonData,
 		RawRequest: r,
+		Files:      make(map[string]*UploadedFile),
+		IsAsync:    false,
 	}
 }
 
