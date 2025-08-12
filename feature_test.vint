@@ -1,0 +1,61 @@
+// VintLang Feature Test
+import time
+import os
+import json
+import uuid
+
+print("🚀 VintLang Feature Test")
+print("=" * 30)
+
+// Test 1: Time functions
+print("1. Time Functions:")
+let now = time.now()
+print("Current time: " + time.format(now, "02-01-2006 15:04:05"))
+
+// Test 2: UUID generation
+print("\n2. UUID Generation:")
+let id = uuid.generate()
+print("Generated UUID: " + id)
+
+// Test 3: JSON operations
+print("\n3. JSON Operations:")
+let data = {
+    "name": "VintLang",
+    "version": "0.2.1",
+    "features": ["time", "json", "uuid", "os"]
+}
+let jsonStr = json.encode(data)
+print("JSON encoded: " + jsonStr)
+
+let decoded = json.decode(jsonStr)
+print("JSON decoded: " + string(decoded))
+
+// Test 4: File operations
+print("\n4. File Operations:")
+let testFile = "test.txt"
+os.writeFile(testFile, "Hello VintLang!")
+let content = os.readFile(testFile)
+print("File content: " + content)
+
+// Test 5: Arrays and loops
+print("\n5. Arrays and Loops:")
+let numbers = [1, 2, 3, 4, 5]
+for num in numbers {
+    print("Number: " + string(num))
+}
+
+// Test 6: String operations
+print("\n6. String Operations:")
+let text = "VintLang Programming"
+let words = text.split(" ")
+print("Split result: " + string(words))
+
+print("\n✅ All tests completed!")
+print("VintLang is working with these modules:")
+print("  • time - Date and time operations")
+print("  • os - File system operations")
+print("  • json - JSON encoding/decoding")
+print("  • uuid - UUID generation")
+print("  • Built-in string methods")
+print("  • Arrays and dictionaries")
+print("  • Control flow (loops, conditionals)")

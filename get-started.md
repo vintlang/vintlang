@@ -220,40 +220,40 @@ import json
 
 //Example 1: Decode a JSON string
 print("=== Example 1: Decode ===")
-raw_json = '{"name": "John", "age": 30, "isAdmin": false, "friends": ["Jane", "Doe"]}'
-decoded = json.decode(raw_json)
+let raw_json = '{"name": "John", "age": 30, "isAdmin": false, "friends": ["Jane", "Doe"]}'
+let decoded = json.decode(raw_json)
 print("Decoded Object:", decoded)
 
 //Example 2: Encode a Vint object to JSON
 print("\n=== Example 2: Encode ===")
-data = {
+let data = {
   "language": "Vint",
   "version": 1.0,
   "features": ["custom modules", "native objects"]
 }
-encoded_json = json.encode(data) //optional parameter indent
+let encoded_json = json.encode(data) //optional parameter indent
 print("Encoded JSON:", encoded_json)
 
 //Example 3: Pretty print a JSON string
 print("\n=== Example 3: Pretty Print ===")
-raw_json_pretty = '{"name":"John","age":30,"friends":["Jane","Doe"]}'
-pretty_json = json.pretty(raw_json_pretty)
+let raw_json_pretty = '{"name":"John","age":30,"friends":["Jane","Doe"]}'
+let pretty_json = json.pretty(raw_json_pretty)
 print("Pretty JSON:\n", pretty_json)
 
 //Example 4: Merge two JSON objects
 print("\n=== Example 4: Merge ===")
-json1 = {"name": "John", "age": 30}
-json2 = {"city": "New York", "age": 35}
-merged_json = json.merge(json1, json2)
+let json1 = {"name": "John", "age": 30}
+let json2 = {"city": "New York", "age": 35}
+let merged_json = json.merge(json1, json2)
 print("Merged JSON:", merged_json)
 
 //Example 5: Get a value by key from a JSON object
 print("\n=== Example 5: Get Value by Key ===")
-json_object = {"name": "John", "age": 30, "city": "New York"}
-value = json.get(json_object, "age")
+let json_object = {"name": "John", "age": 30, "city": "New York"}
+let value = json.get(json_object, "age")
 print("Age:", value)
 
-missing_value = json.get(json_object, "country")
+let missing_value = json.get(json_object, "country")
 print("Country (missing key):", missing_value)
 
 ```
@@ -293,34 +293,34 @@ import os
 // os.exit(1)
 
 // Run a shell command
-result = os.run("ls -la")
+let result = os.run("ls -la")
 print(result)
 // print(os.run("go run . vintLang/main.vint"))
 
 // Get and set environment variables
 // os.setEnv("API_KEY", "12345")
-api_key = os.getEnv("API_KEY")
+let api_key = os.getEnv("API_KEY")
 print(api_key)
 
 // Read and write files
 os.writeFile("example.txt", "Hello, Vint!")
-content = os.readFile("example.txt")
+let content = os.readFile("example.txt")
 print(content)
 
 // List directory contents
-files = os.listDir(".")
+let files = os.listDir(".")
 print(files)
 
 // Create a directory
 os.makeDir("new_folder")
 
 // Check if a file exists
-exists = os.fileExists("example.txt")
+let exists = os.fileExists("example.txt")
 print(exists) // Outputs: false
 
 // Write a file and read it line by line
 os.writeFile("example.txt", "Hello\nWorld")
-lines = os.readLines("example.txt")
+let lines = os.readLines("example.txt")
 print(lines) // Outputs: ["Hello", "World"]
 
 // Delete a file
