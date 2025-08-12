@@ -32,11 +32,11 @@ let logResult = func(level, logMessage) {
     
     // Display with better formatting
     if (level == "ERROR") {
-        println("❌ [ERROR] " + logMessage)
+        error logMessage
     } else if (level == "SUCCESS") {
         println("✅ [SUCCESS] " + logMessage)
     } else if (level == "INFO") {
-        println("ℹ️  [INFO] " + logMessage)
+        info logMessage
     } else {
         println("📢 [" + level + "] " + logMessage)
     }
@@ -226,7 +226,7 @@ let viewLog = func() {
         let logs = os.readFile(log_file)
         println(logs)
     } else {
-        logResult("INFO", "No logs available yet.")
+        info "No logs available yet."
     }
     
     input("\nPress Enter to continue...")
