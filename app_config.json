@@ -1,0 +1,1 @@
+{"database":{"host":"localhost","name":"vintlang_demo","port":5432},"features":{"cache_enabled":true,"debug_mode":false,"max_connections":100},"logging":{"file":"application.log","level":"info"}}
