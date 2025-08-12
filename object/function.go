@@ -14,6 +14,7 @@ type Function struct {
 	Body       *ast.BlockStatement
 	Env        *Environment
 	IsAsync    bool // Support for async handlers
+	IsStreaming bool // Support for streaming responses
 }
 
 func (f *Function) Type() ObjectType { return FUNCTION_OBJ }

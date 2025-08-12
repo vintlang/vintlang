@@ -282,3 +282,74 @@ func TestCORSConfiguration(t *testing.T) {
 		t.Errorf("Expected CORS methods to contain 'GET', got '%s'", methods)
 	}
 }
+
+func TestStreamingHandler(t *testing.T) {
+	handler := &object.Function{
+		Parameters: []*ast.Identifier{
+			{Value: "req"},
+			{Value: "res"},
+		},
+		Body: nil,
+		Env:  nil,
+	}
+
+	result := createStreamHandler([]object.Object{handler}, map[string]object.Object{})
+	
+	streamHandler, ok := result.(*object.Function)
+	if !ok {
+		t.Errorf("Expected Function result, got %T", result)
+	}
+
+	if !streamHandler.IsStreaming {
+		t.Error("Expected handler to be marked as streaming")
+	}
+}
+
+func TestMetricsEnable(t *testing.T) {
+	currentApp = object.NewHTTPApp()
+
+	result := enableMetrics([]object.Object{}, map[string]object.Object{})
+	
+	if result.Type() != object.STRING_OBJ {
+		t.Errorf("Expected string result, got %T", result)
+	}
+
+	// Verify metrics were enabled
+	if !currentApp.Performance.EnableMetrics {
+		t.Error("Expected metrics to be enabled")
+	}
+
+	if !currentApp.Performance.RequestTiming {
+		t.Error("Expected request timing to be enabled")
+	}
+}
+
+func TestPerformanceHeaders(t *testing.T) {
+	currentApp = object.NewHTTPApp()
+	currentApp.Performance.RequestTiming = true
+	handler := createHTTPHandler(currentApp)
+
+	req := httptest.NewRequest("GET", "/test", nil)
+	w := httptest.NewRecorder()
+
+	// Add a test route with a simple function
+	testHandler := &object.Function{
+		Parameters: []*ast.Identifier{{Value: "req"}, {Value: "res"}},
+		Body:       &ast.BlockStatement{Statements: []ast.Statement{}},
+		Env:        nil,
+	}
+	currentApp.Routes["GET:/test"] = testHandler
+
+	handler(w, req)
+
+	// Check performance headers
+	headers := w.Header()
+	
+	if requestStart := headers.Get("X-Request-Start"); requestStart == "" {
+		t.Error("Expected X-Request-Start header to be set")
+	}
+
+	if responseTime := headers.Get("X-Response-Time"); responseTime == "" {
+		t.Error("Expected X-Response-Time header to be set")
+	}
+}
