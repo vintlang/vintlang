@@ -40,7 +40,7 @@ export function Sidebar() {
               )}
               asChild
             >
-              <Link href={item.href}>
+              <Link href={item.href} target={item.blank ? "_blank" : "_self"}>
                 <item.icon className="mr-2 h-4 w-4" />
                 {item.name}
               </Link>
