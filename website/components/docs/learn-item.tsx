@@ -3,13 +3,15 @@ import { fetchMarkdown } from '@/lib/utils';
 import React from 'react'
 import Markdown from 'react-markdown';
 
+interface LearnItemProps { 
+    item: string;
+}
 
-
-const LearnItem = async () => {
-  const markdown = await fetchMarkdown("docs/bundler.md");
+const LearnItem = async ({ item }: LearnItemProps) => {
+  const markdown = await fetchMarkdown(`docs/${item}.md`);
   return (
     <div className="p-6" id="docs">
-      <SectionHeader title="Bundler" />
+      <SectionHeader title={item} />
       <Markdown>{markdown}</Markdown>
     </div>
   )
