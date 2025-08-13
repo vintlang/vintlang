@@ -148,7 +148,7 @@ print(a)  // will print [3, 2, 1]
 
 ### sort()
 
-sort() sorts the array in place. It only works for arrays of integers or strings:
+sort() sorts the array in place. It works for arrays of integers, floats, or strings:
 
 ```s
 a = [3, 1, 2]
@@ -158,6 +158,10 @@ print(a)  // will print [1, 2, 3]
 b = ["banana", "apple", "cherry"]
 b.sort()
 print(b)  // will print ["apple", "banana", "cherry"]
+
+c = [3.14, 1.41, 2.71]
+c.sort()
+print(c)  // will print [1.41, 2.71, 3.14]
 ```
 
 ### map()
@@ -307,4 +311,143 @@ print(lastIndex)  // 3
 // Element not found
 notFound = numbers.lastIndexOf(10)
 print(notFound)  // -1
+```
+
+## Mathematical Array Methods
+
+Arrays in vint include several mathematical methods for numeric data analysis:
+
+### sum()
+
+sum() calculates the sum of all numeric elements:
+
+```s
+numbers = [1, 2, 3, 4, 5]
+total = numbers.sum()
+print(total)  // 15
+
+floats = [1.5, 2.5, 3.5]
+floatSum = floats.sum()
+print(floatSum)  // 7.5
+```
+
+### average() / mean()
+
+average() calculates the arithmetic mean of all numeric elements:
+
+```s
+numbers = [2, 4, 6, 8]
+avg = numbers.average()
+print(avg)  // 5
+
+// mean() is an alias for average()
+mean = numbers.mean()
+print(mean)  // 5
+```
+
+### min() / max()
+
+min() and max() find the minimum and maximum values:
+
+```s
+numbers = [5, 1, 9, 3, 7]
+minimum = numbers.min()
+print(minimum)  // 1
+
+maximum = numbers.max()
+print(maximum)  // 9
+```
+
+### median()
+
+median() calculates the median (middle value) of numeric elements:
+
+```s
+oddNumbers = [1, 3, 5, 7, 9]
+medianOdd = oddNumbers.median()
+print(medianOdd)  // 5
+
+evenNumbers = [2, 4, 6, 8]
+medianEven = evenNumbers.median()
+print(medianEven)  // 5 (average of 4 and 6)
+```
+
+### mode()
+
+mode() returns the most frequently occurring value(s):
+
+```s
+numbers = [1, 2, 2, 3, 2, 4]
+mostFrequent = numbers.mode()
+print(mostFrequent)  // [2]
+```
+
+### variance()
+
+variance() calculates the population variance:
+
+```s
+data = [2, 4, 4, 4, 5, 5, 7, 9]
+var = data.variance()
+print(var)  // 4
+```
+
+### standardDeviation()
+
+standardDeviation() calculates the population standard deviation:
+
+```s
+data = [2, 4, 4, 4, 5, 5, 7, 9]
+stdDev = data.standardDeviation()
+print(stdDev)  // 2
+```
+
+### product()
+
+product() calculates the product of all numeric elements:
+
+```s
+numbers = [2, 3, 4]
+prod = numbers.product()
+print(prod)  // 24
+```
+
+## Enhanced Sorting Methods
+
+In addition to the basic sort() method, vint provides enhanced sorting capabilities:
+
+### sortAsc()
+
+sortAsc() is an alias for sort() that explicitly sorts in ascending order:
+
+```s
+numbers = [3, 1, 4, 1, 5]
+numbers.sortAsc()
+print(numbers)  // [1, 1, 3, 4, 5]
+```
+
+### sortDesc()
+
+sortDesc() sorts the array in descending order:
+
+```s
+numbers = [3, 1, 4, 1, 5]
+numbers.sortDesc()
+print(numbers)  // [5, 4, 3, 1, 1]
+```
+
+### sortBy()
+
+sortBy() sorts the array using a custom comparison function:
+
+```s
+// Sort by absolute value
+numbers = [-3, 1, -4, 2]
+numbers.sortBy(func(x){ return abs(x) })
+print(numbers)  // [1, 2, -3, -4]
+
+// Sort strings by length
+words = ["hello", "hi", "world", "a"]
+words.sortBy(func(x){ return len(x) })
+print(words)  // ["a", "hi", "hello", "world"]
 ```
