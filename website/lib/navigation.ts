@@ -17,6 +17,11 @@ export const navigation = [
       icon: FileText,
     },
     {
+      name: "Learn",
+      href: "/docs/learn",
+      icon: BookOpen,
+    },
+    {
       name: "Bundler",
       href: "/docs/bundler",
       icon: PackageCheck,
