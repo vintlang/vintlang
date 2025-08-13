@@ -1,7 +1,7 @@
 import SectionHeader from '@/components/docs/SectionHeader';
+import { Markdown } from '@/components/Markdown';
 import { fetchMarkdown } from '@/lib/utils';
 import React from 'react'
-import Markdown from 'react-markdown';
 
 interface LearnItemProps { 
     item: string;
