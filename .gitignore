@@ -72,3 +72,7 @@ app_config.json
 processing_log.txt
 test.txt
 config.json
+
+# Bundled test binaries
+include_test
+test_builtin
