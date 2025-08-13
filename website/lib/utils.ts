@@ -20,7 +20,6 @@ export async function getMarkdownContent(file: string) {
 }
 
 export const fetchMarkdown = async (file: string) => {
-  const pathname = window.location.pathname;
   try {
     const markdown = await getMarkdownContent(file);
     return markdown;
@@ -32,13 +31,8 @@ export const fetchMarkdown = async (file: string) => {
       errorMessage += `\nDetails: ${error}`;
     }
     console.error("Failed to fetch markdown:", error);
-    if (pathname && pathname.includes("learn")) {
-      window.location.href = "/docs/learn";
-      return "";
-    } else {
-      toast.error(errorMessage);
-      return errorMessage;
-    }
+    window.location.href = "/docs/learn";
+    return errorMessage;
   }
 };
 
