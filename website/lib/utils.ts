@@ -17,14 +17,19 @@ export async function getMarkdownContent(file:string) {
   return markdown;
 }
 
-export async function fetchMarkdown(file:string) {
+export async function fetchMarkdown(file: string) {
   try {
     const markdown = await getMarkdownContent(file);
     return markdown;
-  } catch (error) {
-    
+  } catch (error: any) {
+    let errorMessage = "Error fetching content. Please try again later.";
+    if (error instanceof Error) {
+      errorMessage += `\nDetails: ${error.message}`;
+    } else if (typeof error === 'string') {
+      errorMessage += `\nDetails: ${error}`;
+    }
     console.error("Failed to fetch markdown:", error);
-    return "Error fetching content. Please try again later.";
+    return errorMessage;
   }
 }
 
