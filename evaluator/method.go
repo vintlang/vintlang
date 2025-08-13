@@ -43,6 +43,8 @@ func applyMethod(obj object.Object, method ast.Expression, args []object.Object,
 			return maap(obj, args)
 		case "filter":
 			return filter(obj, args)
+		case "sortBy":
+			return sortBy(obj, args)
 		default:
 			return obj.Method(method.(*ast.Identifier).Value, args)
 		}
@@ -129,4 +131,73 @@ func filter(a *object.Array, args []object.Object) object.Object {
 		}
 	}
 	return &newArr
+}
+
+func sortBy(a *object.Array, args []object.Object) object.Object {
+	if len(args) != 1 || args[0].Type() != object.FUNCTION_OBJ {
+		return newError("Sorry, the argument is not valid")
+	}
+
+	fn, ok := args[0].(*object.Function)
+	if !ok {
+		return newError("Sorry, the argument is not valid")
+	}
+	
+	if len(a.Elements) <= 1 {
+		return a
+	}
+	
+	// Use bubble sort for simplicity with custom comparison
+	elements := make([]object.Object, len(a.Elements))
+	copy(elements, a.Elements)
+	
+	for i := 0; i < len(elements)-1; i++ {
+		for j := 0; j < len(elements)-i-1; j++ {
+			// Call comparison function with two elements
+			env := object.NewEnvironment()
+			env.Define(fn.Parameters[0].Value, elements[j])
+			if len(fn.Parameters) > 1 {
+				env.Define(fn.Parameters[1].Value, elements[j+1])
+			}
+			
+			result1 := Eval(fn.Body, env)
+			if o, ok := result1.(*object.ReturnValue); ok {
+				result1 = o.Value
+			}
+			
+			env2 := object.NewEnvironment()
+			env2.Define(fn.Parameters[0].Value, elements[j+1])
+			if len(fn.Parameters) > 1 {
+				env2.Define(fn.Parameters[1].Value, elements[j])
+			}
+			
+			result2 := Eval(fn.Body, env2)
+			if o, ok := result2.(*object.ReturnValue); ok {
+				result2 = o.Value
+			}
+			
+			// Compare results and swap if needed
+			shouldSwap := false
+			if intResult1, ok1 := result1.(*object.Integer); ok1 {
+				if intResult2, ok2 := result2.(*object.Integer); ok2 {
+					shouldSwap = intResult1.Value > intResult2.Value
+				}
+			} else if floatResult1, ok1 := result1.(*object.Float); ok1 {
+				if floatResult2, ok2 := result2.(*object.Float); ok2 {
+					shouldSwap = floatResult1.Value > floatResult2.Value
+				}
+			} else if strResult1, ok1 := result1.(*object.String); ok1 {
+				if strResult2, ok2 := result2.(*object.String); ok2 {
+					shouldSwap = strResult1.Value > strResult2.Value
+				}
+			}
+			
+			if shouldSwap {
+				elements[j], elements[j+1] = elements[j+1], elements[j]
+			}
+		}
+	}
+	
+	a.Elements = elements
+	return a
 }
