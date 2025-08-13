@@ -1,4 +1,5 @@
 import Bundler from "@/components/docs/bundler";
+import SectionHeader from "@/components/docs/SectionHeader";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -10,7 +11,7 @@ export const metadata: Metadata = {
 export default function BundlerPage() {
   return (
     <div className="space-y-10">
-      <h1>Learn</h1>
+      <SectionHeader title="Learn" />
     </div>
   );
 }

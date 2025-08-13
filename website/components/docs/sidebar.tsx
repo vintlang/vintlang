@@ -31,7 +31,7 @@ export function Sidebar() {
         {navigation.map((item) => {
           const isActive = pathname === item.href;
           return (
-            <Button
+            <Button 
               key={item.name}
               variant={isActive ? "secondary" : "ghost"}
               className={cn(
