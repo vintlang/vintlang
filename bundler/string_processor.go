@@ -27,18 +27,27 @@ func (sp *StringProcessor) ProcessBundle() (string, error) {
 
 	var result strings.Builder
 
-	// First, process all dependency files to extract package definitions
+	// First, process all dependency files
 	importedPackages := make(map[string]bool)
+	includedFiles := make(map[string]bool)
 	
 	for filename, content := range sp.bundle.Files {
 		if filename != sp.bundle.MainFile {
-			packageName := strings.TrimSuffix(filepath.Base(filename), filepath.Ext(filename))
-			importedPackages[packageName] = true
-			
-			// Process the dependency file and add it to the result
-			processedContent := sp.processDependencyFile(content, packageName)
-			result.WriteString(processedContent)
-			result.WriteString("\n\n")
+			if sp.bundle.IncludeFiles[filename] {
+				// This is an included file - embed directly
+				processedContent := sp.processIncludedFile(content)
+				result.WriteString(processedContent)
+				result.WriteString("\n\n")
+				includedFiles[filename] = true
+			} else {
+				// This is an imported module - wrap in package
+				packageName := strings.TrimSuffix(filepath.Base(filename), filepath.Ext(filename))
+				importedPackages[packageName] = true
+				
+				processedContent := sp.processDependencyFile(content, packageName)
+				result.WriteString(processedContent)
+				result.WriteString("\n\n")
+			}
 		}
 	}
 
@@ -49,10 +58,24 @@ func (sp *StringProcessor) ProcessBundle() (string, error) {
 	}
 
 	// Remove import statements for packages we've already included
-	processedMain := sp.processMainFile(mainContent, importedPackages)
+	// and remove include statements for files we've already embedded
+	processedMain := sp.processMainFile(mainContent, importedPackages, includedFiles)
 	result.WriteString(processedMain)
 
 	return result.String(), nil
+}
+
+// processIncludedFile processes an included file by embedding it directly
+func (sp *StringProcessor) processIncludedFile(content string) string {
+	content = strings.TrimSpace(content)
+	
+	// Remove any import statements from included files since they should be handled at the main level
+	content = sp.removeImportStatements(content)
+	
+	// Remove any include statements from included files to avoid circular includes
+	content = sp.removeIncludeStatements(content)
+	
+	return content
 }
 
 // processDependencyFile processes a dependency file to ensure it has proper package structure
@@ -75,24 +98,56 @@ func (sp *StringProcessor) processDependencyFile(content, packageName string) st
 }
 
 // processMainFile processes the main file to remove import statements for bundled packages
-func (sp *StringProcessor) processMainFile(content string, bundledPackages map[string]bool) string {
+// and include statements for bundled files
+func (sp *StringProcessor) processMainFile(content string, bundledPackages map[string]bool, includedFiles map[string]bool) string {
 	lines := strings.Split(content, "\n")
 	var result strings.Builder
 	
 	importRegex := regexp.MustCompile(`^\s*import\s+(\w+)`)
+	includeRegex := regexp.MustCompile(`^\s*include\s+"([^"]+)"`)
 	
 	for _, line := range lines {
+		skipLine := false
+		
 		// Check if this line is an import statement
-		matches := importRegex.FindStringSubmatch(line)
-		if len(matches) > 1 {
-			importedModule := matches[1]
+		importMatches := importRegex.FindStringSubmatch(line)
+		if len(importMatches) > 1 {
+			importedModule := importMatches[1]
 			// If this module is one of our bundled packages, skip the import
 			if bundledPackages[importedModule] {
-				continue
+				skipLine = true
 			}
 		}
 		
-		// Add the line to the result
+		// Check if this line is an include statement
+		includeMatches := includeRegex.FindStringSubmatch(line)
+		if len(includeMatches) > 1 {
+			// Always skip include statements since we've embedded the content
+			skipLine = true
+		}
+		
+		if !skipLine {
+			result.WriteString(line)
+			result.WriteString("\n")
+		}
+	}
+	
+	return result.String()
+}
+
+// removeIncludeStatements removes include statements from content
+func (sp *StringProcessor) removeIncludeStatements(content string) string {
+	lines := strings.Split(content, "\n")
+	var result strings.Builder
+	
+	includeRegex := regexp.MustCompile(`^\s*include\s+`)
+	
+	for _, line := range lines {
+		// Skip include lines
+		if includeRegex.MatchString(line) {
+			continue
+		}
+		
 		result.WriteString(line)
 		result.WriteString("\n")
 	}
