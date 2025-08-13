@@ -1,6 +1,10 @@
+"use client"
+
 import { clsx, type ClassValue } from "clsx"
 import { twMerge } from "tailwind-merge"
 import { Clock, Globe, Network, Type, Variable, Wand2 } from 'lucide-react'
+import { usePathname, useRouter } from 'next/navigation'
+import { toast } from 'sonner'
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
@@ -17,20 +21,34 @@ export async function getMarkdownContent(file:string) {
   return markdown;
 }
 
-export async function fetchMarkdown(file: string) {
-  try {
-    const markdown = await getMarkdownContent(file);
-    return markdown;
-  } catch (error: any) {
-    let errorMessage = "Error fetching content. Please try again later.";
-    if (error instanceof Error) {
-      errorMessage += `\nDetails: ${error.message}`;
-    } else if (typeof error === 'string') {
-      errorMessage += `\nDetails: ${error}`;
+// fetchMarkdown is now a React hook to access router and pathname
+export function useFetchMarkdown() {
+  const pathname = usePathname();
+  const router = useRouter();
+
+  const fetchMarkdown = async (file: string) => {
+    try {
+      const markdown = await getMarkdownContent(file);
+      return markdown;
+    } catch (error: any) {
+      let errorMessage = "Error fetching content. Please try again later.";
+      if (error instanceof Error) {
+        errorMessage += `\nDetails: ${error.message}`;
+      } else if (typeof error === 'string') {
+        errorMessage += `\nDetails: ${error}`;
+      }
+      console.error("Failed to fetch markdown:", error);
+      if (pathname && pathname.includes('learn')) {
+        toast.error(errorMessage);
+        router.push('/learn');
+        return null;
+      } else {
+        toast.error(errorMessage);
+        return errorMessage;
+      }
     }
-    console.error("Failed to fetch markdown:", error);
-    return errorMessage;
-  }
+  };
+  return fetchMarkdown;
 }
 
 export const features = [
