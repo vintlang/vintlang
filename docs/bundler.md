@@ -58,16 +58,17 @@ This makes the `vint` CLI available, including the `bundle` command.
 
 ## Multi-File Package Support (NEW!)
 
-The VintLang Bundler now supports bundling multi-file packages with imports! 
+The VintLang Bundler now supports bundling multi-file packages with both imports and includes! 
 
 ### Key Features
 
-* ✅ **Automatic Dependency Discovery**: Finds all imported `.vint` files recursively
+* ✅ **Automatic Dependency Discovery**: Finds all imported and included `.vint` files recursively
 * ✅ **Package System Integration**: Handles `package` declarations and `import` statements
+* ✅ **Include Statement Support**: Handles `include` statements for direct file embedding
 * ✅ **Self-Contained Binaries**: No external `.vint` files needed at runtime
 * ✅ **Compatible with Built-ins**: Works with all VintLang built-in modules
 
-### Example Multi-File Project
+### Example Multi-File Project (Imports)
 
 **main.vint**:
 ```js
@@ -94,6 +95,43 @@ vint bundle main.vint
 ```
 
 The bundler automatically discovers `my_utils.vint`, processes the package structure, and creates a single binary containing both files.
+
+### Example Multi-File Project (Includes)
+
+**main.vint**:
+```js
+include "config.vint"
+include "helpers.vint"
+
+print("Application:", appName)
+print("Result:", processData("test"))
+```
+
+**config.vint**:
+```js
+let appName = "My VintLang App"
+let version = "1.0.0"
+```
+
+**helpers.vint**:
+```js
+let processData = func(input) {
+    return "processed: " + input
+}
+```
+
+Bundle the entire project:
+```sh
+vint bundle main.vint
+```
+
+The bundler automatically discovers all included files and embeds their content directly into the bundled binary.
+
+### Differences between Import and Include
+
+* **Import statements** (`import module_name`) work with the package system and wrap content in packages
+* **Include statements** (`include "file_path"`) directly embed file content without package wrapping
+* Both are automatically discovered and bundled into self-contained binaries
 
 ---
 
