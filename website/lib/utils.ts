@@ -22,6 +22,7 @@ export async function fetchMarkdown(file:string) {
     const markdown = await getMarkdownContent(file);
     return markdown;
   } catch (error) {
+    
     console.error("Failed to fetch markdown:", error);
     return "Error fetching content. Please try again later.";
   }
