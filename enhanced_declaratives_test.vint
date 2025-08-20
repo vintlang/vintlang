@@ -1,0 +1,38 @@
+// Enhanced Declaratives Test File for Vint
+// This file demonstrates all the declarative improvements made to Vint
+
+println("=== Testing Enhanced Declaratives ===")
+
+// Original lowercase declaratives (already working)
+println("\n--- Original Declaratives (lowercase) ---")
+info "Info: Standard informational message"
+debug "Debug: Debugging information"
+note "Note: Important note for developers"
+todo "Todo: Task that needs to be completed"
+warn "Warn: Warning about potential issues"
+success "Success: Operation completed successfully"
+trace "Trace: Execution flow tracing"
+
+// NEW: Capitalized declaratives (now supported)
+println("\n--- NEW: Capitalized Declaratives ---")
+Info "Info: Capitalized informational message"
+Debug "Debug: Capitalized debugging information"
+Note "Note: Capitalized important note"
+Todo "Todo: Capitalized task"
+Warn "Warn: Capitalized warning"
+Success "Success: Capitalized success message"
+Trace "Trace: Capitalized execution tracing"
+
+// NEW: Log declarative - non-fatal error logging
+println("\n--- NEW: Non-Fatal Error Logging ---")
+log "Log: Non-fatal error message (execution continues)"
+Log "Log: Capitalized non-fatal error message"
+println("Execution continues after log messages")
+
+// Fatal declaratives (stop execution)
+println("\n--- Fatal Declaratives (execution stops) ---")
+println("Testing error declarative:")
+let errorMsg = "This is an error"
+error errorMsg + " - execution stops here"
+
+println("This line should NOT be reached due to error above")
