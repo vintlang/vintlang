@@ -312,6 +312,34 @@ func Eval(node ast.Node, env *object.Environment) object.Object {
 		}
 		fmt.Printf("\n\u001b[1;32m[SUCCESS]\u001b[0m: %s\n\n", val.Inspect())
 		return NULL
+	case *ast.TraceStatement:
+		val := Eval(node.Value, env)
+		if isError(val) {
+			return val
+		}
+		fmt.Printf("\n\u001b[1;37m[TRACE]\u001b[0m: %s\n\n", val.Inspect())
+		return NULL
+	case *ast.FatalStatement:
+		val := Eval(node.Value, env)
+		if isError(val) {
+			return val
+		}
+		fmt.Printf("\n\u001b[1;31m[FATAL]\u001b[0m: %s\n\n", val.Inspect())
+		return newError("FATAL: %s", val.Inspect())
+	case *ast.CriticalStatement:
+		val := Eval(node.Value, env)
+		if isError(val) {
+			return val
+		}
+		fmt.Printf("\n\u001b[1;91m[CRITICAL]\u001b[0m: %s\n\n", val.Inspect())
+		return newError("CRITICAL: %s", val.Inspect())
+	case *ast.LogStatement:
+		val := Eval(node.Value, env)
+		if isError(val) {
+			return val
+		}
+		fmt.Printf("\n\u001b[1;31m[LOG]\u001b[0m: %s\n\n", val.Inspect())
+		return NULL
 	case *ast.RepeatStatement:
 		countObj := Eval(node.Count, env)
 		if isError(countObj) {

@@ -132,7 +132,24 @@ func New(l *lexer.Lexer) *Parser {
 	p.registerPrefix(token.DEBUG, p.parseDebugStatement)
 	p.registerPrefix(token.NOTE, p.parseNoteStatement)
 	p.registerPrefix(token.SUCCESS, p.parseSuccessStatement)
+	p.registerPrefix(token.TRACE, p.parseTraceStatement)
+	p.registerPrefix(token.FATAL, p.parseFatalStatement)
+	p.registerPrefix(token.CRITICAL, p.parseCriticalStatement)
+	p.registerPrefix(token.LOG, p.parseLogStatement)
 	p.registerPrefix(token.REPEAT, p.parseRepeatStatement)
+	
+	// Capitalized declaratives
+	p.registerPrefix(token.INFO_CAP, p.parseInfoStatement)
+	p.registerPrefix(token.DEBUG_CAP, p.parseDebugStatement)
+	p.registerPrefix(token.NOTE_CAP, p.parseNoteStatement)
+	p.registerPrefix(token.TODO_CAP, p.parseTodoStatement)
+	p.registerPrefix(token.WARN_CAP, p.parseWarnStatement)
+	p.registerPrefix(token.SUCCESS_CAP, p.parseSuccessStatement)
+	p.registerPrefix(token.ERROR_CAP, p.parseErrorStatement)
+	p.registerPrefix(token.TRACE_CAP, p.parseTraceStatement)
+	p.registerPrefix(token.FATAL_CAP, p.parseFatalStatement)
+	p.registerPrefix(token.CRITICAL_CAP, p.parseCriticalStatement)
+	p.registerPrefix(token.LOG_CAP, p.parseLogStatement)
 	
 	// Async/Concurrency prefix parsers
 	p.registerPrefix(token.ASYNC, p.parseAsyncFunctionLiteral)
@@ -499,6 +516,46 @@ func (p *Parser) parseNoteStatement() ast.Expression {
 
 func (p *Parser) parseSuccessStatement() ast.Expression {
 	stmt := &ast.SuccessStatement{Token: p.curToken}
+	p.nextToken()
+	stmt.Value = p.parseExpression(LOWEST)
+	if p.peekTokenIs(token.SEMICOLON) {
+		p.nextToken()
+	}
+	return stmt
+}
+
+func (p *Parser) parseTraceStatement() ast.Expression {
+	stmt := &ast.TraceStatement{Token: p.curToken}
+	p.nextToken()
+	stmt.Value = p.parseExpression(LOWEST)
+	if p.peekTokenIs(token.SEMICOLON) {
+		p.nextToken()
+	}
+	return stmt
+}
+
+func (p *Parser) parseFatalStatement() ast.Expression {
+	stmt := &ast.FatalStatement{Token: p.curToken}
+	p.nextToken()
+	stmt.Value = p.parseExpression(LOWEST)
+	if p.peekTokenIs(token.SEMICOLON) {
+		p.nextToken()
+	}
+	return stmt
+}
+
+func (p *Parser) parseCriticalStatement() ast.Expression {
+	stmt := &ast.CriticalStatement{Token: p.curToken}
+	p.nextToken()
+	stmt.Value = p.parseExpression(LOWEST)
+	if p.peekTokenIs(token.SEMICOLON) {
+		p.nextToken()
+	}
+	return stmt
+}
+
+func (p *Parser) parseLogStatement() ast.Expression {
+	stmt := &ast.LogStatement{Token: p.curToken}
 	p.nextToken()
 	stmt.Value = p.parseExpression(LOWEST)
 	if p.peekTokenIs(token.SEMICOLON) {
