@@ -101,3 +101,51 @@ func (ss *SuccessStatement) TokenLiteral() string { return ss.Token.Literal }
 func (ss *SuccessStatement) String() string {
 	return fmt.Sprintf("success %s", ss.Value.String())
 }
+
+type TraceStatement struct {
+	Token token.Token // the 'trace' token
+	Value Expression
+}
+
+func (ts *TraceStatement) statementNode()       {}
+func (ts *TraceStatement) expressionNode()      {}
+func (ts *TraceStatement) TokenLiteral() string { return ts.Token.Literal }
+func (ts *TraceStatement) String() string {
+	return fmt.Sprintf("trace %s", ts.Value.String())
+}
+
+type FatalStatement struct {
+	Token token.Token // the 'fatal' token
+	Value Expression
+}
+
+func (fs *FatalStatement) statementNode()       {}
+func (fs *FatalStatement) expressionNode()      {}
+func (fs *FatalStatement) TokenLiteral() string { return fs.Token.Literal }
+func (fs *FatalStatement) String() string {
+	return fmt.Sprintf("fatal %s", fs.Value.String())
+}
+
+type CriticalStatement struct {
+	Token token.Token // the 'critical' token
+	Value Expression
+}
+
+func (cs *CriticalStatement) statementNode()       {}
+func (cs *CriticalStatement) expressionNode()      {}
+func (cs *CriticalStatement) TokenLiteral() string { return cs.Token.Literal }
+func (cs *CriticalStatement) String() string {
+	return fmt.Sprintf("critical %s", cs.Value.String())
+}
+
+type LogStatement struct {
+	Token token.Token // the 'log' token
+	Value Expression
+}
+
+func (ls *LogStatement) statementNode()       {}
+func (ls *LogStatement) expressionNode()      {}
+func (ls *LogStatement) TokenLiteral() string { return ls.Token.Literal }
+func (ls *LogStatement) String() string {
+	return fmt.Sprintf("log %s", ls.Value.String())
+}

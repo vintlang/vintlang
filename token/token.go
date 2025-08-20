@@ -92,6 +92,10 @@ const (
 	DEBUG    = "DEBUG"
 	NOTE     = "NOTE"
 	SUCCESS  = "SUCCESS"
+	TRACE    = "TRACE"
+	FATAL    = "FATAL"
+	CRITICAL = "CRITICAL"
+	LOG      = "LOG"
 	
 	// Async/Concurrency Keywords
 	ASYNC    = "ASYNC"
@@ -101,6 +105,19 @@ const (
 	
 	// Error Handling Keywords
 	THROW    = "THROW"
+	
+	// Capitalized Declaratives
+	INFO_CAP     = "INFO_CAP"
+	DEBUG_CAP    = "DEBUG_CAP"
+	NOTE_CAP     = "NOTE_CAP"
+	TODO_CAP     = "TODO_CAP"
+	WARN_CAP     = "WARN_CAP"
+	SUCCESS_CAP  = "SUCCESS_CAP"
+	ERROR_CAP    = "ERROR_CAP"
+	TRACE_CAP    = "TRACE_CAP"
+	FATAL_CAP    = "FATAL_CAP"
+	CRITICAL_CAP = "CRITICAL_CAP"
+	LOG_CAP      = "LOG_CAP"
 )
 
 var keywords = map[string]TokenType{
@@ -135,11 +152,26 @@ var keywords = map[string]TokenType{
 	"debug":    DEBUG,
 	"note":     NOTE,
 	"success":  SUCCESS,
+	"trace":    TRACE,
+	"fatal":    FATAL,
+	"critical": CRITICAL,
+	"log":      LOG,
 	"async":    ASYNC,
 	"await":    AWAIT,
 	"go":       GO,
 	"chan":     CHAN,
 	"throw":    THROW,
+	"Info":     INFO_CAP,
+	"Debug":    DEBUG_CAP,
+	"Note":     NOTE_CAP,
+	"Todo":     TODO_CAP,
+	"Warn":     WARN_CAP,
+	"Success":  SUCCESS_CAP,
+	"Error":    ERROR_CAP,
+	"Trace":    TRACE_CAP,
+	"Fatal":    FATAL_CAP,
+	"Critical": CRITICAL_CAP,
+	"Log":      LOG_CAP,
 }
 
 func LookupIdent(ident string) TokenType {
