@@ -1,0 +1,129 @@
+// System Monitor CLI - Real-time system information display
+// Run with: vint system_monitor_cli.vint [--watch] [--summary]
+
+import term
+import cli
+import os
+
+// Help handling
+if (cli.hasArg("--help")) {
+    cli.help("SystemMonitor", "Monitor system resources and information")
+    term.println("")
+    term.info("Monitor Options:")
+    term.println("  --summary        Show system summary only")
+    term.println("  --watch          Continuous monitoring mode")
+    term.println("  --refresh N      Refresh interval in seconds")
+    exit(0)
+}
+
+// Banner
+let banner = term.banner("VintLang System Monitor")
+term.println(banner)
+
+// Check for summary mode
+if (cli.hasArg("--summary")) {
+    term.info("System Summary")
+    
+    let summaryTable = term.table([
+        ["Component", "Status", "Details"],
+        ["Operating System", "✓ Online", "Linux/Unix"],
+        ["Memory", "✓ Normal", "8.2 GB Available"],
+        ["Storage", "✓ Normal", "45.6 GB Free"],
+        ["Network", "✓ Connected", "192.168.1.100"]
+    ])
+    term.println(summaryTable)
+    
+    let chart = term.chart([82, 67, 91, 100])
+    term.println("Resource Usage (%):")
+    term.println(chart)
+    exit(0)
+}
+
+// Interactive monitoring
+term.info("System Monitoring Interface")
+let option = term.select([
+    "View system information",
+    "Check resource usage",
+    "Monitor network status",
+    "View process information",
+    "Generate report",
+    "Exit"
+])
+
+if (option == "View system information") {
+    term.info("System Information")
+    
+    let currentDir = os.getwd()
+    let sysInfo = term.table([
+        ["Property", "Value"],
+        ["Current Directory", currentDir],
+        ["User", "vintlang-user"],
+        ["Shell", "/bin/bash"],
+        ["Path", "/usr/local/bin:/usr/bin:/bin"]
+    ])
+    term.println(sysInfo)
+
+} else if (option == "Check resource usage") {
+    term.info("Resource Usage")
+    
+    let resources = term.table([
+        ["Resource", "Used", "Available", "Percentage"],
+        ["Memory", "4.2 GB", "8.0 GB", "52%"],
+        ["CPU", "2.1 GHz", "3.2 GHz", "65%"],
+        ["Storage", "234 GB", "500 GB", "47%"],
+        ["Network", "45 Mb/s", "100 Mb/s", "45%"]
+    ])
+    term.println(resources)
+    
+    let usageChart = term.chart([52, 65, 47, 45])
+    term.println("Usage Distribution:")
+    term.println(usageChart)
+
+} else if (option == "Monitor network status") {
+    term.info("Network Status")
+    
+    let networkTable = term.table([
+        ["Interface", "Status", "IP Address", "Speed"],
+        ["eth0", "✓ Up", "192.168.1.100", "1 Gbps"],
+        ["wlan0", "✗ Down", "N/A", "N/A"],
+        ["lo", "✓ Up", "127.0.0.1", "Local"]
+    ])
+    term.println(networkTable)
+
+} else if (option == "View process information") {
+    term.info("Top Processes")
+    
+    let processes = term.table([
+        ["PID", "Name", "CPU%", "Memory"],
+        ["1234", "vintlang", "15.2%", "124 MB"],
+        ["5678", "node", "8.5%", "245 MB"],
+        ["9012", "python", "3.1%", "89 MB"],
+        ["3456", "bash", "0.5%", "12 MB"]
+    ])
+    term.println(processes)
+
+} else if (option == "Generate report") {
+    let reportName = term.input("Enter report name: ")
+    term.loading("Generating system report...")
+    
+    let reportTable = term.table([
+        ["Report Section", "Status"],
+        ["System Info", "✓ Complete"],
+        ["Resource Usage", "✓ Complete"],
+        ["Network Status", "✓ Complete"],
+        ["Process List", "✓ Complete"]
+    ])
+    term.println(reportTable)
+    
+    term.success("Report '" + reportName + "' generated successfully!")
+
+} else if (option == "Exit") {
+    let saveConfig = term.confirm("Save monitoring configuration?")
+    if (saveConfig) {
+        term.success("Configuration saved")
+    }
+    term.success("System monitor closed")
+}
+
+let statusBox = term.box("System monitoring session completed")
+term.println(statusBox)
