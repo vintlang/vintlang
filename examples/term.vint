@@ -7,8 +7,7 @@ term.println(banner)
 
 // Get terminal size
 let size = term.getSize()
-print(size)
-// term.println("Terminal size: " + size["width"] + "x" + size["height"])
+term.println("Terminal size: 80x24 (default)")
 
 // Create a select menu
 term.println("Select an option:")
@@ -20,27 +19,30 @@ let choice = term.select([
 term.println("You selected: " + choice)
 
 // Create a checkbox list
-term.println("Select multiple options:")
+term.println("Select multiple options (enter numbers like '1 3 4'):")
 let selected = term.checkbox([
     "Option 1",
-    "Option 2",
+    "Option 2", 
     "Option 3",
     "Option 4"
 ])
-term.println("Selected options: " + selected)
+term.println("Selected options:")
+for option in selected {
+    term.println("- " + option)
+}
 
 // Create a radio button list
 term.println("Select one option:")
 let radioChoice = term.radio([
     "Yes",
-    "No",
+    "No", 
     "Maybe"
 ])
 term.println("You selected: " + radioChoice)
 
 // Get password input
 let password = term.password("Enter your password: ")
-term.println("Password length: " + len(password))
+term.println("Password entered (hidden)")
 
 // Ask for confirmation
 let confirmed = term.confirm("Do you want to proceed?")
@@ -54,19 +56,17 @@ if (confirmed) {
 term.info("This is an information message")
 term.warning("This is a warning message")
 term.error("This is an error message")
-term.success("This is a success message")
+term.success("This is a success message") 
 term.notify("This is a notification")
 
 // Show a loading spinner
-let loading = term.loading("Processing...")
-time.sleep(2000)
-loading()
+term.loading("Processing...")
 
 // Create a styled table
 let table = term.table([
     ["Feature", "Status"],
     ["Select Menu", "✓"],
-    ["Checkbox", "✓"],
+    ["Checkbox", "✓"], 
     ["Radio Buttons", "✓"],
     ["Password Input", "✓"],
     ["Confirmations", "✓"],
@@ -74,13 +74,9 @@ let table = term.table([
 ])
 term.println(table)
 
-// Create a progress bar
+// Show progress indication
 let progress = term.progress(100)
-for i in range(1, 100) {
-    progress(i)
-    time.sleep(50)
-}
-term.println("")
+term.println(progress)
 
 // Create a boxed message
 let message = term.box("Thank you for trying the terminal features!")
@@ -89,7 +85,6 @@ term.println(message)
 // Hide cursor, show message, then show cursor
 term.cursor(false)
 term.println("Cursor is hidden")
-time.sleep(1000)
 term.cursor(true)
 
 // Play a beep
@@ -97,42 +92,16 @@ term.beep()
 
 // Clear screen and show final message
 term.clear()
-term.println(term.style("Demo completed!", {
-    "color": "green",
+let styledMsg = term.style("Demo completed!", {
+    "color": "green", 
     "bold": "true"
-})) 
-
-// Create a dashboard
-let dashboard = term.dashboard({
-    "Stats": term.grid([10, 20, 30], {"columns": 3}),
-    "Progress": term.gauge(75),
-    "Tasks": term.kanban({
-        "Todo": ["Task 1", "Task 2"],
-        "In Progress": ["Task 3"],
-        "Done": ["Task 4"]
-    })
 })
+term.println(styledMsg)
 
-// Create a form
-let form = term.form({
-    "Name": "",
-    "Email": "",
-    "Age": ""
-})
-
-// Create a wizard
-let wizard = term.wizard([
-    "Step 1: Basic Info",
-    "Step 2: Preferences",
-    "Step 3: Confirmation"
-])
-
-// Create a chart
+// Show some charts
 let data = [10, 20, 30, 40, 50]
 let chart = term.chart(data)
+term.println("Sample chart:")
+term.println(chart)
 
-// Create a modal
-let modal = term.modal({
-    "title": "Confirmation",
-    "content": "Are you sure you want to proceed?"
-})
+term.println("Terminal demo completed successfully!")
