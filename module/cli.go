@@ -26,6 +26,8 @@ func init() {
 	CliFunctions["confirm"] = confirm
 	CliFunctions["execCommand"] = execCommand
 	CliFunctions["cliExit"] = cliExit
+	CliFunctions["help"] = cliHelp
+	CliFunctions["version"] = cliVersion
 }
 
 // getArgs returns an array of command line arguments
@@ -555,4 +557,87 @@ func createPositionalFunction(positionalArgs []object.Object) func(...object.Obj
 
 		return &object.Array{Elements: positionalArgs}
 	}
+}
+
+// cliHelp generates and displays help text for CLI applications
+func cliHelp(args []object.Object, defs map[string]object.Object) object.Object {
+	if len(args) > 2 {
+		return ErrorMessage(
+			"cli", "help",
+			"0-2 arguments: optional app name and description",
+			fmt.Sprintf("%d arguments", len(args)),
+			"cli.help() or cli.help(\"myapp\", \"My application description\")",
+		)
+	}
+
+	appName := "app"
+	description := "A VintLang command-line application"
+
+	if len(args) >= 1 {
+		if name, ok := args[0].(*object.String); ok {
+			appName = name.Value
+		}
+	}
+
+	if len(args) >= 2 {
+		if desc, ok := args[1].(*object.String); ok {
+			description = desc.Value
+		}
+	}
+
+	helpText := fmt.Sprintf(`%s
+
+%s
+
+Usage:
+  %s [options] [arguments]
+
+Options:
+  --help, -h     Show this help message
+  --version, -v  Show version information
+  --verbose      Enable verbose output
+  --output FILE  Specify output file
+  --input FILE   Specify input file
+
+Examples:
+  %s --help
+  %s --verbose input.txt
+  %s --output result.txt --input data.txt
+
+For more information, visit: https://github.com/vintlang/vintlang
+`, appName, description, appName, appName, appName, appName)
+
+	fmt.Print(helpText)
+	return &object.Null{}
+}
+
+// cliVersion displays version information  
+func cliVersion(args []object.Object, defs map[string]object.Object) object.Object {
+	if len(args) > 2 {
+		return ErrorMessage(
+			"cli", "version",
+			"0-2 arguments: optional app name and version",
+			fmt.Sprintf("%d arguments", len(args)),
+			"cli.version() or cli.version(\"myapp\", \"1.0.0\")",
+		)
+	}
+
+	appName := "VintLang CLI Application"
+	version := "1.0.0"
+
+	if len(args) >= 1 {
+		if name, ok := args[0].(*object.String); ok {
+			appName = name.Value
+		}
+	}
+
+	if len(args) >= 2 {
+		if ver, ok := args[1].(*object.String); ok {
+			version = ver.Value
+		}
+	}
+
+	versionText := fmt.Sprintf("%s v%s\n", appName, version)
+	fmt.Print(versionText)
+	return &object.Null{}
 }
