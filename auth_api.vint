@@ -1,0 +1,76 @@
+import http
+import sqlite
+import json
+import crypto
+
+// Initialize HTTP server
+let app = http.new()
+
+// Initialize SQLite database
+let db = sqlite.open("auth.db")
+
+// Create users table if it doesn't exist
+db.exec("CREATE TABLE IF NOT EXISTS users (id INTEGER PRIMARY KEY AUTOINCREMENT, username TEXT UNIQUE NOT NULL, password_hash TEXT NOT NULL)")
+
+// Register endpoint
+app.post("/register", func(req, res) {
+    let body = json.decode(req.body)
+    let username = body.username
+    let password = body.password
+
+    if (username == null || password == null) {
+        res.json({"success": false, "message": "Username and password are required"})
+        return
+    }
+
+    let password_hash = crypto.sha256(password)
+
+    // Check if username already exists
+    let existing_user = db.query("SELECT id FROM users WHERE username = ?", username)
+    if (len(existing_user) > 0) {
+        res.json({"success": false, "message": "Username already exists"})
+        return
+    }
+
+    // Insert new user
+    let result = db.exec("INSERT INTO users (username, password_hash) VALUES (?, ?)", username, password_hash)
+    if (result.rows_affected > 0) {
+        res.json({"success": true, "message": "User registered successfully"})
+    } else {
+        res.json({"success": false, "message": "Failed to register user"})
+    }
+})
+
+// Login endpoint
+app.post("/login", func(req, res) {
+    let body = json.decode(req.body)
+    let username = body.username
+    let password = body.password
+
+    if (username == null || password == null) {
+        res.json({"success": false, "message": "Username and password are required"})
+        return
+    }
+
+    // Retrieve user from database
+    let user_rows = db.query("SELECT password_hash FROM users WHERE username = ?", username)
+
+    if (len(user_rows) == 0) {
+        res.json({"success": false, "message": "Invalid username or password"})
+        return
+    }
+
+    let stored_password_hash = user_rows[0].password_hash
+    let provided_password_hash = crypto.sha256(password)
+
+    if (stored_password_hash == provided_password_hash) {
+        res.json({"success": true, "message": "Login successful"})
+    } else {
+        res.json({"success": false, "message": "Invalid username or password"})
+    }
+})
+
+print("Api is running");
+// Start the server
+app.listen(":3000")
+//print("Auth API listening on port 3000")

@@ -1,4 +1,3 @@
-// Enhanced NotifyAfrica SMS Sender - Showcasing VintLang Features
 import notifyafrica_pkg
 import os
 import time

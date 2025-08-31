@@ -11,7 +11,7 @@ package notifyafrica_pkg {
 
         if (token == null || token == "") {
             error "[ERROR] API token not found in .env. Please set NOTIFYAFRICA_TOKEN."
-            return null // Return null to indicate failure
+            return null
         }
         if (baseUrl == null || baseUrl == "") {
             baseUrl = "https://api.notify.africa/v2/send-sms" // fallback default
