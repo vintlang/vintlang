@@ -14,12 +14,10 @@ if (cli.hasArg("--help")) {
     term.println("  --output FILE    Output file for results")
     term.println("  --format TYPE    Output format (json, csv, txt)")
     term.println("  --verbose        Show detailed processing info")
-    exit(0)
 }
 
 if (cli.hasArg("--version")) {
     cli.version("FileProcessor", "2.1.0")
-    exit(0)
 }
 
 // Display banner
@@ -35,13 +33,14 @@ let verbose = cli.hasArg("--verbose")
 // Show configuration
 if (verbose) {
     term.info("Configuration:")
-    let configTable = term.table([
+    let configTableRows = [
         ["Setting", "Value"],
         ["Input File", inputFile || "Not specified"],
         ["Output File", outputFile || "stdout"],
         ["Format", format || "txt"],
         ["Verbose", verbose ? "Enabled" : "Disabled"]
-    ])
+    ]
+    let configTable = term.table(configTableRows)
     term.println(configTable)
 }
 
@@ -71,7 +70,7 @@ if (!inputFile) {
         
     } else if (choice == "Exit") {
         term.info("Exiting file processor")
-        exit(0)
+
     }
 }
 
@@ -87,13 +86,14 @@ if (inputFile) {
     term.success("Analysis complete")
     
     // Show results
-    let results = term.table([
+    let resultsRows = [
         ["Analysis Result", "Value"],
         ["File Size", "1.2 KB"],
         ["Lines", "45"],
         ["Words", "234"],
         ["Characters", "1,234"]
-    ])
+    ]
+    let results = term.table(resultsRows)
     term.println(results)
     
     // Show processing chart
