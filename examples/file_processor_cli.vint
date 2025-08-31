@@ -14,10 +14,12 @@ if (cli.hasArg("--help")) {
     term.println("  --output FILE    Output file for results")
     term.println("  --format TYPE    Output format (json, csv, txt)")
     term.println("  --verbose        Show detailed processing info")
+    os.exit()
 }
 
 if (cli.hasArg("--version")) {
     cli.version("FileProcessor", "2.1.0")
+    os.exit()
 }
 
 // Display banner
@@ -55,21 +57,21 @@ if (!inputFile) {
     ])
     
     if (choice == "Browse current directory") {
-        let currentDir = os.getwd()
-        term.info("Current directory: " + currentDir)
-        // In real implementation, would list files
-        term.warning("File browsing not implemented yet")
+    let currentDir = os.getwd()
+    term.info("Current directory: " + currentDir)
+    term.warning("File browsing not implemented yet")
         
     } else if (choice == "Enter file path manually") {
-        inputFile = term.input("Enter file path: ")
-        term.success("Input file set to: " + inputFile)
+    inputFile = term.input("Enter file path: ")
+    term.success("Input file set to: " + inputFile)
         
     } else if (choice == "Create sample file") {
-        let filename = term.input("Enter filename for sample: ")
-        term.success("Sample file '" + filename + "' would be created")
+    let filename = term.input("Enter filename for sample: ")
+    term.success("Sample file '" + filename + "' would be created")
         
     } else if (choice == "Exit") {
-        term.info("Exiting file processor")
+    term.info("Exiting file processor")
+    os.exit()
 
     }
 }
@@ -77,14 +79,11 @@ if (!inputFile) {
 // File processing simulation
 if (inputFile) {
     term.info("Processing file: " + inputFile)
-    
     // Show processing steps
     term.loading("Reading file...")
     term.success("File read successfully")
-    
     term.loading("Analyzing content...")
     term.success("Analysis complete")
-    
     // Show results
     let resultsRows = [
         ["Analysis Result", "Value"],
@@ -95,12 +94,10 @@ if (inputFile) {
     ]
     let results = term.table(resultsRows)
     term.println(results)
-    
     // Show processing chart
     let processingChart = term.chart([45, 234, 12])
     term.println("Content Analysis:")
     term.println(processingChart)
-    
     if (outputFile) {
         term.success("Results saved to: " + outputFile)
     }
