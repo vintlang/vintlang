@@ -1,0 +1,116 @@
+// File Processor CLI - Demonstrates file operations with terminal UI
+// Run with: vint file_processor_cli.vint [options]
+
+import term
+import cli
+import os
+
+// Help and version handling
+if (cli.hasArg("--help")) {
+    cli.help("FileProcessor", "Process and analyze files with VintLang")
+    term.println("")
+    term.info("File Processing Options:")
+    term.println("  --input FILE     Input file to process")
+    term.println("  --output FILE    Output file for results")
+    term.println("  --format TYPE    Output format (json, csv, txt)")
+    term.println("  --verbose        Show detailed processing info")
+    exit(0)
+}
+
+if (cli.hasArg("--version")) {
+    cli.version("FileProcessor", "2.1.0")
+    exit(0)
+}
+
+// Display banner
+let banner = term.banner("VintLang File Processor")
+term.println(banner)
+
+// Process command line arguments
+let inputFile = cli.getArgValue("--input")
+let outputFile = cli.getArgValue("--output")
+let format = cli.getArgValue("--format")
+let verbose = cli.hasArg("--verbose")
+
+// Show configuration
+if (verbose) {
+    term.info("Configuration:")
+    let configTable = term.table([
+        ["Setting", "Value"],
+        ["Input File", inputFile || "Not specified"],
+        ["Output File", outputFile || "stdout"],
+        ["Format", format || "txt"],
+        ["Verbose", verbose ? "Enabled" : "Disabled"]
+    ])
+    term.println(configTable)
+}
+
+// Interactive file selection if no input specified
+if (!inputFile) {
+    term.info("No input file specified")
+    let choice = term.select([
+        "Browse current directory",
+        "Enter file path manually",
+        "Create sample file",
+        "Exit"
+    ])
+    
+    if (choice == "Browse current directory") {
+        let currentDir = os.getwd()
+        term.info("Current directory: " + currentDir)
+        // In real implementation, would list files
+        term.warning("File browsing not implemented yet")
+        
+    } else if (choice == "Enter file path manually") {
+        inputFile = term.input("Enter file path: ")
+        term.success("Input file set to: " + inputFile)
+        
+    } else if (choice == "Create sample file") {
+        let filename = term.input("Enter filename for sample: ")
+        term.success("Sample file '" + filename + "' would be created")
+        
+    } else if (choice == "Exit") {
+        term.info("Exiting file processor")
+        exit(0)
+    }
+}
+
+// File processing simulation
+if (inputFile) {
+    term.info("Processing file: " + inputFile)
+    
+    // Show processing steps
+    term.loading("Reading file...")
+    term.success("File read successfully")
+    
+    term.loading("Analyzing content...")
+    term.success("Analysis complete")
+    
+    // Show results
+    let results = term.table([
+        ["Analysis Result", "Value"],
+        ["File Size", "1.2 KB"],
+        ["Lines", "45"],
+        ["Words", "234"],
+        ["Characters", "1,234"]
+    ])
+    term.println(results)
+    
+    // Show processing chart
+    let processingChart = term.chart([45, 234, 12])
+    term.println("Content Analysis:")
+    term.println(processingChart)
+    
+    if (outputFile) {
+        term.success("Results saved to: " + outputFile)
+    }
+}
+
+// Final operations
+let shouldCleanup = term.confirm("Clean up temporary files?")
+if (shouldCleanup) {
+    term.success("Cleanup completed")
+}
+
+let finalBox = term.box("File processing completed successfully!")
+term.println(finalBox)

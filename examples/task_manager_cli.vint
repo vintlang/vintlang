@@ -1,0 +1,116 @@
+// Task Manager CLI - A practical example of VintLang terminal capabilities
+// Run with: vint task_manager_cli.vint [--help] [--list] [--add "task"]
+
+import term
+import cli
+
+// Check for help
+if (cli.hasArg("--help") || cli.hasArg("-h")) {
+    cli.help("TaskManager", "A simple task management CLI tool")
+    term.println("")
+    term.info("Additional Usage Examples:")
+    term.println("  vint task_manager_cli.vint --list")
+    term.println("  vint task_manager_cli.vint --add \"Write documentation\"")
+    term.println("  vint task_manager_cli.vint --interactive")
+    exit(0)
+}
+
+// Initialize tasks (in real app, would load from file)
+let tasks = [
+    "Review code changes",
+    "Update documentation", 
+    "Test new features",
+    "Deploy to staging"
+]
+
+// Display app banner
+let banner = term.banner("VintLang Task Manager")
+term.println(banner)
+
+// Handle command line operations
+if (cli.hasArg("--list")) {
+    term.info("Current Tasks:")
+    let taskTable = term.table([
+        ["ID", "Task", "Status"],
+        ["1", "Review code changes", "Pending"],
+        ["2", "Update documentation", "Pending"],
+        ["3", "Test new features", "In Progress"],
+        ["4", "Deploy to staging", "Pending"]
+    ])
+    term.println(taskTable)
+    exit(0)
+}
+
+let newTask = cli.getArgValue("--add")
+if (newTask) {
+    term.success("Added new task: " + newTask)
+    exit(0)
+}
+
+// Interactive mode
+term.info("Interactive Task Manager")
+let action = term.select([
+    "View all tasks",
+    "Add new task",
+    "Mark task complete",
+    "Delete task",
+    "Task statistics",
+    "Exit"
+])
+
+if (action == "View all tasks") {
+    let taskTable = term.table([
+        ["ID", "Task", "Status"],
+        ["1", "Review code changes", "Pending"],
+        ["2", "Update documentation", "Pending"], 
+        ["3", "Test new features", "In Progress"],
+        ["4", "Deploy to staging", "Pending"]
+    ])
+    term.println(taskTable)
+
+} else if (action == "Add new task") {
+    let taskName = term.input("Enter task description: ")
+    term.success("Added: " + taskName)
+
+} else if (action == "Mark task complete") {
+    let taskChoice = term.select([
+        "Review code changes",
+        "Update documentation",
+        "Test new features", 
+        "Deploy to staging"
+    ])
+    term.success("Marked as complete: " + taskChoice)
+
+} else if (action == "Delete task") {
+    let taskToDelete = term.radio([
+        "Review code changes",
+        "Update documentation", 
+        "Test new features",
+        "Deploy to staging"
+    ])
+    let confirmed = term.confirm("Delete '" + taskToDelete + "'?")
+    if (confirmed) {
+        term.success("Task deleted: " + taskToDelete)
+    }
+
+} else if (action == "Task statistics") {
+    term.info("Task Statistics")
+    let stats = term.table([
+        ["Metric", "Value"],
+        ["Total Tasks", "4"],
+        ["Completed", "0"],
+        ["In Progress", "1"],
+        ["Pending", "3"]
+    ])
+    term.println(stats)
+    
+    let chart = term.chart([0, 1, 3])
+    term.println("Status Distribution:")
+    term.println(chart)
+
+} else if (action == "Exit") {
+    term.success("Thank you for using VintLang Task Manager!")
+}
+
+let message = term.box("Task management session complete!")
+term.println(message)
