@@ -27,6 +27,7 @@ func init() {
 	OsFunctions["changeDir"] = changeDir
 	OsFunctions["fileExists"] = fileExists
 	OsFunctions["readLines"] = readLines
+	OsFunctions["getwd"] = getwd
 }
 
 func exit(args []object.Object, defs map[string]object.Object) object.Object {
@@ -203,6 +204,23 @@ func readFile(args []object.Object, defs map[string]object.Object) object.Object
 	}
 
 	return &object.String{Value: string(content)}
+}
+
+func getwd(args []object.Object, defs map[string]object.Object) object.Object {
+	if len(args) != 0 {
+		return ErrorMessage(
+			"os", "getwd",
+			"no arguments",
+			fmt.Sprintf("%d arguments", len(args)),
+			`os.getwd()`,
+		)
+	}
+
+	dir, err := os.Getwd()
+	if err != nil {
+		return &object.Error{Message: "Failed to get current working directory: " + err.Error()}
+	}
+	return &object.String{Value: dir}
 }
 
 func writeFile(args []object.Object, defs map[string]object.Object) object.Object {
