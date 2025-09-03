@@ -14,6 +14,9 @@ type Module struct {
 
 // Returns a new Module
 func NewModule(name string, functions map[string]ModuleFunction) *Module {
+	if functions == nil {
+		functions = make(map[string]ModuleFunction)
+	}
 	return &Module{
 		Name:       name,
 		Functions:  functions,

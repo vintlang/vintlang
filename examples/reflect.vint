@@ -1,0 +1,30 @@
+import reflect
+
+// Type inspection
+let t1 = reflect.typeOf("hello")         // "STRING"
+let t2 = reflect.typeOf([1,2,3])         // "ARRAY"
+let t3 = reflect.typeOf({"a": 1})        // "DICT"
+let t4 = reflect.typeOf(null)            // "NULL"
+let t5 = reflect.typeOf(func() {})       // "FUNCTION"
+println(t1, t2, t3, t4, t5)
+
+// Value extraction
+let v = reflect.valueOf(42)              // 42
+println(v)
+
+// Null check
+println(reflect.isNil(null))             // true
+println(reflect.isNil(123))              // false
+
+// Array check
+println(reflect.isArray([1,2,3]))        // true
+println(reflect.isArray("not array"))    // false
+
+// Object (dict) check
+println(reflect.isObject({"a": 1}))      // true
+println(reflect.isObject([1,2,3]))       // false
+
+// Function check
+let f = func(x) { x * 2 }
+println(reflect.isFunction(f))           // true
+println(reflect.isFunction(123))         // false

@@ -31,7 +31,7 @@ func init() {
 	Mapper["random"] = &object.Module{Name: "random", Functions: RandomFunctions}
 	Mapper["csv"] = &object.Module{Name: "csv", Functions: CsvFunctions}
 	Mapper["encoding"] = &object.Module{Name: "encoding", Functions: EncodingFunctions}
-	Mapper["errors"] = &object.Module{Name: "errors", Functions: ErrorFunctions}
+	// Mapper["errors"] = &object.Module{Name: "errors", Functions: ErrorFunctions} //Note: commented because errors module uses object.NewModule(...)
 	Mapper["colors"] = &object.Module{Name: "colors", Functions: ColorsFunctions}
 	Mapper["vintSocket"] = &object.Module{Name: "vintSocket", Functions: VintSocketFunctions}
 	Mapper["vintChart"] = &object.Module{Name: "vintChart", Functions: VintChartFunctions}
