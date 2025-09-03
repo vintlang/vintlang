@@ -31,7 +31,7 @@ func init() {
 	Mapper["random"] = &object.Module{Name: "random", Functions: RandomFunctions}
 	Mapper["csv"] = &object.Module{Name: "csv", Functions: CsvFunctions}
 	Mapper["encoding"] = &object.Module{Name: "encoding", Functions: EncodingFunctions}
-	Mapper["errors"] = &object.Module{Name: "errors", Functions: ErrorFunctions}
+	// Mapper["errors"] = &object.Module{Name: "errors", Functions: ErrorFunctions} //Note: commented because errors module uses object.NewModule(...)
 	Mapper["colors"] = &object.Module{Name: "colors", Functions: ColorsFunctions}
 	Mapper["vintSocket"] = &object.Module{Name: "vintSocket", Functions: VintSocketFunctions}
 	Mapper["vintChart"] = &object.Module{Name: "vintChart", Functions: VintChartFunctions}
@@ -43,6 +43,7 @@ func init() {
 	Mapper["xml"] = &object.Module{Name: "xml", Functions: XMLFunctions}
 	Mapper["url"] = &object.Module{Name: "url", Functions: URLFunctions}
 	Mapper["email"] = &object.Module{Name: "email", Functions: EmailFunctions}
+	Mapper["reflect"] = &object.Module{Name: "reflect", Functions: ReflectFunctions}
 }
 
 // ErrorMessage formats an error message for module functions
