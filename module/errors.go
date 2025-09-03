@@ -1,13 +1,19 @@
 package module
 
 import (
+	"github.com/vintlang/vintlang/config"
 	"github.com/vintlang/vintlang/object"
 )
 
-var ErrorFunctions = map[string]object.ModuleFunction{}
+var ErrorsModule = object.NewModule("errors", nil)
 
 func init() {
-	ErrorFunctions["new"] = errorsNew
+	//Note: Sample usage of the new module definition
+	ErrorsModule.RegisterFunction("new", errorsNew)
+	// ErrorsModule.RegisterVariable("defaultCode", &object.Integer{Value: 1000})
+	ErrorsModule.Doc = "Provides error creation and handling utilities."
+	ErrorsModule.Version = config.VINT_VERSION //TODO: should probably change this to the last version of vint that the module was touched/updated
+	ErrorsModule.Author = "VintLang Core"
 }
 
 func errorsNew(args []object.Object, defs map[string]object.Object) object.Object {
