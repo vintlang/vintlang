@@ -25,6 +25,9 @@ You can also run other commands, like:
 // print(os.run("go run . vintLang/main.vint"))
 ```
 
+## Get the working dir
+use `os.getwd()`
+
 ## Get and Set Environment Variables
 
 Environment variables can be set and retrieved with `os.setEnv()` and `os.getEnv()`.
