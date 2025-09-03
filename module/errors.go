@@ -12,7 +12,7 @@ func init() {
 	ErrorsModule.RegisterFunction("new", errorsNew)
 	// ErrorsModule.RegisterVariable("defaultCode", &object.Integer{Value: 1000})
 	ErrorsModule.Doc = "Provides error creation and handling utilities."
-	ErrorsModule.Version = config.VINT_VERSION
+	ErrorsModule.Version = config.VINT_VERSION //TODO: should probably change this to the last version of vint that the module was touched/updated
 	ErrorsModule.Author = "VintLang Core"
 }
 
