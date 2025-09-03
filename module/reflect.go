@@ -13,4 +13,19 @@ func init(){
 	ReflectFunctions["isFunction"] = isFunction
 }
 
-func 
+func typeOf(args []object.Object, defs map[string]object.Object) object.Object {
+	//
+}
+
+func valueOf(args []object.Object, defs map[string]object.Object) object.Object {
+	if len(args) != 1 {
+		return ErrorMessage(
+			"reflect",
+			"valueOf",
+			"1 argument",
+			formatArgs(args),
+			`reflect.valueOf("Hello") -> "Hello"`,
+		)
+	}
+	return args[0]
+}
