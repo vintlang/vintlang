@@ -1,6 +1,0 @@
-import http
-
-dir = "/var/www/html"
-// dir="/home/tach/Documents/homeFirefox/"
-
-http.fileServer(PORT,dir,"server running on "+PORT)
