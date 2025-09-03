@@ -31,7 +31,7 @@ func slug(args []object.Object, defs map[string]object.Object) object.Object {
 		return ErrorMessage(
 			"string", "slug",
 			"1 string argument (text to convert to slug)",
-			formatArgs(args),
+			FormatArgs(args),
 			`string.slug("Hello World!") -> "hello-world"`,
 		)
 	}
@@ -52,7 +52,7 @@ func similarity(args []object.Object, defs map[string]object.Object) object.Obje
 		return ErrorMessage(
 			"string", "similarity",
 			"2 string arguments (string1, string2)",
-			formatArgs(args),
+			FormatArgs(args),
 			`string.similarity("hello", "hallo") -> 0.8`,
 		)
 	}
@@ -75,7 +75,7 @@ func trim(args []object.Object, defs map[string]object.Object) object.Object {
 		return ErrorMessage(
 			"string", "trim",
 			"1 string argument",
-			formatArgs(args),
+			FormatArgs(args),
 			`string.trim("  hi  ") -> "hi"`,
 		)
 	}
@@ -87,7 +87,7 @@ func contains(args []object.Object, defs map[string]object.Object) object.Object
 		return ErrorMessage(
 			"string", "contains",
 			"2 string arguments (string, substring)",
-			formatArgs(args),
+			FormatArgs(args),
 			`string.contains("hello world", "world") -> true`,
 		)
 	}
@@ -99,7 +99,7 @@ func toUpper(args []object.Object, defs map[string]object.Object) object.Object 
 		return ErrorMessage(
 			"string", "toUpper",
 			"1 string argument",
-			formatArgs(args),
+			FormatArgs(args),
 			`string.toUpper("hello") -> "HELLO"`,
 		)
 	}
@@ -111,7 +111,7 @@ func toLower(args []object.Object, defs map[string]object.Object) object.Object 
 		return ErrorMessage(
 			"string", "toLower",
 			"1 string argument",
-			formatArgs(args),
+			FormatArgs(args),
 			`string.toLower("HELLO") -> "hello"`,
 		)
 	}
@@ -123,7 +123,7 @@ func replace(args []object.Object, defs map[string]object.Object) object.Object 
 		return ErrorMessage(
 			"string", "replace",
 			"3 string arguments (original, old, new)",
-			formatArgs(args),
+			FormatArgs(args),
 			`string.replace("hello world", "world", "gophers") -> "hello gophers"`,
 		)
 	}
@@ -135,7 +135,7 @@ func split(args []object.Object, defs map[string]object.Object) object.Object {
 		return ErrorMessage(
 			"string", "split",
 			"2 string arguments (string, delimiter)",
-			formatArgs(args),
+			FormatArgs(args),
 			`string.split("a,b,c", ",") -> ["a","b","c"]`,
 		)
 	}
@@ -152,7 +152,7 @@ func join(args []object.Object, defs map[string]object.Object) object.Object {
 		return ErrorMessage(
 			"string", "join",
 			"array of strings and delimiter",
-			formatArgs(args),
+			FormatArgs(args),
 			`string.join(["a","b"], ",") -> "a,b"`,
 		)
 	}
@@ -173,7 +173,7 @@ func substring(args []object.Object, defs map[string]object.Object) object.Objec
 		return ErrorMessage(
 			"string", "substring",
 			"string, int start, int end",
-			formatArgs(args),
+			FormatArgs(args),
 			`string.substring("hello", 0, 4) -> "hell"`,
 		)
 	}
@@ -191,7 +191,7 @@ func length(args []object.Object, defs map[string]object.Object) object.Object {
 		return ErrorMessage(
 			"string", "length",
 			"1 string argument",
-			formatArgs(args),
+			FormatArgs(args),
 			`string.length("hello") -> 5`,
 		)
 	}
@@ -203,7 +203,7 @@ func indexOf(args []object.Object, defs map[string]object.Object) object.Object 
 		return ErrorMessage(
 			"string", "indexOf",
 			"string, substring",
-			formatArgs(args),
+			FormatArgs(args),
 			`string.indexOf("hello", "e") -> 1`,
 		)
 	}

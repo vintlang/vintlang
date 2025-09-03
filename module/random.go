@@ -23,7 +23,7 @@ func randomInt(args []object.Object, defs map[string]object.Object) object.Objec
 			"random",
 			"int",
 			"2 integer arguments (min, max)",
-			formatArgs(args),
+			FormatArgs(args),
 			`random.int(1, 10) -> 7`,
 		)
 	}
@@ -38,7 +38,7 @@ func randomFloat(args []object.Object, defs map[string]object.Object) object.Obj
 			"random",
 			"float",
 			"no arguments",
-			formatArgs(args),
+			FormatArgs(args),
 			`random.float() -> 0.527391`,
 		)
 	}
@@ -53,7 +53,7 @@ func randomString(args []object.Object, defs map[string]object.Object) object.Ob
 			"random",
 			"string",
 			"1 integer argument (length)",
-			formatArgs(args),
+			FormatArgs(args),
 			`random.string(8) -> "aZxRtQwe"`,
 		)
 	}
@@ -71,7 +71,7 @@ func randomChoice(args []object.Object, defs map[string]object.Object) object.Ob
 			"random",
 			"choice",
 			"1 array argument",
-			formatArgs(args),
+			FormatArgs(args),
 			`random.choice(["apple", "banana", "cherry"]) -> "banana"`,
 		)
 	}

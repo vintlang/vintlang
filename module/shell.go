@@ -18,7 +18,7 @@ func runCommand(args []object.Object, defs map[string]object.Object) object.Obje
 			"shell",
 			"run",
 			"1 string argument (command)",
-			formatArgs(args),
+			FormatArgs(args),
 			`shell.run("ls -la") -> string`,
 		)
 	}
@@ -36,7 +36,7 @@ func commandExists(args []object.Object, defs map[string]object.Object) object.O
 			"shell",
 			"exists",
 			"1 string argument (command name)",
-			formatArgs(args),
+			FormatArgs(args),
 			`shell.exists("git") -> true`,
 		)
 	}

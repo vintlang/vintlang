@@ -76,3 +76,4 @@ config.json
 # Bundled test binaries
 include_test
 test_builtin
+vint_test

@@ -19,7 +19,7 @@ func base64Encode(args []object.Object, defs map[string]object.Object) object.Ob
 			"encoding",
 			"base64Encode",
 			"1 string argument (text to encode)",
-			formatArgs(args),
+			FormatArgs(args),
 			`encoding.base64Encode("Hello") -> "SGVsbG8="`,
 		)
 	}
@@ -35,7 +35,7 @@ func base64Decode(args []object.Object, defs map[string]object.Object) object.Ob
 			"encoding",
 			"base64Decode",
 			"1 string argument (base64 encoded text)",
-			formatArgs(args),
+			FormatArgs(args),
 			`encoding.base64Decode("SGVsbG8=") -> "Hello"`,
 		)
 	}
@@ -51,20 +51,4 @@ func base64Decode(args []object.Object, defs map[string]object.Object) object.Ob
 	}
 
 	return &object.String{Value: string(decoded)}
-}
-
-// formatArgs converts the provided arguments into a string representation
-// so we can display them in error messages.
-func formatArgs(args []object.Object) string {
-	if len(args) == 0 {
-		return "no arguments"
-	}
-	result := ""
-	for i, arg := range args {
-		if i > 0 {
-			result += ", "
-		}
-		result += string(arg.Type())
-	}
-	return result
 }

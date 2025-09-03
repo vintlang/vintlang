@@ -25,7 +25,7 @@ func errorsNew(args []object.Object, defs map[string]object.Object) object.Objec
 			"errors",
 			"new",
 			"1 string argument",
-			formatArgs(args),
+			FormatArgs(args),
 			`errors.new("Something went wrong") -> error`,
 		)
 	}

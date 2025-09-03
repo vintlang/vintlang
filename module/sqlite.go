@@ -30,7 +30,7 @@ func openDatabase(args []object.Object, defs map[string]object.Object) object.Ob
 			"sqlite",
 			"open",
 			"1 string argument (path)",
-			formatArgs(args),
+			FormatArgs(args),
 			`sqlite.open("my.db") -> connection`,
 		)
 	}
@@ -48,7 +48,7 @@ func closeDatabase(args []object.Object, defs map[string]object.Object) object.O
 			"sqlite",
 			"close",
 			"1 connection argument",
-			formatArgs(args),
+			FormatArgs(args),
 			`sqlite.close(conn) -> null`,
 		)
 	}
@@ -69,7 +69,7 @@ func executeQuery(args []object.Object, defs map[string]object.Object) object.Ob
 			"sqlite",
 			"execute",
 			"connection, query, [params...]",
-			formatArgs(args),
+			FormatArgs(args),
 			`sqlite.execute(conn, "INSERT INTO users(name) VALUES(?)", "John") -> null`,
 		)
 	}
@@ -88,7 +88,7 @@ func fetchAll(args []object.Object, defs map[string]object.Object) object.Object
 			"sqlite",
 			"fetchAll",
 			"connection, query, [params...]",
-			formatArgs(args),
+			FormatArgs(args),
 			`sqlite.fetchAll(conn, "SELECT * FROM users") -> [{...}]`,
 		)
 	}
@@ -138,7 +138,7 @@ func createTable(args []object.Object, defs map[string]object.Object) object.Obj
 			"sqlite",
 			"createTable",
 			"connection, query",
-			formatArgs(args),
+			FormatArgs(args),
 			`sqlite.createTable(conn, "CREATE TABLE IF NOT EXISTS users(id INTEGER PRIMARY KEY, name TEXT)") -> null`,
 		)
 	}
@@ -156,7 +156,7 @@ func dropTable(args []object.Object, defs map[string]object.Object) object.Objec
 			"sqlite",
 			"dropTable",
 			"connection, tableName",
-			formatArgs(args),
+			FormatArgs(args),
 			`sqlite.dropTable(conn, "users") -> null`,
 		)
 	}

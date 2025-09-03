@@ -17,7 +17,7 @@ func match(args []object.Object, defs map[string]object.Object) object.Object {
 			"regex",
 			"match",
 			"2 string arguments (pattern, text)",
-			formatArgs(args),
+			FormatArgs(args),
 			`regex.match("\\d+", "abc123") -> true`,
 		)
 	}
@@ -37,7 +37,7 @@ func replaceString(args []object.Object, defs map[string]object.Object) object.O
 			"regex",
 			"replaceString",
 			"3 string arguments (pattern, replacement, text)",
-			formatArgs(args),
+			FormatArgs(args),
 			`regex.replaceString("\\d+", "#", "abc123") -> "abc#"`,
 		)
 	}
@@ -58,7 +58,7 @@ func splitString(args []object.Object, defs map[string]object.Object) object.Obj
 			"regex",
 			"splitString",
 			"2 string arguments (pattern, text)",
-			formatArgs(args),
+			FormatArgs(args),
 			`regex.splitString("\\s+", "a b  c") -> ["a", "b", "c"]`,
 		)
 	}

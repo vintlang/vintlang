@@ -43,6 +43,7 @@ func init() {
 	Mapper["xml"] = &object.Module{Name: "xml", Functions: XMLFunctions}
 	Mapper["url"] = &object.Module{Name: "url", Functions: URLFunctions}
 	Mapper["email"] = &object.Module{Name: "email", Functions: EmailFunctions}
+	Mapper["reflect"] = &object.Module{Name: "reflect", Functions: ReflectFunctions}
 }
 
 // ErrorMessage formats an error message for module functions
@@ -59,4 +60,20 @@ func ErrorMessage(module, function, expected, received, usage string) *object.Er
             module, function, expected, received, usage,
         ),
     }
+}
+
+// FormatArgs converts the provided arguments into a string representation
+// so we can display them in error messages.
+func FormatArgs(args []object.Object) string {
+	if len(args) == 0 {
+		return "no arguments"
+	}
+	result := ""
+	for i, arg := range args {
+		if i > 0 {
+			result += ", "
+		}
+		result += string(arg.Type())
+	}
+	return result
 }
