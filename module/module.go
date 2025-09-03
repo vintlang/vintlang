@@ -43,6 +43,7 @@ func init() {
 	Mapper["xml"] = &object.Module{Name: "xml", Functions: XMLFunctions}
 	Mapper["url"] = &object.Module{Name: "url", Functions: URLFunctions}
 	Mapper["email"] = &object.Module{Name: "email", Functions: EmailFunctions}
+	Mapper["reflect"] = &object.Module{Name: "reflect", Functions: ReflectFunctions}
 }
 
 // ErrorMessage formats an error message for module functions
