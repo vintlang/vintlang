@@ -3,16 +3,65 @@ package object
 type ModuleFunction func(args []Object, defs map[string]Object) Object
 
 type Module struct {
-	Name      string
-	Functions map[string]ModuleFunction
+	Name       string
+	Functions  map[string]ModuleFunction
+	Variables  map[string]Object
+	Submodules map[string]*Module
+	Doc        string
+	Version    string
+	Author     string
 }
 
-//Returns a new Module
+// Returns a new Module
 func NewModule(name string, functions map[string]ModuleFunction) *Module {
 	return &Module{
-		name,
-		functions,
+		Name:       name,
+		Functions:  functions,
+		Variables:  make(map[string]Object),
+		Submodules: make(map[string]*Module),
 	}
+}
+
+// Register a function at runtime
+func (m *Module) RegisterFunction(name string, fn ModuleFunction) {
+	m.Functions[name] = fn
+}
+
+// Register a variable at runtime
+func (m *Module) RegisterVariable(name string, value Object) {
+	m.Variables[name] = value
+}
+
+// Register a submodule at runtime
+func (m *Module) RegisterSubmodule(name string, mod *Module) {
+	m.Submodules[name] = mod
+}
+
+// List all function names
+func (m *Module) ListFunctions() []string {
+	keys := make([]string, 0, len(m.Functions))
+	for k := range m.Functions {
+		keys = append(keys, k)
+	}
+	return keys
+}
+
+// List all variable names
+func (m *Module) ListVariables() []string {
+	keys := make([]string, 0, len(m.Variables))
+	for k := range m.Variables {
+		keys = append(keys, k)
+	}
+	return keys
+}
+
+// List all submodule names
+func (m *Module) ListSubmodules() []string {
+	keys := make([]string, 0, len(m.Submodules))
+	for k := range m.Submodules {
+		keys = append(keys, k)
+	}
+	return keys
 }
 
 func (m *Module) Type() ObjectType {
