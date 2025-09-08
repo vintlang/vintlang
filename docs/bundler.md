@@ -181,17 +181,253 @@ Hello, World!
 
 ---
 
-## How It Works
+## How It Works (Current Implementation)
 
-The bundler performs the following steps internally:
+The VintLang bundler has evolved into a sophisticated multi-stage pipeline that handles complex multi-file projects with automatic dependency resolution. Here's how it works:
 
-1. Reads the `.vint` source file
-2. Escapes characters as needed for embedding in Go
-3. Generates a temporary `main.go` that runs the embedded code via `repl.Read(...)`
-4. Initializes a temporary Go module and compiles the binary using `go build`
-5. Outputs a binary named after the original `.vint` file
+### 🔍 Phase 1: Dependency Analysis
+```
+main.vint
+    ↓ (parse AST)
+    ├── import math_utils → finds math_utils.vint
+    ├── include "config.vint" → finds config.vint  
+    └── import os → skips (built-in module)
+```
 
-No external dependencies are required to run the resulting binary.
+**What happens:**
+- Parses main file's AST to find `import` and `include` statements
+- Sets up search paths (main file directory, current directory, `./modules/`)
+- Recursively discovers all dependency files
+- Distinguishes between imports (modules) and includes (direct embedding)
+- Skips built-in modules (like `os`, `http`, etc.)
+
+### ⚙️ Phase 2: String Processing & Code Combination
+```
+Files discovered:
+├── main.vint (import math_utils; include "config.vint"; ...)
+├── math_utils.vint (package math_utils { ... })
+└── config.vint (let appName = "App"; ...)
+
+Processing:
+├── math_utils.vint → wraps in package if needed
+├── config.vint → embeds directly (no package wrapper)
+└── main.vint → removes import/include statements for bundled files
+```
+
+**What happens:**
+- **Import files**: Wrapped in package structure if not already packaged
+- **Include files**: Content embedded directly, imports/includes removed  
+- **Main file**: Import/include statements removed for bundled dependencies
+- All code combined into single VintLang program
+
+### 🏗️ Phase 3: Go Code Generation
+```
+Combined VintLang Code
+    ↓ (escape for Go)
+Template → main.go with embedded code
+    ↓
+package main
+import "github.com/vintlang/vintlang/repl"
+func main() {
+    code := `<embedded VintLang code>`
+    repl.Read(code)
+}
+```
+
+**What happens:**
+- Escapes VintLang code for safe embedding in Go string literals
+- Generates Go main.go file using template
+- Adds metadata (bundler version, build time)
+- Creates go.mod file for dependencies
+
+### 🔨 Phase 4: Binary Compilation
+```
+Temporary Directory
+├── main.go (generated)
+├── go.mod (generated)
+    ↓ (go mod tidy && go build)
+Binary Output (self-contained executable)
+```
+
+**What happens:**
+- Creates temporary build directory
+- Runs `go mod tidy` to resolve Go dependencies  
+- Compiles with `go build -o binary_name`
+- Moves final binary to output location
+- Cleans up temporary files
+
+### 🎯 Key Features of Current Implementation
+
+1. **Automatic Dependency Discovery**: Recursively finds all `.vint` files through AST parsing
+2. **Dual Processing Modes**: 
+   - `import module_name` → wraps content in packages
+   - `include "file.vint"` → directly embeds content
+3. **Smart Module Resolution**: Searches multiple paths, handles built-ins
+4. **Self-Contained Output**: No external `.vint` files needed at runtime
+5. **Cross-Compilation Support**: Uses GOOS/GOARCH environment variables
+
+The resulting binary is completely portable and self-contained - no VintLang interpreter or external dependencies required!
+
+### 📊 Visual Workflow Diagram
+
+```
+┌─────────────────┐    ┌─────────────────┐    ┌─────────────────┐
+│   main.vint     │    │  math_utils.vint│    │   config.vint   │
+│                 │    │                 │    │                 │
+│ import math_utils│    │ package math_utils│   │ let appName =   │
+│ include "config"│    │ {               │    │   "My App"      │
+│ print(appName)  │    │   let add = ... │    │ let version =   │
+│ ...             │    │ }               │    │   "1.0"         │
+└─────────────────┘    └─────────────────┘    └─────────────────┘
+         │                       │                       │
+         └───────────────────────┼───────────────────────┘
+                                 │
+                        ┌────────▼─────────┐
+                        │ Dependency       │
+                        │ Analyzer         │
+                        │ (AST parsing)    │
+                        └────────┬─────────┘
+                                 │
+                        ┌────────▼─────────┐
+                        │ String           │
+                        │ Processor        │
+                        │ (code combining) │
+                        └────────┬─────────┘
+                                 │
+                    ┌────────────▼─────────────┐
+                    │ Combined VintLang Code:  │
+                    │                          │
+                    │ package math_utils {     │
+                    │   let add = ...          │
+                    │ }                        │
+                    │ let appName = "My App"   │
+                    │ let version = "1.0"      │
+                    │ print(appName)           │
+                    │ ...                      │
+                    └────────────┬─────────────┘
+                                 │
+                        ┌────────▼─────────┐
+                        │ Bundled          │
+                        │ Evaluator        │
+                        │ (Go code gen)    │
+                        └────────┬─────────┘
+                                 │
+                    ┌────────────▼─────────────┐
+                    │ Generated main.go:       │
+                    │                          │
+                    │ package main             │
+                    │ import "repl"            │
+                    │ func main() {            │
+                    │   code := `<embedded>`   │
+                    │   repl.Read(code)        │
+                    │ }                        │
+                    └────────────┬─────────────┘
+                                 │
+                        ┌────────▼─────────┐
+                        │ Go Compiler      │
+                        │ (go build)       │
+                        └────────┬─────────┘
+                                 │
+                        ┌────────▼─────────┐
+                        │ Self-Contained   │
+                        │ Binary           │
+                        │ (portable exe)   │
+                        └──────────────────┘
+```
+
+### 🏗️ Bundler Architecture Components
+
+The bundler is built with several specialized components:
+
+| Component | File | Purpose |
+|-----------|------|---------|
+| **Bundle Controller** | `bundler.go` | Main entry point, coordinates the entire bundling process |
+| **Dependency Analyzer** | `dependencies.go` | Discovers and analyzes all imported/included files recursively |
+| **String Processor** | `string_processor.go` | Combines files and handles import/include statement processing |
+| **Bundled Evaluator** | `bundled_evaluator.go` | Generates the final Go code with embedded VintLang content |
+| **Package Processor** | `package_processor.go` | Handles package structure and wrapping for imported modules |
+
+**Flow**: Bundle Controller → Dependency Analyzer → String Processor → Bundled Evaluator → Go Compiler
+
+### 🔄 Evolution from Original Design
+
+The bundler has significantly evolved from the simple design originally described:
+
+| Original Design | Current Implementation |
+|----------------|----------------------|
+| ✅ Single file bundling | ✅ Multi-file project support with dependency resolution |
+| ✅ Simple string embedding | ✅ Advanced AST parsing and code processing |
+| ❌ No import support | ✅ Full import/include statement handling |
+| ❌ No package system | ✅ Package wrapping and module resolution |
+| ❌ Manual dependency management | ✅ Automatic recursive dependency discovery |
+| ✅ Basic Go template | ✅ Sophisticated string processing and escaping |
+
+The current implementation handles complex multi-file projects automatically while maintaining the same simple command-line interface.
+
+### 🔍 Step-by-Step Example Transformation
+
+Let's see exactly what happens when bundling a multi-file project:
+
+**Input Files:**
+```js
+// main.vint
+import math_utils
+include "config.vint"
+print("App:", appName)
+print("Result:", math_utils.add(5, 3))
+
+// math_utils.vint  
+package math_utils {
+    let add = func(a, b) { return a + b }
+}
+
+// config.vint
+let appName = "Calculator"
+```
+
+**After Dependency Analysis:**
+```
+Found 3 files:
+├── main.vint (main file)
+├── math_utils.vint (import dependency)
+└── config.vint (include dependency)
+```
+
+**After String Processing:**
+```js
+// Combined VintLang code:
+package math_utils {
+    let add = func(a, b) { return a + b }
+}
+
+let appName = "Calculator"
+
+print("App:", appName)
+print("Result:", math_utils.add(5, 3))
+```
+
+**After Go Code Generation:**
+```go
+package main
+import "github.com/vintlang/vintlang/repl"
+func main() {
+    code := `package math_utils {
+    let add = func(a, b) { return a + b }
+}
+
+let appName = "Calculator"
+
+print("App:", appName)
+print("Result:", math_utils.add(5, 3))`
+    repl.Read(code)
+}
+```
+
+**Final Result:** Self-contained binary that outputs:
+```
+App: Calculator
+Result: 8
+```
 
 ---
 
