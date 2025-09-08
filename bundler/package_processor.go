@@ -7,6 +7,7 @@ import (
 
 	"github.com/vintlang/vintlang/ast"
 	"github.com/vintlang/vintlang/lexer"
+	"github.com/vintlang/vintlang/module"
 	"github.com/vintlang/vintlang/parser"
 )
 
@@ -111,17 +112,34 @@ func (pp *PackageProcessor) processMainFile(mainContent string, packages map[str
 		// Check if this is an import statement
 		if exprStmt, ok := stmt.(*ast.ExpressionStatement); ok {
 			if importExpr, ok := exprStmt.Expression.(*ast.Import); ok {
-				// Check if any of the imported modules are in our packages
-				shouldSkip := false
+				// Check if any of the imported modules are in our packages or are built-in
+				var identifiersToKeep []*ast.Identifier
 				for _, ident := range importExpr.Identifiers {
+					// if the module is a custom module, we skip it
 					if _, exists := packages[ident.Value]; exists {
-						shouldSkip = true
-						break
+						continue
 					}
+					// if the module is a built-in module, we keep it
+					if _, exists := module.Mapper[ident.Value]; exists {
+						identifiersToKeep = append(identifiersToKeep, ident)
+						continue
+					}
+					// otherwise, we keep it and let the runtime handle it
+					identifiersToKeep = append(identifiersToKeep, ident)
 				}
-				if shouldSkip {
-					continue // Skip this import statement
+
+				if len(identifiersToKeep) == 0 {
+					continue // Skip this import statement entirely
 				}
+
+				// Rebuild the import statement with only the identifiers to keep
+				newImportExpr := &ast.Import{
+					Token:       importExpr.Token,
+					Identifiers: identifiersToKeep,
+				}
+				result.WriteString(newImportExpr.String())
+				result.WriteString("\n")
+				continue
 			}
 		}
 

@@ -5,6 +5,8 @@ import (
 	"path/filepath"
 	"regexp"
 	"strings"
+
+	"github.com/vintlang/vintlang/module"
 )
 
 // StringProcessor handles string-based processing of VintLang files
@@ -102,36 +104,44 @@ func (sp *StringProcessor) processDependencyFile(content, packageName string) st
 func (sp *StringProcessor) processMainFile(content string, bundledPackages map[string]bool, includedFiles map[string]bool) string {
 	lines := strings.Split(content, "\n")
 	var result strings.Builder
-	
-	importRegex := regexp.MustCompile(`^\s*import\s+(\w+)`)
+
+	importRegex := regexp.MustCompile(`^\s*import\s+([\w, ]+)`)
 	includeRegex := regexp.MustCompile(`^\s*include\s+"([^"]+)"`)
-	
+
 	for _, line := range lines {
-		skipLine := false
-		
+		// Check if this line is an include statement
+		includeMatches := includeRegex.FindStringSubmatch(line)
+		if len(includeMatches) > 0 {
+			// Always skip include statements since we've embedded the content
+			continue
+		}
+
 		// Check if this line is an import statement
 		importMatches := importRegex.FindStringSubmatch(line)
 		if len(importMatches) > 1 {
-			importedModule := importMatches[1]
-			// If this module is one of our bundled packages, skip the import
-			if bundledPackages[importedModule] {
-				skipLine = true
+			modules := strings.Split(importMatches[1], ",")
+			var modulesToKeep []string
+
+			for _, m := range modules {
+				mod := strings.TrimSpace(m)
+				// If this module is not a bundled package, keep it
+				if !bundledPackages[mod] {
+					modulesToKeep = append(modulesToKeep, mod)
+				}
 			}
+
+			// If there are modules to keep, reconstruct the import statement
+			if len(modulesToKeep) > 0 {
+				result.WriteString(fmt.Sprintf("import %s\n", strings.Join(modulesToKeep, ", ")))
+			} // else, skip the import statement entirely
+			continue
 		}
-		
-		// Check if this line is an include statement
-		includeMatches := includeRegex.FindStringSubmatch(line)
-		if len(includeMatches) > 1 {
-			// Always skip include statements since we've embedded the content
-			skipLine = true
-		}
-		
-		if !skipLine {
-			result.WriteString(line)
-			result.WriteString("\n")
-		}
+
+		// If it's not an include or import statement, write the line as is
+		result.WriteString(line)
+		result.WriteString("\n")
 	}
-	
+
 	return result.String()
 }
 
