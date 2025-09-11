@@ -17,7 +17,7 @@ let fetchWeather = func(city) {
     let response = net.get(url)
     if (response) {
         print("Weather in " + city + ":")
-        print(response.body)
+        print(response)
     } else {
         print("Error fetching weather data for " + city)
     }
