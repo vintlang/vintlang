@@ -1,0 +1,3 @@
+[submodule "vscode-extension/vint"]
+	path = vscode-extension/vint
+	url = ./vscode-extension/vint
