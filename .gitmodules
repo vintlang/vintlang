@@ -1,3 +1,3 @@
-[submodule "vscode-extension/vint"]
-	path = vscode-extension/vint
-	url = ./vscode-extension/vint
+[submodule "vscode-extension"]
+	path = vscode-extension/
+	url = https://github.com/vintlang/vscode-extension.git
