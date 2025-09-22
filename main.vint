@@ -1,5 +1,5 @@
 // Simple string manipulation and message printing
-import greetings_module
+// import greetings_module
 import time
 
 let x = 42
@@ -16,5 +16,10 @@ for letter in letters {
     println(letter)
 }
 
+let my_function = func() {
+    defer println("This will be printed last");
+    println("This will be printed first");
+};
+
 //from the greetings_module
-greetings_module.greet("Developer")
+// greetings_module.greet("Developer")

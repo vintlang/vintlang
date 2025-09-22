@@ -133,9 +133,13 @@ func (pp *PackageProcessor) processMainFile(mainContent string, packages map[str
 				}
 
 				// Rebuild the import statement with only the identifiers to keep
+				identifiersMap := make(map[string]*ast.Identifier)
+				for _, ident := range identifiersToKeep {
+					identifiersMap[ident.Value] = ident
+				}
 				newImportExpr := &ast.Import{
 					Token:       importExpr.Token,
-					Identifiers: identifiersToKeep,
+					Identifiers: identifiersMap,
 				}
 				result.WriteString(newImportExpr.String())
 				result.WriteString("\n")

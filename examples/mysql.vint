@@ -5,7 +5,7 @@ import mysql
 
 conn = mysql.open("user:password@tcp(127.0.0.1:3306)/testdb")
 
-if conn.type() == "ERROR" {
+if (conn.type() == "ERROR") {
     print("Error connecting to MySQL:", conn.message())
 } else {
     print("Successfully connected to MySQL")
