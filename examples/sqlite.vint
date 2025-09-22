@@ -1,38 +1,47 @@
 import sqlite
 
-// Open a database
-db = sqlite.open("example.db")
-
-// Create a table
-sqlite.createTable(db, "CREATE TABLE IF NOT EXISTS users (id INTEGER PRIMARY KEY, name TEXT, age INTEGER)")
-
-// Insert data
-sqlite.execute(db, "INSERT INTO users (name, age) VALUES (?, ?)", "Alice", 25)
-sqlite.execute(db, "INSERT INTO users (name, age) VALUES (?, ?)", "Bob", 30)
-
-// Fetch all rows
-print("=== All Users ===")
-users = sqlite.fetchAll(db, "SELECT * FROM users")
-print(users)
-
-// Fetch a single row
-print("\n=== First User ===")
-first_user = sqlite.fetchOne(db, "SELECT * FROM users LIMIT 1")
-print(first_user)
-
-// Update data
-sqlite.execute(db, "UPDATE users SET age = ? WHERE name = ?", 26, "Alice")
-
-// Delete data
-//sqlite.execute(db, "DELETE FROM users WHERE name = ?", "Bob")
-
-// Fetch all rows after changes
-print("\n=== Users After Changes ===")
-users_after_changes = sqlite.fetchAll(db, "SELECT * FROM users")
-print(users_after_changes)
-
 // Drop a table
 //sqlite.dropTable(db, "users")
 
-// Close the database connection
-sqlite.close(db)
+
+let someFunction = func(){
+    println("This is a function in sqlite.vint")
+    
+    // Open a database
+    const db = sqlite.open("example.db")
+    println("Database opened:", db)
+    // defer sqlite.close(db)  // Ensure the database is closed when done
+    // defer println("Database closed.")
+
+
+    // Create a table
+    sqlite.createTable(db, "CREATE TABLE IF NOT EXISTS users (id INTEGER PRIMARY KEY, name TEXT, age INTEGER)")
+        println("Table 'users' created or already exists.")
+    // Insert data
+    sqlite.execute(db, "INSERT INTO users (name, age) VALUES (?, ?)", "Alice", 25)
+    sqlite.execute(db, "INSERT INTO users (name, age) VALUES (?, ?)", "Bob", 30)
+
+    // Fetch all rows
+    println("=== All Users ===")
+    users = sqlite.fetchAll(db, "SELECT * FROM users")
+    println(users)
+
+    // Fetch a single row
+    println("\n=== First User ===")
+    first_user = sqlite.fetchOne(db, "SELECT * FROM users LIMIT 1")
+    println(first_user)
+
+    // Update data
+    sqlite.execute(db, "UPDATE users SET age = ? WHERE name = ?", 26, "Alice")
+
+    // Delete data
+    //sqlite.execute(db, "DELETE FROM users WHERE name = ?", "Bob")
+
+    // Fetch all rows after changes
+    println("\n=== Users After Changes ===")
+    users_after_changes = sqlite.fetchAll(db, "SELECT * FROM users")
+    println(users_after_changes)
+
+}
+
+someFunction()

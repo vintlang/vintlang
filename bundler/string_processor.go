@@ -6,7 +6,7 @@ import (
 	"regexp"
 	"strings"
 
-	"github.com/vintlang/vintlang/module"
+	// "github.com/vintlang/vintlang/module"
 )
 
 // StringProcessor handles string-based processing of VintLang files

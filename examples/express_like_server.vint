@@ -10,54 +10,54 @@ http.app()
 http.get("/", func(req, res) {
     println(req.headers)
     // This function will be registered as the handler for GET /
-    print("Home page accessed")
+    println("Home page accessed")
 })
 
 http.get("/about", func(req, res) {
-    print("About page accessed") 
+    println("About page accessed") 
 })
 
 // API routes
 http.get("/api/status", func(req, res) {
-    print("API status check")
+    println("API status check")
 })
 
 http.get("/api/users", func(req, res) {
-    print("Getting all users")
+    println("Getting all users")
 })
 
 http.post("/api/users", func(req, res) {
-    print("Creating a new user")
+    println("Creating a new user")
 })
 
 http.put("/api/users/123", func(req, res) {
-    print("Updating user with ID 123")
+    println("Updating user with ID 123")
 })
 
 http.delete("/api/users/123", func(req, res) {
-    print("Deleting user with ID 123")
+    println("Deleting user with ID 123")
 })
 
 // Middleware (currently registered but execution pending full evaluator integration)
 http.use(func(req, res, next) {
-    print("Middleware: Request logged")
+    println("Middleware: Request logged")
 })
 
 // Display configured routes
-print("🚀 VintLang Express-like HTTP Server")
-print("====================================")
-print("Routes configured:")
-print("  GET    /")
-print("  GET    /about") 
-print("  GET    /api/status")
-print("  GET    /api/users")
-print("  POST   /api/users") 
-print("  PUT    /api/users/123")
-print("  DELETE /api/users/123")
-print("")
+println("🚀 VintLang Express-like HTTP Server")
+println("====================================")
+println("Routes configured:")
+println("  GET    /")
+println("  GET    /about") 
+println("  GET    /api/status")
+println("  GET    /api/users")
+println("  POST   /api/users") 
+println("  PUT    /api/users/123")
+println("  DELETE /api/users/123")
+println("")
 
 // Start the server
-print("Starting server...")
+println("Starting server...")
 http.listen(3000, "🌟 Server running at http://localhost:3000")
 
 /*

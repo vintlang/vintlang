@@ -9,17 +9,17 @@ import uuid       // Unique ID generation
 
 // Session ID for unique tracking
 let session_id = uuid.generate()
-print("Session ID:", session_id)
+println("Session ID:", session_id)
 
 // Fetch weather using wttr.in (No API key required)
 let fetchWeather = func(city) {
     let url = "https://wttr.in/" + city + "?format=%C+%t+%w"
     let response = net.get(url)
     if (response) {
-        print("Weather in " + city + ":")
-        print(response)
+        println("Weather in " + city + ":")
+        println(response)
     } else {
-        print("Error fetching weather data for " + city)
+        println("Error fetching weather data for " + city)
     }
 }
 
@@ -29,14 +29,14 @@ let fetchNews = func() {
     let response = net.get(url)
     if (response) {
         let news = json.decode(response.body)
-        print("\n=== Top 3 News Headlines ===")
+        println("\n=== Top 3 News Headlines ===")
         for i in range(0, 3) {
-            print("Title:", news[i]["title"])
-            print("Summary:", news[i]["body"])
-            print("-------------------------")
+            println("Title:", news[i]["title"])
+            println("Summary:", news[i]["body"])
+            println("-------------------------")
         }
     } else {
-        print("Error fetching news.")
+        println("Error fetching news.")
     }
 }
 
@@ -45,7 +45,7 @@ let saveLog = func(logMessage) {
     let log_file = "app_logs.txt"
     let timestamp = time.now().toString()
     os.writeFile(log_file, "[" + timestamp + "] " + logMessage + "\n", "append")
-    print("Log saved:", logMessage)
+    println("Log saved:", logMessage)
 }
 
 // Greet user dynamically based on the time
@@ -54,11 +54,11 @@ let greetUser = func(name) {
     let hour = currentTime.split(" ")[0].split(":")[0].toInt()  // Extract hour as an integer
     
     if (hour < 12) {
-        print("Good morning, " + name + "!")
+        println("Good morning, " + name + "!")
     } else if (hour < 18) {
-        print("Good afternoon, " + name + "!")
+        println("Good afternoon, " + name + "!")
     } else {
-        print("Good evening, " + name + "!")
+        println("Good evening, " + name + "!")
     }
 }
 
@@ -68,23 +68,23 @@ let viewLogs = func() {
     let log_file = "app_logs.txt"
     if (os.exists(log_file)) {
         let logs = os.readFile(log_file)
-        print("=== Log History ===")
-        print(logs)
+        println("=== Log History ===")
+        println(logs)
     } else {
-        print("No logs available yet.")
+        println("No logs available yet.")
     }
 }
 
 // Main interactive menu
 let main = func() {
-    print("\n=== Welcome to the Dynamic Dashboard ===")
+    println("\n=== Welcome to the Dynamic Dashboard ===")
     // greetUser("Tachera")
-    print("\nChoose an option:")
-    print("1. View Weather Information")
-    print("2. Read Latest News")
-    print("3. Save a Custom Log")
-    print("4. View All Logs")
-    print("5. Exit")
+    println("\nChoose an option:")
+    println("1. View Weather Information")
+    println("2. Read Latest News")
+    println("3. Save a Custom Log")
+    println("4. View All Logs")
+    println("5. Exit")
 
     let choice = input("\nEnter your choice (1-5): ")
     if (choice == "1") {
@@ -98,10 +98,10 @@ let main = func() {
     } else if (choice == "4") {
         viewLogs()
     } else if (choice == "5") {
-        print("Goodbye! See you next time.")
+        println("Goodbye! See you next time.")
         os.exit(0)
     } else {
-        print("Invalid choice. Try again.")
+        println("Invalid choice. Try again.")
     }
 }
 
