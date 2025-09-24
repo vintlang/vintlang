@@ -595,3 +595,29 @@ func checkParserErrors(t *testing.T, p *Parser) {
 	}
 	t.FailNow()
 }
+
+func TestParserErrors(t *testing.T) {
+	tests := []struct {
+		input          string
+		expectedErrors int
+	}{
+		{"let x 5;", 1},            // missing =
+		{"let = 5;", 2},            // missing identifier and invalid prefix
+		{"5 + ;", 1},               // incomplete expression
+		{"if x { }", 1},            // missing parentheses
+		{"func() { return ; }", 1}, // invalid return expression (semicolon)
+		{"let x = 5", 0},           // valid without semicolon
+	}
+
+	for _, tt := range tests {
+		l := lexer.New(tt.input)
+		p := New(l)
+		p.ParseProgram()
+
+		errors := p.Errors()
+		if len(errors) != tt.expectedErrors {
+			t.Errorf("input %q: expected %d errors, got %d. Errors: %v", 
+				tt.input, tt.expectedErrors, len(errors), errors)
+		}
+	}
+}

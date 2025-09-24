@@ -286,6 +286,11 @@ func TestStringTokens(t *testing.T) {
 		{`"hello world"`, "hello world"},
 		{`"hello\nworld"`, "hello\nworld"},
 		{`"hello\"world"`, "hello\"world"},
+		{`"hello\\world"`, "hello\\world"},
+		{`"hello\tworld"`, "hello\tworld"},
+		{`"hello\rworld"`, "hello\rworld"},
+		{`"hello\x41world"`, "helloAworld"}, // \x41 = 'A'
+		{`"hello\u0041world"`, "helloAworld"}, // \u0041 = 'A'
 		{`""`, ""},
 	}
 

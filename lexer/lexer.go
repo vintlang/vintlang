@@ -1,6 +1,8 @@
 package lexer
 
 import (
+	"strings"
+	
 	"github.com/vintlang/vintlang/token"
 )
 
@@ -310,7 +312,7 @@ func (l *Lexer) skipMultiLineComment() {
 }
 
 func (l *Lexer) readString() string {
-	var str string
+	var str strings.Builder
 	for {
 		l.readChar()
 		if l.ch == '"' || l.ch == 0 {
@@ -319,24 +321,70 @@ func (l *Lexer) readString() string {
 			switch l.peekChar() {
 			case 'n':
 				l.readChar()
-				l.ch = '\n'
+				str.WriteByte('\n')
 			case 'r':
 				l.readChar()
-				l.ch = '\r'
+				str.WriteByte('\r')
 			case 't':
 				l.readChar()
-				l.ch = '\t'
+				str.WriteByte('\t')
 			case '"':
 				l.readChar()
-				l.ch = '"'
+				str.WriteByte('"')
 			case '\\':
 				l.readChar()
-				l.ch = '\\'
+				str.WriteByte('\\')
+			case '0':
+				l.readChar()
+				str.WriteByte('\x00')
+			case 'x':
+				// Handle hex escape sequences \xHH
+				l.readChar() // consume 'x'
+				l.readChar() // get first hex digit
+				h1 := l.ch
+				l.readChar() // get second hex digit
+				h2 := l.ch
+				if isHexDigit(h1) && isHexDigit(h2) {
+					value := hexValue(h1)*16 + hexValue(h2)
+					str.WriteByte(byte(value))
+				} else {
+					// Invalid hex sequence, just include as-is
+					str.WriteString("\\x")
+					str.WriteRune(h1)
+					str.WriteRune(h2)
+				}
+			case 'u':
+				// Handle Unicode escape sequences \uHHHH
+				l.readChar() // consume 'u'
+				var hexDigits [4]rune
+				for i := 0; i < 4; i++ {
+					l.readChar()
+					hexDigits[i] = l.ch
+					if !isHexDigit(l.ch) {
+						// Invalid Unicode sequence, include as-is
+						str.WriteString("\\u")
+						for j := 0; j <= i; j++ {
+							str.WriteRune(hexDigits[j])
+						}
+						goto continueLoop
+					}
+				}
+				// Convert to Unicode code point
+				value := hexValue(hexDigits[0])*4096 + hexValue(hexDigits[1])*256 + 
+				         hexValue(hexDigits[2])*16 + hexValue(hexDigits[3])
+				str.WriteRune(rune(value))
+			default:
+				// Unknown escape sequence, keep the backslash
+				str.WriteByte('\\')
+				str.WriteRune(l.peekChar())
+				l.readChar()
 			}
+		} else {
+			str.WriteRune(l.ch)
 		}
-		str += string(l.ch)
+	continueLoop:
 	}
-	return str
+	return str.String()
 }
 
 func (l *Lexer) readSingleQuoteString() string {
@@ -367,4 +415,20 @@ func (l *Lexer) readSingleQuoteString() string {
 		str += string(l.ch)
 	}
 	return str
+}
+
+// Helper functions for hex digit processing
+func isHexDigit(ch rune) bool {
+	return isDigit(ch) || (ch >= 'a' && ch <= 'f') || (ch >= 'A' && ch <= 'F')
+}
+
+func hexValue(ch rune) int {
+	if isDigit(ch) {
+		return int(ch - '0')
+	} else if ch >= 'a' && ch <= 'f' {
+		return int(ch - 'a' + 10)
+	} else if ch >= 'A' && ch <= 'F' {
+		return int(ch - 'A' + 10)
+	}
+	return 0
 }
