@@ -99,7 +99,7 @@ func (vm *VM) executeComparison(op byte) error {
 	case byte(code.OpNotEqual):
 		return vm.push(nativeBoolToBooleanObject(right != left))
 	default:
-		return fmt.Errorf("unknown operator: %T %s %T",
+		return fmt.Errorf("unknown operator: %T %d %T",
 			left, op, right)
 	}
 }
