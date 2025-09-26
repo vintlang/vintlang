@@ -1,4 +1,0 @@
-import url
-
-let result = url.build({"scheme": "https", "host": "example.com", "path": "/test"})
-print("URL build works:", result)
