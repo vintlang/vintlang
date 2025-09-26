@@ -302,6 +302,19 @@ print(result)
 let api_key = os.getEnv("API_KEY")
 print(api_key)
 
+// Unset environment variables
+// os.unsetEnv("API_KEY")
+
+// Get system information
+let home = os.homedir()
+print("Home:", home)
+let temp = os.tmpdir()
+print("Temp:", temp)
+let cpus = os.cpuCount()
+print("CPUs:", cpus)
+let hostname = os.hostname()
+print("Hostname:", hostname)
+
 // Read and write files
 os.writeFile("example.txt", "Hello, Vint!")
 let content = os.readFile("example.txt")
@@ -325,6 +338,10 @@ print(lines) // Outputs: ["Hello", "World"]
 
 // Delete a file
 //os.deleteFile("example.txt")
+
+// Copy and move files
+// os.copy("source.txt", "destination.txt")
+// os.move("old_name.txt", "new_name.txt")
 
 
 ```
