@@ -1,0 +1,16 @@
+import url
+
+// Test basic URL building
+let components = {"scheme": "https", "host": "example.com", "path": "/api/v1", "query": "limit=10", "fragment": "results"}
+let built_url = url.build(components)
+print("Built URL:", built_url)
+
+// Test minimal URL
+let minimal = {"scheme": "http", "host": "localhost"}
+let minimal_url = url.build(minimal)
+print("Minimal URL:", minimal_url)
+
+// Test with port
+let with_port = {"scheme": "https", "host": "api.example.com", "port": "8080", "path": "/data"}
+let port_url = url.build(with_port)
+print("URL with port:", port_url)

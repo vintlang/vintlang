@@ -1,7 +1,7 @@
 
 # URL Module
 
-The `url` module provides a set of functions for working with URLs. You can use it to parse, encode, decode, join, and validate URLs.
+The `url` module provides a set of functions for working with URLs. You can use it to parse, encode, decode, join, build, and validate URLs.
 
 ## Functions
 
@@ -21,6 +21,37 @@ import url
 let components = url.parse("https://example.com/path?query=value#fragment")
 println(components)
 // Output: scheme:https host:example.com path:/path query:query=value fragment:fragment
+```
+
+### `build(components)`
+
+Builds a URL from a dictionary of components.
+
+- `components` (dict): A dictionary containing URL components.
+
+**Valid components:**
+- `scheme` (string): The URL scheme (e.g., "https", "http", "ftp")
+- `host` (string): The hostname (e.g., "example.com", "localhost")
+- `path` (string): The path component (e.g., "/api/v1")
+- `query` (string): The query string (e.g., "limit=10&offset=0")
+- `fragment` (string): The fragment identifier (e.g., "section1")
+- `port` (string): The port number (e.g., "8080")
+- `user` (string): User information for the URL
+
+**Returns:** The constructed URL string.
+
+**Usage:**
+
+```vint
+import url
+
+let components = {"scheme": "https", "host": "api.example.com", "path": "/v1/users", "query": "limit=10"}
+let built_url = url.build(components)
+println(built_url) // "https://api.example.com/v1/users?limit=10"
+
+// Minimal example
+let minimal = {"scheme": "http", "host": "localhost"}
+println(url.build(minimal)) // "http://localhost"
 ```
 
 ### `encode(text)`
