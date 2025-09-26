@@ -12,14 +12,21 @@ println("Hello, VintLang World! it currently",time.now())
 // Demonstrate string splitting
 let phrase = "VintLang"
 let letters = phrase.split("")
-for letter in letters {
+for letter in letters 
+//Vint also allow this syntax
+{
     println(letter)
 }
 
-let my_function = func() {
-    defer println("This will be printed last");
-    println("This will be printed first");
+
+let thisWillBePrintedLast = func() {
+    println("This will be printed last");
 };
+let my_function = func() {
+    defer thisWillBePrintedLast()
+    defer println("This will be printed last. 2");
+    println("This will be printed first");
+}();
 
 //from the greetings_module
 // greetings_module.greet("Developer")
