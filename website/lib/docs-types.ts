@@ -1,5 +1,5 @@
 // Auto-generated types for docs registry
-// Generated at: 2025-09-26T14:06:40.619Z
+// Generated at: 2025-09-26T14:07:04.626Z
 
 export interface DocItem {
   title: string;

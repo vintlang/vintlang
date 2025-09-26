@@ -18,15 +18,19 @@ async function loadDocsRegistry(): Promise<DocsRegistry> {
     _docsRegistry = registry.default || registry;
     return _docsRegistry as DocsRegistry;
   } catch (error) {
-    console.warn("Failed to load generated docs registry, using fallback:", error);
-    
+    console.warn(
+      "Failed to load generated docs registry, using fallback:",
+      error
+    );
+
     // Fallback for development when the file might not exist yet
     const fallbackRegistry: DocsRegistry = {
       items: [
         {
           title: "Strings",
           href: "/docs/learn/strings",
-          description: "Learn about string manipulation and functions in VintLang.",
+          description:
+            "Learn about string manipulation and functions in VintLang.",
           filename: "strings",
         },
         {
@@ -41,7 +45,8 @@ async function loadDocsRegistry(): Promise<DocsRegistry> {
           {
             title: "Strings",
             href: "/docs/learn/strings",
-            description: "Learn about string manipulation and functions in VintLang.",
+            description:
+              "Learn about string manipulation and functions in VintLang.",
             filename: "strings",
           },
           {
@@ -54,7 +59,7 @@ async function loadDocsRegistry(): Promise<DocsRegistry> {
       },
       generatedAt: new Date().toISOString(),
     };
-    
+
     _docsRegistry = fallbackRegistry;
     return _docsRegistry;
   }
