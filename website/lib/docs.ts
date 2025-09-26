@@ -1,4 +1,4 @@
-import { generateDocsRegistry, categorizeDocItems } from './generate-docs';
+import { generateDocsRegistry, categorizeDocItems } from "./generate-docs";
 
 // Cache for the docs registry to avoid regenerating on every request
 let _docsCache: Awaited<ReturnType<typeof generateDocsRegistry>> | null = null;
@@ -33,7 +33,7 @@ export const learnItems = [
   },
   {
     title: "Numbers",
-    href: "/docs/learn/numbers", 
+    href: "/docs/learn/numbers",
     description: "Understand number types and operations in VintLang.",
-  }
-]
+  },
+];
