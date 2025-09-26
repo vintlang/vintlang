@@ -3,8 +3,9 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
-    "build": "next build",
+    "dev": "npm run build-docs && next dev",
+    "build": "npm run build-docs && next build",
+    "build-docs": "node scripts/build-docs.js",
     "start": "next start",
     "lint": "next lint"
   },

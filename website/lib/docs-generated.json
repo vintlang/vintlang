@@ -1,0 +1,925 @@
+{
+  "items": [
+    {
+      "title": "Argparse",
+      "href": "/docs/learn/argparse",
+      "description": "The `argparse` module provides a powerful command-line argument parsing system for VintLang applications. It allows you to define command-line argumen...",
+      "filename": "argparse"
+    },
+    {
+      "title": "Args",
+      "href": "/docs/learn/args",
+      "description": "Vint now provides built-in support for parsing command line arguments, making it easy to build CLI applications.",
+      "filename": "args"
+    },
+    {
+      "title": "Arrays",
+      "href": "/docs/learn/arrays",
+      "description": "Arrays in vint are versatile data structures that can hold multiple items, including different types such as numbers, strings, booleans, functions, an...",
+      "filename": "arrays"
+    },
+    {
+      "title": "Async",
+      "href": "/docs/learn/async",
+      "description": "VintLang now supports native async operations and a simple concurrency model inspired by Go's goroutines and channels.",
+      "filename": "async"
+    },
+    {
+      "title": "Bool",
+      "href": "/docs/learn/bool",
+      "description": "Boolean objects in vint are truthy, meaning that any value is true, except tupu and false. They are used to evaluate expressions that return true or f...",
+      "filename": "bool"
+    },
+    {
+      "title": "Builtins",
+      "href": "/docs/learn/builtins",
+      "description": "Vint has a number of built-in functions that are globally available to perform common tasks.",
+      "filename": "builtins"
+    },
+    {
+      "title": "Bundler",
+      "href": "/docs/learn/bundler",
+      "description": "The **VintLang Bundler** compiles `.vint` source files into standalone Go binaries.",
+      "filename": "bundler"
+    },
+    {
+      "title": "Cli",
+      "href": "/docs/learn/cli",
+      "description": "The `cli` module provides a comprehensive set of tools for building command-line applications in VintLang. It allows you to parse arguments, handle fl...",
+      "filename": "cli"
+    },
+    {
+      "title": "Comments",
+      "href": "/docs/learn/comments",
+      "description": "In vint, you can write comments to provide explanations and documentation for your code. Comments are lines of text that are ignored by the vint inter...",
+      "filename": "comments"
+    },
+    {
+      "title": "Const",
+      "href": "/docs/learn/const",
+      "description": "Constants are used to declare variables with values that cannot be changed once assigned. This feature helps ensure immutability and prevents accident...",
+      "filename": "const"
+    },
+    {
+      "title": "Crypto",
+      "href": "/docs/learn/crypto",
+      "description": "The `crypto` module provides a set of functions for common cryptographic operations, including hashing, symmetric encryption (AES), asymmetric encrypt...",
+      "filename": "crypto"
+    },
+    {
+      "title": "CSV",
+      "href": "/docs/learn/csv",
+      "description": "The `csv` module provides functions to read from and write to CSV (Comma-Separated Values) files.",
+      "filename": "csv"
+    },
+    {
+      "title": "Datetime",
+      "href": "/docs/learn/datetime",
+      "description": "The `datetime` module provides comprehensive date and time manipulation capabilities with timezone support, duration handling, and advanced datetime o...",
+      "filename": "datetime"
+    },
+    {
+      "title": "Debug",
+      "href": "/docs/learn/debug",
+      "description": "The `debug` keyword allows you to print debug messages at runtime for troubleshooting and development.",
+      "filename": "debug"
+    },
+    {
+      "title": "Declaratives",
+      "href": "/docs/learn/declaratives",
+      "description": "Learn about declaratives in VintLang.",
+      "filename": "declaratives"
+    },
+    {
+      "title": "Defer",
+      "href": "/docs/learn/defer",
+      "description": "The `defer` keyword provides a convenient way to schedule a function call to be executed just before the surrounding function returns. This is particu...",
+      "filename": "defer"
+    },
+    {
+      "title": "Dictionaries",
+      "href": "/docs/learn/dictionaries",
+      "description": "Here’s a detailed explanation of dictionaries in Vint, without the Swahili terms:",
+      "filename": "dictionaries"
+    },
+    {
+      "title": "Dotenv",
+      "href": "/docs/learn/dotenv",
+      "description": "The `dotenv` module in Vint is designed to load environment variables from a `.env` file into the application. This allows you to manage sensitive inf...",
+      "filename": "dotenv"
+    },
+    {
+      "title": "Editor",
+      "href": "/docs/learn/editor",
+      "description": "The `editor` module provides a simple text editor component for terminal applications. It allows you to create and manipulate text editors within your...",
+      "filename": "editor"
+    },
+    {
+      "title": "Email",
+      "href": "/docs/learn/email",
+      "description": "The Email module in Vint provides email validation and processing functions. This module helps you validate email addresses, extract components, and n...",
+      "filename": "email"
+    },
+    {
+      "title": "Encoding",
+      "href": "/docs/learn/encoding",
+      "description": "The `encoding` module in Vint provides functions for encoding and decoding data in various formats. This includes commonly used encoding schemes like ...",
+      "filename": "encoding"
+    },
+    {
+      "title": "Enhanced-errors",
+      "href": "/docs/learn/enhanced-errors",
+      "description": "This document describes the enhanced error handling system implemented across Vint's core modules using the new `ErrorMessage` helper function. The im...",
+      "filename": "enhanced-errors"
+    },
+    {
+      "title": "Error",
+      "href": "/docs/learn/error",
+      "description": "The `error` keyword allows you to raise a fatal runtime error that stops the execution of the script.",
+      "filename": "error"
+    },
+    {
+      "title": "Errors",
+      "href": "/docs/learn/errors",
+      "description": "The `errors` module provides a way to create new errors.",
+      "filename": "errors"
+    },
+    {
+      "title": "Files",
+      "href": "/docs/learn/files",
+      "description": "The `files` module in Vint provides comprehensive functionality for working with files, including reading, writing, file operations, and metadata acce...",
+      "filename": "files"
+    },
+    {
+      "title": "Filewatcher",
+      "href": "/docs/learn/filewatcher",
+      "description": "The `filewatcher` module provides functionality to monitor files and directories for changes. This is useful for building file watchers, auto-reloader...",
+      "filename": "filewatcher"
+    },
+    {
+      "title": "For",
+      "href": "/docs/learn/for",
+      "description": "For loops are a ffuncmental control structure in vint, used for iterating over iterable objects such as strings, arrays, and dictionaries. This page c...",
+      "filename": "for"
+    },
+    {
+      "title": "Function",
+      "href": "/docs/learn/function",
+      "description": "Functions in **Vint** allow you to encapsulate code and execute it when needed. Here's a simple guide to understanding how functions work in **Vint**.",
+      "filename": "function"
+    },
+    {
+      "title": "Hash",
+      "href": "/docs/learn/hash",
+      "description": "The Hash module in Vint provides additional hashing algorithms that complement the existing crypto module. It currently supports SHA1 and SHA512 hashi...",
+      "filename": "hash"
+    },
+    {
+      "title": "HTTP Enhanced",
+      "href": "/docs/learn/http_enhanced",
+      "description": "The Vint HTTP module has been significantly enhanced to support full-fledged backend development with enterprise-grade features.",
+      "filename": "http_enhanced"
+    },
+    {
+      "title": "HTTP Enterprise",
+      "href": "/docs/learn/http_enterprise",
+      "description": "The Vint HTTP module has been enhanced with enterprise-level features to support building production-ready backend applications. This document covers ...",
+      "filename": "http_enterprise"
+    },
+    {
+      "title": "Identifiers",
+      "href": "/docs/learn/identifiers",
+      "description": "Identifiers are used to name variables, functions, and other elements in your **Vint** code. This guide explains the rules and best practices for crea...",
+      "filename": "identifiers"
+    },
+    {
+      "title": "Ifstatements",
+      "href": "/docs/learn/ifStatements",
+      "description": "Conditional statements in **Vint** allow you to perform different actions based on specific conditions. The `if/else` structure is fundamental for con...",
+      "filename": "ifStatements"
+    },
+    {
+      "title": "Include",
+      "href": "/docs/learn/include",
+      "description": "The `include` keyword is a language construct in Vint that allows you to include and evaluate code from another file into the current file. This is us...",
+      "filename": "include"
+    },
+    {
+      "title": "Info",
+      "href": "/docs/learn/info",
+      "description": "The `info` keyword allows you to print informational messages at runtime.",
+      "filename": "info"
+    },
+    {
+      "title": "JSON",
+      "href": "/docs/learn/json",
+      "description": "The JSON module in Vint provides powerful and straightforward functions for working with JSON data, including decoding, encoding, formatting, merging,...",
+      "filename": "json"
+    },
+    {
+      "title": "Language Improvements",
+      "href": "/docs/learn/LANGUAGE_IMPROVEMENTS",
+      "description": "This document outlines the comprehensive improvements made to VintLang to transform it from a toy language into a more usable programming language for...",
+      "filename": "LANGUAGE_IMPROVEMENTS"
+    },
+    {
+      "title": "Llm",
+      "href": "/docs/learn/llm",
+      "description": "This module provides access to OpenAI's GPT models for chat and text completion from VintLang scripts.",
+      "filename": "llm"
+    },
+    {
+      "title": "Logger",
+      "href": "/docs/learn/logger",
+      "description": "The Logger module in Vint provides structured logging functionality with different severity levels and timestamps. This module helps you log messages ...",
+      "filename": "logger"
+    },
+    {
+      "title": "Main-function",
+      "href": "/docs/learn/main-function",
+      "description": "VintLang now supports a **main function** as an entry point for your programs, similar to Go, Zig, C, and C++. This provides a structured way to organ...",
+      "filename": "main-function"
+    },
+    {
+      "title": "Math",
+      "href": "/docs/learn/math",
+      "description": "To use the `math` module, import it into your Vint script:",
+      "filename": "math"
+    },
+    {
+      "title": "Modules",
+      "href": "/docs/learn/modules",
+      "description": "Modules are a way to organize and reuse code in VintLang. This guide explains how to create and use modules.",
+      "filename": "modules"
+    },
+    {
+      "title": "Mysql",
+      "href": "/docs/learn/mysql",
+      "description": "The `mysql` module in **VintLang** provides a way to interact with MySQL databases. You can connect to a database, execute queries, and fetch data.",
+      "filename": "mysql"
+    },
+    {
+      "title": "Net",
+      "href": "/docs/learn/net",
+      "description": "The `net` module provides functions for making HTTP requests (GET, POST, PUT, DELETE, PATCH) from your Vint scripts. Each function supports both simpl...",
+      "filename": "net"
+    },
+    {
+      "title": "Note",
+      "href": "/docs/learn/note",
+      "description": "The `note` keyword allows you to print general notes at runtime.",
+      "filename": "note"
+    },
+    {
+      "title": "Null",
+      "href": "/docs/learn/null",
+      "description": "The `null` data type in Vint represents the absence of a value or the concept of \"nothing\" or \"empty.\" This page covers the syntax and usage of the `n...",
+      "filename": "null"
+    },
+    {
+      "title": "Numbers",
+      "href": "/docs/learn/numbers",
+      "description": "Integers and floats are the basic numeric data types in vint, used for representing whole numbers and decimal numbers, respectively. This page covers ...",
+      "filename": "numbers"
+    },
+    {
+      "title": "Operators",
+      "href": "/docs/learn/operators",
+      "description": "Operators are a core feature of any programming language, enabling you to perform various operations on variables and values. This page details the sy...",
+      "filename": "operators"
+    },
+    {
+      "title": "OS",
+      "href": "/docs/learn/os",
+      "description": "In **Vint**, the `os` module provides functions to interact with the operating system. You can execute commands, manage files, and interact with the e...",
+      "filename": "os"
+    },
+    {
+      "title": "Packages",
+      "href": "/docs/learn/packages",
+      "description": "Packages in VintLang provide a powerful way to organize, encapsulate, and reuse your code. They allow you to group related functions, variables, and s...",
+      "filename": "packages"
+    },
+    {
+      "title": "Path",
+      "href": "/docs/learn/path",
+      "description": "The `path` module provides functions for working with file system paths.",
+      "filename": "path"
+    },
+    {
+      "title": "Pointers",
+      "href": "/docs/learn/pointers",
+      "description": "VintLang now supports basic pointer operations, allowing you to reference and dereference values in your programs. This feature enables more advanced ...",
+      "filename": "pointers"
+    },
+    {
+      "title": "Postgres",
+      "href": "/docs/learn/postgres",
+      "description": "The `postgres` module in **VintLang** allows you to interact with PostgreSQL databases. This guide will walk you through connecting, executing queries...",
+      "filename": "postgres"
+    },
+    {
+      "title": "Random",
+      "href": "/docs/learn/random",
+      "description": "The `random` module provides functions for generating random numbers and data.",
+      "filename": "random"
+    },
+    {
+      "title": "Range",
+      "href": "/docs/learn/range",
+      "description": "The `range` function in Vint generates a sequence of numbers and is commonly used in loops or for creating arrays of sequential values.",
+      "filename": "range"
+    },
+    {
+      "title": "Reflect",
+      "href": "/docs/learn/reflect",
+      "description": "The `reflect` module provides runtime type inspection and reflection utilities for VintLang. It allows you to examine the type and structure of values...",
+      "filename": "reflect"
+    },
+    {
+      "title": "Regex",
+      "href": "/docs/learn/regex",
+      "description": "The `regex` module in Vint provides powerful functionality to perform regular expression operations like matching patterns, replacing strings, and spl...",
+      "filename": "regex"
+    },
+    {
+      "title": "Schedule",
+      "href": "/docs/learn/schedule",
+      "description": "The `schedule` module provides powerful scheduling capabilities for VintLang, similar to Go's ticker and NestJS's schedule decorators. It allows you t...",
+      "filename": "schedule"
+    },
+    {
+      "title": "Shell",
+      "href": "/docs/learn/shell",
+      "description": "The Shell module in Vint provides a way to interact with the system's shell environment, allowing you to execute commands and check the existence of c...",
+      "filename": "shell"
+    },
+    {
+      "title": "Sqlite",
+      "href": "/docs/learn/sqlite",
+      "description": "In **VintLang**, the `sqlite` module allows interaction with SQLite databases. You can open a database, execute queries, fetch data, and manage tables...",
+      "filename": "sqlite"
+    },
+    {
+      "title": "Strings",
+      "href": "/docs/learn/strings",
+      "description": "Strings are a sequence of characters used to represent text in the Vint programming language. Here’s a detailed explanation of how to work with string...",
+      "filename": "strings"
+    },
+    {
+      "title": "Success",
+      "href": "/docs/learn/success",
+      "description": "The `success` keyword allows you to print success messages at runtime.",
+      "filename": "success"
+    },
+    {
+      "title": "Switch",
+      "href": "/docs/learn/switch",
+      "description": "Switch statements in **Vint** allow you to execute different code blocks based on the value of a given expression. This guide covers the basics of swi...",
+      "filename": "switch"
+    },
+    {
+      "title": "Sysinfo",
+      "href": "/docs/learn/sysinfo",
+      "description": "The `sysinfo` module in Vint provides information about the system, such as the operating system and architecture. This can be useful for system diagn...",
+      "filename": "sysinfo"
+    },
+    {
+      "title": "Term",
+      "href": "/docs/learn/term",
+      "description": "The `term` module provides a rich set of tools for building beautiful and interactive terminal user interfaces (TUIs). It is built on top of the power...",
+      "filename": "term"
+    },
+    {
+      "title": "Time",
+      "href": "/docs/learn/time",
+      "description": "To use time-related functionalities in Vint, you first need to import the `time` module as follows:",
+      "filename": "time"
+    },
+    {
+      "title": "Todo",
+      "href": "/docs/learn/todo",
+      "description": "The `todo` keyword allows you to leave compiler-visible TODOs that warn at runtime.",
+      "filename": "todo"
+    },
+    {
+      "title": "Tooling",
+      "href": "/docs/learn/tooling",
+      "description": "Vint provides several CLI tools to help you manage, format, and scaffold your projects:",
+      "filename": "tooling"
+    },
+    {
+      "title": "Url",
+      "href": "/docs/learn/url",
+      "description": "The `url` module provides a set of functions for working with URLs. You can use it to parse, encode, decode, join, build, and validate URLs.",
+      "filename": "url"
+    },
+    {
+      "title": "UUID",
+      "href": "/docs/learn/uuid",
+      "description": "The **UUID** (Universal Unique Identifier) module in Vint allows you to generate unique identifiers that are globally unique. These identifiers can be...",
+      "filename": "uuid"
+    },
+    {
+      "title": "Vintchart",
+      "href": "/docs/learn/vintChart",
+      "description": "The `vintChart` module provides functions for creating various types of charts and saving them as HTML files. This module is experimental and its API ...",
+      "filename": "vintChart"
+    },
+    {
+      "title": "Vintsocket",
+      "href": "/docs/learn/vintSocket",
+      "description": "The `vintSocket` module provides functions for working with WebSockets. It allows you to create WebSocket servers and connect to WebSocket servers as ...",
+      "filename": "vintSocket"
+    },
+    {
+      "title": "Warn",
+      "href": "/docs/learn/warn",
+      "description": "The `warn` keyword allows you to emit non-fatal warnings at runtime.",
+      "filename": "warn"
+    },
+    {
+      "title": "While",
+      "href": "/docs/learn/while",
+      "description": "While loops in Vint are used to execute a block of code repeatedly, as long as a given condition is true. This page covers the basics of while loops, ...",
+      "filename": "while"
+    },
+    {
+      "title": "XML",
+      "href": "/docs/learn/xml",
+      "description": "The XML module in Vint provides basic XML processing capabilities including validation, value extraction, and character escaping/unescaping. This modu...",
+      "filename": "xml"
+    }
+  ],
+  "categorized": {
+    "Language Basics": [
+      {
+        "title": "Argparse",
+        "href": "/docs/learn/argparse",
+        "description": "The `argparse` module provides a powerful command-line argument parsing system for VintLang applications. It allows you to define command-line argumen...",
+        "filename": "argparse"
+      },
+      {
+        "title": "Args",
+        "href": "/docs/learn/args",
+        "description": "Vint now provides built-in support for parsing command line arguments, making it easy to build CLI applications.",
+        "filename": "args"
+      },
+      {
+        "title": "Builtins",
+        "href": "/docs/learn/builtins",
+        "description": "Vint has a number of built-in functions that are globally available to perform common tasks.",
+        "filename": "builtins"
+      },
+      {
+        "title": "Comments",
+        "href": "/docs/learn/comments",
+        "description": "In vint, you can write comments to provide explanations and documentation for your code. Comments are lines of text that are ignored by the vint inter...",
+        "filename": "comments"
+      },
+      {
+        "title": "Const",
+        "href": "/docs/learn/const",
+        "description": "Constants are used to declare variables with values that cannot be changed once assigned. This feature helps ensure immutability and prevents accident...",
+        "filename": "const"
+      },
+      {
+        "title": "Declaratives",
+        "href": "/docs/learn/declaratives",
+        "description": "Learn about declaratives in VintLang.",
+        "filename": "declaratives"
+      },
+      {
+        "title": "Enhanced-errors",
+        "href": "/docs/learn/enhanced-errors",
+        "description": "This document describes the enhanced error handling system implemented across Vint's core modules using the new `ErrorMessage` helper function. The im...",
+        "filename": "enhanced-errors"
+      },
+      {
+        "title": "Error",
+        "href": "/docs/learn/error",
+        "description": "The `error` keyword allows you to raise a fatal runtime error that stops the execution of the script.",
+        "filename": "error"
+      },
+      {
+        "title": "Errors",
+        "href": "/docs/learn/errors",
+        "description": "The `errors` module provides a way to create new errors.",
+        "filename": "errors"
+      },
+      {
+        "title": "Info",
+        "href": "/docs/learn/info",
+        "description": "The `info` keyword allows you to print informational messages at runtime.",
+        "filename": "info"
+      },
+      {
+        "title": "Language Improvements",
+        "href": "/docs/learn/LANGUAGE_IMPROVEMENTS",
+        "description": "This document outlines the comprehensive improvements made to VintLang to transform it from a toy language into a more usable programming language for...",
+        "filename": "LANGUAGE_IMPROVEMENTS"
+      },
+      {
+        "title": "Note",
+        "href": "/docs/learn/note",
+        "description": "The `note` keyword allows you to print general notes at runtime.",
+        "filename": "note"
+      },
+      {
+        "title": "Operators",
+        "href": "/docs/learn/operators",
+        "description": "Operators are a core feature of any programming language, enabling you to perform various operations on variables and values. This page details the sy...",
+        "filename": "operators"
+      },
+      {
+        "title": "Range",
+        "href": "/docs/learn/range",
+        "description": "The `range` function in Vint generates a sequence of numbers and is commonly used in loops or for creating arrays of sequential values.",
+        "filename": "range"
+      },
+      {
+        "title": "Success",
+        "href": "/docs/learn/success",
+        "description": "The `success` keyword allows you to print success messages at runtime.",
+        "filename": "success"
+      },
+      {
+        "title": "Todo",
+        "href": "/docs/learn/todo",
+        "description": "The `todo` keyword allows you to leave compiler-visible TODOs that warn at runtime.",
+        "filename": "todo"
+      },
+      {
+        "title": "Vintchart",
+        "href": "/docs/learn/vintChart",
+        "description": "The `vintChart` module provides functions for creating various types of charts and saving them as HTML files. This module is experimental and its API ...",
+        "filename": "vintChart"
+      },
+      {
+        "title": "Vintsocket",
+        "href": "/docs/learn/vintSocket",
+        "description": "The `vintSocket` module provides functions for working with WebSockets. It allows you to create WebSocket servers and connect to WebSocket servers as ...",
+        "filename": "vintSocket"
+      },
+      {
+        "title": "Warn",
+        "href": "/docs/learn/warn",
+        "description": "The `warn` keyword allows you to emit non-fatal warnings at runtime.",
+        "filename": "warn"
+      }
+    ],
+    "Data Types": [
+      {
+        "title": "Arrays",
+        "href": "/docs/learn/arrays",
+        "description": "Arrays in vint are versatile data structures that can hold multiple items, including different types such as numbers, strings, booleans, functions, an...",
+        "filename": "arrays"
+      },
+      {
+        "title": "Bool",
+        "href": "/docs/learn/bool",
+        "description": "Boolean objects in vint are truthy, meaning that any value is true, except tupu and false. They are used to evaluate expressions that return true or f...",
+        "filename": "bool"
+      },
+      {
+        "title": "Dictionaries",
+        "href": "/docs/learn/dictionaries",
+        "description": "Here’s a detailed explanation of dictionaries in Vint, without the Swahili terms:",
+        "filename": "dictionaries"
+      },
+      {
+        "title": "Null",
+        "href": "/docs/learn/null",
+        "description": "The `null` data type in Vint represents the absence of a value or the concept of \"nothing\" or \"empty.\" This page covers the syntax and usage of the `n...",
+        "filename": "null"
+      },
+      {
+        "title": "Numbers",
+        "href": "/docs/learn/numbers",
+        "description": "Integers and floats are the basic numeric data types in vint, used for representing whole numbers and decimal numbers, respectively. This page covers ...",
+        "filename": "numbers"
+      },
+      {
+        "title": "Strings",
+        "href": "/docs/learn/strings",
+        "description": "Strings are a sequence of characters used to represent text in the Vint programming language. Here’s a detailed explanation of how to work with string...",
+        "filename": "strings"
+      }
+    ],
+    "Control Flow": [
+      {
+        "title": "Defer",
+        "href": "/docs/learn/defer",
+        "description": "The `defer` keyword provides a convenient way to schedule a function call to be executed just before the surrounding function returns. This is particu...",
+        "filename": "defer"
+      },
+      {
+        "title": "For",
+        "href": "/docs/learn/for",
+        "description": "For loops are a ffuncmental control structure in vint, used for iterating over iterable objects such as strings, arrays, and dictionaries. This page c...",
+        "filename": "for"
+      },
+      {
+        "title": "Identifiers",
+        "href": "/docs/learn/identifiers",
+        "description": "Identifiers are used to name variables, functions, and other elements in your **Vint** code. This guide explains the rules and best practices for crea...",
+        "filename": "identifiers"
+      },
+      {
+        "title": "Ifstatements",
+        "href": "/docs/learn/ifStatements",
+        "description": "Conditional statements in **Vint** allow you to perform different actions based on specific conditions. The `if/else` structure is fundamental for con...",
+        "filename": "ifStatements"
+      },
+      {
+        "title": "Switch",
+        "href": "/docs/learn/switch",
+        "description": "Switch statements in **Vint** allow you to execute different code blocks based on the value of a given expression. This guide covers the basics of swi...",
+        "filename": "switch"
+      },
+      {
+        "title": "While",
+        "href": "/docs/learn/while",
+        "description": "While loops in Vint are used to execute a block of code repeatedly, as long as a given condition is true. This page covers the basics of while loops, ...",
+        "filename": "while"
+      }
+    ],
+    "Functions & Modules": [
+      {
+        "title": "Function",
+        "href": "/docs/learn/function",
+        "description": "Functions in **Vint** allow you to encapsulate code and execute it when needed. Here's a simple guide to understanding how functions work in **Vint**.",
+        "filename": "function"
+      },
+      {
+        "title": "Include",
+        "href": "/docs/learn/include",
+        "description": "The `include` keyword is a language construct in Vint that allows you to include and evaluate code from another file into the current file. This is us...",
+        "filename": "include"
+      },
+      {
+        "title": "Main-function",
+        "href": "/docs/learn/main-function",
+        "description": "VintLang now supports a **main function** as an entry point for your programs, similar to Go, Zig, C, and C++. This provides a structured way to organ...",
+        "filename": "main-function"
+      },
+      {
+        "title": "Modules",
+        "href": "/docs/learn/modules",
+        "description": "Modules are a way to organize and reuse code in VintLang. This guide explains how to create and use modules.",
+        "filename": "modules"
+      },
+      {
+        "title": "Packages",
+        "href": "/docs/learn/packages",
+        "description": "Packages in VintLang provide a powerful way to organize, encapsulate, and reuse your code. They allow you to group related functions, variables, and s...",
+        "filename": "packages"
+      }
+    ],
+    "Built-in Modules": [
+      {
+        "title": "Crypto",
+        "href": "/docs/learn/crypto",
+        "description": "The `crypto` module provides a set of functions for common cryptographic operations, including hashing, symmetric encryption (AES), asymmetric encrypt...",
+        "filename": "crypto"
+      },
+      {
+        "title": "CSV",
+        "href": "/docs/learn/csv",
+        "description": "The `csv` module provides functions to read from and write to CSV (Comma-Separated Values) files.",
+        "filename": "csv"
+      },
+      {
+        "title": "Datetime",
+        "href": "/docs/learn/datetime",
+        "description": "The `datetime` module provides comprehensive date and time manipulation capabilities with timezone support, duration handling, and advanced datetime o...",
+        "filename": "datetime"
+      },
+      {
+        "title": "Dotenv",
+        "href": "/docs/learn/dotenv",
+        "description": "The `dotenv` module in Vint is designed to load environment variables from a `.env` file into the application. This allows you to manage sensitive inf...",
+        "filename": "dotenv"
+      },
+      {
+        "title": "Encoding",
+        "href": "/docs/learn/encoding",
+        "description": "The `encoding` module in Vint provides functions for encoding and decoding data in various formats. This includes commonly used encoding schemes like ...",
+        "filename": "encoding"
+      },
+      {
+        "title": "Files",
+        "href": "/docs/learn/files",
+        "description": "The `files` module in Vint provides comprehensive functionality for working with files, including reading, writing, file operations, and metadata acce...",
+        "filename": "files"
+      },
+      {
+        "title": "Hash",
+        "href": "/docs/learn/hash",
+        "description": "The Hash module in Vint provides additional hashing algorithms that complement the existing crypto module. It currently supports SHA1 and SHA512 hashi...",
+        "filename": "hash"
+      },
+      {
+        "title": "JSON",
+        "href": "/docs/learn/json",
+        "description": "The JSON module in Vint provides powerful and straightforward functions for working with JSON data, including decoding, encoding, formatting, merging,...",
+        "filename": "json"
+      },
+      {
+        "title": "Logger",
+        "href": "/docs/learn/logger",
+        "description": "The Logger module in Vint provides structured logging functionality with different severity levels and timestamps. This module helps you log messages ...",
+        "filename": "logger"
+      },
+      {
+        "title": "Math",
+        "href": "/docs/learn/math",
+        "description": "To use the `math` module, import it into your Vint script:",
+        "filename": "math"
+      },
+      {
+        "title": "OS",
+        "href": "/docs/learn/os",
+        "description": "In **Vint**, the `os` module provides functions to interact with the operating system. You can execute commands, manage files, and interact with the e...",
+        "filename": "os"
+      },
+      {
+        "title": "Path",
+        "href": "/docs/learn/path",
+        "description": "The `path` module provides functions for working with file system paths.",
+        "filename": "path"
+      },
+      {
+        "title": "Random",
+        "href": "/docs/learn/random",
+        "description": "The `random` module provides functions for generating random numbers and data.",
+        "filename": "random"
+      },
+      {
+        "title": "Regex",
+        "href": "/docs/learn/regex",
+        "description": "The `regex` module in Vint provides powerful functionality to perform regular expression operations like matching patterns, replacing strings, and spl...",
+        "filename": "regex"
+      },
+      {
+        "title": "Schedule",
+        "href": "/docs/learn/schedule",
+        "description": "The `schedule` module provides powerful scheduling capabilities for VintLang, similar to Go's ticker and NestJS's schedule decorators. It allows you t...",
+        "filename": "schedule"
+      },
+      {
+        "title": "Shell",
+        "href": "/docs/learn/shell",
+        "description": "The Shell module in Vint provides a way to interact with the system's shell environment, allowing you to execute commands and check the existence of c...",
+        "filename": "shell"
+      },
+      {
+        "title": "Sysinfo",
+        "href": "/docs/learn/sysinfo",
+        "description": "The `sysinfo` module in Vint provides information about the system, such as the operating system and architecture. This can be useful for system diagn...",
+        "filename": "sysinfo"
+      },
+      {
+        "title": "Term",
+        "href": "/docs/learn/term",
+        "description": "The `term` module provides a rich set of tools for building beautiful and interactive terminal user interfaces (TUIs). It is built on top of the power...",
+        "filename": "term"
+      },
+      {
+        "title": "Time",
+        "href": "/docs/learn/time",
+        "description": "To use time-related functionalities in Vint, you first need to import the `time` module as follows:",
+        "filename": "time"
+      },
+      {
+        "title": "UUID",
+        "href": "/docs/learn/uuid",
+        "description": "The **UUID** (Universal Unique Identifier) module in Vint allows you to generate unique identifiers that are globally unique. These identifiers can be...",
+        "filename": "uuid"
+      },
+      {
+        "title": "XML",
+        "href": "/docs/learn/xml",
+        "description": "The XML module in Vint provides basic XML processing capabilities including validation, value extraction, and character escaping/unescaping. This modu...",
+        "filename": "xml"
+      }
+    ],
+    "Database": [
+      {
+        "title": "Mysql",
+        "href": "/docs/learn/mysql",
+        "description": "The `mysql` module in **VintLang** provides a way to interact with MySQL databases. You can connect to a database, execute queries, and fetch data.",
+        "filename": "mysql"
+      },
+      {
+        "title": "Postgres",
+        "href": "/docs/learn/postgres",
+        "description": "The `postgres` module in **VintLang** allows you to interact with PostgreSQL databases. This guide will walk you through connecting, executing queries...",
+        "filename": "postgres"
+      },
+      {
+        "title": "Sqlite",
+        "href": "/docs/learn/sqlite",
+        "description": "In **VintLang**, the `sqlite` module allows interaction with SQLite databases. You can open a database, execute queries, fetch data, and manage tables...",
+        "filename": "sqlite"
+      }
+    ],
+    "Web & HTTP": [
+      {
+        "title": "Email",
+        "href": "/docs/learn/email",
+        "description": "The Email module in Vint provides email validation and processing functions. This module helps you validate email addresses, extract components, and n...",
+        "filename": "email"
+      },
+      {
+        "title": "HTTP Enhanced",
+        "href": "/docs/learn/http_enhanced",
+        "description": "The Vint HTTP module has been significantly enhanced to support full-fledged backend development with enterprise-grade features.",
+        "filename": "http_enhanced"
+      },
+      {
+        "title": "HTTP Enterprise",
+        "href": "/docs/learn/http_enterprise",
+        "description": "The Vint HTTP module has been enhanced with enterprise-level features to support building production-ready backend applications. This document covers ...",
+        "filename": "http_enterprise"
+      },
+      {
+        "title": "Net",
+        "href": "/docs/learn/net",
+        "description": "The `net` module provides functions for making HTTP requests (GET, POST, PUT, DELETE, PATCH) from your Vint scripts. Each function supports both simpl...",
+        "filename": "net"
+      },
+      {
+        "title": "Url",
+        "href": "/docs/learn/url",
+        "description": "The `url` module provides a set of functions for working with URLs. You can use it to parse, encode, decode, join, build, and validate URLs.",
+        "filename": "url"
+      }
+    ],
+    "Development Tools": [
+      {
+        "title": "Bundler",
+        "href": "/docs/learn/bundler",
+        "description": "The **VintLang Bundler** compiles `.vint` source files into standalone Go binaries.",
+        "filename": "bundler"
+      },
+      {
+        "title": "Cli",
+        "href": "/docs/learn/cli",
+        "description": "The `cli` module provides a comprehensive set of tools for building command-line applications in VintLang. It allows you to parse arguments, handle fl...",
+        "filename": "cli"
+      },
+      {
+        "title": "Debug",
+        "href": "/docs/learn/debug",
+        "description": "The `debug` keyword allows you to print debug messages at runtime for troubleshooting and development.",
+        "filename": "debug"
+      },
+      {
+        "title": "Editor",
+        "href": "/docs/learn/editor",
+        "description": "The `editor` module provides a simple text editor component for terminal applications. It allows you to create and manipulate text editors within your...",
+        "filename": "editor"
+      },
+      {
+        "title": "Tooling",
+        "href": "/docs/learn/tooling",
+        "description": "Vint provides several CLI tools to help you manage, format, and scaffold your projects:",
+        "filename": "tooling"
+      }
+    ],
+    "Advanced Features": [
+      {
+        "title": "Async",
+        "href": "/docs/learn/async",
+        "description": "VintLang now supports native async operations and a simple concurrency model inspired by Go's goroutines and channels.",
+        "filename": "async"
+      },
+      {
+        "title": "Filewatcher",
+        "href": "/docs/learn/filewatcher",
+        "description": "The `filewatcher` module provides functionality to monitor files and directories for changes. This is useful for building file watchers, auto-reloader...",
+        "filename": "filewatcher"
+      },
+      {
+        "title": "Llm",
+        "href": "/docs/learn/llm",
+        "description": "This module provides access to OpenAI's GPT models for chat and text completion from VintLang scripts.",
+        "filename": "llm"
+      },
+      {
+        "title": "Pointers",
+        "href": "/docs/learn/pointers",
+        "description": "VintLang now supports basic pointer operations, allowing you to reference and dereference values in your programs. This feature enables more advanced ...",
+        "filename": "pointers"
+      },
+      {
+        "title": "Reflect",
+        "href": "/docs/learn/reflect",
+        "description": "The `reflect` module provides runtime type inspection and reflection utilities for VintLang. It allows you to examine the type and structure of values...",
+        "filename": "reflect"
+      }
+    ]
+  },
+  "generatedAt": "2025-09-26T14:06:40.619Z"
+}
