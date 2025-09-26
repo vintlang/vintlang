@@ -104,7 +104,7 @@ function categorizeDocItems(items) {
     "Control Flow": [],
     "Functions & Modules": [],
     "Built-in Modules": [],
-    "Database": [],
+    Database: [],
     "Web & HTTP": [],
     "Development Tools": [],
     "Advanced Features": [],
@@ -285,7 +285,9 @@ export interface DocsRegistry {
 
     fs.writeFileSync(typesOutputPath, typesContent);
 
-    console.log(`✅ Successfully generated docs registry with ${docItems.length} items`);
+    console.log(
+      `✅ Successfully generated docs registry with ${docItems.length} items`
+    );
     console.log(`📁 Categories: ${Object.keys(categorized).join(", ")}`);
     console.log(`📝 Types generated: ${typesOutputPath}`);
     console.log(`🎯 Registry saved: ${outputPath}`);
