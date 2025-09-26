@@ -374,7 +374,7 @@ func Eval(node ast.Node, env *object.Environment) object.Object {
 			result = res
 		}
 		return result
-	
+
 	// Async/Concurrency constructs
 	case *ast.AsyncFunctionLiteral:
 		return &object.AsyncFunction{
@@ -388,15 +388,15 @@ func Eval(node ast.Node, env *object.Environment) object.Object {
 		if isError(promise) {
 			return promise
 		}
-		
+
 		promiseObj, ok := promise.(*object.Promise)
 		if !ok {
 			return newError("await can only be used with promises, got %T", promise)
 		}
-		
+
 		// Block until promise resolves using channel-based waiting
 		promiseObj.Wait()
-		
+
 		if promiseObj.Error != nil {
 			return promiseObj.Error
 		}
@@ -415,20 +415,20 @@ func Eval(node ast.Node, env *object.Environment) object.Object {
 			if isError(bufferSize) {
 				return bufferSize
 			}
-			
+
 			size, ok := bufferSize.(*object.Integer)
 			if !ok {
 				return newError("channel buffer size must be an integer, got %T", bufferSize)
 			}
-			
+
 			return object.NewBufferedChannel(int(size.Value))
 		}
-		
+
 		return object.NewChannel()
-		
+
 	case *ast.ErrorDeclaration:
 		return evalErrorDeclaration(node, env)
-		
+
 	case *ast.ThrowStatement:
 		return evalThrowStatement(node, env)
 	}
@@ -439,6 +439,7 @@ func Eval(node ast.Node, env *object.Environment) object.Object {
 func evalProgram(program *ast.Program, env *object.Environment) object.Object {
 	var result object.Object
 
+	// First pass: Execute all statements to define functions and variables
 	for _, statement := range program.Statements {
 		result = Eval(statement, env)
 
@@ -447,6 +448,21 @@ func evalProgram(program *ast.Program, env *object.Environment) object.Object {
 			return result.Value
 		case *object.Error:
 			return result
+		}
+	}
+
+	// Second pass: Check for main function and execute it
+	if mainFunc, exists := env.Get("main"); exists {
+		if fn, ok := mainFunc.(*object.Function); ok {
+			// Call main function with no arguments
+			mainResult := applyFunction(fn, []object.Object{}, 0)
+			if isError(mainResult) {
+				return mainResult
+			}
+			// Return the main function's result, but if it's null, return the last statement's result
+			if mainResult.Type() != object.NULL_OBJ {
+				return mainResult
+			}
 		}
 	}
 
@@ -543,22 +559,22 @@ func applyFunction(fn object.Object, args []object.Object, line int) object.Obje
 		applyFunction(node, args, fn.Name.Token.Line)
 		node.(*object.Function).Env.Del("@")
 		return obj
-		
+
 	case *object.ErrorType:
 		// Check if number of arguments matches parameters
 		if len(args) != len(fn.Parameters) {
-			return newError("error %s expects %d arguments, got %d", 
+			return newError("error %s expects %d arguments, got %d",
 				fn.Name, len(fn.Parameters), len(args))
 		}
-		
+
 		// Create custom error instance
 		customError := &object.CustomError{
 			ErrorType: fn,
 			Arguments: args,
 		}
-		
+
 		return customError
-		
+
 	default:
 		return newError("not a function: %s", fn.Type())
 	}
@@ -738,19 +754,19 @@ func evalErrorDeclaration(node *ast.ErrorDeclaration, env *object.Environment) o
 	for i, param := range node.Parameters {
 		paramNames[i] = param.Value
 	}
-	
+
 	// Create error type
 	errorType := &object.ErrorType{
 		Name:       node.Name.Value,
 		Parameters: paramNames,
 	}
-	
+
 	// Store the error type in the environment
 	result := env.Define(node.Name.Value, errorType)
 	if isError(result) {
 		return result
 	}
-	
+
 	// Return NULL for declarations (like let statements)
 	return NULL
 }
@@ -761,12 +777,12 @@ func evalThrowStatement(node *ast.ThrowStatement, env *object.Environment) objec
 	if isError(errorExpr) {
 		return errorExpr
 	}
-	
+
 	// If it's a custom error, wrap it in a regular error for propagation
 	if customError, ok := errorExpr.(*object.CustomError); ok {
 		return newError("thrown: %s", customError.Inspect())
 	}
-	
+
 	// If it's any other type, create a regular error
 	return newError("thrown: %s", errorExpr.Inspect())
 }
