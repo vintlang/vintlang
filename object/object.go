@@ -25,6 +25,7 @@ const (
 	BREAK_OBJ        = "BREAK"
 	FILE_OBJ         = "FILE"
 	TIME_OBJ         = "TIME"
+	DURATION_OBJ     = "DURATION"
 	JSON_OBJ         = "JSON"
 	MODULE_OBJ       = "MODULE"
 	BYTE_OBJ         = "BYTE"
