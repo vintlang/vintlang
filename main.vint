@@ -22,7 +22,7 @@ for letter in letters
 let thisWillBePrintedLast = func() {
     println("This will be printed last");
 };
-let my_function = func() {
+const my_function = func() { // you can also use const
     defer thisWillBePrintedLast()
     defer println("This will be printed last. 2");
     println("This will be printed first");
