@@ -1,4 +1,0 @@
-import url
-
-parsed = url.parse("https://example.com/path?query=value#frag")
-print(parsed)
