@@ -255,8 +255,33 @@ func (p *Parser) Errors() []string {
 }
 
 func (p *Parser) peekError(t token.TokenType) {
-	msg := fmt.Sprintf("Line %d: We expected to get %s, instead we got %s", p.curToken.Line, t, p.peekToken.Type)
+	msg := fmt.Sprintf("Line %d: Expected next token to be %s, got %s instead", p.peekToken.Line, t, p.peekToken.Type)
 	p.errors = append(p.errors, msg)
+}
+
+func (p *Parser) addErrorWithContext(msg string, line int) {
+	contextMsg := fmt.Sprintf("Line %d: %s", line, msg)
+	p.errors = append(p.errors, contextMsg)
+}
+
+// Synchronize parser after error - skip to next statement boundary
+func (p *Parser) synchronize() {
+	p.nextToken()
+	
+	for p.curToken.Type != token.EOF {
+		if p.curToken.Type == token.SEMICOLON {
+			p.nextToken()
+			return
+		}
+		
+		switch p.curToken.Type {
+		case token.LET, token.CONST, token.FUNCTION, token.IF, token.WHILE, 
+			 token.FOR, token.RETURN, token.MATCH, token.SWITCH:
+			return
+		}
+		
+		p.nextToken()
+	}
 }
 
 // parse expressions
@@ -315,7 +340,7 @@ func (p *Parser) parsePrefixExpression() ast.Expression {
 }
 
 func (p *Parser) noPrefixParseFnError(t token.TokenType) {
-	msg := fmt.Sprintf("Line %d: Failed to be parsed %s", p.curToken.Line, t)
+	msg := fmt.Sprintf("Line %d: No prefix parse function for %s found", p.curToken.Line, t)
 	p.errors = append(p.errors, msg)
 }
 

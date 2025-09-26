@@ -118,6 +118,11 @@ const (
 	FATAL_CAP    = "FATAL_CAP"
 	CRITICAL_CAP = "CRITICAL_CAP"
 	LOG_CAP      = "LOG_CAP"
+	
+	// Type system tokens
+	AS    = "AS"    // type casting: x as int
+	IS    = "IS"    // type checking: x is int
+	PIPE  = "|"     // union types: int | string
 )
 
 var keywords = map[string]TokenType{
@@ -172,6 +177,8 @@ var keywords = map[string]TokenType{
 	"Fatal":    FATAL_CAP,
 	"Critical": CRITICAL_CAP,
 	"Log":      LOG_CAP,
+	"as":       AS,
+	"is":       IS,
 }
 
 func LookupIdent(ident string) TokenType {
