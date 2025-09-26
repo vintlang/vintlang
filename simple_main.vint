@@ -1,0 +1,9 @@
+// Simple test without imports first
+println("Before main definition")
+
+let main = func() {
+    println("Main function is running!")
+    return 42
+}
+
+println("After main definition")
