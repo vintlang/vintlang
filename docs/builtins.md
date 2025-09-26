@@ -136,6 +136,58 @@ let file = open("data.txt")
 
 ---
 
+## Logical Functions
+
+### `and(boolean1, boolean2)`
+Performs a logical AND operation on two boolean values. Returns `true` only if both arguments are `true`.
+```js
+and(true, true)    // Output: true
+and(true, false)   // Output: false
+and(false, false)  // Output: false
+```
+
+### `or(boolean1, boolean2)`
+Performs a logical OR operation on two boolean values. Returns `true` if at least one of the arguments is `true`.
+```js
+or(true, false)    // Output: true
+or(false, false)   // Output: false
+or(true, true)     // Output: true
+```
+
+### `not(boolean)`
+Performs a logical NOT operation on a boolean value. Returns the opposite of the input.
+```js
+not(true)          // Output: false
+not(false)         // Output: true
+```
+
+### `xor(boolean1, boolean2)`
+Performs a logical XOR (exclusive OR) operation on two boolean values. Returns `true` when exactly one of the arguments is `true`.
+```js
+xor(true, false)   // Output: true
+xor(false, true)   // Output: true
+xor(true, true)    // Output: false
+xor(false, false)  // Output: false
+```
+
+### `nand(boolean1, boolean2)`
+Performs a logical NAND (NOT AND) operation on two boolean values. Returns `false` only when both arguments are `true`.
+```js
+nand(true, true)   // Output: false
+nand(true, false)  // Output: true
+nand(false, false) // Output: true
+```
+
+### `nor(boolean1, boolean2)`
+Performs a logical NOR (NOT OR) operation on two boolean values. Returns `true` only when both arguments are `false`.
+```js
+nor(false, false)  // Output: true
+nor(true, false)   // Output: false
+nor(true, true)    // Output: false
+```
+
+---
+
 ## Additional Built-in Functions
 
 ### String Functions
@@ -162,6 +214,14 @@ Returns the index of the first occurrence of an element in an array, or -1 if no
 let arr = [1, 2, 3, 2, 4]
 indexOf(arr, 2)    // Output: 1
 indexOf(arr, 5)    // Output: -1
+```
+
+#### `unique(array)`
+Returns a new array containing only the unique elements from the input array, removing duplicates.
+```js
+let arr = [1, 2, 2, 3, 1, 4]
+unique(arr)        // Output: [1, 2, 3, 4]
+unique([])         // Output: []
 ```
 
 ### Type Checking Functions

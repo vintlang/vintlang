@@ -1,0 +1,193 @@
+// Enhanced VintLang Language Showcase
+// This example demonstrates the improvements made to VintLang
+
+print("🚀 VintLang Enhanced Language Showcase")
+print("=" * 50)
+
+// 1. Enhanced String Handling with Unicode and Escape Sequences
+print("\n📝 Enhanced String Handling:")
+let greeting = "Hello\nWorld!"
+let unicode_text = "Hello \u0041\u0042\u0043"  // Hello ABC
+let hex_text = "Value: \x41\x42"  // Value: AB
+print("Multiline greeting:", greeting)
+print("Unicode text:", unicode_text)
+print("Hex escape text:", hex_text)
+
+// 2. Type Checking Functions
+print("\n🔍 Type Checking:")
+let values = [42, 3.14, "hello", true, [1, 2, 3], {"key": "value"}]
+for value in values {
+    print("Value:", value, "Type:", typeof(value))
+    print("  isInt:", isInt(value))
+    print("  isFloat:", isFloat(value))
+    print("  isString:", isString(value))
+    print("  isBool:", isBool(value))
+    print("  isArray:", isArray(value))
+    print("  isDict:", isDict(value))
+    print("---")
+}
+
+// 3. Enhanced Array Operations
+print("\n📊 Enhanced Array Operations:")
+let numbers = [5, 2, 8, 1, 9, 3, 5, 2]
+print("Original array:", numbers)
+print("Length:", len(numbers))
+print("Sorted:", sort(numbers))
+print("Reversed:", reverse(numbers))
+print("Unique values:", unique(numbers))
+print("Index of 8:", indexOf(numbers, 8))
+
+// Higher-order functions
+let doubled = map(numbers, func(x) { return x * 2 })
+print("Doubled:", doubled)
+
+let evens = filter(numbers, func(x) { return x % 2 == 0 })
+print("Even numbers:", evens)
+
+// 4. Enhanced String Operations
+print("\n🔤 Enhanced String Operations:")
+let text = "  VintLang Programming Language  "
+print("Original:", text)
+print("Trimmed:", trim(text))
+print("Uppercase:", toUpper(trim(text)))
+print("Lowercase:", toLower(trim(text)))
+
+let sentence = "VintLang is a modern programming language"
+let words = split(sentence, " ")
+print("Words:", words)
+print("Joined with '-':", join(words, "-"))
+
+print("Starts with 'VintLang':", startsWith(sentence, "VintLang"))
+print("Ends with 'language':", endsWith(sentence, "language"))
+
+// 5. Math Operations
+print("\n🧮 Math Operations:")
+let vals = [10, -5, 3.14, -2.7]
+for val in vals {
+    print("abs(" + string(val) + ") =", abs(val))
+}
+print("min(10, 5, 20):", min(10, 5, 20))
+print("max(10, 5, 20):", max(10, 5, 20))
+
+// 6. Range Function
+print("\n📏 Range Function:")
+print("range(5):", range(5))
+print("range(2, 8):", range(2, 8))
+print("range(0, 10, 2):", range(0, 10, 2))
+print("range(10, 0, -2):", range(10, 0, -2))
+
+// 7. Data Conversion and Parsing
+print("\n🔄 Data Conversion:")
+let num_str = "42"
+let float_str = "3.14159"
+print("parseInt('" + num_str + "'):", parseInt(num_str))
+print("parseFloat('" + float_str + "'):", parseFloat(float_str))
+print("string(42):", string(42))
+print("int('100'):", int("100"))
+
+// 8. Dictionary Operations with Better Built-ins
+print("\n📚 Dictionary Operations:")
+let person = {
+    "name": "Alice",
+    "age": 30,
+    "city": "New York"
+}
+print("Person:", person)
+print("Keys:", keys(person))
+print("Values:", values(person))
+print("Has 'age' key:", has_key(person, "age"))
+print("Has 'country' key:", has_key(person, "country"))
+
+// 9. Error Handling and Validation
+print("\n⚠️ Error Handling Examples:")
+let safe_divide = func(a, b) {
+    if (b == 0) {
+        return "Error: Division by zero"
+    }
+    return a / b
+}
+
+print("10 / 2 =", safe_divide(10, 2))
+print("10 / 0 =", safe_divide(10, 0))
+
+// 10. Advanced Control Flow
+print("\n🔀 Advanced Control Flow:")
+let process_data = func(data) {
+    if (isArray(data)) {
+        return "Processing array with " + string(len(data)) + " elements"
+    } else if (isDict(data)) {
+        return "Processing dictionary with " + string(len(data)) + " keys"
+    } else if (isString(data)) {
+        return "Processing string: " + data
+    } else {
+        return "Unknown data type: " + typeof(data)
+    }
+}
+
+let test_data = [
+    [1, 2, 3, 4],
+    {"name": "test", "type": "demo"},
+    "Hello World",
+    42
+]
+
+for data in test_data {
+    print(process_data(data))
+}
+
+// 11. Function Composition and Higher-Order Functions
+print("\n🔗 Function Composition:")
+let add_one = func(x) { return x + 1 }
+let double = func(x) { return x * 2 }
+let square = func(x) { return x * x }
+
+let compose = func(f, g) {
+    return func(x) { return f(g(x)) }
+}
+
+let add_one_then_double = compose(double, add_one)
+let square_then_add_one = compose(add_one, square)
+
+print("add_one_then_double(5):", add_one_then_double(5))  // (5 + 1) * 2 = 12
+print("square_then_add_one(4):", square_then_add_one(4))  // (4 * 4) + 1 = 17
+
+// 12. Data Processing Pipeline
+print("\n⚙️ Data Processing Pipeline:")
+let process_numbers = func(nums) {
+    let result = nums
+    result = filter(result, func(x) { return x > 0 })  // Filter positive
+    result = map(result, func(x) { return x * x })     // Square each
+    result = sort(result)                              // Sort ascending
+    result = unique(result)                            // Remove duplicates
+    return result
+}
+
+let mixed_numbers = [-2, 3, -1, 4, 3, 5, -3, 4, 2]
+print("Original:", mixed_numbers)
+print("Processed:", process_numbers(mixed_numbers))
+
+// 13. Performance and Utility
+print("\n⏱️ Performance and Utilities:")
+let start_time = time.now()
+sleep(100)  // Sleep for 100ms
+print("Operation completed after sleep")
+
+// Clone objects safely
+let original_array = [1, [2, 3], {"nested": "object"}]
+let cloned_array = clone(original_array)
+print("Original array:", original_array)
+print("Cloned array:", cloned_array)
+
+print("\n✅ VintLang Enhanced Language Showcase Complete!")
+print("This demonstrates:")
+print("• Enhanced string handling with Unicode support")
+print("• Comprehensive type checking functions")
+print("• Rich array and string manipulation")
+print("• Mathematical operations")
+print("• Functional programming features")
+print("• Data conversion and parsing")
+print("• Better error handling patterns")
+print("• Advanced control flow")
+print("• Function composition")
+print("• Data processing pipelines")
+print("• Performance utilities")

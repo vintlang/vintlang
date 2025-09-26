@@ -16,6 +16,7 @@ func init() {
 	URLFunctions["decode"] = urlDecode
 	URLFunctions["join"] = urlJoin
 	URLFunctions["isValid"] = urlIsValid
+	URLFunctions["build"] = urlBuild
 }
 
 func urlParse(args []object.Object, defs map[string]object.Object) object.Object {
@@ -199,4 +200,83 @@ func urlIsValid(args []object.Object, defs map[string]object.Object) object.Obje
 	}
 	
 	return &object.Boolean{Value: true}
+}
+
+func urlBuild(args []object.Object, defs map[string]object.Object) object.Object {
+	if len(args) != 1 {
+		return ErrorMessage(
+			"url", "build",
+			"1 argument: components dictionary (dict)",
+			fmt.Sprintf("%d arguments", len(args)),
+			`url.build({"scheme": "https", "host": "example.com", "path": "/api"}) -> "https://example.com/api"`,
+		)
+	}
+
+	components := args[0]
+	if components.Type() != object.DICT_OBJ {
+		return ErrorMessage(
+			"url", "build",
+			"dictionary of URL components",
+			string(components.Type()),
+			`url.build({"scheme": "https", "host": "example.com", "path": "/api"}) -> "https://example.com/api"`,
+		)
+	}
+
+	dict := components.(*object.Dict)
+	u := &url.URL{}
+
+	// Extract components from dictionary
+	for _, pair := range dict.Pairs {
+		key := pair.Key.Inspect()
+		value := pair.Value
+
+		if value.Type() != object.STRING_OBJ {
+			return &object.Error{
+				Message: fmt.Sprintf("\033[1;31m -> url.build()\033[0m:\n"+
+					"  Component '%s' must be a string, got %s\n"+
+					"  Usage: url.build({\"scheme\": \"https\", \"host\": \"example.com\"})\n", 
+					key, string(value.Type())),
+			}
+		}
+
+		valueStr := value.(*object.String).Value
+
+		switch strings.ToLower(key) {
+		case "scheme":
+			u.Scheme = valueStr
+		case "host":
+			u.Host = valueStr
+		case "path":
+			u.Path = valueStr
+		case "query":
+			u.RawQuery = valueStr
+		case "fragment":
+			u.Fragment = valueStr
+		case "user":
+			if userInfo, err := url.Parse("http://" + valueStr + "@example.com"); err == nil {
+				u.User = userInfo.User
+			}
+		case "port":
+			if u.Host != "" && !strings.Contains(u.Host, ":") {
+				u.Host = u.Host + ":" + valueStr
+			}
+		default:
+			return &object.Error{
+				Message: fmt.Sprintf("\033[1;31m -> url.build()\033[0m:\n"+
+					"  Unknown URL component: '%s'\n"+
+					"  Valid components: scheme, host, path, query, fragment, user, port\n", key),
+			}
+		}
+	}
+
+	// Basic validation - at least scheme or host should be provided for a valid URL
+	if u.Scheme == "" && u.Host == "" {
+		return &object.Error{
+			Message: fmt.Sprintf("\033[1;31m -> url.build()\033[0m:\n"+
+				"  URL must have at least a scheme or host component\n"+
+				"  Usage: url.build({\"scheme\": \"https\", \"host\": \"example.com\"})\n"),
+		}
+	}
+
+	return &object.String{Value: u.String()}
 }

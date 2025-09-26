@@ -31,6 +31,8 @@ func applyMethod(obj object.Object, method ast.Expression, args []object.Object,
 		return obj.Method(method.(*ast.Identifier).Value, args)
 	case *object.Time:
 		return obj.Method(method.(*ast.Identifier).Value, args, defs)
+	case *object.Duration:
+		return obj.Method(method.(*ast.Identifier).Value, args, defs)
 	case *object.Integer:
 		return obj.Method(method.(*ast.Identifier).Value, args)
 	case *object.Float:

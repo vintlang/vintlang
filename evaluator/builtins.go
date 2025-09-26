@@ -225,7 +225,6 @@ var builtins = map[string]*object.Builtin{
 
 			value := args[0]
 
-			// Use the existing convertToString function to handle conversion
 			return convertToString(value)
 		},
 	},
@@ -239,77 +238,117 @@ var builtins = map[string]*object.Builtin{
 
 			value := args[0]
 
-			// Use the existing convertToInteger function to handle conversion
 			return convertToInteger(value)
 		},
 	},
 
 	"and": {
 		Fn: func(args ...object.Object) object.Object {
-			// Ensure that there are exactly 2 arguments
 			if len(args) != 2 {
 				return newError("and requires 2 arguments, you provided %d", len(args))
 			}
 
-			// Get the boolean value of the first argument
 			bool1, err := getBooleanValue(args[0])
 			if err != nil {
-				// Return an error if the first argument is not a boolean
 				return newError("First argument must be a boolean")
 			}
 
-			// Get the boolean value of the second argument
 			bool2, err := getBooleanValue(args[1])
 			if err != nil {
-				// Return an error if the second argument is not a boolean
 				return newError("Second argument must be a boolean")
 			}
 
-			// Perform the logical AND operation and return the result as a boolean
 			return &object.Boolean{Value: bool1 && bool2}
 		},
 	},
 	"or": {
 		Fn: func(args ...object.Object) object.Object {
-			// Ensure that there are exactly 2 arguments
 			if len(args) != 2 {
 				return newError("or requires 2 arguments, you provided %d", len(args))
 			}
 
-			// Get the boolean value of the first argument
 			bool1, err := getBooleanValue(args[0])
 			if err != nil {
-				// Return an error if the first argument is not a boolean
 				return newError("First argument must be a boolean")
 			}
 
-			// Get the boolean value of the second argument
 			bool2, err := getBooleanValue(args[1])
 			if err != nil {
-				// Return an error if the second argument is not a boolean
 				return newError("Second argument must be a boolean")
 			}
 
-			// Perform the logical OR operation and return the result as a boolean
 			return &object.Boolean{Value: bool1 || bool2}
 		},
 	},
 	"not": {
 		Fn: func(args ...object.Object) object.Object {
-			// Ensure that there is exactly 1 argument
 			if len(args) != 1 {
 				return newError("not requires 1 argument, you provided %d", len(args))
 			}
 
-			// Get the boolean value of the argument
 			boolVal, err := getBooleanValue(args[0])
 			if err != nil {
-				// Return an error if the argument is not a boolean
 				return newError("Argument must be a boolean")
 			}
 
-			// Perform the logical NOT operation and return the result as a boolean
 			return &object.Boolean{Value: !boolVal}
+		},
+	},
+	"xor": {
+		Fn: func(args ...object.Object) object.Object {
+			if len(args) != 2 {
+				return newError("xor requires 2 arguments, you provided %d", len(args))
+			}
+
+			bool1, err := getBooleanValue(args[0])
+			if err != nil {
+				return newError("First argument must be a boolean")
+			}
+
+			bool2, err := getBooleanValue(args[1])
+			if err != nil {
+				return newError("Second argument must be a boolean")
+			}
+
+			return &object.Boolean{Value: (bool1 && !bool2) || (!bool1 && bool2)}
+		},
+	},
+	"nand": {
+		Fn: func(args ...object.Object) object.Object {
+			if len(args) != 2 {
+				return newError("nand requires 2 arguments, you provided %d", len(args))
+			}
+
+			bool1, err := getBooleanValue(args[0])
+			if err != nil {
+				return newError("First argument must be a boolean")
+			}
+
+			bool2, err := getBooleanValue(args[1])
+			if err != nil {
+				return newError("Second argument must be a boolean")
+			}
+
+			return &object.Boolean{Value: !(bool1 && bool2)}
+		},
+	},
+	"nor": {
+		Fn: func(args ...object.Object) object.Object {
+			if len(args) != 2 {
+				return newError("nor requires 2 arguments, you provided %d", len(args))
+			}
+
+			bool1, err := getBooleanValue(args[0])
+			if err != nil {
+				return newError("First argument must be a boolean")
+			}
+
+			bool2, err := getBooleanValue(args[1])
+			if err != nil {
+				return newError("Second argument must be a boolean")
+			}
+
+			return &object.Boolean{Value: !(bool1 || bool2)}
 		},
 	},
 	"len": {
@@ -479,58 +518,58 @@ var builtins = map[string]*object.Builtin{
 			return cliArgs
 		},
 	},
-	
+
 	// Channel operations
 	"send": {
 		Fn: func(args ...object.Object) object.Object {
 			if len(args) != 2 {
 				return newError("send() takes exactly 2 arguments (channel, value), got %d", len(args))
 			}
-			
+
 			ch, ok := args[0].(*object.Channel)
 			if !ok {
 				return newError("first argument to send() must be a channel, got %T", args[0])
 			}
-			
+
 			if err := ch.Send(args[1]); err != nil {
 				return newError("send error: %s", err.Error())
 			}
-			
+
 			return NULL
 		},
 	},
-	
+
 	"receive": {
 		Fn: func(args ...object.Object) object.Object {
 			if len(args) != 1 {
 				return newError("receive() takes exactly 1 argument (channel), got %d", len(args))
 			}
-			
+
 			ch, ok := args[0].(*object.Channel)
 			if !ok {
 				return newError("argument to receive() must be a channel, got %T", args[0])
 			}
-			
+
 			value, ok := ch.Receive()
 			if !ok {
 				return NULL // Channel closed
 			}
-			
+
 			return value
 		},
 	},
-	
+
 	"close": {
 		Fn: func(args ...object.Object) object.Object {
 			if len(args) != 1 {
 				return newError("close() takes exactly 1 argument (channel), got %d", len(args))
 			}
-			
+
 			ch, ok := args[0].(*object.Channel)
 			if !ok {
 				return newError("argument to close() must be a channel, got %T", args[0])
 			}
-			
+
 			ch.Close()
 			return NULL
 		},
@@ -542,29 +581,29 @@ var builtins = map[string]*object.Builtin{
 			if len(args) != 2 {
 				return newError("startsWith() takes exactly 2 arguments, got %d", len(args))
 			}
-			
+
 			if args[0].Type() != object.STRING_OBJ || args[1].Type() != object.STRING_OBJ {
-				return newError("both arguments to startsWith() must be strings, got (%s, %s)", 
+				return newError("both arguments to startsWith() must be strings, got (%s, %s)",
 					args[0].Type(), args[1].Type())
 			}
-			
+
 			str := args[0].(*object.String).Value
 			prefix := args[1].(*object.String).Value
 			return &object.Boolean{Value: strings.HasPrefix(str, prefix)}
 		},
 	},
-	
+
 	"endsWith": {
 		Fn: func(args ...object.Object) object.Object {
 			if len(args) != 2 {
 				return newError("endsWith() takes exactly 2 arguments, got %d", len(args))
 			}
-			
+
 			if args[0].Type() != object.STRING_OBJ || args[1].Type() != object.STRING_OBJ {
-				return newError("both arguments to endsWith() must be strings, got (%s, %s)", 
+				return newError("both arguments to endsWith() must be strings, got (%s, %s)",
 					args[0].Type(), args[1].Type())
 			}
-			
+
 			str := args[0].(*object.String).Value
 			suffix := args[1].(*object.String).Value
 			return &object.Boolean{Value: strings.HasSuffix(str, suffix)}
@@ -577,18 +616,18 @@ var builtins = map[string]*object.Builtin{
 			if len(args) != 2 {
 				return newError("indexOf() takes exactly 2 arguments, got %d", len(args))
 			}
-			
+
 			if args[0].Type() != object.ARRAY_OBJ {
 				return newError("first argument to indexOf() must be an array, got %s", args[0].Type())
 			}
-			
+
 			arr := args[0].(*object.Array)
 			for i, element := range arr.Elements {
 				if element.Inspect() == args[1].Inspect() {
 					return &object.Integer{Value: int64(i)}
 				}
 			}
-			
+
 			return &object.Integer{Value: -1} // Not found
 		},
 	},
@@ -599,67 +638,67 @@ var builtins = map[string]*object.Builtin{
 			if len(args) != 1 {
 				return newError("isInt() takes exactly 1 argument, got %d", len(args))
 			}
-			
+
 			return &object.Boolean{Value: args[0].Type() == object.INTEGER_OBJ}
 		},
 	},
-	
+
 	"isFloat": {
 		Fn: func(args ...object.Object) object.Object {
 			if len(args) != 1 {
 				return newError("isFloat() takes exactly 1 argument, got %d", len(args))
 			}
-			
+
 			return &object.Boolean{Value: args[0].Type() == object.FLOAT_OBJ}
 		},
 	},
-	
+
 	"isString": {
 		Fn: func(args ...object.Object) object.Object {
 			if len(args) != 1 {
 				return newError("isString() takes exactly 1 argument, got %d", len(args))
 			}
-			
+
 			return &object.Boolean{Value: args[0].Type() == object.STRING_OBJ}
 		},
 	},
-	
+
 	"isBool": {
 		Fn: func(args ...object.Object) object.Object {
 			if len(args) != 1 {
 				return newError("isBool() takes exactly 1 argument, got %d", len(args))
 			}
-			
+
 			return &object.Boolean{Value: args[0].Type() == object.BOOLEAN_OBJ}
 		},
 	},
-	
+
 	"isArray": {
 		Fn: func(args ...object.Object) object.Object {
 			if len(args) != 1 {
 				return newError("isArray() takes exactly 1 argument, got %d", len(args))
 			}
-			
+
 			return &object.Boolean{Value: args[0].Type() == object.ARRAY_OBJ}
 		},
 	},
-	
+
 	"isDict": {
 		Fn: func(args ...object.Object) object.Object {
 			if len(args) != 1 {
 				return newError("isDict() takes exactly 1 argument, got %d", len(args))
 			}
-			
+
 			return &object.Boolean{Value: args[0].Type() == object.DICT_OBJ}
 		},
 	},
-	
+
 	"isNull": {
 		Fn: func(args ...object.Object) object.Object {
 			if len(args) != 1 {
 				return newError("isNull() takes exactly 1 argument, got %d", len(args))
 			}
-			
+
 			return &object.Boolean{Value: args[0].Type() == object.NULL_OBJ}
 		},
 	},
@@ -670,61 +709,61 @@ var builtins = map[string]*object.Builtin{
 			if len(args) != 1 {
 				return newError("parseInt() takes exactly 1 argument, got %d", len(args))
 			}
-			
+
 			if args[0].Type() != object.STRING_OBJ {
 				return newError("argument to parseInt() must be a string, got %s", args[0].Type())
 			}
-			
+
 			str := args[0].(*object.String).Value
 			val, err := strconv.ParseInt(str, 10, 64)
 			if err != nil {
 				return newError("cannot parse '%s' as integer: %s", str, err.Error())
 			}
-			
+
 			return &object.Integer{Value: val}
 		},
 	},
-	
+
 	"parseFloat": {
 		Fn: func(args ...object.Object) object.Object {
 			if len(args) != 1 {
 				return newError("parseFloat() takes exactly 1 argument, got %d", len(args))
 			}
-			
+
 			if args[0].Type() != object.STRING_OBJ {
 				return newError("argument to parseFloat() must be a string, got %s", args[0].Type())
 			}
-			
+
 			str := args[0].(*object.String).Value
 			val, err := strconv.ParseFloat(str, 64)
 			if err != nil {
 				return newError("cannot parse '%s' as float: %s", str, err.Error())
 			}
-			
+
 			return &object.Float{Value: val}
 		},
 	},
 
-	// Array deduplication function  
+	// Array deduplication function
 	"unique": {
 		Fn: func(args ...object.Object) object.Object {
 			if len(args) != 1 {
 				return newError("unique() takes exactly 1 argument, got %d", len(args))
 			}
-			
+
 			if args[0].Type() != object.ARRAY_OBJ {
 				return newError("argument to unique() must be an array, got %s", args[0].Type())
 			}
-			
+
 			arr := args[0].(*object.Array)
 			if len(arr.Elements) == 0 {
 				// Return empty array if input is empty
 				return &object.Array{Elements: []object.Object{}}
 			}
-			
+
 			seen := make(map[string]bool)
 			unique := []object.Object{}
-			
+
 			for _, element := range arr.Elements {
 				// Use Inspect() method to get string representation for comparison
 				key := element.Inspect()
@@ -733,7 +772,7 @@ var builtins = map[string]*object.Builtin{
 					unique = append(unique, element)
 				}
 			}
-			
+
 			return &object.Array{Elements: unique}
 		},
 	},

@@ -30,7 +30,7 @@ use `os.getwd()`
 
 ## Get and Set Environment Variables
 
-Environment variables can be set and retrieved with `os.setEnv()` and `os.getEnv()`.
+Environment variables can be set, retrieved, and removed with `os.setEnv()`, `os.getEnv()`, and `os.unsetEnv()`.
 
 ### Set Environment Variable:
 ```js
@@ -41,6 +41,13 @@ os.setEnv("API_KEY", "12345")
 ```js
 api_key = os.getEnv("API_KEY")
 print(api_key)  // Outputs: "12345"
+```
+
+### Unset Environment Variable:
+```js
+os.unsetEnv("API_KEY")
+api_key = os.getEnv("API_KEY")
+print(api_key)  // Outputs: "" (empty string)
 ```
 
 ## Read and Write Files
@@ -100,4 +107,46 @@ To delete a file, use `os.deleteFile()`:
 // os.deleteFile("example.txt")
 ```
 
-By utilizing the **Vint** `os` module, you can effectively manage files, directories, and environment variables within your programs.
+## System Information
+
+The `os` module provides several functions to get system information:
+
+### Get Home Directory:
+```js
+home = os.homedir()
+print(home)  // Outputs: "/home/username"
+```
+
+### Get Temporary Directory:
+```js
+temp = os.tmpdir()
+print(temp)  // Outputs: "/tmp" (on Unix-like systems)
+```
+
+### Get CPU Count:
+```js
+cpus = os.cpuCount()
+print(cpus)  // Outputs: 4 (number of logical CPUs)
+```
+
+### Get Hostname:
+```js
+hostname = os.hostname()
+print(hostname)  // Outputs: "my-computer"
+```
+
+## File Operations
+
+### Copy a File:
+```js
+os.copy("source.txt", "destination.txt")
+print("File copied successfully")
+```
+
+### Move or Rename a File:
+```js
+os.move("old_name.txt", "new_name.txt")
+print("File moved/renamed successfully")
+```
+
+By utilizing the **Vint** `os` module, you can effectively manage files, directories, environment variables, and system information within your programs.

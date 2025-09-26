@@ -2,9 +2,11 @@ package module
 
 import (
 	"fmt"
+	"io"
 	"io/ioutil"
 	"os"
 	"os/exec"
+	"runtime"
 	"strings"
 
 	"github.com/vintlang/vintlang/object"
@@ -17,6 +19,7 @@ func init() {
 	OsFunctions["run"] = run
 	OsFunctions["getEnv"] = getEnv
 	OsFunctions["setEnv"] = setEnv
+	OsFunctions["unsetEnv"] = unsetEnv
 	OsFunctions["readFile"] = readFile
 	OsFunctions["writeFile"] = writeFile
 	OsFunctions["listDir"] = listDir
@@ -28,6 +31,12 @@ func init() {
 	OsFunctions["fileExists"] = fileExists
 	OsFunctions["readLines"] = readLines
 	OsFunctions["getwd"] = getwd
+	OsFunctions["homedir"] = homedir
+	OsFunctions["tmpdir"] = tmpdir
+	OsFunctions["cpuCount"] = cpuCount
+	OsFunctions["hostname"] = hostname
+	OsFunctions["copy"] = copyFile
+	OsFunctions["move"] = moveFile
 }
 
 func exit(args []object.Object, defs map[string]object.Object) object.Object {
@@ -476,4 +485,182 @@ func readLines(args []object.Object, defs map[string]object.Object) object.Objec
 	}
 
 	return &object.Array{Elements: lineObjects}
+}
+
+// unsetEnv removes an environment variable
+func unsetEnv(args []object.Object, defs map[string]object.Object) object.Object {
+	if len(args) != 1 {
+		return ErrorMessage(
+			"os", "unsetEnv",
+			"1 string argument (environment variable name)",
+			fmt.Sprintf("%d arguments", len(args)),
+			`os.unsetEnv("TEMP_VAR")`,
+		)
+	}
+
+	key, ok := args[0].(*object.String)
+	if !ok {
+		return ErrorMessage(
+			"os", "unsetEnv",
+			"string argument for environment variable name",
+			string(args[0].Type()),
+			`os.unsetEnv("TEMP_VAR")`,
+		)
+	}
+
+	if strings.TrimSpace(key.Value) == "" {
+		return &object.Error{
+			Message: "\033[1;31m -> os.unsetEnv()\033[0m:\n" +
+				"  Cannot unset an environment variable with an empty name.\n" +
+				"  Please provide a valid variable name.\n" +
+				"  Usage: os.unsetEnv(\"TEMP_VAR\")\n",
+		}
+	}
+
+	err := os.Unsetenv(key.Value)
+	if err != nil {
+		return &object.Error{Message: "Failed to unset environment variable: " + err.Error()}
+	}
+
+	return &object.String{Value: "Environment variable unset successfully"}
+}
+
+// homedir returns the user's home directory
+func homedir(args []object.Object, defs map[string]object.Object) object.Object {
+	if len(args) != 0 {
+		return ErrorMessage(
+			"os", "homedir",
+			"no arguments",
+			fmt.Sprintf("%d arguments", len(args)),
+			"os.homedir()",
+		)
+	}
+
+	home, err := os.UserHomeDir()
+	if err != nil {
+		return &object.Error{Message: "Failed to get home directory: " + err.Error()}
+	}
+
+	return &object.String{Value: home}
+}
+
+// tmpdir returns the system's temporary directory
+func tmpdir(args []object.Object, defs map[string]object.Object) object.Object {
+	if len(args) != 0 {
+		return ErrorMessage(
+			"os", "tmpdir",
+			"no arguments",
+			fmt.Sprintf("%d arguments", len(args)),
+			"os.tmpdir()",
+		)
+	}
+
+	tmpdir := os.TempDir()
+	return &object.String{Value: tmpdir}
+}
+
+// cpuCount returns the number of logical CPUs
+func cpuCount(args []object.Object, defs map[string]object.Object) object.Object {
+	if len(args) != 0 {
+		return ErrorMessage(
+			"os", "cpuCount",
+			"no arguments",
+			fmt.Sprintf("%d arguments", len(args)),
+			"os.cpuCount()",
+		)
+	}
+
+	count := runtime.NumCPU()
+	return &object.Integer{Value: int64(count)}
+}
+
+// hostname returns the system's hostname
+func hostname(args []object.Object, defs map[string]object.Object) object.Object {
+	if len(args) != 0 {
+		return ErrorMessage(
+			"os", "hostname",
+			"no arguments",
+			fmt.Sprintf("%d arguments", len(args)),
+			"os.hostname()",
+		)
+	}
+
+	hostname, err := os.Hostname()
+	if err != nil {
+		return &object.Error{Message: "Failed to get hostname: " + err.Error()}
+	}
+
+	return &object.String{Value: hostname}
+}
+
+// copyFile copies a file from source to destination
+func copyFile(args []object.Object, defs map[string]object.Object) object.Object {
+	if len(args) != 2 {
+		return ErrorMessage(
+			"os", "copy",
+			"2 string arguments (source path, destination path)",
+			fmt.Sprintf("%d arguments", len(args)),
+			`os.copy("source.txt", "destination.txt")`,
+		)
+	}
+
+	source, ok1 := args[0].(*object.String)
+	destination, ok2 := args[1].(*object.String)
+	if !ok1 || !ok2 {
+		return ErrorMessage(
+			"os", "copy",
+			"2 string arguments for source and destination paths",
+			fmt.Sprintf("source: %s, destination: %s", args[0].Type(), args[1].Type()),
+			`os.copy("source.txt", "destination.txt")`,
+		)
+	}
+
+	sourceFile, err := os.Open(source.Value)
+	if err != nil {
+		return &object.Error{Message: "Failed to open source file: " + err.Error()}
+	}
+	defer sourceFile.Close()
+
+	destFile, err := os.Create(destination.Value)
+	if err != nil {
+		return &object.Error{Message: "Failed to create destination file: " + err.Error()}
+	}
+	defer destFile.Close()
+
+	_, err = io.Copy(destFile, sourceFile)
+	if err != nil {
+		return &object.Error{Message: "Failed to copy file: " + err.Error()}
+	}
+
+	return &object.String{Value: "File copied successfully"}
+}
+
+// moveFile moves or renames a file from source to destination
+func moveFile(args []object.Object, defs map[string]object.Object) object.Object {
+	if len(args) != 2 {
+		return ErrorMessage(
+			"os", "move",
+			"2 string arguments (source path, destination path)",
+			fmt.Sprintf("%d arguments", len(args)),
+			`os.move("old_name.txt", "new_name.txt")`,
+		)
+	}
+
+	source, ok1 := args[0].(*object.String)
+	destination, ok2 := args[1].(*object.String)
+	if !ok1 || !ok2 {
+		return ErrorMessage(
+			"os", "move",
+			"2 string arguments for source and destination paths",
+			fmt.Sprintf("source: %s, destination: %s", args[0].Type(), args[1].Type()),
+			`os.move("old_name.txt", "new_name.txt")`,
+		)
+	}
+
+	err := os.Rename(source.Value, destination.Value)
+	if err != nil {
+		return &object.Error{Message: "Failed to move file: " + err.Error()}
+	}
+
+	return &object.String{Value: "File moved successfully"}
 }
