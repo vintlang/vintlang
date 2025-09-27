@@ -22,30 +22,30 @@ export default function Header() {
             <span className="hidden font-bold sm:inline-block">VintLang</span>
           </Link>
           <nav className="flex items-center space-x-6 text-sm font-medium">
-            <a
+            <Link
               className="transition-colors hover:text-foreground/80 text-foreground/60"
               href="#features"
             >
               Features
-            </a>
-            <a
+            </Link>
+            <Link
               className="transition-colors hover:text-foreground/80 text-foreground/60"
               href="#code-example"
             >
               Code Example
-            </a>
-            <a
+            </Link>
+            <Link
               className="transition-colors hover:text-foreground/80 text-foreground/60"
               href="/docs"
             >
               Get Started
-            </a>
-            <a
+            </Link>
+            <Link
               className="transition-colors hover:text-foreground/80 text-foreground/60"
               href="/docs/learn"
             >
               Learn
-            </a>
+            </Link>
           </nav>
         </div>
         <div className="flex flex-1 items-center justify-between space-x-2 md:justify-end">
