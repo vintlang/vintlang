@@ -3,19 +3,22 @@ import { twMerge } from "tailwind-merge";
 import { Clock, Globe, Network, Type, Variable, Wand2 } from "lucide-react";
 import { usePathname, useRouter } from "next/navigation";
 import { toast } from "sonner";
+import fs from "fs";
+import path from "path";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
 export async function getMarkdownContent(file: string) {
-  const res = await fetch(
-    `https://raw.githubusercontent.com/vintlang/vintlang/main/${file}`
-  );
-  if (!res.ok) {
-    throw new Error(`Failed to fetch Markdown: ${res.statusText}`);
+  const docsDir = path.join(process.cwd(), "..", "docs");
+  const filePath = path.join(docsDir, file);
+
+  if (!fs.existsSync(filePath)) {
+    throw new Error(`Failed to fetch Markdown: Not Found`);
   }
-  const markdown = await res.text();
+
+  const markdown = fs.readFileSync(filePath, "utf-8");
   return markdown;
 }
 
@@ -24,15 +27,11 @@ export const fetchMarkdown = async (file: string) => {
     const markdown = await getMarkdownContent(file);
     return markdown;
   } catch (error: any) {
-    let errorMessage = "Error fetching content. Please try again later.";
-    if (error instanceof Error) {
-      errorMessage += `\nDetails: ${error.message}`;
-    } else if (typeof error === "string") {
-      errorMessage += `\nDetails: ${error}`;
-    }
     console.error("Failed to fetch markdown:", error);
-    window.location.href = "/docs/learn";
-    return errorMessage;
+    if (error.message.includes("Not Found")) {
+      return "The requested document could not be found. Please check the URL and try again.";
+    }
+    return "An error occurred while loading the document. Please try again later.";
   }
 };
 
