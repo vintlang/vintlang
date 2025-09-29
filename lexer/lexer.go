@@ -14,11 +14,27 @@ type Lexer struct {
 	ch           rune
 	line         int
 	column       int
+	filename     string
 	errors       []string
 }
-
 func New(input string) *Lexer {
-	l := &Lexer{input: []rune(input), line: 1, column: 0}
+	l := &Lexer{
+		input:    []rune(input),
+		line:     1,
+		column:   1,
+		filename: "main.vint", // default filename
+	}
+	l.readChar()
+	return l
+}
+
+func NewWithFilename(input string, filename string) *Lexer {
+	l := &Lexer{
+		input:    []rune(input),
+		line:     1,
+		column:   1,
+		filename: filename,
+	}
 	l.readChar()
 	return l
 }
@@ -273,11 +289,11 @@ func (l *Lexer) addErrorWithContext(msg string, line, column int) {
 func (l *Lexer) createIllegalToken(ch rune, context string) token.Token {
 	var errorMsg string
 	if ch == 0 {
-		errorMsg = fmt.Sprintf("Line %d:%d: Unexpected end of file", l.line, l.column)
+		errorMsg = fmt.Sprintf("%s:%d:%d: Unexpected end of file", l.filename, l.line, l.column)
 	} else if ch < 32 || ch > 126 {
-		errorMsg = fmt.Sprintf("Line %d:%d: Illegal character '\\x%02x' (non-printable) %s", l.line, l.column, ch, context)
+		errorMsg = fmt.Sprintf("%s:%d:%d: Illegal character '\\x%02x' (non-printable) %s", l.filename, l.line, l.column, ch, context)
 	} else {
-		errorMsg = fmt.Sprintf("Line %d:%d: Illegal character '%c' %s", l.line, l.column, ch, context)
+		errorMsg = fmt.Sprintf("%s:%d:%d: Illegal character '%c' %s", l.filename, l.line, l.column, ch, context)
 	}
 	l.addErrorWithContext(errorMsg, l.line, l.column)
 	return token.Token{Type: token.ILLEGAL, Literal: string(ch), Line: l.line, Column: l.column}
@@ -567,4 +583,12 @@ func getSuggestion(input string) string {
 		return fmt.Sprintf(" (did you mean '%s'?)", bestMatch)
 	}
 	return ""
+}
+
+func (l *Lexer) GetErrors() []string {
+	return l.errors
+}
+
+func (l *Lexer) GetFilename() string {
+	return l.filename
 }
