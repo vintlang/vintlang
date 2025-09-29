@@ -1,0 +1,14 @@
+name: Test YAML
+version: "1.0.0"
+description: "A test YAML configuration file for the Vint YAML module"
+author:
+  name: "Test Author"
+  email: "test@example.com"
+dependencies:
+  - yaml
+  - json
+  - http
+settings:
+  debug: true
+  timeout: 30
+  max_connections: 100
