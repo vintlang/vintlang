@@ -5,11 +5,11 @@ let todos = ["new","todo"]
 
 let args = cli.getArgs()
 let args_len = args.length()
-println(args_len)
+info "Length: " + string(args_len)
 
 if (args_len == 0){
-    println("Invalid options")
-    // return
+    info "Invalid options"
+    return
 } else {
     switch (args[0]) {
         case "all" {
