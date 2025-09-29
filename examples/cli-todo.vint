@@ -5,24 +5,24 @@ let todos = ["new","todo"]
 
 let args = cli.getArgs()
 let args_len = args.length()
+
 info "Length: " + string(args_len)
 
-if (args_len == 0){
+if (args_len == 0) {
     info "Invalid options"
     return
 } else {
     switch (args[0]) {
-        case "all" {
+        case "all": {
             if (todos.length() == 0) {
                 println("NO todo found")
             } else {
-                for todo in todos{
+                for todo in todos {
                     println(todo)
                 }
             }
-        
         }
-        case "add" {
+        case "add": {
             newtodo = input("Enter the todo title")
             todos.push(newtodo)
         }
