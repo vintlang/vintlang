@@ -1,0 +1,4 @@
+println("Before import")
+import time
+println("After import")
+println("Time module:", time)

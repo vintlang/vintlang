@@ -1,0 +1,3 @@
+import time
+
+println("Current time:", time.now())

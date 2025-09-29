@@ -37,6 +37,8 @@ func evalImport(node *ast.Import, env *object.Environment) object.Object {
 	importedModules = make(map[string]bool)
 
 	for alias, modName := range node.Identifiers {
+		fmt.Printf("DEBUG: Importing - alias: '%s', modName: '%s'\n", alias, modName.Value)
+		
 		// Validates module name
 		if !isValidModuleName(modName.Value) {
 			return newError(ErrInvalidModule, modName.Value)
@@ -49,8 +51,10 @@ func evalImport(node *ast.Import, env *object.Environment) object.Object {
 		importedModules[modName.Value] = true
 
 		if mod, exists := module.Mapper[modName.Value]; exists {
+			fmt.Printf("DEBUG: Found module in Mapper, defining '%s' as %+v\n", alias, mod)
 			env.Define(alias, mod)
 		} else {
+			fmt.Printf("DEBUG: Module not in Mapper, trying file import\n")
 			result := evalImportFile(alias, modName, env)
 			if isError(result) {
 				return result
