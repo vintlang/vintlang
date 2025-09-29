@@ -1,0 +1,25 @@
+// Comprehensive test suite for improved error messages in Vint
+// This file tests various error scenarios to validate descriptive error reporting
+
+// Test 1: Lexer errors - illegal characters
+let x = 5 ?
+
+// Test 2: Parser errors - missing semicolon and syntax errors 
+let y = 5 +
+
+// Test 3: Type mismatch errors
+let z = 5 + "hello"
+
+// Test 4: Undeclared variable assignment  
+undeclaredVar = 10
+
+// Test 5: Array index out of bounds
+let arr = [1, 2, 3]
+arr[10] = 5
+
+// Test 6: Function argument count errors
+type()
+type(1, 2, 3)
+
+// Test 7: Invalid operations
+let a = true * false

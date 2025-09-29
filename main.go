@@ -78,7 +78,7 @@ func main() {
 			fmt.Println(Help)
 		case "version", "-version", "--version", "-v", "v":
 			fmt.Println(versionMsg)
-		case "bundle", "-bundle", "--bundle", "-b","--b":
+		case "bundle", "-bundle", "--bundle", "-b", "--b":
 			if len(args) < 3 {
 				fmt.Println(styles.ErrorStyle.Render("Error: Please specify a Vint file to bundle"))
 				os.Exit(1)
@@ -133,14 +133,13 @@ func run(file string) {
 		}
 
 		// Passes the file contents to the REPL for execution
-		repl.Read(string(contents))
+		repl.ReadWithFilename(string(contents), file)
 	} else {
 		// Handles invalid file type
 		fmt.Println(styles.ErrorStyle.Render("'"+file+"'", "is not a correct file type. Use '.vint'"))
 		os.Exit(1)
 	}
 }
-
 
 // formatFile formats a Vint source file
 func formatFile(file string) {
@@ -156,7 +155,7 @@ func formatFile(file string) {
 	}
 
 	// Parse the file using the lexer and parser
-	l := lexer.New(string(contents))
+	l := lexer.NewWithFilename(string(contents), file)
 	p := parser.New(l)
 	program := p.ParseProgram()
 
