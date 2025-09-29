@@ -461,7 +461,7 @@ func (p *Parser) parseErrorDeclaration(errorToken token.Token) ast.Expression {
 
 		// Parse first parameter
 		if !p.curTokenIs(token.IDENT) {
-			p.addError(fmt.Sprintf("expected parameter name, got %s", p.curToken.Type))
+			p.addError(fmt.Sprintf("Line %d: Expected parameter name, got %s", p.curToken.Line, p.curToken.Type))
 			return nil
 		}
 		decl.Parameters = append(decl.Parameters, &ast.Identifier{Token: p.curToken, Value: p.curToken.Literal})
@@ -471,7 +471,7 @@ func (p *Parser) parseErrorDeclaration(errorToken token.Token) ast.Expression {
 			p.nextToken() // advance to comma
 			p.nextToken() // advance to next parameter
 			if !p.curTokenIs(token.IDENT) {
-				p.addError(fmt.Sprintf("expected parameter name, got %s", p.curToken.Type))
+				p.addError(fmt.Sprintf("Line %d: Expected parameter name, got %s", p.curToken.Line, p.curToken.Type))
 				return nil
 			}
 			decl.Parameters = append(decl.Parameters, &ast.Identifier{Token: p.curToken, Value: p.curToken.Literal})
