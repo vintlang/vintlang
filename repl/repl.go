@@ -12,6 +12,7 @@ import (
 	tea "github.com/charmbracelet/bubbletea"
 	"github.com/charmbracelet/lipgloss"
 	zone "github.com/lrstanley/bubblezone"
+	"github.com/vintlang/vintlang/docs"
 	"github.com/vintlang/vintlang/evaluator"
 	"github.com/vintlang/vintlang/lexer"
 	"github.com/vintlang/vintlang/object"
@@ -21,8 +22,7 @@ import (
 
 const PROMPT = ">>> "
 
-// go:embed docs
-var res embed.FS
+var res embed.FS = docs.Docs
 
 func Read(contents string) {
 	ReadWithFilename(contents, "<input>")
