@@ -30,6 +30,37 @@ func evalForInExpression(fie *ast.ForIn, env *object.Environment, line int) obje
 		return loopIterable(i.Next, env, fie) // Start looping through the iterable
 	default:
 		// Returns an error if the iterable object does not support iteration
-		return newError("Line %d: Operation not supported on %s", line, i.Type())
+		return newError("Line %d: for..in loop requires an iterable object, but got %s", line, i.Type())
 	}
+}
+
+func loopIterable(
+	next func() (object.Object, object.Object),
+	env *object.Environment,
+	fi *ast.ForIn,
+) object.Object {
+	var ret object.Object
+	k, v := next()
+	for k != nil {
+		loopEnv := object.NewEnclosedEnvironment(env)
+		loopEnv.Define(fi.Key, k)
+		if fi.Value != "" {
+			loopEnv.Define(fi.Value, v)
+		}
+		ret = Eval(fi.Block, loopEnv)
+		if ret != nil {
+			if ret.Type() == object.BREAK_OBJ {
+				return NULL
+			}
+			if ret.Type() == object.CONTINUE_OBJ {
+				k, v = next()
+				continue
+			}
+			if ret.Type() == object.RETURN_VALUE_OBJ {
+				return ret
+			}
+		}
+		k, v = next()
+	}
+	return NULL
 }

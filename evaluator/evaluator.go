@@ -557,7 +557,7 @@ func applyFunction(fn object.Object, args []object.Object, line int) object.Obje
 		}
 		node.(*object.Function).Env.Define("@", obj)
 		applyFunction(node, args, fn.Name.Token.Line)
-		node.(*object.Function).Env.Del("@")
+		node.(*object.Function).Del("@")
 		return obj
 
 	case *object.ErrorType:
@@ -611,87 +611,6 @@ func evalContinue(node *ast.Continue) object.Object {
 	return CONTINUE
 }
 
-// func evalForExpression(fe *ast.For, env *object.Environment) object.Object {
-// 	obj, ok := env.Get(fe.Identifier)
-// 	defer func() { // stay safe and not reassign an existing variable
-// 		if ok {
-// 			env.Set(fe.Identifier, obj)
-// 		}
-// 	}()
-// 	val := Eval(fe.StarterValue, env)
-// 	if isError(val) {
-// 		return val
-// 	}
-
-// 	env.Set(fe.StarterName.Value, val)
-
-// 	// err := Eval(fe.Starter, env)
-// 	// if isError(err) {
-// 	// 	return err
-// 	// }
-// 	for {
-// 		evaluated := Eval(fe.Condition, env)
-// 		if isError(evaluated) {
-// 			return evaluated
-// 		}
-// 		if !isTruthy(evaluated) {
-// 			break
-// 		}
-// 		res := Eval(fe.Block, env)
-// 		if isError(res) {
-// 			return res
-// 		}
-// 		if res.Type() == object.BREAK_OBJ {
-// 			break
-// 		}
-// 		if res.Type() == object.CONTINUE_OBJ {
-// 			err := Eval(fe.Closer, env)
-// 			if isError(err) {
-// 				return err
-// 			}
-// 			continue
-// 		}
-// 		if res.Type() == object.RETURN_VALUE_OBJ {
-// 			return res
-// 		}
-// 		err := Eval(fe.Closer, env)
-// 		if isError(err) {
-// 			return err
-// 		}
-// 	}
-// 	return NULL
-// }
-
-func loopIterable(
-	next func() (object.Object, object.Object),
-	env *object.Environment,
-	fi *ast.ForIn,
-) object.Object {
-	var ret object.Object
-	k, v := next()
-	for k != nil {
-		loopEnv := object.NewEnclosedEnvironment(env)
-		loopEnv.Define(fi.Key, k)
-		if fi.Value != "" {
-			loopEnv.Define(fi.Value, v)
-		}
-		ret = Eval(fi.Block, loopEnv)
-		if ret != nil {
-			if ret.Type() == object.BREAK_OBJ {
-				return NULL
-			}
-			if ret.Type() == object.CONTINUE_OBJ {
-				k, v = next()
-				continue
-			}
-			if ret.Type() == object.RETURN_VALUE_OBJ {
-				return ret
-			}
-		}
-		k, v = next()
-	}
-	return NULL
-}
 
 func evalIncludeStatement(node *ast.IncludeStatement, env *object.Environment) object.Object {
 	pathObj := Eval(node.Path, env)
@@ -785,4 +704,52 @@ func evalThrowStatement(node *ast.ThrowStatement, env *object.Environment) objec
 
 	// If it's any other type, create a regular error
 	return newError("thrown: %s", errorExpr.Inspect())
+}
+
+func evalForExpression(fe *ast.For, env *object.Environment) object.Object {
+	loopEnv := object.NewEnclosedEnvironment(env)
+
+	val := Eval(fe.StarterValue, loopEnv)
+	if isError(val) {
+		return val
+	}
+
+	loopEnv.Define(fe.StarterName.Value, val)
+
+	for {
+		evaluated := Eval(fe.Condition, loopEnv)
+		if isError(evaluated) {
+			return evaluated
+		}
+		if !isTruthy(evaluated) {
+			break
+		}
+		res := Eval(fe.Block, loopEnv)
+		if isError(res) {
+			return res
+		}
+		if res != nil {
+			switch res.Type() {
+			case object.BREAK_OBJ:
+				return NULL
+			case object.CONTINUE_OBJ:
+				if fe.Closer != nil {
+					err := Eval(fe.Closer, loopEnv)
+					if isError(err) {
+						return err
+					}
+				}
+				continue
+			case object.RETURN_VALUE_OBJ:
+				return res
+			}
+		}
+		if fe.Closer != nil {
+			err := Eval(fe.Closer, loopEnv)
+			if isError(err) {
+				return err
+			}
+		}
+	}
+	return NULL
 }
