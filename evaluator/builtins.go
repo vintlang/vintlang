@@ -31,20 +31,25 @@ func handlePrint(w io.Writer, args []object.Object, addNewline bool) object.Obje
 }
 
 var builtins = map[string]*object.Builtin{
-	"@import": {//TODO: in the future turn this this '@' 
+	"@import": { //TODO: in the future turn this this '@'
 		Fn: func(args ...object.Object) object.Object {
 			if len(args) != 1 {
-				return newError("Function '@import' requires exactly 1 argument, got %d", len(args))
+				return newError("Function '@import()' requires exactly 1 argument, got %d", len(args))
 			}
 			if args[0].Type() != object.STRING_OBJ {
-				return newError("Argument to '@import' must be a string, got %s", args[0].Type())
+				return newError("Argument to '@import()' must be a string, got %s", args[0].Type())
 			}
 
+			// TODO: Implement module loading in the future
 			// moduleName := args[0].(*object.String).Value
 			// module, err := toolkit.LoadModule(moduleName)
 			// if err != nil {
 			// 	return newError("Failed to load module '%s': %s", moduleName, err.Error())
 			// }
+
+			// For now, return NULL as placeholder
+			return NULL
+		},
 	},
 	"input": {
 		Fn: func(args ...object.Object) object.Object {
