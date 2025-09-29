@@ -57,6 +57,7 @@ config.json
 # For vint executables
 /vint
 /vint
+/vintlang
 /vendor
 
 dist/

@@ -37,6 +37,8 @@ func evalImport(node *ast.Import, env *object.Environment) object.Object {
 	importedModules = make(map[string]bool)
 
 	for alias, modName := range node.Identifiers {
+		fmt.Printf("DEBUG: Importing - alias: '%s', modName: '%s'\n", alias, modName.Value)
+
 		// Validates module name
 		if !isValidModuleName(modName.Value) {
 			return newError(ErrInvalidModule, modName.Value)
@@ -49,8 +51,10 @@ func evalImport(node *ast.Import, env *object.Environment) object.Object {
 		importedModules[modName.Value] = true
 
 		if mod, exists := module.Mapper[modName.Value]; exists {
+			fmt.Printf("DEBUG: Found module in Mapper, defining '%s' as %+v\n", alias, mod)
 			env.Define(alias, mod)
 		} else {
+			fmt.Printf("DEBUG: Module not in Mapper, trying file import\n")
 			result := evalImportFile(alias, modName, env)
 			if isError(result) {
 				return result
@@ -120,17 +124,17 @@ func findFile(name string) string {
 	if bundledFiles != nil {
 		extensions := []string{".vint", ".VINT", ".Vint"}
 		basename := name
-		
+
 		for _, ext := range extensions {
 			filename := basename + ext
-			
+
 			// Check if the exact filename exists in bundled files
 			for bundledPath := range bundledFiles {
 				if filepath.Base(bundledPath) == filename {
 					return bundledPath
 				}
 			}
-			
+
 			// Also check if the name matches without extension
 			for bundledPath := range bundledFiles {
 				bundledBase := filepath.Base(bundledPath)
@@ -141,7 +145,7 @@ func findFile(name string) string {
 			}
 		}
 	}
-	
+
 	// If not found in bundled files, use the original file search logic
 	extensions := []string{".vint", ".VINT", ".Vint"}
 	basename := name
@@ -169,7 +173,7 @@ func fileExists(file string) bool {
 func evaluateFile(file string) (object.Object, object.Object) {
 	var source []byte
 	var err error
-	
+
 	// First, check if we have bundled files and if this file is in the bundle
 	bundledFiles := bundle.GetBundledFiles()
 	if bundledFiles != nil {
@@ -185,7 +189,7 @@ func evaluateFile(file string) (object.Object, object.Object) {
 			}
 		}
 	}
-	
+
 	// If not found in bundled files, try to read from filesystem
 	if source == nil {
 		source, err = os.ReadFile(file)
