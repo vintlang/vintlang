@@ -96,11 +96,11 @@ func evalInfixExpression(operator string, left, right object.Object, line int) o
 		return evalBooleanInfixExpression(operator, left, right, line)
 
 	case left.Type() != right.Type():
-		return newError("Line %d: Types do not match: %s %s %s", line, left.Type(), operator, right.Type())
+		return newError("Line %d: Type mismatch: cannot use '%s' operator between %s and %s. Consider type conversion", line, operator, left.Type(), right.Type())
 
 	default:
-		return newError("Line %d: Unknown Operation: %s %s %s",
-			line, left.Type(), operator, right.Type())
+		return newError("Line %d: Unsupported operation: '%s' operator is not supported for %s and %s types",
+			line, operator, left.Type(), right.Type())
 	}
 }
 
@@ -141,8 +141,8 @@ func evalFloatIntegerInfixExpression(operator string, left, right object.Object,
 	case "!=":
 		return nativeBoolToBooleanObject(leftVal != rightVal)
 	default:
-		return newError("Line %d: Unknown Operation: %s %s %s",
-			line, left.Type(), operator, right.Type())
+		return newError("Line %d: Unsupported numeric operation: '%s' operator cannot be used with %s and %s",
+			line, operator, left.Type(), right.Type())
 	}
 
 	if math.Mod(val, 1) == 0 {
@@ -165,7 +165,7 @@ func evalStringInfixExpression(operator string, left, right object.Object, line 
 	case "!=":
 		return nativeBoolToBooleanObject(leftVal != rightVal)
 	default:
-		return newError("Line %d: Unknown Operation: %s %s %s", line, left.Type(), operator, right.Type())
+		return newError("Line %d: Unsupported string operation: '%s' operator cannot be used with strings", line, operator)
 	}
 }
 
@@ -179,7 +179,7 @@ func evalBooleanInfixExpression(operator string, left, right object.Object, line
 	case "||":
 		return nativeBoolToBooleanObject(leftVal || rightVal)
 	default:
-		return newError("Line %d: Unknown Operation: %s %s %s", line, left.Type(), operator, right.Type())
+		return newError("Line %d: Unsupported boolean operation: '%s' operator cannot be used with boolean values", line, operator)
 	}
 }
 
@@ -211,8 +211,8 @@ func evalFloatInfixExpression(operator string, left, right object.Object, line i
 	case "!=":
 		return nativeBoolToBooleanObject(leftVal != rightVal)
 	default:
-		return newError("Line %d: Unknown Operation: %s %s %s",
-			line, left.Type(), operator, right.Type())
+		return newError("Line %d: Unsupported float operation: '%s' operator cannot be used with floating point numbers",
+			line, operator)
 	}
 }
 
@@ -251,7 +251,7 @@ func evalIntegerInfixExpression(operator string, left, right object.Object, line
 	case "!=":
 		return nativeBoolToBooleanObject(leftVal != rightVal)
 	default:
-		return newError("Line %d: Unknown Operation: %s %s %s",
-			line, left.Type(), operator, right.Type())
+		return newError("Line %d: Unsupported integer operation: '%s' operator cannot be used with integer values",
+			line, operator)
 	}
 }
