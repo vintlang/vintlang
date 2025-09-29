@@ -662,37 +662,6 @@ func evalContinue(node *ast.Continue) object.Object {
 // 	return NULL
 // }
 
-func loopIterable(
-	next func() (object.Object, object.Object),
-	env *object.Environment,
-	fi *ast.ForIn,
-) object.Object {
-	var ret object.Object
-	k, v := next()
-	for k != nil {
-		loopEnv := object.NewEnclosedEnvironment(env)
-		loopEnv.Define(fi.Key, k)
-		if fi.Value != "" {
-			loopEnv.Define(fi.Value, v)
-		}
-		ret = Eval(fi.Block, loopEnv)
-		if ret != nil {
-			if ret.Type() == object.BREAK_OBJ {
-				return NULL
-			}
-			if ret.Type() == object.CONTINUE_OBJ {
-				k, v = next()
-				continue
-			}
-			if ret.Type() == object.RETURN_VALUE_OBJ {
-				return ret
-			}
-		}
-		k, v = next()
-	}
-	return NULL
-}
-
 func evalIncludeStatement(node *ast.IncludeStatement, env *object.Environment) object.Object {
 	pathObj := Eval(node.Path, env)
 	if isError(pathObj) {
