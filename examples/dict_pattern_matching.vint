@@ -3,12 +3,12 @@
 
 let user = {"role": "admin", "active": true}
 
-print("Testing dict pattern matching:")
+println("Testing dict pattern matching:")
 
 match user {
-    {"role": "admin"} => print("Hello, Admin!")
-    {"active": false} => print("Inactive user") 
-    _ => print("Regular user")
+    {"role": "admin"} => println("Hello, Admin!")
+    {"active": false} => println("Inactive user") 
+    _ => println("Regular user")
 }
 
 // Test multiple patterns
@@ -20,8 +20,8 @@ let users = [
 
 for u in users {
     match u {
-        {"role": "admin"} => print("Admin user found")
-        {"active": false} => print("Found inactive user")
-        _ => print("Other user type")
+        {"role": "admin"} => println("Admin user found")
+        {"active": false} => println("Found inactive user")
+        _ => println("Other user type")
     }
 }
