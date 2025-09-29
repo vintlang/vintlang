@@ -136,8 +136,8 @@ func TestForInLoopWithDictionaries(t *testing.T) {
 			map[string]int64{"a": 1, "b": 2},
 		},
 		{
-			`let dict = {"x": 10}; let result = []; for key in dict { result = result.push(key) }; result`,
-			map[string]int64{"x": 0}, // just checking key exists
+			`let dict = {"x": 10}; let result = []; for val in dict { result = result.push(val) }; result`,
+			map[string]int64{"10": 0}, // single variable gets value, not key
 		},
 	}
 
@@ -177,17 +177,21 @@ func TestForInLoopWithDictionaries(t *testing.T) {
 				}
 			}
 		case *object.Array:
-			// For key-only tests, just verify we got the keys
-			for key := range tt.expected {
+			// For value tests, verify we got the expected values
+			for expectedVal := range tt.expected {
 				found := false
 				for _, elem := range res.Elements {
-					if str, ok := elem.(*object.String); ok && str.Value == key {
+					if str, ok := elem.(*object.String); ok && str.Value == expectedVal {
+						found = true
+						break
+					}
+					if integer, ok := elem.(*object.Integer); ok && integer.Inspect() == expectedVal {
 						found = true
 						break
 					}
 				}
 				if !found {
-					t.Errorf("expected key %s not found in result array", key)
+					t.Errorf("expected value %s not found in result array", expectedVal)
 				}
 			}
 		default:
@@ -383,7 +387,7 @@ func TestNestedForInLoops(t *testing.T) {
 
 func TestForInLoopWithReturn(t *testing.T) {
 	input := `
-		let f = fun() {
+		let f = func() {
 			for i in [1, 2, 3] {
 				if (i == 2) {
 					return i;
