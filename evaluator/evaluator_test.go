@@ -262,4 +262,3 @@ func TestRangeInForLoop(t *testing.T) {
 		}
 	}
 }
- 

@@ -6,20 +6,8 @@ import (
 )
 
 func evalForInExpression(fie *ast.ForIn, env *object.Environment, line int) object.Object {
-	// Evaluates the iterable expression and checks for existing key and value identifiers in the environment
+	// Evaluates the iterable expression
 	iterable := Eval(fie.Iterable, env)
-	existingKeyIdentifier, okk := env.Get(fie.Key)     // Check if key identifier exists
-	existingValueIdentifier, okv := env.Get(fie.Value) // Check if value identifier exists
-
-	// Ensure the original key and value identifiers are restored after execution
-	defer func() {
-		if okk {
-			env.Assign(fie.Key, existingKeyIdentifier) // Restore key identifier
-		}
-		if okv {
-			env.Assign(fie.Value, existingValueIdentifier) // Restore value identifier
-		}
-	}()
 
 	// Check if the iterable object supports iteration
 	switch i := iterable.(type) {
@@ -27,7 +15,7 @@ func evalForInExpression(fie *ast.ForIn, env *object.Environment, line int) obje
 		defer func() {
 			i.Reset() // Reset iterable after iteration
 		}()
-		return loopIterable(i.Next, env, fie) // Start looping through the iterable
+		return loopIterable(i.Next, env, fie, line) // Start looping through the iterable
 	default:
 		// Returns an error if the iterable object does not support iteration
 		return newError("Line %d: for..in loop requires an iterable object, but got %s", line, i.Type())
@@ -38,6 +26,7 @@ func loopIterable(
 	next func() (object.Object, object.Object),
 	env *object.Environment,
 	fi *ast.ForIn,
+	line int,
 ) object.Object {
 	var ret object.Object
 	k, v := next()
@@ -48,6 +37,9 @@ func loopIterable(
 			loopEnv.Define(fi.Value, v)
 		}
 		ret = Eval(fi.Block, loopEnv)
+		if isError(ret) {
+			return ret
+		}
 		if ret != nil {
 			if ret.Type() == object.BREAK_OBJ {
 				return NULL
