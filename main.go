@@ -133,7 +133,7 @@ func run(file string) {
 		}
 
 		// Passes the file contents to the REPL for execution
-		repl.Read(string(contents))
+		repl.ReadWithFilename(string(contents), file)
 	} else {
 		// Handles invalid file type
 		fmt.Println(styles.ErrorStyle.Render("'"+file+"'", "is not a correct file type. Use '.vint'"))
@@ -156,7 +156,7 @@ func formatFile(file string) {
 	}
 
 	// Parse the file using the lexer and parser
-	l := lexer.New(string(contents))
+	l := lexer.NewWithFilename(string(contents), file)
 	p := parser.New(l)
 	program := p.ParseProgram()
 

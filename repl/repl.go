@@ -25,9 +25,13 @@ const PROMPT = ">>> "
 var res embed.FS
 
 func Read(contents string) {
+	ReadWithFilename(contents, "<input>")
+}
+
+func ReadWithFilename(contents string, filename string) {
 	env := object.NewEnvironment()
 
-	l := lexer.New(contents)
+	l := lexer.NewWithFilename(contents, filename)
 	p := parser.New(l)
 
 	program := p.ParseProgram()
@@ -38,6 +42,7 @@ func Read(contents string) {
 		for _, msg := range p.Errors() {
 			fmt.Println("\t" + styles.ErrorStyle.Render(msg))
 		}
+		return // Don't evaluate if there are parser errors
 	}
 	evaluated := evaluator.Eval(program, env)
 	if evaluated != nil {
@@ -81,7 +86,7 @@ func (d *dummy) executor(in string) {
 		fmt.Println(message)
 		os.Exit(0)
 	}
-	l := lexer.New(in)
+	l := lexer.NewWithFilename(in, "<repl>")
 	p := parser.New(l)
 
 	program := p.ParseProgram()

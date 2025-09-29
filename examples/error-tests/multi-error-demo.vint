@@ -1,0 +1,17 @@
+// Multi-file Error Test Demonstration
+// This demonstrates how filename inclusion helps identify errors across multiple files
+
+// Test 1: Lexer Error - Invalid Character
+let price = 100 & 50  // Invalid & operator in assignment context
+
+// Test 2: Parser Error - Missing Assignment
+let name  // Missing = and value
+
+// Test 3: Complex Expression Error  
+let result = 5 + * 3  // Missing operand before *
+
+// Test 4: Function Declaration Error
+fn hello()  // Missing parameters or empty params syntax
+
+// Test 5: String with Invalid Escape
+let message = "Hello\z World"  // Invalid escape sequence \z
