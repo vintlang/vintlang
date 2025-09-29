@@ -54,22 +54,20 @@ func (l languages) Description() string { return l.desc }
 func (l languages) FilterValue() string { return l.title }
 
 type playground struct {
-	id             string
-	output         viewport.Model
-	code           string
-	editor         textarea.Model
-	docs           viewport.Model
-	ready          bool
-	filename       string
-	content        []byte
-	mybutton       string
-	fileSelected   bool
-	toc            list.Model
-	windowWidth    int
-	windowHeight   int
-	docRenderer    *glamour.TermRenderer
-	language       string
-	languageCursor list.Model
+	id           string
+	output       viewport.Model
+	code         string
+	editor       textarea.Model
+	docs         viewport.Model
+	ready        bool
+	filename     string
+	content      []byte
+	mybutton     string
+	fileSelected bool
+	toc          list.Model
+	windowWidth  int
+	windowHeight int
+	docRenderer  *glamour.TermRenderer
 }
 
 func (pg playground) Init() tea.Cmd {
@@ -86,7 +84,6 @@ func (pg playground) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 
 	pg.editor, edCmd = pg.editor.Update(msg)
 	pg.output, opCmd = pg.output.Update(msg)
-	pg.languageCursor, _ = pg.languageCursor.Update(msg)
 	if !pg.fileSelected {
 		pg.toc, tocCmd = pg.toc.Update(msg)
 	}

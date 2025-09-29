@@ -112,18 +112,8 @@ func completer(in prompt.Document) []prompt.Suggest {
 func Docs() {
 	zone.NewGlobal()
 
-	languageChoice := []list.Item{
-		languages{title: "English", desc: "Read documentation in English", dir: "en"},
-	}
-
 	var p playground
 
-	p.languageCursor = list.New(languageChoice, list.NewDefaultDelegate(), 50, 8)
-	p.languageCursor.Title = "Chagua Lugha"
-	p.languageCursor.SetFilteringEnabled(false)
-	p.languageCursor.SetShowStatusBar(false)
-	p.languageCursor.SetShowPagination(false)
-	p.languageCursor.SetShowHelp(false)
 	p.toc = list.New(englishItems, list.NewDefaultDelegate(), 0, 0)
 	p.toc.Title = "Table of Contents"
 	p.id = zone.NewPrefix()
