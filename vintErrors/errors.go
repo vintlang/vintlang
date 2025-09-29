@@ -1,5 +1,4 @@
 package vinterrors
-package vintErrors
 
 import (
 	"fmt"
