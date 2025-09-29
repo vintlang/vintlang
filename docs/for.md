@@ -1,26 +1,25 @@
 # For Loops in vint
 
-For loops are a ffuncmental control structure in vint, used for iterating over iterable objects such as strings, arrays, and dictionaries. This page covers the syntax and usage of for loops in vint, including key-value pair iteration, and the use of break and continue statements.
+For loops are a fundamental control structure in vint, used for iterating over iterable objects such as strings, arrays, and dictionaries. This page covers the syntax and usage of for loops in vint, including key-value pair iteration, and the use of break and continue statements.
 
 ## Basic Syntax
 
 To create a for loop, use the for keyword followed by a temporary identifier (such as i or v) and the iterable object. Enclose the loop body in curly braces {}. Here's an example with a string:
 
 ```s
-jina = "tachera"
+name = "hello"
 
-for i in jina {
+for i in name {
     print(i)
 }
 ```
 Output:
 
 ```s
+h
+e
 l
-u
-g
-a
-n
+l
 o
 ```
 
@@ -31,9 +30,9 @@ o
 vint allows you to iterate over both the value or the key-value pair of an iterable. To iterate over just the values, use one temporary identifier:
 
 ```s
-kamusi = {"a": "andaa", "b": "baba"}
+dict = {"a": "apple", "b": "banana"}
 
-for v in kamusi {
+for v in dict {
     print(v)
 }
 ```
@@ -41,22 +40,23 @@ for v in kamusi {
 Output:
 
 ```s
-andaa
-baba
+apple
+banana
 ```
+
 To iterate over both the keys and the values, use two temporary identifiers:
 
 ```s
-
-for k, v in kamusi {
-    print(k + " ni " + v)
+for k, v in dict {
+    print(k + " is " + v)
 }
 ```
+
 Output:
 
 ```s
-a ni andaa
-b ni baba
+a is apple
+b is banana
 ```
 
 ### Strings
@@ -96,9 +96,9 @@ Output:
 To iterate over just the values in a list, use one temporary identifier:
 
 ```s
-majina = ["juma", "asha", "haruna"]
+names = ["alice", "bob", "charlie"]
 
-for v in majina {
+for v in names {
     print(v)
 }
 ```
@@ -106,15 +106,15 @@ for v in majina {
 Output:
 
 ```s
-juma
-asha
-haruna
+alice
+bob
+charlie
 ```
 
 To iterate over both the keys and the values in a list, use two temporary identifiers:
 
 ```s
-for i, v in majina {
+for i, v in names {
     print(i, "-", v)
 }
 ```
@@ -122,22 +122,21 @@ for i, v in majina {
 Output:
 
 ```s
-0 - juma
-1 - asha
-2 - haruna
+0 - alice
+1 - bob
+2 - charlie
 ```
 
-## Break  and Continue 
+## Break and Continue
 
-### Break 
+### Break
 
 Use the break keyword to terminate a loop:
 
 ```s
-
-for i, v in "mojo" {
+for i, v in "hello" {
     if (i == 2) {
-        print("break")
+        print("breaking loop")
         break
     }
     print(v)
@@ -147,19 +146,19 @@ for i, v in "mojo" {
 Output:
 
 ```s
-m
-o
-nimebreak
+h
+e
+breaking loop
 ```
 
-### Continue (Endelea)
+### Continue
 
 Use the continue keyword to skip a specific iteration:
 
 ```s
-for i, v in "mojo" {
+for i, v in "hello" {
     if (i == 2) {
-        print("nimeruka")
+        print("skipping iteration")
         continue
     }
     print(v)
@@ -169,8 +168,9 @@ for i, v in "mojo" {
 Output:
 
 ```s
-m
-o
-nimeruka
+h
+e
+skipping iteration
+l
 o
 ```
