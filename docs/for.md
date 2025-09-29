@@ -3,10 +3,11 @@
 For loops are a ffuncmental control structure in vint, used for iterating over iterable objects such as strings, arrays, and dictionaries. This page covers the syntax and usage of for loops in vint, including key-value pair iteration, and the use of break and continue statements.
 
 ## Basic Syntax
+
 To create a for loop, use the for keyword followed by a temporary identifier (such as i or v) and the iterable object. Enclose the loop body in curly braces {}. Here's an example with a string:
 
 ```s
-jina = "lugano"
+jina = "tachera"
 
 for i in jina {
     print(i)

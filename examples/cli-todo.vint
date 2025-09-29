@@ -1,23 +1,23 @@
 //The sample vint code for a simple cli todo app
 import cli
 
-todos = ["new","todo"]
+let todos = ["new","todo"]
 
-args = cli.getArgs()
-args_len = args.length()
-print(args_len)
+let args = cli.getArgs()
+let args_len = args.length()
+println(args_len)
 
 if (args_len == 0){
-    print("Invalid options")
+    println("Invalid options")
     // return
-}else{
+} else {
     switch (args[0]) {
         case "all" {
-            if(todos.length()==0){
-                print("NO todo found")
-            }else{
+            if (todos.length() == 0) {
+                println("NO todo found")
+            } else {
                 for todo in todos{
-                    print(todo)
+                    println(todo)
                 }
             }
         
