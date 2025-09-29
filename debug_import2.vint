@@ -1,3 +1,0 @@
-import time
-println("After import")
-println(time)
