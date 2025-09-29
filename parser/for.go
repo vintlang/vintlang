@@ -15,7 +15,7 @@ func (p *Parser) parseForExpression() ast.Expression {
 		return p.parseForInExpression(expression)
 	}
 
-	// In future will allow: for i = 0; i<10; i++ {print(i)}
+	// TODO:In future will allow: for i = 0; i<10; i++ {print(i)}
 	// expression.Identifier = p.curToken.Literal
 	// expression.StarterName = &ast.Identifier{Token: p.curToken, Value: p.curToken.Literal}
 	// if expression.StarterName == nil {
