@@ -1,24 +1,19 @@
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
 import { Clock, Globe, Network, Type, Variable, Wand2 } from "lucide-react";
-import { usePathname, useRouter } from "next/navigation";
-import { toast } from "sonner";
-import fs from "fs";
-import path from "path";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
 export async function getMarkdownContent(file: string) {
-  const docsDir = path.join(process.cwd(), "..", "docs");
-  const filePath = path.join(docsDir, file);
-
-  if (!fs.existsSync(filePath)) {
-    throw new Error(`Failed to fetch Markdown: Not Found`);
+  const res = await fetch(
+    `https://raw.githubusercontent.com/vintlang/vintlang/main/${file}`
+  );
+  if (!res.ok) {
+    throw new Error(`Failed to fetch Markdown: ${res.statusText}`);
   }
-
-  const markdown = fs.readFileSync(filePath, "utf-8");
+  const markdown = await res.text();
   return markdown;
 }
 
