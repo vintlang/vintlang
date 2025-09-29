@@ -1,0 +1,42 @@
+import yaml
+
+// Test 1: Decode simple YAML string
+print("=== Test 1: Decode YAML ===")
+let yaml_string = 'name: John Doe\nage: 30\nactive: true'
+let parsed = yaml.decode(yaml_string)
+print("Parsed YAML:", parsed)
+
+// Test 2: Decode complex YAML with arrays and objects  
+print("\n=== Test 2: Complex YAML ===")
+let complex_yaml = 'person:\n  name: Jane\n  age: 25\nskills:\n  - Python\n  - Go'
+let complex_parsed = yaml.decode(complex_yaml)
+print("Complex YAML:", complex_parsed)
+
+// Test 3: Encode object to YAML
+print("\n=== Test 3: Encode to YAML ===")
+let test_obj = {
+    "language": "Vint", 
+    "version": 1.0,
+    "features": ["modules", "yaml", "json"],
+    "active": true
+}
+let encoded = yaml.encode(test_obj)
+print("Encoded YAML:")
+print(encoded)
+
+// Test 4: Get value from YAML object
+print("\n=== Test 4: Get Values ===")
+let name = yaml.get(parsed, "name")
+print("Name from YAML:", name)
+
+let age = yaml.get(parsed, "age") 
+print("Age from YAML:", age)
+
+// Test 5: Merge two YAML objects
+print("\n=== Test 5: Merge Objects ===")
+let obj1 = yaml.decode("name: Alice\nage: 25")
+let obj2 = yaml.decode("city: NYC\ncountry: USA") 
+let merged = yaml.merge(obj1, obj2)
+print("Merged objects:", merged)
+
+print("\n=== YAML module test completed! ===")
