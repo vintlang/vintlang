@@ -251,7 +251,10 @@ func (p *Parser) curPrecedence() int {
 // error messages
 
 func (p *Parser) Errors() []string {
-	return p.errors
+	// Collect lexer errors first
+	lexerErrors := p.l.Errors()
+	allErrors := append(lexerErrors, p.errors...)
+	return allErrors
 }
 
 func (p *Parser) peekError(t token.TokenType) {
