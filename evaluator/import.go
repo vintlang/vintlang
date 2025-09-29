@@ -51,10 +51,8 @@ func evalImport(node *ast.Import, env *object.Environment) object.Object {
 		importedModules[modName.Value] = true
 
 		if mod, exists := module.Mapper[modName.Value]; exists {
-			fmt.Printf("DEBUG: Found module in Mapper, defining '%s' as %+v\n", alias, mod)
 			env.Define(alias, mod)
 		} else {
-			fmt.Printf("DEBUG: Module not in Mapper, trying file import\n")
 			result := evalImportFile(alias, modName, env)
 			if isError(result) {
 				return result
@@ -101,7 +99,7 @@ func dirExists(path string) bool {
 }
 
 func addSearchPath(path string) {
-	// Convert to absolute path if relative
+	// We Convert to absolute path if relative
 	if !filepath.IsAbs(path) {
 		absPath, err := filepath.Abs(path)
 		if err == nil {
@@ -109,7 +107,7 @@ func addSearchPath(path string) {
 		}
 	}
 
-	// Only add if not already in search paths
+	// we Only add if not already in search paths
 	for _, existingPath := range searchPaths {
 		if existingPath == path {
 			return
