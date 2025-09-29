@@ -11,19 +11,19 @@ type ErrorCode string
 const (
 	// Lexer errors (E1xx)
 	E100_ILLEGAL_CHAR     ErrorCode = "E100"
-	E101_UNTERMINATED_STR ErrorCode = "E101" 
+	E101_UNTERMINATED_STR ErrorCode = "E101"
 	E102_INVALID_ESCAPE   ErrorCode = "E102"
-	
-	// Parser errors (E2xx)  
+
+	// Parser errors (E2xx)
 	E200_UNEXPECTED_TOKEN ErrorCode = "E200"
 	E201_MISSING_TOKEN    ErrorCode = "E201"
 	E202_INVALID_SYNTAX   ErrorCode = "E202"
-	
+
 	// Semantic errors (E3xx)
-	E300_UNDECLARED_VAR   ErrorCode = "E300"
-	E301_TYPE_MISMATCH    ErrorCode = "E301" 
-	E302_INVALID_OP       ErrorCode = "E302"
-	
+	E300_UNDECLARED_VAR ErrorCode = "E300"
+	E301_TYPE_MISMATCH  ErrorCode = "E301"
+	E302_INVALID_OP     ErrorCode = "E302"
+
 	// Runtime errors (E4xx)
 	E400_INDEX_OUT_BOUNDS ErrorCode = "E400"
 	E401_INVALID_ARG      ErrorCode = "E401"
@@ -35,29 +35,29 @@ type Severity string
 
 const (
 	ERROR   Severity = "ERROR"
-	WARNING Severity = "WARNING" 
+	WARNING Severity = "WARNING"
 	INFO    Severity = "INFO"
 )
 
 // VintError represents a structured error with metadata
 type VintError struct {
-	Code     ErrorCode
-	Severity Severity
-	Message  string
-	Line     int
-	Column   int
-	Source   string
-	Context  string
+	Code       ErrorCode
+	Severity   Severity
+	Message    string
+	Line       int
+	Column     int
+	Source     string
+	Context    string
 	Suggestion string
 }
 
 // Error implements the error interface
 func (e *VintError) Error() string {
 	var builder strings.Builder
-	
+
 	// Write severity and code
 	builder.WriteString(fmt.Sprintf("[%s %s] ", e.Severity, e.Code))
-	
+
 	// Write position
 	if e.Line > 0 {
 		if e.Column > 0 {
@@ -66,15 +66,15 @@ func (e *VintError) Error() string {
 			builder.WriteString(fmt.Sprintf("Line %d: ", e.Line))
 		}
 	}
-	
+
 	// Write message
 	builder.WriteString(e.Message)
-	
+
 	// Add suggestion if available
 	if e.Suggestion != "" {
 		builder.WriteString(fmt.Sprintf(" %s", e.Suggestion))
 	}
-	
+
 	// Add context if available
 	if e.Context != "" {
 		builder.WriteString(fmt.Sprintf("\n    %s", e.Context))
@@ -82,7 +82,7 @@ func (e *VintError) Error() string {
 			builder.WriteString(fmt.Sprintf("\n    %s^", strings.Repeat(" ", e.Column-1)))
 		}
 	}
-	
+
 	return builder.String()
 }
 
