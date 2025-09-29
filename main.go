@@ -45,6 +45,7 @@ var (
     %s: Install a vint package
     %s: Run tests in current directory
     %s: Format vint code
+    %s: Open interactive documentation
     %s: Show vint version
     %s: Show this help message
 `,
@@ -55,6 +56,7 @@ var (
 		styles.HelpStyle.Bold(true).Render("vint get package"),
 		styles.HelpStyle.Bold(true).Render("vint test"),
 		styles.HelpStyle.Bold(true).Render("vint fmt filename.vint"),
+		styles.HelpStyle.Bold(true).Render("vint docs"),
 		styles.HelpStyle.Bold(true).Render("vint version"),
 		styles.HelpStyle.Bold(true).Render("vint help")))
 )

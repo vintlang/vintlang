@@ -11,12 +11,12 @@ import (
 	tea "github.com/charmbracelet/bubbletea"
 	"github.com/charmbracelet/glamour"
 	"github.com/charmbracelet/lipgloss"
+	zone "github.com/lrstanley/bubblezone"
 	"github.com/vintlang/vintlang/evaluator"
 	"github.com/vintlang/vintlang/lexer"
 	"github.com/vintlang/vintlang/object"
 	"github.com/vintlang/vintlang/parser"
 	"github.com/vintlang/vintlang/styles"
-	zone "github.com/lrstanley/bubblezone"
 )
 
 var (
@@ -44,14 +44,6 @@ type item struct {
 func (i item) Title() string       { return i.title }
 func (i item) Description() string { return i.desc }
 func (i item) FilterValue() string { return i.title }
-
-type languages struct {
-	title, desc, dir string
-}
-
-func (l languages) Title() string       { return l.title }
-func (l languages) Description() string { return l.desc }
-func (l languages) FilterValue() string { return l.title }
 
 type playground struct {
 	id           string
@@ -95,24 +87,10 @@ func (pg playground) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 			fmt.Println(pg.editor.Value())
 			return pg, tea.Quit
 		case tea.KeyEnter:
-			if pg.language == "" {
-				i, ok := pg.languageCursor.SelectedItem().(languages)
-				if ok {
-					pg.language = i.dir
-					if pg.language == "en" {
-						pg.toc = list.New(englishItems, list.NewDefaultDelegate(), pg.windowWidth/2-4, pg.windowHeight-8)
-						pg.toc.Title = "Table of Contents"
-					} else {
-						pg.toc = list.New(kiswahiliItems, list.NewDefaultDelegate(), pg.windowWidth/2-4, pg.windowHeight-8)
-						pg.toc.Title = "Yaliyomo"
-					}
-					return pg, tea.EnterAltScreen
-				}
-			}
 			i, ok := pg.toc.SelectedItem().(item)
 			if ok {
 				pg.filename = i.filename
-				content, err := res.ReadFile("docs/" + pg.language + "/" + pg.filename)
+				content, err := res.ReadFile("docs/en/" + pg.filename)
 				if err != nil {
 					panic(err)
 				}
@@ -124,17 +102,13 @@ func (pg playground) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 
 				pg.docs.SetContent(str + "\n\n\n\n\n\n")
 
-				if err != nil {
-					panic(err)
-				}
 				pg.fileSelected = true
 				pg.editor.Focus()
 			}
 		case tea.KeyCtrlR:
 			if strings.Contains(pg.editor.Value(), "input") {
-				pg.output.SetContent(styles.HelpStyle.Italic(false).Render("Samahani, huwezi kuimport `input()` for sasa."))
+				pg.output.SetContent(styles.HelpStyle.Italic(false).Render("Sorry, you cannot use input() function in this playground."))
 			} else {
-				// this is just for the output will find a better solution
 				code := strings.ReplaceAll(pg.editor.Value(), "print", "_print")
 				pg.code = code
 				env := object.NewEnvironment()
@@ -169,15 +143,13 @@ func (pg playground) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	case tea.MouseMsg:
 		if zone.Get(pg.id + "docs").InBounds(msg) {
 			pg.docs, docCmd = pg.docs.Update(msg)
-
 		}
 		switch msg.Type {
 		case tea.MouseLeft:
 			if zone.Get(pg.id + "run").InBounds(msg) {
 				if strings.Contains(pg.editor.Value(), "input") {
-					pg.output.SetContent(styles.HelpStyle.Italic(false).Render("Samahani, huwezi kuimport `input()` for sasa."))
+					pg.output.SetContent(styles.HelpStyle.Italic(false).Render("Sorry, you cannot use input() function in this playground."))
 				} else {
-					// this is just for the output will find a better solution
 					code := strings.ReplaceAll(pg.editor.Value(), "print", "_print")
 					pg.code = code
 					env := object.NewEnvironment()
@@ -202,40 +174,28 @@ func (pg playground) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 						}
 					}
 				}
-
 			}
 		}
 	case tea.WindowSizeMsg:
 		if !pg.ready {
-			// editor code
 			pg.editor = textarea.New()
-			if pg.language == "en" {
-				pg.editor.Placeholder = "Write vint code here..."
-			} else {
-				pg.editor.Placeholder = "Write vint code here..."
-			}
-
+			pg.editor.Placeholder = "Write vint code here..."
 			pg.editor.Prompt = "┃ "
 			pg.editor.SetWidth(msg.Width / 2)
 			pg.editor.SetHeight((2 * msg.Height / 3) - 4)
-
 			pg.editor.CharLimit = 0
 			pg.editor.FocusedStyle.CursorLine = lipgloss.NewStyle()
 			pg.editor.FocusedStyle.Base = lipgloss.NewStyle().PaddingTop(2).
 				Border(lipgloss.RoundedBorder()).
 				BorderForeground(lipgloss.Color("238"))
-
 			pg.editor.ShowLineNumbers = true
 
-			// output of editor
 			pg.output = viewport.New(msg.Width/2, msg.Height/3-4)
 			pg.output.Style = lipgloss.NewStyle().PaddingLeft(3)
 			var output string
 			output = "Your code output will be displayed here..." + strings.Repeat(" ", msg.Width-6)
-
 			pg.output.SetContent(output)
 
-			// documentation
 			pg.docs = viewport.New(msg.Width/2, msg.Height)
 			pg.docs.KeyMap = viewport.KeyMap{
 				Up: key.NewBinding(
@@ -259,17 +219,10 @@ func (pg playground) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 			}
 
 			pg.docRenderer = renderer
-
 			pg.toc.SetSize(msg.Width, msg.Height-8)
 			pg.windowWidth = msg.Width
 			pg.windowHeight = msg.Height
-
-			if pg.language == "en" {
-				pg.mybutton = activeButtonStyle.Width(msg.Width / 2).Height(1).Align(lipgloss.Center).Render("Run (CTRL + R)")
-			} else {
-
-				pg.mybutton = activeButtonStyle.Width(msg.Width / 2).Height(1).Align(lipgloss.Center).Render("Run (CTRL + R)")
-			}
+			pg.mybutton = activeButtonStyle.Width(msg.Width / 2).Height(1).Align(lipgloss.Center).Render("Run (CTRL + R)")
 			pg.ready = true
 
 		} else {
@@ -295,11 +248,7 @@ func (pg playground) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 			pg.docs.Width = msg.Width / 2
 
 			pg.docs.SetContent(str + "\n\n\n\n\n\n")
-			if pg.language == "en" {
-				pg.mybutton = activeButtonStyle.Width(msg.Width / 2).Height(1).Align(lipgloss.Center).Render("Run (CTRL + R)")
-			} else {
-				pg.mybutton = activeButtonStyle.Width(msg.Width / 2).Height(1).Align(lipgloss.Center).Render("Run (CTRL + R)")
-			}
+			pg.mybutton = activeButtonStyle.Width(msg.Width / 2).Height(1).Align(lipgloss.Center).Render("Run (CTRL + R)")
 			pg.toc.SetSize(msg.Width, msg.Height-8)
 			pg.windowWidth = msg.Width
 			pg.windowHeight = msg.Height
@@ -310,11 +259,8 @@ func (pg playground) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 }
 
 func (pg playground) View() string {
-	if pg.language == "" {
-		return lipgloss.NewStyle().PaddingTop(1).Render(pg.languageCursor.View())
-	}
 	if !pg.ready {
-		return "\n Tunakuandalia....."
+		return "\n  Preparing documentation..."
 	}
 	var docs string
 	if !pg.fileSelected {
