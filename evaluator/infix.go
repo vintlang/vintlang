@@ -9,10 +9,10 @@ import (
 
 func evalInfixExpression(operator string, left, right object.Object, line int) object.Object {
 	if right == nil {
-		return newError("Line %d: You made a mistake here", line)
+		return newError("Line %d: Right operand is missing or invalid for '%s' operator", line, operator)
 	}
 	if left == nil {
-		return newError("Line %d: You made a mistake here", line)
+		return newError("Line %d: Left operand is missing or invalid for '%s' operator", line, operator)
 	}
 	switch {
 

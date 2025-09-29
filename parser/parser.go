@@ -372,7 +372,7 @@ func (p *Parser) parseRangeExpression(left ast.Expression) ast.Expression {
 }
 
 func (p *Parser) noInfixParseFnError(t token.TokenType) {
-	msg := fmt.Sprintf("Line %d: Failed to be parsed %s", p.curToken.Line, t)
+	msg := fmt.Sprintf("Line %d: Unexpected token '%s' - cannot be used in this context. Check syntax for operators, expressions, or missing semicolon", p.curToken.Line, t)
 	p.errors = append(p.errors, msg)
 }
 
