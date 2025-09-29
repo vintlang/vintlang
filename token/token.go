@@ -97,16 +97,16 @@ const (
 	FATAL    = "FATAL"
 	CRITICAL = "CRITICAL"
 	LOG      = "LOG"
-	
+
 	// Async/Concurrency Keywords
-	ASYNC    = "ASYNC"
-	AWAIT    = "AWAIT"
-	GO       = "GO"
-	CHAN     = "CHAN"
-	
+	ASYNC = "ASYNC"
+	AWAIT = "AWAIT"
+	GO    = "GO"
+	CHAN  = "CHAN"
+
 	// Error Handling Keywords
-	THROW    = "THROW"
-	
+	THROW = "THROW"
+
 	// Capitalized Declaratives
 	INFO_CAP     = "INFO_CAP"
 	DEBUG_CAP    = "DEBUG_CAP"
@@ -119,11 +119,11 @@ const (
 	FATAL_CAP    = "FATAL_CAP"
 	CRITICAL_CAP = "CRITICAL_CAP"
 	LOG_CAP      = "LOG_CAP"
-	
+
 	// Type system tokens
-	AS    = "AS"    // type casting: x as int
-	IS    = "IS"    // type checking: x is int
-	PIPE  = "|"     // union types: int | string
+	AS   = "AS" // type casting: x as int
+	IS   = "IS" // type checking: x is int
+	PIPE = "|"  // union types: int | string
 )
 
 var keywords = map[string]TokenType{
