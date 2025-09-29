@@ -1,0 +1,4 @@
+// Test enhanced error messages with column numbers and context
+let x = 5 ? 10
+let y = "hello" @ "world"
+let z = 5 + 

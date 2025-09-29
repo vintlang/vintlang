@@ -1,0 +1,29 @@
+// Final comprehensive error message validation suite
+println("=== Testing Improved Vint Error Messages ===")
+
+// Test 1: Lexer Error - Illegal character with helpful suggestion
+println("Test 1: Lexer illegal character")
+let result1 = 5 ? 10  // Should suggest ?? operator
+
+// Test 2: Parser Error - Missing operand  
+println("Test 2: Parser missing operand")  
+let result2 = 5 +    // Missing right operand
+
+// Test 3: Type mismatch with conversion suggestion
+println("Test 3: Type mismatch")
+let result3 = 42 + "world"  // Should suggest type conversion
+
+// Test 4: Undeclared variable with declaration hint
+println("Test 4: Undeclared variable")
+undeclaredVariable = 100  // Should suggest using 'let'
+
+// Test 5: Array bounds with specific indices  
+println("Test 5: Array bounds")
+let myArray = [1, 2, 3]
+myArray[999] = 5  // Should show bounds information
+
+// Test 6: Function argument validation
+println("Test 6: Function arguments")
+type(1, 2, 3)  // Should show expected vs actual args
+
+println("=== Error Message Testing Complete ===")

@@ -1,0 +1,8 @@
+// This file tests filename inclusion in error messages
+
+// Lexer errors:
+let invalid_char = "hello @ world"  // @ is invalid character
+
+// Parser errors:  
+let missing_equals 5  // missing = operator
+fn missing_params()  // missing parameter syntax

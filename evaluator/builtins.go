@@ -35,7 +35,7 @@ var builtins = map[string]*object.Builtin{
 		Fn: func(args ...object.Object) object.Object {
 
 			if len(args) > 1 {
-				return newError("Sorry, this function accepts 0 or 1 argument, you provided %d", len(args))
+				return newError("Function '%s' accepts 0 or 1 argument, got %d", "input", len(args))
 			}
 
 			if len(args) > 0 && args[0].Type() != object.STRING_OBJ {
@@ -96,7 +96,7 @@ var builtins = map[string]*object.Builtin{
 	"type": {
 		Fn: func(args ...object.Object) object.Object {
 			if len(args) != 1 {
-				return newError("Sorry, this function requires 1 argument, you provided %d", len(args))
+				return newError("Function 'type' requires exactly 1 argument, got %d", len(args))
 			}
 
 			return &object.String{Value: string(args[0].Type())}

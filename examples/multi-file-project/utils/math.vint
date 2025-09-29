@@ -1,0 +1,27 @@
+// math.vint - Mathematical utility functions
+// This package file contains math operations with intentional errors
+
+package mathutils {
+    // ERROR 1: Invalid parameter syntax
+    let calculate_sum = func(a b) {  // Missing comma between parameters
+        return a + b
+    }
+
+    // ERROR 2: Invalid operator in assignment
+    let calculate_product = func(x, y) {
+        let result @ x * y  // Invalid @ operator instead of =
+        return result
+    }
+
+    // ERROR 3: Missing closing brace
+    let calculate_difference = func(a, b) {
+        let diff = a - b
+        return diff
+    // Missing closing brace here
+
+    // ERROR 4: Invalid character in identifier  
+    let calculate_power = func(base, exp) {
+        let power$ = 1  // Invalid $ character in variable name
+        return power$
+    }
+}

@@ -1,0 +1,5 @@
+// Test single character lexer errors
+let x = 5 ? 10
+
+// Test more invalid operations  
+let y = 10 @ 5

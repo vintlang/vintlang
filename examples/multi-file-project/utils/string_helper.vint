@@ -1,0 +1,28 @@
+// string_helper.vint - String manipulation utilities  
+// This include file has various syntax errors for testing
+
+package stringutils {
+    // ERROR 1: Invalid string literal
+    let format_message = func(prefix, suffix) {
+        let message = prefix + " - " + suffix
+        return message + "unterminated string  // Missing closing quote
+    }
+
+    // ERROR 2: Invalid function declaration
+    let process_text = func(text  // Missing closing parenthesis and opening brace
+        let processed = "Processed: " + text
+        return processed
+    }
+
+    // ERROR 3: Invalid assignment operator
+    let capitalize = func(str) {
+        let result := str.toUpperCase()  // Invalid := operator (should be =)
+        return result  
+    }
+
+    // ERROR 4: Invalid expression structure
+    let join_strings = func(parts) {
+        let combined = parts[0] + + parts[1]  // Invalid double + operator
+        return combined
+    }
+}

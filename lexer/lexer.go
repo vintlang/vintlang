@@ -1,8 +1,9 @@
 package lexer
 
 import (
+	"fmt"
 	"strings"
-	
+
 	"github.com/vintlang/vintlang/token"
 )
 
@@ -12,10 +13,29 @@ type Lexer struct {
 	readPosition int
 	ch           rune
 	line         int
+	column       int
+	filename     string
+	errors       []string
 }
 
 func New(input string) *Lexer {
-	l := &Lexer{input: []rune(input), line: 1}
+	l := &Lexer{
+		input:    []rune(input),
+		line:     1,
+		column:   1,
+		filename: "main.vint", // default filename
+	}
+	l.readChar()
+	return l
+}
+
+func NewWithFilename(input string, filename string) *Lexer {
+	l := &Lexer{
+		input:    []rune(input),
+		line:     1,
+		column:   1,
+		filename: filename,
+	}
 	l.readChar()
 	return l
 }
@@ -29,6 +49,13 @@ func (l *Lexer) readChar() {
 
 	l.position = l.readPosition
 	l.readPosition += 1
+
+	if l.ch == '\n' {
+		l.line += 1
+		l.column = 0
+	} else {
+		l.column += 1
+	}
 }
 
 func (l *Lexer) NextToken() token.Token {
@@ -187,7 +214,7 @@ func (l *Lexer) NextToken() token.Token {
 			l.readChar()
 			tok = token.Token{Type: token.NULL_COALESCE, Literal: string(ch) + string(l.ch), Line: l.line}
 		} else {
-			tok = newToken(token.ILLEGAL, l.line, l.ch)
+			tok = l.createIllegalToken(l.ch, "- single '?' is not a valid operator, did you mean '??'?")
 		}
 	case rune('#'):
 		if l.peekChar() == rune('!') && l.line == 1 {
@@ -213,7 +240,7 @@ func (l *Lexer) NextToken() token.Token {
 			tok = l.readDecimal()
 			return tok
 		} else {
-			tok = newToken(token.ILLEGAL, l.line, l.ch)
+			tok = l.createIllegalToken(l.ch, "- unexpected character, not a valid token")
 		}
 	}
 
@@ -223,6 +250,54 @@ func (l *Lexer) NextToken() token.Token {
 
 func newToken(tokenType token.TokenType, line int, ch rune) token.Token {
 	return token.Token{Type: tokenType, Literal: string(ch), Line: line}
+}
+
+func (l *Lexer) newTokenWithColumn(tokenType token.TokenType, literal string) token.Token {
+	return token.Token{Type: tokenType, Literal: literal, Line: l.line, Column: l.column}
+}
+
+// Errors returns all lexer errors
+func (l *Lexer) Errors() []string {
+	return l.errors
+}
+
+// addError adds an error message to the lexer
+func (l *Lexer) addError(msg string) {
+	l.errors = append(l.errors, msg)
+}
+
+// getSourceLine returns the source line for error context
+func (l *Lexer) getSourceLine(lineNum int) string {
+	lines := strings.Split(string(l.input), "\n")
+	if lineNum > 0 && lineNum <= len(lines) {
+		return lines[lineNum-1]
+	}
+	return ""
+}
+
+// addErrorWithContext adds an error with source code context
+func (l *Lexer) addErrorWithContext(msg string, line, column int) {
+	sourceLine := l.getSourceLine(line)
+	if sourceLine != "" {
+		contextMsg := fmt.Sprintf("%s\n    %s\n    %s^", msg, sourceLine, strings.Repeat(" ", column-1))
+		l.errors = append(l.errors, contextMsg)
+	} else {
+		l.errors = append(l.errors, msg)
+	}
+}
+
+// createIllegalToken creates an ILLEGAL token and adds a descriptive error message
+func (l *Lexer) createIllegalToken(ch rune, context string) token.Token {
+	var errorMsg string
+	if ch == 0 {
+		errorMsg = fmt.Sprintf("%s:%d:%d: Unexpected end of file", l.filename, l.line, l.column)
+	} else if ch < 32 || ch > 126 {
+		errorMsg = fmt.Sprintf("%s:%d:%d: Illegal character '\\x%02x' (non-printable) %s", l.filename, l.line, l.column, ch, context)
+	} else {
+		errorMsg = fmt.Sprintf("%s:%d:%d: Illegal character '%c' %s", l.filename, l.line, l.column, ch, context)
+	}
+	l.addErrorWithContext(errorMsg, l.line, l.column)
+	return token.Token{Type: token.ILLEGAL, Literal: string(ch), Line: l.line, Column: l.column}
 }
 
 func (l *Lexer) readIdentifier() string {
@@ -312,10 +387,14 @@ func (l *Lexer) skipMultiLineComment() {
 }
 
 func (l *Lexer) readString() string {
+	startLine := l.line
 	var str strings.Builder
 	for {
 		l.readChar()
-		if l.ch == '"' || l.ch == 0 {
+		if l.ch == '"' {
+			break
+		} else if l.ch == 0 {
+			l.addError(fmt.Sprintf("Line %d: Unterminated string literal started on line %d", l.line, startLine))
 			break
 		} else if l.ch == '\\' {
 			switch l.peekChar() {
@@ -370,8 +449,8 @@ func (l *Lexer) readString() string {
 					}
 				}
 				// Convert to Unicode code point
-				value := hexValue(hexDigits[0])*4096 + hexValue(hexDigits[1])*256 + 
-				         hexValue(hexDigits[2])*16 + hexValue(hexDigits[3])
+				value := hexValue(hexDigits[0])*4096 + hexValue(hexDigits[1])*256 +
+					hexValue(hexDigits[2])*16 + hexValue(hexDigits[3])
 				str.WriteRune(rune(value))
 			default:
 				// Unknown escape sequence, keep the backslash
@@ -388,10 +467,14 @@ func (l *Lexer) readString() string {
 }
 
 func (l *Lexer) readSingleQuoteString() string {
+	startLine := l.line
 	var str string
 	for {
 		l.readChar()
-		if l.ch == '\'' || l.ch == 0 {
+		if l.ch == '\'' {
+			break
+		} else if l.ch == 0 {
+			l.addError(fmt.Sprintf("Line %d: Unterminated single-quoted string literal started on line %d", l.line, startLine))
 			break
 		} else if l.ch == '\\' {
 			switch l.peekChar() {
@@ -431,4 +514,82 @@ func hexValue(ch rune) int {
 		return int(ch - 'A' + 10)
 	}
 	return 0
+}
+
+// Smart suggestions for common typos and mistakes
+var commonKeywords = []string{
+	"let", "const", "if", "else", "for", "while", "func", "return",
+	"true", "false", "null", "import", "switch", "case", "default",
+	"break", "continue", "defer", "match", "in",
+}
+
+// levenshteinDistance calculates the edit distance between two strings
+func levenshteinDistance(a, b string) int {
+	if len(a) == 0 {
+		return len(b)
+	}
+	if len(b) == 0 {
+		return len(a)
+	}
+
+	matrix := make([][]int, len(a)+1)
+	for i := range matrix {
+		matrix[i] = make([]int, len(b)+1)
+		matrix[i][0] = i
+	}
+	for j := 0; j <= len(b); j++ {
+		matrix[0][j] = j
+	}
+
+	for i := 1; i <= len(a); i++ {
+		for j := 1; j <= len(b); j++ {
+			cost := 0
+			if a[i-1] != b[j-1] {
+				cost = 1
+			}
+			matrix[i][j] = min(
+				matrix[i-1][j]+1,      // deletion
+				matrix[i][j-1]+1,      // insertion
+				matrix[i-1][j-1]+cost, // substitution
+			)
+		}
+	}
+	return matrix[len(a)][len(b)]
+}
+
+func min(a, b, c int) int {
+	if a < b && a < c {
+		return a
+	}
+	if b < c {
+		return b
+	}
+	return c
+}
+
+// getSuggestion returns a "did you mean?" suggestion for unknown identifiers
+func getSuggestion(input string) string {
+	bestMatch := ""
+	bestDistance := 3 // Only suggest if distance <= 3
+
+	for _, keyword := range commonKeywords {
+		distance := levenshteinDistance(input, keyword)
+		if distance < bestDistance {
+			bestDistance = distance
+			bestMatch = keyword
+		}
+	}
+
+	if bestMatch != "" {
+		return fmt.Sprintf(" (did you mean '%s'?)", bestMatch)
+	}
+	return ""
+}
+
+func (l *Lexer) GetErrors() []string {
+	return l.errors
+}
+
+func (l *Lexer) GetFilename() string {
+	return l.filename
 }
