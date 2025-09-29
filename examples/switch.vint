@@ -1,13 +1,11 @@
-n = 1
+let n = 1
 switch (n) {
     case 1 {
-
-        print("is",n)
+        println("is",n)
         break
     }
     default {
-
-        print("is not")
-        break
+        println("is not")
+        // break
     }
 } 

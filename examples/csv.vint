@@ -9,7 +9,7 @@ const data_to_write = [
     ["3", "Charlie", "75"]
 ]
 
- let filename = "scores.csv"
+let filename = "scores.csv"
 csv.write(filename, data_to_write)
 
 println("Wrote data to", filename)
