@@ -2,8 +2,9 @@ package module
 
 import (
 	"fmt"
-	"gopkg.in/yaml.v3"
+
 	"github.com/vintlang/vintlang/object"
+	"gopkg.in/yaml.v3"
 )
 
 var YAMLFunctions = map[string]object.ModuleFunction{}
