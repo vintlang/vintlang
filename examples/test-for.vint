@@ -2,6 +2,6 @@ let todos = ["new", "todo"]
 
 println("Your TODOs:", todos)
 println(type(todos))
-for todo in todos {
-    println(todo)
+for tach in todos {
+    println(tach)
 }

@@ -1,0 +1,14 @@
+//The sample vint code for a simple cli todo app
+
+let todos = ["Buy groceries", "Walk the dog", "Finish project"]
+
+let command = "all"  // Simulate command line argument for now
+
+if (command == "all") {
+    println("Your TODOs:")
+    for todo in todos {
+        println("- " + todo)
+    }
+} else {
+    println("Unknown command: " + command)
+}

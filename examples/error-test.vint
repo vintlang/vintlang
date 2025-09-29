@@ -1,0 +1,10 @@
+// Test various error scenarios to validate improved error messages
+
+// Test type mismatch
+let x = 5 + "hello"
+
+// Test unsupported operation
+let y = true * false
+
+// Test invalid identifier
+unknownVariable = 10
