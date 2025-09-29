@@ -22,24 +22,24 @@ const (
 // ColorizedError formats an error message with colors
 func ColorizedError(errorType, message, sourceLine string, line, column int) string {
 	var builder strings.Builder
-	
+
 	// Error header with color
-	builder.WriteString(fmt.Sprintf("%s%s[ERROR]%s %sLine %d:%d:%s ", 
+	builder.WriteString(fmt.Sprintf("%s%s[ERROR]%s %sLine %d:%d:%s ",
 		Bold, Red, Reset, Yellow, line, column, Reset))
-	
+
 	// Error message
 	builder.WriteString(message)
 	builder.WriteString("\n")
-	
+
 	// Source line with highlighting
 	if sourceLine != "" {
 		builder.WriteString(fmt.Sprintf("%s    %s%s\n", Blue, sourceLine, Reset))
 		if column > 0 {
-			builder.WriteString(fmt.Sprintf("%s    %s^%s\n", 
+			builder.WriteString(fmt.Sprintf("%s    %s^%s\n",
 				Red, strings.Repeat(" ", column-1), Reset))
 		}
 	}
-	
+
 	return builder.String()
 }
 
@@ -52,10 +52,10 @@ func CheckColorSupport() bool {
 func main() {
 	if CheckColorSupport() {
 		fmt.Println("✅ Terminal supports colors!")
-		
+
 		// Demo colorized error
 		demo := ColorizedError(
-			"SYNTAX", 
+			"SYNTAX",
 			"Illegal character '?' - single '?' is not a valid operator, did you mean '??'?",
 			"let x = 5 ? 10",
 			2, 11,
