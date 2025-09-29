@@ -76,6 +76,8 @@ func main() {
 		switch args[1] {
 		case "help", "-help", "--help", "-h":
 			fmt.Println(Help)
+		case "docs", "-docs", "--docs", "-d":
+			// docs, err := os.ReadFile("docs/index.md")
 		case "version", "-version", "--version", "-v", "v":
 			fmt.Println(versionMsg)
 		case "bundle", "-bundle", "--bundle", "-b", "--b":
