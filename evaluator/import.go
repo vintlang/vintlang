@@ -37,8 +37,6 @@ func evalImport(node *ast.Import, env *object.Environment) object.Object {
 	importedModules = make(map[string]bool)
 
 	for alias, modName := range node.Identifiers {
-		fmt.Printf("DEBUG: Importing - alias: '%s', modName: '%s'\n", alias, modName.Value)
-
 		// Validates module name
 		if !isValidModuleName(modName.Value) {
 			return newError(ErrInvalidModule, modName.Value)
