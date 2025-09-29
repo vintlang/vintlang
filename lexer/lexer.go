@@ -1,6 +1,7 @@
 package lexer
 
 import (
+	"fmt"
 	"strings"
 	
 	"github.com/vintlang/vintlang/token"
@@ -12,6 +13,7 @@ type Lexer struct {
 	readPosition int
 	ch           rune
 	line         int
+	errors       []string
 }
 
 func New(input string) *Lexer {
@@ -187,7 +189,7 @@ func (l *Lexer) NextToken() token.Token {
 			l.readChar()
 			tok = token.Token{Type: token.NULL_COALESCE, Literal: string(ch) + string(l.ch), Line: l.line}
 		} else {
-			tok = newToken(token.ILLEGAL, l.line, l.ch)
+			tok = l.createIllegalToken(l.ch, "- single '?' is not a valid operator, did you mean '??'?")
 		}
 	case rune('#'):
 		if l.peekChar() == rune('!') && l.line == 1 {
@@ -213,7 +215,7 @@ func (l *Lexer) NextToken() token.Token {
 			tok = l.readDecimal()
 			return tok
 		} else {
-			tok = newToken(token.ILLEGAL, l.line, l.ch)
+			tok = l.createIllegalToken(l.ch, "- unexpected character, not a valid token")
 		}
 	}
 
@@ -223,6 +225,30 @@ func (l *Lexer) NextToken() token.Token {
 
 func newToken(tokenType token.TokenType, line int, ch rune) token.Token {
 	return token.Token{Type: tokenType, Literal: string(ch), Line: line}
+}
+
+// Errors returns all lexer errors
+func (l *Lexer) Errors() []string {
+	return l.errors
+}
+
+// addError adds an error message to the lexer
+func (l *Lexer) addError(msg string) {
+	l.errors = append(l.errors, msg)
+}
+
+// createIllegalToken creates an ILLEGAL token and adds a descriptive error message
+func (l *Lexer) createIllegalToken(ch rune, context string) token.Token {
+	var errorMsg string
+	if ch == 0 {
+		errorMsg = fmt.Sprintf("Line %d: Unexpected end of file", l.line)
+	} else if ch < 32 || ch > 126 {
+		errorMsg = fmt.Sprintf("Line %d: Illegal character '\\x%02x' (non-printable) %s", l.line, ch, context)
+	} else {
+		errorMsg = fmt.Sprintf("Line %d: Illegal character '%c' %s", l.line, ch, context)
+	}
+	l.addError(errorMsg)
+	return newToken(token.ILLEGAL, l.line, ch)
 }
 
 func (l *Lexer) readIdentifier() string {
@@ -312,10 +338,14 @@ func (l *Lexer) skipMultiLineComment() {
 }
 
 func (l *Lexer) readString() string {
+	startLine := l.line
 	var str strings.Builder
 	for {
 		l.readChar()
-		if l.ch == '"' || l.ch == 0 {
+		if l.ch == '"' {
+			break
+		} else if l.ch == 0 {
+			l.addError(fmt.Sprintf("Line %d: Unterminated string literal started on line %d", l.line, startLine))
 			break
 		} else if l.ch == '\\' {
 			switch l.peekChar() {
@@ -388,10 +418,14 @@ func (l *Lexer) readString() string {
 }
 
 func (l *Lexer) readSingleQuoteString() string {
+	startLine := l.line
 	var str string
 	for {
 		l.readChar()
-		if l.ch == '\'' || l.ch == 0 {
+		if l.ch == '\'' {
+			break
+		} else if l.ch == 0 {
+			l.addError(fmt.Sprintf("Line %d: Unterminated single-quoted string literal started on line %d", l.line, startLine))
 			break
 		} else if l.ch == '\\' {
 			switch l.peekChar() {

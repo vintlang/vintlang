@@ -442,7 +442,7 @@ func (p *Parser) parseErrorDeclaration(errorToken token.Token) ast.Expression {
 
 	// Parse the error type name (current token should be IDENT)
 	if !p.curTokenIs(token.IDENT) {
-		p.addError(fmt.Sprintf("expected identifier for error type name, got %s", p.curToken.Type))
+		p.addError(fmt.Sprintf("Line %d: Expected identifier for error type name, got %s", p.curToken.Line, p.curToken.Type))
 		return nil
 	}
 
