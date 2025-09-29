@@ -11,6 +11,8 @@ import (
 	"os"
 	"os/exec"
 	"runtime"
+
+	"github.com/vintlang/vintlang/config"
 	// "strings"
 )
 
@@ -199,6 +201,7 @@ func Get(pkg string) {
 type VintConfig struct {
 	Name        string `json:"name"`
 	Version     string `json:"version"`
+	VintVersion string `json:"vint,omitempty"`
 	Description string `json:"description"`
 }
 
@@ -234,6 +237,7 @@ func createProject(projectName string) {
 	var vintConfig = VintConfig{
 		Name:        projectName,
 		Version:     "1.0.0",
+		VintVersion:  config.VINT_VERSION,
 		Description: "I love VintLang",
 	}
 

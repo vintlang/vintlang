@@ -1,30 +1,30 @@
 //The sample vint code for a simple cli todo app
 import cli
 
-todos = ["new","todo"]
+let todos = ["new", "todo"]
 
-args = cli.getArgs()
-args_len = args.length()
-print(args_len)
+let args = args()
+let args_len = len(args)
+info "Length: " + string(args_len)
 
-if (args_len == 0){
-    print("Invalid options")
-    // return
-}else{
-    switch (args[0]) {
-        case "all" {
-            if(todos.length()==0){
-                print("NO todo found")
-            }else{
-                for todo in todos{
-                    print(todo)
-                }
-            }
-        
-        }
-        case "add" {
-            newtodo = input("Enter the todo title")
-            todos.push(newtodo)
+if (args_len == 0) {
+    info "Invalid options"
+    return
+}
+
+if (args[0] == "all") {
+    if (len(todos) == 0) {
+        println("NO todo found")
+    } else {
+        for todo in todos {
+            println(todo)
         }
     }
+} else if (args[0] == "add") {
+    let newtodo = input("Enter the todo title: ")
+    todos.push(newtodo)
+    info "Added: " + newtodo
+} else {
+    info "Unknown command: " + args[0]
+    info "Available commands: all, add"
 }

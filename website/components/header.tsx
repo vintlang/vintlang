@@ -22,9 +22,30 @@ export default function Header() {
             <span className="hidden font-bold sm:inline-block">VintLang</span>
           </Link>
           <nav className="flex items-center space-x-6 text-sm font-medium">
-            <a className="transition-colors hover:text-foreground/80 text-foreground/60" href="#features">Features</a>
-            <a className="transition-colors hover:text-foreground/80 text-foreground/60" href="#code-example">Code Example</a>
-            <a className="transition-colors hover:text-foreground/80 text-foreground/60" href="/docs">Get Started</a>
+            <Link
+              className="transition-colors hover:text-foreground/80 text-foreground/60"
+              href="#features"
+            >
+              Features
+            </Link>
+            <Link
+              className="transition-colors hover:text-foreground/80 text-foreground/60"
+              href="#code-example"
+            >
+              Code Example
+            </Link>
+            <Link
+              className="transition-colors hover:text-foreground/80 text-foreground/60"
+              href="/docs"
+            >
+              Get Started
+            </Link>
+            <Link
+              className="transition-colors hover:text-foreground/80 text-foreground/60"
+              href="/docs/learn"
+            >
+              Learn
+            </Link>
           </nav>
         </div>
         <div className="flex flex-1 items-center justify-between space-x-2 md:justify-end">
@@ -33,7 +54,7 @@ export default function Header() {
             size="icon"
             aria-label="Toggle theme"
             className="mr-6"
-            onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
+            onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
           >
             <Sun className="h-6 w-6 rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
             <Moon className="absolute h-6 w-6 rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
@@ -42,6 +63,6 @@ export default function Header() {
         </div>
       </div>
     </header>
-  )
+  );
 }
 

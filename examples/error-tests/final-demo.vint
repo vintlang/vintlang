@@ -1,0 +1,28 @@
+// FILENAME ERROR TESTING - COMPREHENSIVE DEMONSTRATION
+//
+// This file demonstrates the filename-in-error-messages feature
+// Compare error messages before and after this enhancement:
+//
+// BEFORE: Line 15: Expected next token to be =, got INT instead
+// AFTER:  examples/error-tests/final-demo.vint:15: Expected next token to be =, got INT instead
+//
+// This helps developers identify which specific file contains errors
+// in multi-file projects
+
+// ERROR 1: Lexer Error - Illegal Character (Line:Column format)
+let variable_with_invalid_char = "text" @ "more"  // @ is illegal
+
+// ERROR 2: Parser Error - Missing Assignment Operator  
+let missing_assignment 42  // Missing = 
+
+// ERROR 3: Parser Error - Invalid Token in Expression Context
+let result = 5 + }  // } cannot start an expression
+
+// ERROR 4: Parser Error - Function Declaration Issues
+fn test_function(  // Missing closing parenthesis and parameters
+
+// The filename prefix in error messages helps developers:
+// 1. Quickly locate problematic files in large projects
+// 2. Distinguish between similar errors in different files  
+// 3. Integrate better with IDEs and error reporting tools
+// 4. Improve debugging workflow efficiency

@@ -1,0 +1,7 @@
+let todos = ["new", "todo"]
+
+println("Your TODOs:", todos)
+println(type(todos))
+for tach in todos {
+    println(tach)
+}

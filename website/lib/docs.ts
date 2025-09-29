@@ -1,6 +1,5 @@
 import { DocItem, CategorizedDocs, DocsRegistry } from "./docs-types";
 
-// Import the pre-generated static docs registry
 // This will be generated at build time by scripts/build-docs.js
 let _docsRegistry: DocsRegistry | null = null;
 
@@ -13,7 +12,6 @@ async function loadDocsRegistry(): Promise<DocsRegistry> {
   }
 
   try {
-    // Try to import the generated JSON file
     const registry = await import("./docs-generated.json");
     _docsRegistry = registry.default || registry;
     return _docsRegistry as DocsRegistry;

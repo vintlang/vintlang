@@ -137,7 +137,7 @@ func New(l *lexer.Lexer) *Parser {
 	p.registerPrefix(token.CRITICAL, p.parseCriticalStatement)
 	p.registerPrefix(token.LOG, p.parseLogStatement)
 	p.registerPrefix(token.REPEAT, p.parseRepeatStatement)
-	
+
 	// Capitalized declaratives
 	p.registerPrefix(token.INFO_CAP, p.parseInfoStatement)
 	p.registerPrefix(token.DEBUG_CAP, p.parseDebugStatement)
@@ -150,12 +150,12 @@ func New(l *lexer.Lexer) *Parser {
 	p.registerPrefix(token.FATAL_CAP, p.parseFatalStatement)
 	p.registerPrefix(token.CRITICAL_CAP, p.parseCriticalStatement)
 	p.registerPrefix(token.LOG_CAP, p.parseLogStatement)
-	
+
 	// Async/Concurrency prefix parsers
 	p.registerPrefix(token.ASYNC, p.parseAsyncFunctionLiteral)
 	p.registerPrefix(token.AWAIT, p.parseAwaitExpression)
 	p.registerPrefix(token.CHAN, p.parseChannelExpression)
-	
+
 	// Error handling prefix parsers
 	p.registerPrefix(token.THROW, p.parseThrowStatement)
 
@@ -249,37 +249,39 @@ func (p *Parser) curPrecedence() int {
 }
 
 // error messages
-
 func (p *Parser) Errors() []string {
-	return p.errors
+	// Collect lexer errors first
+	lexerErrors := p.l.Errors()
+	allErrors := append(lexerErrors, p.errors...)
+	return allErrors
 }
 
 func (p *Parser) peekError(t token.TokenType) {
-	msg := fmt.Sprintf("Line %d: Expected next token to be %s, got %s instead", p.peekToken.Line, t, p.peekToken.Type)
+	msg := fmt.Sprintf("%s:%d: Expected next token to be %s, got %s instead", p.l.GetFilename(), p.peekToken.Line, t, p.peekToken.Type)
 	p.errors = append(p.errors, msg)
 }
 
 func (p *Parser) addErrorWithContext(msg string, line int) {
-	contextMsg := fmt.Sprintf("Line %d: %s", line, msg)
+	contextMsg := fmt.Sprintf("%s:%d: %s", p.l.GetFilename(), line, msg)
 	p.errors = append(p.errors, contextMsg)
 }
 
 // Synchronize parser after error - skip to next statement boundary
 func (p *Parser) synchronize() {
 	p.nextToken()
-	
+
 	for p.curToken.Type != token.EOF {
 		if p.curToken.Type == token.SEMICOLON {
 			p.nextToken()
 			return
 		}
-		
+
 		switch p.curToken.Type {
-		case token.LET, token.CONST, token.FUNCTION, token.IF, token.WHILE, 
-			 token.FOR, token.RETURN, token.MATCH, token.SWITCH:
+		case token.LET, token.CONST, token.FUNCTION, token.IF, token.WHILE,
+			token.FOR, token.RETURN, token.MATCH, token.SWITCH:
 			return
 		}
-		
+
 		p.nextToken()
 	}
 }
@@ -340,7 +342,7 @@ func (p *Parser) parsePrefixExpression() ast.Expression {
 }
 
 func (p *Parser) noPrefixParseFnError(t token.TokenType) {
-	msg := fmt.Sprintf("Line %d: No prefix parse function for %s found", p.curToken.Line, t)
+	msg := fmt.Sprintf("%s:%d: Unexpected token '%s' - this token cannot start an expression. Check for missing operands or invalid syntax", p.l.GetFilename(), p.curToken.Line, t)
 	p.errors = append(p.errors, msg)
 }
 
@@ -372,7 +374,7 @@ func (p *Parser) parseRangeExpression(left ast.Expression) ast.Expression {
 }
 
 func (p *Parser) noInfixParseFnError(t token.TokenType) {
-	msg := fmt.Sprintf("Line %d: Failed to be parsed %s", p.curToken.Line, t)
+	msg := fmt.Sprintf("%s:%d: Unexpected token '%s' - cannot be used in this context. Check syntax for operators, expressions, or missing semicolon", p.l.GetFilename(), p.curToken.Line, t)
 	p.errors = append(p.errors, msg)
 }
 
@@ -421,13 +423,13 @@ func (p *Parser) parseWarnStatement() ast.Expression {
 func (p *Parser) parseErrorStatement() ast.Expression {
 	errorToken := p.curToken
 	p.nextToken()
-	
+
 	// Check if this is an error type declaration: error TypeName(param1, param2)
 	if p.curTokenIs(token.IDENT) && p.peekTokenIs(token.LPAREN) {
 		// This is an error type declaration
 		return p.parseErrorDeclaration(errorToken)
 	}
-	
+
 	// This is a regular declarative error statement: error "message"
 	stmt := &ast.ErrorStatement{Token: errorToken}
 	stmt.Value = p.parseExpression(LOWEST)
@@ -439,63 +441,63 @@ func (p *Parser) parseErrorStatement() ast.Expression {
 
 func (p *Parser) parseErrorDeclaration(errorToken token.Token) ast.Expression {
 	decl := &ast.ErrorDeclaration{Token: errorToken}
-	
+
 	// Parse the error type name (current token should be IDENT)
 	if !p.curTokenIs(token.IDENT) {
-		p.addError(fmt.Sprintf("expected identifier for error type name, got %s", p.curToken.Type))
+		p.addError(fmt.Sprintf("%s:%d: Expected identifier for error type name, got %s", p.l.GetFilename(), p.curToken.Line, p.curToken.Type))
 		return nil
 	}
-	
+
 	decl.Name = &ast.Identifier{Token: p.curToken, Value: p.curToken.Literal}
-	
+
 	// Expect opening parenthesis
 	if !p.expectPeek(token.LPAREN) {
 		return nil
 	}
-	
+
 	// Parse parameters
 	decl.Parameters = []*ast.Identifier{}
-	
+
 	if !p.peekTokenIs(token.RPAREN) {
 		p.nextToken() // advance to first parameter
-		
+
 		// Parse first parameter
 		if !p.curTokenIs(token.IDENT) {
-			p.addError(fmt.Sprintf("expected parameter name, got %s", p.curToken.Type))
+			p.addError(fmt.Sprintf("%s:%d: Expected parameter name, got %s", p.l.GetFilename(), p.curToken.Line, p.curToken.Type))
 			return nil
 		}
 		decl.Parameters = append(decl.Parameters, &ast.Identifier{Token: p.curToken, Value: p.curToken.Literal})
-		
+
 		// Parse additional parameters
 		for p.peekTokenIs(token.COMMA) {
 			p.nextToken() // advance to comma
 			p.nextToken() // advance to next parameter
 			if !p.curTokenIs(token.IDENT) {
-				p.addError(fmt.Sprintf("expected parameter name, got %s", p.curToken.Type))
+				p.addError(fmt.Sprintf("%s:%d: Expected parameter name, got %s", p.l.GetFilename(), p.curToken.Line, p.curToken.Type))
 				return nil
 			}
 			decl.Parameters = append(decl.Parameters, &ast.Identifier{Token: p.curToken, Value: p.curToken.Literal})
 		}
 	}
-	
+
 	// Expect closing parenthesis
 	if !p.expectPeek(token.RPAREN) {
 		return nil
 	}
-	
+
 	return decl
 }
 
 func (p *Parser) parseThrowStatement() ast.Expression {
 	stmt := &ast.ThrowStatement{Token: p.curToken}
 	p.nextToken()
-	
+
 	stmt.ErrorExpr = p.parseExpression(LOWEST)
-	
+
 	if p.peekTokenIs(token.SEMICOLON) {
 		p.nextToken()
 	}
-	
+
 	return stmt
 }
 

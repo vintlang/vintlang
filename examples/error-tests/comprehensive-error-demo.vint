@@ -1,0 +1,13 @@
+// Enhanced Error Message Test Suite
+// This demonstrates all our error message improvements
+
+println("=== Vint Enhanced Error Messages Demo ===")
+
+// Test 1: Simple illegal character with column position
+let test1 = 5?
+
+// Test 2: Multiple errors in one file
+let test2 = "unclosed string
+let test3 = unknown_variable
+
+println("Demo complete - check errors above!")

@@ -1,0 +1,15 @@
+// config.vint - Configuration file with errors
+// This file simulates a configuration module
+
+// ERROR 1: Invalid constant declaration
+const APP_NAME  // Missing = and value
+
+// ERROR 2: Invalid number format  
+const PORT = 080$  // Invalid $ in number
+
+// ERROR 3: Missing semicolon equivalent (in Vint context)
+const DEBUG = true
+const VERSION = "1.0.0" invalid_token  // Invalid token after valid statement
+
+// ERROR 4: Invalid boolean operator
+const ENABLED = true && & false  // Invalid && & combination
