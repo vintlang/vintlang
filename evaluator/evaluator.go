@@ -201,7 +201,7 @@ func Eval(node ast.Node, env *object.Environment) object.Object {
 		if ident, ok := node.Left.(*ast.Identifier); ok {
 			newVal, ok := env.Assign(ident.Value, value)
 			if !ok {
-				return newError("assignment to undeclared variable '%s'", ident.Value)
+				return newError("Line %d: Assignment to undeclared variable '%s'. Use 'let' to declare the variable first", node.Token.Line, ident.Value)
 			}
 			return newVal
 		} else if ie, ok := node.Left.(*ast.IndexExpression); ok {
@@ -217,11 +217,11 @@ func Eval(node ast.Node, env *object.Environment) object.Object {
 				}
 				if idx, ok := index.(*object.Integer); ok {
 					if int(idx.Value) >= len(array.Elements) {
-						return newError("Index exceeds the number of elements")
+						return newError("Line %d: Array index %d out of bounds. Array length is %d", node.Token.Line, idx.Value, len(array.Elements))
 					}
 					array.Elements[idx.Value] = value
 				} else {
-					return newError("Cannot perform this operation with %#v", index)
+					return newError("Line %d: Array index must be an integer, got %s", node.Token.Line, index.Type())
 				}
 			} else if hash, ok := obj.(*object.Dict); ok {
 				key := Eval(ie.Index, env)

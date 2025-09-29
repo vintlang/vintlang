@@ -3,7 +3,7 @@ package lexer
 import (
 	"fmt"
 	"strings"
-	
+
 	"github.com/vintlang/vintlang/token"
 )
 
@@ -400,8 +400,8 @@ func (l *Lexer) readString() string {
 					}
 				}
 				// Convert to Unicode code point
-				value := hexValue(hexDigits[0])*4096 + hexValue(hexDigits[1])*256 + 
-				         hexValue(hexDigits[2])*16 + hexValue(hexDigits[3])
+				value := hexValue(hexDigits[0])*4096 + hexValue(hexDigits[1])*256 +
+					hexValue(hexDigits[2])*16 + hexValue(hexDigits[3])
 				str.WriteRune(rune(value))
 			default:
 				// Unknown escape sequence, keep the backslash
