@@ -13,11 +13,12 @@ type Lexer struct {
 	readPosition int
 	ch           rune
 	line         int
+	column       int
 	errors       []string
 }
 
 func New(input string) *Lexer {
-	l := &Lexer{input: []rune(input), line: 1}
+	l := &Lexer{input: []rune(input), line: 1, column: 0}
 	l.readChar()
 	return l
 }
