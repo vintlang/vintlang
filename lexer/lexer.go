@@ -17,6 +17,7 @@ type Lexer struct {
 	filename     string
 	errors       []string
 }
+
 func New(input string) *Lexer {
 	l := &Lexer{
 		input:    []rune(input),

@@ -1,0 +1,21 @@
+// main.vint - Entry point of multi-file project
+// This file demonstrates filename error reporting in a project context
+
+include "utils/math.vint"
+include "utils/string_helper.vint" 
+
+// ERROR 1: Syntax error in main file
+let main_variable & "invalid syntax"  // Invalid & operator
+
+// ERROR 2: Missing assignment operator  
+let project_name "Vint Multi-File Test"  // Missing =
+
+fn main() {
+    let result = calculate_sum(10, 20)  // This function is in math.vint
+    let message = format_message("Hello", "World")  // This function is in string_helper.vint
+    
+    // ERROR 3: Invalid function call syntax
+    let bad_call = calculate_sum(10 20)  // Missing comma between arguments
+    
+    return result
+}

@@ -78,7 +78,7 @@ func main() {
 			fmt.Println(Help)
 		case "version", "-version", "--version", "-v", "v":
 			fmt.Println(versionMsg)
-		case "bundle", "-bundle", "--bundle", "-b","--b":
+		case "bundle", "-bundle", "--bundle", "-b", "--b":
 			if len(args) < 3 {
 				fmt.Println(styles.ErrorStyle.Render("Error: Please specify a Vint file to bundle"))
 				os.Exit(1)
@@ -140,7 +140,6 @@ func run(file string) {
 		os.Exit(1)
 	}
 }
-
 
 // formatFile formats a Vint source file
 func formatFile(file string) {

@@ -248,7 +248,7 @@ func (p *Parser) curPrecedence() int {
 	return LOWEST
 }
 
-// error messages 
+// error messages
 func (p *Parser) Errors() []string {
 	// Collect lexer errors first
 	lexerErrors := p.l.Errors()

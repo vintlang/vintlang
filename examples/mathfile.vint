@@ -1,4 +1,4 @@
-package mathfile{//will change this to module
+package mathfile{//FIXME:will change this to module
     let sum = func(a,b){
         return a+b
     }
