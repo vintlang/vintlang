@@ -32,7 +32,7 @@ func (l *Lexer) readChar() {
 
 	l.position = l.readPosition
 	l.readPosition += 1
-	
+
 	if l.ch == '\n' {
 		l.line += 1
 		l.column = 0
@@ -531,8 +531,8 @@ func levenshteinDistance(a, b string) int {
 				cost = 1
 			}
 			matrix[i][j] = min(
-				matrix[i-1][j]+1,    // deletion
-				matrix[i][j-1]+1,    // insertion
+				matrix[i-1][j]+1,      // deletion
+				matrix[i][j-1]+1,      // insertion
 				matrix[i-1][j-1]+cost, // substitution
 			)
 		}
