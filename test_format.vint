@@ -1,0 +1,3 @@
+println("Testing format function");
+let result = format("Hello %s", "World");
+println("Format result:", result);
