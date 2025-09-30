@@ -1,0 +1,16 @@
+println("=== Testing import with various whitespace scenarios ===");
+
+// Test with spaces before parentheses
+let osModule = import   ("os");
+println("import   ('os'):", osModule);
+
+// Test with newlines and tabs (should still be function call)
+let mathModule = import
+    ("math");
+println("import\\n    ('math'):", mathModule);
+
+// Test import statement with spaces
+import    time;
+println("import    time;:", time);
+
+println("=== Whitespace tests completed ===");

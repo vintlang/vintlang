@@ -1,0 +1,13 @@
+println("=== Testing import() function with lookahead ===");
+
+// Test import function call
+println("Testing import('os'):");
+let osModule = import("os");
+println("Result:", osModule);
+
+// Test import statement  
+println("Testing import statement:");
+import math;
+println("Math module imported:", math);
+
+println("=== Tests completed ===");

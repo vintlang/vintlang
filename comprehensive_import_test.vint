@@ -1,0 +1,41 @@
+println("=== Comprehensive import() function and statement test ===");
+println();
+
+// Test 1: import() function calls
+println("1. Testing import() function calls:");
+let osModule = import("os");
+println("   import('os'):", osModule);
+
+println('Time now:', import("time").now());
+
+let mathModule = import("math");  
+println("   import('math'):", mathModule);
+
+let stringModule = import("string");
+println("   import('string'):", stringModule);
+
+// Test 2: import statements
+println();
+println("2. Testing import statements:");
+import time;
+println("   import time; ->", time);
+
+import crypto;
+println("   import crypto; ->", crypto);
+
+// Test 3: Mixed usage
+println();
+println("3. Testing mixed usage:");
+let jsonFunc = import("json");
+import regex;
+println("   Function call result:", jsonFunc);
+println("   Statement result:", regex);
+
+// Test 4: Error cases
+println();
+println("4. Testing error cases:");
+let badModule = import("nonexistent");
+println("   import('nonexistent'):", badModule);
+
+println();
+println("=== All tests completed successfully! ===");
