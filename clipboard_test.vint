@@ -1,0 +1,46 @@
+import clipboard
+
+// Test writing different types to clipboard
+println("Testing clipboard module...")
+
+// Write string
+clipboard.write("Hello from VintLang!")
+println("Written to clipboard:", clipboard.read())
+
+// Write number
+clipboard.write(42)
+println("Number written to clipboard:", clipboard.read())
+
+// Write float
+clipboard.write(3.14159)
+println("Float written to clipboard:", clipboard.read())
+
+// Write boolean
+clipboard.write(true)
+println("Boolean written to clipboard:", clipboard.read())
+
+// Check if clipboard has content
+if (clipboard.hasContent()) {
+{
+    println("Clipboard has content!")
+} 
+else 
+{
+    println("Clipboard is empty")
+}
+
+// Clear clipboard
+clipboard.clear()
+println("Clipboard cleared")
+
+// Check again
+if (clipboard.hasContent() )
+{
+    println("Clipboard still has content:", clipboard.read())
+} 
+else 
+{
+    println("Clipboard is now empty")
+}
+
+println("Clipboard module test completed!")
