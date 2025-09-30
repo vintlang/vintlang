@@ -149,5 +149,3 @@ func (ls *LogStatement) TokenLiteral() string { return ls.Token.Literal }
 func (ls *LogStatement) String() string {
 	return fmt.Sprintf("log %s", ls.Value.String())
 }
-
-

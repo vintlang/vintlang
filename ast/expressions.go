@@ -3,6 +3,7 @@ package ast
 import (
 	"bytes"
 	"strings"
+
 	"github.com/vintlang/vintlang/token"
 )
 
@@ -482,7 +483,7 @@ func (re *RangeExpression) String() string {
 // Match expressions
 type MatchCase struct {
 	Token   token.Token
-	Pattern Expression  // Dict pattern or "_" for wildcard
+	Pattern Expression // Dict pattern or "_" for wildcard
 	Block   *BlockStatement
 }
 
@@ -490,11 +491,11 @@ func (mc *MatchCase) expressionNode()      {}
 func (mc *MatchCase) TokenLiteral() string { return mc.Token.Literal }
 func (mc *MatchCase) String() string {
 	var out bytes.Buffer
-	
+
 	out.WriteString(mc.Pattern.String())
 	out.WriteString(" => ")
 	out.WriteString(mc.Block.String())
-	
+
 	return out.String()
 }
 
@@ -511,15 +512,14 @@ func (me *MatchExpression) String() string {
 	out.WriteString("match ")
 	out.WriteString(me.Value.String())
 	out.WriteString(" {\n")
-	
+
 	for _, c := range me.Cases {
 		if c != nil {
 			out.WriteString(c.String())
 			out.WriteString("\n")
 		}
 	}
-	
+
 	out.WriteString("}")
 	return out.String()
 }
-
