@@ -3,6 +3,7 @@ package ast
 import (
 	"bytes"
 	"strings"
+
 	"github.com/vintlang/vintlang/token"
 )
 
@@ -138,8 +139,6 @@ func (gs *GoStatement) String() string {
 	return out.String()
 }
 
-
-
 // PackageBlock represents package block statements
 type PackageBlock struct {
 	Token      token.Token
@@ -160,9 +159,9 @@ func (pb *PackageBlock) String() string {
 
 // ErrorDeclaration represents custom error type definitions like: error FileNotFound(path)
 type ErrorDeclaration struct {
-	Token      token.Token    // the 'error' token
-	Name       *Identifier    // error type name
-	Parameters []*Identifier  // parameter names
+	Token      token.Token   // the 'error' token
+	Name       *Identifier   // error type name
+	Parameters []*Identifier // parameter names
 }
 
 func (ed *ErrorDeclaration) statementNode()       {}
@@ -170,25 +169,25 @@ func (ed *ErrorDeclaration) expressionNode()      {}
 func (ed *ErrorDeclaration) TokenLiteral() string { return ed.Token.Literal }
 func (ed *ErrorDeclaration) String() string {
 	var out bytes.Buffer
-	
+
 	params := []string{}
 	for _, p := range ed.Parameters {
 		params = append(params, p.String())
 	}
-	
+
 	out.WriteString("error ")
 	out.WriteString(ed.Name.String())
 	out.WriteString("(")
 	out.WriteString(strings.Join(params, ", "))
 	out.WriteString(")")
-	
+
 	return out.String()
 }
 
 // ThrowStatement represents throw statements like: throw FileNotFound("/missing.txt")
 type ThrowStatement struct {
-	Token     token.Token  // the 'throw' token
-	ErrorExpr Expression   // the error expression to throw
+	Token     token.Token // the 'throw' token
+	ErrorExpr Expression  // the error expression to throw
 }
 
 func (ts *ThrowStatement) statementNode()       {}
@@ -196,11 +195,11 @@ func (ts *ThrowStatement) expressionNode()      {}
 func (ts *ThrowStatement) TokenLiteral() string { return ts.Token.Literal }
 func (ts *ThrowStatement) String() string {
 	var out bytes.Buffer
-	
+
 	out.WriteString("throw ")
 	if ts.ErrorExpr != nil {
 		out.WriteString(ts.ErrorExpr.String())
 	}
-	
+
 	return out.String()
 }

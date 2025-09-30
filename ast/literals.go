@@ -3,6 +3,7 @@ package ast
 import (
 	"bytes"
 	"strings"
+
 	"github.com/vintlang/vintlang/token"
 )
 
