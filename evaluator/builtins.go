@@ -15,7 +15,7 @@ func GetAllBuiltinFunctions() map[string]*object.Builtin {
 	return builtinpkg.GetAllBuiltins()
 }
 
-// Initialize builtins variable to maintain compatibility
+// We initialize builtins variable to maintain compatibility
 // This will be populated once all the builtin packages are imported
 func init() {
 	// The builtins will be automatically registered by importing the subpackages
