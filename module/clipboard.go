@@ -111,3 +111,28 @@ func clipboardHasContent(args []object.Object, defs map[string]object.Object) ob
 
 	return &object.Boolean{Value: len(text) > 0}
 }
+
+func clipboardAll(args []object.Object, defs map[string]object.Object) object.Object {
+	if len(args) != 0 {
+		return ErrorMessage(
+			"clipboard", "all",
+			"No arguments",
+			fmt.Sprintf("%d arguments", len(args)),
+			`clipboard.all() -> returns array with current clipboard content`,
+		)
+	}
+
+	text, err := clipboard.ReadAll()
+	if err != nil {
+		return &object.Error{Message: fmt.Sprintf("Failed to read from clipboard: %s", err.Error())}
+	}
+
+	// We create an array with the current clipboard content
+	// Since system clipboard only holds one item at a time, we return array with single item
+	elements := []object.Object{}
+	if len(text) > 0 {
+		elements = append(elements, &object.String{Value: text})
+	}
+
+	return &object.Array{Elements: elements}
+}

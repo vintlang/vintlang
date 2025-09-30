@@ -42,6 +42,15 @@ Checks if the clipboard contains any content.
 - `false` if clipboard is empty
 - Error object if operation fails
 
+### `clipboard.all()`
+Returns all clipboard data as an array. Since the system clipboard typically holds only one piece of text at a time, this returns an array containing the current clipboard content.
+
+**Parameters:** None
+
+**Returns:**
+- Array containing clipboard content (empty array if clipboard is empty)
+- Error object if operation fails
+
 ## Examples
 
 ### Basic Usage
@@ -63,9 +72,17 @@ if clipboard.hasContent() {
     print("Clipboard is empty")
 }
 
+// Get all clipboard data as array
+let allData = clipboard.all()
+print("All clipboard data:", allData)
+
 // Clear clipboard
 clipboard.clear()
 print("Clipboard cleared")
+
+// Check all data after clear
+let emptyData = clipboard.all()
+print("Clipboard after clear:", emptyData)
 ```
 
 ### Writing Different Data Types
