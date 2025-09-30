@@ -14,6 +14,7 @@ func init() {
 	ClipboardFunctions["read"] = clipboardRead
 	ClipboardFunctions["clear"] = clipboardClear
 	ClipboardFunctions["hasContent"] = clipboardHasContent
+	ClipboardFunctions["all"] = clipboardAll
 }
 
 func clipboardWrite(args []object.Object, defs map[string]object.Object) object.Object {
