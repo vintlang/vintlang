@@ -777,13 +777,13 @@ var builtins = map[string]*object.Builtin{
 		},
 	},
 
-	"importModule": {
+	"load": {
 		Fn: func(args ...object.Object) object.Object {
 			if len(args) != 1 {
-				return newError("Function 'importModule()' requires exactly 1 argument, got %d", len(args))
+				return newError("Function 'load()' requires exactly 1 argument, got %d", len(args))
 			}
 			if args[0].Type() != object.STRING_OBJ {
-				return newError("Argument to 'importModule()' must be a string, got %s", args[0].Type())
+				return newError("Argument to 'load()' must be a string, got %s", args[0].Type())
 			}
 
 			moduleName := args[0].(*object.String).Value
@@ -802,10 +802,9 @@ var builtins = map[string]*object.Builtin{
 			// to avoid circular dependencies with import.go
 			// For now, return an error indicating file-based imports aren't supported
 			// in the builtin version yet
-			return newError("Module '%s' not found in built-in modules. File-based module import not yet supported in importModule() builtin. Use 'import' statement instead for file modules.", moduleName)
+			return newError("Module '%s' not found in built-in modules. File-based module import not yet supported in load() builtin. Use 'import' statement instead for file modules.", moduleName)
 		},
 	},
-	
 }
 
 func getIntValue(obj object.Object) (int64, error) {
