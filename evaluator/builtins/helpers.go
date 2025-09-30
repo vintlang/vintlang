@@ -1,10 +1,8 @@
 package builtins
 
 import (
-	"bufio"
 	"fmt"
 	"io"
-	"os"
 	"strconv"
 	"strings"
 
