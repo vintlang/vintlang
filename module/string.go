@@ -221,13 +221,13 @@ func indexOf(args []object.Object, defs map[string]object.Object) object.Object 
 func startsWith(args []object.Object, defs map[string]object.Object) object.Object {
 	if len(defs) != 0 || len(args) != 2 || args[0].Type() != object.STRING_OBJ || args[1].Type() != object.STRING_OBJ {
 		return ErrorMessage(
-			"string", "startsWith", 
-			"string, prefix", 
+			"string", "startsWith",
+			"string, prefix",
 			formatArgs(args),
 			`string.startsWith("hello", "he") -> true`,
 		)
 	}
-	
+
 	str := args[0].(*object.String).Value
 	prefix := args[1].(*object.String).Value
 	return &object.Boolean{Value: strings.HasPrefix(str, prefix)}
@@ -236,13 +236,13 @@ func startsWith(args []object.Object, defs map[string]object.Object) object.Obje
 func endsWith(args []object.Object, defs map[string]object.Object) object.Object {
 	if len(defs) != 0 || len(args) != 2 || args[0].Type() != object.STRING_OBJ || args[1].Type() != object.STRING_OBJ {
 		return ErrorMessage(
-			"string", "endsWith", 
-			"string, suffix", 
+			"string", "endsWith",
+			"string, suffix",
 			formatArgs(args),
 			`string.endsWith("hello", "lo") -> true`,
 		)
 	}
-	
+
 	str := args[0].(*object.String).Value
 	suffix := args[1].(*object.String).Value
 	return &object.Boolean{Value: strings.HasSuffix(str, suffix)}
@@ -251,13 +251,13 @@ func endsWith(args []object.Object, defs map[string]object.Object) object.Object
 func chr(args []object.Object, defs map[string]object.Object) object.Object {
 	if len(defs) != 0 || len(args) != 1 || args[0].Type() != object.INTEGER_OBJ {
 		return ErrorMessage(
-			"string", "chr", 
-			"integer (ASCII/Unicode code)", 
+			"string", "chr",
+			"integer (ASCII/Unicode code)",
 			formatArgs(args),
 			`string.chr(65) -> "A"`,
 		)
 	}
-	
+
 	code := args[0].(*object.Integer).Value
 	return &object.String{Value: string(rune(code))}
 }
@@ -265,18 +265,18 @@ func chr(args []object.Object, defs map[string]object.Object) object.Object {
 func ord(args []object.Object, defs map[string]object.Object) object.Object {
 	if len(defs) != 0 || len(args) != 1 || args[0].Type() != object.STRING_OBJ {
 		return ErrorMessage(
-			"string", "ord", 
-			"single character string", 
+			"string", "ord",
+			"single character string",
 			formatArgs(args),
 			`string.ord("A") -> 65`,
 		)
 	}
-	
+
 	s := args[0].(*object.String).Value
 	if len(s) != 1 {
 		return ErrorMessage(
-			"string", "ord", 
-			"single character string", 
+			"string", "ord",
+			"single character string",
 			formatArgs(args),
 			`string.ord("A") -> 65`,
 		)
