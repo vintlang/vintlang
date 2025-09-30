@@ -87,7 +87,18 @@ func registerCoreBuiltins() {
 
 			formatArgs := make([]interface{}, len(args)-1)
 			for i, arg := range args[1:] {
-				formatArgs[i] = arg.Inspect()
+				switch obj := arg.(type) {
+				case *object.Integer:
+					formatArgs[i] = obj.Value
+				case *object.Float:
+					formatArgs[i] = obj.Value
+				case *object.String:
+					formatArgs[i] = obj.Value
+				case *object.Boolean:
+					formatArgs[i] = obj.Value
+				default:
+					formatArgs[i] = obj.Inspect()
+				}
 			}
 
 			result := fmt.Sprintf(formatStr.Value, formatArgs...)
