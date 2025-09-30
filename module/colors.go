@@ -12,7 +12,7 @@ func init() {
 	ColorsFunctions["rgbToHex"] = rgbToHex
 }
 
-func rgbToHex(args []object.Object, defs map[string]object.Object) object.Object {
+func rgbToHex(args []object.VintObject, defs map[string]object.VintObject) object.VintObject {
 	if len(args) != 3 {
 		return ErrorMessage(
 			"colors", "rgbToHex",

@@ -8,7 +8,7 @@ func init() {
 
 func registerArrayBuiltins() {
 	RegisterBuiltin("range", &object.Builtin{
-		Fn: func(args ...object.Object) object.Object {
+		Fn: func(args ...object.VintObject) object.VintObject {
 			if len(args) < 1 || len(args) > 3 {
 				return newError("Sorry, range requires 1 to 3 arguments, you provided %d", len(args))
 			}
@@ -51,7 +51,7 @@ func registerArrayBuiltins() {
 				}
 			}
 
-			elements := []object.Object{}
+			elements := []object.VintObject{}
 			for i := start; (step > 0 && i < end) || (step < 0 && i > end); i += step {
 				elements = append(elements, &object.Integer{Value: i})
 			}
@@ -61,7 +61,7 @@ func registerArrayBuiltins() {
 	})
 
 	RegisterBuiltin("append", &object.Builtin{
-		Fn: func(args ...object.Object) object.Object {
+		Fn: func(args ...object.VintObject) object.VintObject {
 			if len(args) < 2 {
 				return newError("wrong number of arguments. got=%d, want>=2", len(args))
 			}
@@ -69,7 +69,7 @@ func registerArrayBuiltins() {
 				return newError("first argument to `append` must be an array, got %s", args[0].Type())
 			}
 			arr := args[0].(*object.Array)
-			newElements := make([]object.Object, len(arr.Elements), len(arr.Elements)+len(args)-1)
+			newElements := make([]object.VintObject, len(arr.Elements), len(arr.Elements)+len(args)-1)
 			copy(newElements, arr.Elements)
 			newElements = append(newElements, args[1:]...)
 			return &object.Array{Elements: newElements}
@@ -77,7 +77,7 @@ func registerArrayBuiltins() {
 	})
 
 	RegisterBuiltin("pop", &object.Builtin{
-		Fn: func(args ...object.Object) object.Object {
+		Fn: func(args ...object.VintObject) object.VintObject {
 			if len(args) != 1 {
 				return newError("wrong number of arguments. got=%d, want=1", len(args))
 			}
@@ -96,7 +96,7 @@ func registerArrayBuiltins() {
 	})
 
 	RegisterBuiltin("indexOf", &object.Builtin{
-		Fn: func(args ...object.Object) object.Object {
+		Fn: func(args ...object.VintObject) object.VintObject {
 			if len(args) != 2 {
 				return newError("indexOf() takes exactly 2 arguments, got %d", len(args))
 			}
@@ -117,7 +117,7 @@ func registerArrayBuiltins() {
 	})
 
 	RegisterBuiltin("unique", &object.Builtin{
-		Fn: func(args ...object.Object) object.Object {
+		Fn: func(args ...object.VintObject) object.VintObject {
 			if len(args) != 1 {
 				return newError("unique() takes exactly 1 argument, got %d", len(args))
 			}
@@ -129,11 +129,11 @@ func registerArrayBuiltins() {
 			arr := args[0].(*object.Array)
 			if len(arr.Elements) == 0 {
 				// Return empty array if input is empty
-				return &object.Array{Elements: []object.Object{}}
+				return &object.Array{Elements: []object.VintObject{}}
 			}
 
 			seen := make(map[string]bool)
-			unique := []object.Object{}
+			unique := []object.VintObject{}
 
 			for _, element := range arr.Elements {
 				// Use Inspect() method to get string representation for comparison

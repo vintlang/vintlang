@@ -15,7 +15,7 @@ func init() {
 
 func registerCoreBuiltins() {
 	RegisterBuiltin("input", &object.Builtin{
-		Fn: func(args ...object.Object) object.Object {
+		Fn: func(args ...object.VintObject) object.VintObject {
 			if len(args) > 1 {
 				return newError("Function '%s' accepts 0 or 1 argument, got %d", "input", len(args))
 			}
@@ -40,31 +40,31 @@ func registerCoreBuiltins() {
 	})
 
 	RegisterBuiltin("print", &object.Builtin{
-		Fn: func(args ...object.Object) object.Object {
+		Fn: func(args ...object.VintObject) object.VintObject {
 			return handlePrint(os.Stdout, args, false)
 		},
 	})
 
 	RegisterBuiltin("println", &object.Builtin{
-		Fn: func(args ...object.Object) object.Object {
+		Fn: func(args ...object.VintObject) object.VintObject {
 			return handlePrint(os.Stdout, args, true)
 		},
 	})
 
 	RegisterBuiltin("printErr", &object.Builtin{
-		Fn: func(args ...object.Object) object.Object {
+		Fn: func(args ...object.VintObject) object.VintObject {
 			return handlePrint(os.Stderr, args, false)
 		},
 	})
 
 	RegisterBuiltin("printlnErr", &object.Builtin{
-		Fn: func(args ...object.Object) object.Object {
+		Fn: func(args ...object.VintObject) object.VintObject {
 			return handlePrint(os.Stderr, args, true)
 		},
 	})
 
 	RegisterBuiltin("type", &object.Builtin{
-		Fn: func(args ...object.Object) object.Object {
+		Fn: func(args ...object.VintObject) object.VintObject {
 			if len(args) != 1 {
 				return newError("Function 'type' requires exactly 1 argument, got %d", len(args))
 			}
@@ -75,7 +75,7 @@ func registerCoreBuiltins() {
 
 	// String utility functions
 	RegisterBuiltin("format", &object.Builtin{
-		Fn: func(args ...object.Object) object.Object {
+		Fn: func(args ...object.VintObject) object.VintObject {
 			if len(args) < 1 {
 				return newError("wrong number of arguments. got=%d, want=1+", len(args))
 			}
@@ -107,7 +107,7 @@ func registerCoreBuiltins() {
 	})
 
 	RegisterBuiltin("startsWith", &object.Builtin{
-		Fn: func(args ...object.Object) object.Object {
+		Fn: func(args ...object.VintObject) object.VintObject {
 			if len(args) != 2 {
 				return newError("wrong number of arguments. got=%d, want=2", len(args))
 			}
@@ -131,7 +131,7 @@ func registerCoreBuiltins() {
 	})
 
 	RegisterBuiltin("endsWith", &object.Builtin{
-		Fn: func(args ...object.Object) object.Object {
+		Fn: func(args ...object.VintObject) object.VintObject {
 			if len(args) != 2 {
 				return newError("wrong number of arguments. got=%d, want=2", len(args))
 			}
@@ -155,7 +155,7 @@ func registerCoreBuiltins() {
 	})
 
 	RegisterBuiltin("chr", &object.Builtin{
-		Fn: func(args ...object.Object) object.Object {
+		Fn: func(args ...object.VintObject) object.VintObject {
 			if len(args) != 1 {
 				return newError("wrong number of arguments. got=%d, want=1", len(args))
 			}
@@ -174,7 +174,7 @@ func registerCoreBuiltins() {
 	})
 
 	RegisterBuiltin("ord", &object.Builtin{
-		Fn: func(args ...object.Object) object.Object {
+		Fn: func(args ...object.VintObject) object.VintObject {
 			if len(args) != 1 {
 				return newError("wrong number of arguments. got=%d, want=1", len(args))
 			}
@@ -193,7 +193,7 @@ func registerCoreBuiltins() {
 	})
 
 	RegisterBuiltin("len", &object.Builtin{
-		Fn: func(args ...object.Object) object.Object {
+		Fn: func(args ...object.VintObject) object.VintObject {
 			if len(args) != 1 {
 				return newError("wrong number of arguments. got=%d, want=1", len(args))
 			}

@@ -24,7 +24,7 @@ type argDef struct {
 	shortName   string
 	description string
 	required    bool
-	defaultVal  object.Object
+	defaultVal  object.VintObject
 	valueType   string
 	choices     []string
 }
@@ -37,7 +37,7 @@ var parserVersions = make(map[string]string)
 var parserDescriptions = make(map[string]string)
 
 // newParser creates a new argument parser
-func newParser(args []object.Object, defs map[string]object.Object) object.Object {
+func newParser(args []object.VintObject, defs map[string]object.VintObject) object.VintObject {
 	if len(args) < 1 || len(args) > 2 {
 		return ErrorMessage("argparse", "newParser", "1-2 arguments: name and optional description", "", "")
 	}
@@ -66,7 +66,7 @@ func newParser(args []object.Object, defs map[string]object.Object) object.Objec
 }
 
 // addArgument adds a positional argument to the parser
-func addArgument(args []object.Object, defs map[string]object.Object) object.Object {
+func addArgument(args []object.VintObject, defs map[string]object.VintObject) object.VintObject {
 	if len(args) < 2 {
 		return ErrorMessage("argparse", "addArgument", "addArgument requires at least 2 arguments: parser and name", "", "")
 	}
@@ -129,7 +129,7 @@ func addArgument(args []object.Object, defs map[string]object.Object) object.Obj
 }
 
 // addFlag adds a flag (optional named argument) to the parser
-func addFlag(args []object.Object, defs map[string]object.Object) object.Object {
+func addFlag(args []object.VintObject, defs map[string]object.VintObject) object.VintObject {
 	if len(args) < 2 {
 		return ErrorMessage("argparse", "addFlag", "addFlag requires at least 2 arguments: parser and name", "", "")
 	}
@@ -189,7 +189,7 @@ func addFlag(args []object.Object, defs map[string]object.Object) object.Object 
 }
 
 // parse parses command line arguments according to the parser definition
-func parse(args []object.Object, defs map[string]object.Object) object.Object {
+func parse(args []object.VintObject, defs map[string]object.VintObject) object.VintObject {
 	if len(args) < 1 {
 		return ErrorMessage("argparse", "parse", "parse requires at least 1 argument: parser", "", "")
 	}
@@ -299,7 +299,7 @@ func parse(args []object.Object, defs map[string]object.Object) object.Object {
 				i++ // Skip the value in next iteration
 
 				// Convert value based on type
-				var objValue object.Object
+				var objValue object.VintObject
 				switch flagDef.valueType {
 				case "string":
 					objValue = &object.String{Value: value}
@@ -351,7 +351,7 @@ func parse(args []object.Object, defs map[string]object.Object) object.Object {
 				value := cliArgs[i+1]
 				i++ // Skip the value in next iteration
 
-				var objValue object.Object
+				var objValue object.VintObject
 				switch flagDef.valueType {
 				case "string":
 					objValue = &object.String{Value: value}
@@ -380,7 +380,7 @@ func parse(args []object.Object, defs map[string]object.Object) object.Object {
 			argDef := parserArgs[parserID.Value][positionalIndex]
 
 			// Convert value based on type
-			var objValue object.Object
+			var objValue object.VintObject
 			switch argDef.valueType {
 			case "string":
 				objValue = &object.String{Value: arg}
@@ -446,7 +446,7 @@ func parse(args []object.Object, defs map[string]object.Object) object.Object {
 }
 
 // generateHelp generates help text for the parser
-func generateHelp(args []object.Object, defs map[string]object.Object) object.Object {
+func generateHelp(args []object.VintObject, defs map[string]object.VintObject) object.VintObject {
 	if len(args) != 1 {
 		return ErrorMessage("argparse", "help", "help requires exactly 1 argument: parser", "", "")
 	}
@@ -535,7 +535,7 @@ func generateHelpText(parserID string) string {
 }
 
 // setVersion sets the version information for the parser
-func setVersion(args []object.Object, defs map[string]object.Object) object.Object {
+func setVersion(args []object.VintObject, defs map[string]object.VintObject) object.VintObject {
 	if len(args) != 2 {
 		return ErrorMessage("argparse", "version", "version requires exactly 2 arguments: parser and version string", "", "")
 	}

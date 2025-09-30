@@ -8,7 +8,7 @@ func init() {
 
 func registerDictBuiltins() {
 	RegisterBuiltin("keys", &object.Builtin{
-		Fn: func(args ...object.Object) object.Object {
+		Fn: func(args ...object.VintObject) object.VintObject {
 			if len(args) != 1 {
 				return newError("wrong number of arguments. got=%d, want=1", len(args))
 			}
@@ -16,7 +16,7 @@ func registerDictBuiltins() {
 				return newError("argument to `keys` must be a dictionary, got %s", args[0].Type())
 			}
 			dict := args[0].(*object.Dict)
-			keys := make([]object.Object, 0, len(dict.Pairs))
+			keys := make([]object.VintObject, 0, len(dict.Pairs))
 			for _, pair := range dict.Pairs {
 				keys = append(keys, pair.Key)
 			}
@@ -25,7 +25,7 @@ func registerDictBuiltins() {
 	})
 
 	RegisterBuiltin("values", &object.Builtin{
-		Fn: func(args ...object.Object) object.Object {
+		Fn: func(args ...object.VintObject) object.VintObject {
 			if len(args) != 1 {
 				return newError("wrong number of arguments. got=%d, want=1", len(args))
 			}
@@ -33,7 +33,7 @@ func registerDictBuiltins() {
 				return newError("argument to `values` must be a dictionary, got %s", args[0].Type())
 			}
 			dict := args[0].(*object.Dict)
-			values := make([]object.Object, 0, len(dict.Pairs))
+			values := make([]object.VintObject, 0, len(dict.Pairs))
 			for _, pair := range dict.Pairs {
 				values = append(values, pair.Value)
 			}
@@ -42,7 +42,7 @@ func registerDictBuiltins() {
 	})
 
 	RegisterBuiltin("has_key", &object.Builtin{
-		Fn: func(args ...object.Object) object.Object {
+		Fn: func(args ...object.VintObject) object.VintObject {
 			if len(args) != 2 {
 				return newError("wrong number of arguments. got=%d, want=2", len(args))
 			}

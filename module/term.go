@@ -64,7 +64,7 @@ func init() {
 }
 
 // termPrint prints a message with optional color
-func termPrint(args []object.Object, defs map[string]object.Object) object.Object {
+func termPrint(args []object.VintObject, defs map[string]object.VintObject) object.VintObject {
 	if len(args) < 1 || len(args) > 2 {
 		return &object.Error{Message: "term.print requires 1-2 arguments: message and optional color"}
 	}
@@ -88,7 +88,7 @@ func termPrint(args []object.Object, defs map[string]object.Object) object.Objec
 }
 
 // termPrintln prints a message with optional color and adds a newline
-func termPrintln(args []object.Object, defs map[string]object.Object) object.Object {
+func termPrintln(args []object.VintObject, defs map[string]object.VintObject) object.VintObject {
 	if len(args) < 1 || len(args) > 2 {
 		return &object.Error{Message: "term.println requires 1-2 arguments: message and optional color"}
 	}
@@ -112,7 +112,7 @@ func termPrintln(args []object.Object, defs map[string]object.Object) object.Obj
 }
 
 // termClear clears the terminal screen
-func termClear(args []object.Object, defs map[string]object.Object) object.Object {
+func termClear(args []object.VintObject, defs map[string]object.VintObject) object.VintObject {
 	if len(args) > 0 {
 		return &object.Error{Message: "term.clear does not accept any arguments"}
 	}
@@ -122,7 +122,7 @@ func termClear(args []object.Object, defs map[string]object.Object) object.Objec
 }
 
 // termSpinner creates a simple loading indicator
-func termSpinner(args []object.Object, defs map[string]object.Object) object.Object {
+func termSpinner(args []object.VintObject, defs map[string]object.VintObject) object.VintObject {
 	if len(args) != 1 {
 		return &object.Error{Message: "term.spinner requires exactly one argument: the message"}
 	}
@@ -140,7 +140,7 @@ func termSpinner(args []object.Object, defs map[string]object.Object) object.Obj
 }
 
 // termProgress creates a progress bar function
-func termProgress(args []object.Object, defs map[string]object.Object) object.Object {
+func termProgress(args []object.VintObject, defs map[string]object.VintObject) object.VintObject {
 	if len(args) != 1 {
 		return &object.Error{Message: "term.progress requires exactly one argument: the total value"}
 	}
@@ -172,7 +172,7 @@ func updateProgress(current, total, width int64) {
 }
 
 // termTable creates a formatted table
-func termTable(args []object.Object, defs map[string]object.Object) object.Object {
+func termTable(args []object.VintObject, defs map[string]object.VintObject) object.VintObject {
 	if len(args) != 1 {
 		return &object.Error{Message: "term.table requires exactly one argument: an array of rows"}
 	}
@@ -205,7 +205,7 @@ func termTable(args []object.Object, defs map[string]object.Object) object.Objec
 }
 
 // termBox creates a boxed text
-func termBox(args []object.Object, defs map[string]object.Object) object.Object {
+func termBox(args []object.VintObject, defs map[string]object.VintObject) object.VintObject {
 	if len(args) != 1 {
 		return &object.Error{Message: "term.box requires exactly one argument: the text"}
 	}
@@ -224,7 +224,7 @@ func termBox(args []object.Object, defs map[string]object.Object) object.Object 
 }
 
 // termStyle creates a styled text
-func termStyle(args []object.Object, defs map[string]object.Object) object.Object {
+func termStyle(args []object.VintObject, defs map[string]object.VintObject) object.VintObject {
 	if len(args) < 1 || len(args) > 2 {
 		return &object.Error{Message: "term.style requires 1-2 arguments: text and optional style options"}
 	}
@@ -264,7 +264,7 @@ func termStyle(args []object.Object, defs map[string]object.Object) object.Objec
 }
 
 // termCursor controls cursor visibility
-func termCursor(args []object.Object, defs map[string]object.Object) object.Object {
+func termCursor(args []object.VintObject, defs map[string]object.VintObject) object.VintObject {
 	if len(args) != 1 {
 		return &object.Error{Message: "term.cursor requires exactly one argument: visibility (true/false)"}
 	}
@@ -284,7 +284,7 @@ func termCursor(args []object.Object, defs map[string]object.Object) object.Obje
 }
 
 // termBeep plays a terminal beep
-func termBeep(args []object.Object, defs map[string]object.Object) object.Object {
+func termBeep(args []object.VintObject, defs map[string]object.VintObject) object.VintObject {
 	if len(args) > 0 {
 		return &object.Error{Message: "term.beep does not accept any arguments"}
 	}
@@ -294,7 +294,7 @@ func termBeep(args []object.Object, defs map[string]object.Object) object.Object
 }
 
 // termMoveCursor moves the cursor to a specific position
-func termMoveCursor(args []object.Object, defs map[string]object.Object) object.Object {
+func termMoveCursor(args []object.VintObject, defs map[string]object.VintObject) object.VintObject {
 	if len(args) != 2 {
 		return &object.Error{Message: "term.moveCursor requires exactly two arguments: x and y coordinates"}
 	}
@@ -314,7 +314,7 @@ func termMoveCursor(args []object.Object, defs map[string]object.Object) object.
 }
 
 // termGetSize returns the terminal size
-func termGetSize(args []object.Object, defs map[string]object.Object) object.Object {
+func termGetSize(args []object.VintObject, defs map[string]object.VintObject) object.VintObject {
 	if len(args) > 0 {
 		return &object.Error{Message: "term.getSize does not accept any arguments"}
 	}
@@ -338,7 +338,7 @@ func termGetSize(args []object.Object, defs map[string]object.Object) object.Obj
 }
 
 // termInput gets user input with a prompt
-func termInput(args []object.Object, defs map[string]object.Object) object.Object {
+func termInput(args []object.VintObject, defs map[string]object.VintObject) object.VintObject {
 	if len(args) != 1 {
 		return &object.Error{Message: "term.input requires exactly one argument: the prompt message"}
 	}
@@ -355,7 +355,7 @@ func termInput(args []object.Object, defs map[string]object.Object) object.Objec
 }
 
 // termMenu creates an interactive menu with numbered options
-func termMenu(args []object.Object, defs map[string]object.Object) object.Object {
+func termMenu(args []object.VintObject, defs map[string]object.VintObject) object.VintObject {
 	if len(args) != 1 {
 		return &object.Error{Message: "term.menu requires exactly one argument: an array of menu items"}
 	}
@@ -375,13 +375,13 @@ func termMenu(args []object.Object, defs map[string]object.Object) object.Object
 	var choice int
 	for {
 		fmt.Print("Select option (1-" + fmt.Sprintf("%d", len(items.Elements)) + "): ")
-		
+
 		var input string
 		_, err := fmt.Scanln(&input)
 		if err != nil {
 			continue
 		}
-		
+
 		if n, err := fmt.Sscanf(input, "%d", &choice); n == 1 && err == nil {
 			if choice >= 1 && choice <= len(items.Elements) {
 				return items.Elements[choice-1]
@@ -392,7 +392,7 @@ func termMenu(args []object.Object, defs map[string]object.Object) object.Object
 }
 
 // termAlert shows an alert message
-func termAlert(args []object.Object, defs map[string]object.Object) object.Object {
+func termAlert(args []object.VintObject, defs map[string]object.VintObject) object.VintObject {
 	if len(args) != 1 {
 		return &object.Error{Message: "term.alert requires exactly one argument: the message"}
 	}
@@ -414,7 +414,7 @@ func termAlert(args []object.Object, defs map[string]object.Object) object.Objec
 }
 
 // termBanner creates a banner text
-func termBanner(args []object.Object, defs map[string]object.Object) object.Object {
+func termBanner(args []object.VintObject, defs map[string]object.VintObject) object.VintObject {
 	if len(args) != 1 {
 		return &object.Error{Message: "term.banner requires exactly one argument: the text"}
 	}
@@ -435,7 +435,7 @@ func termBanner(args []object.Object, defs map[string]object.Object) object.Obje
 }
 
 // termCountdown creates a countdown timer
-func termCountdown(args []object.Object, defs map[string]object.Object) object.Object {
+func termCountdown(args []object.VintObject, defs map[string]object.VintObject) object.VintObject {
 	if len(args) != 1 {
 		return &object.Error{Message: "term.countdown requires exactly one argument: the duration in seconds"}
 	}
@@ -459,7 +459,7 @@ func termCountdown(args []object.Object, defs map[string]object.Object) object.O
 }
 
 // termSelect creates a select menu with simple numbered selection
-func termSelect(args []object.Object, defs map[string]object.Object) object.Object {
+func termSelect(args []object.VintObject, defs map[string]object.VintObject) object.VintObject {
 	if len(args) != 1 {
 		return &object.Error{Message: "term.select requires exactly one argument: an array of options"}
 	}
@@ -484,14 +484,14 @@ func termSelect(args []object.Object, defs map[string]object.Object) object.Obje
 	var choice int
 	for {
 		fmt.Print("Select option (1-" + fmt.Sprintf("%d", len(optionStrs)) + "): ")
-		
+
 		// Read input using a more reliable method
 		var input string
 		_, err := fmt.Scanln(&input)
 		if err != nil {
 			continue
 		}
-		
+
 		// Parse the input
 		if n, err := fmt.Sscanf(input, "%d", &choice); n == 1 && err == nil {
 			if choice >= 1 && choice <= len(options.Elements) {
@@ -503,7 +503,7 @@ func termSelect(args []object.Object, defs map[string]object.Object) object.Obje
 }
 
 // termCheckbox creates a checkbox list with simple number-based selection
-func termCheckbox(args []object.Object, defs map[string]object.Object) object.Object {
+func termCheckbox(args []object.VintObject, defs map[string]object.VintObject) object.VintObject {
 	if len(args) != 1 {
 		return &object.Error{Message: "term.checkbox requires exactly one argument: an array of options"}
 	}
@@ -542,7 +542,7 @@ func termCheckbox(args []object.Object, defs map[string]object.Object) object.Ob
 	}
 
 	// Build result array
-	var result []object.Object
+	var result []object.VintObject
 	for i, option := range options.Elements {
 		if selected[i] {
 			result = append(result, option)
@@ -553,7 +553,7 @@ func termCheckbox(args []object.Object, defs map[string]object.Object) object.Ob
 }
 
 // termRadio creates a radio button list with numbered selection
-func termRadio(args []object.Object, defs map[string]object.Object) object.Object {
+func termRadio(args []object.VintObject, defs map[string]object.VintObject) object.VintObject {
 	if len(args) != 1 {
 		return &object.Error{Message: "term.radio requires exactly one argument: an array of options"}
 	}
@@ -578,13 +578,13 @@ func termRadio(args []object.Object, defs map[string]object.Object) object.Objec
 	var choice int
 	for {
 		fmt.Print("Select option (1-" + fmt.Sprintf("%d", len(optionStrs)) + "): ")
-		
+
 		var input string
 		_, err := fmt.Scanln(&input)
 		if err != nil {
 			continue
 		}
-		
+
 		if n, err := fmt.Sscanf(input, "%d", &choice); n == 1 && err == nil {
 			if choice >= 1 && choice <= len(options.Elements) {
 				return options.Elements[choice-1]
@@ -595,7 +595,7 @@ func termRadio(args []object.Object, defs map[string]object.Object) object.Objec
 }
 
 // termPassword gets password input with hidden characters
-func termPassword(args []object.Object, defs map[string]object.Object) object.Object {
+func termPassword(args []object.VintObject, defs map[string]object.VintObject) object.VintObject {
 	if len(args) != 1 {
 		return &object.Error{Message: "term.password requires exactly one argument: the prompt message"}
 	}
@@ -616,7 +616,7 @@ func termPassword(args []object.Object, defs map[string]object.Object) object.Ob
 }
 
 // termConfirm asks for yes/no confirmation
-func termConfirm(args []object.Object, defs map[string]object.Object) object.Object {
+func termConfirm(args []object.VintObject, defs map[string]object.VintObject) object.VintObject {
 	if len(args) != 1 {
 		return &object.Error{Message: "term.confirm requires exactly one argument: the prompt message"}
 	}
@@ -634,7 +634,7 @@ func termConfirm(args []object.Object, defs map[string]object.Object) object.Obj
 }
 
 // termLoading shows a loading message
-func termLoading(args []object.Object, defs map[string]object.Object) object.Object {
+func termLoading(args []object.VintObject, defs map[string]object.VintObject) object.VintObject {
 	if len(args) != 1 {
 		return &object.Error{Message: "term.loading requires exactly one argument: the message"}
 	}
@@ -646,12 +646,12 @@ func termLoading(args []object.Object, defs map[string]object.Object) object.Obj
 
 	// Display loading message with spinner
 	fmt.Printf("⏳ %s\n", msg.Value)
-	
+
 	return &object.Null{}
 }
 
 // termNotify shows a notification message
-func termNotify(args []object.Object, defs map[string]object.Object) object.Object {
+func termNotify(args []object.VintObject, defs map[string]object.VintObject) object.VintObject {
 	if len(args) != 1 {
 		return &object.Error{Message: "term.notify requires exactly one argument: the message"}
 	}
@@ -673,7 +673,7 @@ func termNotify(args []object.Object, defs map[string]object.Object) object.Obje
 }
 
 // termError shows an error message
-func termError(args []object.Object, defs map[string]object.Object) object.Object {
+func termError(args []object.VintObject, defs map[string]object.VintObject) object.VintObject {
 	if len(args) != 1 {
 		return &object.Error{Message: "term.error requires exactly one argument: the message"}
 	}
@@ -695,7 +695,7 @@ func termError(args []object.Object, defs map[string]object.Object) object.Objec
 }
 
 // termSuccess shows a success message
-func termSuccess(args []object.Object, defs map[string]object.Object) object.Object {
+func termSuccess(args []object.VintObject, defs map[string]object.VintObject) object.VintObject {
 	if len(args) != 1 {
 		return &object.Error{Message: "term.success requires exactly one argument: the message"}
 	}
@@ -717,7 +717,7 @@ func termSuccess(args []object.Object, defs map[string]object.Object) object.Obj
 }
 
 // termInfo shows an info message
-func termInfo(args []object.Object, defs map[string]object.Object) object.Object {
+func termInfo(args []object.VintObject, defs map[string]object.VintObject) object.VintObject {
 	if len(args) != 1 {
 		return &object.Error{Message: "term.info requires exactly one argument: the message"}
 	}
@@ -739,7 +739,7 @@ func termInfo(args []object.Object, defs map[string]object.Object) object.Object
 }
 
 // termWarning shows a warning message
-func termWarning(args []object.Object, defs map[string]object.Object) object.Object {
+func termWarning(args []object.VintObject, defs map[string]object.VintObject) object.VintObject {
 	if len(args) != 1 {
 		return &object.Error{Message: "term.warning requires exactly one argument: the message"}
 	}
@@ -761,7 +761,7 @@ func termWarning(args []object.Object, defs map[string]object.Object) object.Obj
 }
 
 // termLayout creates a flexible layout system
-func termLayout(args []object.Object, defs map[string]object.Object) object.Object {
+func termLayout(args []object.VintObject, defs map[string]object.VintObject) object.VintObject {
 	if len(args) != 1 {
 		return &object.Error{Message: "term.layout requires exactly one argument: layout configuration"}
 	}
@@ -796,7 +796,7 @@ func termLayout(args []object.Object, defs map[string]object.Object) object.Obje
 }
 
 // termGrid creates a grid layout
-func termGrid(args []object.Object, defs map[string]object.Object) object.Object {
+func termGrid(args []object.VintObject, defs map[string]object.VintObject) object.VintObject {
 	if len(args) != 2 {
 		return &object.Error{Message: "term.grid requires exactly two arguments: items array and grid configuration"}
 	}
@@ -834,7 +834,7 @@ func termGrid(args []object.Object, defs map[string]object.Object) object.Object
 }
 
 // termTabs creates a tabbed interface
-func termTabs(args []object.Object, defs map[string]object.Object) object.Object {
+func termTabs(args []object.VintObject, defs map[string]object.VintObject) object.VintObject {
 	if len(args) != 1 {
 		return &object.Error{Message: "term.tabs requires exactly one argument: tabs configuration"}
 	}
@@ -859,7 +859,7 @@ func termTabs(args []object.Object, defs map[string]object.Object) object.Object
 }
 
 // termAccordion creates a collapsible accordion
-func termAccordion(args []object.Object, defs map[string]object.Object) object.Object {
+func termAccordion(args []object.VintObject, defs map[string]object.VintObject) object.VintObject {
 	if len(args) != 1 {
 		return &object.Error{Message: "term.accordion requires exactly one argument: sections configuration"}
 	}
@@ -886,7 +886,7 @@ func termAccordion(args []object.Object, defs map[string]object.Object) object.O
 }
 
 // termTree creates a tree view
-func termTree(args []object.Object, defs map[string]object.Object) object.Object {
+func termTree(args []object.VintObject, defs map[string]object.VintObject) object.VintObject {
 	if len(args) != 1 {
 		return &object.Error{Message: "term.tree requires exactly one argument: tree configuration"}
 	}
@@ -916,7 +916,7 @@ func termTree(args []object.Object, defs map[string]object.Object) object.Object
 }
 
 // termChart creates a simple chart
-func termChart(args []object.Object, defs map[string]object.Object) object.Object {
+func termChart(args []object.VintObject, defs map[string]object.VintObject) object.VintObject {
 	if len(args) != 1 {
 		return &object.Error{Message: "term.chart requires exactly one argument: data array"}
 	}
@@ -948,7 +948,7 @@ func termChart(args []object.Object, defs map[string]object.Object) object.Objec
 }
 
 // termGauge creates a gauge/progress indicator
-func termGauge(args []object.Object, defs map[string]object.Object) object.Object {
+func termGauge(args []object.VintObject, defs map[string]object.VintObject) object.VintObject {
 	if len(args) != 1 {
 		return &object.Error{Message: "term.gauge requires exactly one argument: value (0-100)"}
 	}
@@ -967,7 +967,7 @@ func termGauge(args []object.Object, defs map[string]object.Object) object.Objec
 }
 
 // termHeatmap creates a heatmap visualization
-func termHeatmap(args []object.Object, defs map[string]object.Object) object.Object {
+func termHeatmap(args []object.VintObject, defs map[string]object.VintObject) object.VintObject {
 	if len(args) != 1 {
 		return &object.Error{Message: "term.heatmap requires exactly one argument: data array"}
 	}
@@ -1000,7 +1000,7 @@ func termHeatmap(args []object.Object, defs map[string]object.Object) object.Obj
 }
 
 // termCalendar creates a calendar view
-func termCalendar(args []object.Object, defs map[string]object.Object) object.Object {
+func termCalendar(args []object.VintObject, defs map[string]object.VintObject) object.VintObject {
 	if len(args) != 1 {
 		return &object.Error{Message: "term.calendar requires exactly one argument: month configuration"}
 	}
@@ -1048,7 +1048,7 @@ func termCalendar(args []object.Object, defs map[string]object.Object) object.Ob
 }
 
 // termTimeline creates a timeline view
-func termTimeline(args []object.Object, defs map[string]object.Object) object.Object {
+func termTimeline(args []object.VintObject, defs map[string]object.VintObject) object.VintObject {
 	if len(args) != 1 {
 		return &object.Error{Message: "term.timeline requires exactly one argument: events array"}
 	}
@@ -1082,7 +1082,7 @@ func termTimeline(args []object.Object, defs map[string]object.Object) object.Ob
 }
 
 // termKanban creates a kanban board
-func termKanban(args []object.Object, defs map[string]object.Object) object.Object {
+func termKanban(args []object.VintObject, defs map[string]object.VintObject) object.VintObject {
 	if len(args) != 1 {
 		return &object.Error{Message: "term.kanban requires exactly one argument: columns configuration"}
 	}
@@ -1109,7 +1109,7 @@ func termKanban(args []object.Object, defs map[string]object.Object) object.Obje
 }
 
 // termSplit creates a split view
-func termSplit(args []object.Object, defs map[string]object.Object) object.Object {
+func termSplit(args []object.VintObject, defs map[string]object.VintObject) object.VintObject {
 	if len(args) != 2 {
 		return &object.Error{Message: "term.split requires exactly two arguments: left content and right content"}
 	}
@@ -1136,7 +1136,7 @@ func termSplit(args []object.Object, defs map[string]object.Object) object.Objec
 }
 
 // termModal creates a modal dialog
-func termModal(args []object.Object, defs map[string]object.Object) object.Object {
+func termModal(args []object.VintObject, defs map[string]object.VintObject) object.VintObject {
 	if len(args) != 1 {
 		return &object.Error{Message: "term.modal requires exactly one argument: modal configuration"}
 	}
@@ -1168,7 +1168,7 @@ func termModal(args []object.Object, defs map[string]object.Object) object.Objec
 }
 
 // termTooltip creates a tooltip
-func termTooltip(args []object.Object, defs map[string]object.Object) object.Object {
+func termTooltip(args []object.VintObject, defs map[string]object.VintObject) object.VintObject {
 	if len(args) != 2 {
 		return &object.Error{Message: "term.tooltip requires exactly two arguments: text and tooltip message"}
 	}
@@ -1191,7 +1191,7 @@ func termTooltip(args []object.Object, defs map[string]object.Object) object.Obj
 }
 
 // termBadge creates a badge
-func termBadge(args []object.Object, defs map[string]object.Object) object.Object {
+func termBadge(args []object.VintObject, defs map[string]object.VintObject) object.VintObject {
 	if len(args) != 1 {
 		return &object.Error{Message: "term.badge requires exactly one argument: badge text"}
 	}
@@ -1211,7 +1211,7 @@ func termBadge(args []object.Object, defs map[string]object.Object) object.Objec
 }
 
 // termAvatar creates an avatar
-func termAvatar(args []object.Object, defs map[string]object.Object) object.Object {
+func termAvatar(args []object.VintObject, defs map[string]object.VintObject) object.VintObject {
 	if len(args) != 1 {
 		return &object.Error{Message: "term.avatar requires exactly one argument: avatar text"}
 	}
@@ -1231,7 +1231,7 @@ func termAvatar(args []object.Object, defs map[string]object.Object) object.Obje
 }
 
 // termCard creates a card component
-func termCard(args []object.Object, defs map[string]object.Object) object.Object {
+func termCard(args []object.VintObject, defs map[string]object.VintObject) object.VintObject {
 	if len(args) != 1 {
 		return &object.Error{Message: "term.card requires exactly one argument: card configuration"}
 	}
@@ -1263,7 +1263,7 @@ func termCard(args []object.Object, defs map[string]object.Object) object.Object
 }
 
 // termList creates a list component
-func termList(args []object.Object, defs map[string]object.Object) object.Object {
+func termList(args []object.VintObject, defs map[string]object.VintObject) object.VintObject {
 	if len(args) != 1 {
 		return &object.Error{Message: "term.list requires exactly one argument: items array"}
 	}
@@ -1288,7 +1288,7 @@ func termList(args []object.Object, defs map[string]object.Object) object.Object
 }
 
 // termForm creates a form component
-func termForm(args []object.Object, defs map[string]object.Object) object.Object {
+func termForm(args []object.VintObject, defs map[string]object.VintObject) object.VintObject {
 	if len(args) != 1 {
 		return &object.Error{Message: "term.form requires exactly one argument: form configuration"}
 	}
@@ -1315,7 +1315,7 @@ func termForm(args []object.Object, defs map[string]object.Object) object.Object
 }
 
 // termWizard creates a wizard/step-by-step form
-func termWizard(args []object.Object, defs map[string]object.Object) object.Object {
+func termWizard(args []object.VintObject, defs map[string]object.VintObject) object.VintObject {
 	if len(args) != 1 {
 		return &object.Error{Message: "term.wizard requires exactly one argument: steps array"}
 	}
@@ -1341,7 +1341,7 @@ func termWizard(args []object.Object, defs map[string]object.Object) object.Obje
 }
 
 // termDashboard creates a dashboard layout
-func termDashboard(args []object.Object, defs map[string]object.Object) object.Object {
+func termDashboard(args []object.VintObject, defs map[string]object.VintObject) object.VintObject {
 	if len(args) != 1 {
 		return &object.Error{Message: "term.dashboard requires exactly one argument: widgets configuration"}
 	}

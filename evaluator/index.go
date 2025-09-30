@@ -3,7 +3,7 @@ package evaluator
 import "github.com/vintlang/vintlang/object"
 
 // evalIndexExpression handles indexing operations for arrays and dictionaries.
-func evalIndexExpression(left, index object.Object, line int) object.Object {
+func evalIndexExpression(left, index object.VintObject, line int) object.VintObject {
 	switch {
 	case left.Type() == object.ARRAY_OBJ && index.Type() == object.INTEGER_OBJ:
 		return evalArrayIndexExpression(left, index)
@@ -17,7 +17,7 @@ func evalIndexExpression(left, index object.Object, line int) object.Object {
 }
 
 // evalSliceExpression handles slicing operations for arrays.
-func evalSliceExpression(left, start, end object.Object, line int) object.Object {
+func evalSliceExpression(left, start, end object.VintObject, line int) object.VintObject {
 	if left.Type() != object.ARRAY_OBJ {
 		return newError("Line %d: Slicing is only supported for arrays, not: %s", line, left.Type())
 	}
@@ -69,14 +69,14 @@ func evalSliceExpression(left, start, end object.Object, line int) object.Object
 	}
 
 	// Create the sliced array
-	slicedElements := make([]object.Object, endIdx-startIdx)
+	slicedElements := make([]object.VintObject, endIdx-startIdx)
 	copy(slicedElements, arrayObject.Elements[startIdx:endIdx])
 
 	return &object.Array{Elements: slicedElements}
 }
 
 // evalArrayIndexExpression evaluates an array index expression.
-func evalArrayIndexExpression(array, index object.Object) object.Object {
+func evalArrayIndexExpression(array, index object.VintObject) object.VintObject {
 	arrayObject := array.(*object.Array)
 	idx := index.(*object.Integer).Value
 	max := int64(len(arrayObject.Elements) - 1)
@@ -89,7 +89,7 @@ func evalArrayIndexExpression(array, index object.Object) object.Object {
 }
 
 // evalDictIndexExpression evaluates a dictionary index expression.
-func evalDictIndexExpression(dict, index object.Object, line int) object.Object {
+func evalDictIndexExpression(dict, index object.VintObject, line int) object.VintObject {
 	dictObject := dict.(*object.Dict)
 
 	// Ensure the index can be used as a key in the dictionary (Hashable).

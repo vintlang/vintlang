@@ -17,28 +17,28 @@ var (
 )
 
 type VM struct {
-	constants    []object.Object
+	constants    []object.VintObject
 	instructions []byte
 
-	stack               []object.Object
+	stack               []object.VintObject
 	sp                  int // Always points to the next value. Top of the stack is stack[sp-1]
-	lastPoppedStackElem object.Object
+	lastPoppedStackElem object.VintObject
 }
 
 func New(bytecode *compiler.Bytecode) *VM {
 	return &VM{
 		instructions: bytecode.Instructions,
 		constants:    bytecode.Constants,
-		stack:        make([]object.Object, StackSize),
+		stack:        make([]object.VintObject, StackSize),
 		sp:           0,
 	}
 }
 
-func (vm *VM) LastPoppedStackElem() object.Object {
+func (vm *VM) LastPoppedStackElem() object.VintObject {
 	return vm.lastPoppedStackElem
 }
 
-func (vm *VM) StackTop() object.Object {
+func (vm *VM) StackTop() object.VintObject {
 	if vm.sp == 0 {
 		return nil
 	}
@@ -106,7 +106,7 @@ func (vm *VM) executeComparison(op byte) error {
 
 func (vm *VM) executeIntegerComparison(
 	op byte,
-	left, right object.Object,
+	left, right object.VintObject,
 ) error {
 	leftValue := left.(*object.Integer).Value
 	rightValue := right.(*object.Integer).Value
@@ -148,7 +148,7 @@ func (vm *VM) executeBinaryOperation(op byte) error {
 	return vm.push(&object.Integer{Value: result})
 }
 
-func (vm *VM) push(o object.Object) error {
+func (vm *VM) push(o object.VintObject) error {
 	if vm.sp >= StackSize {
 		return fmt.Errorf("stack overflow")
 	}
@@ -159,7 +159,7 @@ func (vm *VM) push(o object.Object) error {
 	return nil
 }
 
-func (vm *VM) pop() object.Object {
+func (vm *VM) pop() object.VintObject {
 	if vm.sp == 0 {
 		return nil
 	}
@@ -175,4 +175,3 @@ func nativeBoolToBooleanObject(input bool) *object.Boolean {
 	}
 	return False
 }
- 

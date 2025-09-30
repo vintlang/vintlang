@@ -22,7 +22,7 @@ type PostGresConnection struct {
 	db *sql.DB
 }
 
-func openPqConnection(args []object.Object, defs map[string]object.Object) object.Object {
+func openPqConnection(args []object.VintObject, defs map[string]object.VintObject) object.VintObject {
 	if len(args) != 1 || args[0].Type() != object.STRING_OBJ {
 		return &object.Error{Message: "Invalid arguments: Expected 'open(connectionString)' where 'connectionString' is a string"}
 	}
@@ -44,7 +44,7 @@ func openPqConnection(args []object.Object, defs map[string]object.Object) objec
 	}
 }
 
-func closePqConnection(args []object.Object, defs map[string]object.Object) object.Object {
+func closePqConnection(args []object.VintObject, defs map[string]object.VintObject) object.VintObject {
 	if len(args) != 1 {
 		return &object.Error{Message: "Invalid arguments: Expected 'close(conn)'"}
 	}
@@ -62,7 +62,7 @@ func closePqConnection(args []object.Object, defs map[string]object.Object) obje
 	return &object.Null{}
 }
 
-func executePqQuery(args []object.Object, defs map[string]object.Object) object.Object {
+func executePqQuery(args []object.VintObject, defs map[string]object.VintObject) object.VintObject {
 	if len(args) < 2 {
 		return &object.Error{Message: "Invalid arguments: Expected 'execute(conn, query, [params...])'"}
 	}
@@ -86,7 +86,7 @@ func executePqQuery(args []object.Object, defs map[string]object.Object) object.
 	return &object.Null{}
 }
 
-func fetchAllPq(args []object.Object, defs map[string]object.Object) object.Object {
+func fetchAllPq(args []object.VintObject, defs map[string]object.VintObject) object.VintObject {
 	if len(args) < 2 {
 		return &object.Error{Message: "Invalid arguments: Expected 'fetchAll(conn, query, [params...])'"}
 	}
@@ -108,7 +108,7 @@ func fetchAllPq(args []object.Object, defs map[string]object.Object) object.Obje
 	}
 	defer rows.Close()
 
-	result := make([]object.Object, 0)
+	result := make([]object.VintObject, 0)
 	cols, _ := rows.Columns()
 	for rows.Next() {
 		values := make([]interface{}, len(cols))
@@ -134,7 +134,7 @@ func fetchAllPq(args []object.Object, defs map[string]object.Object) object.Obje
 	return &object.Array{Elements: result}
 }
 
-func fetchOnePq(args []object.Object, defs map[string]object.Object) object.Object {
+func fetchOnePq(args []object.VintObject, defs map[string]object.VintObject) object.VintObject {
 	result := fetchAllPq(args, defs)
 	if result.Type() == object.ARRAY_OBJ {
 		array := result.(*object.Array)
@@ -145,7 +145,7 @@ func fetchOnePq(args []object.Object, defs map[string]object.Object) object.Obje
 	return &object.Null{}
 }
 
-func convertPqToObject(val interface{}) object.Object {
+func convertPqToObject(val interface{}) object.VintObject {
 	switch v := val.(type) {
 	case int64:
 		return &object.Integer{Value: v}
@@ -164,7 +164,7 @@ func convertPqToObject(val interface{}) object.Object {
 	}
 }
 
-func convertObjectsToPqParams(objects []object.Object) []interface{} {
+func convertObjectsToPqParams(objects []object.VintObject) []interface{} {
 	params := make([]interface{}, len(objects))
 	for i, obj := range objects {
 		switch v := obj.(type) {

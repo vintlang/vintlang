@@ -30,7 +30,7 @@ func init() {
 }
 
 // slug creates a URL-friendly slug from a normal string
-func slug(args []object.Object, defs map[string]object.Object) object.Object {
+func slug(args []object.VintObject, defs map[string]object.VintObject) object.VintObject {
 	if len(defs) != 0 || len(args) != 1 || args[0].Type() != object.STRING_OBJ {
 		return ErrorMessage(
 			"string", "slug",
@@ -51,7 +51,7 @@ func slug(args []object.Object, defs map[string]object.Object) object.Object {
 }
 
 // similarity computes a similarity score between two strings
-func similarity(args []object.Object, defs map[string]object.Object) object.Object {
+func similarity(args []object.VintObject, defs map[string]object.VintObject) object.VintObject {
 	if len(defs) != 0 || len(args) != 2 || args[0].Type() != object.STRING_OBJ || args[1].Type() != object.STRING_OBJ {
 		return ErrorMessage(
 			"string", "similarity",
@@ -74,7 +74,7 @@ func similarity(args []object.Object, defs map[string]object.Object) object.Obje
 	return &object.Float{Value: 1.0 - float64(distance)/float64(maxLen)}
 }
 
-func trim(args []object.Object, defs map[string]object.Object) object.Object {
+func trim(args []object.VintObject, defs map[string]object.VintObject) object.VintObject {
 	if len(defs) != 0 || len(args) != 1 || args[0].Type() != object.STRING_OBJ {
 		return ErrorMessage(
 			"string", "trim",
@@ -86,7 +86,7 @@ func trim(args []object.Object, defs map[string]object.Object) object.Object {
 	return &object.String{Value: strings.TrimSpace(args[0].(*object.String).Value)}
 }
 
-func contains(args []object.Object, defs map[string]object.Object) object.Object {
+func contains(args []object.VintObject, defs map[string]object.VintObject) object.VintObject {
 	if len(defs) != 0 || len(args) != 2 || args[0].Type() != object.STRING_OBJ || args[1].Type() != object.STRING_OBJ {
 		return ErrorMessage(
 			"string", "contains",
@@ -98,7 +98,7 @@ func contains(args []object.Object, defs map[string]object.Object) object.Object
 	return &object.Boolean{Value: strings.Contains(args[0].(*object.String).Value, args[1].(*object.String).Value)}
 }
 
-func toUpper(args []object.Object, defs map[string]object.Object) object.Object {
+func toUpper(args []object.VintObject, defs map[string]object.VintObject) object.VintObject {
 	if len(defs) != 0 || len(args) != 1 || args[0].Type() != object.STRING_OBJ {
 		return ErrorMessage(
 			"string", "toUpper",
@@ -110,7 +110,7 @@ func toUpper(args []object.Object, defs map[string]object.Object) object.Object 
 	return &object.String{Value: strings.ToUpper(args[0].(*object.String).Value)}
 }
 
-func toLower(args []object.Object, defs map[string]object.Object) object.Object {
+func toLower(args []object.VintObject, defs map[string]object.VintObject) object.VintObject {
 	if len(defs) != 0 || len(args) != 1 || args[0].Type() != object.STRING_OBJ {
 		return ErrorMessage(
 			"string", "toLower",
@@ -122,7 +122,7 @@ func toLower(args []object.Object, defs map[string]object.Object) object.Object 
 	return &object.String{Value: strings.ToLower(args[0].(*object.String).Value)}
 }
 
-func replace(args []object.Object, defs map[string]object.Object) object.Object {
+func replace(args []object.VintObject, defs map[string]object.VintObject) object.VintObject {
 	if len(defs) != 0 || len(args) != 3 || args[0].Type() != object.STRING_OBJ || args[1].Type() != object.STRING_OBJ || args[2].Type() != object.STRING_OBJ {
 		return ErrorMessage(
 			"string", "replace",
@@ -134,7 +134,7 @@ func replace(args []object.Object, defs map[string]object.Object) object.Object 
 	return &object.String{Value: strings.ReplaceAll(args[0].(*object.String).Value, args[1].(*object.String).Value, args[2].(*object.String).Value)}
 }
 
-func split(args []object.Object, defs map[string]object.Object) object.Object {
+func split(args []object.VintObject, defs map[string]object.VintObject) object.VintObject {
 	if len(defs) != 0 || len(args) != 2 || args[0].Type() != object.STRING_OBJ || args[1].Type() != object.STRING_OBJ {
 		return ErrorMessage(
 			"string", "split",
@@ -144,14 +144,14 @@ func split(args []object.Object, defs map[string]object.Object) object.Object {
 		)
 	}
 	parts := strings.Split(args[0].(*object.String).Value, args[1].(*object.String).Value)
-	elements := make([]object.Object, len(parts))
+	elements := make([]object.VintObject, len(parts))
 	for i, part := range parts {
 		elements[i] = &object.String{Value: part}
 	}
 	return &object.Array{Elements: elements}
 }
 
-func join(args []object.Object, defs map[string]object.Object) object.Object {
+func join(args []object.VintObject, defs map[string]object.VintObject) object.VintObject {
 	if len(defs) != 0 || len(args) != 2 || args[0].Type() != object.ARRAY_OBJ || args[1].Type() != object.STRING_OBJ {
 		return ErrorMessage(
 			"string", "join",
@@ -172,7 +172,7 @@ func join(args []object.Object, defs map[string]object.Object) object.Object {
 	return &object.String{Value: strings.Join(parts, delim)}
 }
 
-func substring(args []object.Object, defs map[string]object.Object) object.Object {
+func substring(args []object.VintObject, defs map[string]object.VintObject) object.VintObject {
 	if len(defs) != 0 || len(args) != 3 || args[0].Type() != object.STRING_OBJ || args[1].Type() != object.INTEGER_OBJ || args[2].Type() != object.INTEGER_OBJ {
 		return ErrorMessage(
 			"string", "substring",
@@ -190,7 +190,7 @@ func substring(args []object.Object, defs map[string]object.Object) object.Objec
 	return &object.String{Value: str[start:end]}
 }
 
-func length(args []object.Object, defs map[string]object.Object) object.Object {
+func length(args []object.VintObject, defs map[string]object.VintObject) object.VintObject {
 	if len(defs) != 0 || len(args) != 1 || args[0].Type() != object.STRING_OBJ {
 		return ErrorMessage(
 			"string", "length",
@@ -202,7 +202,7 @@ func length(args []object.Object, defs map[string]object.Object) object.Object {
 	return &object.Integer{Value: int64(len(args[0].(*object.String).Value))}
 }
 
-func indexOf(args []object.Object, defs map[string]object.Object) object.Object {
+func indexOf(args []object.VintObject, defs map[string]object.VintObject) object.VintObject {
 	if len(defs) != 0 || len(args) != 2 || args[0].Type() != object.STRING_OBJ || args[1].Type() != object.STRING_OBJ {
 		return ErrorMessage(
 			"string", "indexOf",
@@ -218,7 +218,7 @@ func indexOf(args []object.Object, defs map[string]object.Object) object.Object 
 	return &object.Integer{Value: int64(index)}
 }
 
-func startsWith(args []object.Object, defs map[string]object.Object) object.Object {
+func startsWith(args []object.VintObject, defs map[string]object.VintObject) object.VintObject {
 	if len(defs) != 0 || len(args) != 2 || args[0].Type() != object.STRING_OBJ || args[1].Type() != object.STRING_OBJ {
 		return ErrorMessage(
 			"string", "startsWith",
@@ -233,7 +233,7 @@ func startsWith(args []object.Object, defs map[string]object.Object) object.Obje
 	return &object.Boolean{Value: strings.HasPrefix(str, prefix)}
 }
 
-func endsWith(args []object.Object, defs map[string]object.Object) object.Object {
+func endsWith(args []object.VintObject, defs map[string]object.VintObject) object.VintObject {
 	if len(defs) != 0 || len(args) != 2 || args[0].Type() != object.STRING_OBJ || args[1].Type() != object.STRING_OBJ {
 		return ErrorMessage(
 			"string", "endsWith",
@@ -248,7 +248,7 @@ func endsWith(args []object.Object, defs map[string]object.Object) object.Object
 	return &object.Boolean{Value: strings.HasSuffix(str, suffix)}
 }
 
-func chr(args []object.Object, defs map[string]object.Object) object.Object {
+func chr(args []object.VintObject, defs map[string]object.VintObject) object.VintObject {
 	if len(defs) != 0 || len(args) != 1 || args[0].Type() != object.INTEGER_OBJ {
 		return ErrorMessage(
 			"string", "chr",
@@ -262,7 +262,7 @@ func chr(args []object.Object, defs map[string]object.Object) object.Object {
 	return &object.String{Value: string(rune(code))}
 }
 
-func ord(args []object.Object, defs map[string]object.Object) object.Object {
+func ord(args []object.VintObject, defs map[string]object.VintObject) object.VintObject {
 	if len(defs) != 0 || len(args) != 1 || args[0].Type() != object.STRING_OBJ {
 		return ErrorMessage(
 			"string", "ord",

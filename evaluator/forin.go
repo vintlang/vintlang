@@ -5,7 +5,7 @@ import (
 	"github.com/vintlang/vintlang/object"
 )
 
-func evalForInExpression(fie *ast.ForIn, env *object.Environment, line int) object.Object {
+func evalForInExpression(fie *ast.ForIn, env *object.Environment, line int) object.VintObject {
 	// Evaluates the iterable expression
 	iterable := Eval(fie.Iterable, env)
 
@@ -29,8 +29,8 @@ type IsolatedIterator struct {
 }
 
 type IteratorItem struct {
-	Key   object.Object
-	Value object.Object
+	Key   object.VintObject
+	Value object.VintObject
 }
 
 // createIsolatedIterator creates a snapshot of all items to iterate over
@@ -60,7 +60,7 @@ func createIsolatedIterator(original object.Iterable) *IsolatedIterator {
 }
 
 // Next We returns the next key-value pair from the snapshot
-func (iter *IsolatedIterator) Next() (object.Object, object.Object) {
+func (iter *IsolatedIterator) Next() (object.VintObject, object.VintObject) {
 	if iter.index >= len(iter.items) {
 		return nil, nil
 	}
@@ -76,12 +76,12 @@ func (iter *IsolatedIterator) Reset() {
 }
 
 func loopIterable(
-	next func() (object.Object, object.Object),
+	next func() (object.VintObject, object.VintObject),
 	env *object.Environment,
 	fi *ast.ForIn,
 	line int,
-) object.Object {
-	var ret object.Object
+) object.VintObject {
+	var ret object.VintObject
 	k, v := next()
 	for k != nil {
 		loopEnv := object.NewEnclosedEnvironment(env)

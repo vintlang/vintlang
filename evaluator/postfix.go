@@ -5,13 +5,13 @@ import (
 	"github.com/vintlang/vintlang/object"
 )
 
-func evalPostfixExpression(env *object.Environment, operator string, node *ast.PostfixExpression) object.Object {
+func evalPostfixExpression(env *object.Environment, operator string, node *ast.PostfixExpression) object.VintObject {
 	val, ok := env.Get(node.Token.Literal)
 	if !ok {
 		return newError("Use a NUMBER or DECIMAL IDENTIFIER, not %s", node.Token.Type)
 	}
 
-	assign := func(val object.Object) object.Object {
+	assign := func(val object.VintObject) object.VintObject {
 		newVal, ok := env.Assign(node.Token.Literal, val)
 		if !ok {
 			return newError("assignment to undeclared variable '%s'", node.Token.Literal)

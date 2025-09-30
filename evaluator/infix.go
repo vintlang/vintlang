@@ -7,7 +7,7 @@ import (
 	"github.com/vintlang/vintlang/object"
 )
 
-func evalInfixExpression(operator string, left, right object.Object, line int) object.Object {
+func evalInfixExpression(operator string, left, right object.VintObject, line int) object.VintObject {
 	if right == nil {
 		return newError("Line %d: Right operand is missing or invalid for '%s' operator", line, operator)
 	}
@@ -104,7 +104,7 @@ func evalInfixExpression(operator string, left, right object.Object, line int) o
 	}
 }
 
-func evalFloatIntegerInfixExpression(operator string, left, right object.Object, line int) object.Object {
+func evalFloatIntegerInfixExpression(operator string, left, right object.VintObject, line int) object.VintObject {
 	var leftVal, rightVal float64
 	if left.Type() == object.FLOAT_OBJ {
 		leftVal = left.(*object.Float).Value
@@ -152,7 +152,7 @@ func evalFloatIntegerInfixExpression(operator string, left, right object.Object,
 	}
 }
 
-func evalStringInfixExpression(operator string, left, right object.Object, line int) object.Object {
+func evalStringInfixExpression(operator string, left, right object.VintObject, line int) object.VintObject {
 
 	leftVal := left.(*object.String).Value
 	rightVal := right.(*object.String).Value
@@ -169,7 +169,7 @@ func evalStringInfixExpression(operator string, left, right object.Object, line 
 	}
 }
 
-func evalBooleanInfixExpression(operator string, left, right object.Object, line int) object.Object {
+func evalBooleanInfixExpression(operator string, left, right object.VintObject, line int) object.VintObject {
 	leftVal := left.(*object.Boolean).Value
 	rightVal := right.(*object.Boolean).Value
 
@@ -183,7 +183,7 @@ func evalBooleanInfixExpression(operator string, left, right object.Object, line
 	}
 }
 
-func evalFloatInfixExpression(operator string, left, right object.Object, line int) object.Object {
+func evalFloatInfixExpression(operator string, left, right object.VintObject, line int) object.VintObject {
 	leftVal := left.(*object.Float).Value
 	rightVal := right.(*object.Float).Value
 
@@ -216,7 +216,7 @@ func evalFloatInfixExpression(operator string, left, right object.Object, line i
 	}
 }
 
-func evalIntegerInfixExpression(operator string, left, right object.Object, line int) object.Object {
+func evalIntegerInfixExpression(operator string, left, right object.VintObject, line int) object.VintObject {
 	leftVal := left.(*object.Integer).Value
 	rightVal := right.(*object.Integer).Value
 

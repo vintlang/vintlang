@@ -10,18 +10,18 @@ import (
 
 type Bytecode struct {
 	Instructions code.Instructions
-	Constants    []object.Object
+	Constants    []object.VintObject
 }
 
 type Compiler struct {
 	instructions code.Instructions
-	constants    []object.Object
+	constants    []object.VintObject
 }
 
 func New() *Compiler {
 	return &Compiler{
 		instructions: code.Instructions{},
-		constants:    []object.Object{},
+		constants:    []object.VintObject{},
 	}
 }
 
@@ -108,7 +108,7 @@ func (c *Compiler) Bytecode() *Bytecode {
 	}
 }
 
-func (c *Compiler) addConstant(obj object.Object) int {
+func (c *Compiler) addConstant(obj object.VintObject) int {
 	c.constants = append(c.constants, obj)
 	return len(c.constants) - 1
 }
@@ -119,4 +119,3 @@ func (c *Compiler) emit(op code.Opcode, operands ...int) int {
 	c.instructions = append(c.instructions, ins...)
 	return pos
 }
- 

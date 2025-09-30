@@ -32,7 +32,7 @@ const (
 // Tracks imported modules to detect circular imports
 var importedModules = make(map[string]bool)
 
-func evalImport(node *ast.Import, env *object.Environment) object.Object {
+func evalImport(node *ast.Import, env *object.Environment) object.VintObject {
 	// Resets imported modules for new import chain
 	importedModules = make(map[string]bool)
 
@@ -60,7 +60,7 @@ func evalImport(node *ast.Import, env *object.Environment) object.Object {
 	return NULL
 }
 
-func evalImportFile(name string, ident *ast.Identifier, env *object.Environment) object.Object {
+func evalImportFile(name string, ident *ast.Identifier, env *object.Environment) object.VintObject {
 	addSearchPath("")
 	checkAndAddModulesDir()
 
@@ -166,7 +166,7 @@ func fileExists(file string) bool {
 	return !info.IsDir()
 }
 
-func evaluateFile(file string) (object.Object, object.Object) {
+func evaluateFile(file string) (object.VintObject, object.VintObject) {
 	var source []byte
 	var err error
 
@@ -214,7 +214,7 @@ func evaluateFile(file string) (object.Object, object.Object) {
 	return result, nil
 }
 
-func importFile(name string, ident *ast.Identifier, env *object.Environment, imported object.Object) object.Object {
+func importFile(name string, ident *ast.Identifier, env *object.Environment, imported object.VintObject) object.VintObject {
 	env.Define(name, imported)
 	return imported
 }

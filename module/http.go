@@ -53,7 +53,7 @@ func init() {
 }
 
 // fileServer serves files from a specified directory with directory listing enabled.
-func fileServer(args []object.Object, defs map[string]object.Object) object.Object {
+func fileServer(args []object.VintObject, defs map[string]object.VintObject) object.VintObject {
 	if len(args) < 2 || len(args) > 3 {
 		return &object.Error{Message: "Usage: http.fileServer(port, directory, [message])"}
 	}
@@ -142,7 +142,7 @@ func waitForInterrupt() {
 }
 
 // createApp creates a new Express.js-like application instance
-func createApp(args []object.Object, defs map[string]object.Object) object.Object {
+func createApp(args []object.VintObject, defs map[string]object.VintObject) object.VintObject {
 	if len(args) > 0 {
 		return &object.Error{Message: "http.app() takes no arguments"}
 	}
@@ -153,7 +153,7 @@ func createApp(args []object.Object, defs map[string]object.Object) object.Objec
 
 // createRouteWrapper creates a route handler for a specific HTTP method
 func createRouteWrapper(method string) object.ModuleFunction {
-	return func(args []object.Object, defs map[string]object.Object) object.Object {
+	return func(args []object.VintObject, defs map[string]object.VintObject) object.VintObject {
 		if currentApp == nil {
 			return &object.Error{Message: "No app instance found. Call http.app() first."}
 		}
@@ -181,7 +181,7 @@ func createRouteWrapper(method string) object.ModuleFunction {
 }
 
 // useMiddleware creates a middleware handler
-func useMiddleware(args []object.Object, defs map[string]object.Object) object.Object {
+func useMiddleware(args []object.VintObject, defs map[string]object.VintObject) object.VintObject {
 	if currentApp == nil {
 		return &object.Error{Message: "No app instance found. Call http.app() first."}
 	}
@@ -200,7 +200,7 @@ func useMiddleware(args []object.Object, defs map[string]object.Object) object.O
 }
 
 // listenServer creates the listen method for starting the server
-func listenServer(args []object.Object, defs map[string]object.Object) object.Object {
+func listenServer(args []object.VintObject, defs map[string]object.VintObject) object.VintObject {
 	if currentApp == nil {
 		return &object.Error{Message: "No app instance found. Call http.app() first."}
 	}
@@ -232,7 +232,7 @@ func listenServer(args []object.Object, defs map[string]object.Object) object.Ob
 
 	// Create HTTP handler
 	handler := createHTTPHandler(currentApp)
-	
+
 	// Start server
 	currentApp.Server = &http.Server{
 		Addr:    ":" + port,
@@ -263,7 +263,7 @@ func listenServer(args []object.Object, defs map[string]object.Object) object.Ob
 func createHTTPHandler(app *object.HTTPApp) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		startTime := time.Now()
-		
+
 		// Create enhanced request and response objects
 		req := object.NewHTTPRequest(r)
 
@@ -354,7 +354,7 @@ func createHTTPHandler(app *object.HTTPApp) http.HandlerFunc {
 		// Find matching route (including route groups)
 		routeKey := r.Method + ":" + r.URL.Path
 		handler, exists := app.Routes[routeKey]
-		
+
 		if !exists {
 			// Check route groups
 			for prefix, group := range app.RouteGroups {
@@ -370,7 +370,7 @@ func createHTTPHandler(app *object.HTTPApp) http.HandlerFunc {
 				}
 			}
 		}
-		
+
 		if !exists {
 			// Try to find a route that matches with parameters
 			for key, routeHandler := range app.Routes {
@@ -387,7 +387,7 @@ func createHTTPHandler(app *object.HTTPApp) http.HandlerFunc {
 			if app.ErrorHandler != nil {
 				log.Printf("Running error handler for 404: %s", app.ErrorHandler.Inspect())
 			}
-			
+
 			// Enhanced error response structure
 			w.WriteHeader(404)
 			w.Header().Set("Content-Type", "application/json")
@@ -398,8 +398,8 @@ func createHTTPHandler(app *object.HTTPApp) http.HandlerFunc {
 					"code":    "ROUTE_NOT_FOUND",
 					"status":  404,
 					"details": map[string]interface{}{
-						"method": r.Method,
-						"path":   r.URL.Path,
+						"method":    r.Method,
+						"path":      r.URL.Path,
 						"timestamp": time.Now().UTC().Format(time.RFC3339),
 					},
 				},
@@ -417,7 +417,7 @@ func createHTTPHandler(app *object.HTTPApp) http.HandlerFunc {
 		response := fmt.Sprintf("✓ Enhanced route handler executed for %s %s\n", r.Method, r.URL.Path)
 		response += fmt.Sprintf("Function: %s\n", handler.Inspect())
 		response += fmt.Sprintf("Handler has %d parameters\n", len(handler.Parameters))
-		
+
 		// Add enhanced request information
 		response += "\nEnhanced Request Info:\n"
 		response += fmt.Sprintf("- Method: %s\n", r.Method)
@@ -426,7 +426,7 @@ func createHTTPHandler(app *object.HTTPApp) http.HandlerFunc {
 		response += fmt.Sprintf("- Query params: %d\n", len(r.URL.Query()))
 		response += fmt.Sprintf("- Cookies: %d\n", len(req.Cookies))
 		response += fmt.Sprintf("- Content-Type: %s\n", r.Header.Get("Content-Type"))
-		
+
 		if len(req.FormData) > 0 {
 			response += fmt.Sprintf("- Form data fields: %d\n", len(req.FormData))
 		}
@@ -497,7 +497,7 @@ func matchesRouteWithParams(pattern, actual string, req *object.HTTPRequest) boo
 	// Extract method and path
 	patternMethod := strings.Split(patternParts[0], ":")[0]
 	actualMethod := strings.Split(actualParts[0], ":")[0]
-	
+
 	if patternMethod != actualMethod {
 		return false
 	}
@@ -505,7 +505,7 @@ func matchesRouteWithParams(pattern, actual string, req *object.HTTPRequest) boo
 	// Start from second part (after method:)
 	patternPath := strings.Join(patternParts[1:], "/")
 	actualPath := strings.Join(actualParts[1:], "/")
-	
+
 	patternPathParts := strings.Split(patternPath, "/")
 	actualPathParts := strings.Split(actualPath, "/")
 
@@ -530,7 +530,7 @@ func matchesRouteWithParams(pattern, actual string, req *object.HTTPRequest) boo
 }
 
 // addInterceptor adds request or response interceptors
-func addInterceptor(args []object.Object, defs map[string]object.Object) object.Object {
+func addInterceptor(args []object.VintObject, defs map[string]object.VintObject) object.VintObject {
 	if currentApp == nil {
 		return &object.Error{Message: "No app instance found. Call http.app() first."}
 	}
@@ -562,7 +562,7 @@ func addInterceptor(args []object.Object, defs map[string]object.Object) object.
 }
 
 // addGuard adds guards for authentication, authorization, rate limiting, etc.
-func addGuard(args []object.Object, defs map[string]object.Object) object.Object {
+func addGuard(args []object.VintObject, defs map[string]object.VintObject) object.VintObject {
 	if currentApp == nil {
 		return &object.Error{Message: "No app instance found. Call http.app() first."}
 	}
@@ -581,7 +581,7 @@ func addGuard(args []object.Object, defs map[string]object.Object) object.Object
 }
 
 // corsMiddleware creates CORS middleware
-func corsMiddleware(args []object.Object, defs map[string]object.Object) object.Object {
+func corsMiddleware(args []object.VintObject, defs map[string]object.VintObject) object.VintObject {
 	if currentApp == nil {
 		return &object.Error{Message: "No app instance found. Call http.app() first."}
 	}
@@ -602,7 +602,7 @@ func corsMiddleware(args []object.Object, defs map[string]object.Object) object.
 }
 
 // bodyParserMiddleware creates body parser middleware
-func bodyParserMiddleware(args []object.Object, defs map[string]object.Object) object.Object {
+func bodyParserMiddleware(args []object.VintObject, defs map[string]object.VintObject) object.VintObject {
 	if currentApp == nil {
 		return &object.Error{Message: "No app instance found. Call http.app() first."}
 	}
@@ -623,7 +623,7 @@ func bodyParserMiddleware(args []object.Object, defs map[string]object.Object) o
 }
 
 // authMiddleware creates authentication middleware
-func authMiddleware(args []object.Object, defs map[string]object.Object) object.Object {
+func authMiddleware(args []object.VintObject, defs map[string]object.VintObject) object.VintObject {
 	if currentApp == nil {
 		return &object.Error{Message: "No app instance found. Call http.app() first."}
 	}
@@ -642,7 +642,7 @@ func authMiddleware(args []object.Object, defs map[string]object.Object) object.
 }
 
 // setErrorHandler sets a global error handler
-func setErrorHandler(args []object.Object, defs map[string]object.Object) object.Object {
+func setErrorHandler(args []object.VintObject, defs map[string]object.VintObject) object.VintObject {
 	if currentApp == nil {
 		return &object.Error{Message: "No app instance found. Call http.app() first."}
 	}
@@ -663,7 +663,7 @@ func setErrorHandler(args []object.Object, defs map[string]object.Object) object
 // Enterprise Features Implementation
 
 // createRouteGroup creates a route group with a common prefix
-func createRouteGroup(args []object.Object, defs map[string]object.Object) object.Object {
+func createRouteGroup(args []object.VintObject, defs map[string]object.VintObject) object.VintObject {
 	if currentApp == nil {
 		return &object.Error{Message: "No app instance found. Call http.app() first."}
 	}
@@ -695,7 +695,7 @@ func createRouteGroup(args []object.Object, defs map[string]object.Object) objec
 	}
 
 	currentApp.RouteGroups[prefix.Value] = routeGroup
-	
+
 	// Store the group function for future use
 	_ = groupFunc
 
@@ -703,7 +703,7 @@ func createRouteGroup(args []object.Object, defs map[string]object.Object) objec
 }
 
 // parseMultipart handles multipart form data parsing
-func parseMultipart(args []object.Object, defs map[string]object.Object) object.Object {
+func parseMultipart(args []object.VintObject, defs map[string]object.VintObject) object.VintObject {
 	if len(args) != 1 {
 		return &object.Error{Message: "http.multipart() requires exactly 1 argument: request object"}
 	}
@@ -767,7 +767,7 @@ func parseMultipart(args []object.Object, defs map[string]object.Object) object.
 }
 
 // createAsyncHandler creates an async handler for long-running operations
-func createAsyncHandler(args []object.Object, defs map[string]object.Object) object.Object {
+func createAsyncHandler(args []object.VintObject, defs map[string]object.VintObject) object.VintObject {
 	if len(args) != 1 {
 		return &object.Error{Message: "http.async() requires exactly 1 argument: handler function"}
 	}
@@ -789,7 +789,7 @@ func createAsyncHandler(args []object.Object, defs map[string]object.Object) obj
 }
 
 // securityMiddleware creates security middleware with CSRF protection and security headers
-func securityMiddleware(args []object.Object, defs map[string]object.Object) object.Object {
+func securityMiddleware(args []object.VintObject, defs map[string]object.VintObject) object.VintObject {
 	if currentApp == nil {
 		return &object.Error{Message: "No app instance found. Call http.app() first."}
 	}
@@ -810,7 +810,7 @@ func securityMiddleware(args []object.Object, defs map[string]object.Object) obj
 }
 
 // createStreamHandler creates a streaming response handler
-func createStreamHandler(args []object.Object, defs map[string]object.Object) object.Object {
+func createStreamHandler(args []object.VintObject, defs map[string]object.VintObject) object.VintObject {
 	if len(args) != 1 {
 		return &object.Error{Message: "http.stream() requires exactly 1 argument: stream handler function"}
 	}
@@ -822,9 +822,9 @@ func createStreamHandler(args []object.Object, defs map[string]object.Object) ob
 
 	// Create a streaming wrapper function
 	streamHandler := &object.Function{
-		Parameters: handler.Parameters,
-		Body:       handler.Body,
-		Env:        handler.Env,
+		Parameters:  handler.Parameters,
+		Body:        handler.Body,
+		Env:         handler.Env,
 		IsStreaming: true, // Mark as streaming
 	}
 
@@ -832,7 +832,7 @@ func createStreamHandler(args []object.Object, defs map[string]object.Object) ob
 }
 
 // enableMetrics enables performance monitoring and metrics collection
-func enableMetrics(args []object.Object, defs map[string]object.Object) object.Object {
+func enableMetrics(args []object.VintObject, defs map[string]object.VintObject) object.VintObject {
 	if currentApp == nil {
 		return &object.Error{Message: "No app instance found. Call http.app() first."}
 	}

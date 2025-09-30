@@ -6,7 +6,7 @@ import (
 	"github.com/vintlang/vintlang/object"
 )
 
-func evalInExpression(left, right object.Object, line int) object.Object {
+func evalInExpression(left, right object.VintObject, line int) object.VintObject {
 	switch right.(type) {
 	case *object.String:
 		return evalInStringExpression(left, right)
@@ -19,7 +19,7 @@ func evalInExpression(left, right object.Object, line int) object.Object {
 	}
 }
 
-func evalInStringExpression(left, right object.Object) object.Object {
+func evalInStringExpression(left, right object.VintObject) object.VintObject {
 	if left.Type() != object.STRING_OBJ {
 		return FALSE
 	}
@@ -29,7 +29,7 @@ func evalInStringExpression(left, right object.Object) object.Object {
 	return nativeBoolToBooleanObject(found)
 }
 
-func evalInDictExpression(left, right object.Object, line int) object.Object {
+func evalInDictExpression(left, right object.VintObject, line int) object.VintObject {
 	leftVal, ok := left.(object.Hashable)
 	if !ok {
 		return newError("Line %d: Sorry, %s cannot be used as a key", line, left.Type())
@@ -40,7 +40,7 @@ func evalInDictExpression(left, right object.Object, line int) object.Object {
 	return nativeBoolToBooleanObject(ok)
 }
 
-func evalInArrayExpression(left, right object.Object) object.Object {
+func evalInArrayExpression(left, right object.VintObject) object.VintObject {
 	rightVal := right.(*object.Array)
 	switch leftVal := left.(type) {
 	case *object.Null:

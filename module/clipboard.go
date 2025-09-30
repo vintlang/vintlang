@@ -17,7 +17,7 @@ func init() {
 	ClipboardFunctions["all"] = clipboardAll
 }
 
-func clipboardWrite(args []object.Object, defs map[string]object.Object) object.Object {
+func clipboardWrite(args []object.VintObject, defs map[string]object.VintObject) object.VintObject {
 	if len(args) != 1 {
 		return ErrorMessage(
 			"clipboard", "write",
@@ -58,7 +58,7 @@ func clipboardWrite(args []object.Object, defs map[string]object.Object) object.
 	return &object.Boolean{Value: true}
 }
 
-func clipboardRead(args []object.Object, defs map[string]object.Object) object.Object {
+func clipboardRead(args []object.VintObject, defs map[string]object.VintObject) object.VintObject {
 	if len(args) != 0 {
 		return ErrorMessage(
 			"clipboard", "read",
@@ -76,7 +76,7 @@ func clipboardRead(args []object.Object, defs map[string]object.Object) object.O
 	return &object.String{Value: text}
 }
 
-func clipboardClear(args []object.Object, defs map[string]object.Object) object.Object {
+func clipboardClear(args []object.VintObject, defs map[string]object.VintObject) object.VintObject {
 	if len(args) != 0 {
 		return ErrorMessage(
 			"clipboard", "clear",
@@ -94,7 +94,7 @@ func clipboardClear(args []object.Object, defs map[string]object.Object) object.
 	return &object.Boolean{Value: true}
 }
 
-func clipboardHasContent(args []object.Object, defs map[string]object.Object) object.Object {
+func clipboardHasContent(args []object.VintObject, defs map[string]object.VintObject) object.VintObject {
 	if len(args) != 0 {
 		return ErrorMessage(
 			"clipboard", "hasContent",
@@ -112,7 +112,7 @@ func clipboardHasContent(args []object.Object, defs map[string]object.Object) ob
 	return &object.Boolean{Value: len(text) > 0}
 }
 
-func clipboardAll(args []object.Object, defs map[string]object.Object) object.Object {
+func clipboardAll(args []object.VintObject, defs map[string]object.VintObject) object.VintObject {
 	if len(args) != 0 {
 		return ErrorMessage(
 			"clipboard", "all",
@@ -129,7 +129,7 @@ func clipboardAll(args []object.Object, defs map[string]object.Object) object.Ob
 
 	// We create an array with the current clipboard content
 	// Since system clipboard only holds one item at a time, we return array with single item
-	elements := []object.Object{}
+	elements := []object.VintObject{}
 	if len(text) > 0 {
 		elements = append(elements, &object.String{Value: text})
 	}

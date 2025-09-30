@@ -1,6 +1,6 @@
 package object
 
-type BuiltinFunction func(args ...Object) Object
+type BuiltinFunction func(args ...VintObject) VintObject
 
 type Builtin struct {
 	Fn BuiltinFunction

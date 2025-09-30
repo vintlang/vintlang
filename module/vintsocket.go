@@ -1,9 +1,10 @@
-package module  //THIS IS AN EXPERIMENTAL MODULE
+package module //THIS IS AN EXPERIMENTAL MODULE
 
 import (
-	"github.com/gorilla/websocket"
 	"net/http"
 	"sync"
+
+	"github.com/gorilla/websocket"
 
 	"github.com/vintlang/vintlang/object"
 )
@@ -29,7 +30,7 @@ func init() {
 }
 
 // Create WebSocket server
-func createServer(args []object.Object, defs map[string]object.Object) object.Object {
+func createServer(args []object.VintObject, defs map[string]object.VintObject) object.VintObject {
 	if len(args) != 1 {
 		return &object.Error{Message: "createServer requires one argument: port"}
 	}
@@ -60,7 +61,7 @@ func createServer(args []object.Object, defs map[string]object.Object) object.Ob
 }
 
 // Connect to WebSocket server
-func connect(args []object.Object, defs map[string]object.Object) object.Object {
+func connect(args []object.VintObject, defs map[string]object.VintObject) object.VintObject {
 	if len(args) != 1 {
 		return &object.Error{Message: "connect requires one argument: URL"}
 	}
@@ -79,7 +80,7 @@ func connect(args []object.Object, defs map[string]object.Object) object.Object 
 }
 
 // Send message to a specific client
-func sendMessage(args []object.Object, defs map[string]object.Object) object.Object {
+func sendMessage(args []object.VintObject, defs map[string]object.VintObject) object.VintObject {
 	if len(args) != 2 {
 		return &object.Error{Message: "sendMessage requires two arguments: client index and message"}
 	}
@@ -104,7 +105,7 @@ func sendMessage(args []object.Object, defs map[string]object.Object) object.Obj
 }
 
 // Broadcast message to all clients
-func broadcast(args []object.Object, defs map[string]object.Object) object.Object {
+func broadcast(args []object.VintObject, defs map[string]object.VintObject) object.VintObject {
 	if len(args) != 1 {
 		return &object.Error{Message: "broadcast requires one argument: message"}
 	}

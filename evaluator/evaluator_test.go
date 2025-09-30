@@ -16,21 +16,21 @@ func TestNullCoalescingOperator(t *testing.T) {
 		// Basic null coalescing
 		{"null ?? \"default\"", "default"},
 		{"\"value\" ?? \"default\"", "value"},
-		
+
 		// Different data types
 		{"null ?? 42", 42},
 		{"null ?? true", true},
 		{"null ?? false", false},
-		
+
 		// Chained null coalescing
 		{"null ?? null ?? \"final\"", "final"},
 		{"null ?? \"first\" ?? \"second\"", "first"},
-		
+
 		// Edge cases with non-null "falsy" values
 		{"\"\" ?? \"default\"", ""},
 		{"0 ?? 999", 0},
 		{"false ?? true", false},
-		
+
 		// Complex expressions
 		{"let a = null; a ?? \"default\"", "default"},
 		{"let a = \"value\"; a ?? \"default\"", "value"},
@@ -64,7 +64,7 @@ func TestNullCoalescingOperator(t *testing.T) {
 func TestIfExpressionAndStatement(t *testing.T) {
 	cases := []struct {
 		input    string
-		expected object.Object
+		expected object.VintObject
 	}{
 		// If as an expression
 		{"let status = \"\"; status = if (true) { \"Online\" } else { \"Offline\" }; status", &object.String{Value: "Online"}},
@@ -152,7 +152,7 @@ func TestChannels(t *testing.T) {
 	}
 }
 
-func testIntegerObject(t *testing.T, obj object.Object, expected int64) bool {
+func testIntegerObject(t *testing.T, obj object.VintObject, expected int64) bool {
 	result, ok := obj.(*object.Integer)
 	if !ok {
 		t.Errorf("object is not Integer. got=%T (%+v)", obj, obj)
@@ -166,7 +166,7 @@ func testIntegerObject(t *testing.T, obj object.Object, expected int64) bool {
 	return true
 }
 
-func testStringObject(t *testing.T, obj object.Object, expected string) bool {
+func testStringObject(t *testing.T, obj object.VintObject, expected string) bool {
 	result, ok := obj.(*object.String)
 	if !ok {
 		t.Errorf("object is not String. got=%T (%+v)", obj, obj)
@@ -196,13 +196,13 @@ func TestRangeExpressions(t *testing.T) {
 		program := p.ParseProgram()
 		env := object.NewEnvironment()
 		result := Eval(program, env)
-		
+
 		rangeObj, ok := result.(*object.Range)
 		if !ok {
 			t.Errorf("object is not Range. got=%T (%+v)", result, result)
 			continue
 		}
-		
+
 		if rangeObj.Inspect() != tt.expected {
 			t.Errorf("range has wrong string representation. got=%q, want=%q",
 				rangeObj.Inspect(), tt.expected)
@@ -235,19 +235,19 @@ func TestRangeInForLoop(t *testing.T) {
 		program := p.ParseProgram()
 		env := object.NewEnvironment()
 		result := Eval(program, env)
-		
+
 		array, ok := result.(*object.Array)
 		if !ok {
 			t.Errorf("object is not Array. got=%T (%+v)", result, result)
 			continue
 		}
-		
+
 		if len(array.Elements) != len(tt.expected) {
 			t.Errorf("array has wrong length. got=%d, want=%d",
 				len(array.Elements), len(tt.expected))
 			continue
 		}
-		
+
 		for i, expectedVal := range tt.expected {
 			intObj, ok := array.Elements[i].(*object.Integer)
 			if !ok {

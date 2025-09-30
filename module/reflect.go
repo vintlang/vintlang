@@ -16,7 +16,7 @@ func init() {
 }
 
 // typeOf returns the type name of the given value
-func typeOf(args []object.Object, defs map[string]object.Object) object.Object {
+func typeOf(args []object.VintObject, defs map[string]object.VintObject) object.VintObject {
 	if len(args) != 1 {
 		return ErrorMessage(
 			"reflect",
@@ -30,7 +30,7 @@ func typeOf(args []object.Object, defs map[string]object.Object) object.Object {
 }
 
 // valueOf returns the raw value (already implemented)
-func valueOf(args []object.Object, defs map[string]object.Object) object.Object {
+func valueOf(args []object.VintObject, defs map[string]object.VintObject) object.VintObject {
 	if len(args) != 1 {
 		return ErrorMessage(
 			"reflect",
@@ -44,7 +44,7 @@ func valueOf(args []object.Object, defs map[string]object.Object) object.Object 
 }
 
 // isNil checks if the value is null
-func isNil(args []object.Object, defs map[string]object.Object) object.Object {
+func isNil(args []object.VintObject, defs map[string]object.VintObject) object.VintObject {
 	if len(args) != 1 {
 		return ErrorMessage(
 			"reflect",
@@ -59,7 +59,7 @@ func isNil(args []object.Object, defs map[string]object.Object) object.Object {
 }
 
 // isArray checks if the value is an array
-func isArray(args []object.Object, defs map[string]object.Object) object.Object {
+func isArray(args []object.VintObject, defs map[string]object.VintObject) object.VintObject {
 	if len(args) != 1 {
 		return ErrorMessage(
 			"reflect",
@@ -74,7 +74,7 @@ func isArray(args []object.Object, defs map[string]object.Object) object.Object 
 }
 
 // isObject checks if the value is a dictionary/object
-func isObject(args []object.Object, defs map[string]object.Object) object.Object {
+func isObject(args []object.VintObject, defs map[string]object.VintObject) object.VintObject {
 	if len(args) != 1 {
 		return ErrorMessage(
 			"reflect",
@@ -89,7 +89,7 @@ func isObject(args []object.Object, defs map[string]object.Object) object.Object
 }
 
 // isFunction checks if the value is a function
-func isFunction(args []object.Object, defs map[string]object.Object) object.Object {
+func isFunction(args []object.VintObject, defs map[string]object.VintObject) object.VintObject {
 	if len(args) != 1 {
 		return ErrorMessage(
 			"reflect",
@@ -102,4 +102,3 @@ func isFunction(args []object.Object, defs map[string]object.Object) object.Obje
 	_, ok := args[0].(*object.Function)
 	return &object.Boolean{Value: ok}
 }
-

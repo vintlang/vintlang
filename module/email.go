@@ -18,7 +18,7 @@ func init() {
 	EmailFunctions["normalize"] = emailNormalize
 }
 
-func emailValidate(args []object.Object, defs map[string]object.Object) object.Object {
+func emailValidate(args []object.VintObject, defs map[string]object.VintObject) object.VintObject {
 	if len(args) != 1 {
 		return ErrorMessage(
 			"email", "validate",
@@ -39,21 +39,21 @@ func emailValidate(args []object.Object, defs map[string]object.Object) object.O
 	}
 
 	email := emailStr.(*object.String).Value
-	
+
 	// Use Go's mail package for validation
 	_, err := mail.ParseAddress(email)
 	if err != nil {
 		return &object.Boolean{Value: false}
 	}
-	
+
 	// Additional validation with regex for common patterns
 	emailRegex := regexp.MustCompile(`^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$`)
 	isValid := emailRegex.MatchString(email)
-	
+
 	return &object.Boolean{Value: isValid}
 }
 
-func emailExtractDomain(args []object.Object, defs map[string]object.Object) object.Object {
+func emailExtractDomain(args []object.VintObject, defs map[string]object.VintObject) object.VintObject {
 	if len(args) != 1 {
 		return ErrorMessage(
 			"email", "extractDomain",
@@ -74,18 +74,18 @@ func emailExtractDomain(args []object.Object, defs map[string]object.Object) obj
 	}
 
 	email := emailStr.(*object.String).Value
-	
+
 	// Find the @ symbol and extract domain
 	atIndex := strings.LastIndex(email, "@")
 	if atIndex == -1 || atIndex == len(email)-1 {
 		return &object.String{Value: ""}
 	}
-	
+
 	domain := email[atIndex+1:]
 	return &object.String{Value: domain}
 }
 
-func emailExtractUsername(args []object.Object, defs map[string]object.Object) object.Object {
+func emailExtractUsername(args []object.VintObject, defs map[string]object.VintObject) object.VintObject {
 	if len(args) != 1 {
 		return ErrorMessage(
 			"email", "extractUsername",
@@ -106,18 +106,18 @@ func emailExtractUsername(args []object.Object, defs map[string]object.Object) o
 	}
 
 	email := emailStr.(*object.String).Value
-	
+
 	// Find the @ symbol and extract username
 	atIndex := strings.LastIndex(email, "@")
 	if atIndex == -1 || atIndex == 0 {
 		return &object.String{Value: ""}
 	}
-	
+
 	username := email[:atIndex]
 	return &object.String{Value: username}
 }
 
-func emailNormalize(args []object.Object, defs map[string]object.Object) object.Object {
+func emailNormalize(args []object.VintObject, defs map[string]object.VintObject) object.VintObject {
 	if len(args) != 1 {
 		return ErrorMessage(
 			"email", "normalize",
@@ -138,15 +138,15 @@ func emailNormalize(args []object.Object, defs map[string]object.Object) object.
 	}
 
 	email := emailStr.(*object.String).Value
-	
+
 	// Convert to lowercase and trim whitespace
 	normalized := strings.ToLower(strings.TrimSpace(email))
-	
+
 	// Validate that it's still a valid email after normalization
 	_, err := mail.ParseAddress(normalized)
 	if err != nil {
 		return &object.String{Value: email} // Return original if normalization makes it invalid
 	}
-	
+
 	return &object.String{Value: normalized}
 }

@@ -32,7 +32,7 @@ func init() {
 	DatetimeFunctions["endOfYear"] = datetimeEndOfYear
 }
 
-func datetimeNow(args []object.Object, defs map[string]object.Object) object.Object {
+func datetimeNow(args []object.VintObject, defs map[string]object.VintObject) object.VintObject {
 	if len(args) > 1 {
 		return ErrorMessage(
 			"datetime", "now",
@@ -58,11 +58,11 @@ func datetimeNow(args []object.Object, defs map[string]object.Object) object.Obj
 	return &object.Time{TimeValue: now.Format("15:04:05 02-01-2006")}
 }
 
-func datetimeUtcNow(args []object.Object, defs map[string]object.Object) object.Object {
+func datetimeUtcNow(args []object.VintObject, defs map[string]object.VintObject) object.VintObject {
 	if len(args) != 0 || len(defs) != 0 {
 		return ErrorMessage(
 			"datetime", "utcNow",
-			"no arguments", 
+			"no arguments",
 			fmt.Sprintf("%d arguments", len(args)),
 			"datetime.utcNow() -> returns current UTC timestamp",
 		)
@@ -72,7 +72,7 @@ func datetimeUtcNow(args []object.Object, defs map[string]object.Object) object.
 	return &object.Time{TimeValue: utcNow.Format("15:04:05 02-01-2006")}
 }
 
-func datetimeParse(args []object.Object, defs map[string]object.Object) object.Object {
+func datetimeParse(args []object.VintObject, defs map[string]object.VintObject) object.VintObject {
 	if len(args) < 1 || len(args) > 3 {
 		return ErrorMessage(
 			"datetime", "parse",
@@ -109,7 +109,7 @@ func datetimeParse(args []object.Object, defs map[string]object.Object) object.O
 	return &object.Time{TimeValue: t.Format("15:04:05 02-01-2006")}
 }
 
-func datetimeFromTimestamp(args []object.Object, defs map[string]object.Object) object.Object {
+func datetimeFromTimestamp(args []object.VintObject, defs map[string]object.VintObject) object.VintObject {
 	if len(args) < 1 || len(args) > 2 {
 		return ErrorMessage(
 			"datetime", "fromTimestamp",
@@ -140,11 +140,11 @@ func datetimeFromTimestamp(args []object.Object, defs map[string]object.Object) 
 	return &object.Time{TimeValue: t.Format("15:04:05 02-01-2006")}
 }
 
-func datetimeDuration(args []object.Object, defs map[string]object.Object) object.Object {
+func datetimeDuration(args []object.VintObject, defs map[string]object.VintObject) object.VintObject {
 	if len(defs) > 0 {
 		// Handle keyword arguments for duration creation
 		var totalDuration time.Duration
-		
+
 		for key, value := range defs {
 			valueStr := value.Inspect()
 			valueInt, err := strconv.ParseInt(valueStr, 10, 64)
@@ -173,7 +173,7 @@ func datetimeDuration(args []object.Object, defs map[string]object.Object) objec
 				return &object.Error{Message: fmt.Sprintf("Invalid duration unit: %s", key)}
 			}
 		}
-		
+
 		return &object.Duration{Value: totalDuration}
 	}
 
@@ -195,7 +195,7 @@ func datetimeDuration(args []object.Object, defs map[string]object.Object) objec
 	return &object.Duration{Value: duration}
 }
 
-func datetimeTimezone(args []object.Object, defs map[string]object.Object) object.Object {
+func datetimeTimezone(args []object.VintObject, defs map[string]object.VintObject) object.VintObject {
 	if len(args) != 2 {
 		return ErrorMessage(
 			"datetime", "timezone",
@@ -225,7 +225,7 @@ func datetimeTimezone(args []object.Object, defs map[string]object.Object) objec
 	return &object.Time{TimeValue: convertedTime.Format("15:04:05 02-01-2006")}
 }
 
-func datetimeSleep(args []object.Object, defs map[string]object.Object) object.Object {
+func datetimeSleep(args []object.VintObject, defs map[string]object.VintObject) object.VintObject {
 	if len(args) != 1 {
 		return ErrorMessage(
 			"datetime", "sleep",
@@ -253,7 +253,7 @@ func datetimeSleep(args []object.Object, defs map[string]object.Object) object.O
 	return nil
 }
 
-func datetimeSince(args []object.Object, defs map[string]object.Object) object.Object {
+func datetimeSince(args []object.VintObject, defs map[string]object.VintObject) object.VintObject {
 	if len(args) != 1 {
 		return ErrorMessage(
 			"datetime", "since",
@@ -277,7 +277,7 @@ func datetimeSince(args []object.Object, defs map[string]object.Object) object.O
 	return &object.Duration{Value: duration}
 }
 
-func datetimeUntil(args []object.Object, defs map[string]object.Object) object.Object {
+func datetimeUntil(args []object.VintObject, defs map[string]object.VintObject) object.VintObject {
 	if len(args) != 1 {
 		return ErrorMessage(
 			"datetime", "until",
@@ -301,7 +301,7 @@ func datetimeUntil(args []object.Object, defs map[string]object.Object) object.O
 	return &object.Duration{Value: duration}
 }
 
-func datetimeIsLeapYear(args []object.Object, defs map[string]object.Object) object.Object {
+func datetimeIsLeapYear(args []object.VintObject, defs map[string]object.VintObject) object.VintObject {
 	if len(args) != 1 {
 		return ErrorMessage(
 			"datetime", "isLeapYear",
@@ -321,7 +321,7 @@ func datetimeIsLeapYear(args []object.Object, defs map[string]object.Object) obj
 	return &object.Boolean{Value: isLeap}
 }
 
-func datetimeDaysInMonth(args []object.Object, defs map[string]object.Object) object.Object {
+func datetimeDaysInMonth(args []object.VintObject, defs map[string]object.VintObject) object.VintObject {
 	if len(args) != 2 {
 		return ErrorMessage(
 			"datetime", "daysInMonth",
@@ -350,11 +350,11 @@ func datetimeDaysInMonth(args []object.Object, defs map[string]object.Object) ob
 
 	firstOfNextMonth := time.Date(year, month+1, 1, 0, 0, 0, 0, time.UTC)
 	lastOfThisMonth := firstOfNextMonth.AddDate(0, 0, -1)
-	
+
 	return &object.Integer{Value: int64(lastOfThisMonth.Day())}
 }
 
-func datetimeStartOfDay(args []object.Object, defs map[string]object.Object) object.Object {
+func datetimeStartOfDay(args []object.VintObject, defs map[string]object.VintObject) object.VintObject {
 	if len(args) != 1 {
 		return ErrorMessage(
 			"datetime", "startOfDay",
@@ -378,7 +378,7 @@ func datetimeStartOfDay(args []object.Object, defs map[string]object.Object) obj
 	return &object.Time{TimeValue: startOfDay.Format("15:04:05 02-01-2006")}
 }
 
-func datetimeEndOfDay(args []object.Object, defs map[string]object.Object) object.Object {
+func datetimeEndOfDay(args []object.VintObject, defs map[string]object.VintObject) object.VintObject {
 	if len(args) != 1 {
 		return ErrorMessage(
 			"datetime", "endOfDay",
@@ -402,7 +402,7 @@ func datetimeEndOfDay(args []object.Object, defs map[string]object.Object) objec
 	return &object.Time{TimeValue: endOfDay.Format("15:04:05 02-01-2006")}
 }
 
-func datetimeStartOfWeek(args []object.Object, defs map[string]object.Object) object.Object {
+func datetimeStartOfWeek(args []object.VintObject, defs map[string]object.VintObject) object.VintObject {
 	if len(args) != 1 {
 		return ErrorMessage(
 			"datetime", "startOfWeek",
@@ -426,11 +426,11 @@ func datetimeStartOfWeek(args []object.Object, defs map[string]object.Object) ob
 	daysFromSunday := int(t.Weekday())
 	startOfWeek := t.AddDate(0, 0, -daysFromSunday)
 	startOfWeek = time.Date(startOfWeek.Year(), startOfWeek.Month(), startOfWeek.Day(), 0, 0, 0, 0, startOfWeek.Location())
-	
+
 	return &object.Time{TimeValue: startOfWeek.Format("15:04:05 02-01-2006")}
 }
 
-func datetimeEndOfWeek(args []object.Object, defs map[string]object.Object) object.Object {
+func datetimeEndOfWeek(args []object.VintObject, defs map[string]object.VintObject) object.VintObject {
 	if len(args) != 1 {
 		return ErrorMessage(
 			"datetime", "endOfWeek",
@@ -454,11 +454,11 @@ func datetimeEndOfWeek(args []object.Object, defs map[string]object.Object) obje
 	daysUntilSaturday := 6 - int(t.Weekday())
 	endOfWeek := t.AddDate(0, 0, daysUntilSaturday)
 	endOfWeek = time.Date(endOfWeek.Year(), endOfWeek.Month(), endOfWeek.Day(), 23, 59, 59, 999999999, endOfWeek.Location())
-	
+
 	return &object.Time{TimeValue: endOfWeek.Format("15:04:05 02-01-2006")}
 }
 
-func datetimeStartOfMonth(args []object.Object, defs map[string]object.Object) object.Object {
+func datetimeStartOfMonth(args []object.VintObject, defs map[string]object.VintObject) object.VintObject {
 	if len(args) != 1 {
 		return ErrorMessage(
 			"datetime", "startOfMonth",
@@ -482,7 +482,7 @@ func datetimeStartOfMonth(args []object.Object, defs map[string]object.Object) o
 	return &object.Time{TimeValue: startOfMonth.Format("15:04:05 02-01-2006")}
 }
 
-func datetimeEndOfMonth(args []object.Object, defs map[string]object.Object) object.Object {
+func datetimeEndOfMonth(args []object.VintObject, defs map[string]object.VintObject) object.VintObject {
 	if len(args) != 1 {
 		return ErrorMessage(
 			"datetime", "endOfMonth",
@@ -506,11 +506,11 @@ func datetimeEndOfMonth(args []object.Object, defs map[string]object.Object) obj
 	firstOfNextMonth := time.Date(t.Year(), t.Month()+1, 1, 0, 0, 0, 0, t.Location())
 	endOfMonth := firstOfNextMonth.AddDate(0, 0, -1)
 	endOfMonth = time.Date(endOfMonth.Year(), endOfMonth.Month(), endOfMonth.Day(), 23, 59, 59, 999999999, endOfMonth.Location())
-	
+
 	return &object.Time{TimeValue: endOfMonth.Format("15:04:05 02-01-2006")}
 }
 
-func datetimeStartOfYear(args []object.Object, defs map[string]object.Object) object.Object {
+func datetimeStartOfYear(args []object.VintObject, defs map[string]object.VintObject) object.VintObject {
 	if len(args) != 1 {
 		return ErrorMessage(
 			"datetime", "startOfYear",
@@ -534,7 +534,7 @@ func datetimeStartOfYear(args []object.Object, defs map[string]object.Object) ob
 	return &object.Time{TimeValue: startOfYear.Format("15:04:05 02-01-2006")}
 }
 
-func datetimeEndOfYear(args []object.Object, defs map[string]object.Object) object.Object {
+func datetimeEndOfYear(args []object.VintObject, defs map[string]object.VintObject) object.VintObject {
 	if len(args) != 1 {
 		return ErrorMessage(
 			"datetime", "endOfYear",

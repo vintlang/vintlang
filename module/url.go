@@ -19,7 +19,7 @@ func init() {
 	URLFunctions["build"] = urlBuild
 }
 
-func urlParse(args []object.Object, defs map[string]object.Object) object.Object {
+func urlParse(args []object.VintObject, defs map[string]object.VintObject) object.VintObject {
 	if len(args) != 1 {
 		return ErrorMessage(
 			"url", "parse",
@@ -52,11 +52,11 @@ func urlParse(args []object.Object, defs map[string]object.Object) object.Object
 	// Return a formatted string with URL components
 	result := fmt.Sprintf("scheme:%s host:%s path:%s query:%s fragment:%s",
 		parsedURL.Scheme, parsedURL.Host, parsedURL.Path, parsedURL.RawQuery, parsedURL.Fragment)
-	
+
 	return &object.String{Value: result}
 }
 
-func urlEncode(args []object.Object, defs map[string]object.Object) object.Object {
+func urlEncode(args []object.VintObject, defs map[string]object.VintObject) object.VintObject {
 	if len(args) != 1 {
 		return ErrorMessage(
 			"url", "encode",
@@ -78,11 +78,11 @@ func urlEncode(args []object.Object, defs map[string]object.Object) object.Objec
 
 	input := text.(*object.String).Value
 	encoded := url.QueryEscape(input)
-	
+
 	return &object.String{Value: encoded}
 }
 
-func urlDecode(args []object.Object, defs map[string]object.Object) object.Object {
+func urlDecode(args []object.VintObject, defs map[string]object.VintObject) object.VintObject {
 	if len(args) != 1 {
 		return ErrorMessage(
 			"url", "decode",
@@ -111,11 +111,11 @@ func urlDecode(args []object.Object, defs map[string]object.Object) object.Objec
 				"  Usage: url.decode(\"hello%%20world%%21\") -> \"hello world!\"\n", err.Error()),
 		}
 	}
-	
+
 	return &object.String{Value: decoded}
 }
 
-func urlJoin(args []object.Object, defs map[string]object.Object) object.Object {
+func urlJoin(args []object.VintObject, defs map[string]object.VintObject) object.VintObject {
 	if len(args) != 2 {
 		return ErrorMessage(
 			"url", "join",
@@ -127,7 +127,7 @@ func urlJoin(args []object.Object, defs map[string]object.Object) object.Object 
 
 	baseURL := args[0]
 	path := args[1]
-	
+
 	if baseURL.Type() != object.STRING_OBJ {
 		return ErrorMessage(
 			"url", "join",
@@ -136,7 +136,7 @@ func urlJoin(args []object.Object, defs map[string]object.Object) object.Object 
 			`url.join("https://example.com", "/path/to/resource") -> "https://example.com/path/to/resource"`,
 		)
 	}
-	
+
 	if path.Type() != object.STRING_OBJ {
 		return ErrorMessage(
 			"url", "join",
@@ -148,7 +148,7 @@ func urlJoin(args []object.Object, defs map[string]object.Object) object.Object 
 
 	base := baseURL.(*object.String).Value
 	relativePath := path.(*object.String).Value
-	
+
 	parsedBase, err := url.Parse(base)
 	if err != nil {
 		return &object.Error{
@@ -171,7 +171,7 @@ func urlJoin(args []object.Object, defs map[string]object.Object) object.Object 
 	return &object.String{Value: result.String()}
 }
 
-func urlIsValid(args []object.Object, defs map[string]object.Object) object.Object {
+func urlIsValid(args []object.VintObject, defs map[string]object.VintObject) object.VintObject {
 	if len(args) != 1 {
 		return ErrorMessage(
 			"url", "isValid",
@@ -193,16 +193,16 @@ func urlIsValid(args []object.Object, defs map[string]object.Object) object.Obje
 
 	input := urlStr.(*object.String).Value
 	_, err := url.Parse(input)
-	
+
 	// Additional validation - must have a scheme for a complete URL
 	if err != nil || !strings.Contains(input, "://") {
 		return &object.Boolean{Value: false}
 	}
-	
+
 	return &object.Boolean{Value: true}
 }
 
-func urlBuild(args []object.Object, defs map[string]object.Object) object.Object {
+func urlBuild(args []object.VintObject, defs map[string]object.VintObject) object.VintObject {
 	if len(args) != 1 {
 		return ErrorMessage(
 			"url", "build",
@@ -234,7 +234,7 @@ func urlBuild(args []object.Object, defs map[string]object.Object) object.Object
 			return &object.Error{
 				Message: fmt.Sprintf("\033[1;31m -> url.build()\033[0m:\n"+
 					"  Component '%s' must be a string, got %s\n"+
-					"  Usage: url.build({\"scheme\": \"https\", \"host\": \"example.com\"})\n", 
+					"  Usage: url.build({\"scheme\": \"https\", \"host\": \"example.com\"})\n",
 					key, string(value.Type())),
 			}
 		}
@@ -272,8 +272,8 @@ func urlBuild(args []object.Object, defs map[string]object.Object) object.Object
 	// Basic validation - at least scheme or host should be provided for a valid URL
 	if u.Scheme == "" && u.Host == "" {
 		return &object.Error{
-			Message: fmt.Sprintf("\033[1;31m -> url.build()\033[0m:\n"+
-				"  URL must have at least a scheme or host component\n"+
+			Message: fmt.Sprintf("\033[1;31m -> url.build()\033[0m:\n" +
+				"  URL must have at least a scheme or host component\n" +
 				"  Usage: url.build({\"scheme\": \"https\", \"host\": \"example.com\"})\n"),
 		}
 	}

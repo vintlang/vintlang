@@ -15,17 +15,17 @@ import (
 
 // HTTPApp represents an Express.js-like application instance
 type HTTPApp struct {
-	Routes       map[string]*Function // key: "METHOD:/path"
-	Middleware   []*Function
-	Server       *http.Server
+	Routes     map[string]*Function // key: "METHOD:/path"
+	Middleware []*Function
+	Server     *http.Server
 	// New features for full backend support
 	Interceptors map[string][]*Function // key: "request" or "response"
 	Guards       []*Function
 	ErrorHandler *Function
 	// Enterprise features
-	RouteGroups  map[string]*RouteGroup
-	Security     *SecurityConfig
-	Performance  *PerformanceConfig
+	RouteGroups map[string]*RouteGroup
+	Security    *SecurityConfig
+	Performance *PerformanceConfig
 }
 
 // RouteGroup represents a group of routes with common prefix and middleware
@@ -38,9 +38,9 @@ type RouteGroup struct {
 
 // SecurityConfig holds security-related configuration
 type SecurityConfig struct {
-	CSRFProtection bool
+	CSRFProtection  bool
 	SecurityHeaders map[string]string
-	CORSOptions    *CORSOptions
+	CORSOptions     *CORSOptions
 }
 
 // CORSOptions holds CORS configuration
@@ -72,7 +72,7 @@ func (file *UploadedFile) Inspect() string {
 }
 
 // Method to access uploaded file functionality
-func (file *UploadedFile) Method(name string, args []Object) Object {
+func (file *UploadedFile) Method(name string, args []VintObject) VintObject {
 	switch name {
 	case "save":
 		if len(args) != 1 {
@@ -82,18 +82,18 @@ func (file *UploadedFile) Method(name string, args []Object) Object {
 		if !ok {
 			return &Error{Message: "Destination path must be a string"}
 		}
-		
+
 		// Create directory if it doesn't exist
 		dir := filepath.Dir(path.Value)
 		if err := os.MkdirAll(dir, 0755); err != nil {
 			return &Error{Message: fmt.Sprintf("Failed to create directory: %v", err)}
 		}
-		
+
 		// Write file
 		if err := os.WriteFile(path.Value, file.Content, 0644); err != nil {
 			return &Error{Message: fmt.Sprintf("Failed to save file: %v", err)}
 		}
-		
+
 		return &String{Value: fmt.Sprintf("File saved to: %s", path.Value)}
 	case "name":
 		return &String{Value: file.Name}
@@ -136,8 +136,8 @@ type HTTPRequest struct {
 	JSON       map[string]interface{}
 	RawRequest *http.Request
 	// Enterprise features
-	Files      map[string]*UploadedFile
-	IsAsync    bool
+	Files   map[string]*UploadedFile
+	IsAsync bool
 }
 
 func (req *HTTPRequest) Type() ObjectType { return HTTP_REQUEST_OBJ }
@@ -151,7 +151,7 @@ func (req *HTTPRequest) Inspect() string {
 }
 
 // Method to access request properties
-func (req *HTTPRequest) Method(name string, args []Object) Object {
+func (req *HTTPRequest) Method(name string, args []VintObject) VintObject {
 	switch name {
 	case "get":
 		if len(args) != 1 {
@@ -174,7 +174,7 @@ func (req *HTTPRequest) Method(name string, args []Object) Object {
 	case "query":
 		if len(args) == 0 {
 			// Return all query parameters as a dict-like structure
-			result := make(map[string]Object)
+			result := make(map[string]VintObject)
 			for k, v := range req.Query {
 				result[k] = &String{Value: v}
 			}
@@ -224,7 +224,7 @@ func (req *HTTPRequest) Method(name string, args []Object) Object {
 	case "form":
 		if len(args) == 0 {
 			// Return all form data
-			result := make(map[string]Object)
+			result := make(map[string]VintObject)
 			for k, v := range req.FormData {
 				result[k] = &String{Value: v}
 			}
@@ -254,7 +254,7 @@ func (req *HTTPRequest) Method(name string, args []Object) Object {
 		return &String{Value: ""}
 	case "files":
 		// Return all uploaded files
-		result := make(map[string]Object)
+		result := make(map[string]VintObject)
 		for k, v := range req.Files {
 			result[k] = v
 		}
@@ -272,7 +272,7 @@ type HTTPResponse struct {
 	Writer     http.ResponseWriter
 	Sent       bool
 	// Enhanced features
-	Request    *HTTPRequest
+	Request *HTTPRequest
 }
 
 func (res *HTTPResponse) Type() ObjectType { return HTTP_RESPONSE_OBJ }
@@ -285,7 +285,7 @@ func (res *HTTPResponse) Inspect() string {
 }
 
 // Method to access response functionality
-func (res *HTTPResponse) Method(name string, args []Object) Object {
+func (res *HTTPResponse) Method(name string, args []VintObject) VintObject {
 	switch name {
 	case "send":
 		if len(args) != 1 {
@@ -360,13 +360,13 @@ func (res *HTTPResponse) Method(name string, args []Object) Object {
 		if !ok1 || !ok2 {
 			return &Error{Message: "Cookie name and value must be strings"}
 		}
-		
+
 		cookie := &http.Cookie{
 			Name:  name.Value,
 			Value: value.Value,
 			Path:  "/",
 		}
-		
+
 		// TODO: Handle cookie options (expires, secure, httponly, etc.)
 		// For now, set basic cookie
 		http.SetCookie(res.Writer, cookie)
@@ -395,7 +395,7 @@ func NewHTTPApp() *HTTPApp {
 		Interceptors: make(map[string][]*Function),
 		Guards:       make([]*Function, 0),
 		RouteGroups:  make(map[string]*RouteGroup),
-		Security:     &SecurityConfig{
+		Security: &SecurityConfig{
 			CSRFProtection: false,
 			SecurityHeaders: map[string]string{
 				"X-Content-Type-Options": "nosniff",
@@ -493,7 +493,7 @@ func (res *HTTPResponse) Send(text string) {
 		log.Println("Warning: Response already sent")
 		return
 	}
-	
+
 	res.Writer.Header().Set("Content-Type", "text/plain")
 	for key, value := range res.Headers {
 		res.Writer.Header().Set(key, value)
@@ -509,7 +509,7 @@ func (res *HTTPResponse) JSON(data interface{}) {
 		log.Println("Warning: Response already sent")
 		return
 	}
-	
+
 	jsonData, err := json.Marshal(data)
 	if err != nil {
 		res.Writer.WriteHeader(500)
@@ -517,7 +517,7 @@ func (res *HTTPResponse) JSON(data interface{}) {
 		res.Sent = true
 		return
 	}
-	
+
 	res.Writer.Header().Set("Content-Type", "application/json")
 	for key, value := range res.Headers {
 		res.Writer.Header().Set(key, value)

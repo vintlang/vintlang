@@ -4,6 +4,7 @@ import (
 	// "fmt"
 	"hash/fnv"
 	"strconv"
+
 	// "strconv"
 	"strings"
 )
@@ -28,7 +29,7 @@ func (s *String) HashKey() HashKey {
 }
 
 // Next implements an iterator for the String, returning the next character and its index.
-func (s *String) Next() (Object, Object) {
+func (s *String) Next() (VintObject, VintObject) {
 	if s.offset < len(s.Value) {
 		char := string(s.Value[s.offset])
 		index := &Integer{Value: int64(s.offset)}
@@ -44,7 +45,7 @@ func (s *String) Reset() {
 }
 
 // Method dynamically dispatches string-related methods.
-func (s *String) Method(method string, args []Object) Object {
+func (s *String) Method(method string, args []VintObject) VintObject {
 	switch method {
 	case "len":
 		return s.len(args)
@@ -86,7 +87,7 @@ func (s *String) Method(method string, args []Object) Object {
 }
 
 // len returns the length of the string.
-func (s *String) len(args []Object) Object {
+func (s *String) len(args []VintObject) VintObject {
 	if len(args) != 0 {
 		return newError("len() expects 0 arguments, got %d", len(args))
 	}
@@ -94,7 +95,7 @@ func (s *String) len(args []Object) Object {
 }
 
 // toInt converts the string to an integer
-func (s *String) toInt(args []Object) Object {
+func (s *String) toInt(args []VintObject) VintObject {
 	// Ensure no arguments are provided
 	if len(args) != 0 {
 		return newError("toInt() expects 0 arguments, got %d", len(args))
@@ -111,9 +112,8 @@ func (s *String) toInt(args []Object) Object {
 	return &Integer{Value: int64(numVal)}
 }
 
-
 // upper converts the string to uppercase.
-func (s *String) upper(args []Object) Object {
+func (s *String) upper(args []VintObject) VintObject {
 	if len(args) != 0 {
 		return newError("upper() expects 0 arguments, got %d", len(args))
 	}
@@ -121,7 +121,7 @@ func (s *String) upper(args []Object) Object {
 }
 
 // lower converts the string to lowercase.
-func (s *String) lower(args []Object) Object {
+func (s *String) lower(args []VintObject) VintObject {
 	if len(args) != 0 {
 		return newError("lower() expects 0 arguments, got %d", len(args))
 	}
@@ -129,7 +129,7 @@ func (s *String) lower(args []Object) Object {
 }
 
 // split splits the string by a given delimiter.
-func (s *String) split(args []Object) Object {
+func (s *String) split(args []VintObject) VintObject {
 	sep := ""
 	if len(args) == 1 {
 		arg, ok := args[0].(*String)
@@ -142,7 +142,7 @@ func (s *String) split(args []Object) Object {
 	}
 
 	parts := strings.Split(s.Value, sep)
-	elements := make([]Object, len(parts))
+	elements := make([]VintObject, len(parts))
 	for i, part := range parts {
 		elements[i] = &String{Value: part}
 	}
@@ -150,7 +150,7 @@ func (s *String) split(args []Object) Object {
 }
 
 // trim removes leading and trailing whitespace or specified characters.
-func (s *String) trim(args []Object) Object {
+func (s *String) trim(args []VintObject) VintObject {
 	if len(args) > 1 {
 		return newError("trim() expects at most 1 argument, got %d", len(args))
 	}
@@ -168,7 +168,7 @@ func (s *String) trim(args []Object) Object {
 }
 
 // contains checks if the string contains a given substring.
-func (s *String) contains(args []Object) Object {
+func (s *String) contains(args []VintObject) VintObject {
 	if len(args) != 1 {
 		return newError("contains() expects 1 argument, got %d", len(args))
 	}
@@ -182,7 +182,7 @@ func (s *String) contains(args []Object) Object {
 }
 
 // replace replaces occurrences of a substring with another substring.
-func (s *String) replace(args []Object) Object {
+func (s *String) replace(args []VintObject) VintObject {
 	if len(args) != 2 {
 		return newError("replace() expects 2 arguments, got %d", len(args))
 	}
@@ -197,7 +197,7 @@ func (s *String) replace(args []Object) Object {
 }
 
 // reverse reverses the string.
-func (s *String) reverse(args []Object) Object {
+func (s *String) reverse(args []VintObject) VintObject {
 	if len(args) != 0 {
 		return newError("reverse() expects 0 arguments, got %d", len(args))
 	}
@@ -211,41 +211,41 @@ func (s *String) reverse(args []Object) Object {
 }
 
 // charAt returns the character at the specified index
-func (s *String) charAt(args []Object) Object {
+func (s *String) charAt(args []VintObject) VintObject {
 	if len(args) != 1 {
 		return newError("charAt() expects exactly 1 argument, got %d", len(args))
 	}
-	
+
 	index, ok := args[0].(*Integer)
 	if !ok {
 		return newError("charAt() index must be an integer, got %s", args[0].Type())
 	}
-	
+
 	idx := int(index.Value)
 	runes := []rune(s.Value)
-	
+
 	if idx < 0 || idx >= len(runes) {
 		return &String{Value: ""} // Return empty string for out of bounds
 	}
-	
+
 	return &String{Value: string(runes[idx])}
 }
 
 // substring extracts a substring between start and end indices
-func (s *String) substring(args []Object) Object {
+func (s *String) substring(args []VintObject) VintObject {
 	if len(args) < 1 || len(args) > 2 {
 		return newError("substring() expects 1 or 2 arguments, got %d", len(args))
 	}
-	
+
 	start, ok := args[0].(*Integer)
 	if !ok {
 		return newError("substring() start index must be an integer, got %s", args[0].Type())
 	}
-	
+
 	runes := []rune(s.Value)
 	startIdx := int(start.Value)
 	endIdx := len(runes)
-	
+
 	if len(args) == 2 {
 		end, ok := args[1].(*Integer)
 		if !ok {
@@ -253,7 +253,7 @@ func (s *String) substring(args []Object) Object {
 		}
 		endIdx = int(end.Value)
 	}
-	
+
 	// Handle negative indices and bounds
 	if startIdx < 0 {
 		startIdx = 0
@@ -270,21 +270,21 @@ func (s *String) substring(args []Object) Object {
 	if startIdx > endIdx {
 		startIdx, endIdx = endIdx, startIdx // Swap if start > end
 	}
-	
+
 	return &String{Value: string(runes[startIdx:endIdx])}
 }
 
 // indexOf finds the index of the first occurrence of a substring
-func (s *String) indexOf(args []Object) Object {
+func (s *String) indexOf(args []VintObject) VintObject {
 	if len(args) < 1 || len(args) > 2 {
 		return newError("indexOf() expects 1 or 2 arguments, got %d", len(args))
 	}
-	
+
 	searchStr, ok := args[0].(*String)
 	if !ok {
 		return newError("indexOf() search string must be a string, got %s", args[0].Type())
 	}
-	
+
 	fromIndex := 0
 	if len(args) == 2 {
 		from, ok := args[1].(*Integer)
@@ -293,35 +293,35 @@ func (s *String) indexOf(args []Object) Object {
 		}
 		fromIndex = int(from.Value)
 	}
-	
+
 	if fromIndex < 0 {
 		fromIndex = 0
 	}
-	
+
 	if fromIndex >= len(s.Value) {
 		return &Integer{Value: -1}
 	}
-	
+
 	substr := s.Value[fromIndex:]
 	index := strings.Index(substr, searchStr.Value)
 	if index == -1 {
 		return &Integer{Value: -1}
 	}
-	
+
 	return &Integer{Value: int64(fromIndex + index)}
 }
 
 // lastIndexOf finds the index of the last occurrence of a substring
-func (s *String) lastIndexOf(args []Object) Object {
+func (s *String) lastIndexOf(args []VintObject) VintObject {
 	if len(args) < 1 || len(args) > 2 {
 		return newError("lastIndexOf() expects 1 or 2 arguments, got %d", len(args))
 	}
-	
+
 	searchStr, ok := args[0].(*String)
 	if !ok {
 		return newError("lastIndexOf() search string must be a string, got %s", args[0].Type())
 	}
-	
+
 	fromIndex := len(s.Value)
 	if len(args) == 2 {
 		from, ok := args[1].(*Integer)
@@ -330,50 +330,50 @@ func (s *String) lastIndexOf(args []Object) Object {
 		}
 		fromIndex = int(from.Value)
 	}
-	
+
 	if fromIndex < 0 {
 		return &Integer{Value: -1}
 	}
 	if fromIndex >= len(s.Value) {
 		fromIndex = len(s.Value) - 1
 	}
-	
+
 	substr := s.Value[:fromIndex+1]
 	index := strings.LastIndex(substr, searchStr.Value)
-	
+
 	return &Integer{Value: int64(index)}
 }
 
 // times repeats the string n times
-func (s *String) times(args []Object) Object {
+func (s *String) times(args []VintObject) VintObject {
 	if len(args) != 1 {
 		return newError("times() expects exactly 1 argument, got %d", len(args))
 	}
-	
+
 	count, ok := args[0].(*Integer)
 	if !ok {
 		return newError("times() count must be an integer, got %s", args[0].Type())
 	}
-	
+
 	n := int(count.Value)
 	if n < 0 {
 		return newError("times() count cannot be negative")
 	}
-	
+
 	return &String{Value: strings.Repeat(s.Value, n)}
 }
 
 // padStart pads the string with a specified string until it reaches the target length
-func (s *String) padStart(args []Object) Object {
+func (s *String) padStart(args []VintObject) VintObject {
 	if len(args) < 1 || len(args) > 2 {
 		return newError("padStart() expects 1 or 2 arguments, got %d", len(args))
 	}
-	
+
 	targetLength, ok := args[0].(*Integer)
 	if !ok {
 		return newError("padStart() target length must be an integer, got %s", args[0].Type())
 	}
-	
+
 	padString := " " // Default padding
 	if len(args) == 2 {
 		pad, ok := args[1].(*String)
@@ -382,42 +382,42 @@ func (s *String) padStart(args []Object) Object {
 		}
 		padString = pad.Value
 	}
-	
+
 	targetLen := int(targetLength.Value)
 	currentLen := len([]rune(s.Value))
-	
+
 	if targetLen <= currentLen {
 		return s // No padding needed
 	}
-	
+
 	padLen := targetLen - currentLen
 	if len(padString) == 0 {
 		return s // Cannot pad with empty string
 	}
-	
+
 	// Repeat pad string and truncate to exact length needed
 	repeats := (padLen / len([]rune(padString))) + 1
 	padding := strings.Repeat(padString, repeats)
 	paddingRunes := []rune(padding)
-	
+
 	if len(paddingRunes) > padLen {
 		paddingRunes = paddingRunes[:padLen]
 	}
-	
+
 	return &String{Value: string(paddingRunes) + s.Value}
 }
 
 // padEnd pads the string with a specified string until it reaches the target length
-func (s *String) padEnd(args []Object) Object {
+func (s *String) padEnd(args []VintObject) VintObject {
 	if len(args) < 1 || len(args) > 2 {
 		return newError("padEnd() expects 1 or 2 arguments, got %d", len(args))
 	}
-	
+
 	targetLength, ok := args[0].(*Integer)
 	if !ok {
 		return newError("padEnd() target length must be an integer, got %s", args[0].Type())
 	}
-	
+
 	padString := " " // Default padding
 	if len(args) == 2 {
 		pad, ok := args[1].(*String)
@@ -426,47 +426,47 @@ func (s *String) padEnd(args []Object) Object {
 		}
 		padString = pad.Value
 	}
-	
+
 	targetLen := int(targetLength.Value)
 	currentLen := len([]rune(s.Value))
-	
+
 	if targetLen <= currentLen {
 		return s // No padding needed
 	}
-	
+
 	padLen := targetLen - currentLen
 	if len(padString) == 0 {
 		return s // Cannot pad with empty string
 	}
-	
+
 	// Repeat pad string and truncate to exact length needed
 	repeats := (padLen / len([]rune(padString))) + 1
 	padding := strings.Repeat(padString, repeats)
 	paddingRunes := []rune(padding)
-	
+
 	if len(paddingRunes) > padLen {
 		paddingRunes = paddingRunes[:padLen]
 	}
-	
+
 	return &String{Value: s.Value + string(paddingRunes)}
 }
 
 // slice extracts a portion of the string between start and end indices
-func (s *String) slice(args []Object) Object {
+func (s *String) slice(args []VintObject) VintObject {
 	if len(args) < 1 || len(args) > 2 {
 		return newError("slice() expects 1 or 2 arguments, got %d", len(args))
 	}
-	
+
 	start, ok := args[0].(*Integer)
 	if !ok {
 		return newError("slice() start index must be an integer, got %s", args[0].Type())
 	}
-	
+
 	runes := []rune(s.Value)
 	length := len(runes)
 	startIdx := int(start.Value)
 	endIdx := length
-	
+
 	if len(args) == 2 {
 		end, ok := args[1].(*Integer)
 		if !ok {
@@ -474,7 +474,7 @@ func (s *String) slice(args []Object) Object {
 		}
 		endIdx = int(end.Value)
 	}
-	
+
 	// Handle negative indices
 	if startIdx < 0 {
 		startIdx = length + startIdx
@@ -482,7 +482,7 @@ func (s *String) slice(args []Object) Object {
 	if endIdx < 0 {
 		endIdx = length + endIdx
 	}
-	
+
 	// Bound check
 	if startIdx < 0 {
 		startIdx = 0
@@ -493,7 +493,7 @@ func (s *String) slice(args []Object) Object {
 	if startIdx > endIdx {
 		startIdx = endIdx
 	}
-	
+
 	return &String{Value: string(runes[startIdx:endIdx])}
 }
 

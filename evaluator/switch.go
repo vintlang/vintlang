@@ -5,7 +5,7 @@ import (
 	"github.com/vintlang/vintlang/object"
 )
 
-func evalSwitchStatement(se *ast.SwitchExpression, env *object.Environment) object.Object {
+func evalSwitchStatement(se *ast.SwitchExpression, env *object.Environment) object.VintObject {
 	obj := Eval(se.Value, env)
 	for _, opt := range se.Choices {
 

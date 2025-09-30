@@ -2,6 +2,7 @@ package module
 
 import (
 	"os/exec"
+
 	"github.com/vintlang/vintlang/object"
 )
 
@@ -12,7 +13,7 @@ func init() {
 	ShellFunctions["exists"] = commandExists
 }
 
-func runCommand(args []object.Object, defs map[string]object.Object) object.Object {
+func runCommand(args []object.VintObject, defs map[string]object.VintObject) object.VintObject {
 	if len(defs) != 0 || len(args) != 1 || args[0].Type() != object.STRING_OBJ {
 		return ErrorMessage(
 			"shell",
@@ -30,7 +31,7 @@ func runCommand(args []object.Object, defs map[string]object.Object) object.Obje
 	return &object.String{Value: string(output)}
 }
 
-func commandExists(args []object.Object, defs map[string]object.Object) object.Object {
+func commandExists(args []object.VintObject, defs map[string]object.VintObject) object.VintObject {
 	if len(defs) != 0 || len(args) != 1 || args[0].Type() != object.STRING_OBJ {
 		return ErrorMessage(
 			"shell",

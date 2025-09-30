@@ -5,7 +5,7 @@ import (
 	"github.com/vintlang/vintlang/object"
 )
 
-func evalMatchExpression(me *ast.MatchExpression, env *object.Environment) object.Object {
+func evalMatchExpression(me *ast.MatchExpression, env *object.Environment) object.VintObject {
 	obj := Eval(me.Value, env)
 	if isError(obj) {
 		return obj
@@ -39,7 +39,7 @@ func evalMatchExpression(me *ast.MatchExpression, env *object.Environment) objec
 	return NULL
 }
 
-func matchesPattern(value object.Object, pattern ast.Expression, env *object.Environment) bool {
+func matchesPattern(value object.VintObject, pattern ast.Expression, env *object.Environment) bool {
 	// Handle dict pattern matching
 	if dictPattern, ok := pattern.(*ast.DictLiteral); ok {
 		return matchesDictPattern(value, dictPattern, env)
@@ -54,7 +54,7 @@ func matchesPattern(value object.Object, pattern ast.Expression, env *object.Env
 	return value.Type() == patternObj.Type() && value.Inspect() == patternObj.Inspect()
 }
 
-func matchesDictPattern(value object.Object, dictPattern *ast.DictLiteral, env *object.Environment) bool {
+func matchesDictPattern(value object.VintObject, dictPattern *ast.DictLiteral, env *object.Environment) bool {
 	// Value must be a dict
 	dict, ok := value.(*object.Dict)
 	if !ok {

@@ -11,7 +11,7 @@ func init() {
 
 func registerImportBuiltins() {
 	RegisterBuiltin("import", &object.Builtin{
-		Fn: func(args ...object.Object) object.Object {
+		Fn: func(args ...object.VintObject) object.VintObject {
 			if len(args) != 1 {
 				return newError("Function 'import()' requires exactly 1 argument, got %d", len(args))
 			}

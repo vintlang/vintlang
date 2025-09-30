@@ -20,7 +20,7 @@ var (
 	deferredCalls []*object.DeferredCall
 )
 
-func Eval(node ast.Node, env *object.Environment) object.Object {
+func Eval(node ast.Node, env *object.Environment) object.VintObject {
 	switch node := node.(type) {
 	case *ast.Program:
 		return evalProgram(node, env)
@@ -129,7 +129,7 @@ func Eval(node ast.Node, env *object.Environment) object.Object {
 		if isError(left) {
 			return left
 		}
-		var start, end object.Object
+		var start, end object.VintObject
 		if node.Start != nil {
 			start = Eval(node.Start, env)
 			if isError(start) {
@@ -349,7 +349,7 @@ func Eval(node ast.Node, env *object.Environment) object.Object {
 		if !ok {
 			return newError("repeat expects an integer count, got %s", countObj.Type())
 		}
-		var result object.Object = NULL
+		var result object.VintObject = NULL
 		varName := node.VarName
 		if varName == "" {
 			varName = "i"
@@ -436,8 +436,8 @@ func Eval(node ast.Node, env *object.Environment) object.Object {
 	return nil
 }
 
-func evalProgram(program *ast.Program, env *object.Environment) object.Object {
-	var result object.Object
+func evalProgram(program *ast.Program, env *object.Environment) object.VintObject {
+	var result object.VintObject
 
 	// First pass: Execute all statements to define functions and variables
 	for _, statement := range program.Statements {
@@ -455,7 +455,7 @@ func evalProgram(program *ast.Program, env *object.Environment) object.Object {
 	if mainFunc, exists := env.Get("main"); exists {
 		if fn, ok := mainFunc.(*object.Function); ok {
 			// Call main function with no arguments
-			mainResult := applyFunction(fn, []object.Object{}, 0)
+			mainResult := applyFunction(fn, []object.VintObject{}, 0)
 			if isError(mainResult) {
 				return mainResult
 			}
@@ -476,7 +476,7 @@ func nativeBoolToBooleanObject(input bool) *object.Boolean {
 	return FALSE
 }
 
-func isTruthy(obj object.Object) bool {
+func isTruthy(obj object.VintObject) bool {
 	switch obj {
 	case NULL:
 		return false
@@ -493,7 +493,7 @@ func newError(format string, a ...interface{}) *object.Error {
 	return &object.Error{Message: fmt.Sprintf(format, a...)}
 }
 
-func isError(obj object.Object) bool {
+func isError(obj object.VintObject) bool {
 	if obj != nil {
 		return obj.Type() == object.ERROR_OBJ
 	}
@@ -501,13 +501,13 @@ func isError(obj object.Object) bool {
 	return false
 }
 
-func evalExpressions(exps []ast.Expression, env *object.Environment) []object.Object {
-	var result []object.Object
+func evalExpressions(exps []ast.Expression, env *object.Environment) []object.VintObject {
+	var result []object.VintObject
 
 	for _, e := range exps {
 		evaluated := Eval(e, env)
 		if isError(evaluated) {
-			return []object.Object{evaluated}
+			return []object.VintObject{evaluated}
 		}
 
 		result = append(result, evaluated)
@@ -516,7 +516,7 @@ func evalExpressions(exps []ast.Expression, env *object.Environment) []object.Ob
 	return result
 }
 
-func applyFunction(fn object.Object, args []object.Object, line int) object.Object {
+func applyFunction(fn object.VintObject, args []object.VintObject, line int) object.VintObject {
 	switch fn := fn.(type) {
 	case *object.Function:
 		prevDefersCount := len(deferredCalls)
@@ -582,7 +582,7 @@ func applyFunction(fn object.Object, args []object.Object, line int) object.Obje
 
 func extendedFunctionEnv(
 	fn *object.Function,
-	args []object.Object,
+	args []object.VintObject,
 ) *object.Environment {
 	env := object.NewEnclosedEnvironment(fn.Env)
 	for i, param := range fn.Parameters {
@@ -595,7 +595,7 @@ func extendedFunctionEnv(
 	return env
 }
 
-func unwrapReturnValue(obj object.Object) object.Object {
+func unwrapReturnValue(obj object.VintObject) object.VintObject {
 	if returnValue, ok := obj.(*object.ReturnValue); ok {
 		return returnValue.Value
 	}
@@ -603,11 +603,11 @@ func unwrapReturnValue(obj object.Object) object.Object {
 	return obj
 }
 
-func evalBreak(node *ast.Break) object.Object {
+func evalBreak(node *ast.Break) object.VintObject {
 	return BREAK
 }
 
-func evalContinue(node *ast.Continue) object.Object {
+func evalContinue(node *ast.Continue) object.VintObject {
 	return CONTINUE
 }
 
@@ -662,7 +662,7 @@ func evalContinue(node *ast.Continue) object.Object {
 // 	return NULL
 // }
 
-func evalIncludeStatement(node *ast.IncludeStatement, env *object.Environment) object.Object {
+func evalIncludeStatement(node *ast.IncludeStatement, env *object.Environment) object.VintObject {
 	pathObj := Eval(node.Path, env)
 	if isError(pathObj) {
 		return pathObj
@@ -689,7 +689,7 @@ func evalIncludeStatement(node *ast.IncludeStatement, env *object.Environment) o
 	return Eval(program, env)
 }
 
-func evalRangeExpression(node *ast.RangeExpression, env *object.Environment) object.Object {
+func evalRangeExpression(node *ast.RangeExpression, env *object.Environment) object.VintObject {
 	start := Eval(node.Start, env)
 	if isError(start) {
 		return start
@@ -717,7 +717,7 @@ func evalRangeExpression(node *ast.RangeExpression, env *object.Environment) obj
 	}
 }
 
-func evalErrorDeclaration(node *ast.ErrorDeclaration, env *object.Environment) object.Object {
+func evalErrorDeclaration(node *ast.ErrorDeclaration, env *object.Environment) object.VintObject {
 	// Extract parameter names
 	paramNames := make([]string, len(node.Parameters))
 	for i, param := range node.Parameters {
@@ -740,7 +740,7 @@ func evalErrorDeclaration(node *ast.ErrorDeclaration, env *object.Environment) o
 	return NULL
 }
 
-func evalThrowStatement(node *ast.ThrowStatement, env *object.Environment) object.Object {
+func evalThrowStatement(node *ast.ThrowStatement, env *object.Environment) object.VintObject {
 	// Evaluate the error expression
 	errorExpr := Eval(node.ErrorExpr, env)
 	if isError(errorExpr) {

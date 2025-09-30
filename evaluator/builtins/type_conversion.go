@@ -12,7 +12,7 @@ func init() {
 
 func registerTypeConversionBuiltins() {
 	RegisterBuiltin("convert", &object.Builtin{
-		Fn: func(args ...object.Object) object.Object {
+		Fn: func(args ...object.VintObject) object.VintObject {
 			if len(args) != 2 {
 				return newError("Sorry, convert requires 2 arguments, you provided %d", len(args))
 			}
@@ -42,7 +42,7 @@ func registerTypeConversionBuiltins() {
 	})
 
 	RegisterBuiltin("string", &object.Builtin{
-		Fn: func(args ...object.Object) object.Object {
+		Fn: func(args ...object.VintObject) object.VintObject {
 			if len(args) != 1 {
 				return newError("string() requires exactly 1 argument, you provided %d", len(args))
 			}
@@ -53,7 +53,7 @@ func registerTypeConversionBuiltins() {
 	})
 
 	RegisterBuiltin("int", &object.Builtin{
-		Fn: func(args ...object.Object) object.Object {
+		Fn: func(args ...object.VintObject) object.VintObject {
 			if len(args) != 1 {
 				return newError("int() requires exactly 1 argument, you provided %d", len(args))
 			}
@@ -64,7 +64,7 @@ func registerTypeConversionBuiltins() {
 	})
 
 	RegisterBuiltin("parseInt", &object.Builtin{
-		Fn: func(args ...object.Object) object.Object {
+		Fn: func(args ...object.VintObject) object.VintObject {
 			if len(args) != 1 {
 				return newError("parseInt() takes exactly 1 argument, got %d", len(args))
 			}
@@ -84,7 +84,7 @@ func registerTypeConversionBuiltins() {
 	})
 
 	RegisterBuiltin("parseFloat", &object.Builtin{
-		Fn: func(args ...object.Object) object.Object {
+		Fn: func(args ...object.VintObject) object.VintObject {
 			if len(args) != 1 {
 				return newError("parseFloat() takes exactly 1 argument, got %d", len(args))
 			}

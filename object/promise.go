@@ -7,11 +7,11 @@ import (
 
 // Promise represents a value that will be available in the future
 type Promise struct {
-	Value     Object
-	Error     Object
+	Value     VintObject
+	Error     VintObject
 	Done      bool
 	mu        sync.Mutex
-	callbacks []func(Object, Object)
+	callbacks []func(VintObject, VintObject)
 	waitChan  chan struct{}
 }
 
@@ -22,7 +22,7 @@ func (p *Promise) Type() ObjectType {
 func (p *Promise) Inspect() string {
 	p.mu.Lock()
 	defer p.mu.Unlock()
-	
+
 	if p.Done {
 		if p.Error != nil {
 			return fmt.Sprintf("Promise{rejected: %s}", p.Error.Inspect())
@@ -33,20 +33,20 @@ func (p *Promise) Inspect() string {
 }
 
 // Resolve sets the promise value and notifies callbacks
-func (p *Promise) Resolve(value Object) {
+func (p *Promise) Resolve(value VintObject) {
 	p.mu.Lock()
 	defer p.mu.Unlock()
-	
+
 	if p.Done {
 		return
 	}
-	
+
 	p.Value = value
 	p.Done = true
-	
+
 	// Notify waiting goroutines
 	close(p.waitChan)
-	
+
 	for _, callback := range p.callbacks {
 		go callback(value, nil)
 	}
@@ -54,20 +54,20 @@ func (p *Promise) Resolve(value Object) {
 }
 
 // Reject sets the promise error and notifies callbacks
-func (p *Promise) Reject(err Object) {
+func (p *Promise) Reject(err VintObject) {
 	p.mu.Lock()
 	defer p.mu.Unlock()
-	
+
 	if p.Done {
 		return
 	}
-	
+
 	p.Error = err
 	p.Done = true
-	
+
 	// Notify waiting goroutines
 	close(p.waitChan)
-	
+
 	for _, callback := range p.callbacks {
 		go callback(nil, err)
 	}
@@ -75,15 +75,15 @@ func (p *Promise) Reject(err Object) {
 }
 
 // Then adds a callback to be executed when the promise resolves
-func (p *Promise) Then(callback func(Object, Object)) {
+func (p *Promise) Then(callback func(VintObject, VintObject)) {
 	p.mu.Lock()
 	defer p.mu.Unlock()
-	
+
 	if p.Done {
 		go callback(p.Value, p.Error)
 		return
 	}
-	
+
 	p.callbacks = append(p.callbacks, callback)
 }
 
@@ -96,7 +96,7 @@ func (p *Promise) Wait() {
 func NewPromise() *Promise {
 	return &Promise{
 		Done:      false,
-		callbacks: make([]func(Object, Object), 0),
+		callbacks: make([]func(VintObject, VintObject), 0),
 		waitChan:  make(chan struct{}),
 	}
 }

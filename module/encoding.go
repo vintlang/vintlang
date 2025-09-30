@@ -13,7 +13,7 @@ func init() {
 	EncodingFunctions["base64Decode"] = base64Decode
 }
 
-func base64Encode(args []object.Object, defs map[string]object.Object) object.Object {
+func base64Encode(args []object.VintObject, defs map[string]object.VintObject) object.VintObject {
 	if len(args) != 1 || args[0].Type() != object.STRING_OBJ {
 		return ErrorMessage(
 			"encoding",
@@ -29,7 +29,7 @@ func base64Encode(args []object.Object, defs map[string]object.Object) object.Ob
 	return &object.String{Value: encoded}
 }
 
-func base64Decode(args []object.Object, defs map[string]object.Object) object.Object {
+func base64Decode(args []object.VintObject, defs map[string]object.VintObject) object.VintObject {
 	if len(args) != 1 || args[0].Type() != object.STRING_OBJ {
 		return ErrorMessage(
 			"encoding",
@@ -55,7 +55,7 @@ func base64Decode(args []object.Object, defs map[string]object.Object) object.Ob
 
 // formatArgs converts the provided arguments into a string representation
 // so we can display them in error messages.
-func formatArgs(args []object.Object) string {
+func formatArgs(args []object.VintObject) string {
 	if len(args) == 0 {
 		return "no arguments"
 	}

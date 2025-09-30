@@ -11,7 +11,7 @@ import (
 
 // Helper functions used by builtin functions
 
-func handlePrint(w io.Writer, args []object.Object, addNewline bool) object.Object {
+func handlePrint(w io.Writer, args []object.VintObject, addNewline bool) object.VintObject {
 	var arr []string
 	for _, arg := range args {
 		if arg == nil {
@@ -32,7 +32,7 @@ func newError(format string, a ...interface{}) *object.Error {
 	return &object.Error{Message: fmt.Sprintf(format, a...)}
 }
 
-func getIntValue(obj object.Object) (int64, error) {
+func getIntValue(obj object.VintObject) (int64, error) {
 	switch obj := obj.(type) {
 	case *object.Integer:
 		return obj.Value, nil
@@ -41,7 +41,7 @@ func getIntValue(obj object.Object) (int64, error) {
 	}
 }
 
-func getBooleanValue(obj object.Object) (bool, error) {
+func getBooleanValue(obj object.VintObject) (bool, error) {
 	switch obj := obj.(type) {
 	case *object.Boolean:
 		return obj.Value, nil
@@ -50,7 +50,7 @@ func getBooleanValue(obj object.Object) (bool, error) {
 	}
 }
 
-func convertToInteger(value object.Object) object.Object {
+func convertToInteger(value object.VintObject) object.VintObject {
 	switch value := value.(type) {
 	case *object.Integer:
 		return value
@@ -72,7 +72,7 @@ func convertToInteger(value object.Object) object.Object {
 	}
 }
 
-func convertToFloat(value object.Object) object.Object {
+func convertToFloat(value object.VintObject) object.VintObject {
 	switch value := value.(type) {
 	case *object.Float:
 		return value
@@ -94,11 +94,11 @@ func convertToFloat(value object.Object) object.Object {
 	}
 }
 
-func convertToString(value object.Object) object.Object {
+func convertToString(value object.VintObject) object.VintObject {
 	return &object.String{Value: value.Inspect()}
 }
 
-func convertToBoolean(value object.Object) object.Object {
+func convertToBoolean(value object.VintObject) object.VintObject {
 	switch value := value.(type) {
 	case *object.Boolean:
 		return value
