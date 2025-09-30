@@ -9,6 +9,7 @@ import (
 	"strings"
 	"time"
 
+	"github.com/vintlang/vintlang/module"
 	"github.com/vintlang/vintlang/object"
 	"github.com/vintlang/vintlang/toolkit"
 )
@@ -31,29 +32,8 @@ func handlePrint(w io.Writer, args []object.Object, addNewline bool) object.Obje
 }
 
 var builtins = map[string]*object.Builtin{
-	"@import": { //TODO: in the future turn this this '@'
-		Fn: func(args ...object.Object) object.Object {
-			if len(args) != 1 {
-				return newError("Function '@import()' requires exactly 1 argument, got %d", len(args))
-			}
-			if args[0].Type() != object.STRING_OBJ {
-				return newError("Argument to '@import()' must be a string, got %s", args[0].Type())
-			}
-
-			// TODO: Implement module loading in the future
-			// moduleName := args[0].(*object.String).Value
-			// module, err := toolkit.LoadModule(moduleName)
-			// if err != nil {
-			// 	return newError("Failed to load module '%s': %s", moduleName, err.Error())
-			// }
-
-			// For now, return NULL as placeholder
-			return NULL
-		},
-	},
 	"input": {
 		Fn: func(args ...object.Object) object.Object {
-
 			if len(args) > 1 {
 				return newError("Function '%s' accepts 0 or 1 argument, got %d", "input", len(args))
 			}
@@ -796,6 +776,36 @@ var builtins = map[string]*object.Builtin{
 			return &object.Array{Elements: unique}
 		},
 	},
+
+	"importModule": {
+		Fn: func(args ...object.Object) object.Object {
+			if len(args) != 1 {
+				return newError("Function 'importModule()' requires exactly 1 argument, got %d", len(args))
+			}
+			if args[0].Type() != object.STRING_OBJ {
+				return newError("Argument to 'importModule()' must be a string, got %s", args[0].Type())
+			}
+
+			moduleName := args[0].(*object.String).Value
+
+			// Basic validation for module name
+			if len(moduleName) == 0 {
+				return newError("Module name cannot be empty")
+			}
+
+			// 1. Check for built-in modules first (from module.Mapper)
+			if mod, exists := module.Mapper[moduleName]; exists {
+				return mod
+			}
+
+			// 2. For file-based modules, we'll need to implement the logic here
+			// to avoid circular dependencies with import.go
+			// For now, return an error indicating file-based imports aren't supported
+			// in the builtin version yet
+			return newError("Module '%s' not found in built-in modules. File-based module import not yet supported in importModule() builtin. Use 'import' statement instead for file modules.", moduleName)
+		},
+	},
+	
 }
 
 func getIntValue(obj object.Object) (int64, error) {
