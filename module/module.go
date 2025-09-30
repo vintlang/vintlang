@@ -46,20 +46,21 @@ func init() {
 	Mapper["email"] = &object.Module{Name: "email", Functions: EmailFunctions}
 	Mapper["reflect"] = &object.Module{Name: "reflect", Functions: ReflectFunctions}
 	Mapper["yaml"] = &object.Module{Name: "yaml", Functions: YAMLFunctions}
+	Mapper["clipboard"] = &object.Module{Name: "clipboard", Functions: ClipboardFunctions}
 }
 
 // ErrorMessage formats an error message for module functions
 // It provides a consistent error format for incorrect usage of module functions
 // including the module name, function name, expected arguments, received arguments, and usage instructions.
 func ErrorMessage(module, function, expected, received, usage string) *object.Error {
-    return &object.Error{
-        Message: fmt.Sprintf(
-            "\033[1; -> %s.%s()\033[0m:\n"+
-                "  Expected: %s\n"+
-                "  Received: %s\n"+
-                "  Usage: %s\n"+
-                "  See documentation for details. https://vintlang.ekilie.com/docs\n",
-            module, function, expected, received, usage,
-        ),
-    }
+	return &object.Error{
+		Message: fmt.Sprintf(
+			"\033[1; -> %s.%s()\033[0m:\n"+
+				"  Expected: %s\n"+
+				"  Received: %s\n"+
+				"  Usage: %s\n"+
+				"  See documentation for details. https://vintlang.ekilie.com/docs\n",
+			module, function, expected, received, usage,
+		),
+	}
 }
