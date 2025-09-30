@@ -1,0 +1,3 @@
+println("Hello World from new builtin system!")
+println("Testing type function:", type(42))
+println("Testing len function:", len("hello"))
