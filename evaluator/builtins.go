@@ -821,7 +821,7 @@ var builtins = map[string]*object.Builtin{
 				return newError("Module name cannot be empty")
 			}
 
-			// 1. Check for built-in modules first (from module.Mapper)
+			// we Check for built-in modules first
 			if mod, exists := module.Mapper[moduleName]; exists {
 				return mod
 			}
