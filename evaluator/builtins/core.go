@@ -73,6 +73,114 @@ func registerCoreBuiltins() {
 		},
 	})
 
+	// String utility functions
+	RegisterBuiltin("format", &object.Builtin{
+		Fn: func(args ...object.Object) object.Object {
+			if len(args) < 1 {
+				return newError("wrong number of arguments. got=%d, want=1+", len(args))
+			}
+
+			formatStr, ok := args[0].(*object.String)
+			if !ok {
+				return newError("first argument to `format` must be STRING, got %T", args[0])
+			}
+
+			formatArgs := make([]interface{}, len(args)-1)
+			for i, arg := range args[1:] {
+				formatArgs[i] = arg.Inspect()
+			}
+
+			result := fmt.Sprintf(formatStr.Value, formatArgs...)
+			return &object.String{Value: result}
+		},
+	})
+
+	RegisterBuiltin("startsWith", &object.Builtin{
+		Fn: func(args ...object.Object) object.Object {
+			if len(args) != 2 {
+				return newError("wrong number of arguments. got=%d, want=2", len(args))
+			}
+
+			str, ok := args[0].(*object.String)
+			if !ok {
+				return newError("first argument to `startsWith` must be STRING, got %T", args[0])
+			}
+
+			prefix, ok := args[1].(*object.String)
+			if !ok {
+				return newError("second argument to `startsWith` must be STRING, got %T", args[1])
+			}
+
+			result := len(str.Value) >= len(prefix.Value) && str.Value[:len(prefix.Value)] == prefix.Value
+			if result {
+				return TRUE
+			}
+			return FALSE
+		},
+	})
+
+	RegisterBuiltin("endsWith", &object.Builtin{
+		Fn: func(args ...object.Object) object.Object {
+			if len(args) != 2 {
+				return newError("wrong number of arguments. got=%d, want=2", len(args))
+			}
+
+			str, ok := args[0].(*object.String)
+			if !ok {
+				return newError("first argument to `endsWith` must be STRING, got %T", args[0])
+			}
+
+			suffix, ok := args[1].(*object.String)
+			if !ok {
+				return newError("second argument to `endsWith` must be STRING, got %T", args[1])
+			}
+
+			result := len(str.Value) >= len(suffix.Value) && str.Value[len(str.Value)-len(suffix.Value):] == suffix.Value
+			if result {
+				return TRUE
+			}
+			return FALSE
+		},
+	})
+
+	RegisterBuiltin("chr", &object.Builtin{
+		Fn: func(args ...object.Object) object.Object {
+			if len(args) != 1 {
+				return newError("wrong number of arguments. got=%d, want=1", len(args))
+			}
+
+			num, ok := args[0].(*object.Integer)
+			if !ok {
+				return newError("argument to `chr` must be INTEGER, got %T", args[0])
+			}
+
+			if num.Value < 0 || num.Value > 127 {
+				return newError("chr() arg not in range(128)")
+			}
+
+			return &object.String{Value: string(rune(num.Value))}
+		},
+	})
+
+	RegisterBuiltin("ord", &object.Builtin{
+		Fn: func(args ...object.Object) object.Object {
+			if len(args) != 1 {
+				return newError("wrong number of arguments. got=%d, want=1", len(args))
+			}
+
+			str, ok := args[0].(*object.String)
+			if !ok {
+				return newError("argument to `ord` must be STRING, got %T", args[0])
+			}
+
+			if len(str.Value) != 1 {
+				return newError("ord() expected a character, but string of length %d found", len(str.Value))
+			}
+
+			return &object.Integer{Value: int64(str.Value[0])}
+		},
+	})
+
 	RegisterBuiltin("len", &object.Builtin{
 		Fn: func(args ...object.Object) object.Object {
 			if len(args) != 1 {
