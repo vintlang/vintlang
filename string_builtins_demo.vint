@@ -1,0 +1,69 @@
+// Comprehensive test of new string builtin functions in VintLang
+
+println("=== String Builtin Functions Test ===");
+println();
+
+// Test format function with various data types
+println("1. format() function:");
+println("   String formatting:", format("Hello %s!", "World"));
+println("   Integer formatting:", format("Number: %d", 42));
+println("   Mixed formatting:", format("%s has %d apples and %s oranges", "Alice", 5, "3"));
+println();
+
+// Test startsWith function
+println("2. startsWith() function:");
+let text = "Hello World";
+println("   Text:", format("\"%s\"", text));
+println("   Starts with 'Hello':", startsWith(text, "Hello"));
+println("   Starts with 'World':", startsWith(text, "World"));
+println("   Starts with 'H':", startsWith(text, "H"));
+println("   Starts with '':", startsWith(text, ""));
+println();
+
+// Test endsWith function  
+println("3. endsWith() function:");
+println("   Text:", format("\"%s\"", text));
+println("   Ends with 'World':", endsWith(text, "World"));
+println("   Ends with 'Hello':", endsWith(text, "Hello"));
+println("   Ends with 'd':", endsWith(text, "d"));
+println("   Ends with '':", endsWith(text, ""));
+println();
+
+// Test chr function (ASCII to character)
+println("4. chr() function:");
+println("   chr(65):", format("\"%s\" (ASCII A)", chr(65)));
+println("   chr(97):", format("\"%s\" (ASCII a)", chr(97)));
+println("   chr(48):", format("\"%s\" (ASCII 0)", chr(48)));
+println("   chr(32):", format("\"%s\" (ASCII space)", chr(32)));
+println();
+
+// Test ord function (character to ASCII)
+println("5. ord() function:");
+println("   ord('A'):", ord("A"));
+println("   ord('a'):", ord("a"));  
+println("   ord('0'):", ord("0"));
+println("   ord(' '):", ord(" "));
+println();
+
+// Demonstrate practical usage
+println("6. Practical examples:");
+let name = "VintLang";
+let version = "1.0";
+let message = format("Welcome to %s v%s!", name, version);
+println("   Formatted message:", message);
+
+let filename = "data.txt";
+if (endsWith(filename, ".txt")) {
+    println("   File is a text file:", filename);
+}
+
+if (startsWith(name, "Vint")) {
+    println("   Language name starts with 'Vint'");
+}
+
+// Convert between characters and ASCII
+let letter = chr(ord("A") + 1); // Should be "B"
+println("   Next letter after A:", letter);
+
+println();
+println("=== All tests completed ===");
