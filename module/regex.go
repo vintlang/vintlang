@@ -2,6 +2,7 @@ package module
 
 import (
 	"regexp"
+
 	"github.com/vintlang/vintlang/object"
 )
 
@@ -11,7 +12,7 @@ var RegexFunctions = map[string]object.ModuleFunction{
 	"splitString":   splitString,
 }
 
-func match(args []object.Object, defs map[string]object.Object) object.Object {
+func match(args []object.VintObject, defs map[string]object.VintObject) object.VintObject {
 	if len(args) != 2 || args[0].Type() != object.STRING_OBJ || args[1].Type() != object.STRING_OBJ {
 		return ErrorMessage(
 			"regex",
@@ -31,7 +32,7 @@ func match(args []object.Object, defs map[string]object.Object) object.Object {
 	return &object.Boolean{Value: re.MatchString(input)}
 }
 
-func replaceString(args []object.Object, defs map[string]object.Object) object.Object {
+func replaceString(args []object.VintObject, defs map[string]object.VintObject) object.VintObject {
 	if len(args) != 3 || args[0].Type() != object.STRING_OBJ || args[1].Type() != object.STRING_OBJ || args[2].Type() != object.STRING_OBJ {
 		return ErrorMessage(
 			"regex",
@@ -52,7 +53,7 @@ func replaceString(args []object.Object, defs map[string]object.Object) object.O
 	return &object.String{Value: re.ReplaceAllString(input, replacement)}
 }
 
-func splitString(args []object.Object, defs map[string]object.Object) object.Object {
+func splitString(args []object.VintObject, defs map[string]object.VintObject) object.VintObject {
 	if len(args) != 2 || args[0].Type() != object.STRING_OBJ || args[1].Type() != object.STRING_OBJ {
 		return ErrorMessage(
 			"regex",
@@ -70,7 +71,7 @@ func splitString(args []object.Object, defs map[string]object.Object) object.Obj
 		return &object.Error{Message: "Invalid regex pattern: " + err.Error()}
 	}
 	result := re.Split(input, -1)
-	var objs []object.Object
+	var objs []object.VintObject
 	for _, s := range result {
 		objs = append(objs, &object.String{Value: s})
 	}

@@ -8,10 +8,10 @@ import (
 
 func TestClipboardWrite(t *testing.T) {
 	// Test writing a string
-	args := []object.Object{
+	args := []object.VintObject{
 		&object.String{Value: "test content"},
 	}
-	result := clipboardWrite(args, map[string]object.Object{})
+	result := clipboardWrite(args, map[string]object.VintObject{})
 
 	if result.Type() == object.ERROR_OBJ {
 		t.Errorf("Expected success, got error: %s", result.(*object.Error).Message)
@@ -24,10 +24,10 @@ func TestClipboardWrite(t *testing.T) {
 
 func TestClipboardWriteInteger(t *testing.T) {
 	// Test writing an integer
-	args := []object.Object{
+	args := []object.VintObject{
 		&object.Integer{Value: 42},
 	}
-	result := clipboardWrite(args, map[string]object.Object{})
+	result := clipboardWrite(args, map[string]object.VintObject{})
 
 	if result.Type() == object.ERROR_OBJ {
 		t.Errorf("Expected success, got error: %s", result.(*object.Error).Message)
@@ -40,10 +40,10 @@ func TestClipboardWriteInteger(t *testing.T) {
 
 func TestClipboardWriteFloat(t *testing.T) {
 	// Test writing a float
-	args := []object.Object{
+	args := []object.VintObject{
 		&object.Float{Value: 3.14159},
 	}
-	result := clipboardWrite(args, map[string]object.Object{})
+	result := clipboardWrite(args, map[string]object.VintObject{})
 
 	if result.Type() == object.ERROR_OBJ {
 		t.Errorf("Expected success, got error: %s", result.(*object.Error).Message)
@@ -56,10 +56,10 @@ func TestClipboardWriteFloat(t *testing.T) {
 
 func TestClipboardWriteBoolean(t *testing.T) {
 	// Test writing a boolean
-	args := []object.Object{
+	args := []object.VintObject{
 		&object.Boolean{Value: true},
 	}
-	result := clipboardWrite(args, map[string]object.Object{})
+	result := clipboardWrite(args, map[string]object.VintObject{})
 
 	if result.Type() == object.ERROR_OBJ {
 		t.Errorf("Expected success, got error: %s", result.(*object.Error).Message)
@@ -72,16 +72,16 @@ func TestClipboardWriteBoolean(t *testing.T) {
 
 func TestClipboardWriteInvalidArgs(t *testing.T) {
 	// Test with no arguments
-	result := clipboardWrite([]object.Object{}, map[string]object.Object{})
+	result := clipboardWrite([]object.VintObject{}, map[string]object.VintObject{})
 	if result.Type() != object.ERROR_OBJ {
 		t.Errorf("Expected error for no arguments, got %T", result)
 	}
 
 	// Test with too many arguments
-	result = clipboardWrite([]object.Object{
+	result = clipboardWrite([]object.VintObject{
 		&object.String{Value: "test"},
 		&object.String{Value: "extra"},
-	}, map[string]object.Object{})
+	}, map[string]object.VintObject{})
 	if result.Type() != object.ERROR_OBJ {
 		t.Errorf("Expected error for too many arguments, got %T", result)
 	}
@@ -89,13 +89,13 @@ func TestClipboardWriteInvalidArgs(t *testing.T) {
 
 func TestClipboardRead(t *testing.T) {
 	// First write something to clipboard
-	writeArgs := []object.Object{
+	writeArgs := []object.VintObject{
 		&object.String{Value: "test read content"},
 	}
-	clipboardWrite(writeArgs, map[string]object.Object{})
+	clipboardWrite(writeArgs, map[string]object.VintObject{})
 
 	// Now read it back
-	result := clipboardRead([]object.Object{}, map[string]object.Object{})
+	result := clipboardRead([]object.VintObject{}, map[string]object.VintObject{})
 
 	if result.Type() == object.ERROR_OBJ {
 		t.Errorf("Expected success, got error: %s", result.(*object.Error).Message)
@@ -110,9 +110,9 @@ func TestClipboardRead(t *testing.T) {
 
 func TestClipboardReadInvalidArgs(t *testing.T) {
 	// Test with arguments (should accept none)
-	result := clipboardRead([]object.Object{
+	result := clipboardRead([]object.VintObject{
 		&object.String{Value: "unexpected"},
-	}, map[string]object.Object{})
+	}, map[string]object.VintObject{})
 	if result.Type() != object.ERROR_OBJ {
 		t.Errorf("Expected error for arguments, got %T", result)
 	}
@@ -120,13 +120,13 @@ func TestClipboardReadInvalidArgs(t *testing.T) {
 
 func TestClipboardHasContent(t *testing.T) {
 	// First write something
-	writeArgs := []object.Object{
+	writeArgs := []object.VintObject{
 		&object.String{Value: "content check"},
 	}
-	clipboardWrite(writeArgs, map[string]object.Object{})
+	clipboardWrite(writeArgs, map[string]object.VintObject{})
 
 	// Check if has content
-	result := clipboardHasContent([]object.Object{}, map[string]object.Object{})
+	result := clipboardHasContent([]object.VintObject{}, map[string]object.VintObject{})
 
 	if result.Type() == object.ERROR_OBJ {
 		t.Errorf("Expected success, got error: %s", result.(*object.Error).Message)
@@ -141,13 +141,13 @@ func TestClipboardHasContent(t *testing.T) {
 
 func TestClipboardClear(t *testing.T) {
 	// First write something
-	writeArgs := []object.Object{
+	writeArgs := []object.VintObject{
 		&object.String{Value: "content to clear"},
 	}
-	clipboardWrite(writeArgs, map[string]object.Object{})
+	clipboardWrite(writeArgs, map[string]object.VintObject{})
 
 	// Clear clipboard
-	result := clipboardClear([]object.Object{}, map[string]object.Object{})
+	result := clipboardClear([]object.VintObject{}, map[string]object.VintObject{})
 
 	if result.Type() == object.ERROR_OBJ {
 		t.Errorf("Expected success, got error: %s", result.(*object.Error).Message)
@@ -158,7 +158,7 @@ func TestClipboardClear(t *testing.T) {
 	}
 
 	// Check that clipboard is now empty
-	hasContentResult := clipboardHasContent([]object.Object{}, map[string]object.Object{})
+	hasContentResult := clipboardHasContent([]object.VintObject{}, map[string]object.VintObject{})
 	if boolResult, ok := hasContentResult.(*object.Boolean); !ok {
 		t.Errorf("Expected boolean result from hasContent, got %T", hasContentResult)
 	} else if boolResult.Value {
@@ -168,9 +168,9 @@ func TestClipboardClear(t *testing.T) {
 
 func TestClipboardClearInvalidArgs(t *testing.T) {
 	// Test with arguments (should accept none)
-	result := clipboardClear([]object.Object{
+	result := clipboardClear([]object.VintObject{
 		&object.String{Value: "unexpected"},
-	}, map[string]object.Object{})
+	}, map[string]object.VintObject{})
 	if result.Type() != object.ERROR_OBJ {
 		t.Errorf("Expected error for arguments, got %T", result)
 	}
@@ -178,9 +178,9 @@ func TestClipboardClearInvalidArgs(t *testing.T) {
 
 func TestClipboardHasContentInvalidArgs(t *testing.T) {
 	// Test with arguments (should accept none)
-	result := clipboardHasContent([]object.Object{
+	result := clipboardHasContent([]object.VintObject{
 		&object.String{Value: "unexpected"},
-	}, map[string]object.Object{})
+	}, map[string]object.VintObject{})
 	if result.Type() != object.ERROR_OBJ {
 		t.Errorf("Expected error for arguments, got %T", result)
 	}
@@ -188,13 +188,13 @@ func TestClipboardHasContentInvalidArgs(t *testing.T) {
 
 func TestClipboardAll(t *testing.T) {
 	// First write something to clipboard
-	writeArgs := []object.Object{
+	writeArgs := []object.VintObject{
 		&object.String{Value: "test all content"},
 	}
-	clipboardWrite(writeArgs, map[string]object.Object{})
+	clipboardWrite(writeArgs, map[string]object.VintObject{})
 
 	// Test the all method
-	result := clipboardAll([]object.Object{}, map[string]object.Object{})
+	result := clipboardAll([]object.VintObject{}, map[string]object.VintObject{})
 
 	if result.Type() == object.ERROR_OBJ {
 		t.Errorf("Expected success, got error: %s", result.(*object.Error).Message)
@@ -213,10 +213,10 @@ func TestClipboardAll(t *testing.T) {
 
 func TestClipboardAllEmpty(t *testing.T) {
 	// Clear clipboard first
-	clipboardClear([]object.Object{}, map[string]object.Object{})
+	clipboardClear([]object.VintObject{}, map[string]object.VintObject{})
 
 	// Test all method with empty clipboard
-	result := clipboardAll([]object.Object{}, map[string]object.Object{})
+	result := clipboardAll([]object.VintObject{}, map[string]object.VintObject{})
 
 	if result.Type() == object.ERROR_OBJ {
 		t.Errorf("Expected success, got error: %s", result.(*object.Error).Message)
@@ -231,9 +231,9 @@ func TestClipboardAllEmpty(t *testing.T) {
 
 func TestClipboardAllInvalidArgs(t *testing.T) {
 	// Test with arguments (should accept none)
-	result := clipboardAll([]object.Object{
+	result := clipboardAll([]object.VintObject{
 		&object.String{Value: "unexpected"},
-	}, map[string]object.Object{})
+	}, map[string]object.VintObject{})
 	if result.Type() != object.ERROR_OBJ {
 		t.Errorf("Expected error for arguments, got %T", result)
 	}

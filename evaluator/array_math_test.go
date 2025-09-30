@@ -16,15 +16,15 @@ func TestArrayMathMethods(t *testing.T) {
 		// Test sum
 		{"[1, 2, 3, 4, 5].sum()", 15},
 		{"[].sum()", 0},
-		
+
 		// Test average
 		{"[1, 2, 3, 4, 5].average()", 3.0},
 		{"[2, 4, 6].average()", 4.0},
-		
+
 		// Test min/max
 		{"[5, 1, 9, 3].min()", 1},
 		{"[5, 1, 9, 3].max()", 9},
-		
+
 		// Test product
 		{"[2, 3, 4].product()", 24},
 		{"[].product()", 1},
@@ -53,14 +53,14 @@ func TestArraySortMethods(t *testing.T) {
 	}{
 		// Test sortAsc
 		{"let arr = [3, 1, 4, 1, 5]; arr.sortAsc(); arr", "[1, 1, 3, 4, 5]"},
-		
+
 		// Test sortDesc
 		{"let arr = [3, 1, 4, 1, 5]; arr.sortDesc(); arr", "[5, 4, 3, 1, 1]"},
-		
+
 		// Test with strings
 		{"let arr = [\"banana\", \"apple\", \"cherry\"]; arr.sort(); arr", "[apple, banana, cherry]"},
 		{"let arr = [\"banana\", \"apple\", \"cherry\"]; arr.sortDesc(); arr", "[cherry, banana, apple]"},
-		
+
 		// Test with floats
 		{"let arr = [3.14, 1.41, 2.71]; arr.sort(); arr", "[1.41, 2.71, 3.14]"},
 		{"let arr = [3.14, 1.41, 2.71]; arr.sortDesc(); arr", "[3.14, 2.71, 1.41]"},
@@ -86,7 +86,7 @@ func TestArraySortBy(t *testing.T) {
 	}{
 		// Test sortBy with simple function
 		{"let arr = [3, 1, 4, 1, 5]; arr.sortBy(func(x){ return x }); arr", "[1, 1, 3, 4, 5]"},
-		
+
 		// Test sortBy with reverse function
 		{"let arr = [3, 1, 4, 1, 5]; arr.sortBy(func(x){ return -x }); arr", "[5, 4, 3, 1, 1]"},
 	}
@@ -119,7 +119,7 @@ func TestArrayMode(t *testing.T) {
 	}
 }
 
-func testFloatObject(t *testing.T, obj object.Object, expected float64) bool {
+func testFloatObject(t *testing.T, obj object.VintObject, expected float64) bool {
 	result, ok := obj.(*object.Float)
 	if !ok {
 		t.Errorf("object is not Float. got=%T (%+v)", obj, obj)

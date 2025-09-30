@@ -14,7 +14,7 @@ func (r *Range) Inspect() string {
 	return fmt.Sprintf("%d..%d", r.Start, r.End)
 }
 
-func (r *Range) Next() (Object, Object) {
+func (r *Range) Next() (VintObject, VintObject) {
 	if r.Current <= r.End {
 		val := &Integer{Value: r.Current}
 		r.Current++

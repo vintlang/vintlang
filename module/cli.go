@@ -31,7 +31,7 @@ func init() {
 }
 
 // getArgs returns an array of command line arguments
-func getArgs(args []object.Object, defs map[string]object.Object) object.Object {
+func getArgs(args []object.VintObject, defs map[string]object.VintObject) object.VintObject {
 	if len(args) > 0 {
 		return ErrorMessage(
 			"cli", "getArgs",
@@ -49,7 +49,7 @@ func getArgs(args []object.Object, defs map[string]object.Object) object.Object 
 }
 
 // getFlags parses command line flags into a dictionary
-func getFlags(args []object.Object, defs map[string]object.Object) object.Object {
+func getFlags(args []object.VintObject, defs map[string]object.VintObject) object.VintObject {
 	if len(args) > 0 {
 		return ErrorMessage(
 			"cli", "getFlags",
@@ -66,7 +66,7 @@ func getFlags(args []object.Object, defs map[string]object.Object) object.Object
 		arg := cliArgs[i]
 		if strings.HasPrefix(arg, "--") {
 			key := strings.TrimPrefix(arg, "--")
-			var value object.Object = &object.Boolean{Value: true}
+			var value object.VintObject = &object.Boolean{Value: true}
 
 			// Check if next arg is a value (not a flag)
 			if i+1 < len(cliArgs) && !strings.HasPrefix(cliArgs[i+1], "--") {
@@ -86,7 +86,7 @@ func getFlags(args []object.Object, defs map[string]object.Object) object.Object
 }
 
 // getPositional returns an array of positional (non-flag) arguments
-func getPositional(args []object.Object, defs map[string]object.Object) object.Object {
+func getPositional(args []object.VintObject, defs map[string]object.VintObject) object.VintObject {
 	if len(args) > 0 {
 		return ErrorMessage(
 			"cli", "getPositional",
@@ -116,7 +116,7 @@ func getPositional(args []object.Object, defs map[string]object.Object) object.O
 }
 
 // prompt displays a message and reads user input
-func prompt(args []object.Object, defs map[string]object.Object) object.Object {
+func prompt(args []object.VintObject, defs map[string]object.VintObject) object.VintObject {
 	if len(args) != 1 {
 		return ErrorMessage(
 			"cli", "prompt",
@@ -152,7 +152,7 @@ func prompt(args []object.Object, defs map[string]object.Object) object.Object {
 }
 
 // confirm prompts the user for a yes/no response
-func confirm(args []object.Object, defs map[string]object.Object) object.Object {
+func confirm(args []object.VintObject, defs map[string]object.VintObject) object.VintObject {
 	if len(args) != 1 {
 		return ErrorMessage(
 			"cli", "confirm",
@@ -184,7 +184,7 @@ func confirm(args []object.Object, defs map[string]object.Object) object.Object 
 }
 
 // execCommand executes a shell command and returns its output
-func execCommand(args []object.Object, defs map[string]object.Object) object.Object {
+func execCommand(args []object.VintObject, defs map[string]object.VintObject) object.VintObject {
 	if len(args) != 1 {
 		return ErrorMessage(
 			"cli", "execCommand",
@@ -227,7 +227,7 @@ func execCommand(args []object.Object, defs map[string]object.Object) object.Obj
 }
 
 // cliExit terminates the program with the given status code
-func cliExit(args []object.Object, defs map[string]object.Object) object.Object {
+func cliExit(args []object.VintObject, defs map[string]object.VintObject) object.VintObject {
 	if len(args) != 1 {
 		return ErrorMessage(
 			"cli", "exit",
@@ -261,7 +261,7 @@ func cliExit(args []object.Object, defs map[string]object.Object) object.Object 
 }
 
 // parseArgs parses command line arguments into a structured format
-func parseArgs(args []object.Object, defs map[string]object.Object) object.Object {
+func parseArgs(args []object.VintObject, defs map[string]object.VintObject) object.VintObject {
 	if len(args) != 1 || len(defs) != 0 {
 		return ErrorMessage(
 			"cli", "parseArgs",
@@ -283,7 +283,7 @@ func parseArgs(args []object.Object, defs map[string]object.Object) object.Objec
 }
 
 // getArgValue gets the value of a named argument
-func getArgValue(args []object.Object, defs map[string]object.Object) object.Object {
+func getArgValue(args []object.VintObject, defs map[string]object.VintObject) object.VintObject {
 	if len(args) != 1 || len(defs) != 0 {
 		return ErrorMessage(
 			"cli", "getArgValue",
@@ -339,7 +339,7 @@ func getArgValue(args []object.Object, defs map[string]object.Object) object.Obj
 }
 
 // hasArg checks if a named argument is present
-func hasArg(args []object.Object, defs map[string]object.Object) object.Object {
+func hasArg(args []object.VintObject, defs map[string]object.VintObject) object.VintObject {
 	if len(args) != 1 || len(defs) != 0 {
 		return ErrorMessage(
 			"cli", "hasArg",
@@ -385,12 +385,12 @@ func hasArg(args []object.Object, defs map[string]object.Object) object.Object {
 }
 
 // args returns an array of all command line arguments (alias for getArgs)
-func args(args []object.Object, defs map[string]object.Object) object.Object {
+func args(args []object.VintObject, defs map[string]object.VintObject) object.VintObject {
 	return getArgs(args, defs)
 }
 
 // argsParse returns a parsed arguments object with helper methods
-func argsParse(args []object.Object, defs map[string]object.Object) object.Object {
+func argsParse(args []object.VintObject, defs map[string]object.VintObject) object.VintObject {
 	if len(args) > 0 {
 		return ErrorMessage(
 			"cli", "parse",
@@ -406,14 +406,14 @@ func argsParse(args []object.Object, defs map[string]object.Object) object.Objec
 	result := &object.Dict{Pairs: make(map[object.HashKey]object.DictPair)}
 
 	// Add flags to the result
-	flags := make(map[string]object.Object)
-	positionalArgs := []object.Object{}
+	flags := make(map[string]object.VintObject)
+	positionalArgs := []object.VintObject{}
 
 	for i := 0; i < len(cliArgs); i++ {
 		arg := cliArgs[i]
 		if strings.HasPrefix(arg, "--") {
 			key := strings.TrimPrefix(arg, "--")
-			var value object.Object = &object.Boolean{Value: true}
+			var value object.VintObject = &object.Boolean{Value: true}
 
 			// Check if next arg is a value (not a flag)
 			if i+1 < len(cliArgs) && !strings.HasPrefix(cliArgs[i+1], "--") && !strings.HasPrefix(cliArgs[i+1], "-") {
@@ -471,7 +471,7 @@ func argsParse(args []object.Object, defs map[string]object.Object) object.Objec
 }
 
 // Helper function to create a dictionary from a map
-func createDictFromMap(flags map[string]object.Object) *object.Dict {
+func createDictFromMap(flags map[string]object.VintObject) *object.Dict {
 	dict := &object.Dict{Pairs: make(map[object.HashKey]object.DictPair)}
 	i := uint64(0)
 	for key, value := range flags {
@@ -486,8 +486,8 @@ func createDictFromMap(flags map[string]object.Object) *object.Dict {
 }
 
 // Helper function to create the has method
-func createHasFunction(flags map[string]object.Object) func(...object.Object) object.Object {
-	return func(args ...object.Object) object.Object {
+func createHasFunction(flags map[string]object.VintObject) func(...object.VintObject) object.VintObject {
+	return func(args ...object.VintObject) object.VintObject {
 		if len(args) != 1 {
 			return ErrorMessage(
 				"cli", "has",
@@ -514,8 +514,8 @@ func createHasFunction(flags map[string]object.Object) func(...object.Object) ob
 }
 
 // Helper function to create the get method
-func createGetFunction(flags map[string]object.Object) func(...object.Object) object.Object {
-	return func(args ...object.Object) object.Object {
+func createGetFunction(flags map[string]object.VintObject) func(...object.VintObject) object.VintObject {
+	return func(args ...object.VintObject) object.VintObject {
 		if len(args) != 1 {
 			return ErrorMessage(
 				"cli", "get",
@@ -544,8 +544,8 @@ func createGetFunction(flags map[string]object.Object) func(...object.Object) ob
 }
 
 // Helper function to create the positional method
-func createPositionalFunction(positionalArgs []object.Object) func(...object.Object) object.Object {
-	return func(args ...object.Object) object.Object {
+func createPositionalFunction(positionalArgs []object.VintObject) func(...object.VintObject) object.VintObject {
+	return func(args ...object.VintObject) object.VintObject {
 		if len(args) > 0 {
 			return ErrorMessage(
 				"cli", "positional",
@@ -560,7 +560,7 @@ func createPositionalFunction(positionalArgs []object.Object) func(...object.Obj
 }
 
 // cliHelp generates and displays help text for CLI applications
-func cliHelp(args []object.Object, defs map[string]object.Object) object.Object {
+func cliHelp(args []object.VintObject, defs map[string]object.VintObject) object.VintObject {
 	if len(args) > 2 {
 		return ErrorMessage(
 			"cli", "help",
@@ -611,8 +611,8 @@ For more information, visit: https://github.com/vintlang/vintlang
 	return &object.Null{}
 }
 
-// cliVersion displays version information  
-func cliVersion(args []object.Object, defs map[string]object.Object) object.Object {
+// cliVersion displays version information
+func cliVersion(args []object.VintObject, defs map[string]object.VintObject) object.VintObject {
 	if len(args) > 2 {
 		return ErrorMessage(
 			"cli", "version",

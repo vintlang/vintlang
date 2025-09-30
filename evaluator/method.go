@@ -5,7 +5,7 @@ import (
 	"github.com/vintlang/vintlang/object"
 )
 
-func evalMethodExpression(node *ast.MethodExpression, env *object.Environment) object.Object {
+func evalMethodExpression(node *ast.MethodExpression, env *object.Environment) object.VintObject {
 	obj := Eval(node.Object, env)
 	if isError(obj) {
 		return obj
@@ -15,7 +15,7 @@ func evalMethodExpression(node *ast.MethodExpression, env *object.Environment) o
 		return args[0]
 	}
 
-	defs := make(map[string]object.Object)
+	defs := make(map[string]object.VintObject)
 
 	for k, v := range node.Defaults {
 		defs[k] = Eval(v, env)
@@ -23,7 +23,7 @@ func evalMethodExpression(node *ast.MethodExpression, env *object.Environment) o
 	return applyMethod(obj, node.Method, args, defs, node.Token.Line)
 }
 
-func applyMethod(obj object.Object, method ast.Expression, args []object.Object, defs map[string]object.Object, l int) object.Object {
+func applyMethod(obj object.VintObject, method ast.Expression, args []object.VintObject, defs map[string]object.VintObject, l int) object.VintObject {
 	switch obj := obj.(type) {
 	case *object.String:
 		return obj.Method(method.(*ast.Identifier).Value, args)
@@ -92,7 +92,7 @@ func applyMethod(obj object.Object, method ast.Expression, args []object.Object,
 // ///////////////////////////////////////////////////////////////
 // //////// Some methods here because of loop dependency ////////
 // /////////////////////////////////////////////////////////////
-func maap(a *object.Array, args []object.Object) object.Object {
+func maap(a *object.Array, args []object.VintObject) object.VintObject {
 	if len(args) != 1 || args[0].Type() != object.FUNCTION_OBJ {
 		return newError("Sorry, the argument is not valid")
 	}
@@ -101,7 +101,7 @@ func maap(a *object.Array, args []object.Object) object.Object {
 	if !ok {
 		return newError("Sorry, the argument is not valid")
 	}
-	newArr := object.Array{Elements: []object.Object{}}
+	newArr := object.Array{Elements: []object.VintObject{}}
 	for _, obj := range a.Elements {
 		env := object.NewEnvironment()
 		env.Define(fn.Parameters[0].Value, obj)
@@ -114,7 +114,7 @@ func maap(a *object.Array, args []object.Object) object.Object {
 	return &newArr
 }
 
-func filter(a *object.Array, args []object.Object) object.Object {
+func filter(a *object.Array, args []object.VintObject) object.VintObject {
 	if len(args) != 1 || args[0].Type() != object.FUNCTION_OBJ {
 		return newError("Sorry, the argument is not valid")
 	}
@@ -123,7 +123,7 @@ func filter(a *object.Array, args []object.Object) object.Object {
 	if !ok {
 		return newError("Sorry, the argument is not valid")
 	}
-	newArr := object.Array{Elements: []object.Object{}}
+	newArr := object.Array{Elements: []object.VintObject{}}
 	for _, obj := range a.Elements {
 		env := object.NewEnvironment()
 		env.Define(fn.Parameters[0].Value, obj)
@@ -135,7 +135,7 @@ func filter(a *object.Array, args []object.Object) object.Object {
 	return &newArr
 }
 
-func sortBy(a *object.Array, args []object.Object) object.Object {
+func sortBy(a *object.Array, args []object.VintObject) object.VintObject {
 	if len(args) != 1 || args[0].Type() != object.FUNCTION_OBJ {
 		return newError("Sorry, the argument is not valid")
 	}
@@ -144,15 +144,15 @@ func sortBy(a *object.Array, args []object.Object) object.Object {
 	if !ok {
 		return newError("Sorry, the argument is not valid")
 	}
-	
+
 	if len(a.Elements) <= 1 {
 		return a
 	}
-	
+
 	// Use bubble sort for simplicity with custom comparison
-	elements := make([]object.Object, len(a.Elements))
+	elements := make([]object.VintObject, len(a.Elements))
 	copy(elements, a.Elements)
-	
+
 	for i := 0; i < len(elements)-1; i++ {
 		for j := 0; j < len(elements)-i-1; j++ {
 			// Call comparison function with two elements
@@ -161,23 +161,23 @@ func sortBy(a *object.Array, args []object.Object) object.Object {
 			if len(fn.Parameters) > 1 {
 				env.Define(fn.Parameters[1].Value, elements[j+1])
 			}
-			
+
 			result1 := Eval(fn.Body, env)
 			if o, ok := result1.(*object.ReturnValue); ok {
 				result1 = o.Value
 			}
-			
+
 			env2 := object.NewEnvironment()
 			env2.Define(fn.Parameters[0].Value, elements[j+1])
 			if len(fn.Parameters) > 1 {
 				env2.Define(fn.Parameters[1].Value, elements[j])
 			}
-			
+
 			result2 := Eval(fn.Body, env2)
 			if o, ok := result2.(*object.ReturnValue); ok {
 				result2 = o.Value
 			}
-			
+
 			// Compare results and swap if needed
 			shouldSwap := false
 			if intResult1, ok1 := result1.(*object.Integer); ok1 {
@@ -193,13 +193,13 @@ func sortBy(a *object.Array, args []object.Object) object.Object {
 					shouldSwap = strResult1.Value > strResult2.Value
 				}
 			}
-			
+
 			if shouldSwap {
 				elements[j], elements[j+1] = elements[j+1], elements[j]
 			}
 		}
 	}
-	
+
 	a.Elements = elements
 	return a
 }

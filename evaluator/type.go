@@ -8,7 +8,7 @@ import (
 )
 
 // Converts an object to an integer, if possible
-func convertToInteger(obj object.Object) object.Object {
+func convertToInteger(obj object.VintObject) object.VintObject {
 	switch obj := obj.(type) {
 	case *object.Integer:
 		return obj
@@ -34,7 +34,7 @@ func convertToInteger(obj object.Object) object.Object {
 }
 
 // Converts an object to a float, if possible
-func convertToFloat(obj object.Object) object.Object {
+func convertToFloat(obj object.VintObject) object.VintObject {
 	switch obj := obj.(type) {
 	case *object.Float:
 		return obj
@@ -61,13 +61,13 @@ func convertToFloat(obj object.Object) object.Object {
 }
 
 // Converts an object to a string
-func convertToString(obj object.Object) object.Object {
+func convertToString(obj object.VintObject) object.VintObject {
 	// Simply return the string representation of the object
 	return &object.String{Value: obj.Inspect()}
 }
 
 // Converts an object to a boolean
-func convertToBoolean(obj object.Object) object.Object {
+func convertToBoolean(obj object.VintObject) object.VintObject {
 	switch obj := obj.(type) {
 	case *object.Boolean:
 		// Return the boolean object as is
@@ -92,7 +92,7 @@ func convertToBoolean(obj object.Object) object.Object {
 
 // Helper function to extract the boolean value from an object
 // Returns an error if the object is not a boolean
-func getBooleanValue(obj object.Object) (bool, error) {
+func getBooleanValue(obj object.VintObject) (bool, error) {
 	switch obj := obj.(type) {
 	case *object.Boolean:
 		return obj.Value, nil

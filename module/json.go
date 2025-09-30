@@ -13,13 +13,13 @@ var JsonFunctions = map[string]object.ModuleFunction{}
 func init() {
 	JsonFunctions["decode"] = decode
 	JsonFunctions["encode"] = encode
-	JsonFunctions["stringify"] = encode  //Experimental
+	JsonFunctions["stringify"] = encode //Experimental
 	JsonFunctions["pretty"] = pretty
 	JsonFunctions["merge"] = merge
 	JsonFunctions["get"] = get
-} 
+}
 
-func decode(args []object.Object, defs map[string]object.Object) object.Object {
+func decode(args []object.VintObject, defs map[string]object.VintObject) object.VintObject {
 	if len(defs) != 0 {
 		return ErrorMessage(
 			"json", "decode",
@@ -57,7 +57,7 @@ func decode(args []object.Object, defs map[string]object.Object) object.Object {
 	return convertWhateverToObject(i)
 }
 
-func convertWhateverToObject(i interface{}) object.Object {
+func convertWhateverToObject(i interface{}) object.VintObject {
 	switch v := i.(type) {
 	case map[string]interface{}:
 		dict := &object.Dict{}
@@ -95,61 +95,60 @@ func convertWhateverToObject(i interface{}) object.Object {
 	return &object.Null{}
 }
 
-func encode(args []object.Object, defs map[string]object.Object) object.Object {
-    if len(defs) != 0 {
-        return ErrorMessage(
+func encode(args []object.VintObject, defs map[string]object.VintObject) object.VintObject {
+	if len(defs) != 0 {
+		return ErrorMessage(
 			"json", "encode",
 			"no definitions allowed",
 			fmt.Sprintf("%d definitions provided", len(defs)),
 			`json.encode(data) or json.encode(data, 2)`,
 		)
-    }
+	}
 
-    if len(args) < 1 || len(args) > 2 {
-        return ErrorMessage(
+	if len(args) < 1 || len(args) > 2 {
+		return ErrorMessage(
 			"json", "encode",
 			"1 or 2 arguments (data and optional indent)",
 			fmt.Sprintf("%d arguments", len(args)),
 			`json.encode(data) or json.encode(data, 2)`,
 		)
-    }
+	}
 
-    input := args[0]
-    i := convertObjectToWhatever(input)
+	input := args[0]
+	i := convertObjectToWhatever(input)
 
-    // Default to no indentation
-    indent := ""
-    if len(args) == 2 {
-        if args[1].Type() != object.INTEGER_OBJ {
-            return ErrorMessage(
+	// Default to no indentation
+	indent := ""
+	if len(args) == 2 {
+		if args[1].Type() != object.INTEGER_OBJ {
+			return ErrorMessage(
 				"json", "encode",
 				"integer argument for indent",
 				string(args[1].Type()),
 				`json.encode(data, 2) - indent with 2 spaces`,
 			)
-        }
-        spaces := int(args[1].(*object.Integer).Value)
-        indent = strings.Repeat(" ", spaces)
-    }
+		}
+		spaces := int(args[1].(*object.Integer).Value)
+		indent = strings.Repeat(" ", spaces)
+	}
 
-    var data []byte
-    var err error
+	var data []byte
+	var err error
 
-    if indent != "" {
-        data, err = json.MarshalIndent(i, "", indent)
-    } else {
-        data, err = json.Marshal(i)
-    }
+	if indent != "" {
+		data, err = json.MarshalIndent(i, "", indent)
+	} else {
+		data, err = json.Marshal(i)
+	}
 
-    if err != nil {
-        return &object.Error{Message: "Unable to convert data to JSON"}
-    }
+	if err != nil {
+		return &object.Error{Message: "Unable to convert data to JSON"}
+	}
 
-    return &object.String{Value: string(data)}
+	return &object.String{Value: string(data)}
 }
 
-
-func convertObjectToWhatever(obj object.Object) interface{} {
+func convertObjectToWhatever(obj object.VintObject) interface{} {
 	switch v := obj.(type) {
 	case *object.Dict:
 		m := make(map[string]interface{})
@@ -179,7 +178,7 @@ func convertObjectToWhatever(obj object.Object) interface{} {
 }
 
 // pretty formats JSON with indentation for better readability
-func pretty(args []object.Object, defs map[string]object.Object) object.Object {
+func pretty(args []object.VintObject, defs map[string]object.VintObject) object.VintObject {
 	if len(defs) != 0 || len(args) != 1 || args[0].Type() != object.STRING_OBJ {
 		return &object.Error{Message: "Expect a single string argument"}
 	}
@@ -200,7 +199,7 @@ func pretty(args []object.Object, defs map[string]object.Object) object.Object {
 }
 
 // merge combines two JSON objects into one
-func merge(args []object.Object, defs map[string]object.Object) object.Object {
+func merge(args []object.VintObject, defs map[string]object.VintObject) object.VintObject {
 	if len(defs) != 0 || len(args) != 2 {
 		return &object.Error{Message: "Expect exactly two arguments"}
 	}
@@ -227,7 +226,7 @@ func merge(args []object.Object, defs map[string]object.Object) object.Object {
 }
 
 // get retrieves a value from a JSON object by key
-func get(args []object.Object, defs map[string]object.Object) object.Object {
+func get(args []object.VintObject, defs map[string]object.VintObject) object.VintObject {
 	if len(defs) != 0 || len(args) != 2 {
 		return &object.Error{Message: "Expect two arguments: JSON object and key"}
 	}

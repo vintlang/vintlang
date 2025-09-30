@@ -20,7 +20,7 @@ func init() {
 	TimeFunctions["subtract"] = subtract
 }
 
-func now(args []object.Object, defs map[string]object.Object) object.Object {
+func now(args []object.VintObject, defs map[string]object.VintObject) object.VintObject {
 	if len(args) != 0 || len(defs) != 0 {
 		return ErrorMessage(
 			"time", "now",
@@ -36,7 +36,7 @@ func now(args []object.Object, defs map[string]object.Object) object.Object {
 	return &object.Time{TimeValue: time_string}
 }
 
-func sleep(args []object.Object, defs map[string]object.Object) object.Object {
+func sleep(args []object.VintObject, defs map[string]object.VintObject) object.VintObject {
 	if len(defs) != 0 {
 		return &object.Error{
 			Message: "\033[1;31m -> time.sleep()\033[0m:\n" +
@@ -80,7 +80,7 @@ func sleep(args []object.Object, defs map[string]object.Object) object.Object {
 	return nil
 }
 
-func since(args []object.Object, defs map[string]object.Object) object.Object {
+func since(args []object.VintObject, defs map[string]object.VintObject) object.VintObject {
 	if len(defs) != 0 {
 		return &object.Error{Message: "This argument is not allowed"}
 	}
@@ -114,7 +114,7 @@ func since(args []object.Object, defs map[string]object.Object) object.Object {
 	return &object.Integer{Value: int64(durationInSeconds)}
 }
 
-func format(args []object.Object, defs map[string]object.Object) object.Object {
+func format(args []object.VintObject, defs map[string]object.VintObject) object.VintObject {
 	if len(args) != 2 {
 		return &object.Error{Message: "We need two arguments: time and format string"}
 	}
@@ -143,7 +143,7 @@ func format(args []object.Object, defs map[string]object.Object) object.Object {
 	return &object.String{Value: formattedTime}
 }
 
-func isLeapYear(args []object.Object, defs map[string]object.Object) object.Object {
+func isLeapYear(args []object.VintObject, defs map[string]object.VintObject) object.VintObject {
 	if len(args) != 1 {
 		return &object.Error{Message: "We need one argument: year"}
 	}
@@ -162,7 +162,7 @@ func isLeapYear(args []object.Object, defs map[string]object.Object) object.Obje
 	return &object.Boolean{Value: isLeap}
 }
 
-func add(args []object.Object, defs map[string]object.Object) object.Object {
+func add(args []object.VintObject, defs map[string]object.VintObject) object.VintObject {
 	if len(args) != 2 {
 		return &object.Error{Message: "We need two arguments: time and duration"}
 	}
@@ -198,7 +198,7 @@ func add(args []object.Object, defs map[string]object.Object) object.Object {
 	return &object.Time{TimeValue: newTime.Format("15:04:05 02-01-2006")}
 }
 
-func subtract(args []object.Object, defs map[string]object.Object) object.Object {
+func subtract(args []object.VintObject, defs map[string]object.VintObject) object.VintObject {
 	if len(args) != 2 {
 		return &object.Error{Message: "We need two arguments: time and duration"}
 	}

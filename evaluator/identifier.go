@@ -7,7 +7,7 @@ import (
 
 // evalIdentifier resolves identifiers in the environment.
 // For functions, we returns the first overload for backward compatibility.
-func evalIdentifier(node *ast.Identifier, env *object.Environment) object.Object {
+func evalIdentifier(node *ast.Identifier, env *object.Environment) object.VintObject {
 	// Checks if the identifier exists in the environment, returns its value if found.
 	if val, ok := env.Get(node.Value); ok {
 		return val

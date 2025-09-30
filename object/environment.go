@@ -3,7 +3,7 @@ package object
 // Environment represents a variable/function scope in VintLang.
 // Now supports function overloading: multiple functions with the same name but different signatures.
 type Environment struct {
-	store     map[string]Object      // For variables and non-function objects
+	store     map[string]VintObject  // For variables and non-function objects
 	funcs     map[string][]*Function // For overloaded functions
 	constants map[string]bool
 	outer     *Environment
@@ -11,7 +11,7 @@ type Environment struct {
 
 // NewEnvironment creates a new environment with support for function overloading.
 func NewEnvironment() *Environment {
-	s := make(map[string]Object)
+	s := make(map[string]VintObject)
 	f := make(map[string][]*Function)
 	c := make(map[string]bool)
 	return &Environment{store: s, funcs: f, constants: c, outer: nil}
@@ -25,7 +25,7 @@ func NewEnclosedEnvironment(outer *Environment) *Environment {
 }
 
 // Get returns a variable or function by name. For functions, returns the first overload (for backward compatibility).
-func (e *Environment) Get(name string) (Object, bool) {
+func (e *Environment) Get(name string) (VintObject, bool) {
 	if funcs, ok := e.funcs[name]; ok && len(funcs) > 0 {
 		return funcs[0], true // Return the first overload for compatibility
 	}
@@ -48,7 +48,7 @@ func (e *Environment) GetAllFunctions(name string) []*Function {
 }
 
 // Define adds a variable or function to the environment. Functions are stored as overloads.
-func (e *Environment) Define(name string, val Object) Object {
+func (e *Environment) Define(name string, val VintObject) VintObject {
 	if fn, ok := val.(*Function); ok {
 		// Overload: append to the slice for this name
 		e.funcs[name] = append(e.funcs[name], fn)
@@ -62,7 +62,7 @@ func (e *Environment) Define(name string, val Object) Object {
 }
 
 // DefineConst adds a constant variable to the environment.
-func (e *Environment) DefineConst(name string, val Object) Object {
+func (e *Environment) DefineConst(name string, val VintObject) VintObject {
 	if _, ok := e.store[name]; ok {
 		return NewError("Identifier '" + name + "' has already been declared")
 	}
@@ -72,7 +72,7 @@ func (e *Environment) DefineConst(name string, val Object) Object {
 }
 
 // Assign updates the value of a variable in the environment.
-func (e *Environment) Assign(name string, val Object) (Object, bool) {
+func (e *Environment) Assign(name string, val VintObject) (VintObject, bool) {
 	if e.constants[name] {
 		return NewError("Cannot assign to constant '" + name + "'"), true
 	}
@@ -87,7 +87,7 @@ func (e *Environment) Assign(name string, val Object) (Object, bool) {
 }
 
 // SetScoped sets a variable in the current scope only.
-func (e *Environment) SetScoped(name string, val Object) Object {
+func (e *Environment) SetScoped(name string, val VintObject) VintObject {
 	if e.constants[name] {
 		return NewError("Cannot assign to constant '" + name + "'")
 	}

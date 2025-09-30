@@ -3,7 +3,7 @@ package object
 import "fmt"
 
 type Pointer struct {
-	Ref Object 
+	Ref VintObject
 }
 
 func (p *Pointer) Type() ObjectType {
@@ -11,5 +11,5 @@ func (p *Pointer) Type() ObjectType {
 }
 
 func (p *Pointer) Inspect() string {
-    return fmt.Sprintf("Pointer(addr=%p, value=%s)", p.Ref, p.Ref.Inspect())
+	return fmt.Sprintf("Pointer(addr=%p, value=%s)", p.Ref, p.Ref.Inspect())
 }

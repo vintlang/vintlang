@@ -5,7 +5,7 @@ import (
 	"github.com/vintlang/vintlang/object"
 )
 
-func evalPropertyExpression(node *ast.PropertyExpression, env *object.Environment) object.Object {
+func evalPropertyExpression(node *ast.PropertyExpression, env *object.Environment) object.VintObject {
 	left := Eval(node.Object, env)
 	if isError(left) {
 		return left
@@ -33,7 +33,7 @@ func evalPropertyExpression(node *ast.PropertyExpression, env *object.Environmen
 	return newError("Value %s is not valid for %s", node.Property.(*ast.Identifier).Value, left.Inspect())
 }
 
-func evalPropertyAssignment(name *ast.PropertyExpression, val object.Object, env *object.Environment) object.Object {
+func evalPropertyAssignment(name *ast.PropertyExpression, val object.VintObject, env *object.Environment) object.VintObject {
 	left := Eval(name.Object, env)
 	if isError(left) {
 		return left

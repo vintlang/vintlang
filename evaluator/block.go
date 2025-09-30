@@ -5,8 +5,8 @@ import (
 	"github.com/vintlang/vintlang/object"
 )
 
-func evalBlockStatement(block *ast.BlockStatement, env *object.Environment) object.Object {
-	var result object.Object
+func evalBlockStatement(block *ast.BlockStatement, env *object.Environment) object.VintObject {
+	var result object.VintObject
 
 	for _, statement := range block.Statements {
 		result = Eval(statement, env)

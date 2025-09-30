@@ -22,16 +22,16 @@ var (
 	Underline = color.New(color.Underline)
 
 	// Custom styles
-	HeaderStyle   = color.New(color.FgGreen, color.Bold)           // Titles & headers
+	HeaderStyle   = color.New(color.FgGreen, color.Bold)              // Titles & headers
 	ErrorStyle    = color.New(color.FgRed, color.Bold, color.BgBlack) // Errors
-	SuccessStyle  = color.New(color.FgHiGreen, color.Bold)          // Success messages
-	WarningStyle  = color.New(color.FgYellow, color.Bold)           // Warnings
-	InfoStyle     = color.New(color.FgCyan, color.Bold)             // Information
-	DebugStyle    = color.New(color.FgMagenta, color.Bold)          // Debug messages
-	InputPrompt   = color.New(color.FgBlue, color.Bold)             // Input prompts
-	Highlight     = color.New(color.FgHiBlue, color.Bold)           // Highlights key info
-	DimText       = color.New(color.FgWhite, color.Faint)           // Subtle text
-	InvertedStyle = color.New(color.FgBlack, color.BgWhite)         // Inverted text
+	SuccessStyle  = color.New(color.FgHiGreen, color.Bold)            // Success messages
+	WarningStyle  = color.New(color.FgYellow, color.Bold)             // Warnings
+	InfoStyle     = color.New(color.FgCyan, color.Bold)               // Information
+	DebugStyle    = color.New(color.FgMagenta, color.Bold)            // Debug messages
+	InputPrompt   = color.New(color.FgBlue, color.Bold)               // Input prompts
+	Highlight     = color.New(color.FgHiBlue, color.Bold)             // Highlights key info
+	DimText       = color.New(color.FgWhite, color.Faint)             // Subtle text
+	InvertedStyle = color.New(color.FgBlack, color.BgWhite)           // Inverted text
 )
 
 var StyledFunctions = map[string]object.ModuleFunction{}
@@ -56,77 +56,77 @@ func init() {
 }
 
 // red prints text in red color
-func red(args []object.Object, defs map[string]object.Object) object.Object {
+func red(args []object.VintObject, defs map[string]object.VintObject) object.VintObject {
 	return printStyled(args, Red)
 }
 
 // green prints text in green color
-func green(args []object.Object, defs map[string]object.Object) object.Object {
+func green(args []object.VintObject, defs map[string]object.VintObject) object.VintObject {
 	return printStyled(args, Green)
 }
 
 // yellow prints text in yellow color
-func yellow(args []object.Object, defs map[string]object.Object) object.Object {
+func yellow(args []object.VintObject, defs map[string]object.VintObject) object.VintObject {
 	return printStyled(args, Yellow)
 }
 
 // blue prints text in blue color
-func blue(args []object.Object, defs map[string]object.Object) object.Object {
+func blue(args []object.VintObject, defs map[string]object.VintObject) object.VintObject {
 	return printStyled(args, Blue)
 }
 
 // header prints text using HeaderStyle
-func header(args []object.Object, defs map[string]object.Object) object.Object {
+func header(args []object.VintObject, defs map[string]object.VintObject) object.VintObject {
 	return printStyled(args, HeaderStyle)
 }
 
 // err prints text using ErrorStyle
-func err(args []object.Object, defs map[string]object.Object) object.Object {
+func err(args []object.VintObject, defs map[string]object.VintObject) object.VintObject {
 	return printStyled(args, ErrorStyle)
 }
 
 // success prints text using SuccessStyle
-func success(args []object.Object, defs map[string]object.Object) object.Object {
+func success(args []object.VintObject, defs map[string]object.VintObject) object.VintObject {
 	return printStyled(args, SuccessStyle)
 }
 
 // warning prints text using WarningStyle
-func warning(args []object.Object, defs map[string]object.Object) object.Object {
+func warning(args []object.VintObject, defs map[string]object.VintObject) object.VintObject {
 	return printStyled(args, WarningStyle)
 }
 
 // info prints text using InfoStyle
-func info(args []object.Object, defs map[string]object.Object) object.Object {
+func info(args []object.VintObject, defs map[string]object.VintObject) object.VintObject {
 	return printStyled(args, InfoStyle)
 }
 
 // debug prints text using DebugStyle
-func debug(args []object.Object, defs map[string]object.Object) object.Object {
+func debug(args []object.VintObject, defs map[string]object.VintObject) object.VintObject {
 	return printStyled(args, DebugStyle)
 }
 
 // inputPrompt prints text using InputPrompt style
-func inputPrompt(args []object.Object, defs map[string]object.Object) object.Object {
+func inputPrompt(args []object.VintObject, defs map[string]object.VintObject) object.VintObject {
 	return printStyled(args, InputPrompt)
 }
 
 // highlight prints text using Highlight style
-func highlight(args []object.Object, defs map[string]object.Object) object.Object {
+func highlight(args []object.VintObject, defs map[string]object.VintObject) object.VintObject {
 	return printStyled(args, Highlight)
 }
 
 // dim prints text using DimText style
-func dim(args []object.Object, defs map[string]object.Object) object.Object {
+func dim(args []object.VintObject, defs map[string]object.VintObject) object.VintObject {
 	return printStyled(args, DimText)
 }
 
 // inverted prints text using InvertedStyle
-func inverted(args []object.Object, defs map[string]object.Object) object.Object {
+func inverted(args []object.VintObject, defs map[string]object.VintObject) object.VintObject {
 	return printStyled(args, InvertedStyle)
 }
 
 // Utility function to handle styled printing
-func printStyled(args []object.Object, style *color.Color) object.Object {
+func printStyled(args []object.VintObject, style *color.Color) object.VintObject {
 	if len(args) == 0 {
 		style.Println("")
 		return nil

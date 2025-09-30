@@ -18,20 +18,20 @@ import (
 
 // CryptoFunctions is a map that holds the available functions in the Crypto module.
 var CryptoFunctions = map[string]object.ModuleFunction{
-	"hashMD5":       hashMD5,
-	"hashSHA256":    hashSHA256,
-	"encryptAES":    encryptAES,
-	"decryptAES":    decryptAES,
-	"generateRSA":   generateRSAKeyPair,
-	"encryptRSA":    encryptRSA,
-	"decryptRSA":    decryptRSA,
-	"signRSA":       signRSA,
-	"verifyRSA":     verifyRSA,
+	"hashMD5":     hashMD5,
+	"hashSHA256":  hashSHA256,
+	"encryptAES":  encryptAES,
+	"decryptAES":  decryptAES,
+	"generateRSA": generateRSAKeyPair,
+	"encryptRSA":  encryptRSA,
+	"decryptRSA":  decryptRSA,
+	"signRSA":     signRSA,
+	"verifyRSA":   verifyRSA,
 }
 
 // hashMD5 takes a string as input and returns the MD5 hash of that string.
 // The MD5 hash is commonly used for checksums or for detecting duplicate data.
-func hashMD5(args []object.Object, defs map[string]object.Object) object.Object {
+func hashMD5(args []object.VintObject, defs map[string]object.VintObject) object.VintObject {
 	if len(args) != 1 || args[0].Type() != object.STRING_OBJ {
 		return ErrorMessage(
 			"crypto", "hashMD5",
@@ -47,7 +47,7 @@ func hashMD5(args []object.Object, defs map[string]object.Object) object.Object 
 
 // hashSHA256 takes a string as input and returns the SHA-256 hash of that string.
 // SHA-256 is a more secure cryptographic hash function than MD5.
-func hashSHA256(args []object.Object, defs map[string]object.Object) object.Object {
+func hashSHA256(args []object.VintObject, defs map[string]object.VintObject) object.VintObject {
 	if len(args) != 1 {
 		return ErrorMessage(
 			"crypto", "hashSHA256",
@@ -78,7 +78,7 @@ func hashSHA256(args []object.Object, defs map[string]object.Object) object.Obje
 }
 
 // encryptAES takes data and a key, encrypts the data using the AES algorithm, and returns the encrypted data as a hexadecimal string.
-func encryptAES(args []object.Object, defs map[string]object.Object) object.Object {
+func encryptAES(args []object.VintObject, defs map[string]object.VintObject) object.VintObject {
 	if len(args) != 2 {
 		return ErrorMessage(
 			"crypto", "encryptAES",
@@ -120,7 +120,7 @@ func encryptAES(args []object.Object, defs map[string]object.Object) object.Obje
 }
 
 // decryptAES takes encrypted data and a key, decrypts the data using the AES algorithm, and returns the decrypted plaintext.
-func decryptAES(args []object.Object, defs map[string]object.Object) object.Object {
+func decryptAES(args []object.VintObject, defs map[string]object.VintObject) object.VintObject {
 	if len(args) != 2 {
 		return ErrorMessage(
 			"crypto", "decryptAES",
@@ -194,10 +194,10 @@ func aesDecrypt(data, key []byte) ([]byte, error) {
 
 // generateRSAKeyPair generates an RSA key pair with the specified bit size.
 // Returns a dictionary with "private" and "public" keys in PEM format.
-func generateRSAKeyPair(args []object.Object, defs map[string]object.Object) object.Object {
+func generateRSAKeyPair(args []object.VintObject, defs map[string]object.VintObject) object.VintObject {
 	// Default key size is 2048 bits
 	keySize := 2048
-	
+
 	if len(args) > 1 {
 		return ErrorMessage(
 			"crypto", "generateRSA",
@@ -206,7 +206,7 @@ func generateRSAKeyPair(args []object.Object, defs map[string]object.Object) obj
 			`crypto.generateRSA() -> {"private": "...", "public": "..."}`,
 		)
 	}
-	
+
 	if len(args) == 1 {
 		if args[0].Type() != object.INTEGER_OBJ {
 			return ErrorMessage(
@@ -252,13 +252,13 @@ func generateRSAKeyPair(args []object.Object, defs map[string]object.Object) obj
 
 	// Return as dictionary
 	pairs := make(map[object.HashKey]object.DictPair)
-	
+
 	privateKeyStr := &object.String{Value: string(privateKeyPEM)}
 	publicKeyStr := &object.String{Value: string(publicKeyPEM)}
-	
+
 	privateKeyKey := &object.String{Value: "private"}
 	publicKeyKey := &object.String{Value: "public"}
-	
+
 	pairs[privateKeyKey.HashKey()] = object.DictPair{
 		Key:   privateKeyKey,
 		Value: privateKeyStr,
@@ -272,7 +272,7 @@ func generateRSAKeyPair(args []object.Object, defs map[string]object.Object) obj
 }
 
 // encryptRSA encrypts data using RSA public key encryption.
-func encryptRSA(args []object.Object, defs map[string]object.Object) object.Object {
+func encryptRSA(args []object.VintObject, defs map[string]object.VintObject) object.VintObject {
 	if len(args) != 2 {
 		return ErrorMessage(
 			"crypto", "encryptRSA",
@@ -323,7 +323,7 @@ func encryptRSA(args []object.Object, defs map[string]object.Object) object.Obje
 }
 
 // decryptRSA decrypts data using RSA private key decryption.
-func decryptRSA(args []object.Object, defs map[string]object.Object) object.Object {
+func decryptRSA(args []object.VintObject, defs map[string]object.VintObject) object.VintObject {
 	if len(args) != 2 {
 		return ErrorMessage(
 			"crypto", "decryptRSA",
@@ -375,7 +375,7 @@ func decryptRSA(args []object.Object, defs map[string]object.Object) object.Obje
 }
 
 // signRSA creates a digital signature using RSA private key.
-func signRSA(args []object.Object, defs map[string]object.Object) object.Object {
+func signRSA(args []object.VintObject, defs map[string]object.VintObject) object.VintObject {
 	if len(args) != 2 {
 		return ErrorMessage(
 			"crypto", "signRSA",
@@ -424,7 +424,7 @@ func signRSA(args []object.Object, defs map[string]object.Object) object.Object 
 }
 
 // verifyRSA verifies a digital signature using RSA public key.
-func verifyRSA(args []object.Object, defs map[string]object.Object) object.Object {
+func verifyRSA(args []object.VintObject, defs map[string]object.VintObject) object.VintObject {
 	if len(args) != 3 {
 		return ErrorMessage(
 			"crypto", "verifyRSA",

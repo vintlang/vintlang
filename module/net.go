@@ -22,15 +22,15 @@ func init() {
 	// NetFunctions["http"] = httpServer
 }
 
-func deleteRequest(args []object.Object, defs map[string]object.Object) object.Object {
+func deleteRequest(args []object.VintObject, defs map[string]object.VintObject) object.VintObject {
 	return handleRequest("DELETE", args, defs)
 }
 
-func patchRequest(args []object.Object, defs map[string]object.Object) object.Object {
+func patchRequest(args []object.VintObject, defs map[string]object.VintObject) object.VintObject {
 	return handleRequest("PATCH", args, defs)
 }
 
-func handleRequest(method string, args []object.Object, defs map[string]object.Object) object.Object {
+func handleRequest(method string, args []object.VintObject, defs map[string]object.VintObject) object.VintObject {
 	var url *object.String
 	var headers, params *object.Dict
 
@@ -126,7 +126,7 @@ func handleRequest(method string, args []object.Object, defs map[string]object.O
 	return &object.String{Value: string(respBody)}
 }
 
-func getRequest(args []object.Object, defs map[string]object.Object) object.Object {
+func getRequest(args []object.VintObject, defs map[string]object.VintObject) object.VintObject {
 	if len(defs) != 0 {
 		var url *object.String
 		var headers, params *object.Dict
@@ -231,7 +231,7 @@ func getRequest(args []object.Object, defs map[string]object.Object) object.Obje
 	return &object.Error{Message: "Arguments are incorrect. Use url and headers."}
 }
 
-func postRequest(args []object.Object, defs map[string]object.Object) object.Object {
+func postRequest(args []object.VintObject, defs map[string]object.VintObject) object.VintObject {
 	if len(defs) != 0 {
 		var url *object.String
 		var headers, params *object.Dict
@@ -308,7 +308,7 @@ func postRequest(args []object.Object, defs map[string]object.Object) object.Obj
 	return &object.Error{Message: "Arguments are incorrect. Use url and headers."}
 }
 
-func putRequest(args []object.Object, defs map[string]object.Object) object.Object {
+func putRequest(args []object.VintObject, defs map[string]object.VintObject) object.VintObject {
 	if len(defs) != 0 {
 		var url *object.String
 		var headers, params *object.Dict

@@ -15,7 +15,7 @@ func init() {
 	CsvFunctions["write"] = writeCsv
 }
 
-func readCsv(args []object.Object, defs map[string]object.Object) object.Object {
+func readCsv(args []object.VintObject, defs map[string]object.VintObject) object.VintObject {
 	if len(args) != 1 || args[0].Type() != object.STRING_OBJ {
 		return ErrorMessage(
 			"csv", "read",
@@ -49,9 +49,9 @@ func readCsv(args []object.Object, defs map[string]object.Object) object.Object 
 		)
 	}
 
-	var rows []object.Object
+	var rows []object.VintObject
 	for _, record := range records {
-		var row []object.Object
+		var row []object.VintObject
 		for _, value := range record {
 			row = append(row, &object.String{Value: value})
 		}
@@ -61,7 +61,7 @@ func readCsv(args []object.Object, defs map[string]object.Object) object.Object 
 	return &object.Array{Elements: rows}
 }
 
-func writeCsv(args []object.Object, defs map[string]object.Object) object.Object {
+func writeCsv(args []object.VintObject, defs map[string]object.VintObject) object.VintObject {
 	if len(args) != 2 || args[0].Type() != object.STRING_OBJ || args[1].Type() != object.ARRAY_OBJ {
 		return ErrorMessage(
 			"csv", "write",

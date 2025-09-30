@@ -24,7 +24,7 @@ type SQLiteConnection struct {
 	db *sql.DB
 }
 
-func openDatabase(args []object.Object, defs map[string]object.Object) object.Object {
+func openDatabase(args []object.VintObject, defs map[string]object.VintObject) object.VintObject {
 	if len(defs) != 0 || len(args) != 1 || args[0].Type() != object.STRING_OBJ {
 		return ErrorMessage(
 			"sqlite",
@@ -42,7 +42,7 @@ func openDatabase(args []object.Object, defs map[string]object.Object) object.Ob
 	return &object.NativeObject{Value: &SQLiteConnection{db: db}}
 }
 
-func closeDatabase(args []object.Object, defs map[string]object.Object) object.Object {
+func closeDatabase(args []object.VintObject, defs map[string]object.VintObject) object.VintObject {
 	if len(defs) != 0 || len(args) != 1 || args[0].Type() != object.NATIVE_OBJ {
 		return ErrorMessage(
 			"sqlite",
@@ -63,7 +63,7 @@ func closeDatabase(args []object.Object, defs map[string]object.Object) object.O
 	return &object.Null{}
 }
 
-func executeQuery(args []object.Object, defs map[string]object.Object) object.Object {
+func executeQuery(args []object.VintObject, defs map[string]object.VintObject) object.VintObject {
 	if len(args) < 2 || args[0].Type() != object.NATIVE_OBJ || args[1].Type() != object.STRING_OBJ {
 		return ErrorMessage(
 			"sqlite",
@@ -82,7 +82,7 @@ func executeQuery(args []object.Object, defs map[string]object.Object) object.Ob
 	return &object.Null{}
 }
 
-func fetchAll(args []object.Object, defs map[string]object.Object) object.Object {
+func fetchAll(args []object.VintObject, defs map[string]object.VintObject) object.VintObject {
 	if len(args) < 2 || args[0].Type() != object.NATIVE_OBJ || args[1].Type() != object.STRING_OBJ {
 		return ErrorMessage(
 			"sqlite",
@@ -99,7 +99,7 @@ func fetchAll(args []object.Object, defs map[string]object.Object) object.Object
 	}
 	defer rows.Close()
 
-	result := make([]object.Object, 0)
+	result := make([]object.VintObject, 0)
 	cols, _ := rows.Columns()
 	for rows.Next() {
 		values := make([]interface{}, len(cols))
@@ -121,7 +121,7 @@ func fetchAll(args []object.Object, defs map[string]object.Object) object.Object
 	return &object.Array{Elements: result}
 }
 
-func fetchOne(args []object.Object, defs map[string]object.Object) object.Object {
+func fetchOne(args []object.VintObject, defs map[string]object.VintObject) object.VintObject {
 	result := fetchAll(args, defs)
 	if result.Type() == object.ARRAY_OBJ {
 		array := result.(*object.Array)
@@ -132,7 +132,7 @@ func fetchOne(args []object.Object, defs map[string]object.Object) object.Object
 	return &object.Null{}
 }
 
-func createTable(args []object.Object, defs map[string]object.Object) object.Object {
+func createTable(args []object.VintObject, defs map[string]object.VintObject) object.VintObject {
 	if len(args) != 2 || args[0].Type() != object.NATIVE_OBJ || args[1].Type() != object.STRING_OBJ {
 		return ErrorMessage(
 			"sqlite",
@@ -150,7 +150,7 @@ func createTable(args []object.Object, defs map[string]object.Object) object.Obj
 	return &object.Null{}
 }
 
-func dropTable(args []object.Object, defs map[string]object.Object) object.Object {
+func dropTable(args []object.VintObject, defs map[string]object.VintObject) object.VintObject {
 	if len(args) != 2 || args[0].Type() != object.NATIVE_OBJ || args[1].Type() != object.STRING_OBJ {
 		return ErrorMessage(
 			"sqlite",
@@ -169,7 +169,7 @@ func dropTable(args []object.Object, defs map[string]object.Object) object.Objec
 	return &object.Null{}
 }
 
-func convertToObject(val interface{}) object.Object {
+func convertToObject(val interface{}) object.VintObject {
 	switch v := val.(type) {
 	case int64:
 		return &object.Integer{Value: v}
@@ -186,7 +186,7 @@ func convertToObject(val interface{}) object.Object {
 	}
 }
 
-func convertObjectsToParams(objects []object.Object) []interface{} {
+func convertObjectsToParams(objects []object.VintObject) []interface{} {
 	params := make([]interface{}, len(objects))
 	for i, obj := range objects {
 		switch v := obj.(type) {

@@ -5,7 +5,7 @@ import (
 	"github.com/vintlang/vintlang/object"
 )
 
-func evalAssign(node *ast.Assign, env *object.Environment) object.Object {
+func evalAssign(node *ast.Assign, env *object.Environment) object.VintObject {
 	val := Eval(node.Value, env)
 	if isError(val) {
 		return val

@@ -6,7 +6,7 @@ import (
 
 // Channel represents a communication channel between goroutines
 type Channel struct {
-	ch       chan Object
+	ch       chan VintObject
 	closed   bool
 	buffered bool
 	size     int
@@ -24,11 +24,11 @@ func (c *Channel) Inspect() string {
 }
 
 // Send sends a value to the channel
-func (c *Channel) Send(value Object) error {
+func (c *Channel) Send(value VintObject) error {
 	if c.closed {
 		return fmt.Errorf("send on closed channel")
 	}
-	
+
 	select {
 	case c.ch <- value:
 		return nil
@@ -40,7 +40,7 @@ func (c *Channel) Send(value Object) error {
 }
 
 // Receive receives a value from the channel
-func (c *Channel) Receive() (Object, bool) {
+func (c *Channel) Receive() (VintObject, bool) {
 	value, ok := <-c.ch
 	return value, ok
 }
@@ -61,7 +61,7 @@ func (c *Channel) IsClosed() bool {
 // NewChannel creates a new unbuffered channel
 func NewChannel() *Channel {
 	return &Channel{
-		ch:       make(chan Object),
+		ch:       make(chan VintObject),
 		closed:   false,
 		buffered: false,
 		size:     0,
@@ -71,7 +71,7 @@ func NewChannel() *Channel {
 // NewBufferedChannel creates a new buffered channel with given size
 func NewBufferedChannel(size int) *Channel {
 	return &Channel{
-		ch:       make(chan Object, size),
+		ch:       make(chan VintObject, size),
 		closed:   false,
 		buffered: true,
 		size:     size,

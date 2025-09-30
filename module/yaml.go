@@ -17,7 +17,7 @@ func init() {
 }
 
 // yamlDecode parses a YAML string and returns a Vint object
-func yamlDecode(args []object.Object, defs map[string]object.Object) object.Object {
+func yamlDecode(args []object.VintObject, defs map[string]object.VintObject) object.VintObject {
 	if len(defs) != 0 {
 		return ErrorMessage(
 			"yaml", "decode",
@@ -55,7 +55,7 @@ func yamlDecode(args []object.Object, defs map[string]object.Object) object.Obje
 }
 
 // yamlEncode converts a Vint object to a YAML string
-func yamlEncode(args []object.Object, defs map[string]object.Object) object.Object {
+func yamlEncode(args []object.VintObject, defs map[string]object.VintObject) object.VintObject {
 	if len(defs) != 0 {
 		return ErrorMessage(
 			"yaml", "encode",
@@ -86,7 +86,7 @@ func yamlEncode(args []object.Object, defs map[string]object.Object) object.Obje
 }
 
 // yamlMerge combines two YAML-compatible objects
-func yamlMerge(args []object.Object, defs map[string]object.Object) object.Object {
+func yamlMerge(args []object.VintObject, defs map[string]object.VintObject) object.VintObject {
 	if len(defs) != 0 {
 		return ErrorMessage(
 			"yaml", "merge",
@@ -128,7 +128,7 @@ func yamlMerge(args []object.Object, defs map[string]object.Object) object.Objec
 }
 
 // yamlGet retrieves a value from a YAML-compatible object by key
-func yamlGet(args []object.Object, defs map[string]object.Object) object.Object {
+func yamlGet(args []object.VintObject, defs map[string]object.VintObject) object.VintObject {
 	if len(defs) != 0 {
 		return ErrorMessage(
 			"yaml", "get",
@@ -172,7 +172,7 @@ func yamlGet(args []object.Object, defs map[string]object.Object) object.Object 
 }
 
 // convertYAMLToObject converts a Go interface{} from YAML parsing to a Vint object
-func convertYAMLToObject(i interface{}) object.Object {
+func convertYAMLToObject(i interface{}) object.VintObject {
 	switch v := i.(type) {
 	case map[string]interface{}:
 		dict := &object.Dict{}
@@ -193,7 +193,7 @@ func convertYAMLToObject(i interface{}) object.Object {
 		dict.Pairs = make(map[object.HashKey]object.DictPair)
 
 		for k, v := range v {
-			var key object.Object
+			var key object.VintObject
 			switch kv := k.(type) {
 			case string:
 				key = &object.String{Value: kv}
@@ -246,7 +246,7 @@ func convertYAMLToObject(i interface{}) object.Object {
 }
 
 // convertObjectToYAML converts a Vint object to a Go interface{} for YAML marshaling
-func convertObjectToYAML(obj object.Object) interface{} {
+func convertObjectToYAML(obj object.VintObject) interface{} {
 	switch v := obj.(type) {
 	case *object.Dict:
 		m := make(map[string]interface{})

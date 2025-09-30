@@ -66,54 +66,54 @@ func TestHTTPRequestMethods(t *testing.T) {
 	req := httptest.NewRequest("GET", "/test?param=value", nil)
 	req.Header.Set("User-Agent", "test-agent")
 	req.AddCookie(&http.Cookie{Name: "test", Value: "cookie-value"})
-	
+
 	httpReq := NewHTTPRequest(req)
 	httpReq.Params["id"] = "123" // Simulate path parameter
 
 	// Test header method
-	result := httpReq.Method("get", []Object{&String{Value: "User-Agent"}})
+	result := httpReq.Method("get", []VintObject{&String{Value: "User-Agent"}})
 	if str, ok := result.(*String); !ok || str.Value != "test-agent" {
 		t.Errorf("Expected User-Agent header, got %v", result)
 	}
 
 	// Test non-existent header
-	result = httpReq.Method("get", []Object{&String{Value: "Non-Existent"}})
+	result = httpReq.Method("get", []VintObject{&String{Value: "Non-Existent"}})
 	if str, ok := result.(*String); !ok || str.Value != "" {
 		t.Errorf("Expected empty string for non-existent header, got %v", result)
 	}
 
 	// Test query method
-	result = httpReq.Method("query", []Object{&String{Value: "param"}})
+	result = httpReq.Method("query", []VintObject{&String{Value: "param"}})
 	if str, ok := result.(*String); !ok || str.Value != "value" {
 		t.Errorf("Expected query param value, got %v", result)
 	}
 
 	// Test param method
-	result = httpReq.Method("param", []Object{&String{Value: "id"}})
+	result = httpReq.Method("param", []VintObject{&String{Value: "id"}})
 	if str, ok := result.(*String); !ok || str.Value != "123" {
 		t.Errorf("Expected path param 123, got %v", result)
 	}
 
 	// Test cookie method
-	result = httpReq.Method("cookie", []Object{&String{Value: "test"}})
+	result = httpReq.Method("cookie", []VintObject{&String{Value: "test"}})
 	if str, ok := result.(*String); !ok || str.Value != "cookie-value" {
 		t.Errorf("Expected cookie value, got %v", result)
 	}
 
 	// Test method method
-	result = httpReq.Method("method", []Object{})
+	result = httpReq.Method("method", []VintObject{})
 	if str, ok := result.(*String); !ok || str.Value != "GET" {
 		t.Errorf("Expected GET method, got %v", result)
 	}
 
 	// Test path method
-	result = httpReq.Method("path", []Object{})
+	result = httpReq.Method("path", []VintObject{})
 	if str, ok := result.(*String); !ok || str.Value != "/test" {
 		t.Errorf("Expected /test path, got %v", result)
 	}
 
 	// Test body method
-	result = httpReq.Method("body", []Object{})
+	result = httpReq.Method("body", []VintObject{})
 	if _, ok := result.(*String); !ok {
 		t.Errorf("Expected string body, got %v", result)
 	}
@@ -124,7 +124,7 @@ func TestHTTPResponseEnhancements(t *testing.T) {
 	recorder := httptest.NewRecorder()
 	req := httptest.NewRequest("GET", "/test", nil)
 	httpReq := NewHTTPRequest(req)
-	
+
 	// Create enhanced HTTPResponse
 	httpRes := NewHTTPResponse(recorder, httpReq)
 
@@ -154,7 +154,7 @@ func TestHTTPResponseMethods(t *testing.T) {
 	httpRes := NewHTTPResponse(recorder, httpReq)
 
 	// Test status method
-	result := httpRes.Method("status", []Object{&Integer{Value: 404}})
+	result := httpRes.Method("status", []VintObject{&Integer{Value: 404}})
 	if httpRes.StatusCode != 404 {
 		t.Errorf("Expected status code 404, got %d", httpRes.StatusCode)
 	}
@@ -165,7 +165,7 @@ func TestHTTPResponseMethods(t *testing.T) {
 	}
 
 	// Test header method
-	result = httpRes.Method("header", []Object{
+	result = httpRes.Method("header", []VintObject{
 		&String{Value: "X-Custom-Header"},
 		&String{Value: "custom-value"},
 	})
@@ -179,14 +179,14 @@ func TestHTTPResponseMethods(t *testing.T) {
 	}
 
 	// Test send method
-	result = httpRes.Method("send", []Object{&String{Value: "Hello World"}})
+	result = httpRes.Method("send", []VintObject{&String{Value: "Hello World"}})
 	if !httpRes.Sent {
 		t.Errorf("Expected response to be marked as sent")
 	}
 
 	// Test end method
 	httpRes2 := NewHTTPResponse(httptest.NewRecorder(), httpReq)
-	result = httpRes2.Method("end", []Object{&String{Value: "Goodbye"}})
+	result = httpRes2.Method("end", []VintObject{&String{Value: "Goodbye"}})
 	if !httpRes2.Sent {
 		t.Errorf("Expected response to be marked as sent after end")
 	}
@@ -214,13 +214,13 @@ func TestFormDataParsing(t *testing.T) {
 	}
 
 	// Test form method
-	result := httpReq.Method("form", []Object{&String{Value: "name"}})
+	result := httpReq.Method("form", []VintObject{&String{Value: "name"}})
 	if str, ok := result.(*String); !ok || str.Value != "John" {
 		t.Errorf("Expected form field name=John, got %v", result)
 	}
 
 	// Test form method with all fields
-	result = httpReq.Method("form", []Object{})
+	result = httpReq.Method("form", []VintObject{})
 	if _, ok := result.(*String); !ok {
 		t.Errorf("Expected string representation of all form fields, got %v", result)
 	}
@@ -231,17 +231,17 @@ func TestErrorHandling(t *testing.T) {
 	httpReq := NewHTTPRequest(req)
 
 	// Test invalid method calls
-	result := httpReq.Method("unknown", []Object{})
+	result := httpReq.Method("unknown", []VintObject{})
 	if _, ok := result.(*Error); !ok {
 		t.Errorf("Expected error for unknown method")
 	}
 
-	result = httpReq.Method("get", []Object{})
+	result = httpReq.Method("get", []VintObject{})
 	if _, ok := result.(*Error); !ok {
 		t.Errorf("Expected error for get method with wrong arguments")
 	}
 
-	result = httpReq.Method("query", []Object{&Integer{Value: 123}})
+	result = httpReq.Method("query", []VintObject{&Integer{Value: 123}})
 	if _, ok := result.(*Error); !ok {
 		t.Errorf("Expected error for query method with wrong argument type")
 	}
@@ -250,12 +250,12 @@ func TestErrorHandling(t *testing.T) {
 	recorder := httptest.NewRecorder()
 	httpRes := NewHTTPResponse(recorder, httpReq)
 
-	result = httpRes.Method("unknown", []Object{})
+	result = httpRes.Method("unknown", []VintObject{})
 	if _, ok := result.(*Error); !ok {
 		t.Errorf("Expected error for unknown response method")
 	}
 
-	result = httpRes.Method("status", []Object{&String{Value: "not a number"}})
+	result = httpRes.Method("status", []VintObject{&String{Value: "not a number"}})
 	if _, ok := result.(*Error); !ok {
 		t.Errorf("Expected error for status method with wrong argument type")
 	}

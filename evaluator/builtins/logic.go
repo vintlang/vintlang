@@ -8,7 +8,7 @@ func init() {
 
 func registerLogicBuiltins() {
 	RegisterBuiltin("and", &object.Builtin{
-		Fn: func(args ...object.Object) object.Object {
+		Fn: func(args ...object.VintObject) object.VintObject {
 			if len(args) != 2 {
 				return newError("and requires 2 arguments, you provided %d", len(args))
 			}
@@ -28,7 +28,7 @@ func registerLogicBuiltins() {
 	})
 
 	RegisterBuiltin("or", &object.Builtin{
-		Fn: func(args ...object.Object) object.Object {
+		Fn: func(args ...object.VintObject) object.VintObject {
 			if len(args) != 2 {
 				return newError("or requires 2 arguments, you provided %d", len(args))
 			}
@@ -48,7 +48,7 @@ func registerLogicBuiltins() {
 	})
 
 	RegisterBuiltin("not", &object.Builtin{
-		Fn: func(args ...object.Object) object.Object {
+		Fn: func(args ...object.VintObject) object.VintObject {
 			if len(args) != 1 {
 				return newError("not requires 1 argument, you provided %d", len(args))
 			}
@@ -63,7 +63,7 @@ func registerLogicBuiltins() {
 	})
 
 	RegisterBuiltin("xor", &object.Builtin{
-		Fn: func(args ...object.Object) object.Object {
+		Fn: func(args ...object.VintObject) object.VintObject {
 			if len(args) != 2 {
 				return newError("xor requires 2 arguments, you provided %d", len(args))
 			}
@@ -83,7 +83,7 @@ func registerLogicBuiltins() {
 	})
 
 	RegisterBuiltin("nand", &object.Builtin{
-		Fn: func(args ...object.Object) object.Object {
+		Fn: func(args ...object.VintObject) object.VintObject {
 			if len(args) != 2 {
 				return newError("nand requires 2 arguments, you provided %d", len(args))
 			}
@@ -103,7 +103,7 @@ func registerLogicBuiltins() {
 	})
 
 	RegisterBuiltin("nor", &object.Builtin{
-		Fn: func(args ...object.Object) object.Object {
+		Fn: func(args ...object.VintObject) object.VintObject {
 			if len(args) != 2 {
 				return newError("nor requires 2 arguments, you provided %d", len(args))
 			}
@@ -123,7 +123,7 @@ func registerLogicBuiltins() {
 	})
 
 	RegisterBuiltin("eq", &object.Builtin{
-		Fn: func(args ...object.Object) object.Object {
+		Fn: func(args ...object.VintObject) object.VintObject {
 			if len(args) != 2 {
 				return newError("Sorry, eq requires 2 arguments, you provided %d", len(args))
 			}

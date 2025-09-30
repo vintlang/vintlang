@@ -22,7 +22,7 @@ type MySQLConnection struct {
 	db *sql.DB
 }
 
-func openMySQLConnection(args []object.Object, defs map[string]object.Object) object.Object {
+func openMySQLConnection(args []object.VintObject, defs map[string]object.VintObject) object.VintObject {
 	if len(args) != 1 || args[0].Type() != object.STRING_OBJ {
 		return &object.Error{Message: "Invalid arguments: Expected 'open(connectionString)' where 'connectionString' is a string"}
 	}
@@ -44,7 +44,7 @@ func openMySQLConnection(args []object.Object, defs map[string]object.Object) ob
 	}
 }
 
-func closeMySQLConnection(args []object.Object, defs map[string]object.Object) object.Object {
+func closeMySQLConnection(args []object.VintObject, defs map[string]object.VintObject) object.VintObject {
 	if len(args) != 1 {
 		return &object.Error{Message: "Invalid arguments: Expected 'close(conn)'"}
 	}
@@ -62,7 +62,7 @@ func closeMySQLConnection(args []object.Object, defs map[string]object.Object) o
 	return &object.Null{}
 }
 
-func executeMySQLQuery(args []object.Object, defs map[string]object.Object) object.Object {
+func executeMySQLQuery(args []object.VintObject, defs map[string]object.VintObject) object.VintObject {
 	if len(args) < 2 {
 		return &object.Error{Message: "Invalid arguments: Expected 'execute(conn, query, [params...])'"}
 	}
@@ -86,7 +86,7 @@ func executeMySQLQuery(args []object.Object, defs map[string]object.Object) obje
 	return &object.Null{}
 }
 
-func fetchAllMySQL(args []object.Object, defs map[string]object.Object) object.Object {
+func fetchAllMySQL(args []object.VintObject, defs map[string]object.VintObject) object.VintObject {
 	if len(args) < 2 {
 		return &object.Error{Message: "Invalid arguments: Expected 'fetchAll(conn, query, [params...])'"}
 	}
@@ -108,7 +108,7 @@ func fetchAllMySQL(args []object.Object, defs map[string]object.Object) object.O
 	}
 	defer rows.Close()
 
-	result := make([]object.Object, 0)
+	result := make([]object.VintObject, 0)
 	cols, _ := rows.Columns()
 	for rows.Next() {
 		values := make([]interface{}, len(cols))
@@ -134,7 +134,7 @@ func fetchAllMySQL(args []object.Object, defs map[string]object.Object) object.O
 	return &object.Array{Elements: result}
 }
 
-func fetchOneMySQL(args []object.Object, defs map[string]object.Object) object.Object {
+func fetchOneMySQL(args []object.VintObject, defs map[string]object.VintObject) object.VintObject {
 	result := fetchAllMySQL(args, defs)
 	if result.Type() == object.ARRAY_OBJ {
 		array := result.(*object.Array)
@@ -145,7 +145,7 @@ func fetchOneMySQL(args []object.Object, defs map[string]object.Object) object.O
 	return &object.Null{}
 }
 
-func convertMySQLToObject(val interface{}) object.Object {
+func convertMySQLToObject(val interface{}) object.VintObject {
 	switch v := val.(type) {
 	case int64:
 		return &object.Integer{Value: v}
@@ -164,7 +164,7 @@ func convertMySQLToObject(val interface{}) object.Object {
 	}
 }
 
-func convertObjectsToMySQLParams(objects []object.Object) []interface{} {
+func convertObjectsToMySQLParams(objects []object.VintObject) []interface{} {
 	params := make([]interface{}, len(objects))
 	for i, obj := range objects {
 		switch v := obj.(type) {

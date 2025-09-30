@@ -5,7 +5,7 @@ import (
 	"github.com/vintlang/vintlang/object"
 )
 
-func evalFunction(node *ast.FunctionLiteral, env *object.Environment) object.Object {
+func evalFunction(node *ast.FunctionLiteral, env *object.Environment) object.VintObject {
 	function := &object.Function{
 		Name:       node.Name,
 		Parameters: node.Parameters,

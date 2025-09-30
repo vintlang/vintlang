@@ -5,7 +5,7 @@ import (
 	"github.com/vintlang/vintlang/object"
 )
 
-func evalIfExpression(ie *ast.IfExpression, env *object.Environment) object.Object {
+func evalIfExpression(ie *ast.IfExpression, env *object.Environment) object.VintObject {
 	condition := Eval(ie.Condition, env)
 
 	if isError(condition) {

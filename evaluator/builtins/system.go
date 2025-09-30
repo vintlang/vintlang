@@ -14,7 +14,7 @@ func init() {
 
 func registerSystemBuiltins() {
 	RegisterBuiltin("exit", &object.Builtin{
-		Fn: func(args ...object.Object) object.Object {
+		Fn: func(args ...object.VintObject) object.VintObject {
 			if len(args) != 1 {
 				return newError("wrong number of arguments. got=%d, want=1", len(args))
 			}
@@ -28,7 +28,7 @@ func registerSystemBuiltins() {
 	})
 
 	RegisterBuiltin("sleep", &object.Builtin{
-		Fn: func(args ...object.Object) object.Object {
+		Fn: func(args ...object.VintObject) object.VintObject {
 			if len(args) != 1 {
 				return newError("wrong number of arguments. got=%d, want=1", len(args))
 			}
@@ -42,7 +42,7 @@ func registerSystemBuiltins() {
 	})
 
 	RegisterBuiltin("args", &object.Builtin{
-		Fn: func(args ...object.Object) object.Object {
+		Fn: func(args ...object.VintObject) object.VintObject {
 			if len(args) > 0 {
 				return newError("args does not accept any arguments")
 			}

@@ -19,7 +19,7 @@ func init() {
 	LoggerFunctions["fatal"] = logFatal
 }
 
-func logInfo(args []object.Object, defs map[string]object.Object) object.Object {
+func logInfo(args []object.VintObject, defs map[string]object.VintObject) object.VintObject {
 	if len(args) != 1 {
 		return ErrorMessage(
 			"logger", "info",
@@ -42,15 +42,15 @@ func logInfo(args []object.Object, defs map[string]object.Object) object.Object 
 	msg := message.(*object.String).Value
 	timestamp := time.Now().Format("2006-01-02 15:04:05")
 	logMsg := fmt.Sprintf("[%s] INFO: %s", timestamp, msg)
-	
+
 	log.SetOutput(os.Stdout)
 	log.SetFlags(0)
 	log.Print(logMsg)
-	
+
 	return &object.String{Value: logMsg}
 }
 
-func logWarn(args []object.Object, defs map[string]object.Object) object.Object {
+func logWarn(args []object.VintObject, defs map[string]object.VintObject) object.VintObject {
 	if len(args) != 1 {
 		return ErrorMessage(
 			"logger", "warn",
@@ -73,15 +73,15 @@ func logWarn(args []object.Object, defs map[string]object.Object) object.Object 
 	msg := message.(*object.String).Value
 	timestamp := time.Now().Format("2006-01-02 15:04:05")
 	logMsg := fmt.Sprintf("[%s] WARN: %s", timestamp, msg)
-	
+
 	log.SetOutput(os.Stdout)
 	log.SetFlags(0)
 	log.Print(logMsg)
-	
+
 	return &object.String{Value: logMsg}
 }
 
-func logError(args []object.Object, defs map[string]object.Object) object.Object {
+func logError(args []object.VintObject, defs map[string]object.VintObject) object.VintObject {
 	if len(args) != 1 {
 		return ErrorMessage(
 			"logger", "error",
@@ -104,15 +104,15 @@ func logError(args []object.Object, defs map[string]object.Object) object.Object
 	msg := message.(*object.String).Value
 	timestamp := time.Now().Format("2006-01-02 15:04:05")
 	logMsg := fmt.Sprintf("[%s] ERROR: %s", timestamp, msg)
-	
+
 	log.SetOutput(os.Stderr)
 	log.SetFlags(0)
 	log.Print(logMsg)
-	
+
 	return &object.String{Value: logMsg}
 }
 
-func logDebug(args []object.Object, defs map[string]object.Object) object.Object {
+func logDebug(args []object.VintObject, defs map[string]object.VintObject) object.VintObject {
 	if len(args) != 1 {
 		return ErrorMessage(
 			"logger", "debug",
@@ -135,15 +135,15 @@ func logDebug(args []object.Object, defs map[string]object.Object) object.Object
 	msg := message.(*object.String).Value
 	timestamp := time.Now().Format("2006-01-02 15:04:05")
 	logMsg := fmt.Sprintf("[%s] DEBUG: %s", timestamp, msg)
-	
+
 	log.SetOutput(os.Stdout)
 	log.SetFlags(0)
 	log.Print(logMsg)
-	
+
 	return &object.String{Value: logMsg}
 }
 
-func logFatal(args []object.Object, defs map[string]object.Object) object.Object {
+func logFatal(args []object.VintObject, defs map[string]object.VintObject) object.VintObject {
 	if len(args) != 1 {
 		return ErrorMessage(
 			"logger", "fatal",
@@ -166,11 +166,11 @@ func logFatal(args []object.Object, defs map[string]object.Object) object.Object
 	msg := message.(*object.String).Value
 	timestamp := time.Now().Format("2006-01-02 15:04:05")
 	logMsg := fmt.Sprintf("[%s] FATAL: %s", timestamp, msg)
-	
+
 	log.SetOutput(os.Stderr)
 	log.SetFlags(0)
 	log.Print(logMsg)
-	
+
 	// Note: In a real implementation, you might want to handle fatal differently
 	// For now, we'll just return the message without exiting
 	return &object.String{Value: logMsg}

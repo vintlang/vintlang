@@ -1,4 +1,4 @@
-//Experimental module for scheduling tasks using ticker and cron-like expressions
+// Experimental module for scheduling tasks using ticker and cron-like expressions
 // This module provides functions to create periodic tasks and one-time scheduled tasks
 // using a simple cron-like syntax. It is not fully implemented yet, but provides a structure
 // for future development.
@@ -41,7 +41,7 @@ func init() {
 }
 
 // ticker(intervalSeconds, callback)
-func tickerFunc(args []object.Object, defs map[string]object.Object) object.Object {
+func tickerFunc(args []object.VintObject, defs map[string]object.VintObject) object.VintObject {
 	if len(args) != 2 {
 		return ErrorMessage(
 			"schedule", "ticker",
@@ -50,7 +50,7 @@ func tickerFunc(args []object.Object, defs map[string]object.Object) object.Obje
 			"schedule.ticker(5, func() { print(\"tick\") })",
 		)
 	}
-	
+
 	// Validate interval argument
 	interval, ok := args[0].(*object.Integer)
 	if !ok {
@@ -61,7 +61,7 @@ func tickerFunc(args []object.Object, defs map[string]object.Object) object.Obje
 			"schedule.ticker(5, func() { print(\"tick\") })",
 		)
 	}
-	
+
 	// Validate callback argument
 	callback, ok := args[1].(*object.Function)
 	if !ok {
@@ -72,7 +72,7 @@ func tickerFunc(args []object.Object, defs map[string]object.Object) object.Obje
 			"schedule.ticker(5, func() { print(\"tick\") })",
 		)
 	}
-	
+
 	if interval.Value <= 0 {
 		return &object.Error{
 			Message: fmt.Sprintf("\033[1;31m -> schedule.ticker()\033[0m:\n"+
@@ -81,16 +81,16 @@ func tickerFunc(args []object.Object, defs map[string]object.Object) object.Obje
 				interval.Value),
 		}
 	}
-	
+
 	// Create ticker
 	ticker := time.NewTicker(time.Duration(interval.Value) * time.Second)
 	stopChan := make(chan bool)
-	
+
 	// Store ticker for management
 	tickerStoreMu.Lock()
 	tickerStore[ticker] = struct{}{}
 	tickerStoreMu.Unlock()
-	
+
 	// Start ticker goroutine
 	go func() {
 		defer func() {
@@ -99,32 +99,32 @@ func tickerFunc(args []object.Object, defs map[string]object.Object) object.Obje
 			delete(tickerStore, ticker)
 			tickerStoreMu.Unlock()
 		}()
-		
+
 		for {
 			select {
 			case <-ticker.C:
 				// For now, we'll return a success message to demonstrate the ticker is working
 				// A full implementation would need access to the evaluator to execute the callback
-				fmt.Printf("[schedule.ticker] Tick at %s (callback: %s)\n", 
+				fmt.Printf("[schedule.ticker] Tick at %s (callback: %s)\n",
 					time.Now().Format("15:04:05"), callback.Inspect())
 			case <-stopChan:
 				return
 			}
 		}
 	}()
-	
+
 	// Create and return a control object
 	control := &TickerControl{
 		Ticker:   ticker,
 		StopChan: stopChan,
 		ID:       fmt.Sprintf("ticker_%p", ticker),
 	}
-	
+
 	return &object.NativeObject{Value: control}
 }
 
 // stopTicker(tickerObj)
-func stopTickerFunc(args []object.Object, defs map[string]object.Object) object.Object {
+func stopTickerFunc(args []object.VintObject, defs map[string]object.VintObject) object.VintObject {
 	if len(args) != 1 {
 		return ErrorMessage(
 			"schedule", "stopTicker",
@@ -133,7 +133,7 @@ func stopTickerFunc(args []object.Object, defs map[string]object.Object) object.
 			"schedule.stopTicker(ticker)",
 		)
 	}
-	
+
 	native, ok := args[0].(*object.NativeObject)
 	if !ok {
 		return ErrorMessage(
@@ -143,7 +143,7 @@ func stopTickerFunc(args []object.Object, defs map[string]object.Object) object.
 			"schedule.stopTicker(ticker)",
 		)
 	}
-	
+
 	control, ok := native.Value.(*TickerControl)
 	if !ok {
 		return ErrorMessage(
@@ -153,19 +153,19 @@ func stopTickerFunc(args []object.Object, defs map[string]object.Object) object.
 			"schedule.stopTicker(ticker)",
 		)
 	}
-	
+
 	// Stop the ticker
 	select {
 	case control.StopChan <- true:
 	default:
 		// Channel might be closed already
 	}
-	
+
 	control.Ticker.Stop()
 	tickerStoreMu.Lock()
 	delete(tickerStore, control.Ticker)
 	tickerStoreMu.Unlock()
-	
+
 	return &object.Boolean{Value: true}
 }
 
@@ -177,7 +177,7 @@ type ScheduleControl struct {
 }
 
 // schedule(cronExpr, callback) - cronExpr: "second minute hour day month weekday" (basic, not full cron)
-func scheduleFunc(args []object.Object, defs map[string]object.Object) object.Object {
+func scheduleFunc(args []object.VintObject, defs map[string]object.VintObject) object.VintObject {
 	if len(args) != 2 {
 		return ErrorMessage(
 			"schedule", "schedule",
@@ -186,7 +186,7 @@ func scheduleFunc(args []object.Object, defs map[string]object.Object) object.Ob
 			"schedule.schedule(\"0 30 14 * * *\", func() { print(\"Good afternoon!\") })",
 		)
 	}
-	
+
 	// Validate cron expression argument
 	expr, ok := args[0].(*object.String)
 	if !ok {
@@ -197,7 +197,7 @@ func scheduleFunc(args []object.Object, defs map[string]object.Object) object.Ob
 			"schedule.schedule(\"0 30 14 * * *\", func() { print(\"Good afternoon!\") })",
 		)
 	}
-	
+
 	// Validate callback argument
 	callback, ok := args[1].(*object.Function)
 	if !ok {
@@ -208,7 +208,7 @@ func scheduleFunc(args []object.Object, defs map[string]object.Object) object.Ob
 			"schedule.schedule(\"0 30 14 * * *\", func() { print(\"Good afternoon!\") })",
 		)
 	}
-	
+
 	// Parse the cron expression to get the next execution time
 	nextTime := nextSchedule(expr.Value)
 	if nextTime.IsZero() {
@@ -221,19 +221,19 @@ func scheduleFunc(args []object.Object, defs map[string]object.Object) object.Ob
 				expr.Value),
 		}
 	}
-	
+
 	// Calculate duration until next execution
 	duration := time.Until(nextTime)
-	
+
 	// Create timer
 	timer := time.NewTimer(duration)
 	stopChan := make(chan bool)
-	
+
 	// Store timer for management
 	scheduleStoreMu.Lock()
 	scheduleStore[timer] = struct{}{}
 	scheduleStoreMu.Unlock()
-	
+
 	// Start schedule goroutine
 	go func() {
 		defer func() {
@@ -242,29 +242,29 @@ func scheduleFunc(args []object.Object, defs map[string]object.Object) object.Ob
 			delete(scheduleStore, timer)
 			scheduleStoreMu.Unlock()
 		}()
-		
+
 		select {
 		case <-timer.C:
 			// For now, we'll log the execution to demonstrate the schedule is working
-			fmt.Printf("[schedule.schedule] Executing at %s (callback: %s)\n", 
+			fmt.Printf("[schedule.schedule] Executing at %s (callback: %s)\n",
 				time.Now().Format("15:04:05"), callback.Inspect())
 		case <-stopChan:
 			return
 		}
 	}()
-	
+
 	// Create and return a control object
 	control := &ScheduleControl{
 		Timer:    timer,
 		StopChan: stopChan,
 		ID:       fmt.Sprintf("schedule_%p", timer),
 	}
-	
+
 	return &object.NativeObject{Value: control}
 }
 
 // stopSchedule(scheduleObj)
-func stopScheduleFunc(args []object.Object, defs map[string]object.Object) object.Object {
+func stopScheduleFunc(args []object.VintObject, defs map[string]object.VintObject) object.VintObject {
 	if len(args) != 1 {
 		return ErrorMessage(
 			"schedule", "stopSchedule",
@@ -273,7 +273,7 @@ func stopScheduleFunc(args []object.Object, defs map[string]object.Object) objec
 			"schedule.stopSchedule(scheduleObj)",
 		)
 	}
-	
+
 	native, ok := args[0].(*object.NativeObject)
 	if !ok {
 		return ErrorMessage(
@@ -283,7 +283,7 @@ func stopScheduleFunc(args []object.Object, defs map[string]object.Object) objec
 			"schedule.stopSchedule(scheduleObj)",
 		)
 	}
-	
+
 	control, ok := native.Value.(*ScheduleControl)
 	if !ok {
 		return ErrorMessage(
@@ -293,19 +293,19 @@ func stopScheduleFunc(args []object.Object, defs map[string]object.Object) objec
 			"schedule.stopSchedule(scheduleObj)",
 		)
 	}
-	
+
 	// Stop the schedule
 	select {
 	case control.StopChan <- true:
 	default:
 		// Channel might be closed already
 	}
-	
+
 	stopped := control.Timer.Stop()
 	scheduleStoreMu.Lock()
 	delete(scheduleStore, control.Timer)
 	scheduleStoreMu.Unlock()
-	
+
 	return &object.Boolean{Value: stopped}
 }
 
@@ -315,14 +315,14 @@ func nextSchedule(expr string) time.Time {
 	// Example: "0 30 14 * * *" = 14:30:00 every day
 	// Example: "*/10 * * * * *" = every 10 seconds (basic step values)
 	// Weekday: 0=Sunday, 1=Monday, ..., 6=Saturday
-	
+
 	fields := [6]int{-1, -1, -1, -1, -1, -1}
 	stepValues := [6]int{1, 1, 1, 1, 1, 1} // Step values for */n patterns
 	parts := splitAndTrim(expr)
 	if len(parts) != 6 {
 		return time.Time{}
 	}
-	
+
 	for i, p := range parts {
 		if p == "*" {
 			fields[i] = -1
@@ -343,34 +343,34 @@ func nextSchedule(expr string) time.Time {
 			fields[i] = v
 		}
 	}
-	
+
 	now := time.Now()
-	
+
 	// Look for the next valid time within the next year
 	for days := 0; days < 366; days++ {
 		cand := now.Add(time.Duration(days) * 24 * time.Hour)
-		
+
 		// Check if day matches (if specified)
 		if fields[3] != -1 && cand.Day() != fields[3] {
 			continue
 		}
-		
+
 		// Check if month matches (if specified)
 		if fields[4] != -1 && int(cand.Month()) != fields[4] {
 			continue
 		}
-		
+
 		// Check if weekday matches (if specified)
 		if fields[5] != -1 && int(cand.Weekday()) != fields[5] {
 			continue
 		}
-		
+
 		// For the current day, start from current time; for future days, start from 00:00:00
 		startHour := 0
 		if days == 0 {
 			startHour = now.Hour()
 		}
-		
+
 		for h := startHour; h < 24; h++ {
 			// Check if hour matches (if specified) or step value
 			if fields[2] != -1 && h != fields[2] {
@@ -379,12 +379,12 @@ func nextSchedule(expr string) time.Time {
 			if fields[2] == -1 && stepValues[2] > 1 && h%stepValues[2] != 0 {
 				continue
 			}
-			
+
 			startMinute := 0
 			if days == 0 && h == now.Hour() {
 				startMinute = now.Minute()
 			}
-			
+
 			for m := startMinute; m < 60; m++ {
 				// Check if minute matches (if specified) or step value
 				if fields[1] != -1 && m != fields[1] {
@@ -393,12 +393,12 @@ func nextSchedule(expr string) time.Time {
 				if fields[1] == -1 && stepValues[1] > 1 && m%stepValues[1] != 0 {
 					continue
 				}
-				
+
 				startSecond := 0
 				if days == 0 && h == now.Hour() && m == now.Minute() {
 					startSecond = now.Second() + 1 // Next second
 				}
-				
+
 				for s := startSecond; s < 60; s++ {
 					// Check if second matches (if specified) or step value
 					if fields[0] != -1 && s != fields[0] {
@@ -407,7 +407,7 @@ func nextSchedule(expr string) time.Time {
 					if fields[0] == -1 && stepValues[0] > 1 && s%stepValues[0] != 0 {
 						continue
 					}
-					
+
 					t := time.Date(cand.Year(), cand.Month(), cand.Day(), h, m, s, 0, cand.Location())
 					if t.After(now) {
 						return t
@@ -416,7 +416,7 @@ func nextSchedule(expr string) time.Time {
 			}
 		}
 	}
-	
+
 	return time.Time{}
 }
 
@@ -433,7 +433,7 @@ func parseInt(s string) (int, error) {
 // Helper functions for common scheduling patterns
 
 // everySecond(callback) - executes callback every second
-func everySecondFunc(args []object.Object, defs map[string]object.Object) object.Object {
+func everySecondFunc(args []object.VintObject, defs map[string]object.VintObject) object.VintObject {
 	if len(args) != 1 {
 		return ErrorMessage(
 			"schedule", "everySecond",
@@ -442,14 +442,14 @@ func everySecondFunc(args []object.Object, defs map[string]object.Object) object
 			"schedule.everySecond(func() { print(\"tick\") })",
 		)
 	}
-	
+
 	// Call ticker with 1 second interval
-	tickerArgs := []object.Object{&object.Integer{Value: 1}, args[0]}
+	tickerArgs := []object.VintObject{&object.Integer{Value: 1}, args[0]}
 	return tickerFunc(tickerArgs, defs)
 }
 
 // everyMinute(callback) - executes callback every minute at second 0
-func everyMinuteFunc(args []object.Object, defs map[string]object.Object) object.Object {
+func everyMinuteFunc(args []object.VintObject, defs map[string]object.VintObject) object.VintObject {
 	if len(args) != 1 {
 		return ErrorMessage(
 			"schedule", "everyMinute",
@@ -458,14 +458,14 @@ func everyMinuteFunc(args []object.Object, defs map[string]object.Object) object
 			"schedule.everyMinute(func() { print(\"Every minute!\") })",
 		)
 	}
-	
+
 	// Call schedule with "0 * * * * *" (every minute at second 0)
-	scheduleArgs := []object.Object{&object.String{Value: "0 * * * * *"}, args[0]}
+	scheduleArgs := []object.VintObject{&object.String{Value: "0 * * * * *"}, args[0]}
 	return scheduleFunc(scheduleArgs, defs)
 }
 
 // everyHour(callback) - executes callback every hour at minute 0, second 0
-func everyHourFunc(args []object.Object, defs map[string]object.Object) object.Object {
+func everyHourFunc(args []object.VintObject, defs map[string]object.VintObject) object.VintObject {
 	if len(args) != 1 {
 		return ErrorMessage(
 			"schedule", "everyHour",
@@ -474,14 +474,14 @@ func everyHourFunc(args []object.Object, defs map[string]object.Object) object.O
 			"schedule.everyHour(func() { print(\"Every hour!\") })",
 		)
 	}
-	
+
 	// Call schedule with "0 0 * * * *" (every hour at minute 0, second 0)
-	scheduleArgs := []object.Object{&object.String{Value: "0 0 * * * *"}, args[0]}
+	scheduleArgs := []object.VintObject{&object.String{Value: "0 0 * * * *"}, args[0]}
 	return scheduleFunc(scheduleArgs, defs)
 }
 
 // daily(hour, minute, callback) - executes callback daily at specified time
-func dailyFunc(args []object.Object, defs map[string]object.Object) object.Object {
+func dailyFunc(args []object.VintObject, defs map[string]object.VintObject) object.VintObject {
 	if len(args) != 3 {
 		return ErrorMessage(
 			"schedule", "daily",
@@ -490,7 +490,7 @@ func dailyFunc(args []object.Object, defs map[string]object.Object) object.Objec
 			"schedule.daily(9, 30, func() { print(\"Good morning!\") })",
 		)
 	}
-	
+
 	// Validate hour argument
 	hour, ok := args[0].(*object.Integer)
 	if !ok {
@@ -501,7 +501,7 @@ func dailyFunc(args []object.Object, defs map[string]object.Object) object.Objec
 			"schedule.daily(9, 30, func() { print(\"Good morning!\") })",
 		)
 	}
-	
+
 	// Validate minute argument
 	minute, ok := args[1].(*object.Integer)
 	if !ok {
@@ -512,7 +512,7 @@ func dailyFunc(args []object.Object, defs map[string]object.Object) object.Objec
 			"schedule.daily(9, 30, func() { print(\"Good morning!\") })",
 		)
 	}
-	
+
 	// Validate time ranges
 	if hour.Value < 0 || hour.Value > 23 {
 		return &object.Error{
@@ -522,7 +522,7 @@ func dailyFunc(args []object.Object, defs map[string]object.Object) object.Objec
 				hour.Value),
 		}
 	}
-	
+
 	if minute.Value < 0 || minute.Value > 59 {
 		return &object.Error{
 			Message: fmt.Sprintf("\033[1;31m -> schedule.daily()\033[0m:\n"+
@@ -531,9 +531,9 @@ func dailyFunc(args []object.Object, defs map[string]object.Object) object.Objec
 				minute.Value),
 		}
 	}
-	
+
 	// Create cron expression: "0 minute hour * * *"
 	cronExpr := fmt.Sprintf("0 %d %d * * *", minute.Value, hour.Value)
-	scheduleArgs := []object.Object{&object.String{Value: cronExpr}, args[2]}
+	scheduleArgs := []object.VintObject{&object.String{Value: cronExpr}, args[2]}
 	return scheduleFunc(scheduleArgs, defs)
 }

@@ -4,7 +4,7 @@ import (
 	"github.com/vintlang/vintlang/object"
 )
 
-func evalMinusPrefixOperatorExpression(right object.Object, line int) object.Object {
+func evalMinusPrefixOperatorExpression(right object.VintObject, line int) object.VintObject {
 	switch obj := right.(type) {
 
 	case *object.Integer:
@@ -17,7 +17,7 @@ func evalMinusPrefixOperatorExpression(right object.Object, line int) object.Obj
 		return newError("Line %d: Unknown operation: -%s", line, right.Type())
 	}
 }
-func evalPlusPrefixOperatorExpression(right object.Object, line int) object.Object {
+func evalPlusPrefixOperatorExpression(right object.VintObject, line int) object.VintObject {
 	switch obj := right.(type) {
 
 	case *object.Integer:
@@ -31,7 +31,7 @@ func evalPlusPrefixOperatorExpression(right object.Object, line int) object.Obje
 	}
 }
 
-func evalPrefixExpression(operator string, right object.Object, line int) object.Object {
+func evalPrefixExpression(operator string, right object.VintObject, line int) object.VintObject {
 	switch operator {
 	case "!":
 		return evalBangOperatorExpression(right)

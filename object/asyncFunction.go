@@ -20,26 +20,26 @@ func (af *AsyncFunction) Type() ObjectType {
 
 func (af *AsyncFunction) Inspect() string {
 	var out strings.Builder
-	
+
 	params := []string{}
 	for _, p := range af.Parameters {
 		params = append(params, p.String())
 	}
-	
+
 	out.WriteString("async func")
 	out.WriteString("(")
 	out.WriteString(strings.Join(params, ", "))
 	out.WriteString(") {\n")
 	out.WriteString(af.Body.String())
 	out.WriteString("\n}")
-	
+
 	return out.String()
 }
 
 // Execute executes the async function and returns a promise
-func (af *AsyncFunction) Execute(args []Object, eval func(ast.Node, *Environment) Object) *Promise {
+func (af *AsyncFunction) Execute(args []VintObject, eval func(ast.Node, *Environment) VintObject) *Promise {
 	promise := NewPromise()
-	
+
 	// Execute the function asynchronously
 	go func() {
 		defer func() {
@@ -47,20 +47,20 @@ func (af *AsyncFunction) Execute(args []Object, eval func(ast.Node, *Environment
 				promise.Reject(&Error{Message: fmt.Sprintf("async function panic: %v", r)})
 			}
 		}()
-		
+
 		// Create new environment for the function
 		extEnv := NewEnclosedEnvironment(af.Env)
-		
+
 		// Bind parameters
 		for paramIdx, param := range af.Parameters {
 			if paramIdx < len(args) {
 				extEnv.Define(param.Value, args[paramIdx])
 			}
 		}
-		
+
 		// Execute the function body
 		result := eval(af.Body, extEnv)
-		
+
 		// Handle return values and errors
 		if returnValue, ok := result.(*ReturnValue); ok {
 			promise.Resolve(returnValue.Value)
@@ -70,6 +70,6 @@ func (af *AsyncFunction) Execute(args []Object, eval func(ast.Node, *Environment
 			promise.Resolve(result)
 		}
 	}()
-	
+
 	return promise
 }

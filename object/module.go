@@ -1,11 +1,11 @@
 package object
 
-type ModuleFunction func(args []Object, defs map[string]Object) Object
+type ModuleFunction func(args []VintObject, defs map[string]VintObject) VintObject
 
 type Module struct {
 	Name       string
 	Functions  map[string]ModuleFunction
-	Variables  map[string]Object
+	Variables  map[string]VintObject
 	Submodules map[string]*Module
 	Doc        string
 	Version    string
@@ -20,7 +20,7 @@ func NewModule(name string, functions map[string]ModuleFunction) *Module {
 	return &Module{
 		Name:       name,
 		Functions:  functions,
-		Variables:  make(map[string]Object),
+		Variables:  make(map[string]VintObject),
 		Submodules: make(map[string]*Module),
 	}
 }
@@ -31,7 +31,7 @@ func (m *Module) RegisterFunction(name string, fn ModuleFunction) {
 }
 
 // Register a variable at runtime
-func (m *Module) RegisterVariable(name string, value Object) {
+func (m *Module) RegisterVariable(name string, value VintObject) {
 	m.Variables[name] = value
 }
 

@@ -56,7 +56,7 @@ var MathFunctions = map[string]object.ModuleFunction{
 	"atan2": atan2,
 }
 
-var Constants = map[string]object.Object{
+var Constants = map[string]object.VintObject{
 	"PI":      &object.Float{Value: math.Pi},
 	"e":       &object.Float{Value: math.E},
 	"phi":     &object.Float{Value: (1 + math.Sqrt(5)) / 2},
@@ -71,54 +71,54 @@ var Constants = map[string]object.Object{
 	"EPSILON": &object.Float{Value: 2.220446049250313e-16},
 }
 
-func pi(args []object.Object, defs map[string]object.Object) object.Object {
+func pi(args []object.VintObject, defs map[string]object.VintObject) object.VintObject {
 	return &object.Float{Value: math.Pi}
 }
 
-func e(args []object.Object, defs map[string]object.Object) object.Object {
+func e(args []object.VintObject, defs map[string]object.VintObject) object.VintObject {
 	return &object.Float{Value: math.E}
 }
 
-func phi(args []object.Object, defs map[string]object.Object) object.Object {
+func phi(args []object.VintObject, defs map[string]object.VintObject) object.VintObject {
 	return &object.Float{Value: (1 + math.Sqrt(5)) / 2}
 }
 
-func ln10(args []object.Object, defs map[string]object.Object) object.Object {
+func ln10(args []object.VintObject, defs map[string]object.VintObject) object.VintObject {
 	return &object.Float{Value: math.Log10E}
 }
 
-func ln2(args []object.Object, defs map[string]object.Object) object.Object {
+func ln2(args []object.VintObject, defs map[string]object.VintObject) object.VintObject {
 	return &object.Float{Value: math.Ln2}
 }
 
-func log10e(args []object.Object, defs map[string]object.Object) object.Object {
+func log10e(args []object.VintObject, defs map[string]object.VintObject) object.VintObject {
 	return &object.Float{Value: math.Log10E}
 }
 
-func log2e(args []object.Object, defs map[string]object.Object) object.Object {
+func log2e(args []object.VintObject, defs map[string]object.VintObject) object.VintObject {
 	return &object.Float{Value: math.Log2E}
 }
 
-func sqrt1_2(args []object.Object, defs map[string]object.Object) object.Object {
+func sqrt1_2(args []object.VintObject, defs map[string]object.VintObject) object.VintObject {
 	return &object.Float{Value: 1 / math.Sqrt2}
 }
 
-func sqrt2(args []object.Object, defs map[string]object.Object) object.Object {
+func sqrt2(args []object.VintObject, defs map[string]object.VintObject) object.VintObject {
 	return &object.Float{Value: math.Sqrt2}
 }
 
-func sqrt3(args []object.Object, defs map[string]object.Object) object.Object {
+func sqrt3(args []object.VintObject, defs map[string]object.VintObject) object.VintObject {
 	return &object.Float{Value: math.Sqrt(3)}
 }
 
-func sqrt5(args []object.Object, defs map[string]object.Object) object.Object {
+func sqrt5(args []object.VintObject, defs map[string]object.VintObject) object.VintObject {
 	return &object.Float{Value: math.Sqrt(5)}
 }
 
-func epsilon(args []object.Object, defs map[string]object.Object) object.Object {
+func epsilon(args []object.VintObject, defs map[string]object.VintObject) object.VintObject {
 	return &object.Float{Value: 2.220446049250313e-16}
 }
-func abs(args []object.Object, defs map[string]object.Object) object.Object {
+func abs(args []object.VintObject, defs map[string]object.VintObject) object.VintObject {
 	if len(defs) != 0 {
 		return &object.Error{
 			Message: "\033[1;31m -> math.abs()\033[0m:\n" +
@@ -158,7 +158,7 @@ func abs(args []object.Object, defs map[string]object.Object) object.Object {
 	}
 }
 
-func sign(args []object.Object, defs map[string]object.Object) object.Object {
+func sign(args []object.VintObject, defs map[string]object.VintObject) object.VintObject {
 	if len(defs) != 0 {
 		return ErrorMessage(
 			"math", "sign",
@@ -202,7 +202,7 @@ func sign(args []object.Object, defs map[string]object.Object) object.Object {
 	}
 }
 
-func ceil(args []object.Object, defs map[string]object.Object) object.Object {
+func ceil(args []object.VintObject, defs map[string]object.VintObject) object.VintObject {
 	if len(defs) != 0 {
 		return ErrorMessage(
 			"math", "ceil",
@@ -237,7 +237,7 @@ func ceil(args []object.Object, defs map[string]object.Object) object.Object {
 	}
 }
 
-func floor(args []object.Object, defs map[string]object.Object) object.Object {
+func floor(args []object.VintObject, defs map[string]object.VintObject) object.VintObject {
 	if len(defs) != 0 {
 		return &object.Error{Message: "This operation does not allow definitions."}
 	}
@@ -257,7 +257,7 @@ func floor(args []object.Object, defs map[string]object.Object) object.Object {
 	}
 }
 
-func sqrt(args []object.Object, defs map[string]object.Object) object.Object {
+func sqrt(args []object.VintObject, defs map[string]object.VintObject) object.VintObject {
 	if len(defs) != 0 {
 		return &object.Error{Message: "This operation does not allow definitions."}
 	}
@@ -277,7 +277,7 @@ func sqrt(args []object.Object, defs map[string]object.Object) object.Object {
 	}
 }
 
-func cbrt(args []object.Object, defs map[string]object.Object) object.Object {
+func cbrt(args []object.VintObject, defs map[string]object.VintObject) object.VintObject {
 	if len(defs) != 0 {
 		return &object.Error{Message: "This operation does not allow definitions."}
 	}
@@ -297,7 +297,7 @@ func cbrt(args []object.Object, defs map[string]object.Object) object.Object {
 	}
 }
 
-func root(args []object.Object, defs map[string]object.Object) object.Object {
+func root(args []object.VintObject, defs map[string]object.VintObject) object.VintObject {
 	if len(defs) != 0 {
 		return &object.Error{Message: "This operation does not allow definitions."}
 	}
@@ -330,7 +330,7 @@ func root(args []object.Object, defs map[string]object.Object) object.Object {
 	return &object.Float{Value: x}
 }
 
-func hypot(args []object.Object, defs map[string]object.Object) object.Object {
+func hypot(args []object.VintObject, defs map[string]object.VintObject) object.VintObject {
 	if len(defs) != 0 {
 		return &object.Error{Message: "This operation does not allow definitions."}
 	}
@@ -352,7 +352,7 @@ func hypot(args []object.Object, defs map[string]object.Object) object.Object {
 	return &object.Float{Value: math.Sqrt(sumOfSquares)}
 }
 
-func factorial(args []object.Object, defs map[string]object.Object) object.Object {
+func factorial(args []object.VintObject, defs map[string]object.VintObject) object.VintObject {
 	if len(defs) != 0 {
 		return &object.Error{Message: "This operation does not allow definitions."}
 	}
@@ -372,7 +372,7 @@ func factorial(args []object.Object, defs map[string]object.Object) object.Objec
 	}
 	return &object.Integer{Value: result}
 }
-func round(args []object.Object, defs map[string]object.Object) object.Object {
+func round(args []object.VintObject, defs map[string]object.VintObject) object.VintObject {
 	if len(defs) != 0 {
 		return &object.Error{Message: "This function does not accept keyword arguments."}
 	}
@@ -387,7 +387,7 @@ func round(args []object.Object, defs map[string]object.Object) object.Object {
 	return &object.Integer{Value: int64(num + 0.5)}
 }
 
-func max(args []object.Object, defs map[string]object.Object) object.Object {
+func max(args []object.VintObject, defs map[string]object.VintObject) object.VintObject {
 	if len(defs) != 0 {
 		return &object.Error{Message: "This function does not accept keyword arguments."}
 	}
@@ -428,7 +428,7 @@ func max(args []object.Object, defs map[string]object.Object) object.Object {
 	return &object.Float{Value: maxNum}
 }
 
-func min(args []object.Object, defs map[string]object.Object) object.Object {
+func min(args []object.VintObject, defs map[string]object.VintObject) object.VintObject {
 	if len(defs) != 0 {
 		return &object.Error{Message: "This function does not accept keyword arguments."}
 	}
@@ -469,7 +469,7 @@ func min(args []object.Object, defs map[string]object.Object) object.Object {
 	return &object.Float{Value: minNum}
 }
 
-func exp(args []object.Object, defs map[string]object.Object) object.Object {
+func exp(args []object.VintObject, defs map[string]object.VintObject) object.VintObject {
 	if len(defs) != 0 {
 		return &object.Error{Message: "This function does not accept keyword arguments."}
 	}
@@ -483,7 +483,7 @@ func exp(args []object.Object, defs map[string]object.Object) object.Object {
 	return &object.Float{Value: math.Exp(num)}
 }
 
-func expm1(args []object.Object, defs map[string]object.Object) object.Object {
+func expm1(args []object.VintObject, defs map[string]object.VintObject) object.VintObject {
 	if len(defs) != 0 {
 		return &object.Error{Message: "This function does not accept keyword arguments."}
 	}
@@ -511,7 +511,7 @@ func expm1(args []object.Object, defs map[string]object.Object) object.Object {
 // 	return &object.Float{Value: math.Log(num)}
 // }
 
-func log10(args []object.Object, defs map[string]object.Object) object.Object {
+func log10(args []object.VintObject, defs map[string]object.VintObject) object.VintObject {
 	if len(defs) != 0 {
 		return &object.Error{Message: "This function does not accept keyword arguments."}
 	}
@@ -525,7 +525,7 @@ func log10(args []object.Object, defs map[string]object.Object) object.Object {
 	return &object.Float{Value: math.Log10(num)}
 }
 
-func log2(args []object.Object, defs map[string]object.Object) object.Object {
+func log2(args []object.VintObject, defs map[string]object.VintObject) object.VintObject {
 	if len(defs) != 0 {
 		return &object.Error{Message: "This function does not accept keyword arguments."}
 	}
@@ -545,7 +545,7 @@ func log2(args []object.Object, defs map[string]object.Object) object.Object {
 	return &object.Float{Value: math.Log2(arg)}
 }
 
-func extractFloatValue(obj object.Object) float64 {
+func extractFloatValue(obj object.VintObject) float64 {
 	switch obj := obj.(type) {
 	case *object.Integer:
 		return float64(obj.Value)
@@ -556,7 +556,7 @@ func extractFloatValue(obj object.Object) float64 {
 	}
 }
 
-func log1p(args []object.Object, defs map[string]object.Object) object.Object {
+func log1p(args []object.VintObject, defs map[string]object.VintObject) object.VintObject {
 	if len(defs) != 0 {
 		return &object.Error{Message: "This function does not accept keyword arguments."}
 	}
@@ -570,7 +570,7 @@ func log1p(args []object.Object, defs map[string]object.Object) object.Object {
 	return &object.Float{Value: math.Log1p(num)}
 }
 
-func cos(args []object.Object, defs map[string]object.Object) object.Object {
+func cos(args []object.VintObject, defs map[string]object.VintObject) object.VintObject {
 	if len(defs) != 0 {
 		return &object.Error{Message: "This function does not accept keyword arguments."}
 	}
@@ -584,7 +584,7 @@ func cos(args []object.Object, defs map[string]object.Object) object.Object {
 	return &object.Float{Value: math.Cos(num)}
 }
 
-func sin(args []object.Object, defs map[string]object.Object) object.Object {
+func sin(args []object.VintObject, defs map[string]object.VintObject) object.VintObject {
 	if len(defs) != 0 {
 		return &object.Error{Message: "This function does not accept keyword arguments."}
 	}
@@ -598,7 +598,7 @@ func sin(args []object.Object, defs map[string]object.Object) object.Object {
 	return &object.Float{Value: math.Sin(num)}
 }
 
-func tan(args []object.Object, defs map[string]object.Object) object.Object {
+func tan(args []object.VintObject, defs map[string]object.VintObject) object.VintObject {
 	if len(defs) != 0 {
 		return &object.Error{Message: "This function does not accept keyword arguments."}
 	}
@@ -612,7 +612,7 @@ func tan(args []object.Object, defs map[string]object.Object) object.Object {
 	return &object.Float{Value: math.Tan(num)}
 }
 
-func acos(args []object.Object, defs map[string]object.Object) object.Object {
+func acos(args []object.VintObject, defs map[string]object.VintObject) object.VintObject {
 	if len(defs) != 0 {
 		return &object.Error{Message: "This function does not accept keyword arguments."}
 	}
@@ -626,7 +626,7 @@ func acos(args []object.Object, defs map[string]object.Object) object.Object {
 	return &object.Float{Value: math.Acos(num)}
 }
 
-func asin(args []object.Object, defs map[string]object.Object) object.Object {
+func asin(args []object.VintObject, defs map[string]object.VintObject) object.VintObject {
 	if len(defs) != 0 {
 		return &object.Error{Message: "This function does not accept keyword arguments."}
 	}
@@ -640,7 +640,7 @@ func asin(args []object.Object, defs map[string]object.Object) object.Object {
 	return &object.Float{Value: math.Asin(num)}
 }
 
-func atan(args []object.Object, defs map[string]object.Object) object.Object {
+func atan(args []object.VintObject, defs map[string]object.VintObject) object.VintObject {
 	if len(defs) != 0 {
 		return &object.Error{Message: "This function does not accept keyword arguments."}
 	}
@@ -654,7 +654,7 @@ func atan(args []object.Object, defs map[string]object.Object) object.Object {
 	return &object.Float{Value: math.Atan(num)}
 }
 
-func cosh(args []object.Object, defs map[string]object.Object) object.Object {
+func cosh(args []object.VintObject, defs map[string]object.VintObject) object.VintObject {
 	if len(defs) != 0 {
 		return &object.Error{Message: "This function does not accept keyword arguments."}
 	}
@@ -668,7 +668,7 @@ func cosh(args []object.Object, defs map[string]object.Object) object.Object {
 	return &object.Float{Value: math.Cosh(num)}
 }
 
-func sinh(args []object.Object, defs map[string]object.Object) object.Object {
+func sinh(args []object.VintObject, defs map[string]object.VintObject) object.VintObject {
 	if len(defs) != 0 {
 		return &object.Error{Message: "This function does not accept keyword arguments."}
 	}
@@ -682,7 +682,7 @@ func sinh(args []object.Object, defs map[string]object.Object) object.Object {
 	return &object.Float{Value: math.Sinh(num)}
 }
 
-func tanh(args []object.Object, defs map[string]object.Object) object.Object {
+func tanh(args []object.VintObject, defs map[string]object.VintObject) object.VintObject {
 	if len(defs) != 0 {
 		return &object.Error{Message: "This function does not accept keyword arguments."}
 	}
@@ -696,7 +696,7 @@ func tanh(args []object.Object, defs map[string]object.Object) object.Object {
 	return &object.Float{Value: math.Tanh(num)}
 }
 
-func acosh(args []object.Object, defs map[string]object.Object) object.Object {
+func acosh(args []object.VintObject, defs map[string]object.VintObject) object.VintObject {
 	if len(defs) != 0 {
 		return &object.Error{Message: "This function does not accept keyword arguments."}
 	}
@@ -710,7 +710,7 @@ func acosh(args []object.Object, defs map[string]object.Object) object.Object {
 	return &object.Float{Value: math.Acosh(num)}
 }
 
-func asinh(args []object.Object, defs map[string]object.Object) object.Object {
+func asinh(args []object.VintObject, defs map[string]object.VintObject) object.VintObject {
 	if len(defs) != 0 {
 		return &object.Error{Message: "This function does not accept keyword arguments."}
 	}
@@ -724,7 +724,7 @@ func asinh(args []object.Object, defs map[string]object.Object) object.Object {
 	return &object.Float{Value: math.Asinh(num)}
 }
 
-func atan2(args []object.Object, defs map[string]object.Object) object.Object {
+func atan2(args []object.VintObject, defs map[string]object.VintObject) object.VintObject {
 	if len(defs) != 0 {
 		return &object.Error{Message: "This function does not accept keyword arguments."}
 	}
@@ -744,7 +744,7 @@ func atan2(args []object.Object, defs map[string]object.Object) object.Object {
 	return &object.Float{Value: math.Atan2(y, x)}
 }
 
-func atanh(args []object.Object, defs map[string]object.Object) object.Object {
+func atanh(args []object.VintObject, defs map[string]object.VintObject) object.VintObject {
 	if len(defs) != 0 {
 		return &object.Error{Message: "This function does not accept keyword arguments."}
 	}
@@ -758,7 +758,7 @@ func atanh(args []object.Object, defs map[string]object.Object) object.Object {
 	return &object.Float{Value: math.Atanh(num)}
 }
 
-func random(args []object.Object, defs map[string]object.Object) object.Object {
+func random(args []object.VintObject, defs map[string]object.VintObject) object.VintObject {
 	if len(defs) != 0 {
 		return &object.Error{Message: "This function does not accept keyword arguments."}
 	}

@@ -8,7 +8,7 @@ func init() {
 
 func registerChannelBuiltins() {
 	RegisterBuiltin("send", &object.Builtin{
-		Fn: func(args ...object.Object) object.Object {
+		Fn: func(args ...object.VintObject) object.VintObject {
 			if len(args) != 2 {
 				return newError("send() takes exactly 2 arguments (channel, value), got %d", len(args))
 			}
@@ -27,7 +27,7 @@ func registerChannelBuiltins() {
 	})
 
 	RegisterBuiltin("receive", &object.Builtin{
-		Fn: func(args ...object.Object) object.Object {
+		Fn: func(args ...object.VintObject) object.VintObject {
 			if len(args) != 1 {
 				return newError("receive() takes exactly 1 argument (channel), got %d", len(args))
 			}
@@ -47,7 +47,7 @@ func registerChannelBuiltins() {
 	})
 
 	RegisterBuiltin("close", &object.Builtin{
-		Fn: func(args ...object.Object) object.Object {
+		Fn: func(args ...object.VintObject) object.VintObject {
 			if len(args) != 1 {
 				return newError("close() takes exactly 1 argument (channel), got %d", len(args))
 			}

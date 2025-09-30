@@ -16,7 +16,7 @@ func init() {
 	ErrorsModule.Author = "VintLang Core"
 }
 
-func errorsNew(args []object.Object, defs map[string]object.Object) object.Object {
+func errorsNew(args []object.VintObject, defs map[string]object.VintObject) object.VintObject {
 	if len(defs) != 0 {
 		return ErrorMessage(
 			"errors",

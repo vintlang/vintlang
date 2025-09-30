@@ -13,7 +13,7 @@ func init() {
 
 func registerIOBuiltins() {
 	RegisterBuiltin("open", &object.Builtin{
-		Fn: func(args ...object.Object) object.Object {
+		Fn: func(args ...object.VintObject) object.VintObject {
 			if len(args) != 1 {
 				return newError("Sorry, this function requires 1 argument, you provided %d", len(args))
 			}
@@ -28,7 +28,7 @@ func registerIOBuiltins() {
 	})
 
 	RegisterBuiltin("write", &object.Builtin{
-		Fn: func(args ...object.Object) object.Object {
+		Fn: func(args ...object.VintObject) object.VintObject {
 			if len(args) == 0 {
 				return &object.String{Value: "\n"}
 			} else {

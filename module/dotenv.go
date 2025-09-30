@@ -16,7 +16,7 @@ func init() {
 	DotenvFunctions["get"] = getDotenvValue
 }
 
-func loadEnv(args []object.Object, defs map[string]object.Object) object.Object {
+func loadEnv(args []object.VintObject, defs map[string]object.VintObject) object.VintObject {
 	if len(args) > 1 || len(defs) != 0 {
 		return ErrorMessage(
 			"dotenv", "load",
@@ -46,7 +46,7 @@ dotenv.load("path/to/.env") -> loads from specified file`,
 	return &object.Boolean{Value: true}
 }
 
-func getDotenvValue(args []object.Object, defs map[string]object.Object) object.Object {
+func getDotenvValue(args []object.VintObject, defs map[string]object.VintObject) object.VintObject {
 	if len(args) != 1 || len(defs) != 0 {
 		return ErrorMessage(
 			"dotenv", "get",

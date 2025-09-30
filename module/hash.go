@@ -16,7 +16,7 @@ func init() {
 	HashFunctions["sha512"] = hashSHA512
 }
 
-func hashSHA1(args []object.Object, defs map[string]object.Object) object.Object {
+func hashSHA1(args []object.VintObject, defs map[string]object.VintObject) object.VintObject {
 	if len(args) != 1 {
 		return ErrorMessage(
 			"hash", "sha1",
@@ -40,11 +40,11 @@ func hashSHA1(args []object.Object, defs map[string]object.Object) object.Object
 	hasher := sha1.New()
 	hasher.Write([]byte(input))
 	hash := hex.EncodeToString(hasher.Sum(nil))
-	
+
 	return &object.String{Value: hash}
 }
 
-func hashSHA512(args []object.Object, defs map[string]object.Object) object.Object {
+func hashSHA512(args []object.VintObject, defs map[string]object.VintObject) object.VintObject {
 	if len(args) != 1 {
 		return ErrorMessage(
 			"hash", "sha512",
@@ -68,6 +68,6 @@ func hashSHA512(args []object.Object, defs map[string]object.Object) object.Obje
 	hasher := sha512.New()
 	hasher.Write([]byte(input))
 	hash := hex.EncodeToString(hasher.Sum(nil))
-	
+
 	return &object.String{Value: hash}
 }

@@ -17,7 +17,7 @@ func init() {
 	XMLFunctions["extract"] = xmlExtractValue
 }
 
-func xmlEscape(args []object.Object, defs map[string]object.Object) object.Object {
+func xmlEscape(args []object.VintObject, defs map[string]object.VintObject) object.VintObject {
 	if len(args) != 1 {
 		return ErrorMessage(
 			"xml", "escape",
@@ -40,11 +40,11 @@ func xmlEscape(args []object.Object, defs map[string]object.Object) object.Objec
 	input := data.(*object.String).Value
 	var buf strings.Builder
 	xml.EscapeText(&buf, []byte(input))
-	
+
 	return &object.String{Value: buf.String()}
 }
 
-func xmlUnescape(args []object.Object, defs map[string]object.Object) object.Object {
+func xmlUnescape(args []object.VintObject, defs map[string]object.VintObject) object.VintObject {
 	if len(args) != 1 {
 		return ErrorMessage(
 			"xml", "unescape",
@@ -65,7 +65,7 @@ func xmlUnescape(args []object.Object, defs map[string]object.Object) object.Obj
 	}
 
 	input := data.(*object.String).Value
-	
+
 	// Replace common XML entities
 	replacements := map[string]string{
 		"&lt;":   "<",
@@ -74,16 +74,16 @@ func xmlUnescape(args []object.Object, defs map[string]object.Object) object.Obj
 		"&quot;": "\"",
 		"&apos;": "'",
 	}
-	
+
 	result := input
 	for entity, char := range replacements {
 		result = strings.ReplaceAll(result, entity, char)
 	}
-	
+
 	return &object.String{Value: result}
 }
 
-func xmlValidate(args []object.Object, defs map[string]object.Object) object.Object {
+func xmlValidate(args []object.VintObject, defs map[string]object.VintObject) object.VintObject {
 	if len(args) != 1 {
 		return ErrorMessage(
 			"xml", "validate",
@@ -104,19 +104,19 @@ func xmlValidate(args []object.Object, defs map[string]object.Object) object.Obj
 	}
 
 	input := data.(*object.String).Value
-	
+
 	// Try to parse the XML
 	var v interface{}
 	err := xml.Unmarshal([]byte(input), &v)
-	
+
 	if err != nil {
 		return &object.Boolean{Value: false}
 	}
-	
+
 	return &object.Boolean{Value: true}
 }
 
-func xmlExtractValue(args []object.Object, defs map[string]object.Object) object.Object {
+func xmlExtractValue(args []object.VintObject, defs map[string]object.VintObject) object.VintObject {
 	if len(args) != 2 {
 		return ErrorMessage(
 			"xml", "extract",
@@ -128,7 +128,7 @@ func xmlExtractValue(args []object.Object, defs map[string]object.Object) object
 
 	xmlData := args[0]
 	tagName := args[1]
-	
+
 	if xmlData.Type() != object.STRING_OBJ {
 		return ErrorMessage(
 			"xml", "extract",
@@ -137,7 +137,7 @@ func xmlExtractValue(args []object.Object, defs map[string]object.Object) object
 			`xml.extract("<root><name>John</name></root>", "name") -> "John"`,
 		)
 	}
-	
+
 	if tagName.Type() != object.STRING_OBJ {
 		return ErrorMessage(
 			"xml", "extract",
@@ -149,22 +149,22 @@ func xmlExtractValue(args []object.Object, defs map[string]object.Object) object
 
 	xmlStr := xmlData.(*object.String).Value
 	tag := tagName.(*object.String).Value
-	
+
 	// Simple XML value extraction using string parsing
 	startTag := fmt.Sprintf("<%s>", tag)
 	endTag := fmt.Sprintf("</%s>", tag)
-	
+
 	startIdx := strings.Index(xmlStr, startTag)
 	if startIdx == -1 {
 		return &object.String{Value: ""}
 	}
-	
+
 	startIdx += len(startTag)
 	endIdx := strings.Index(xmlStr[startIdx:], endTag)
 	if endIdx == -1 {
 		return &object.String{Value: ""}
 	}
-	
+
 	value := xmlStr[startIdx : startIdx+endIdx]
 	return &object.String{Value: value}
 }

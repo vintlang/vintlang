@@ -39,7 +39,7 @@ func init() {
 	OsFunctions["move"] = moveFile
 }
 
-func exit(args []object.Object, defs map[string]object.Object) object.Object {
+func exit(args []object.VintObject, defs map[string]object.VintObject) object.VintObject {
 	if len(args) > 1 {
 		return ErrorMessage(
 			"os", "exit",
@@ -68,7 +68,7 @@ func exit(args []object.Object, defs map[string]object.Object) object.Object {
 	return nil
 }
 
-func run(args []object.Object, defs map[string]object.Object) object.Object {
+func run(args []object.VintObject, defs map[string]object.VintObject) object.VintObject {
 	if len(args) != 1 {
 		return ErrorMessage(
 			"os", "run",
@@ -125,7 +125,7 @@ func run(args []object.Object, defs map[string]object.Object) object.Object {
 	return &object.String{Value: string(out)}
 }
 
-func getEnv(args []object.Object, defs map[string]object.Object) object.Object {
+func getEnv(args []object.VintObject, defs map[string]object.VintObject) object.VintObject {
 	if len(args) != 1 {
 		return ErrorMessage(
 			"os", "getEnv",
@@ -158,7 +158,7 @@ func getEnv(args []object.Object, defs map[string]object.Object) object.Object {
 	return &object.String{Value: value}
 }
 
-func setEnv(args []object.Object, defs map[string]object.Object) object.Object {
+func setEnv(args []object.VintObject, defs map[string]object.VintObject) object.VintObject {
 	if len(args) != 2 {
 		return ErrorMessage(
 			"os", "setEnv",
@@ -187,7 +187,7 @@ func setEnv(args []object.Object, defs map[string]object.Object) object.Object {
 	return &object.String{Value: "Environment variable set successfully"}
 }
 
-func readFile(args []object.Object, defs map[string]object.Object) object.Object {
+func readFile(args []object.VintObject, defs map[string]object.VintObject) object.VintObject {
 	if len(args) != 1 {
 		return ErrorMessage(
 			"os", "readFile",
@@ -215,7 +215,7 @@ func readFile(args []object.Object, defs map[string]object.Object) object.Object
 	return &object.String{Value: string(content)}
 }
 
-func getwd(args []object.Object, defs map[string]object.Object) object.Object {
+func getwd(args []object.VintObject, defs map[string]object.VintObject) object.VintObject {
 	if len(args) != 0 {
 		return ErrorMessage(
 			"os", "getwd",
@@ -232,7 +232,7 @@ func getwd(args []object.Object, defs map[string]object.Object) object.Object {
 	return &object.String{Value: dir}
 }
 
-func writeFile(args []object.Object, defs map[string]object.Object) object.Object {
+func writeFile(args []object.VintObject, defs map[string]object.VintObject) object.VintObject {
 	if len(args) != 2 {
 		return ErrorMessage(
 			"os", "writeFile",
@@ -261,7 +261,7 @@ func writeFile(args []object.Object, defs map[string]object.Object) object.Objec
 	return &object.String{Value: "File written successfully"}
 }
 
-func listDir(args []object.Object, defs map[string]object.Object) object.Object {
+func listDir(args []object.VintObject, defs map[string]object.VintObject) object.VintObject {
 	if len(args) != 1 {
 		return ErrorMessage(
 			"os", "listDir",
@@ -294,7 +294,7 @@ func listDir(args []object.Object, defs map[string]object.Object) object.Object 
 	return &object.String{Value: strings.Join(fileList, ", ")}
 }
 
-func deleteFile(args []object.Object, defs map[string]object.Object) object.Object {
+func deleteFile(args []object.VintObject, defs map[string]object.VintObject) object.VintObject {
 	if len(args) != 1 {
 		return ErrorMessage(
 			"os", "deleteFile",
@@ -324,7 +324,7 @@ func deleteFile(args []object.Object, defs map[string]object.Object) object.Obje
 
 // This makeDir method Still has an issue with what
 // path the new dir is saved will fix this
-func makeDir(args []object.Object, defs map[string]object.Object) object.Object {
+func makeDir(args []object.VintObject, defs map[string]object.VintObject) object.VintObject {
 	if len(args) != 1 {
 		return ErrorMessage(
 			"os", "makeDir",
@@ -352,7 +352,7 @@ func makeDir(args []object.Object, defs map[string]object.Object) object.Object 
 	return &object.String{Value: "Directory created successfully"}
 }
 
-func removeDir(args []object.Object, defs map[string]object.Object) object.Object {
+func removeDir(args []object.VintObject, defs map[string]object.VintObject) object.VintObject {
 	if len(args) != 1 {
 		return ErrorMessage(
 			"os", "removeDir",
@@ -380,7 +380,7 @@ func removeDir(args []object.Object, defs map[string]object.Object) object.Objec
 	return &object.String{Value: "Directory removed successfully"}
 }
 
-func currentDir(args []object.Object, defs map[string]object.Object) object.Object {
+func currentDir(args []object.VintObject, defs map[string]object.VintObject) object.VintObject {
 	if len(args) != 0 {
 		return ErrorMessage(
 			"os", "currentDir",
@@ -398,7 +398,7 @@ func currentDir(args []object.Object, defs map[string]object.Object) object.Obje
 	return &object.String{Value: dir}
 }
 
-func changeDir(args []object.Object, defs map[string]object.Object) object.Object {
+func changeDir(args []object.VintObject, defs map[string]object.VintObject) object.VintObject {
 	if len(args) != 1 {
 		return ErrorMessage(
 			"os", "changeDir",
@@ -426,7 +426,7 @@ func changeDir(args []object.Object, defs map[string]object.Object) object.Objec
 	return &object.String{Value: "Directory changed successfully"}
 }
 
-func fileExists(args []object.Object, defs map[string]object.Object) object.Object {
+func fileExists(args []object.VintObject, defs map[string]object.VintObject) object.VintObject {
 	if len(args) != 1 {
 		return ErrorMessage(
 			"os", "fileExists",
@@ -453,7 +453,7 @@ func fileExists(args []object.Object, defs map[string]object.Object) object.Obje
 	return &object.Boolean{Value: true}
 }
 
-func readLines(args []object.Object, defs map[string]object.Object) object.Object {
+func readLines(args []object.VintObject, defs map[string]object.VintObject) object.VintObject {
 	if len(args) != 1 {
 		return ErrorMessage(
 			"os", "readLines",
@@ -479,7 +479,7 @@ func readLines(args []object.Object, defs map[string]object.Object) object.Objec
 	}
 
 	lines := strings.Split(string(content), "\n")
-	lineObjects := make([]object.Object, len(lines))
+	lineObjects := make([]object.VintObject, len(lines))
 	for i, line := range lines {
 		lineObjects[i] = &object.String{Value: line}
 	}
@@ -488,7 +488,7 @@ func readLines(args []object.Object, defs map[string]object.Object) object.Objec
 }
 
 // unsetEnv removes an environment variable
-func unsetEnv(args []object.Object, defs map[string]object.Object) object.Object {
+func unsetEnv(args []object.VintObject, defs map[string]object.VintObject) object.VintObject {
 	if len(args) != 1 {
 		return ErrorMessage(
 			"os", "unsetEnv",
@@ -526,7 +526,7 @@ func unsetEnv(args []object.Object, defs map[string]object.Object) object.Object
 }
 
 // homedir returns the user's home directory
-func homedir(args []object.Object, defs map[string]object.Object) object.Object {
+func homedir(args []object.VintObject, defs map[string]object.VintObject) object.VintObject {
 	if len(args) != 0 {
 		return ErrorMessage(
 			"os", "homedir",
@@ -545,7 +545,7 @@ func homedir(args []object.Object, defs map[string]object.Object) object.Object 
 }
 
 // tmpdir returns the system's temporary directory
-func tmpdir(args []object.Object, defs map[string]object.Object) object.Object {
+func tmpdir(args []object.VintObject, defs map[string]object.VintObject) object.VintObject {
 	if len(args) != 0 {
 		return ErrorMessage(
 			"os", "tmpdir",
@@ -560,7 +560,7 @@ func tmpdir(args []object.Object, defs map[string]object.Object) object.Object {
 }
 
 // cpuCount returns the number of logical CPUs
-func cpuCount(args []object.Object, defs map[string]object.Object) object.Object {
+func cpuCount(args []object.VintObject, defs map[string]object.VintObject) object.VintObject {
 	if len(args) != 0 {
 		return ErrorMessage(
 			"os", "cpuCount",
@@ -575,7 +575,7 @@ func cpuCount(args []object.Object, defs map[string]object.Object) object.Object
 }
 
 // hostname returns the system's hostname
-func hostname(args []object.Object, defs map[string]object.Object) object.Object {
+func hostname(args []object.VintObject, defs map[string]object.VintObject) object.VintObject {
 	if len(args) != 0 {
 		return ErrorMessage(
 			"os", "hostname",
@@ -594,7 +594,7 @@ func hostname(args []object.Object, defs map[string]object.Object) object.Object
 }
 
 // copyFile copies a file from source to destination
-func copyFile(args []object.Object, defs map[string]object.Object) object.Object {
+func copyFile(args []object.VintObject, defs map[string]object.VintObject) object.VintObject {
 	if len(args) != 2 {
 		return ErrorMessage(
 			"os", "copy",
@@ -636,7 +636,7 @@ func copyFile(args []object.Object, defs map[string]object.Object) object.Object
 }
 
 // moveFile moves or renames a file from source to destination
-func moveFile(args []object.Object, defs map[string]object.Object) object.Object {
+func moveFile(args []object.VintObject, defs map[string]object.VintObject) object.VintObject {
 	if len(args) != 2 {
 		return ErrorMessage(
 			"os", "move",

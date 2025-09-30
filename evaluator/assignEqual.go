@@ -7,7 +7,7 @@ import (
 	"github.com/vintlang/vintlang/object"
 )
 
-func evalAssignEqual(node *ast.AssignEqual, env *object.Environment) object.Object {
+func evalAssignEqual(node *ast.AssignEqual, env *object.Environment) object.VintObject {
 	left := Eval(node.Left, env)
 	if isError(left) {
 		return left
@@ -18,7 +18,7 @@ func evalAssignEqual(node *ast.AssignEqual, env *object.Environment) object.Obje
 		return value
 	}
 
-	assign := func(val object.Object) object.Object {
+	assign := func(val object.VintObject) object.VintObject {
 		newVal, ok := env.Assign(node.Left.Token.Literal, val)
 		if !ok {
 			return newError("assignment to undeclared variable '%s'", node.Left.Token.Literal)

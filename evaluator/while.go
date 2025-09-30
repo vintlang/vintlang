@@ -5,9 +5,9 @@ import (
 	"github.com/vintlang/vintlang/object"
 )
 
-func evalWhileExpression(we *ast.WhileExpression, env *object.Environment) object.Object {
+func evalWhileExpression(we *ast.WhileExpression, env *object.Environment) object.VintObject {
 	condition := Eval(we.Condition, env)
-	var evaluated object.Object
+	var evaluated object.VintObject
 	if isError(condition) {
 		return condition
 	}

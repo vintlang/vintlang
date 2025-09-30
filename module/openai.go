@@ -18,7 +18,7 @@ func init() {
 }
 
 // chat sends a chat completion request to OpenAI's API
-func chat(args []object.Object, defs map[string]object.Object) object.Object {
+func chat(args []object.VintObject, defs map[string]object.VintObject) object.VintObject {
 	if len(args) != 2 {
 		return &object.Error{Message: "Usage: chat(api_key, message)"}
 	}
@@ -80,7 +80,7 @@ func chat(args []object.Object, defs map[string]object.Object) object.Object {
 }
 
 // complete sends a simple text completion request to OpenAI's API
-func complete(args []object.Object, defs map[string]object.Object) object.Object {
+func complete(args []object.VintObject, defs map[string]object.VintObject) object.VintObject {
 	if len(args) != 2 {
 		return &object.Error{Message: "Usage: complete(api_key, prompt)"}
 	}
@@ -93,8 +93,8 @@ func complete(args []object.Object, defs map[string]object.Object) object.Object
 	}
 
 	requestBody := map[string]interface{}{
-		"model":  "text-davinci-003",
-		"prompt": prompt.Value,
+		"model":      "text-davinci-003",
+		"prompt":     prompt.Value,
 		"max_tokens": 100,
 	}
 

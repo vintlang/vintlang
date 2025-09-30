@@ -17,7 +17,7 @@ func init() {
 	RandomFunctions["choice"] = randomChoice
 }
 
-func randomInt(args []object.Object, defs map[string]object.Object) object.Object {
+func randomInt(args []object.VintObject, defs map[string]object.VintObject) object.VintObject {
 	if len(args) != 2 || args[0].Type() != object.INTEGER_OBJ || args[1].Type() != object.INTEGER_OBJ {
 		return ErrorMessage(
 			"random",
@@ -32,7 +32,7 @@ func randomInt(args []object.Object, defs map[string]object.Object) object.Objec
 	return &object.Integer{Value: int64(rand.Intn(max-min+1) + min)}
 }
 
-func randomFloat(args []object.Object, defs map[string]object.Object) object.Object {
+func randomFloat(args []object.VintObject, defs map[string]object.VintObject) object.VintObject {
 	if len(args) != 0 {
 		return ErrorMessage(
 			"random",
@@ -47,7 +47,7 @@ func randomFloat(args []object.Object, defs map[string]object.Object) object.Obj
 
 const letterBytes = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
 
-func randomString(args []object.Object, defs map[string]object.Object) object.Object {
+func randomString(args []object.VintObject, defs map[string]object.VintObject) object.VintObject {
 	if len(args) != 1 || args[0].Type() != object.INTEGER_OBJ {
 		return ErrorMessage(
 			"random",
@@ -65,7 +65,7 @@ func randomString(args []object.Object, defs map[string]object.Object) object.Ob
 	return &object.String{Value: string(b)}
 }
 
-func randomChoice(args []object.Object, defs map[string]object.Object) object.Object {
+func randomChoice(args []object.VintObject, defs map[string]object.VintObject) object.VintObject {
 	if len(args) != 1 || args[0].Type() != object.ARRAY_OBJ {
 		return ErrorMessage(
 			"random",

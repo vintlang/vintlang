@@ -17,7 +17,7 @@ func TestEnterpriseHTTPFeatures(t *testing.T) {
 	currentApp = nil
 
 	// Test app creation
-	_ = createApp([]object.Object{}, map[string]object.Object{})
+	_ = createApp([]object.VintObject{}, map[string]object.VintObject{})
 	if currentApp == nil {
 		t.Fatal("Expected currentApp to be created")
 	}
@@ -43,8 +43,8 @@ func TestRouteGrouping(t *testing.T) {
 		Env:        nil,
 	}
 
-	result := createRouteGroup([]object.Object{prefix, groupFunc}, map[string]object.Object{})
-	
+	result := createRouteGroup([]object.VintObject{prefix, groupFunc}, map[string]object.VintObject{})
+
 	if result.Type() != object.STRING_OBJ {
 		t.Errorf("Expected string result, got %T", result)
 	}
@@ -58,17 +58,17 @@ func TestMultipartParsing(t *testing.T) {
 	// Create a multipart form request
 	var buf bytes.Buffer
 	writer := multipart.NewWriter(&buf)
-	
+
 	// Add form field
 	writer.WriteField("username", "testuser")
-	
+
 	// Add file
 	fileWriter, err := writer.CreateFormFile("avatar", "test.txt")
 	if err != nil {
 		t.Fatal(err)
 	}
 	fileWriter.Write([]byte("test file content"))
-	
+
 	writer.Close()
 
 	// Create HTTP request
@@ -85,8 +85,8 @@ func TestMultipartParsing(t *testing.T) {
 	httpReq := object.NewHTTPRequest(req)
 
 	// Test multipart parsing
-	result := parseMultipart([]object.Object{httpReq}, map[string]object.Object{})
-	
+	result := parseMultipart([]object.VintObject{httpReq}, map[string]object.VintObject{})
+
 	if result.Type() == object.ERROR_OBJ {
 		t.Errorf("Got error: %s", result.Inspect())
 		return
@@ -117,8 +117,8 @@ func TestAsyncHandler(t *testing.T) {
 		Env:  nil,
 	}
 
-	result := createAsyncHandler([]object.Object{handler}, map[string]object.Object{})
-	
+	result := createAsyncHandler([]object.VintObject{handler}, map[string]object.VintObject{})
+
 	asyncHandler, ok := result.(*object.Function)
 	if !ok {
 		t.Errorf("Expected Function result, got %T", result)
@@ -132,8 +132,8 @@ func TestAsyncHandler(t *testing.T) {
 func TestSecurityMiddleware(t *testing.T) {
 	currentApp = object.NewHTTPApp()
 
-	result := securityMiddleware([]object.Object{}, map[string]object.Object{})
-	
+	result := securityMiddleware([]object.VintObject{}, map[string]object.VintObject{})
+
 	if result.Type() != object.STRING_OBJ {
 		t.Errorf("Expected string result, got %T", result)
 	}
@@ -182,19 +182,19 @@ func TestFileUploadMethods(t *testing.T) {
 	}
 
 	// Test name method
-	nameResult := file.Method("name", []object.Object{})
+	nameResult := file.Method("name", []object.VintObject{})
 	if nameStr, ok := nameResult.(*object.String); !ok || nameStr.Value != "test.txt" {
 		t.Errorf("Expected name 'test.txt', got %v", nameResult)
 	}
 
 	// Test size method
-	sizeResult := file.Method("size", []object.Object{})
+	sizeResult := file.Method("size", []object.VintObject{})
 	if sizeInt, ok := sizeResult.(*object.Integer); !ok || sizeInt.Value != 100 {
 		t.Errorf("Expected size 100, got %v", sizeResult)
 	}
 
 	// Test type method
-	typeResult := file.Method("type", []object.Object{})
+	typeResult := file.Method("type", []object.VintObject{})
 	if typeStr, ok := typeResult.(*object.String); !ok || typeStr.Value != "text/plain" {
 		t.Errorf("Expected type 'text/plain', got %v", typeResult)
 	}
@@ -214,8 +214,8 @@ func TestRequestFileAccess(t *testing.T) {
 
 	// Test file method
 	fileName := &object.String{Value: "avatar"}
-	result := req.Method("file", []object.Object{fileName})
-	
+	result := req.Method("file", []object.VintObject{fileName})
+
 	if file, ok := result.(*object.UploadedFile); !ok {
 		t.Errorf("Expected UploadedFile, got %T", result)
 	} else if file.Name != "avatar.jpg" {
@@ -223,7 +223,7 @@ func TestRequestFileAccess(t *testing.T) {
 	}
 
 	// Test files method
-	filesResult := req.Method("files", []object.Object{})
+	filesResult := req.Method("files", []object.VintObject{})
 	if filesResult.Type() != object.STRING_OBJ {
 		t.Errorf("Expected string result for files method, got %T", filesResult)
 	}
@@ -248,7 +248,7 @@ func TestSecurityHeaders(t *testing.T) {
 
 	// Check security headers
 	headers := w.Header()
-	
+
 	expectedHeaders := map[string]string{
 		"X-Content-Type-Options": "nosniff",
 		"X-Frame-Options":        "DENY",
@@ -273,7 +273,7 @@ func TestCORSConfiguration(t *testing.T) {
 
 	// Check CORS headers
 	headers := w.Header()
-	
+
 	if origin := headers.Get("Access-Control-Allow-Origin"); origin != "*" {
 		t.Errorf("Expected CORS origin '*', got '%s'", origin)
 	}
@@ -293,8 +293,8 @@ func TestStreamingHandler(t *testing.T) {
 		Env:  nil,
 	}
 
-	result := createStreamHandler([]object.Object{handler}, map[string]object.Object{})
-	
+	result := createStreamHandler([]object.VintObject{handler}, map[string]object.VintObject{})
+
 	streamHandler, ok := result.(*object.Function)
 	if !ok {
 		t.Errorf("Expected Function result, got %T", result)
@@ -308,8 +308,8 @@ func TestStreamingHandler(t *testing.T) {
 func TestMetricsEnable(t *testing.T) {
 	currentApp = object.NewHTTPApp()
 
-	result := enableMetrics([]object.Object{}, map[string]object.Object{})
-	
+	result := enableMetrics([]object.VintObject{}, map[string]object.VintObject{})
+
 	if result.Type() != object.STRING_OBJ {
 		t.Errorf("Expected string result, got %T", result)
 	}
@@ -344,7 +344,7 @@ func TestPerformanceHeaders(t *testing.T) {
 
 	// Check performance headers
 	headers := w.Header()
-	
+
 	if requestStart := headers.Get("X-Request-Start"); requestStart == "" {
 		t.Error("Expected X-Request-Start header to be set")
 	}

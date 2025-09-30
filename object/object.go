@@ -10,41 +10,41 @@ type ObjectType string
 
 // Constants for object types
 const (
-	INTEGER_OBJ      = "INTEGER"
-	FLOAT_OBJ        = "FLOAT"
-	BOOLEAN_OBJ      = "BOOLEAN"
-	NULL_OBJ         = "NULL"
-	RETURN_VALUE_OBJ = "RETURN_VALUE"
-	ERROR_OBJ        = "ERROR"
-	FUNCTION_OBJ     = "FUNCTION"
-	STRING_OBJ       = "STRING"
-	BUILTIN_OBJ      = "BUILTIN"
-	ARRAY_OBJ        = "ARRAY"
-	DICT_OBJ         = "DICT"
-	CONTINUE_OBJ     = "CONTINUE"
-	BREAK_OBJ        = "BREAK"
-	FILE_OBJ         = "FILE"
-	TIME_OBJ         = "TIME"
-	DURATION_OBJ     = "DURATION"
-	JSON_OBJ         = "JSON"
-	MODULE_OBJ       = "MODULE"
-	BYTE_OBJ         = "BYTE"
-	PACKAGE_OBJ      = "PACKAGE"
-	INSTANCE         = "INSTANCE"
-	NATIVE_OBJ       = "NATIVE_OBJ"
-	POINTER_OBJ      = "POINTER"
-	AT               = "@"
+	INTEGER_OBJ       = "INTEGER"
+	FLOAT_OBJ         = "FLOAT"
+	BOOLEAN_OBJ       = "BOOLEAN"
+	NULL_OBJ          = "NULL"
+	RETURN_VALUE_OBJ  = "RETURN_VALUE"
+	ERROR_OBJ         = "ERROR"
+	FUNCTION_OBJ      = "FUNCTION"
+	STRING_OBJ        = "STRING"
+	BUILTIN_OBJ       = "BUILTIN"
+	ARRAY_OBJ         = "ARRAY"
+	DICT_OBJ          = "DICT"
+	CONTINUE_OBJ      = "CONTINUE"
+	BREAK_OBJ         = "BREAK"
+	FILE_OBJ          = "FILE"
+	TIME_OBJ          = "TIME"
+	DURATION_OBJ      = "DURATION"
+	JSON_OBJ          = "JSON"
+	MODULE_OBJ        = "MODULE"
+	BYTE_OBJ          = "BYTE"
+	PACKAGE_OBJ       = "PACKAGE"
+	INSTANCE          = "INSTANCE"
+	NATIVE_OBJ        = "NATIVE_OBJ"
+	POINTER_OBJ       = "POINTER"
+	AT                = "@"
 	DEFERRED_CALL_OBJ = "DEFERRED_CALL"
-	
+
 	// Async/Concurrency Objects
-	PROMISE_OBJ      = "PROMISE"
-	CHANNEL_OBJ      = "CHANNEL"
-	ASYNC_FUNC_OBJ   = "ASYNC_FUNCTION"
-	
+	PROMISE_OBJ    = "PROMISE"
+	CHANNEL_OBJ    = "CHANNEL"
+	ASYNC_FUNC_OBJ = "ASYNC_FUNCTION"
+
 	// Custom Error Objects
 	CUSTOM_ERROR_OBJ = "CUSTOM_ERROR"
 	ERROR_TYPE_OBJ   = "ERROR_TYPE"
-	
+
 	// HTTP Objects
 	HTTP_APP_OBJ      = "HTTP_APP"
 	HTTP_REQUEST_OBJ  = "HTTP_REQUEST"
@@ -52,8 +52,8 @@ const (
 	UPLOADED_FILE_OBJ = "UPLOADED_FILE"
 )
 
-// Object interface represents any object in the system
-type Object interface {
+// VintObject interface represents any object in the system
+type VintObject interface {
 	Type() ObjectType
 	Inspect() string
 }
@@ -71,7 +71,7 @@ type Hashable interface {
 
 // Iterable interface supports iteration for collections like dicts, strings, and arrays
 type Iterable interface {
-	Next() (Object, Object)
+	Next() (VintObject, VintObject)
 	Reset()
 }
 
@@ -84,8 +84,8 @@ func newError(format string, a ...interface{}) *Error {
 // DeferredCall represents a function call that has been deferred
 
 type DeferredCall struct {
-	Fn   Object
-	Args []Object
+	Fn   VintObject
+	Args []VintObject
 }
 
 func (dc *DeferredCall) Type() ObjectType { return DEFERRED_CALL_OBJ }
@@ -107,7 +107,7 @@ func (et *ErrorType) Inspect() string {
 // CustomError represents an instance of a custom error type
 type CustomError struct {
 	ErrorType *ErrorType
-	Arguments []Object
+	Arguments []VintObject
 }
 
 func (ce *CustomError) Type() ObjectType { return CUSTOM_ERROR_OBJ }
@@ -116,6 +116,6 @@ func (ce *CustomError) Inspect() string {
 	for _, arg := range ce.Arguments {
 		args = append(args, arg.Inspect())
 	}
-	return fmt.Sprintf("\x1b[1;31m%s:\x1b[0m %s(%s)", 
+	return fmt.Sprintf("\x1b[1;31m%s:\x1b[0m %s(%s)",
 		ce.ErrorType.Name, ce.ErrorType.Name, strings.Join(args, ", "))
 }

@@ -65,7 +65,7 @@ func runVmTests(t *testing.T, tests []vmTestCase) {
 func testExpectedObject(
 	t *testing.T,
 	expected interface{},
-	actual object.Object,
+	actual object.VintObject,
 ) {
 	t.Helper()
 
@@ -83,7 +83,7 @@ func testExpectedObject(
 	}
 }
 
-func testIntegerObject(expected int64, actual object.Object) error {
+func testIntegerObject(expected int64, actual object.VintObject) error {
 	result, ok := actual.(*object.Integer)
 	if !ok {
 		return fmt.Errorf("object is not Integer. got=%T (%+v)",
@@ -98,7 +98,7 @@ func testIntegerObject(expected int64, actual object.Object) error {
 	return nil
 }
 
-func testBooleanObject(expected bool, actual object.Object) error {
+func testBooleanObject(expected bool, actual object.VintObject) error {
 	result, ok := actual.(*object.Boolean)
 	if !ok {
 		return fmt.Errorf("object is not Boolean. got=%T (%+v)",
@@ -118,4 +118,3 @@ func parse(input string) *ast.Program {
 	p := parser.New(l)
 	return p.ParseProgram()
 }
- 

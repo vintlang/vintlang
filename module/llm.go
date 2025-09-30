@@ -67,7 +67,7 @@ var LLMFunctions = map[string]object.ModuleFunction{
 }
 
 // llmChat is the VintLang wrapper for OpenAI chat
-func llmChat(args []object.Object, defs map[string]object.Object) object.Object {
+func llmChat(args []object.VintObject, defs map[string]object.VintObject) object.VintObject {
 	if len(args) < 1 {
 		return &object.Error{Message: "llm.chat expects at least 1 argument (messages)"}
 	}
@@ -116,7 +116,7 @@ func llmChat(args []object.Object, defs map[string]object.Object) object.Object 
 }
 
 // llmCompletion is the VintLang wrapper for OpenAI completion
-func llmCompletion(args []object.Object, defs map[string]object.Object) object.Object {
+func llmCompletion(args []object.VintObject, defs map[string]object.VintObject) object.VintObject {
 	if len(args) < 1 {
 		return &object.Error{Message: "llm.completion expects at least 1 argument (prompt)"}
 	}

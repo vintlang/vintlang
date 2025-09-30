@@ -5,7 +5,7 @@ import (
 	"github.com/vintlang/vintlang/object"
 )
 
-func evalDictLiteral(node *ast.DictLiteral, env *object.Environment) object.Object {
+func evalDictLiteral(node *ast.DictLiteral, env *object.Environment) object.VintObject {
 	// Create a map to store key-value pairs for the dictionary
 	pairs := make(map[object.HashKey]object.DictPair)
 

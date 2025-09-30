@@ -2,7 +2,7 @@ package evaluator
 
 import "github.com/vintlang/vintlang/object"
 
-func evalBangOperatorExpression(right object.Object) object.Object {
+func evalBangOperatorExpression(right object.VintObject) object.VintObject {
 	switch right {
 	case TRUE:
 		return FALSE

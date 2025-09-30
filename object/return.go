@@ -1,7 +1,7 @@
 package object
 
 type ReturnValue struct {
-	Value Object
+	Value VintObject
 }
 
 func (rv *ReturnValue) Inspect() string  { return rv.Value.Inspect() }
