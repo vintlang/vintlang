@@ -6,5 +6,13 @@ clipboard.write("Hello World")
 let content = clipboard.read()
 println("Read from clipboard:", content)
 
+// Test the new 'all' method
+let allContent = clipboard.all()
+println("All clipboard content:", allContent)
+
 clipboard.clear()
 println("Clipboard cleared successfully")
+
+// Test 'all' method with empty clipboard
+let emptyContent = clipboard.all()
+println("All clipboard content after clear:", emptyContent)

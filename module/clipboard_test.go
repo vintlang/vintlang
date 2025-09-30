@@ -185,3 +185,56 @@ func TestClipboardHasContentInvalidArgs(t *testing.T) {
 		t.Errorf("Expected error for arguments, got %T", result)
 	}
 }
+
+func TestClipboardAll(t *testing.T) {
+	// First write something to clipboard
+	writeArgs := []object.Object{
+		&object.String{Value: "test all content"},
+	}
+	clipboardWrite(writeArgs, map[string]object.Object{})
+
+	// Test the all method
+	result := clipboardAll([]object.Object{}, map[string]object.Object{})
+
+	if result.Type() == object.ERROR_OBJ {
+		t.Errorf("Expected success, got error: %s", result.(*object.Error).Message)
+	}
+
+	if arrayResult, ok := result.(*object.Array); !ok {
+		t.Errorf("Expected array result, got %T", result)
+	} else if len(arrayResult.Elements) != 1 {
+		t.Errorf("Expected array with 1 element, got %d elements", len(arrayResult.Elements))
+	} else if stringElement, ok := arrayResult.Elements[0].(*object.String); !ok {
+		t.Errorf("Expected string element, got %T", arrayResult.Elements[0])
+	} else if stringElement.Value != "test all content" {
+		t.Errorf("Expected 'test all content', got '%s'", stringElement.Value)
+	}
+}
+
+func TestClipboardAllEmpty(t *testing.T) {
+	// Clear clipboard first
+	clipboardClear([]object.Object{}, map[string]object.Object{})
+
+	// Test all method with empty clipboard
+	result := clipboardAll([]object.Object{}, map[string]object.Object{})
+
+	if result.Type() == object.ERROR_OBJ {
+		t.Errorf("Expected success, got error: %s", result.(*object.Error).Message)
+	}
+
+	if arrayResult, ok := result.(*object.Array); !ok {
+		t.Errorf("Expected array result, got %T", result)
+	} else if len(arrayResult.Elements) != 0 {
+		t.Errorf("Expected empty array, got %d elements", len(arrayResult.Elements))
+	}
+}
+
+func TestClipboardAllInvalidArgs(t *testing.T) {
+	// Test with arguments (should accept none)
+	result := clipboardAll([]object.Object{
+		&object.String{Value: "unexpected"},
+	}, map[string]object.Object{})
+	if result.Type() != object.ERROR_OBJ {
+		t.Errorf("Expected error for arguments, got %T", result)
+	}
+}
