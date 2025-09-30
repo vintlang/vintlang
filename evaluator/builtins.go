@@ -31,7 +31,7 @@ func handlePrint(w io.Writer, args []object.Object, addNewline bool) object.Obje
 }
 
 var builtins = map[string]*object.Builtin{
-	"@import": { //TODO: in the future turn this this '@'
+	"import": {
 		Fn: func(args ...object.Object) object.Object {
 			if len(args) != 1 {
 				return newError("Function '@import()' requires exactly 1 argument, got %d", len(args))
