@@ -1,0 +1,42 @@
+import clipboard
+
+println("=== Clipboard Module Complete Test ===")
+
+// Test write and read
+clipboard.write("Hello VintLang!")
+println("1. Written text:", clipboard.read())
+
+// Test all method with content
+let allContent = clipboard.all()
+println("2. All content (array):", allContent)
+
+// Test hasContent
+if (clipboard.hasContent()) {
+    println("3. Clipboard has content: true")
+}
+
+// Test with different data types
+clipboard.write(42)
+println("4. Number in clipboard:", clipboard.read())
+println("   All content:", clipboard.all())
+
+clipboard.write(3.14159)
+println("5. Float in clipboard:", clipboard.read())
+println("   All content:", clipboard.all())
+
+clipboard.write(true)
+println("6. Boolean in clipboard:", clipboard.read())
+println("   All content:", clipboard.all())
+
+// Test clear and all method with empty clipboard
+clipboard.clear()
+println("7. Clipboard cleared")
+
+let emptyAll = clipboard.all()
+println("8. All content after clear:", emptyAll)
+
+if ((clipboard.hasContent())) {
+    println("9. Still has content")
+}
+
+println("=== All tests completed successfully! ===")
