@@ -228,7 +228,17 @@ func (l *Lexer) NextToken() token.Token {
 	default:
 		if isLetter(l.ch) {
 			tok.Literal = l.readIdentifier()
-			tok.Type = token.LookupIdent(tok.Literal)
+			// Special handling for import() - check if followed by (
+			if tok.Literal == "import" {
+				// We look ahead to see if this is import( function call
+				if l.peekNextNonWhitespace() == '(' {
+					tok.Type = token.IDENT // We Treat as identifier for function call
+				} else {
+					tok.Type = token.IMPORT // We Treat as import statement keyword
+				}
+			} else {
+				tok.Type = token.LookupIdent(tok.Literal)
+			}
 			tok.Line = l.line
 			return tok
 		} else if isDigit(l.ch) && isLetter(l.peekChar()) {
@@ -320,6 +330,31 @@ func (l *Lexer) skipWhitespace() {
 		}
 		l.readChar()
 	}
+}
+
+func (l *Lexer) peekNextNonWhitespace() rune {
+	// Save current position
+	savedPosition := l.position
+	savedReadPosition := l.readPosition
+	savedCh := l.ch
+	savedLine := l.line
+	savedColumn := l.column
+
+	// Skip whitespace and look for next non-whitespace character
+	for l.ch == ' ' || l.ch == '\t' || l.ch == '\n' || l.ch == '\r' {
+		l.readChar()
+	}
+
+	result := l.ch
+
+	// Restore position
+	l.position = savedPosition
+	l.readPosition = savedReadPosition
+	l.ch = savedCh
+	l.line = savedLine
+	l.column = savedColumn
+
+	return result
 }
 
 func isDigit(ch rune) bool {
