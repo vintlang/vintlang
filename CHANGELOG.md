@@ -1,6 +1,194 @@
-# Changelog - [August-2025]
+# Changelog
 
-## [Unreleased] – Recent Major & Minor Updates
+## [September-2025] – Major Refactoring & New Features
+
+### Major Refactoring (September 30, 2025)
+
+- **Builtin Functions Restructuring**
+  Complete refactoring of the builtin functions system from a monolithic structure to a modular, maintainable architecture:
+  - Split 800+ lines `builtins.go` into 9 categorized files under `evaluator/builtins/`
+  - Implemented centralized registration system with automatic function discovery
+  - Moved specialized functions to appropriate modules for better organization
+  - Created comprehensive developer documentation for the new structure
+  
+  **New Structure:**
+  ```
+  evaluator/builtins/
+  ├── registry.go         # Central registration system
+  ├── helpers.go          # Common helper functions  
+  ├── core.go            # Essential functions (print, len, type, input)
+  ├── io.go              # I/O functions (open, write)
+  ├── type_conversion.go # Type conversion functions
+  ├── logic.go           # Logic operations (and, or, not, xor, etc.)
+  ├── arrays.go          # Array manipulation functions
+  ├── dict.go            # Dictionary operations
+  ├── system.go          # System functions (exit, sleep, args)
+  ├── channels.go        # Channel operations
+  └── imports.go         # Import functions
+  ```
+  
+  **Benefits:**
+  - Better maintainability with small, focused files
+  - Reduced merge conflicts for multi-developer work
+  - Clear guidelines for adding new functions
+  - Improved code organization and navigation
+  - Backward compatibility maintained - no breaking changes
+
+### New Features (September 2025)
+
+- **Dynamic Import Function**
+  Added `import()` builtin function for runtime module importing:
+  - Syntax: `import("module_name")` - dynamically loads built-in modules at runtime
+  - Supports all existing built-in modules (os, math, string, etc.)
+  - Enhanced lexer with lookahead capabilities for better parsing
+  - Comprehensive error handling and validation
+  - Works alongside traditional `import` statements
+  
+  **Sample:**
+  ```js
+  let os_module = import("os")
+  let current_dir = os_module.Functions["getwd"]([])
+  
+  let math_module = import("math")
+  let result = math_module.Functions["abs"]([-5])
+  ```
+
+- **YAML Module**
+  Complete YAML processing capabilities with comprehensive functionality:
+  - `yaml.decode(yamlString)` - parses YAML strings into VintLang objects
+  - `yaml.encode(object)` - converts VintLang objects to YAML format
+  - `yaml.merge(yaml1, yaml2)` - merges two YAML objects
+  - `yaml.get(yamlObj, key)` - retrieves values from YAML objects with dot notation
+  - Support for complex nested structures, arrays, and mappings
+  - Proper error handling for malformed YAML
+  - Integration with existing file I/O for YAML file processing
+  
+  **Sample:**
+  ```js
+  import yaml
+  
+  let config_yaml = `
+  database:
+    host: localhost
+    port: 5432
+  features:
+    - authentication
+    - logging
+  `
+  
+  let config = yaml.decode(config_yaml)
+  let db_host = yaml.get(config, "database.host")  // "localhost"
+  let features = yaml.get(config, "features")      // ["authentication", "logging"]
+  
+  // Modify and encode back
+  config["environment"] = "production"
+  let output_yaml = yaml.encode(config)
+  ```
+
+- **Enhanced String Module**
+  Added new string manipulation functions moved from builtins:
+  - `string.startsWith(str, prefix)` - checks if string starts with prefix
+  - `string.endsWith(str, suffix)` - checks if string ends with suffix
+  - `string.chr(code)` - converts ASCII/Unicode code to character
+  - `string.ord(char)` - converts character to ASCII/Unicode code
+  - Better integration with existing string functions
+  - Consistent error handling and validation
+  
+  **Sample:**
+  ```js
+  import string
+  
+  println(string.startsWith("hello world", "hello"))  // true
+  println(string.endsWith("hello world", "world"))    // true
+  println(string.chr(65))                             // "A"
+  println(string.ord("A"))                            // 65
+  ```
+
+- **Enhanced Reflect Module**
+  Expanded runtime type inspection capabilities:
+  - Enhanced existing functions: `typeOf`, `valueOf`, `isNil`, `isArray`, `isObject`, `isFunction`
+  - Better error messages and validation
+  - Improved integration with the new builtin system
+  - Comprehensive type checking for all VintLang data types
+  
+  **Sample:**
+  ```js
+  import reflect
+  
+  let arr = [1, 2, 3]
+  println(reflect.typeOf(arr))    // "ARRAY"
+  println(reflect.isArray(arr))   // true
+  println(reflect.isNil(null))    // true
+  ```
+
+### Language Improvements
+
+- **For Loop Enhancements**
+  Improved for..in loop functionality with better iteration handling:
+  - Implemented `IsolatedIterator` for safe nested iteration
+  - Enhanced error messages for iteration issues
+  - Better handling of different iterable types
+  - Improved loop variable scoping and safety
+  - Fixed edge cases in nested loop scenarios
+
+- **Documentation System**
+  Enhanced embedded documentation support:
+  - Interactive documentation command in REPL
+  - Embedded docs in binary for offline access
+  - Improved documentation generation and categorization
+  - Better help system integration
+  - Streamlined documentation structure
+
+### Error Handling & Developer Experience
+
+- **Enhanced Error Messages**
+  Comprehensive improvements to error reporting across the language:
+  - Added filename support to lexer, parser, and REPL
+  - Enhanced column and line tracking for precise error location
+  - Improved error messages for type mismatches and operations
+  - Better context in error messages with code snippets
+  - Structured error handling throughout the codebase
+
+- **Code Quality Improvements**
+  Extensive refactoring and cleanup:
+  - Standardized function declarations to use `let` syntax
+  - Improved variable naming consistency
+  - Enhanced code formatting and whitespace handling
+  - Better separation of concerns in modules
+  - Removed outdated and obsolete files
+
+### Bug Fixes
+
+- **Import System Fixes**
+  - Fixed import statement parsing and evaluation
+  - Improved module loading reliability
+  - Better error handling for missing modules
+  - Enhanced import path resolution
+
+- **Loop and Control Flow**
+  - Fixed for..in loop edge cases and nested iteration issues
+  - Improved control flow handling in various scenarios
+  - Better variable scoping in loops and functions
+
+- **Documentation and Examples**
+  - Updated examples to use current syntax and best practices
+  - Fixed various syntax issues in example code
+  - Improved consistency across code samples
+
+### Development Tools
+
+- **Bundler Improvements**
+  - Enhanced bundler architecture with better string processing
+  - Improved package processing capabilities
+  - Added bundler visualization and documentation
+  - Better integration with the overall build system
+
+- **VSCode Extension**
+  - Added VSCode extension as submodule for better integration
+  - Improved development workflow
+  - Better syntax highlighting and language support
+
+## [August-2025] – Previous Major & Minor Updates
 
 ### New Features (Week of August 9, 2025)
 
