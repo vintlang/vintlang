@@ -1,6 +1,10 @@
-// Simple string manipulation and message printing
+// Simple demo vint code
 // import greetings_module
 import time
+
+const sysInfo = import("sysinfo")
+
+println("Operating System:", sysInfo.os())
 
 let x = 42
 
