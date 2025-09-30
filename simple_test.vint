@@ -1,3 +1,0 @@
-println("Testing basic len function");
-let result = len("hello");
-println("Length:", result);

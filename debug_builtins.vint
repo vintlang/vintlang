@@ -1,4 +1,0 @@
-println("Available builtins test");
-println("len exists:", len("test")); // This should work
-println("startsWith exists:", startsWith("test", "te")); // This should work
-println("Testing if format exists manually...");

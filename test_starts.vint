@@ -1,3 +1,0 @@
-println("Testing startsWith function");
-let result = startsWith("hello", "he");
-println("StartsWith result:", result);

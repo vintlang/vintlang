@@ -1,2 +1,0 @@
-let result = format("Hello");
-println(result);
