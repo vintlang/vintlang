@@ -1,5 +1,6 @@
 // Import the built-in 'time' module to use its sleep function.
-import time
+// import time //Both ways work
+const time = import("time")
 
 // Import the file containing the 'greeter' package.
 // Because it's in the same directory, we can refer to it directly.
