@@ -1,30 +1,40 @@
-// Sample usage of the Regex module in Vint
-import regex
+// VintLang Regex Module Example (CURRENTLY NOT WORKING)
+// NOTE: This example demonstrates planned regex functionality
+// The regex module is not yet fully implemented and has syntax parsing issues
 
-// 1. Using match to check if a string matches a pattern
-let result = regex.match("^Hello", "Hello World")
-print(result)  // Expected output: true
+// TODO: Fix regex module implementation to support these operations:
+// - Pattern matching
+// - String replacement with regex
+// - String splitting with regex patterns
 
-// 2. Using match to check if a string does not match a pattern
-result = regex.match("^World", "Hello World")
-print(result)  // Expected output: false
+// import regex
 
-// 3. Using replaceString to replace part of a string with a new value
-let newString = regex.replaceString("World", "VintLang", "Hello World")
-print(newString)  // Expected output: "Hello VintLang"
+// Example 1: Using match to check if a string matches a pattern
+// let result = regex.match("^Hello", "Hello World")
+// print(result)  // Expected output: true
 
-// 4. Using splitString to split a string by a regex pattern
-let words = regex.splitString("\\s+", "Hello World VintLang")
-print(words)  // Expected output: ["Hello", "World", "VintLang"]
+// Example 2: Using match to check if a string does not match a pattern
+// result = regex.match("^World", "Hello World")
+// print(result)  // Expected output: false
 
-// 5. Using splitString to split a string by a comma
-let csv = regex.splitString(",", "apple,banana,orange")
-print(csv)  // Expected output: ["apple", "banana", "orange"]
+// Example 3: Using replaceString to replace part of a string with a new value
+// let newString = regex.replaceString("World", "VintLang", "Hello World")
+// print(newString)  // Expected output: "Hello VintLang"
 
-// 6. Using match with a more complex regex pattern
-let emailMatch = regex.match("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$", "test@example.com")
-print(emailMatch)  // Expected output: true
+// Example 4: Using splitString to split a string by a regex pattern
+// let words = regex.splitString("\\s+", "Hello World VintLang")
+// print(words)  // Expected output: ["Hello", "World", "VintLang"]
 
-// 7. Using replaceString with a regex pattern to replace digits in a string
-let maskedString = regex.replaceString("\\d", "*", "My phone number is 123456789")
-print(maskedString)  // Expected output: "My phone number is *********"
+// Example 5: Using splitString to split a string by a comma
+// let csv = regex.splitString(",", "apple,banana,orange")
+// print(csv)  // Expected output: ["apple", "banana", "orange"]
+
+// Example 6: Using match with a more complex regex pattern
+// let emailMatch = regex.match("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$", "test@example.com")
+// print(emailMatch)  // Expected output: true
+
+// Example 7: Using replaceString with a regex pattern to replace digits in a string
+// let maskedString = regex.replaceString("\\d", "*", "My phone number is 123456789")
+// print(maskedString)  // Expected output: "My phone number is *********"
+
+println("Regex module is not yet implemented. This example is for future reference.")

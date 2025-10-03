@@ -1,1 +1,5 @@
+// VintLang Included File Example
+// This file is meant to be included by other VintLang files
+
+// Define a variable that will be available to the including file
 let message = "Hello from an included file!"; 

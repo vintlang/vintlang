@@ -1,7 +1,12 @@
+// VintLang Shell Module Example
+// Demonstrates executing shell commands from VintLang
+
 import shell
 
-output = shell.run("echo Hello, Shell!")
+// Execute a shell command and capture the output
+let output = shell.run("echo Hello, Shell!")
 print(output) // Outputs "Hello, Shell!"
 
-exists = shell.exists("ls")
+// Check if a command exists in the system PATH
+let exists = shell.exists("ls")
 print(exists) // Outputs true if the 'ls' command exists
