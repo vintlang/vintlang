@@ -1,13 +1,20 @@
+// VintLang Package System Example
+// NOTE: This feature is still in development and not fully working yet
+
 /**
-Not working Still in development 
+The package system with init functions and @ accessor is under development.
+This example demonstrates the planned syntax, but it's not yet functional.
 */
 
+// Planned syntax (not yet working):
+// package vint{
+//     init = func(){
+//         name = "vint"
+//         a = "hiofehoi"
+//     }
+//     print(@.name)
+// }
+// print(@.a)
 
-package vint{
-    init = func(){
-        name = "vint"
-        a = "hiofehoi"
-    }
-    print(@.name)
-}
-    print(@.a)
+println("Package system is under development.")
+println("This example shows planned syntax that will be implemented in future versions.")
