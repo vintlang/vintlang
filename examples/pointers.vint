@@ -1,9 +1,23 @@
+// VintLang Pointers Example
+// Demonstrates pointer operations: creating, dereferencing, and displaying pointers
+
 print("POINTERS IN VINTLANG")
+
+// Create a variable with a value
 let x = 42 * 2
+
+// Create a pointer to x using the & (address-of) operator
 let p = &x
+
+// Print the pointer (shows memory address and value)
 println(p)
+
+// Display the pointer with a label
 println("POINTER is",p)
+
+// Dereference the pointer using * operator to get the value
 println("VALUE is",*p)
 
-//Will Output something like
-// POINTER is Pointer(addr=0x14000010560, value=42)
+// Example output:
+// POINTER is Pointer(addr=0x14000010560, value=84)
+// VALUE is 84
