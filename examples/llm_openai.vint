@@ -1,25 +1,34 @@
-// // Example: Using the LLM/OpenAI module in VintLang
+// VintLang LLM/OpenAI Module Example
+// Demonstrates using Large Language Models (like GPT) from VintLang
+// NOTE: Requires an OpenAI API key set in environment variables
+
+// Example 1: Chat with OpenAI's GPT model
+// The chat function takes an array of messages with roles and content
 
 // import llm
 
-// // Chat example
-// messages = [
+// let messages = [
 //     {"role": "system", "content": "You are a helpful assistant."},
 //     {"role": "user", "content": "What is the capital of France?"}
 // ]
 
-// response, err = llm.chat(messages)
-// if err != null {
+// let response, err = llm.chat(messages)
+// if (err != null) {
 //     print("Chat error: ", err)
 // } else {
 //     print("Chat response: ", response)
 // }
 
-// // Completion example
-// prompt = "Write a haiku about the ocean."
-// completion, err = llm.completion(prompt)
-// if err != null {
+// Example 2: Text completion
+// The completion function generates text based on a prompt
+
+// let prompt = "Write a haiku about the ocean."
+// let completion, err = llm.completion(prompt)
+// if (err != null) {
 //     print("Completion error: ", err)
 // } else {
 //     print("Completion: ", completion)
-// } 
+// }
+
+println("LLM module example (requires OpenAI API key)")
+println("Uncomment the code above to test with a valid API key") 
