@@ -1,25 +1,38 @@
-// Function overloading by arity
+// VintLang Function Overloading Example
+// Demonstrates function overloading by arity (number of parameters)
+
+// Define multiple versions of 'greet' function with different parameter counts
+// The interpreter selects the appropriate version based on the number of arguments
+
+// Version 1: Single parameter
 let greet = func(name) {
     print("Hello, ", name)
 }
 
+// Version 2: Two parameters
 let greet = func(name, times) {
     for i in range(times) {
         print("Hello, ", name)
     }
 }
 
+// Version 3: No parameters
 let greet = func() {
     print("Hello, world!")
 }
 
+// Call with one argument - uses Version 1
 greet("Alice")      // Should print: Hello, Alice
 print("---")
+
+// Call with two arguments - uses Version 2
 greet("Bob", 3)      // Should print: Hello, Bob (3 times)
 print("---")
+
+// Call with no arguments - uses Version 3
 greet()             // Should print: Hello, world!
 
-// Normal (non-overloaded) functions
+// Example: Normal (non-overloaded) functions work as usual
 let add = func(a, b) {
     return a + b
 }
