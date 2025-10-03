@@ -1,17 +1,23 @@
-//The sample vint code for a simple cli todo app
+// VintLang CLI Todo Application Example
+// This example demonstrates building a simple command-line todo application
+
 import cli
 
+// Initialize the todos list with some default items
 let todos = ["new", "todo"]
 
+// Get command line arguments
 let args = args()
 let args_len = len(args)
-info "Length: " + string(args_len)
+info "Length: " + str(args_len)
 
+// Check if any arguments were provided
 if (args_len == 0) {
     info "Invalid options"
     return
 }
 
+// Handle 'all' command - list all todos
 if (args[0] == "all") {
     if (len(todos) == 0) {
         println("NO todo found")
@@ -21,10 +27,12 @@ if (args[0] == "all") {
         }
     }
 } else if (args[0] == "add") {
+    // Handle 'add' command - add a new todo
     let newtodo = input("Enter the todo title: ")
     todos.push(newtodo)
     info "Added: " + newtodo
 } else {
+    // Handle unknown commands
     info "Unknown command: " + args[0]
     info "Available commands: all, add"
 }

@@ -1,7 +1,17 @@
+// VintLang For Loop Example
+// Demonstrates iterating over array elements
+
+// Create an array of todo items
 let todos = ["new", "todo"]
 
+// Print the entire array
 println("Your TODOs:", todos)
+
+// Check the type of the variable
 println(type(todos))
+
+// Iterate through each element in the array
+// The loop variable (tach) takes on each value from the array
 for tach in todos {
     println(tach)
 }

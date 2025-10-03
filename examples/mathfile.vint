@@ -1,4 +1,9 @@
-package mathfile{//FIXME:will change this to module
+// VintLang Package Example
+// Demonstrates defining a package to organize related functions
+
+// Define a package (will be changed to module syntax in future)
+package mathfile{
+    // Define a sum function within the package
     let sum = func(a,b){
         return a+b
     }

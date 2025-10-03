@@ -1,35 +1,43 @@
+// VintLang JSON Module Example
+// Demonstrates JSON encoding, decoding, and manipulation operations
+
 import json
 
-//Example 1: Decode a JSON string
+// Example 1: Decode a JSON string
+// Converts a JSON string into a VintLang object
 print("=== Example 1: Decode ===")
 let raw_json = '{"name": "John", "age": 30, "isAdmin": false, "friends": ["Jane", "Doe"]}'
 let decoded = json.decode(raw_json)
 print("Decoded Object:", decoded)
 
-//Example 2: Encode a Vint object to JSON
+// Example 2: Encode a Vint object to JSON
+// Converts a VintLang object into a JSON string
 print("\n=== Example 2: Encode ===")
 let data = {
   "language": "Vint",
   "version": 1.0,
   "features": ["custom modules", "native objects"]
 }
-let encoded_json = json.encode(data) //optional parameter indent
+let encoded_json = json.encode(data) // Optional parameter: indent for pretty printing
 print("Encoded JSON:", encoded_json)
 
-//Example 3: Pretty print a JSON string
+// Example 3: Pretty print a JSON string
+// Formats JSON with indentation for readability
 print("\n=== Example 3: Pretty Print ===")
 let raw_json_pretty = '{"name":"John","age":30,"friends":["Jane","Doe"]}'
 let pretty_json = json.pretty(raw_json_pretty)
 print("Pretty JSON:\n", pretty_json)
 
-//Example 4: Merge two JSON objects
+// Example 4: Merge two JSON objects
+// Combines two objects, with the second object's values taking precedence
 print("\n=== Example 4: Merge ===")
 let json1 = {"name": "John", "age": 30}
 let json2 = {"city": "New York", "age": 35}
 let merged_json = json.merge(json1, json2)
 print("Merged JSON:", merged_json)
 
-//Example 5: Get a value by key from a JSON object
+// Example 5: Get a value by key from a JSON object
+// Retrieves a value from an object, returns null if key doesn't exist
 print("\n=== Example 5: Get Value by Key ===")
 let json_object = {"name": "John", "age": 30, "city": "New York"}
 let value = json.get(json_object, "age")

@@ -1,34 +1,39 @@
+// VintLang SQLite Database Example
+// Demonstrates SQLite database operations: create, insert, query, update
+
 import sqlite
 
-// Drop a table
-//sqlite.dropTable(db, "users")
-
+// Drop a table (commented to preserve data between runs)
+// sqlite.dropTable(db, "users")
 
 let someFunction = func(){
     println("This is a function in sqlite.vint")
     
-    // Open a database
+    // Example 1: Open a database connection
+    // Creates or opens the database file
     const db = sqlite.open("example.db")
     println("Database opened:", db)
     // defer sqlite.close(db)  // Ensure the database is closed when done
     // defer println("Database closed.")
 
-
-    // Create a table
+    // Example 2: Create a table
+    // Creates a users table with id, name, and age columns
     sqlite.createTable(db, "CREATE TABLE IF NOT EXISTS users (id INTEGER PRIMARY KEY, name TEXT, age INTEGER)")
-        println("Table 'users' created or already exists.")
-    // Insert data
+    println("Table 'users' created or already exists.")
+    
+    // Example 3: Insert data into the table
+    // Uses prepared statements with ? placeholders for safety
     sqlite.execute(db, "INSERT INTO users (name, age) VALUES (?, ?)", "Alice", 25)
     sqlite.execute(db, "INSERT INTO users (name, age) VALUES (?, ?)", "Bob", 30)
 
     // Fetch all rows
     println("=== All Users ===")
-    users = sqlite.fetchAll(db, "SELECT * FROM users")
+    let users = sqlite.fetchAll(db, "SELECT * FROM users")
     println(users)
 
     // Fetch a single row
     println("\n=== First User ===")
-    first_user = sqlite.fetchOne(db, "SELECT * FROM users LIMIT 1")
+    let first_user = sqlite.fetchOne(db, "SELECT * FROM users LIMIT 1")
     println(first_user)
 
     // Update data
@@ -39,7 +44,7 @@ let someFunction = func(){
 
     // Fetch all rows after changes
     println("\n=== Users After Changes ===")
-    users_after_changes = sqlite.fetchAll(db, "SELECT * FROM users")
+    let users_after_changes = sqlite.fetchAll(db, "SELECT * FROM users")
     println(users_after_changes)
 
 }

@@ -1,3 +1,6 @@
+// VintLang Desktop GUI Application Example
+// This example demonstrates creating a simple desktop application with GUI elements
+
 import desktop
 
 // Create the desktop application
@@ -6,13 +9,13 @@ desktop.createApp()
 // Add a label to the window
 desktop.newLabel("Hello, Vint Desktop App!")
 
-// Add a button with a callback
-desktop.newButton("Click Me", fun() {
+// Add a button with a callback function
+desktop.newButton("Click Me", func() {
     print("Button clicked!")
 })
 
-// Add an entry field
+// Add an entry field for text input
 desktop.newEntry()
 
-// Run the application
+// Run the application (starts the GUI event loop)
 desktop.runApp()

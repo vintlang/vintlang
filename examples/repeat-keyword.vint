@@ -1,9 +1,14 @@
+// VintLang Repeat Keyword Example
+// Demonstrates the repeat loop for fixed-iteration counting
+
 let num = 5
 
+// Repeat with a variable - executes the block 'num' times
 repeat num {
     println("Hello there")
 }
 
+// Repeat with a literal number - automatically provides index variable 'i'
 repeat 3 {
     println("Default i:", i)
 }

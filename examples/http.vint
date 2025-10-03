@@ -1,33 +1,43 @@
+// VintLang HTTP File Server Example
+// Demonstrates creating a simple HTTP file server
+
 import http
 
 let port = "3000";
-// let dir = "/var/www/html";
-let dir = "/home/tach/Documents/homeFirefox/";
+// let dir = "/var/www/html";  // Production directory
+let dir = "./";  // Serve files from current directory
 
-// Scenario 1: Using the default message and no directory listing
+// Scenario 1: Using the default message and no directory listing (commented)
 // http.fileServer(port, dir);
 
 // Scenario 2: Starting a file server with a custom message
-http.fileServer(
-    port,
-    dir,
-    "My custom Vint server is running on port 3000!"
-);
+// This starts the server and blocks until stopped
+// Uncomment to test:
+// http.fileServer(
+//     port,
+//     dir,
+//     "My custom Vint server is running on port 3000!"
+// );
 
 // Scenario 3: Starting a file server with directory listing enabled (default message)
-http.fileServer(
-    port,
-    dir
-);
+// Uncomment to test:
+// http.fileServer(
+//     port,
+//     dir
+// );
 
 // Scenario 4: Starting a file server with a custom message and directory listing enabled
-http.fileServer(
-    port,
-    dir,
-    "Directory listing is now enabled! Check it out!"
-);
+println("To start the server, uncomment one of the http.fileServer() calls above")
+println("Server will listen on port:", port)
+println("Serving directory:", dir)
 
-// Scenario 5: Invalid usage (e.g., wrong arguments) - this should return an error
+// http.fileServer(
+//     port,
+//     dir,
+//     "Directory listing is now enabled! Check it out!"
+// );
+
+// Scenario 5: Invalid usage examples (commented to avoid errors)
 // http.fileServer(3000, dir);  // Port must be a string
 // http.fileServer(port, 123);  // Directory must be a string
 // http.fileServer(port, dir, 404);  // Message must be a string

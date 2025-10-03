@@ -1,3 +1,9 @@
+// VintLang Include Statement Example
+// Demonstrates including code from another VintLang file
+
+// Include another VintLang file - this loads and executes it
+// The included file can define variables, functions, etc. that become available here
 include "examples/included.vint";
 
+// Use a variable defined in the included file
 println(message); 

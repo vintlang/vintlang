@@ -1,4 +1,8 @@
+// VintLang UUID Module Example
+// Demonstrates generating universally unique identifiers (UUIDs)
+
 import uuid
 
-
+// Generate a random UUID (Version 4)
+// Returns a string in the format: xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx
 print(uuid.generate())
