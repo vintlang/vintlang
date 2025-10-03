@@ -73,6 +73,10 @@ app_config.json
 processing_log.txt
 test.txt
 config.json
+example.txt
+example.db
+*.db
+new_folder/
 
 # Bundled test binaries
 include_test
