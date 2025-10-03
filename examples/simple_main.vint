@@ -1,9 +1,18 @@
-// Simple test without imports first
+// VintLang Main Function Example
+// Demonstrates defining and calling a main function
+
+// Code before main function definition executes immediately
 println("Before main definition")
 
+// Define a main function that returns a value
 let main = func() {
     println("Main function is running!")
     return 42
 }
 
 println("After main definition")
+
+// In VintLang, main() must be called explicitly
+// It doesn't run automatically like in some languages
+// Uncomment the line below to execute main:
+// println(main())

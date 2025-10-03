@@ -1,4 +1,10 @@
+// VintLang Colors Module Example
+// Demonstrates converting RGB color values to hexadecimal format
+
 import colors
 
+// Convert RGB values (Red, Green, Blue) to hexadecimal color code
+// RGB values range from 0-255
+// (255, 255, 255) represents white color
 let hex = colors.rgbToHex(255, 255, 255)
-print(hex) // Outputs "#ffffff"
+print(hex) // Outputs "#FFFFFF"

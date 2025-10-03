@@ -1,40 +1,46 @@
+// VintLang PostgreSQL Database Example
+// Demonstrates PostgreSQL database operations: connect, create table, insert, query
+
 import postgres
 
 // NOTE: Please replace the placeholder credentials with your actual PostgreSQL database credentials.
 // The connection string should be in the format: "user=youruser password=yourpassword dbname=yourdbname sslmode=disable"
 
+// Example 1: Open a PostgreSQL database connection
 const conn = postgres.open("user=postgres password=password dbname=testdb sslmode=disable")
 
-if (conn.type() == "ERROR") {
-    error "Error connecting to PostgreSQL:"+ conn.message()
+if (type(conn) == "ERROR") {
+    error "Error connecting to PostgreSQL: " + str(conn)
 } else {
     info "Successfully connected to PostgreSQL"
 
-    // Create a table
-    create_table_query = "CREATE TABLE IF NOT EXISTS users (id SERIAL PRIMARY KEY, name VARCHAR(255), age INT)"
-    err = postgres.execute(conn, create_table_query)
-    if err {
-        print("Error creating table:", err.message())
+    // Example 2: Create a table
+    // Creates a users table with auto-incrementing SERIAL id
+    let create_table_query = "CREATE TABLE IF NOT EXISTS users (id SERIAL PRIMARY KEY, name VARCHAR(255), age INT)"
+    let err = postgres.execute(conn, create_table_query)
+    if (err != null) {
+        print("Error creating table:", err)
     }
 
-    // Insert data
-    insert_query = "INSERT INTO users (name, age) VALUES ($1, $2)"
+    // Example 3: Insert data into the table
+    // PostgreSQL uses $1, $2 instead of ? for placeholders
+    let insert_query = "INSERT INTO users (name, age) VALUES ($1, $2)"
     postgres.execute(conn, insert_query, "Alice", 25)
     postgres.execute(conn, insert_query, "Bob", 30)
 
-    // Fetch all rows
+    // Example 4: Fetch all rows from the table
     print("\n=== All Users ===")
-    fetch_all_query = "SELECT * FROM users"
-    users = postgres.fetchAll(conn, fetch_all_query)
+    let fetch_all_query = "SELECT * FROM users"
+    let users = postgres.fetchAll(conn, fetch_all_query)
     print(users)
 
-    // Fetch a single row
+    // Example 5: Fetch a single row
     print("\n=== First User ===")
-    fetch_one_query = "SELECT * FROM users LIMIT 1"
-    first_user = postgres.fetchOne(conn, fetch_one_query)
+    let fetch_one_query = "SELECT * FROM users LIMIT 1"
+    let first_user = postgres.fetchOne(conn, fetch_one_query)
     print(first_user)
 
-    // Close the connection
+    // Example 6: Close the connection
     postgres.close(conn)
     print("\nConnection closed")
 } 

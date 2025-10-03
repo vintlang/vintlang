@@ -1,6 +1,10 @@
+// VintLang Reflect Module Example
+// Demonstrates runtime type inspection and reflection capabilities
+
 import reflect
 
-// Type inspection
+// Example 1: Type inspection
+// Get the type of various values
 let t1 = reflect.typeOf("hello")         // "STRING"
 let t2 = reflect.typeOf([1,2,3])         // "ARRAY"
 let t3 = reflect.typeOf({"a": 1})        // "DICT"
@@ -8,23 +12,28 @@ let t4 = reflect.typeOf(null)            // "NULL"
 let t5 = reflect.typeOf(func() {})       // "FUNCTION"
 println(t1, t2, t3, t4, t5)
 
-// Value extraction
+// Example 2: Value extraction
+// Extract the underlying value
 let v = reflect.valueOf(42)              // 42
 println(v)
 
-// Null check
+// Example 3: Null check
+// Check if a value is null/nil
 println(reflect.isNil(null))             // true
 println(reflect.isNil(123))              // false
 
-// Array check
+// Example 4: Array check
+// Check if a value is an array
 println(reflect.isArray([1,2,3]))        // true
 println(reflect.isArray("not array"))    // false
 
-// Object (dict) check
+// Example 5: Object (dictionary) check
+// Check if a value is an object/dict
 println(reflect.isObject({"a": 1}))      // true
 println(reflect.isObject([1,2,3]))       // false
 
-// Function check
+// Example 6: Function check
+// Check if a value is a function
 let f = func(x) { x * 2 }
 println(reflect.isFunction(f))           // true
 println(reflect.isFunction(123))         // false

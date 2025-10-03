@@ -1,5 +1,19 @@
+// VintLang DotEnv Module Example
+// Demonstrates loading environment variables from .env files
+
 import dotenv
 
-dotenv.load(".env")
-apiKey = dotenv.get("API_KEY")
-print(apiKey) // Outputs the value of API_KEY from .env
+// Example 1: Load environment variables from a .env file
+// This reads the .env file and makes its variables available
+// dotenv.load(".env")
+
+// Example 2: Get a specific environment variable
+// let apiKey = dotenv.get("API_KEY")
+// print(apiKey) // Outputs the value of API_KEY from .env
+
+// Note: Create a .env file in the same directory with content like:
+// API_KEY=your_api_key_here
+// DATABASE_URL=your_database_url
+
+println("DotEnv module requires a .env file to be present")
+println("Create a .env file with key=value pairs, then uncomment the code above")

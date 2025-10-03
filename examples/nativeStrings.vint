@@ -1,5 +1,8 @@
-// Define the variable 'name' and assign the string "Tachera Sasi" to it
-name = "Tachera Sasi"
+// VintLang Native String Operations Example
+// Demonstrates built-in string methods and type conversion functions
+
+// Define a variable and assign a string to it
+let name = "Tachera Sasi"
 
 // Split the string into an array of characters and print the result
 print(name.split("")) 

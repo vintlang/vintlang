@@ -1,40 +1,46 @@
+// VintLang MySQL Database Example
+// Demonstrates MySQL database operations: connect, create table, insert, query
+
 import mysql
 
 // NOTE: Please replace the placeholder credentials with your actual MySQL database credentials.
 // The connection string should be in the format: "user:password@tcp(127.0.0.1:3306)/dbname"
 
-conn = mysql.open("user:password@tcp(127.0.0.1:3306)/testdb")
+// Example 1: Open a MySQL database connection
+let conn = mysql.open("user:password@tcp(127.0.0.1:3306)/testdb")
 
-if (conn.type() == "ERROR") {
-    print("Error connecting to MySQL:", conn.message())
+if (type(conn) == "ERROR") {
+    print("Error connecting to MySQL:", conn)
 } else {
     print("Successfully connected to MySQL")
 
-    // Create a table
-    create_table_query = "CREATE TABLE IF NOT EXISTS users (id INT AUTO_INCREMENT PRIMARY KEY, name VARCHAR(255), age INT)"
-    err = mysql.execute(conn, create_table_query)
-    if err {
-        print("Error creating table:", err.message())
+    // Example 2: Create a table
+    // Creates a users table with auto-incrementing id
+    let create_table_query = "CREATE TABLE IF NOT EXISTS users (id INT AUTO_INCREMENT PRIMARY KEY, name VARCHAR(255), age INT)"
+    let err = mysql.execute(conn, create_table_query)
+    if (err != null) {
+        print("Error creating table:", err)
     }
 
-    // Insert data
-    insert_query = "INSERT INTO users (name, age) VALUES (?, ?)"
+    // Example 3: Insert data into the table
+    // Uses prepared statements with ? placeholders
+    let insert_query = "INSERT INTO users (name, age) VALUES (?, ?)"
     mysql.execute(conn, insert_query, "Alice", 25)
     mysql.execute(conn, insert_query, "Bob", 30)
 
-    // Fetch all rows
+    // Example 4: Fetch all rows from the table
     print("\n=== All Users ===")
-    fetch_all_query = "SELECT * FROM users"
-    users = mysql.fetchAll(conn, fetch_all_query)
+    let fetch_all_query = "SELECT * FROM users"
+    let users = mysql.fetchAll(conn, fetch_all_query)
     print(users)
 
-    // Fetch a single row
+    // Example 5: Fetch a single row
     print("\n=== First User ===")
-    fetch_one_query = "SELECT * FROM users LIMIT 1"
-    first_user = mysql.fetchOne(conn, fetch_one_query)
+    let fetch_one_query = "SELECT * FROM users LIMIT 1"
+    let first_user = mysql.fetchOne(conn, fetch_one_query)
     print(first_user)
 
-    // Close the connection
+    // Example 6: Close the connection
     mysql.close(conn)
     print("\nConnection closed")
 } 

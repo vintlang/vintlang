@@ -1,15 +1,21 @@
-// Example: Using if as a statement (classic)
+// VintLang If Expressions Example
+// Demonstrates using if as both a statement and an expression
+
+// Example 1: Using if as a statement (classic approach)
+// The if statement modifies an existing variable
 let x = 0
 if (true) {
     x = 42
 }
 print("Classic if statement result: ", x)
 
-// Example: Using if as an expression (new)
+// Example 2: Using if as an expression (functional approach)
+// The if expression returns a value that can be assigned
 let status = ""
 status = if (x > 0) { "Online" } else { "Offline" }
 print("If as an expression result: ", status)
 
-// Example: if as an expression with no else
+// Example 3: If expression without else clause
+// If the condition is false and there's no else, returns null
 let y = if (false) { 123 }
 print("If as an expression with no else: ", y) 

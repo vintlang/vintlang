@@ -1,7 +1,17 @@
+// VintLang Defer Statement Example
+// Demonstrates the defer keyword which delays execution until function returns
+
 let test_defer = func() {
+    // The defer statement will execute AFTER the function completes
+    // regardless of how the function exits
     defer println("deferred message");
+    
+    // This executes immediately
     println("function body");
 };
 
+// Call the function
 test_defer();
+
+// This executes after the function and its deferred statements complete
 println("after function call");

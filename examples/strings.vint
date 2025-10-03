@@ -1,5 +1,6 @@
 // Sample usage of the string module
-import "string"
+// The string module provides various string manipulation functions
+import string
 
 // Example 1: Trim whitespace
 let result = string.trim("  Hello, World!  ")

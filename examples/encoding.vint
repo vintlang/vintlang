@@ -1,7 +1,14 @@
+// VintLang Encoding Module Example
+// Demonstrates base64 encoding and decoding operations
+
 import encoding
 
-encoded = encoding.base64Encode("Hello, World!")
+// Example 1: Base64 Encoding
+// Encode a string to base64 format
+let encoded = encoding.base64Encode("Hello, World!")
 print(encoded) // Outputs "SGVsbG8sIFdvcmxkIQ=="
 
-decoded = encoding.base64Decode(encoded)
+// Example 2: Base64 Decoding
+// Decode a base64 string back to original text
+let decoded = encoding.base64Decode(encoded)
 print(decoded) // Outputs "Hello, World!"

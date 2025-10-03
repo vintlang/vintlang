@@ -1,4 +1,9 @@
-print(eq(2,"")) //Prints False
+// VintLang Builtins Example
+// This example demonstrates the use of built-in functions in VintLang
 
-a = print
-a("yeee")
+// eq() - Check if two values are equal (returns true/false)
+print(eq(2,""))  // Prints false - comparing number 2 with empty string
+
+// Functions can be assigned to variables
+let a = print
+a("yeee")  // Call the print function through variable 'a'
