@@ -1,16 +1,29 @@
+// VintLang Path Module Example
+// Demonstrates file path manipulation operations
+
 import path
 
-full_path = path.join("/home", "user", "documents", "report.pdf")
+// Example 1: Join path components
+// Combines multiple path segments into a single path
+let full_path = path.join("/home", "user", "documents", "report.pdf")
 print("Joined path:", full_path)
 
-base = path.basename(full_path)
+// Example 2: Get the basename (filename)
+// Extracts the last component of the path
+let base = path.basename(full_path)
 print("Basename:", base)
 
-dir = path.dirname(full_path)
+// Example 3: Get the directory name
+// Returns the directory path without the filename
+let dir = path.dirname(full_path)
 print("Dirname:", dir)
 
-extension = path.ext(full_path)
+// Example 4: Get the file extension
+// Extracts the file extension from the path
+let extension = path.ext(full_path)
 print("Extension:", extension)
 
+// Example 5: Check if path is absolute
+// Determines if a path is absolute (starts from root)
 print("Is absolute?", path.isAbs(full_path))
 print("Is 'relative/path' absolute?", path.isAbs("relative/path")) 

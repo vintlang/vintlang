@@ -1,10 +1,16 @@
+// VintLang Switch Statement Example
+// Demonstrates the switch-case control flow structure
+
 let n = 1
+
+// Switch statement checks the value of n against multiple cases
 switch (n) {
     case 1 {
         println("is",n)
-        break
+        break  // Exit the switch statement after matching
     }
     default {
+        // Default case runs if no other case matches
         println("is not")
         // break
     }
