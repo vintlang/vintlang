@@ -1,16 +1,22 @@
-//This module is still experimental
+// VintLang Crypto Module Example
+// This module is still experimental
+// Demonstrates cryptographic operations: hashing and encryption
+
 import crypto
 
-// MD5 Hashing
-md5_hash = crypto.hashMD5("Hello, World!")
+// Example 1: MD5 Hashing
+// MD5 is a cryptographic hash function that produces a 128-bit hash value
+let md5_hash = crypto.hashMD5("Hello, World!")
 print(md5_hash)  // Prints the MD5 hash of "Hello, World!"
 
-// AES Encryption and Decryption
-key = "mysecretkey12345"
-data = "Sensitive data"
-encrypted = crypto.encryptAES(data, key)
+// Example 2: AES Encryption and Decryption
+// AES (Advanced Encryption Standard) is a symmetric encryption algorithm
+let key = "mysecretkey12345"  // Encryption key (must be appropriate length for AES)
+let data = "Sensitive data"    // Data to encrypt
+let encrypted = crypto.encryptAES(data, key)  // Encrypt the data
 print(encrypted)
 
-decrypted = crypto.decryptAES(encrypted, key)
+// Decrypt the encrypted data back to original
+let decrypted = crypto.decryptAES(encrypted, key)
 print(decrypted)  
 print(type(decrypted)) 
