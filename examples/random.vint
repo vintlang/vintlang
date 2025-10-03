@@ -1,10 +1,17 @@
+// VintLang Random Module Example
+// This example demonstrates various random number generation functions
+
 import random
 
+// Generate a random integer between 10 and 20 (inclusive)
 print("Random integer between 10 and 20:", random.int(10, 20))
 
+// Generate a random float between 0 and 1
 print("Random float:", random.float())
 
+// Generate a random string of specified length
 print("Random string of length 8:", random.string(8))
 
-options = ["rock", "paper", "scissors"]
+// Select a random element from an array
+let options = ["rock", "paper", "scissors"]
 print("Random choice from", options, ":", random.choice(options)) 
