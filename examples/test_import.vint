@@ -1,3 +1,7 @@
+// VintLang Import Statement Example
+// Demonstrates importing and using a module
+
 import time
 
+// Use the imported time module to get the current timestamp
 println("Current time:", time.now())
