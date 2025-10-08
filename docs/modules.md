@@ -124,4 +124,88 @@ result2 = calculator.multiply(4, 3)
 
 print("Addition: " + result1)      // Output: Addition: 15
 print("Multiplication: " + result2) // Output: Multiplication: 12
-``` 
+```
+
+## Built-in Modules
+
+VintLang provides several built-in modules for common functionality:
+
+### Core Modules
+- **`math`** - Mathematical functions (`abs`, `sqrt`, `sin`, `cos`, etc.)
+- **`string`** - String manipulation (`toUpper`, `toLower`, `trim`, etc.)
+- **`random`** - Random number generation (`int`, `float`, `choice`, etc.)
+- **`kv`** - In-memory key-value store with TTL support and atomic operations
+
+### I/O and System
+- **`os`** - Operating system interface (file operations, environment variables)
+- **`time`** - Date and time utilities
+- **`datetime`** - Advanced date/time formatting and parsing
+- **`path`** - File path manipulation
+- **`shell`** - Shell command execution
+
+### Network and Web
+- **`net`** - Network utilities
+- **`http`** - HTTP client and server functionality
+- **`url`** - URL parsing and manipulation
+- **`email`** - Email sending capabilities
+
+### Data Processing
+- **`json`** - JSON parsing and serialization
+- **`csv`** - CSV file processing
+- **`xml`** - XML parsing and generation
+- **`yaml`** - YAML parsing and serialization
+- **`encoding`** - Text encoding utilities
+
+### Security and Crypto
+- **`crypto`** - Cryptographic functions
+- **`hash`** - Hashing algorithms (MD5, SHA1, SHA256, etc.)
+
+### Database
+- **`sqlite`** - SQLite database interface
+- **`mysql`** - MySQL database connectivity
+- **`postgres`** - PostgreSQL database connectivity
+- **`redis`** - Redis client
+
+### Development Tools
+- **`regex`** - Regular expression support
+- **`term`** - Terminal manipulation
+- **`cli`** - Command-line interface utilities
+- **`logger`** - Logging functionality
+- **`uuid`** - UUID generation
+- **`reflect`** - Runtime reflection
+
+### Specialized
+- **`schedule`** - Task scheduling
+- **`dotenv`** - Environment file loading
+- **`sysinfo`** - System information
+- **`clipboard`** - System clipboard access
+- **`vintSocket`** - WebSocket support
+- **`vintChart`** - Chart generation
+- **`llm`** - Large Language Model integration
+- **`openai`** - OpenAI API client
+
+Example usage of built-in modules:
+
+```js
+import kv
+import math
+import json
+
+// Use KV store for caching
+kv.set("pi", math.pi())
+let cached_pi = kv.get("pi")
+
+// Store complex data with TTL
+let user_data = {"name": "Alice", "score": 100}
+kv.setTTL("user:123", user_data, 3600) // 1 hour TTL
+
+// Use atomic operations
+kv.increment("page_views")
+kv.decrement("inventory", 5)
+
+// Export data
+let all_data = kv.dump()
+let json_export = json.stringify(all_data)
+```
+
+See individual module documentation for detailed API reference.
