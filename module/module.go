@@ -48,6 +48,7 @@ func init() {
 	Mapper["yaml"] = &object.Module{Name: "yaml", Functions: YAMLFunctions}
 	Mapper["clipboard"] = &object.Module{Name: "clipboard", Functions: ClipboardFunctions}
 	Mapper["redis"] = &object.Module{Name: "redis", Functions: RedisFunctions}
+	Mapper["kv"] = &object.Module{Name: "kv", Functions: KvFunctions}
 }
 
 // ErrorMessage formats an error message for module functions

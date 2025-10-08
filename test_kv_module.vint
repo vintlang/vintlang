@@ -1,0 +1,63 @@
+// Test the KV module functionality
+// Test the KV module functionality
+// import kv
+const kv = import("kv");
+
+// Test basic operations
+println("=== Basic KV Operations ===");
+kv.set("user:123", {"name": "John", "age": 30});
+kv.set("session:456", "active");
+kv.set("counter", 0);
+
+println("Get user:", kv.get("user:123"));
+println("Get session:", kv.get("session:456"));
+println("Get counter:", kv.get("counter"));
+println("Get nonexistent:", kv.get("nonexistent"));
+
+println("User exists:", kv.exists("user:123"));
+println("Nonexistent exists:", kv.exists("nonexistent"));
+
+println("Store size:", kv.size());
+println("Store empty:", kv.isEmpty());
+
+println("\n=== Keys and Values ===");
+println("All keys:", kv.keys());
+println("All values:", kv.values());
+
+println("\n=== TTL Operations ===");
+kv.setTTL("temp:data", "will expire", 2); // Set with 2 seconds TTL
+println("TTL for temp:data:", kv.getTTL("temp:data"));
+
+kv.set("quick:expire", "expires now");
+println("Before expire:", kv.exists("quick:expire"));
+println("Expire result:", kv.expire("quick:expire", 1)); // expire in 1 second
+println("After expire:", kv.exists("quick:expire"));
+
+println("\n=== Bulk Operations ===");
+kv.mset({"bulk1": "value1", "bulk2": "value2", "bulk3": "value3"});
+println("Bulk get:", kv.mget(["bulk1", "bulk2", "bulk3", "nonexistent"]));
+
+println("\n=== Atomic Operations ===");
+println("Initial counter:", kv.get("counter"));
+println("Increment by 1:", kv.increment("counter"));
+println("Increment by 5:", kv.increment("counter", 5));
+println("Decrement by 2:", kv.decrement("counter", 2));
+println("Final counter:", kv.get("counter"));
+
+// Test increment on non-existent key
+println("New counter increment:", kv.increment("newcounter", 10));
+
+println("\n=== Statistics ===");
+println("Store stats:", kv.stats());
+
+println("\n=== Data Dump ===");
+println("All data:", kv.dump());
+
+println("\n=== Clear Operations ===");
+println("Delete specific key:", kv.delete("session:456"));
+println("Key exists after delete:", kv.exists("session:456"));
+
+println("Size before clear:", kv.size());
+kv.clear();
+println("Size after clear:", kv.size());
+println("Store empty after clear:", kv.isEmpty());
