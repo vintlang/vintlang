@@ -3,12 +3,7 @@ package evaluator
 import (
 	builtinpkg "github.com/vintlang/vintlang/evaluator/builtins"
 	"github.com/vintlang/vintlang/object"
-
-	// Import all builtin packages to trigger their init() functions
-	_ "github.com/vintlang/vintlang/evaluator/builtins"
-)
-
-// GetBuiltinFunction returns a builtin function by name
+) // GetBuiltinFunction returns a builtin function by name
 func GetBuiltinFunction(name string) (*object.Builtin, bool) {
 	return builtinpkg.GetBuiltin(name)
 }
