@@ -545,6 +545,10 @@ func applyFunction(fn object.VintObject, args []object.VintObject, line int) obj
 			return result
 		}
 		return NULL
+	case *object.DebouncedFunction:
+		// Set the apply function callback if not already set
+		fn.SetApplyFunction(applyFunction)
+		return fn.Call(args...)
 	case *object.Package:
 		obj := &object.Instance{
 			Package: fn,
