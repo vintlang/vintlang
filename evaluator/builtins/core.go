@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"io"
 	"os"
+	"time"
 
 	"github.com/vintlang/vintlang/object"
 )
@@ -207,6 +208,45 @@ func registerCoreBuiltins() {
 			default:
 				return newError("argument to `len` not supported, got %s", args[0].Type())
 			}
+		},
+	})
+
+	RegisterBuiltin("debounce", &object.Builtin{
+		Fn: func(args ...object.VintObject) object.VintObject {
+			if len(args) != 2 {
+				return newError("wrong number of arguments. got=%d, want=2", len(args))
+			}
+
+			// Extract duration from first argument
+			var duration time.Duration
+			switch durationObj := args[0].(type) {
+			case *object.Duration:
+				duration = durationObj.Value
+			case *object.Integer:
+				// Treat integer as milliseconds
+				duration = time.Duration(durationObj.Value) * time.Millisecond
+			default:
+				return newError("first argument to `debounce` must be DURATION or INTEGER (milliseconds), got %T", args[0])
+			}
+
+			// Extract function from second argument
+			var fn object.VintObject
+			switch funcObj := args[1].(type) {
+			case *object.Function:
+				fn = funcObj
+			case *object.Builtin:
+				fn = funcObj
+			default:
+				return newError("second argument to `debounce` must be FUNCTION or BUILTIN, got %T", args[1])
+			}
+
+			// Create debounced function
+			debouncedFunc := &object.DebouncedFunction{
+				Fn:       fn,
+				Duration: duration,
+			}
+
+			return debouncedFunc
 		},
 	})
 }
