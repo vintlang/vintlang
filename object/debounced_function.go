@@ -10,13 +10,13 @@ type ApplyFunctionCallback func(fn VintObject, args []VintObject, line int) Vint
 
 // DebouncedFunction wraps a function with debouncing functionality
 type DebouncedFunction struct {
-	Fn           VintObject             // The original function (Function or Builtin)
-	Duration     time.Duration          // The debounce delay
-	timer        *time.Timer            // Internal timer for debouncing
-	mutex        sync.Mutex             // Mutex to handle concurrent calls
-	lastArgs     []VintObject           // Store last arguments for execution
-	applyFunc    ApplyFunctionCallback  // Callback to apply the function
-	lastResult   VintObject             // Store the last result
+	Fn         VintObject            // The original function (Function or Builtin)
+	Duration   time.Duration         // The debounce delay
+	timer      *time.Timer           // Internal timer for debouncing
+	mutex      sync.Mutex            // Mutex to handle concurrent calls
+	lastArgs   []VintObject          // Store last arguments for execution
+	applyFunc  ApplyFunctionCallback // Callback to apply the function
+	lastResult VintObject            // Store the last result
 }
 
 func (df *DebouncedFunction) Type() ObjectType { return DEBOUNCED_FUNC_OBJ }

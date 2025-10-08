@@ -3,7 +3,7 @@ package evaluator
 import (
 	builtinpkg "github.com/vintlang/vintlang/evaluator/builtins"
 	"github.com/vintlang/vintlang/object"
-	
+
 	// Import all builtin packages to trigger their init() functions
 	_ "github.com/vintlang/vintlang/evaluator/builtins"
 )
