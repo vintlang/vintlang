@@ -368,7 +368,7 @@ func kvSetTTL(args []object.VintObject, defs map[string]object.VintObject) objec
 		return ErrorMessage(
 			"kv", "setTTL",
 			"key must be a string",
-			"key is " + string(args[0].Type()),
+			"key is "+string(args[0].Type()),
 			`kv.setTTL("mykey", "value", 60)`,
 		)
 	}
@@ -377,7 +377,7 @@ func kvSetTTL(args []object.VintObject, defs map[string]object.VintObject) objec
 		return ErrorMessage(
 			"kv", "setTTL",
 			"TTL must be an integer (seconds)",
-			"TTL is " + string(args[2].Type()),
+			"TTL is "+string(args[2].Type()),
 			`kv.setTTL("mykey", "value", 60)`,
 		)
 	}
@@ -390,7 +390,7 @@ func kvSetTTL(args []object.VintObject, defs map[string]object.VintObject) objec
 		return ErrorMessage(
 			"kv", "setTTL",
 			"TTL must be positive",
-			"TTL is " + args[2].Inspect(),
+			"TTL is "+args[2].Inspect(),
 			`kv.setTTL("mykey", "value", 60)`,
 		)
 	}
@@ -399,7 +399,7 @@ func kvSetTTL(args []object.VintObject, defs map[string]object.VintObject) objec
 	defer globalStore.mutex.Unlock()
 
 	expiresAt := time.Now().Add(time.Duration(ttlSeconds) * time.Second)
-	
+
 	// Stop existing timer if any
 	if timer, exists := globalStore.ttlMap[key]; exists {
 		timer.Stop()
@@ -436,7 +436,7 @@ func kvGetTTL(args []object.VintObject, defs map[string]object.VintObject) objec
 		return ErrorMessage(
 			"kv", "getTTL",
 			"key must be a string",
-			"key is " + string(args[0].Type()),
+			"key is "+string(args[0].Type()),
 			`kv.getTTL("mykey")`,
 		)
 	}
@@ -450,12 +450,12 @@ func kvGetTTL(args []object.VintObject, defs map[string]object.VintObject) objec
 		if item.ExpiresAt == nil {
 			return &object.Integer{Value: -1} // No TTL set
 		}
-		
+
 		remaining := item.ExpiresAt.Sub(time.Now()).Seconds()
 		if remaining <= 0 {
 			return &object.Integer{Value: 0} // Expired
 		}
-		
+
 		return &object.Integer{Value: int64(remaining)}
 	}
 
@@ -477,7 +477,7 @@ func kvExpire(args []object.VintObject, defs map[string]object.VintObject) objec
 		return ErrorMessage(
 			"kv", "expire",
 			"key must be a string",
-			"key is " + string(args[0].Type()),
+			"key is "+string(args[0].Type()),
 			`kv.expire("mykey", 60)`,
 		)
 	}
@@ -486,7 +486,7 @@ func kvExpire(args []object.VintObject, defs map[string]object.VintObject) objec
 		return ErrorMessage(
 			"kv", "expire",
 			"TTL must be an integer (seconds)",
-			"TTL is " + string(args[1].Type()),
+			"TTL is "+string(args[1].Type()),
 			`kv.expire("mykey", 60)`,
 		)
 	}
@@ -498,7 +498,7 @@ func kvExpire(args []object.VintObject, defs map[string]object.VintObject) objec
 		return ErrorMessage(
 			"kv", "expire",
 			"TTL must be positive",
-			"TTL is " + args[1].Inspect(),
+			"TTL is "+args[1].Inspect(),
 			`kv.expire("mykey", 60)`,
 		)
 	}
@@ -544,7 +544,7 @@ func kvMget(args []object.VintObject, defs map[string]object.VintObject) object.
 		return ErrorMessage(
 			"kv", "mget",
 			"keys must be an array",
-			"keys is " + string(args[0].Type()),
+			"keys is "+string(args[0].Type()),
 			`kv.mget(["key1", "key2"])`,
 		)
 	}
@@ -560,13 +560,13 @@ func kvMget(args []object.VintObject, defs map[string]object.VintObject) object.
 			return ErrorMessage(
 				"kv", "mget",
 				"all keys must be strings",
-				"key at index " + string(rune(i+48)) + " is " + string(keyObj.Type()),
+				"key at index "+string(rune(i+48))+" is "+string(keyObj.Type()),
 				`kv.mget(["key1", "key2"])`,
 			)
 		}
 
 		key := keyObj.(*object.String).Value
-		
+
 		// Check expiration and get value
 		if item, exists := globalStore.data[key]; exists {
 			if item.ExpiresAt == nil || time.Now().Before(*item.ExpiresAt) {
@@ -597,7 +597,7 @@ func kvMset(args []object.VintObject, defs map[string]object.VintObject) object.
 		return ErrorMessage(
 			"kv", "mset",
 			"pairs must be a dictionary",
-			"pairs is " + string(args[0].Type()),
+			"pairs is "+string(args[0].Type()),
 			`kv.mset({"key1": "value1", "key2": "value2"})`,
 		)
 	}
@@ -607,19 +607,19 @@ func kvMset(args []object.VintObject, defs map[string]object.VintObject) object.
 	globalStore.mutex.Lock()
 	defer globalStore.mutex.Unlock()
 
-	for keyObj, value := range pairsDict.Pairs {
-		if keyObj.Type() != object.STRING_OBJ {
+	for _, pair := range pairsDict.Pairs {
+		if pair.Key.Type() != object.STRING_OBJ {
 			return ErrorMessage(
 				"kv", "mset",
 				"all keys must be strings",
-				"found key of type " + string(keyObj.Type()),
+				"found key of type "+string(pair.Key.Type()),
 				`kv.mset({"key1": "value1", "key2": "value2"})`,
 			)
 		}
 
-		key := keyObj.(*object.String).Value
+		key := pair.Key.(*object.String).Value
 		globalStore.data[key] = &KvItem{
-			Value:     value.Value,
+			Value:     pair.Value,
 			ExpiresAt: nil,
 		}
 	}
@@ -642,7 +642,7 @@ func kvIncrement(args []object.VintObject, defs map[string]object.VintObject) ob
 		return ErrorMessage(
 			"kv", "increment",
 			"key must be a string",
-			"key is " + string(args[0].Type()),
+			"key is "+string(args[0].Type()),
 			`kv.increment("counter")`,
 		)
 	}
@@ -655,7 +655,7 @@ func kvIncrement(args []object.VintObject, defs map[string]object.VintObject) ob
 			return ErrorMessage(
 				"kv", "increment",
 				"delta must be an integer",
-				"delta is " + string(args[1].Type()),
+				"delta is "+string(args[1].Type()),
 				`kv.increment("counter", 5)`,
 			)
 		}
@@ -685,7 +685,7 @@ func kvIncrement(args []object.VintObject, defs map[string]object.VintObject) ob
 				return ErrorMessage(
 					"kv", "increment",
 					"existing value must be an integer",
-					"existing value is " + string(item.Value.Type()),
+					"existing value is "+string(item.Value.Type()),
 					`kv.increment("counter")`,
 				)
 			}
@@ -717,7 +717,7 @@ func kvDecrement(args []object.VintObject, defs map[string]object.VintObject) ob
 		return ErrorMessage(
 			"kv", "decrement",
 			"key must be a string",
-			"key is " + string(args[0].Type()),
+			"key is "+string(args[0].Type()),
 			`kv.decrement("counter")`,
 		)
 	}
@@ -730,7 +730,7 @@ func kvDecrement(args []object.VintObject, defs map[string]object.VintObject) ob
 			return ErrorMessage(
 				"kv", "decrement",
 				"delta must be an integer",
-				"delta is " + string(args[1].Type()),
+				"delta is "+string(args[1].Type()),
 				`kv.decrement("counter", 5)`,
 			)
 		}
@@ -760,7 +760,7 @@ func kvDecrement(args []object.VintObject, defs map[string]object.VintObject) ob
 				return ErrorMessage(
 					"kv", "decrement",
 					"existing value must be an integer",
-					"existing value is " + string(item.Value.Type()),
+					"existing value is "+string(item.Value.Type()),
 					`kv.decrement("counter")`,
 				)
 			}
@@ -791,14 +791,15 @@ func kvDump(args []object.VintObject, defs map[string]object.VintObject) object.
 	globalStore.mutex.RLock()
 	defer globalStore.mutex.RUnlock()
 
-	pairs := make(map[object.VintObject]*object.DictItem)
+	pairs := make(map[object.HashKey]object.DictPair)
 	for key, item := range globalStore.data {
 		// Skip expired items
 		if item.ExpiresAt != nil && time.Now().After(*item.ExpiresAt) {
 			continue
 		}
 		keyObj := &object.String{Value: key}
-		pairs[keyObj] = &object.DictItem{Value: item.Value}
+		hashKey := keyObj.HashKey()
+		pairs[hashKey] = object.DictPair{Key: keyObj, Value: item.Value}
 	}
 
 	return &object.Dict{Pairs: pairs}
