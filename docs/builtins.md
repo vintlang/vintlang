@@ -343,6 +343,7 @@ VintLang also provides specialized modules for advanced functionality:
 - **Math functions** like `abs`, `min`, `max`, `sqrt`, etc. are available in the `math` module
 - **String functions** like `toUpper`, `toLower`, `trim`, `contains`, etc. are available in the `string` module  
 - **Random functions** like `random.int()` and `random.float()` are available in the `random` module
+- **KV functions** like `set`, `get`, `delete`, `increment`, etc. are available in the `kv` module for in-memory key-value storage
 - **Array methods** like `reverse()` and `sort()` are available as methods on array objects
 
 Use these modules for more advanced functionality:
@@ -351,9 +352,15 @@ Use these modules for more advanced functionality:
 import math
 import string
 import random
+import kv
 
 let result = math.abs(-5)        // 5
 let upper = string.toUpper("hi") // "HI"
 let num = random.int(1, 10)      // Random number 1-10
 let arr = [3, 1, 4].sort()       // [1, 3, 4]
+
+// In-memory key-value storage
+kv.set("user:123", {"name": "Alice"})
+let user = kv.get("user:123")    // {name: Alice}
+kv.increment("page_views")       // 1
 ```
