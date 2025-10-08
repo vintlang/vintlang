@@ -238,6 +238,30 @@ See `SHOWCASE_README.md` for detailed information about each showcase applicatio
 
 ---
 
+## 🤝 Contributing
+
+We welcome contributions to VintLang! Whether you're fixing bugs, adding features, or improving documentation, your help is appreciated.
+
+### For Maintainers: Creating Releases
+
+If you're a maintainer looking to create a new release, please refer to our comprehensive [Release Process Documentation](docs/RELEASE_PROCESS.md) which covers:
+
+- How to use GoReleaser to build and publish releases
+- Testing releases locally before publishing
+- Understanding the GitHub Actions workflow
+- Troubleshooting common release issues
+
+Quick start for creating a release:
+```bash
+# Test the build locally first
+./scripts/test-goreleaser.sh
+
+# Create and publish a release
+./scripts/release.sh v0.3.0
+```
+
+---
+
 ## Author
 
 Created by **Tachera Sasi**
