@@ -1,7 +1,7 @@
 # GoReleaser configuration for VintLang
 # See https://goreleaser.com for documentation
 
-version: 2
+version: 1
 
 before:
   hooks:

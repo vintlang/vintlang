@@ -7,6 +7,9 @@ set -e
 
 echo "🔧 Testing GoReleaser configuration..."
 
+# Ensure ~/go/bin is in PATH
+export PATH="$HOME/go/bin:$PATH"
+
 # Check if goreleaser is installed
 if ! command -v goreleaser &> /dev/null; then
     echo "❌ GoReleaser is not installed. Installing..."
