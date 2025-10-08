@@ -7,6 +7,7 @@ import (
 	"github.com/vintlang/vintlang/object"
 )
 
+// KvFunctions contains all KV module functions
 var KvFunctions = map[string]object.ModuleFunction{}
 
 // KvStore represents a thread-safe in-memory key-value store
@@ -451,7 +452,7 @@ func kvGetTTL(args []object.VintObject, defs map[string]object.VintObject) objec
 			return &object.Integer{Value: -1} // No TTL set
 		}
 
-		remaining := item.ExpiresAt.Sub(time.Now()).Seconds()
+		remaining := time.Until(*item.ExpiresAt).Seconds()
 		if remaining <= 0 {
 			return &object.Integer{Value: 0} // Expired
 		}
@@ -834,11 +835,23 @@ func kvStats(args []object.VintObject, defs map[string]object.VintObject) object
 
 	activeKeys := totalKeys - expiredKeys
 
-	stats := make(map[object.VintObject]*object.DictItem)
-	stats[&object.String{Value: "total_keys"}] = &object.DictItem{Value: &object.Integer{Value: totalKeys}}
-	stats[&object.String{Value: "active_keys"}] = &object.DictItem{Value: &object.Integer{Value: activeKeys}}
-	stats[&object.String{Value: "expired_keys"}] = &object.DictItem{Value: &object.Integer{Value: expiredKeys}}
-	stats[&object.String{Value: "keys_with_ttl"}] = &object.DictItem{Value: &object.Integer{Value: keysWithTTL}}
+	stats := make(map[object.HashKey]object.DictPair)
+	
+	totalKeysObj := &object.String{Value: "total_keys"}
+	stats[totalKeysObj.HashKey()] = object.DictPair{Key: totalKeysObj, Value: &object.Integer{Value: totalKeys}}
+	
+	activeKeysObj := &object.String{Value: "active_keys"}
+	stats[activeKeysObj.HashKey()] = object.DictPair{Key: activeKeysObj, Value: &object.Integer{Value: activeKeys}}
+	
+	expiredKeysObj := &object.String{Value: "expired_keys"}
+	stats[expiredKeysObj.HashKey()] = object.DictPair{Key: expiredKeysObj, Value: &object.Integer{Value: expiredKeys}}
+	
+	keysWithTTLObj := &object.String{Value: "keys_with_ttl"}
+	stats[keysWithTTLObj.HashKey()] = object.DictPair{Key: keysWithTTLObj, Value: &object.Integer{Value: keysWithTTL}}
 
 	return &object.Dict{Pairs: stats}
 }
+
+
+
+

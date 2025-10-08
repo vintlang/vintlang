@@ -1,0 +1,62 @@
+// Test the KV module functionality
+import kv;
+
+// Test basic operations
+print("=== Basic KV Operations ===");
+kv.set("user:123", {"name": "John", "age": 30});
+kv.set("session:456", "active");
+kv.set("counter", 0);
+
+print("Get user:", kv.get("user:123"));
+print("Get session:", kv.get("session:456"));
+print("Get counter:", kv.get("counter"));
+print("Get nonexistent:", kv.get("nonexistent"));
+
+print("User exists:", kv.exists("user:123"));
+print("Nonexistent exists:", kv.exists("nonexistent"));
+
+print("Store size:", kv.size());
+print("Store empty:", kv.isEmpty());
+
+print("\n=== Keys and Values ===");
+print("All keys:", kv.keys());
+print("All values:", kv.values());
+
+print("\n=== TTL Operations ===");
+kv.set("temp:data", "will expire");
+kv.setTTL("temp:data", 2); // 2 seconds TTL
+print("TTL for temp:data:", kv.getTTL("temp:data"));
+
+kv.set("quick:expire", "expires now");
+print("Before expire:", kv.exists("quick:expire"));
+kv.expire("quick:expire", 0); // expire immediately
+print("After expire:", kv.exists("quick:expire"));
+
+print("\n=== Bulk Operations ===");
+kv.mset({"bulk1": "value1", "bulk2": "value2", "bulk3": "value3"});
+print("Bulk get:", kv.mget(["bulk1", "bulk2", "bulk3", "nonexistent"]));
+
+print("\n=== Atomic Operations ===");
+print("Initial counter:", kv.get("counter"));
+print("Increment by 1:", kv.increment("counter"));
+print("Increment by 5:", kv.increment("counter", 5));
+print("Decrement by 2:", kv.decrement("counter", 2));
+print("Final counter:", kv.get("counter"));
+
+// Test increment on non-existent key
+print("New counter increment:", kv.increment("newcounter", 10));
+
+print("\n=== Statistics ===");
+print("Store stats:", kv.stats());
+
+print("\n=== Data Dump ===");
+print("All data:", kv.dump());
+
+print("\n=== Clear Operations ===");
+print("Delete specific key:", kv.delete("session:456"));
+print("Key exists after delete:", kv.exists("session:456"));
+
+print("Size before clear:", kv.size());
+kv.clear();
+print("Size after clear:", kv.size());
+print("Store empty after clear:", kv.isEmpty());
