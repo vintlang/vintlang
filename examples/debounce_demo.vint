@@ -1,0 +1,52 @@
+// Comprehensive debounce demonstration
+println("=== Vint Debounce Function Demo ===\n")
+
+// Test 1: Basic debounce with user function
+println("Test 1: User-defined function debouncing")
+let callCount = 0
+let testFunc = func(message) {
+    callCount = callCount + 1
+    println("Executed:", message, "| Call #" + string(callCount))
+}
+
+let debouncedTest = debounce(150, testFunc)
+
+println("Making 5 rapid calls...")
+debouncedTest("Call 1")
+debouncedTest("Call 2") 
+debouncedTest("Call 3")
+debouncedTest("Call 4")
+debouncedTest("Final call") // Only this should execute
+
+sleep(200) // Wait for execution
+println("Result: Only 1 execution should have occurred\n")
+
+// Test 2: Debounce with builtin function
+println("Test 2: Builtin function debouncing")
+let debouncedPrint = debounce(100, println)
+
+println("Making rapid println calls...")
+debouncedPrint("Message 1")
+debouncedPrint("Message 2")
+debouncedPrint("This message should appear") // Only this prints
+
+sleep(150)
+println("Result: Only the final message should have printed above\n")
+
+// Test 3: Different delay values
+println("Test 3: Testing with integer milliseconds")
+let quickDebounce = debounce(50, func() { println("Quick execution!") })
+let slowDebounce = debounce(200, func() { println("Slow execution!") })
+
+quickDebounce()
+slowDebounce()
+
+sleep(75)  // Quick should execute
+println("After 75ms - quick should have executed")
+
+sleep(150) // Slow should execute  
+println("After 225ms total - slow should have executed")
+
+println("\n=== Demo Complete ===")
+println("The debounce function successfully delays execution and")
+println("cancels previous calls when new ones are made rapidly!")
