@@ -836,22 +836,18 @@ func kvStats(args []object.VintObject, defs map[string]object.VintObject) object
 	activeKeys := totalKeys - expiredKeys
 
 	stats := make(map[object.HashKey]object.DictPair)
-	
+
 	totalKeysObj := &object.String{Value: "total_keys"}
 	stats[totalKeysObj.HashKey()] = object.DictPair{Key: totalKeysObj, Value: &object.Integer{Value: totalKeys}}
-	
+
 	activeKeysObj := &object.String{Value: "active_keys"}
 	stats[activeKeysObj.HashKey()] = object.DictPair{Key: activeKeysObj, Value: &object.Integer{Value: activeKeys}}
-	
+
 	expiredKeysObj := &object.String{Value: "expired_keys"}
 	stats[expiredKeysObj.HashKey()] = object.DictPair{Key: expiredKeysObj, Value: &object.Integer{Value: expiredKeys}}
-	
+
 	keysWithTTLObj := &object.String{Value: "keys_with_ttl"}
 	stats[keysWithTTLObj.HashKey()] = object.DictPair{Key: keysWithTTLObj, Value: &object.Integer{Value: keysWithTTL}}
 
 	return &object.Dict{Pairs: stats}
 }
-
-
-
-
