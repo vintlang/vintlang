@@ -300,6 +300,40 @@ parseFloat("-2.5")    // Output: -2.5
 parseFloat("hello")   // Error: cannot parse 'hello' as float
 ```
 
+### Utility Functions
+
+#### `debounce(delay, function)`
+
+Creates a debounced version of a function that delays its execution until after `delay` milliseconds have elapsed since the last time the debounced function was invoked. This is useful for rate-limiting function calls, especially in response to user input or events.
+
+The `delay` parameter can be:
+
+- An integer representing milliseconds
+- A Duration object
+
+The `function` parameter can be:
+
+- A user-defined function
+- A builtin function
+
+```js
+// Create a debounced version of print with 500ms delay
+let debouncedPrint = debounce(500, print)
+
+// These rapid calls will be debounced - only the last one executes
+debouncedPrint("First call")
+debouncedPrint("Second call")  
+debouncedPrint("Third call")   // Only this prints after 500ms
+
+// Example with user-defined function
+let logMessage = func(msg) {
+    println("LOG:", msg)
+}
+
+let debouncedLog = debounce(1000, logMessage)
+debouncedLog("This will be logged after 1 second of inactivity")
+```
+
 ---
 
 ## Note on Existing Modules
@@ -312,6 +346,7 @@ VintLang also provides specialized modules for advanced functionality:
 - **Array methods** like `reverse()` and `sort()` are available as methods on array objects
 
 Use these modules for more advanced functionality:
+
 ```js
 import math
 import string

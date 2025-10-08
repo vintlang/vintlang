@@ -1,0 +1,36 @@
+// Example usage of the debounce builtin function in VintLang
+// This demonstrates how to use debounce with different types of delays and functions
+
+// Example 1: Using debounce with an integer (milliseconds) and a builtin function
+let debouncedPrint = debounce(500, print)
+
+println("Calling debounced print multiple times rapidly...")
+debouncedPrint("First call")
+debouncedPrint("Second call")
+debouncedPrint("Third call") // Only this one should execute after 500ms
+
+// Example 2: Using debounce with a Duration object and a user-defined function
+let logMessage = func(msg) {
+    println("LOG:", msg)
+}
+
+// Note: This would require a duration object to be created
+// let debouncedLog = debounce(duration.milliseconds(1000), logMessage)
+
+// Example 3: Demonstrating the debounce behavior
+println("Testing debounce behavior...")
+let counter = 0
+let incrementCounter = func() {
+    counter = counter + 1
+    println("Counter:", counter)
+}
+
+let debouncedIncrement = debounce(300, incrementCounter)
+
+// These calls will be debounced - only the last one should execute
+debouncedIncrement()
+debouncedIncrement() 
+debouncedIncrement()
+debouncedIncrement() // Only this call should result in incrementing the counter
+
+println("Debounce test complete. The counter should only increment once after 300ms.")
