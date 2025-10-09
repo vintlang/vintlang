@@ -50,10 +50,10 @@ func Bundle(args []string) error {
 	if len(args) >= 7 && args[6] == "quiet" {
 		verbose = false
 	}
-	printlnVerbose(verbose, "📦 Starting Enhanced Bundle for '", filepath.Base(vintFile), "'")
+	printlnVerbose(verbose, ">> Starting Enhanced Bundle for '", filepath.Base(vintFile), "'")
 
 	// Analyze dependencies
-	printVerbose(verbose, "🔍 Analyzing dependencies... ")
+	printVerbose(verbose, "=> Analyzing dependencies... ")
 	analyzer := NewDependencyAnalyzer()
 	bundle, err := analyzer.AnalyzeDependencies(vintFile)
 	if err != nil {
@@ -61,9 +61,9 @@ func Bundle(args []string) error {
 		logError(err)
 		return err
 	}
-	printlnVerbose(verbose, fmt.Sprintf("✅ Found %d files", len(bundle.Files)))
+	printlnVerbose(verbose, fmt.Sprintf("=> Found %d files", len(bundle.Files)))
 
-	printVerbose(verbose, "📁 Creating temp Bundle directory... ")
+	printVerbose(verbose, "=> Creating temp Bundle directory... ")
 	tempDir, err := os.MkdirTemp("", "vint-bundle-*")
 	if err != nil {
 		err = fmt.Errorf("failed to create temp dir: %w", err)
@@ -71,13 +71,13 @@ func Bundle(args []string) error {
 		return err
 	}
 	defer os.RemoveAll(tempDir)
-	printlnVerbose(verbose, "✅")
+	printlnVerbose(verbose, "OK")
 
 	bundlerVersion := config.VINT_VERSION
 	buildTime := time.Now().Format(time.RFC3339)
 
 	// Generate bundled code using the new evaluator
-	printVerbose(verbose, "⚙️  Generating Go code with bundled files... ")
+	printVerbose(verbose, "=> Generating Go code with bundled files... ")
 	bundledEvaluator := NewBundledEvaluator(bundle)
 	goCode, err := bundledEvaluator.GenerateBundledCode(bundlerVersion, buildTime)
 	if err != nil {
@@ -92,9 +92,9 @@ func Bundle(args []string) error {
 		logError(err)
 		return err
 	}
-	printlnVerbose(verbose, "✅")
+	printlnVerbose(verbose, "OK")
 
-	printVerbose(verbose, "📦 Initializing modules... ")
+	printVerbose(verbose, "=> Initializing modules... ")
 	goMod := `module vint-bundled
 
 go 1.24
@@ -106,7 +106,7 @@ require github.com/vintlang/vintlang v0.2.0
 		logError(err)
 		return err
 	}
-	printlnVerbose(verbose, "✅")
+	printlnVerbose(verbose, "OK")
 
 	// Bundle binary
 	binaryName := strings.TrimSuffix(filepath.Base(vintFile), ".vint")
@@ -115,9 +115,9 @@ require github.com/vintlang/vintlang v0.2.0
 	if len(args) == 3 {
 		binaryName = args[2]
 	}
-	printlnVerbose(verbose, "🔨 Bundling binary '", binaryName, "'...")
+	printlnVerbose(verbose, "=> Bundling binary '", binaryName, "'...")
 
-	spinner := []string{"⣾", "⣽", "⣻", "⢿", "⡿", "⣟", "⣯", "⣷"}
+	spinner := []string{"|", "/", "-", "\\", "|", "/", "-", "\\"}
 	done := make(chan bool)
 	if verbose {
 		go func() {
