@@ -156,11 +156,11 @@ require github.com/vintlang/vintlang v0.2.0
 		err = fmt.Errorf("bundle command failed: %w", err)
 		logError(err)
 		done <- true
-		return fmt.Errorf("\n❌ Bundle failed: %w", err)
+		return fmt.Errorf("\n!! Bundle failed: %w", err)
 	}
 
 	done <- true
-	printVerbose(verbose, "\r🎉 Bundle successful! Moving binary... ")
+	printVerbose(verbose, "\r=> Bundle successful! Moving binary... ")
 
 	// Determine output directory
 	outputDir := "."
@@ -177,11 +177,11 @@ require github.com/vintlang/vintlang v0.2.0
 	if err := os.Rename(finalBinary, outputPath); err != nil {
 		err = fmt.Errorf("failed to move binary from '%s' to '%s': %w", finalBinary, outputPath, err)
 		logError(err)
-		return fmt.Errorf("\n❌ Failed to move binary: %w", err)
+		return fmt.Errorf("\n!! Failed to move binary: %w", err)
 	}
 
-	printlnVerbose(verbose, "✅")
-	fmt.Printf("\n✨ Successfully created binary with %d bundled files: %s\n", len(bundle.Files), outputPath)
+	printlnVerbose(verbose, "OK")
+	fmt.Printf("\n=> Successfully created binary with %d bundled files: %s\n", len(bundle.Files), outputPath)
 
 	// Cleanup option: keep temp directory if 'keep' flag is provided
 	keepTemp := false
