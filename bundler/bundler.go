@@ -117,7 +117,7 @@ require github.com/vintlang/vintlang v0.2.0
 	}
 	printlnVerbose(verbose, "=> Bundling binary '", binaryName, "'...")
 
-	spinner := []string{"|", "/", "-", "\\", "|", "/", "-", "\\"}
+	spinner := []string{"⣾", "⣽", "⣻", "⢿", "⡿", "⣟", "⣯", "⣷"}
 	done := make(chan bool)
 	if verbose {
 		go func() {
