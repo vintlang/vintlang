@@ -83,7 +83,6 @@ func newError(format string, a ...interface{}) *Error {
 }
 
 // DeferredCall represents a function call that has been deferred
-
 type DeferredCall struct {
 	Fn   VintObject
 	Args []VintObject
