@@ -10,9 +10,9 @@ import (
 
 // JwtFunctions is a map that holds the available functions in the JWT module.
 var JwtFunctions = map[string]object.ModuleFunction{
-	"create":     createJWT,
-	"verify":     verifyJWT,
-	"decode":     decodeJWT,
+	"create":      createJWT,
+	"verify":      verifyJWT,
+	"decode":      decodeJWT,
 	"createHS256": createJWTHS256,
 	"verifyHS256": verifyJWTHS256,
 }
