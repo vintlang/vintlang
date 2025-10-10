@@ -1,0 +1,19 @@
+// import jwt
+const jwt = import("jwt") // Both ways work
+
+const secret = "vint-is-so-awaseome"
+// Create a JWT token
+let payload = {"user": "Tachera", "role": "admin"}
+let token = jwt.create(payload, secret)
+info "token is "+ token
+
+const decoded = jwt.decode(token)
+
+println("DECODED", decoded)
+
+// Verify the token
+let result = jwt.verify(token, secret)
+if (result) {
+    println("User:", result["user"])
+    println("Role:", result["role"])
+}
