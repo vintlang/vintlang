@@ -1,0 +1,165 @@
+// Math Module Extensions Example
+// This example demonstrates the new math module capabilities
+
+import math
+
+print("=" * 60)
+print("MATH MODULE EXTENSIONS DEMO")
+print("=" * 60)
+
+// ============================================================================
+// STATISTICS FUNCTIONS
+// ============================================================================
+
+print("\n### STATISTICS FUNCTIONS ###\n")
+
+let data = [12, 15, 18, 22, 25, 28, 30, 35, 40]
+print("Dataset:", data)
+print("Mean:", math.mean(data))
+print("Median:", math.median(data))
+print("Variance:", math.variance(data))
+print("Standard Deviation:", math.stddev(data))
+
+// Example with test scores
+let scores = [85, 92, 78, 95, 88, 76, 89, 93]
+print("\nTest Scores:", scores)
+print("Average Score:", math.mean(scores))
+print("Score Spread (stddev):", math.stddev(scores))
+
+// ============================================================================
+// COMPLEX NUMBERS
+// ============================================================================
+
+print("\n### COMPLEX NUMBERS ###\n")
+
+let c1 = math.complex(3, 4)
+print("Complex number c1 = 3 + 4i:", c1)
+print("Real part:", c1["real"])
+print("Imaginary part:", c1["imag"])
+print("Magnitude |c1|:", math.abs(c1))
+
+let c2 = math.complex(5, 12)
+print("\nComplex number c2 = 5 + 12i:", c2)
+print("Magnitude |c2|:", math.abs(c2))
+
+let c3 = math.complex(0, 1)
+print("\nImaginary unit i = 0 + 1i:", c3)
+print("Magnitude |i|:", math.abs(c3))
+
+// ============================================================================
+// BIG INTEGERS
+// ============================================================================
+
+print("\n### BIG INTEGER SUPPORT ###\n")
+
+let bigNum1 = math.bigint("12345678901234567890")
+print("Big integer 1:", bigNum1["value"])
+
+let bigNum2 = math.bigint("99999999999999999999999999999999")
+print("Big integer 2:", bigNum2["value"])
+
+let regularInt = math.bigint(42)
+print("Regular integer as bigint:", regularInt["value"])
+
+// ============================================================================
+// LINEAR ALGEBRA OPERATIONS
+// ============================================================================
+
+print("\n### LINEAR ALGEBRA ###\n")
+
+// Dot product
+let v1 = [1, 2, 3]
+let v2 = [4, 5, 6]
+print("Vector v1:", v1)
+print("Vector v2:", v2)
+print("Dot product (v1 · v2):", math.dot(v1, v2))
+
+// Cross product (3D vectors only)
+let a = [1, 0, 0]
+let b = [0, 1, 0]
+print("\nVector a:", a)
+print("Vector b:", b)
+print("Cross product (a × b):", math.cross(a, b))
+
+// Vector magnitude
+let vec = [3, 4]
+print("\nVector:", vec)
+print("Magnitude:", math.magnitude(vec))
+
+let vec3d = [1, 2, 2]
+print("\nVector 3D:", vec3d)
+print("Magnitude:", math.magnitude(vec3d))
+
+// ============================================================================
+// NUMERICAL METHODS
+// ============================================================================
+
+print("\n### NUMERICAL METHODS ###\n")
+
+// Greatest Common Divisor
+print("GCD(48, 18):", math.gcd(48, 18))
+print("GCD(100, 75):", math.gcd(100, 75))
+
+// Least Common Multiple
+print("\nLCM(12, 15):", math.lcm(12, 15))
+print("LCM(8, 12):", math.lcm(8, 12))
+
+// Clamp - constrain a value between min and max
+print("\nClamp examples:")
+print("clamp(5, 0, 10):", math.clamp(5, 0, 10))
+print("clamp(-5, 0, 10):", math.clamp(-5, 0, 10))
+print("clamp(15, 0, 10):", math.clamp(15, 0, 10))
+
+// Linear interpolation
+print("\nLinear interpolation:")
+print("lerp(0, 100, 0.0):", math.lerp(0, 100, 0.0))
+print("lerp(0, 100, 0.25):", math.lerp(0, 100, 0.25))
+print("lerp(0, 100, 0.5):", math.lerp(0, 100, 0.5))
+print("lerp(0, 100, 0.75):", math.lerp(0, 100, 0.75))
+print("lerp(0, 100, 1.0):", math.lerp(0, 100, 1.0))
+
+// ============================================================================
+// PRACTICAL EXAMPLES
+// ============================================================================
+
+print("\n### PRACTICAL EXAMPLES ###\n")
+
+// Example 1: Calculate distance between two points in 3D space
+let distance3D = func(p1, p2) {
+    let diff = [p2[0] - p1[0], p2[1] - p1[1], p2[2] - p1[2]]
+    return math.magnitude(diff)
+}
+
+let point1 = [1, 2, 3]
+let point2 = [4, 6, 8]
+print("Distance between", point1, "and", point2)
+print("Result:", distance3D(point1, point2))
+
+// Example 2: Normalize a vector
+let normalize = func(vec) {
+    let mag = math.magnitude(vec)
+    return [vec[0] / mag, vec[1] / mag, vec[2] / mag]
+}
+
+let vector = [3, 4, 0]
+print("\nOriginal vector:", vector)
+print("Normalized:", normalize(vector))
+
+// Example 3: Statistical analysis of a dataset
+let analyzeData = func(data) {
+    print("\nDataset Analysis:")
+    print("Data:", data)
+    print("Count:", len(data))
+    print("Mean:", math.mean(data))
+    print("Median:", math.median(data))
+    print("Std Dev:", math.stddev(data))
+    print("Min:", math.min(data))
+    print("Max:", math.max(data))
+}
+
+let measurements = [102, 98, 105, 97, 103, 100, 99, 101, 104, 98]
+analyzeData(measurements)
+
+print("\n" + "=" * 60)
+print("END OF DEMO")
+print("=" * 60)
