@@ -641,7 +641,7 @@ func (s *String) compareIgnoreCase(args []VintObject) VintObject {
 // format applies simple formatting to the string with provided arguments
 func (s *String) format(args []VintObject) VintObject {
 	result := s.Value
-	
+
 	for i, arg := range args {
 		placeholder := "{" + strconv.Itoa(i) + "}"
 		result = strings.ReplaceAll(result, placeholder, arg.Inspect())
