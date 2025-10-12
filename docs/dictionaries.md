@@ -220,6 +220,150 @@ print(original)  // {"Alice": "alice@email.com", "Bob": "bob@email.com"}
 print(backup)    // {"Alice": "alice@email.com", "Bob": "bob@email.com", "Charlie": "charlie@email.com"}
 ```
 
+### filter()
+
+Create a new dictionary with key-value pairs that pass a test function:
+
+```js
+scores = {"Alice": 85, "Bob": 92, "Charlie": 78, "Diana": 95}
+highScores = scores.filter(func(key, value) { return value >= 90 })
+print(highScores)  // {"Bob": 92, "Diana": 95}
+```
+
+### map()
+
+Create a new dictionary with transformed values:
+
+```js
+prices = {"apple": 1.5, "banana": 0.8, "orange": 2.0}
+discountedPrices = prices.map(func(key, value) { return value * 0.9 })
+print(discountedPrices)  // {"apple": 1.35, "banana": 0.72, "orange": 1.8}
+```
+
+### forEach()
+
+Execute a function for each key-value pair:
+
+```js
+contacts = {"Alice": "alice@email.com", "Bob": "bob@email.com"}
+contacts.forEach(func(key, value) { 
+    print("Name:", key, "Email:", value) 
+})
+// Output:
+// Name: Alice Email: alice@email.com
+// Name: Bob Email: bob@email.com
+```
+
+### find()
+
+Find the first key-value pair that satisfies a test function:
+
+```js
+users = {"user1": 25, "user2": 17, "user3": 32}
+adult = users.find(func(key, value) { return value >= 18 })
+print(adult)  // ["user1", 25] or null if not found
+```
+
+### some()
+
+Test whether at least one key-value pair passes the test:
+
+```js
+scores = {"Alice": 85, "Bob": 72, "Charlie": 95}
+hasHighScore = scores.some(func(key, value) { return value >= 90 })
+print(hasHighScore)  // true
+```
+
+### every()
+
+Test whether all key-value pairs pass the test:
+
+```js
+scores = {"Alice": 85, "Bob": 92, "Charlie": 95}
+allPassed = scores.every(func(key, value) { return value >= 80 })
+print(allPassed)  // true
+```
+
+### pick()
+
+Create a new dictionary with only specified keys:
+
+```js
+user = {"name": "Alice", "age": 25, "email": "alice@email.com", "password": "secret"}
+publicInfo = user.pick("name", "age", "email")
+print(publicInfo)  // {"name": "Alice", "age": 25, "email": "alice@email.com"}
+```
+
+### omit()
+
+Create a new dictionary excluding specified keys:
+
+```js
+user = {"name": "Alice", "age": 25, "email": "alice@email.com", "password": "secret"}
+safeInfo = user.omit("password")
+print(safeInfo)  // {"name": "Alice", "age": 25, "email": "alice@email.com"}
+```
+
+### isEmpty()
+
+Check if the dictionary is empty:
+
+```js
+emptyDict = {}
+filledDict = {"key": "value"}
+print(emptyDict.isEmpty())   // true
+print(filledDict.isEmpty())  // false
+```
+
+### equals()
+
+Check if two dictionaries are equal:
+
+```js
+dict1 = {"name": "Alice", "age": 25}
+dict2 = {"name": "Alice", "age": 25}
+dict3 = {"name": "Bob", "age": 30}
+print(dict1.equals(dict2))   // true
+print(dict1.equals(dict3))   // false
+```
+
+### entries()
+
+Get an array of [key, value] pairs:
+
+```js
+contacts = {"Alice": "alice@email.com", "Bob": "bob@email.com"}
+entryList = contacts.entries()
+print(entryList)  // [["Alice", "alice@email.com"], ["Bob", "bob@email.com"]]
+```
+
+### flatten()
+
+Flatten nested dictionaries (one level deep):
+
+```js
+nested = {
+    "user": {"name": "Alice", "age": 25},
+    "status": "active"
+}
+flattened = nested.flatten()
+print(flattened)  // {"user.name": "Alice", "user.age": 25, "status": "active"}
+```
+
+### deepMerge()
+
+Recursively merge dictionaries:
+
+```js
+dict1 = {"user": {"name": "Alice"}, "status": "active"}
+dict2 = {"user": {"age": 25}, "role": "admin"}
+merged = dict1.deepMerge(dict2)
+print(merged)  // {"user": {"name": "Alice", "age": 25}, "status": "active", "role": "admin"}
+```
+
+## Practical Examples
+```
+
 ## Advanced Dictionary Usage
 
 Here are some practical examples of using dictionaries with their methods:
