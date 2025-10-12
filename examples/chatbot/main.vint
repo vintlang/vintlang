@@ -51,7 +51,7 @@ let getAnswerForQuestion = func(question, knowledgeBase) {
 // Chatbot main logic
 // This is the main chatbot loop. It continuously interacts with the user until they type "quit."
 let chatBot = func() {
-    print("Hello, BUDDDY your daily assistant") // Initial greeting
+    println("Hello, BUDDDY your daily assistant") // Initial greeting
     let filePath = "./knowledge_base.json" // Filepath for the knowledge base
     let knowledgeBase = loadKnowledgeBase(filePath) // Load knowledge base
 
@@ -73,14 +73,14 @@ let chatBot = func() {
         if (bestMatch != "") {
             // If a matching question is found, get and display the answer
             let answer = getAnswerForQuestion(bestMatch, knowledgeBase)
-            print("BUDDDY: " + answer)
+            println("BUDDDY: " + answer)
         } else {
             // If no match is found, inform the user without learning new answers
-            print("BUDDDY: Sorry, I don't know the answer to that.") 
+            println("BUDDDY: Sorry, I don't know the answer to that.") 
             
             // Commented out the part where the chatbot asks to be taught
             /*
-            print("Sorry, I don't know the answer. Can you teach me?")
+            println("Sorry, I don't know the answer. Can you teach me?")
             let newAnswer = input("Type the answer or 'skip' to skip: ")
 
             if (string.toLower(newAnswer) != "skip") {
@@ -90,7 +90,7 @@ let chatBot = func() {
                 // Commented out saving functionality
                 // saveKnowledgeBase(filePath, knowledgeBase)
 
-                print("BUDDDY: Thank you, I learned a new response!")
+                println("BUDDDY: Thank you, I learned a new response!")
             }
             */
         }
