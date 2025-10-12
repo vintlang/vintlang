@@ -153,6 +153,18 @@ let condition = false
 print(condition.negate())   // true
 ```
 
+### toggle()
+
+Returns the opposite boolean value (same as negate):
+
+```s
+let flag = true
+print(flag.toggle())        // false
+
+let condition = false
+print(condition.toggle())   // true
+```
+
 ### and()
 
 Performs logical AND operation with another boolean:
