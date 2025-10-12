@@ -180,6 +180,99 @@ print((4).factorial()) // 24
 print((0).factorial()) // 1
 ```
 
+### toBinary()
+
+Converts the integer to binary representation:
+
+```s
+let num = 255
+print(num.toBinary())  // "11111111"
+print((5).toBinary())  // "101"
+```
+
+### toHex()
+
+Converts the integer to hexadecimal representation:
+
+```s
+let num = 255
+print(num.toHex())     // "ff"
+print((16).toHex())    // "10"
+```
+
+### toOctal()
+
+Converts the integer to octal representation:
+
+```s
+let num = 64
+print(num.toOctal())   // "100"
+print((8).toOctal())   // "10"
+```
+
+### isPrime()
+
+Checks if the integer is a prime number:
+
+```s
+print((17).isPrime())  // true
+print((4).isPrime())   // false
+print((2).isPrime())   // true
+print((1).isPrime())   // false
+```
+
+### nthRoot()
+
+Calculates the nth root of the integer:
+
+```s
+let num = 8
+print(num.nthRoot(3))  // 2.0 (cube root)
+print((16).nthRoot(2)) // 4.0 (square root)
+```
+
+### mod()
+
+Calculates the modulo (remainder) with another integer:
+
+```s
+let num = 10
+print(num.mod(3))      // 1
+print((15).mod(4))     // 3
+```
+
+### clamp()
+
+Restricts the integer to be within specified bounds:
+
+```s
+let num = 15
+print(num.clamp(1, 10))  // 10 (clamped to max)
+print((-5).clamp(1, 10)) // 1 (clamped to min)
+print((5).clamp(1, 10))  // 5 (within bounds)
+```
+
+### inRange()
+
+Checks if the integer is within the specified range (inclusive):
+
+```s
+let num = 5
+print(num.inRange(1, 10))  // true
+print((15).inRange(1, 10)) // false
+print((0).inRange(1, 10))  // false
+```
+
+### digits()
+
+Returns an array of individual digits:
+
+```s
+let num = 123
+print(num.digits())    // [1, 2, 3]
+print((456).digits())  // [4, 5, 6]
+```
+
 ## Float Methods
 
 Floats in vint have powerful built-in methods for mathematical operations and utility functions:
@@ -289,6 +382,121 @@ let value = 75.5
 print(value.clamp(0.0, 50.0))  // 50.0
 print((25.3).clamp(30.0, 100.0)) // 30.0
 print((45.7).clamp(10.0, 80.0))  // 45.7
+```
+
+### toPrecision()
+
+Formats the float to specified precision:
+
+```s
+let num = 123.456789
+print(num.toPrecision(4))    // "123.5"
+print((0.123456).toPrecision(3)) // "0.123"
+```
+
+### toFixed()
+
+Formats the float to fixed decimal places:
+
+```s
+let num = 123.456
+print(num.toFixed(2))        // "123.46"
+print((5.0).toFixed(3))      // "5.000"
+```
+
+### sign()
+
+Returns the sign of the float:
+
+```s
+print((5.5).sign())          // 1.0
+print((-3.2).sign())         // -1.0
+print((0.0).sign())          // 0.0
+```
+
+### truncate()
+
+Removes the fractional part:
+
+```s
+print((5.9).truncate())      // 5.0
+print((-3.7).truncate())     // -3.0
+```
+
+### mod()
+
+Calculates the floating-point remainder:
+
+```s
+let num = 5.5
+print(num.mod(2.0))          // 1.5
+print((10.7).mod(3.0))       // 1.7
+```
+
+### degrees()
+
+Converts radians to degrees:
+
+```s
+import math
+let pi = math.PI
+print(pi.degrees())          // 180.0
+print((pi / 2).degrees())    // 90.0
+```
+
+### radians()
+
+Converts degrees to radians:
+
+```s
+print((180.0).radians())     // 3.141592653589793
+print((90.0).radians())      // 1.5707963267948966
+```
+
+### sin()
+
+Calculates the sine:
+
+```s
+print((0.0).sin())           // 0.0
+print((math.PI / 2).sin())   // 1.0
+```
+
+### cos()
+
+Calculates the cosine:
+
+```s
+print((0.0).cos())           // 1.0
+print(math.PI.cos())         // -1.0
+```
+
+### tan()
+
+Calculates the tangent:
+
+```s
+print((0.0).tan())           // 0.0
+print((math.PI / 4).tan())   // 1.0
+```
+
+### log()
+
+Calculates the natural logarithm:
+
+```s
+import math
+print(math.E.log())          // 1.0
+print((10.0).log())          // 2.302585092994046
+```
+
+### exp()
+
+Calculates e raised to the power of the float:
+
+```s
+print((0.0).exp())           // 1.0
+print((1.0).exp())           // 2.718281828459045
 ```
 
 ## Practical Examples
