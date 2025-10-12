@@ -167,3 +167,97 @@ Here is a complete list of the available functions and constants:
 - **Description**: Calculates the hyperbolic tangent of a number.
 - **Example**: `math.tanh(1.0)` returns `0.761...`.
 
+---
+
+## Statistics Functions
+
+#### `mean(array)`
+- **Description**: Calculates the arithmetic mean (average) of an array of numbers.
+- **Example**: `math.mean([1, 2, 3, 4, 5])` returns `3.0`.
+
+#### `median(array)`
+- **Description**: Calculates the median (middle value) of an array of numbers.
+- **Example**: `math.median([1, 2, 3, 4, 5])` returns `3.0`.
+- **Note**: For even-length arrays, returns the average of the two middle values.
+
+#### `variance(array)`
+- **Description**: Calculates the variance of an array of numbers.
+- **Example**: `math.variance([1, 2, 3, 4, 5])` returns `2.0`.
+
+#### `stddev(array)`
+- **Description**: Calculates the standard deviation of an array of numbers.
+- **Example**: `math.stddev([1, 2, 3, 4, 5])` returns `1.414...`.
+
+---
+
+## Complex Numbers
+
+#### `complex(real, imag)`
+- **Description**: Creates a complex number with the given real and imaginary parts.
+- **Returns**: A dictionary with `real` and `imag` keys.
+- **Example**: 
+  ```js
+  let c = math.complex(3, 4)
+  print(c["real"])  // 3
+  print(c["imag"])  // 4
+  ```
+
+#### `abs(n)` (extended)
+- **Description**: Also works with complex numbers to calculate magnitude.
+- **Example**: 
+  ```js
+  let c = math.complex(3, 4)
+  math.abs(c)  // returns 5.0
+  ```
+
+---
+
+## Arbitrary Precision
+
+#### `bigint(value)`
+- **Description**: Creates a big integer representation for arbitrary precision arithmetic.
+- **Parameters**: A string or integer representing a large number.
+- **Returns**: A dictionary with `value` (string) and `type` ("bigint") keys.
+- **Example**: 
+  ```js
+  let big = math.bigint("999999999999999999999")
+  print(big["value"])  // "999999999999999999999"
+  ```
+
+---
+
+## Linear Algebra
+
+#### `dot(array1, array2)`
+- **Description**: Calculates the dot product of two vectors (arrays).
+- **Example**: `math.dot([1, 2, 3], [4, 5, 6])` returns `32.0`.
+
+#### `cross(array1, array2)`
+- **Description**: Calculates the cross product of two 3D vectors.
+- **Example**: `math.cross([1, 2, 3], [4, 5, 6])` returns `[-3, 6, -3]`.
+
+#### `magnitude(array)`
+- **Description**: Calculates the magnitude (length) of a vector.
+- **Example**: `math.magnitude([3, 4])` returns `5.0`.
+
+---
+
+## Numerical Methods
+
+#### `gcd(a, b)`
+- **Description**: Calculates the greatest common divisor of two integers.
+- **Example**: `math.gcd(48, 18)` returns `6`.
+
+#### `lcm(a, b)`
+- **Description**: Calculates the least common multiple of two integers.
+- **Example**: `math.lcm(12, 15)` returns `60`.
+
+#### `clamp(value, min, max)`
+- **Description**: Clamps a value between a minimum and maximum.
+- **Example**: `math.clamp(15, 0, 10)` returns `10.0`.
+
+#### `lerp(start, end, t)`
+- **Description**: Linear interpolation between two values.
+- **Parameters**: `start` and `end` values, and `t` (0.0 to 1.0) as the interpolation factor.
+- **Example**: `math.lerp(0, 10, 0.5)` returns `5.0`.
+
