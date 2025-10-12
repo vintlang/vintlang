@@ -207,6 +207,458 @@
     {
       "question": "what is a hackathon?",
       "answer": "A hackathon is an event where programmers and others involved in software development collaborate intensively on projects over a short period of time."
+    },
+    {
+      "question": "what is software engineering?",
+      "answer": "Software engineering is the systematic approach to the design, development, and maintenance of software systems."
+    },
+    {
+      "question": "what is version control?",
+      "answer": "Version control is a system that tracks changes to files over time, allowing multiple developers to collaborate on projects."
+    },
+    {
+      "question": "what is a code review?",
+      "answer": "A code review is a systematic examination of source code intended to find bugs and improve code quality."
+    },
+    {
+      "question": "what is unit testing?",
+      "answer": "Unit testing is the practice of testing individual components or modules of software to ensure they work correctly."
+    },
+    {
+      "question": "what is continuous integration?",
+      "answer": "Continuous integration is a development practice where developers integrate code into a shared repository frequently."
+    },
+    {
+      "question": "what is a microservice?",
+      "answer": "A microservice is an architectural style that structures an application as a collection of small, independent services."
+    },
+    {
+      "question": "what is REST API?",
+      "answer": "REST API is an architectural style for designing networked applications using standard HTTP methods."
+    },
+    {
+      "question": "what is GraphQL?",
+      "answer": "GraphQL is a query language and runtime for APIs that allows clients to request exactly the data they need."
+    },
+    {
+      "question": "what is Docker?",
+      "answer": "Docker is a platform that uses containerization to package applications and their dependencies together."
+    },
+    {
+      "question": "what is Kubernetes?",
+      "answer": "Kubernetes is an open-source container orchestration platform for automating deployment, scaling, and management of containerized applications."
+    },
+    {
+      "question": "what is a virtual machine?",
+      "answer": "A virtual machine is a software emulation of a computer system that runs on top of physical hardware."
+    },
+    {
+      "question": "what is serverless computing?",
+      "answer": "Serverless computing is a cloud computing model where the cloud provider manages the infrastructure and automatically scales resources."
+    },
+    {
+      "question": "what is NoSQL?",
+      "answer": "NoSQL databases are non-relational databases designed to handle large volumes of unstructured or semi-structured data."
+    },
+    {
+      "question": "what is MongoDB?",
+      "answer": "MongoDB is a popular NoSQL document database that stores data in flexible, JSON-like documents."
+    },
+    {
+      "question": "what is Redis?",
+      "answer": "Redis is an in-memory data structure store used as a database, cache, and message broker."
+    },
+    {
+      "question": "what is Node.js?",
+      "answer": "Node.js is a JavaScript runtime built on Chrome's V8 JavaScript engine for building server-side applications."
+    },
+    {
+      "question": "what is React?",
+      "answer": "React is a JavaScript library for building user interfaces, particularly for web applications."
+    },
+    {
+      "question": "what is Angular?",
+      "answer": "Angular is a TypeScript-based web application framework developed by Google."
+    },
+    {
+      "question": "what is Vue.js?",
+      "answer": "Vue.js is a progressive JavaScript framework for building user interfaces and single-page applications."
+    },
+    {
+      "question": "what is TypeScript?",
+      "answer": "TypeScript is a programming language that builds on JavaScript by adding static type definitions."
+    },
+    {
+      "question": "what is PHP?",
+      "answer": "PHP is a server-side scripting language designed for web development but also used as a general-purpose programming language."
+    },
+    {
+      "question": "what is Ruby?",
+      "answer": "Ruby is a dynamic, object-oriented programming language known for its simplicity and productivity."
+    },
+    {
+      "question": "what is Ruby on Rails?",
+      "answer": "Ruby on Rails is a web application framework written in Ruby that follows the model-view-controller pattern."
+    },
+    {
+      "question": "what is Java?",
+      "answer": "Java is a high-level, object-oriented programming language known for its portability and 'write once, run anywhere' philosophy."
+    },
+    {
+      "question": "what is C++?",
+      "answer": "C++ is a general-purpose programming language that supports procedural, object-oriented, and generic programming."
+    },
+    {
+      "question": "what is Go?",
+      "answer": "Go is an open-source programming language developed by Google, known for its simplicity and efficiency in concurrent programming."
+    },
+    {
+      "question": "what is Rust?",
+      "answer": "Rust is a systems programming language focused on safety, speed, and concurrency without garbage collection."
+    },
+    {
+      "question": "what is Swift?",
+      "answer": "Swift is a programming language developed by Apple for iOS, macOS, watchOS, and tvOS app development."
+    },
+    {
+      "question": "what is Kotlin?",
+      "answer": "Kotlin is a statically typed programming language that runs on the Java Virtual Machine and is fully interoperable with Java."
+    },
+    {
+      "question": "what is Django?",
+      "answer": "Django is a high-level Python web framework that encourages rapid development and clean, pragmatic design."
+    },
+    {
+      "question": "what is Flask?",
+      "answer": "Flask is a lightweight Python web framework that provides the basic tools needed to build web applications."
+    },
+    {
+      "question": "what is Express.js?",
+      "answer": "Express.js is a minimal and flexible Node.js web application framework that provides robust features for web and mobile applications."
+    },
+    {
+      "question": "what is Spring Boot?",
+      "answer": "Spring Boot is a Java-based framework that simplifies the creation of production-ready Spring applications."
+    },
+    {
+      "question": "what is Bootstrap?",
+      "answer": "Bootstrap is a free and open-source CSS framework for developing responsive and mobile-first websites."
+    },
+    {
+      "question": "what is Sass?",
+      "answer": "Sass is a CSS preprocessor that adds features like variables, nesting, and mixins to make CSS more maintainable."
+    },
+    {
+      "question": "what is webpack?",
+      "answer": "Webpack is a static module bundler for JavaScript applications that processes and bundles various assets."
+    },
+    {
+      "question": "what is npm?",
+      "answer": "npm is the package manager for Node.js and the world's largest software registry for JavaScript packages."
+    },
+    {
+      "question": "what is yarn?",
+      "answer": "Yarn is a package manager for JavaScript that focuses on speed, reliability, and security."
+    },
+    {
+      "question": "what is pip?",
+      "answer": "pip is the package installer for Python, used to install and manage software packages from the Python Package Index."
+    },
+    {
+      "question": "what is a compiler?",
+      "answer": "A compiler is a program that translates source code written in a high-level programming language into machine code."
+    },
+    {
+      "question": "what is an interpreter?",
+      "answer": "An interpreter is a program that directly executes instructions written in a programming language without compiling them first."
+    },
+    {
+      "question": "what is object-oriented programming?",
+      "answer": "Object-oriented programming is a programming paradigm based on the concept of objects, which contain data and methods."
+    },
+    {
+      "question": "what is functional programming?",
+      "answer": "Functional programming is a programming paradigm that treats computation as the evaluation of mathematical functions."
+    },
+    {
+      "question": "what is procedural programming?",
+      "answer": "Procedural programming is a programming paradigm based on the procedure call concept, where programs are structured as sequences of functions."
+    },
+    {
+      "question": "what is recursion?",
+      "answer": "Recursion is a programming technique where a function calls itself to solve a problem by breaking it into smaller subproblems."
+    },
+    {
+      "question": "what is a data structure?",
+      "answer": "A data structure is a way of organizing and storing data in a computer so that it can be accessed and used efficiently."
+    },
+    {
+      "question": "what is an array?",
+      "answer": "An array is a data structure that stores multiple elements of the same type in a contiguous memory location."
+    },
+    {
+      "question": "what is a linked list?",
+      "answer": "A linked list is a linear data structure where elements are stored in nodes, and each node contains data and a reference to the next node."
+    },
+    {
+      "question": "what is a stack?",
+      "answer": "A stack is a linear data structure that follows the Last In, First Out (LIFO) principle for adding and removing elements."
+    },
+    {
+      "question": "what is a queue?",
+      "answer": "A queue is a linear data structure that follows the First In, First Out (FIFO) principle for adding and removing elements."
+    },
+    {
+      "question": "what is a binary tree?",
+      "answer": "A binary tree is a hierarchical data structure where each node has at most two children, referred to as left and right child."
+    },
+    {
+      "question": "what is a hash table?",
+      "answer": "A hash table is a data structure that implements an associative array using a hash function to compute indexes for keys and values."
+    },
+    {
+      "question": "what is time complexity?",
+      "answer": "Time complexity is a measure of the amount of time an algorithm takes to complete as a function of the input size."
+    },
+    {
+      "question": "what is space complexity?",
+      "answer": "Space complexity is a measure of the amount of memory space an algorithm uses as a function of the input size."
+    },
+    {
+      "question": "what is Big O notation?",
+      "answer": "Big O notation is a mathematical notation used to describe the upper bound of an algorithm's time or space complexity."
+    },
+    {
+      "question": "what is sorting?",
+      "answer": "Sorting is the process of arranging elements in a specific order, typically ascending or descending."
+    },
+    {
+      "question": "what is searching?",
+      "answer": "Searching is the process of finding a specific element or value within a data structure or collection."
+    },
+    {
+      "question": "what is binary search?",
+      "answer": "Binary search is an efficient searching algorithm that works on sorted arrays by repeatedly dividing the search interval in half."
+    },
+    {
+      "question": "what is linear search?",
+      "answer": "Linear search is a simple searching algorithm that checks every element in a list sequentially until the target is found."
+    },
+    {
+      "question": "what is merge sort?",
+      "answer": "Merge sort is a divide-and-conquer sorting algorithm that divides the array into halves, sorts them, and then merges them back."
+    },
+    {
+      "question": "what is quick sort?",
+      "answer": "Quick sort is a divide-and-conquer sorting algorithm that picks a pivot element and partitions the array around it."
+    },
+    {
+      "question": "what is bubble sort?",
+      "answer": "Bubble sort is a simple sorting algorithm that repeatedly steps through the list and swaps adjacent elements if they're in the wrong order."
+    },
+    {
+      "question": "what is a design pattern?",
+      "answer": "A design pattern is a reusable solution to a commonly occurring problem in software design and architecture."
+    },
+    {
+      "question": "what is the Singleton pattern?",
+      "answer": "The Singleton pattern ensures that a class has only one instance and provides a global point of access to that instance."
+    },
+    {
+      "question": "what is the Observer pattern?",
+      "answer": "The Observer pattern defines a one-to-many dependency between objects so that when one object changes state, all dependents are notified."
+    },
+    {
+      "question": "what is the Factory pattern?",
+      "answer": "The Factory pattern creates objects without specifying the exact class to create, providing an interface for creating families of related objects."
+    },
+    {
+      "question": "what is MVC architecture?",
+      "answer": "MVC (Model-View-Controller) is an architectural pattern that separates an application into three interconnected components."
+    },
+    {
+      "question": "what is SOLID principles?",
+      "answer": "SOLID is an acronym for five design principles intended to make software designs more understandable, flexible, and maintainable."
+    },
+    {
+      "question": "what is dependency injection?",
+      "answer": "Dependency injection is a design pattern that provides dependencies to an object rather than having the object create them itself."
+    },
+    {
+      "question": "what is polymorphism?",
+      "answer": "Polymorphism is the ability of objects of different types to be treated as instances of the same type through a common interface."
+    },
+    {
+      "question": "what is inheritance?",
+      "answer": "Inheritance is an object-oriented programming concept where a class can inherit properties and methods from another class."
+    },
+    {
+      "question": "what is encapsulation?",
+      "answer": "Encapsulation is the bundling of data and methods that operate on that data within a single unit or class."
+    },
+    {
+      "question": "what is abstraction?",
+      "answer": "Abstraction is the concept of hiding complex implementation details while showing only the essential features of an object."
+    },
+    {
+      "question": "what is a constructor?",
+      "answer": "A constructor is a special method that is automatically called when an object of a class is created, used to initialize the object."
+    },
+    {
+      "question": "what is a destructor?",
+      "answer": "A destructor is a special method that is automatically called when an object is destroyed, used to clean up resources."
+    },
+    {
+      "question": "what is garbage collection?",
+      "answer": "Garbage collection is an automatic memory management feature that reclaims memory occupied by objects that are no longer in use."
+    },
+    {
+      "question": "what is memory management?",
+      "answer": "Memory management is the process of controlling and coordinating computer memory, assigning portions called blocks to various running programs."
+    },
+    {
+      "question": "what is a pointer?",
+      "answer": "A pointer is a variable that stores the memory address of another variable, allowing indirect access to that variable's value."
+    },
+    {
+      "question": "what is multithreading?",
+      "answer": "Multithreading is the ability of a program to execute multiple threads concurrently, allowing for parallel processing."
+    },
+    {
+      "question": "what is concurrency?",
+      "answer": "Concurrency is the ability to execute multiple tasks or processes simultaneously, improving overall system performance."
+    },
+    {
+      "question": "what is parallelism?",
+      "answer": "Parallelism is the simultaneous execution of multiple tasks or processes, typically on multiple processors or cores."
+    },
+    {
+      "question": "what is synchronization?",
+      "answer": "Synchronization is the coordination of multiple threads or processes to ensure they access shared resources safely."
+    },
+    {
+      "question": "what is a race condition?",
+      "answer": "A race condition occurs when multiple threads access shared data concurrently and the outcome depends on the timing of their execution."
+    },
+    {
+      "question": "what is deadlock?",
+      "answer": "Deadlock is a situation where two or more threads are blocked forever, waiting for each other to release resources."
+    },
+    {
+      "question": "what is a mutex?",
+      "answer": "A mutex is a synchronization primitive that prevents multiple threads from accessing a shared resource simultaneously."
+    },
+    {
+      "question": "what is a semaphore?",
+      "answer": "A semaphore is a synchronization primitive that controls access to a resource through a counter mechanism."
+    },
+    {
+      "question": "what is load balancing?",
+      "answer": "Load balancing is the process of distributing network traffic or computational load across multiple servers to optimize performance."
+    },
+    {
+      "question": "what is caching?",
+      "answer": "Caching is the process of storing frequently accessed data in a faster storage medium to improve performance."
+    },
+    {
+      "question": "what is CDN?",
+      "answer": "A CDN (Content Delivery Network) is a system of distributed servers that deliver web content to users based on their geographic location."
+    },
+    {
+      "question": "what is SSL/TLS?",
+      "answer": "SSL/TLS are cryptographic protocols that provide secure communication over a computer network, commonly used for web security."
+    },
+    {
+      "question": "what is HTTPS?",
+      "answer": "HTTPS is the secure version of HTTP that uses SSL/TLS encryption to protect data transmitted between a web browser and server."
+    },
+    {
+      "question": "what is OAuth?",
+      "answer": "OAuth is an authorization framework that enables applications to obtain limited access to user accounts on other services."
+    },
+    {
+      "question": "what is JWT?",
+      "answer": "JWT (JSON Web Token) is a compact, URL-safe means of representing claims to be transferred between two parties."
+    },
+    {
+      "question": "what is session management?",
+      "answer": "Session management is the process of keeping track of user activity and maintaining state across multiple HTTP requests."
+    },
+    {
+      "question": "what is CORS?",
+      "answer": "CORS (Cross-Origin Resource Sharing) is a mechanism that allows web pages to make requests to a different domain than the one serving the page."
+    },
+    {
+      "question": "what is responsive design?",
+      "answer": "Responsive design is an approach to web design that makes web pages render well on various devices and screen sizes."
+    },
+    {
+      "question": "what is progressive web app?",
+      "answer": "A Progressive Web App is a web application that uses modern web capabilities to provide a native app-like experience."
+    },
+    {
+      "question": "what is single page application?",
+      "answer": "A Single Page Application is a web application that loads a single HTML page and dynamically updates content as the user interacts with it."
+    },
+    {
+      "question": "what is server-side rendering?",
+      "answer": "Server-side rendering is the process of rendering web pages on the server and sending fully rendered pages to the client."
+    },
+    {
+      "question": "what is client-side rendering?",
+      "answer": "Client-side rendering is the process of rendering web pages in the browser using JavaScript after the initial page load."
+    },
+    {
+      "question": "what is SEO?",
+      "answer": "SEO (Search Engine Optimization) is the practice of optimizing websites to rank higher in search engine results pages."
+    },
+    {
+      "question": "what is accessibility in web development?",
+      "answer": "Web accessibility ensures that websites and applications are usable by people with disabilities, following guidelines like WCAG."
+    },
+    {
+      "question": "what is performance optimization?",
+      "answer": "Performance optimization involves improving the speed and efficiency of software applications through various techniques and best practices."
+    },
+    {
+      "question": "bye",
+      "answer": "Goodbye! Feel free to come back anytime if you have more questions."
+    },
+    {
+      "question": "thanks",
+      "answer": "You're welcome! I'm glad I could help."
+    },
+    {
+      "question": "thank you",
+      "answer": "You're very welcome! Happy to assist you anytime."
+    },
+    {
+      "question": "good morning",
+      "answer": "Good morning! How can I help you today?"
+    },
+    {
+      "question": "good evening",
+      "answer": "Good evening! What can I do for you?"
+    },
+    {
+      "question": "good night",
+      "answer": "Good night! Sleep well and feel free to chat again soon."
+    },
+    {
+      "question": "how's your day?",
+      "answer": "Thank you for asking! I don't have days like humans do, but I'm here and ready to help!"
+    },
+    {
+      "question": "are you human?",
+      "answer": "No, I'm an AI chatbot designed to answer questions and have conversations with users."
+    },
+    {
+      "question": "can you help me?",
+      "answer": "Of course! I'd be happy to help you. What do you need assistance with?"
+    },
+    {
+      "question": "what's new?",
+      "answer": "I'm always learning and improving! What would you like to know about or discuss?"
     }
   ]
 }
