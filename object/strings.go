@@ -79,8 +79,28 @@ func (s *String) Method(method string, args []VintObject) VintObject {
 		return s.padEnd(args)
 	case "slice":
 		return s.slice(args)
-	// case "format":
-	// 	return s.format(args)
+	case "startsWith":
+		return s.startsWith(args)
+	case "endsWith":
+		return s.endsWith(args)
+	case "includes":
+		return s.includes(args)
+	case "repeat":
+		return s.repeat(args)
+	case "capitalize":
+		return s.capitalize(args)
+	case "isNumeric":
+		return s.isNumeric(args)
+	case "isAlpha":
+		return s.isAlpha(args)
+	case "compareIgnoreCase":
+		return s.compareIgnoreCase(args)
+	case "format":
+		return s.format(args)
+	case "removeAccents":
+		return s.removeAccents(args)
+	case "toInt":
+		return s.toInt(args)
 	default:
 		return newError("Method '%s' is not supported on strings", method)
 	}
@@ -497,11 +517,169 @@ func (s *String) slice(args []VintObject) VintObject {
 	return &String{Value: string(runes[startIdx:endIdx])}
 }
 
-// format applies formatting to the string with provided arguments.
-// func (s *String) format(args []Object) Object {
-// 	value, err := formatStr(s.Value, args)
-// 	if err != nil {
-// 		return newError(err.Error())
-// 	}
-// 	return &String{Value: value}
-// }
+// startsWith checks if the string starts with a given prefix
+func (s *String) startsWith(args []VintObject) VintObject {
+	if len(args) != 1 {
+		return newError("startsWith() expects 1 argument, got %d", len(args))
+	}
+
+	prefix, ok := args[0].(*String)
+	if !ok {
+		return newError("Argument must be a string")
+	}
+
+	return &Boolean{Value: strings.HasPrefix(s.Value, prefix.Value)}
+}
+
+// endsWith checks if the string ends with a given suffix
+func (s *String) endsWith(args []VintObject) VintObject {
+	if len(args) != 1 {
+		return newError("endsWith() expects 1 argument, got %d", len(args))
+	}
+
+	suffix, ok := args[0].(*String)
+	if !ok {
+		return newError("Argument must be a string")
+	}
+
+	return &Boolean{Value: strings.HasSuffix(s.Value, suffix.Value)}
+}
+
+// includes checks if the string contains a given substring (alias for contains)
+func (s *String) includes(args []VintObject) VintObject {
+	return s.contains(args)
+}
+
+// repeat repeats the string n times
+func (s *String) repeat(args []VintObject) VintObject {
+	if len(args) != 1 {
+		return newError("repeat() expects 1 argument, got %d", len(args))
+	}
+
+	count, ok := args[0].(*Integer)
+	if !ok {
+		return newError("Argument must be an integer")
+	}
+
+	if count.Value < 0 {
+		return newError("Repeat count cannot be negative")
+	}
+
+	if count.Value > 1000000 {
+		return newError("Repeat count too large (max 1,000,000)")
+	}
+
+	return &String{Value: strings.Repeat(s.Value, int(count.Value))}
+}
+
+// capitalize capitalizes the first letter of the string
+func (s *String) capitalize(args []VintObject) VintObject {
+	if len(args) != 0 {
+		return newError("capitalize() expects 0 arguments, got %d", len(args))
+	}
+
+	if len(s.Value) == 0 {
+		return &String{Value: ""}
+	}
+
+	runes := []rune(s.Value)
+	if len(runes) > 0 {
+		runes[0] = []rune(strings.ToUpper(string(runes[0])))[0]
+	}
+
+	return &String{Value: string(runes)}
+}
+
+// isNumeric checks if the string contains only numeric characters
+func (s *String) isNumeric(args []VintObject) VintObject {
+	if len(args) != 0 {
+		return newError("isNumeric() expects 0 arguments, got %d", len(args))
+	}
+
+	if len(s.Value) == 0 {
+		return &Boolean{Value: false}
+	}
+
+	_, err := strconv.ParseFloat(s.Value, 64)
+	return &Boolean{Value: err == nil}
+}
+
+// isAlpha checks if the string contains only alphabetic characters
+func (s *String) isAlpha(args []VintObject) VintObject {
+	if len(args) != 0 {
+		return newError("isAlpha() expects 0 arguments, got %d", len(args))
+	}
+
+	if len(s.Value) == 0 {
+		return &Boolean{Value: false}
+	}
+
+	for _, r := range s.Value {
+		if !((r >= 'a' && r <= 'z') || (r >= 'A' && r <= 'Z')) {
+			return &Boolean{Value: false}
+		}
+	}
+
+	return &Boolean{Value: true}
+}
+
+// compareIgnoreCase compares strings case-insensitively
+func (s *String) compareIgnoreCase(args []VintObject) VintObject {
+	if len(args) != 1 {
+		return newError("compareIgnoreCase() expects 1 argument, got %d", len(args))
+	}
+
+	other, ok := args[0].(*String)
+	if !ok {
+		return newError("Argument must be a string")
+	}
+
+	result := strings.Compare(strings.ToLower(s.Value), strings.ToLower(other.Value))
+	return &Integer{Value: int64(result)}
+}
+
+// format applies simple formatting to the string with provided arguments
+func (s *String) format(args []VintObject) VintObject {
+	result := s.Value
+	
+	for i, arg := range args {
+		placeholder := "{" + strconv.Itoa(i) + "}"
+		result = strings.ReplaceAll(result, placeholder, arg.Inspect())
+	}
+
+	return &String{Value: result}
+}
+
+// removeAccents removes accent characters from the string (basic implementation)
+func (s *String) removeAccents(args []VintObject) VintObject {
+	if len(args) != 0 {
+		return newError("removeAccents() expects 0 arguments, got %d", len(args))
+	}
+
+	// Basic accent removal mapping
+	accentMap := map[rune]rune{
+		'á': 'a', 'à': 'a', 'ä': 'a', 'â': 'a', 'ã': 'a', 'å': 'a',
+		'é': 'e', 'è': 'e', 'ë': 'e', 'ê': 'e',
+		'í': 'i', 'ì': 'i', 'ï': 'i', 'î': 'i',
+		'ó': 'o', 'ò': 'o', 'ö': 'o', 'ô': 'o', 'õ': 'o',
+		'ú': 'u', 'ù': 'u', 'ü': 'u', 'û': 'u',
+		'ý': 'y', 'ÿ': 'y',
+		'ñ': 'n', 'ç': 'c',
+		'Á': 'A', 'À': 'A', 'Ä': 'A', 'Â': 'A', 'Ã': 'A', 'Å': 'A',
+		'É': 'E', 'È': 'E', 'Ë': 'E', 'Ê': 'E',
+		'Í': 'I', 'Ì': 'I', 'Ï': 'I', 'Î': 'I',
+		'Ó': 'O', 'Ò': 'O', 'Ö': 'O', 'Ô': 'O', 'Õ': 'O',
+		'Ú': 'U', 'Ù': 'U', 'Ü': 'U', 'Û': 'U',
+		'Ý': 'Y', 'Ÿ': 'Y',
+		'Ñ': 'N', 'Ç': 'C',
+	}
+
+	runes := []rune(s.Value)
+	for i, r := range runes {
+		if replacement, exists := accentMap[r]; exists {
+			runes[i] = replacement
+		}
+	}
+
+	return &String{Value: string(runes)}
+}
