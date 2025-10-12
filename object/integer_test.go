@@ -16,17 +16,17 @@ func TestIntegerNewMethods(t *testing.T) {
 		{"toBinary", 5, []VintObject{}, "101", false},
 		{"toBinary", 0, []VintObject{}, "0", false},
 		{"toBinary", 255, []VintObject{}, "11111111", false},
-		
+
 		// toHex tests
 		{"toHex", 255, []VintObject{}, "ff", false},
 		{"toHex", 16, []VintObject{}, "10", false},
 		{"toHex", 0, []VintObject{}, "0", false},
-		
+
 		// toOctal tests
 		{"toOctal", 8, []VintObject{}, "10", false},
 		{"toOctal", 64, []VintObject{}, "100", false},
 		{"toOctal", 0, []VintObject{}, "0", false},
-		
+
 		// isPrime tests
 		{"isPrime", 2, []VintObject{}, "true", false},
 		{"isPrime", 3, []VintObject{}, "true", false},
@@ -35,17 +35,17 @@ func TestIntegerNewMethods(t *testing.T) {
 		{"isPrime", 1, []VintObject{}, "false", false},
 		{"isPrime", 0, []VintObject{}, "false", false},
 		{"isPrime", -5, []VintObject{}, "false", false},
-		
+
 		// mod tests
 		{"mod", 10, []VintObject{&Integer{Value: 3}}, "1", false},
 		{"mod", 15, []VintObject{&Integer{Value: 4}}, "3", false},
 		{"mod", 7, []VintObject{&Integer{Value: 7}}, "0", false},
-		
+
 		// clamp tests
 		{"clamp", 5, []VintObject{&Integer{Value: 1}, &Integer{Value: 10}}, "5", false},
 		{"clamp", -5, []VintObject{&Integer{Value: 1}, &Integer{Value: 10}}, "1", false},
 		{"clamp", 15, []VintObject{&Integer{Value: 1}, &Integer{Value: 10}}, "10", false},
-		
+
 		// inRange tests
 		{"inRange", 5, []VintObject{&Integer{Value: 1}, &Integer{Value: 10}}, "true", false},
 		{"inRange", 0, []VintObject{&Integer{Value: 1}, &Integer{Value: 10}}, "false", false},
@@ -55,7 +55,7 @@ func TestIntegerNewMethods(t *testing.T) {
 	for _, test := range tests {
 		integer := &Integer{Value: test.value}
 		result := integer.Method(test.method, test.args)
-		
+
 		if test.isError {
 			if _, ok := result.(*Error); !ok {
 				t.Errorf("Expected error for %s(%d), got %s", test.method, test.value, result.Inspect())
@@ -82,25 +82,25 @@ func TestIntegerDigits(t *testing.T) {
 	for _, test := range tests {
 		integer := &Integer{Value: test.value}
 		result := integer.digits([]VintObject{})
-		
+
 		arr, ok := result.(*Array)
 		if !ok {
 			t.Errorf("Expected Array for digits(%d), got %T", test.value, result)
 			continue
 		}
-		
+
 		if len(arr.Elements) != len(test.expected) {
 			t.Errorf("Expected %d digits for %d, got %d", len(test.expected), test.value, len(arr.Elements))
 			continue
 		}
-		
+
 		for i, elem := range arr.Elements {
 			digit, ok := elem.(*Integer)
 			if !ok {
 				t.Errorf("Expected Integer digit, got %T", elem)
 				continue
 			}
-			
+
 			if digit.Value != test.expected[i] {
 				t.Errorf("Expected digit %d at position %d for %d, got %d", test.expected[i], i, test.value, digit.Value)
 			}
@@ -127,7 +127,7 @@ func TestIntegerNthRoot(t *testing.T) {
 	for _, test := range tests {
 		integer := &Integer{Value: test.value}
 		result := integer.nthRoot([]VintObject{&Integer{Value: test.root}})
-		
+
 		if test.isError {
 			if _, ok := result.(*Error); !ok {
 				t.Errorf("Expected error for nthRoot(%d, %d), got %s", test.value, test.root, result.Inspect())
@@ -138,7 +138,7 @@ func TestIntegerNthRoot(t *testing.T) {
 				t.Errorf("Expected Float for nthRoot(%d, %d), got %T", test.value, test.root, result)
 				continue
 			}
-			
+
 			// Allow small floating point differences
 			if abs(float.Value-test.expected) > 0.0001 {
 				t.Errorf("Expected nthRoot(%d, %d) ≈ %f, got %f", test.value, test.root, test.expected, float.Value)
@@ -156,13 +156,13 @@ func abs(x float64) float64 {
 
 func TestIntegerErrorCases(t *testing.T) {
 	integer := &Integer{Value: 10}
-	
+
 	// Test division by zero in mod
 	result := integer.mod([]VintObject{&Integer{Value: 0}})
 	if _, ok := result.(*Error); !ok {
 		t.Errorf("Expected error for mod with zero divisor")
 	}
-	
+
 	// Test invalid clamp bounds
 	result = integer.clamp([]VintObject{&Integer{Value: 10}, &Integer{Value: 1}})
 	if _, ok := result.(*Error); !ok {
