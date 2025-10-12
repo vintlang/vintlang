@@ -47,6 +47,8 @@ func (b *Boolean) Method(method string, args []VintObject) VintObject {
 		return b.nor(args)
 	case "nand":
 		return b.nand(args)
+	case "toggle":
+		return b.toggle(args)
 	default:
 		return newError("Method '%s' is not supported for Boolean objects", method)
 	}
@@ -170,4 +172,13 @@ func (b *Boolean) nand(args []VintObject) VintObject {
 
 	// NAND is !(p && q)
 	return &Boolean{Value: !(b.Value && other.Value)}
+}
+
+// toggle returns the opposite boolean value
+func (b *Boolean) toggle(args []VintObject) VintObject {
+	if len(args) != 0 {
+		return newError("toggle() expects 0 arguments, got %d", len(args))
+	}
+
+	return &Boolean{Value: !b.Value}
 }

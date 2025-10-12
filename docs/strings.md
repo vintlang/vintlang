@@ -149,6 +149,125 @@ print(newGreeting)  // Output: Hello Vint
 You can remove whitespace from the start and end of a string using the `trim` method:
 
 ```js
+let text = "  Hello World  "
+print(text.trim())  // Output: "Hello World"
+```
+
+### Check String Start (`startsWith`)
+
+The `startsWith` method checks if a string starts with a specified prefix:
+
+```js
+let text = "Hello World"
+print(text.startsWith("Hello"))  // Output: true
+print(text.startsWith("World"))  // Output: false
+```
+
+### Check String End (`endsWith`)
+
+The `endsWith` method checks if a string ends with a specified suffix:
+
+```js
+let text = "Hello World"
+print(text.endsWith("World"))   // Output: true
+print(text.endsWith("Hello"))   // Output: false
+```
+
+### Check String Contains (`includes`)
+
+The `includes` method checks if a string contains a specified substring:
+
+```js
+let text = "Hello World"
+print(text.includes("lo Wo"))   // Output: true
+print(text.includes("xyz"))     // Output: false
+```
+
+### Repeat String (`repeat`)
+
+The `repeat` method repeats a string a specified number of times:
+
+```js
+let text = "Ha"
+print(text.repeat(3))  // Output: "HaHaHa"
+print("X".repeat(5))   // Output: "XXXXX"
+```
+
+### Capitalize String (`capitalize`)
+
+The `capitalize` method capitalizes the first letter of a string:
+
+```js
+let text = "hello world"
+print(text.capitalize())  // Output: "Hello world"
+```
+
+### Check if Numeric (`isNumeric`)
+
+The `isNumeric` method checks if a string contains only numeric characters:
+
+```js
+print("123".isNumeric())      // Output: true
+print("12.34".isNumeric())    // Output: true
+print("abc".isNumeric())      // Output: false
+print("12a".isNumeric())      // Output: false
+```
+
+### Check if Alphabetic (`isAlpha`)
+
+The `isAlpha` method checks if a string contains only alphabetic characters:
+
+```js
+print("hello".isAlpha())      // Output: true
+print("Hello".isAlpha())      // Output: true
+print("hello123".isAlpha())   // Output: false
+print("hello world".isAlpha()) // Output: false (space is not alphabetic)
+```
+
+### Case-Insensitive Compare (`compareIgnoreCase`)
+
+The `compareIgnoreCase` method compares strings ignoring case differences:
+
+```js
+let text = "Hello"
+print(text.compareIgnoreCase("hello"))   // Output: 0 (equal)
+print(text.compareIgnoreCase("apple"))   // Output: 1 (greater)
+print(text.compareIgnoreCase("zebra"))   // Output: -1 (less)
+```
+
+### Format String (`format`)
+
+The `format` method applies simple formatting to strings using placeholders:
+
+```js
+let template = "Hello {0}, you are {1} years old"
+print(template.format("John", 25))  // Output: "Hello John, you are 25 years old"
+
+let message = "The result is {0}"
+print(message.format(42))  // Output: "The result is 42"
+```
+
+### Remove Accents (`removeAccents`)
+
+The `removeAccents` method removes accent characters from a string:
+
+```js
+print("café".removeAccents())     // Output: "cafe"
+print("naïve".removeAccents())    // Output: "naive"
+print("résumé".removeAccents())   // Output: "resume"
+```
+
+### Convert to Integer (`toInt`)
+
+The `toInt` method converts a string to an integer:
+
+```js
+print("123".toInt())    // Output: 123
+print("-456".toInt())   // Output: -456
+// Note: Returns an error if the string is not a valid integer
+```
+
+```js
 let message = "  Hello World  "
 print(message.trim())  // Output: Hello World
 ```
