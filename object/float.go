@@ -41,6 +41,30 @@ func (f *Float) Method(method string, args []VintObject) VintObject {
 		return f.toString(args)
 	case "clamp":
 		return f.clamp(args)
+	case "toPrecision":
+		return f.toPrecision(args)
+	case "toFixed":
+		return f.toFixed(args)
+	case "sign":
+		return f.sign(args)
+	case "truncate":
+		return f.truncate(args)
+	case "mod":
+		return f.mod(args)
+	case "degrees":
+		return f.degrees(args)
+	case "radians":
+		return f.radians(args)
+	case "sin":
+		return f.sin(args)
+	case "cos":
+		return f.cos(args)
+	case "tan":
+		return f.tan(args)
+	case "log":
+		return f.log(args)
+	case "exp":
+		return f.exp(args)
 	default:
 		return newError("Method '%s' is not supported for Float objects", method)
 	}
@@ -183,4 +207,159 @@ func (f *Float) clamp(args []VintObject) VintObject {
 	}
 
 	return &Float{Value: value}
+}
+
+// toPrecision formats the float to specified precision
+func (f *Float) toPrecision(args []VintObject) VintObject {
+	if len(args) != 1 {
+		return newError("toPrecision() expects 1 argument, got %d", len(args))
+	}
+
+	precision, ok := args[0].(*Integer)
+	if !ok {
+		return newError("Precision must be an integer")
+	}
+
+	if precision.Value < 1 || precision.Value > 21 {
+		return newError("Precision must be between 1 and 21")
+	}
+
+	result := strconv.FormatFloat(f.Value, 'g', int(precision.Value), 64)
+	return &String{Value: result}
+}
+
+// toFixed formats the float to fixed decimal places
+func (f *Float) toFixed(args []VintObject) VintObject {
+	if len(args) != 1 {
+		return newError("toFixed() expects 1 argument, got %d", len(args))
+	}
+
+	places, ok := args[0].(*Integer)
+	if !ok {
+		return newError("Decimal places must be an integer")
+	}
+
+	if places.Value < 0 || places.Value > 20 {
+		return newError("Decimal places must be between 0 and 20")
+	}
+
+	result := strconv.FormatFloat(f.Value, 'f', int(places.Value), 64)
+	return &String{Value: result}
+}
+
+// sign returns the sign of the float
+func (f *Float) sign(args []VintObject) VintObject {
+	if len(args) != 0 {
+		return newError("sign() expects 0 arguments, got %d", len(args))
+	}
+
+	if math.IsNaN(f.Value) {
+		return &Float{Value: math.NaN()}
+	}
+
+	if f.Value > 0 {
+		return &Float{Value: 1.0}
+	} else if f.Value < 0 {
+		return &Float{Value: -1.0}
+	}
+	return &Float{Value: 0.0}
+}
+
+// truncate removes the fractional part
+func (f *Float) truncate(args []VintObject) VintObject {
+	if len(args) != 0 {
+		return newError("truncate() expects 0 arguments, got %d", len(args))
+	}
+
+	return &Float{Value: math.Trunc(f.Value)}
+}
+
+// mod calculates the floating-point remainder
+func (f *Float) mod(args []VintObject) VintObject {
+	if len(args) != 1 {
+		return newError("mod() expects 1 argument, got %d", len(args))
+	}
+
+	var divisor float64
+	switch arg := args[0].(type) {
+	case *Float:
+		divisor = arg.Value
+	case *Integer:
+		divisor = float64(arg.Value)
+	default:
+		return newError("Divisor must be a number")
+	}
+
+	if divisor == 0 {
+		return newError("Division by zero")
+	}
+
+	return &Float{Value: math.Mod(f.Value, divisor)}
+}
+
+// degrees converts radians to degrees
+func (f *Float) degrees(args []VintObject) VintObject {
+	if len(args) != 0 {
+		return newError("degrees() expects 0 arguments, got %d", len(args))
+	}
+
+	return &Float{Value: f.Value * 180.0 / math.Pi}
+}
+
+// radians converts degrees to radians
+func (f *Float) radians(args []VintObject) VintObject {
+	if len(args) != 0 {
+		return newError("radians() expects 0 arguments, got %d", len(args))
+	}
+
+	return &Float{Value: f.Value * math.Pi / 180.0}
+}
+
+// sin calculates the sine
+func (f *Float) sin(args []VintObject) VintObject {
+	if len(args) != 0 {
+		return newError("sin() expects 0 arguments, got %d", len(args))
+	}
+
+	return &Float{Value: math.Sin(f.Value)}
+}
+
+// cos calculates the cosine
+func (f *Float) cos(args []VintObject) VintObject {
+	if len(args) != 0 {
+		return newError("cos() expects 0 arguments, got %d", len(args))
+	}
+
+	return &Float{Value: math.Cos(f.Value)}
+}
+
+// tan calculates the tangent
+func (f *Float) tan(args []VintObject) VintObject {
+	if len(args) != 0 {
+		return newError("tan() expects 0 arguments, got %d", len(args))
+	}
+
+	return &Float{Value: math.Tan(f.Value)}
+}
+
+// log calculates the natural logarithm
+func (f *Float) log(args []VintObject) VintObject {
+	if len(args) != 0 {
+		return newError("log() expects 0 arguments, got %d", len(args))
+	}
+
+	if f.Value <= 0 {
+		return newError("Cannot calculate log of non-positive number")
+	}
+
+	return &Float{Value: math.Log(f.Value)}
+}
+
+// exp calculates e raised to the power of the float
+func (f *Float) exp(args []VintObject) VintObject {
+	if len(args) != 0 {
+		return newError("exp() expects 0 arguments, got %d", len(args))
+	}
+
+	return &Float{Value: math.Exp(f.Value)}
 }
