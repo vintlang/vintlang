@@ -54,6 +54,24 @@ var MathFunctions = map[string]object.ModuleFunction{
 	"asinh": asinh,
 	"atanh": atanh,
 	"atan2": atan2,
+	// Statistics functions
+	"mean":     mean,
+	"stddev":   stddev,
+	"variance": variance,
+	"median":   median,
+	// Complex number functions
+	"complex": complexNum,
+	// Big integer functions
+	"bigint": bigint,
+	// Linear algebra operations
+	"dot":       dot,
+	"cross":     cross,
+	"magnitude": magnitude,
+	// Numerical methods
+	"gcd":       gcd,
+	"lcm":       lcm,
+	"clamp":     clamp,
+	"lerp":      lerp,
 }
 
 var Constants = map[string]object.VintObject{
@@ -134,12 +152,30 @@ func abs(args []object.VintObject, defs map[string]object.VintObject) object.Vin
 			"math.abs(-5) -> 5",
 		)
 	}
+
+	// Check if it's a complex number (dict with real and imag keys)
+	if dict, ok := args[0].(*object.Dict); ok {
+		realKey := &object.String{Value: "real"}
+		imagKey := &object.String{Value: "imag"}
+		
+		realPair, hasReal := dict.Pairs[realKey.HashKey()]
+		imagPair, hasImag := dict.Pairs[imagKey.HashKey()]
+		
+		if hasReal && hasImag {
+			// It's a complex number, calculate magnitude
+			real := extractFloatValue(realPair.Value)
+			imag := extractFloatValue(imagPair.Value)
+			magnitude := math.Sqrt(real*real + imag*imag)
+			return &object.Float{Value: magnitude}
+		}
+	}
+
 	if args[0].Type() != object.INTEGER_OBJ && args[0].Type() != object.FLOAT_OBJ {
 		return ErrorMessage(
 			"math", "abs",
-			"numeric argument (integer or float)",
+			"numeric argument (integer, float, or complex number)",
 			string(args[0].Type()),
-			"math.abs(-5) -> 5",
+			"math.abs(-5) -> 5 or math.abs(complex(3, 4)) -> 5",
 		)
 	}
 	switch arg := args[0].(type) {
@@ -771,4 +807,429 @@ func random(args []object.VintObject, defs map[string]object.VintObject) object.
 	value := rand.Float64()
 
 	return &object.Float{Value: value}
+}
+
+// Statistics functions
+
+func mean(args []object.VintObject, defs map[string]object.VintObject) object.VintObject {
+	if len(defs) != 0 {
+		return &object.Error{Message: "This function does not accept keyword arguments."}
+	}
+	if len(args) != 1 {
+		return &object.Error{Message: "This function requires exactly one argument (array of numbers)."}
+	}
+
+	arr, ok := args[0].(*object.Array)
+	if !ok {
+		return &object.Error{Message: "The argument must be an array."}
+	}
+
+	if len(arr.Elements) == 0 {
+		return &object.Error{Message: "Cannot calculate mean of empty array."}
+	}
+
+	var sum float64
+	for _, element := range arr.Elements {
+		if element.Type() != object.INTEGER_OBJ && element.Type() != object.FLOAT_OBJ {
+			return &object.Error{Message: "All elements in the array must be numbers."}
+		}
+		sum += extractFloatValue(element)
+	}
+
+	return &object.Float{Value: sum / float64(len(arr.Elements))}
+}
+
+func variance(args []object.VintObject, defs map[string]object.VintObject) object.VintObject {
+	if len(defs) != 0 {
+		return &object.Error{Message: "This function does not accept keyword arguments."}
+	}
+	if len(args) != 1 {
+		return &object.Error{Message: "This function requires exactly one argument (array of numbers)."}
+	}
+
+	arr, ok := args[0].(*object.Array)
+	if !ok {
+		return &object.Error{Message: "The argument must be an array."}
+	}
+
+	if len(arr.Elements) == 0 {
+		return &object.Error{Message: "Cannot calculate variance of empty array."}
+	}
+
+	// Calculate mean first
+	var sum float64
+	for _, element := range arr.Elements {
+		if element.Type() != object.INTEGER_OBJ && element.Type() != object.FLOAT_OBJ {
+			return &object.Error{Message: "All elements in the array must be numbers."}
+		}
+		sum += extractFloatValue(element)
+	}
+	meanVal := sum / float64(len(arr.Elements))
+
+	// Calculate variance
+	var varianceSum float64
+	for _, element := range arr.Elements {
+		diff := extractFloatValue(element) - meanVal
+		varianceSum += diff * diff
+	}
+
+	return &object.Float{Value: varianceSum / float64(len(arr.Elements))}
+}
+
+func stddev(args []object.VintObject, defs map[string]object.VintObject) object.VintObject {
+	varianceResult := variance(args, defs)
+	if varianceResult.Type() == object.ERROR_OBJ {
+		return varianceResult
+	}
+
+	varianceVal := varianceResult.(*object.Float).Value
+	return &object.Float{Value: math.Sqrt(varianceVal)}
+}
+
+func median(args []object.VintObject, defs map[string]object.VintObject) object.VintObject {
+	if len(defs) != 0 {
+		return &object.Error{Message: "This function does not accept keyword arguments."}
+	}
+	if len(args) != 1 {
+		return &object.Error{Message: "This function requires exactly one argument (array of numbers)."}
+	}
+
+	arr, ok := args[0].(*object.Array)
+	if !ok {
+		return &object.Error{Message: "The argument must be an array."}
+	}
+
+	if len(arr.Elements) == 0 {
+		return &object.Error{Message: "Cannot calculate median of empty array."}
+	}
+
+	// Extract and validate numbers
+	numbers := make([]float64, len(arr.Elements))
+	for i, element := range arr.Elements {
+		if element.Type() != object.INTEGER_OBJ && element.Type() != object.FLOAT_OBJ {
+			return &object.Error{Message: "All elements in the array must be numbers."}
+		}
+		numbers[i] = extractFloatValue(element)
+	}
+
+	// Sort the numbers
+	for i := 0; i < len(numbers); i++ {
+		for j := i + 1; j < len(numbers); j++ {
+			if numbers[i] > numbers[j] {
+				numbers[i], numbers[j] = numbers[j], numbers[i]
+			}
+		}
+	}
+
+	// Calculate median
+	n := len(numbers)
+	if n%2 == 0 {
+		return &object.Float{Value: (numbers[n/2-1] + numbers[n/2]) / 2}
+	}
+	return &object.Float{Value: numbers[n/2]}
+}
+
+// Complex number support
+
+func complexNum(args []object.VintObject, defs map[string]object.VintObject) object.VintObject {
+	if len(defs) != 0 {
+		return &object.Error{Message: "This function does not accept keyword arguments."}
+	}
+	if len(args) != 2 {
+		return &object.Error{Message: "This function requires exactly two arguments (real, imaginary)."}
+	}
+
+	if args[0].Type() != object.INTEGER_OBJ && args[0].Type() != object.FLOAT_OBJ {
+		return &object.Error{Message: "Both arguments must be numbers."}
+	}
+	if args[1].Type() != object.INTEGER_OBJ && args[1].Type() != object.FLOAT_OBJ {
+		return &object.Error{Message: "Both arguments must be numbers."}
+	}
+
+	real := extractFloatValue(args[0])
+	imag := extractFloatValue(args[1])
+
+	// Return as a dict with real and imag properties
+	dict := &object.Dict{Pairs: make(map[object.HashKey]object.DictPair)}
+	
+	realKey := &object.String{Value: "real"}
+	imagKey := &object.String{Value: "imag"}
+	
+	dict.Pairs[realKey.HashKey()] = object.DictPair{
+		Key:   realKey,
+		Value: &object.Float{Value: real},
+	}
+	dict.Pairs[imagKey.HashKey()] = object.DictPair{
+		Key:   imagKey,
+		Value: &object.Float{Value: imag},
+	}
+
+	return dict
+}
+
+// Big integer support
+
+func bigint(args []object.VintObject, defs map[string]object.VintObject) object.VintObject {
+	if len(defs) != 0 {
+		return &object.Error{Message: "This function does not accept keyword arguments."}
+	}
+	if len(args) != 1 {
+		return &object.Error{Message: "This function requires exactly one argument (string or integer)."}
+	}
+
+	var value string
+	switch arg := args[0].(type) {
+	case *object.String:
+		value = arg.Value
+	case *object.Integer:
+		value = fmt.Sprintf("%d", arg.Value)
+	default:
+		return &object.Error{Message: "Argument must be a string or integer."}
+	}
+
+	// Return as a dict with value and type properties
+	dict := &object.Dict{Pairs: make(map[object.HashKey]object.DictPair)}
+	
+	valueKey := &object.String{Value: "value"}
+	typeKey := &object.String{Value: "type"}
+	
+	dict.Pairs[valueKey.HashKey()] = object.DictPair{
+		Key:   valueKey,
+		Value: &object.String{Value: value},
+	}
+	dict.Pairs[typeKey.HashKey()] = object.DictPair{
+		Key:   typeKey,
+		Value: &object.String{Value: "bigint"},
+	}
+
+	return dict
+}
+
+// Linear algebra operations
+
+func dot(args []object.VintObject, defs map[string]object.VintObject) object.VintObject {
+	if len(defs) != 0 {
+		return &object.Error{Message: "This function does not accept keyword arguments."}
+	}
+	if len(args) != 2 {
+		return &object.Error{Message: "This function requires exactly two arguments (two arrays)."}
+	}
+
+	arr1, ok1 := args[0].(*object.Array)
+	arr2, ok2 := args[1].(*object.Array)
+	
+	if !ok1 || !ok2 {
+		return &object.Error{Message: "Both arguments must be arrays."}
+	}
+
+	if len(arr1.Elements) != len(arr2.Elements) {
+		return &object.Error{Message: "Arrays must have the same length."}
+	}
+
+	if len(arr1.Elements) == 0 {
+		return &object.Error{Message: "Arrays cannot be empty."}
+	}
+
+	var result float64
+	for i := 0; i < len(arr1.Elements); i++ {
+		if arr1.Elements[i].Type() != object.INTEGER_OBJ && arr1.Elements[i].Type() != object.FLOAT_OBJ {
+			return &object.Error{Message: "All elements must be numbers."}
+		}
+		if arr2.Elements[i].Type() != object.INTEGER_OBJ && arr2.Elements[i].Type() != object.FLOAT_OBJ {
+			return &object.Error{Message: "All elements must be numbers."}
+		}
+		result += extractFloatValue(arr1.Elements[i]) * extractFloatValue(arr2.Elements[i])
+	}
+
+	return &object.Float{Value: result}
+}
+
+func cross(args []object.VintObject, defs map[string]object.VintObject) object.VintObject {
+	if len(defs) != 0 {
+		return &object.Error{Message: "This function does not accept keyword arguments."}
+	}
+	if len(args) != 2 {
+		return &object.Error{Message: "This function requires exactly two arguments (two 3D vectors)."}
+	}
+
+	arr1, ok1 := args[0].(*object.Array)
+	arr2, ok2 := args[1].(*object.Array)
+	
+	if !ok1 || !ok2 {
+		return &object.Error{Message: "Both arguments must be arrays."}
+	}
+
+	if len(arr1.Elements) != 3 || len(arr2.Elements) != 3 {
+		return &object.Error{Message: "Both vectors must be 3D (length 3)."}
+	}
+
+	// Extract components
+	var a1, a2, a3, b1, b2, b3 float64
+	for i := 0; i < 3; i++ {
+		if arr1.Elements[i].Type() != object.INTEGER_OBJ && arr1.Elements[i].Type() != object.FLOAT_OBJ {
+			return &object.Error{Message: "All elements must be numbers."}
+		}
+		if arr2.Elements[i].Type() != object.INTEGER_OBJ && arr2.Elements[i].Type() != object.FLOAT_OBJ {
+			return &object.Error{Message: "All elements must be numbers."}
+		}
+	}
+	a1, a2, a3 = extractFloatValue(arr1.Elements[0]), extractFloatValue(arr1.Elements[1]), extractFloatValue(arr1.Elements[2])
+	b1, b2, b3 = extractFloatValue(arr2.Elements[0]), extractFloatValue(arr2.Elements[1]), extractFloatValue(arr2.Elements[2])
+
+	// Calculate cross product
+	result := &object.Array{
+		Elements: []object.VintObject{
+			&object.Float{Value: a2*b3 - a3*b2},
+			&object.Float{Value: a3*b1 - a1*b3},
+			&object.Float{Value: a1*b2 - a2*b1},
+		},
+	}
+
+	return result
+}
+
+func magnitude(args []object.VintObject, defs map[string]object.VintObject) object.VintObject {
+	if len(defs) != 0 {
+		return &object.Error{Message: "This function does not accept keyword arguments."}
+	}
+	if len(args) != 1 {
+		return &object.Error{Message: "This function requires exactly one argument (array)."}
+	}
+
+	arr, ok := args[0].(*object.Array)
+	if !ok {
+		return &object.Error{Message: "The argument must be an array."}
+	}
+
+	if len(arr.Elements) == 0 {
+		return &object.Error{Message: "Array cannot be empty."}
+	}
+
+	var sumOfSquares float64
+	for _, element := range arr.Elements {
+		if element.Type() != object.INTEGER_OBJ && element.Type() != object.FLOAT_OBJ {
+			return &object.Error{Message: "All elements must be numbers."}
+		}
+		val := extractFloatValue(element)
+		sumOfSquares += val * val
+	}
+
+	return &object.Float{Value: math.Sqrt(sumOfSquares)}
+}
+
+// Numerical methods
+
+func gcd(args []object.VintObject, defs map[string]object.VintObject) object.VintObject {
+	if len(defs) != 0 {
+		return &object.Error{Message: "This function does not accept keyword arguments."}
+	}
+	if len(args) != 2 {
+		return &object.Error{Message: "This function requires exactly two arguments (two integers)."}
+	}
+
+	if args[0].Type() != object.INTEGER_OBJ || args[1].Type() != object.INTEGER_OBJ {
+		return &object.Error{Message: "Both arguments must be integers."}
+	}
+
+	a := args[0].(*object.Integer).Value
+	b := args[1].(*object.Integer).Value
+
+	// Make positive
+	if a < 0 {
+		a = -a
+	}
+	if b < 0 {
+		b = -b
+	}
+
+	// Euclidean algorithm
+	for b != 0 {
+		a, b = b, a%b
+	}
+
+	return &object.Integer{Value: a}
+}
+
+func lcm(args []object.VintObject, defs map[string]object.VintObject) object.VintObject {
+	if len(defs) != 0 {
+		return &object.Error{Message: "This function does not accept keyword arguments."}
+	}
+	if len(args) != 2 {
+		return &object.Error{Message: "This function requires exactly two arguments (two integers)."}
+	}
+
+	gcdResult := gcd(args, defs)
+	if gcdResult.Type() == object.ERROR_OBJ {
+		return gcdResult
+	}
+
+	a := args[0].(*object.Integer).Value
+	b := args[1].(*object.Integer).Value
+	gcdVal := gcdResult.(*object.Integer).Value
+
+	if gcdVal == 0 {
+		return &object.Integer{Value: 0}
+	}
+
+	// Make positive
+	if a < 0 {
+		a = -a
+	}
+	if b < 0 {
+		b = -b
+	}
+
+	return &object.Integer{Value: (a * b) / gcdVal}
+}
+
+func clamp(args []object.VintObject, defs map[string]object.VintObject) object.VintObject {
+	if len(defs) != 0 {
+		return &object.Error{Message: "This function does not accept keyword arguments."}
+	}
+	if len(args) != 3 {
+		return &object.Error{Message: "This function requires exactly three arguments (value, min, max)."}
+	}
+
+	for i := 0; i < 3; i++ {
+		if args[i].Type() != object.INTEGER_OBJ && args[i].Type() != object.FLOAT_OBJ {
+			return &object.Error{Message: "All arguments must be numbers."}
+		}
+	}
+
+	value := extractFloatValue(args[0])
+	minVal := extractFloatValue(args[1])
+	maxVal := extractFloatValue(args[2])
+
+	if minVal > maxVal {
+		return &object.Error{Message: "Min value must be less than or equal to max value."}
+	}
+
+	if value < minVal {
+		value = minVal
+	} else if value > maxVal {
+		value = maxVal
+	}
+
+	return &object.Float{Value: value}
+}
+
+func lerp(args []object.VintObject, defs map[string]object.VintObject) object.VintObject {
+	if len(defs) != 0 {
+		return &object.Error{Message: "This function does not accept keyword arguments."}
+	}
+	if len(args) != 3 {
+		return &object.Error{Message: "This function requires exactly three arguments (start, end, t)."}
+	}
+
+	for i := 0; i < 3; i++ {
+		if args[i].Type() != object.INTEGER_OBJ && args[i].Type() != object.FLOAT_OBJ {
+			return &object.Error{Message: "All arguments must be numbers."}
+		}
+	}
+
+	start := extractFloatValue(args[0])
+	end := extractFloatValue(args[1])
+	t := extractFloatValue(args[2])
+
+	return &object.Float{Value: start + (end-start)*t}
 }
