@@ -1,27 +1,60 @@
-package greeter {
+package greeter_pkg {
+    // Package-level constants (NEW FEATURE)
+    let VERSION = "1.0.0"
+    let AUTHOR = "Tachera Sasi"
+    let DESCRIPTION = "A simple greeting package demonstrating VintLang packages"
+    
     let message = "Hello"
     let initializedAt = ""
 
     // This init function will be called automatically when the package is imported.
     let init = func() {
+        // Import time module for current package scope
+        let time = import("time")
         // Use the '@' operator to modify the package's internal state.
-        @.initializedAt = time.now()
-        print("Greeter package initialized successfully!")
+        initializedAt = time.now()
+        print("Greeter package v" + VERSION + " initialized successfully!")
+        print("Package by: " + AUTHOR)
     }
 
     // A simple function that uses the package's state.
     let sayHello = func(name) {
-        print(@.message + ", " + name + "!")
+        print(message + ", " + name + "!")
     }
 
     // A function to change the package's internal state.
     let setGreeting = func(newMessage) {
-        @.message = newMessage
-        print("Greeting has been updated.")
+        message = newMessage
+        print("Greeting has been updated to: " + message)
     }
 
     // A function that shows when the package was initialized.
     let showInitTime = func() {
-        print("This package was initialized at: " + @.initializedAt)
+        print("This package was initialized at: " + initializedAt)
+    }
+    
+    // New utility functions to demonstrate package features
+    let getPackageInfo = func() {
+        return {
+            "name": "greeter_pkg",
+            "version": VERSION,
+            "author": AUTHOR,
+            "description": DESCRIPTION,
+            "initialized_at": initializedAt
+        }
+    }
+    
+    // Function that uses package constants
+    let getVersion = func() {
+        return VERSION
+    }
+    
+    // Function with internal helper (demonstrates encapsulation)
+    let _formatMessage = func(msg, name) {
+        return msg + ", " + name + "! (from " + AUTHOR + ")"
+    }
+    
+    let fancyGreeting = func(name) {
+        print(_formatMessage(message, name))
     }
 } 
