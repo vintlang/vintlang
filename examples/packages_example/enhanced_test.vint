@@ -63,7 +63,7 @@ package enhanced_test {
     
     let _logDebug = func(message) {
         if (DEBUG_MODE) {
-            print("[DEBUG] " + message + " (Counter: " + str(_internalCounter) + ")")
+            print("[DEBUG] " + message + " (Counter: " + string(_internalCounter) + ")")
         }
     }
     
@@ -91,7 +91,7 @@ package enhanced_test {
             return "Error: Radius must be a number"
         }
         
-        _logDebug("Calculating circumference for radius: " + str(radius))
+        _logDebug("Calculating circumference for radius: " + string(radius))
         return 2 * PI * radius
     }
     

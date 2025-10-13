@@ -84,7 +84,7 @@ func checkAndAddModulesDir() {
 	if dirExists(modulesPath) {
 		addSearchPath(modulesPath)
 	} else {
-		fmt.Fprintf(os.Stderr, "\x1b[33m[Warning]\x1b[0m Recommended: Create a 'modules' directory for your custom VintLang modules.\n")
+		// fmt.Fprintf(os.Stderr, "\x1b[33m[Warning]\x1b[0m Recommended: Create a 'modules' directory for your custom VintLang modules.\n")
 	}
 }
 
