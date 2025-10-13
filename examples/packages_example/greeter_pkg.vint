@@ -30,17 +30,19 @@ package greeter_pkg {
 
     // A function that shows when the package was initialized.
     let showInitTime = func() {
-        print("This package was initialized at: " + initializedAt)
+        let time = import("time")
+        print("This package was initialized at: " + time.format(initializedAt, "2006-01-02 15:04:05"))
     }
     
     // New utility functions to demonstrate package features
     let getPackageInfo = func() {
+        let time = import("time")
         return {
             "name": "greeter_pkg",
             "version": VERSION,
             "author": AUTHOR,
             "description": DESCRIPTION,
-            "initialized_at": initializedAt
+            "initialized_at": time.format(initializedAt, "2006-01-02 15:04:05")
         }
     }
     
