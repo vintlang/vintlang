@@ -79,7 +79,8 @@ func applyMethod(obj object.VintObject, method ast.Expression, args []object.Vin
 			return ret
 		}
 	case *object.Package:
-		if fn, ok := obj.Scope.Get(method.(*ast.Identifier).Value); ok {
+		// Here We Use GetPublic to enforce private member access control
+		if fn, ok := obj.GetPublic(method.(*ast.Identifier).Value); ok {
 			fn.(*object.Function).Env.Define("@", obj)
 			ret := applyFunction(fn, args, l)
 			fn.(*object.Function).Env.Del("@")
