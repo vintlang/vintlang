@@ -1,0 +1,16 @@
+// Simple string manipulation and message printing
+import greetings_module
+import time
+
+// Print a greeting
+print("Hello, VintLang World! it currently",time.now())
+
+// Demonstrate string splitting
+let phrase = "VintLang"
+let letters = phrase.split("")
+for letter in letters {
+    print(letter)
+}
+
+//from the greetings_module
+greetings_module.greet("Developer")
