@@ -48,4 +48,43 @@ This immutability ensures that critical values in your program remain constant, 
    const API_KEY = "your-secret-key"
    ```
 
-3. **Prefer `const` Over `let`:** Whenever possible, prefer `const` over `let` to make your code safer and more predictable. Only use `let` when you know a variable's value needs to change. 
+3. **Prefer `const` Over `let`:** Whenever possible, prefer `const` over `let` to make your code safer and more predictable. Only use `let` when you know a variable's value needs to change.
+
+## Constants in Packages
+
+Constants work seamlessly with VintLang's package system and support the same access control features:
+
+```js
+package Config {
+    // Public constants (accessible from outside)
+    const VERSION = "2.1.0"
+    const MAX_USERS = 1000
+    
+    // Private constants (internal use only)
+    const _SECRET_KEY = "internal-key-abc123"
+    const _DEBUG_MODE = true
+    
+    let getPublicConfig = func() {
+        return {
+            "version": VERSION,
+            "max_users": MAX_USERS
+            // Note: private constants are not exposed
+        }
+    }
+}
+```
+
+### Package Constant Usage
+
+```js
+import "Config"
+
+// Accessing public constants
+print("App Version:", Config.VERSION)  // ✅ Works
+print("Max Users:", Config.MAX_USERS)  // ✅ Works
+
+// Attempting to access private constants
+print(Config._SECRET_KEY)  // ❌ Error: cannot access private property
+```
+
+For more information about packages and access control, see the [Packages documentation](packages.md). 

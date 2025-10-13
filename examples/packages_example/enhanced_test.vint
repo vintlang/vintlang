@@ -1,0 +1,104 @@
+package enhanced_test {
+    // Package-level constants using const keyword
+    const VERSION = "3.0.0"
+    const AUTHOR = "Enhanced VintLang Team"
+    const MAX_ITEMS = 1000
+    const PI = 3.14159
+    const DEBUG_MODE = true
+    
+    // Public variables
+    let publicCounter = 0
+    let publicMessage = "This is accessible from outside"
+    
+    // Private variables (underscore prefix)
+    let _privateSecret = "This should not be accessible from outside"
+    let _internalCounter = 0
+    let _debugInfo = "Internal debug information"
+    
+    // Private constants
+    const _PRIVATE_KEY = "secret-key-12345"
+    const _INTERNAL_LIMIT = 500
+    
+    let init = func() {
+        _internalCounter = 1
+        publicCounter = 10
+        print("Enhanced package v" + VERSION + " initialized!")
+        print("Debug mode:", DEBUG_MODE)
+        print("Private key loaded:", len(_PRIVATE_KEY) > 0)
+    }
+    
+    // Public functions
+    let getVersion = func() {
+        return VERSION
+    }
+    
+    let getAuthor = func() {
+        return AUTHOR
+    }
+    
+    let incrementPublicCounter = func() {
+        publicCounter = publicCounter + 1
+        _internalCounter = _internalCounter + 1  // Also increment private counter
+        return publicCounter
+    }
+    
+    let getPublicInfo = func() {
+        return {
+            "version": VERSION,
+            "author": AUTHOR,
+            "public_counter": publicCounter,
+            "max_items": MAX_ITEMS,
+            "pi_value": PI,
+            "debug_enabled": DEBUG_MODE
+        }
+    }
+    
+    // Private functions (should not be accessible from outside)
+    let _validateInput = func(input) {
+        if (type(input) == "NULL" || input == "") {
+            return false
+        }
+        return true
+    }
+    
+    let _logDebug = func(message) {
+        if (DEBUG_MODE) {
+            print("[DEBUG] " + message + " (Counter: " + string(_internalCounter) + ")")
+        }
+    }
+    
+    let _getPrivateKey = func() {
+        return _PRIVATE_KEY
+    }
+    
+    // Public function that uses private functions internally
+    let processData = func(data) {
+        if (!_validateInput(data)) {
+            return "Error: Invalid input"
+        }
+        
+        _logDebug("Processing data: " + data)
+        
+        let result = "Processed: " + data + " (v" + VERSION + ")"
+        _internalCounter = _internalCounter + 1
+        
+        return result
+    }
+    
+    // Function to demonstrate constant usage
+    let calculateCircumference = func(radius) {
+        if (!_validateInput(radius) || type(radius) != "INTEGER" && type(radius) != "FLOAT") {
+            return "Error: Radius must be a number"
+        }
+        
+        _logDebug("Calculating circumference for radius: " + string(radius))
+        return 2 * PI * radius
+    }
+    
+    // Function that tries to modify constants (should fail)
+    let tryModifyConstants = func() {
+        // This should fail because VERSION is a constant
+        // Uncomment to test: VERSION = "4.0.0"
+        return "Constants cannot be modified (VERSION = " + VERSION + ")"
+    }
+}
