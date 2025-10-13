@@ -1,10 +1,11 @@
 const os = import("os")
 const DOCS_DIR = "../docs"
 const OUTPUT_FILE = "merged-doc.md"
+const EXAMPLE_DIR = "../examples"
 // let files = os.listDir(DOCS_DIR).split(",") // listDir returns a comma-separated string of filenames
-let files = os.listFiles(DOCS_DIR) // listFiles returns an array of filenames
+let docFiles = os.listFiles(DOCS_DIR) // listFiles returns an array of filenames
 let mergedContent = "# Merged Documentation\n\n"
-for file in files {
+for file in docFiles {
     if (file.endsWith(".md")) {
         let content = os.readFile(DOCS_DIR + "/" + file)
         mergedContent = mergedContent + "## " + file + "\n\n"
@@ -13,8 +14,16 @@ for file in files {
 }
 
 os.writeFile(OUTPUT_FILE, mergedContent)
-print("Documentation merged into " + OUTPUT_FILE)
-// get the list of all file in the dir
-// loop through them and read their content
-// merge them into a single string
-// write the string to a new file called merged-doc.md
+
+let exampleFiles = os.listFiles(EXAMPLE_DIR)
+let EXAMPLES_OUTPUT_FILE = "merged-examples.md"
+exampleContent = "# Example Code Snippets\n\n"
+for file in exampleFiles {
+    if (file.endsWith(".vint")) {
+        let content = os.readFile(EXAMPLE_DIR + "/" + file)
+        exampleContent = exampleContent + "## " + file + "\n\n"
+        exampleContent = exampleContent + "```vint\n" + content + "\n```\n\n"
+    }
+}
+os.writeFile(EXAMPLES_OUTPUT_FILE, exampleContent)
+print("Documentation and examples merged into " + OUTPUT_FILE + " and " + EXAMPLES_OUTPUT_FILE)
