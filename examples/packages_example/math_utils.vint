@@ -1,0 +1,208 @@
+package math_utils {
+    // Package-level constants
+    let VERSION = "2.1.0"
+    let PI_APPROXIMATION = 3.14159
+    let E_APPROXIMATION = 2.71828
+    let GOLDEN_RATIO = 1.61803
+    let PACKAGE_NAME = "Mathematical Utilities Package"
+    let MAX_SAFE_INTEGER = 9007199254740991
+    
+    let operationCount = 0
+    let lastOperation = "none"
+    let isInitialized = false
+    
+    // Auto-initialization function
+    let init = func() {
+        isInitialized = true
+        operationCount = 0
+        lastOperation = "package_initialized"
+        print("Math Utils v" + VERSION + " initialized with constants loaded!")
+    }
+    
+    // Private helper functions (underscore convention)
+    let _incrementCounter = func(operation) {
+        operationCount = operationCount + 1
+        lastOperation = operation
+    }
+    
+    let _isNumber = func(value) {
+        return type(value) == "INTEGER" || type(value) == "FLOAT"
+    }
+    
+    // Public mathematical operations
+    let add = func(a, b) {
+        if (!_isNumber(a) || !_isNumber(b)) {
+            return "Error: Both arguments must be numbers"
+        }
+        _incrementCounter("addition")
+        return a + b
+    }
+    
+    let multiply = func(a, b) {
+        if (!_isNumber(a) || !_isNumber(b)) {
+            return "Error: Both arguments must be numbers"
+        }
+        _incrementCounter("multiplication")
+        return a * b
+    }
+    
+    let power = func(base, exponent) {
+        if (!_isNumber(base) || !_isNumber(exponent)) {
+            return "Error: Both arguments must be numbers"
+        }
+        _incrementCounter("power")
+        let result = 1
+        for i in range(exponent) {
+            result = result * base
+        }
+        return result
+    }
+    
+    let factorial = func(n) {
+        if (!_isNumber(n) || n < 0) {
+            return "Error: Argument must be a non-negative number"
+        }
+        _incrementCounter("factorial")
+        if (n == 0 || n == 1) {
+            return 1
+        }
+        let result = 1
+        for i in range(1, n + 1) {
+            result = result * i
+        }
+        return result
+    }
+    
+    let fibonacci = func(n) {
+        if (!_isNumber(n) || n < 0) {
+            return "Error: Argument must be a non-negative number"
+        }
+        _incrementCounter("fibonacci")
+        if (n <= 1) {
+            return n
+        }
+        let a = 0
+        let b = 1
+        for i in range(2, n + 1) {
+            let temp = a + b
+            a = b
+            b = temp
+        }
+        return b
+    }
+    
+    // Statistical functions
+    let average = func(numbers) {
+        if (type(numbers) != "ARRAY" || len(numbers) == 0) {
+            return "Error: Argument must be a non-empty array"
+        }
+        _incrementCounter("average")
+        let sum = 0
+        for num in numbers {
+            if (!_isNumber(num)) {
+                return "Error: All array elements must be numbers"
+            }
+            sum = sum + num
+        }
+        return sum / len(numbers)
+    }
+    
+    let maximum = func(numbers) {
+        if (type(numbers) != "ARRAY" || len(numbers) == 0) {
+            return "Error: Argument must be a non-empty array"
+        }
+        _incrementCounter("maximum")
+        let max = numbers[0]
+        for num in numbers {
+            if (!_isNumber(num)) {
+                return "Error: All array elements must be numbers"
+            }
+            if (num > max) {
+                max = num
+            }
+        }
+        return max
+    }
+    
+    let minimum = func(numbers) {
+        if (type(numbers) != "ARRAY" || len(numbers) == 0) {
+            return "Error: Argument must be a non-empty array"
+        }
+        _incrementCounter("minimum")
+        let min = numbers[0]
+        for num in numbers {
+            if (!_isNumber(num)) {
+                return "Error: All array elements must be numbers"
+            }
+            if (num < min) {
+                min = num
+            }
+        }
+        return min
+    }
+    
+    // Package state and statistics functions
+    let getStats = func() {
+        return {
+            "package_name": PACKAGE_NAME,
+            "version": VERSION,
+            "operations_performed": operationCount,
+            "last_operation": lastOperation,
+            "initialized": isInitialized
+        }
+    }
+    
+    let getConstants = func() {
+        return {
+            "pi": PI_APPROXIMATION,
+            "e": E_APPROXIMATION,
+            "golden_ratio": GOLDEN_RATIO,
+            "max_safe_integer": MAX_SAFE_INTEGER
+        }
+    }
+    
+    let resetStats = func() {
+        operationCount = 0
+        lastOperation = "stats_reset"
+        return "Statistics have been reset"
+    }
+    
+    // Complex calculation example
+    let quadraticFormula = func(a, b, c) {
+        if (!_isNumber(a) || !_isNumber(b) || !_isNumber(c)) {
+            return "Error: All coefficients must be numbers"
+        }
+        if (a == 0) {
+            return "Error: Coefficient 'a' cannot be zero"
+        }
+        _incrementCounter("quadratic_formula")
+        
+        let discriminant = (b * b) - (4 * a * c)
+        
+        if (discriminant < 0) {
+            return {
+                "type": "complex",
+                "message": "Complex roots (discriminant < 0)",
+                "discriminant": discriminant
+            }
+        }
+        
+        // Simple square root approximation
+        let sqrt_discriminant = discriminant
+        if (discriminant > 1) {
+            for i in range(10) {
+                sqrt_discriminant = (sqrt_discriminant + discriminant / sqrt_discriminant) / 2
+            }
+        }
+        
+        let root1 = (-b + sqrt_discriminant) / (2 * a)
+        let root2 = (-b - sqrt_discriminant) / (2 * a)
+        
+        return {
+            "type": "real", 
+            "root1": root1,
+            "root2": root2,
+            "discriminant": discriminant
+        }
+    }
+}
