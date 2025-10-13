@@ -1,27 +1,44 @@
 // Import the built-in 'time' module to use its sleep function.
-import time //Both ways work
-// const time = import("time")
+import time
 
-// Import the file containing the 'greeter' package.
+// Import the file containing the 'greeter_pkg' package.
 // Because it's in the same directory, we can refer to it directly.
 import greeter_pkg
 
-// When the line above is executed, you will see the message from the init() function.
-print("\n--- Running Package Example ---\n")
+// When the line above is executed, you should see the message from the init() function.
+print("\n--- Running VintLang Package Example ---\n")
 
-// Call a function from the 'greeter' package.
+// Test package info and constants
+let packageInfo = greeter_pkg.getPackageInfo()
+print("Package Name:", packageInfo["name"])
+print("Version:", packageInfo["version"])
+print("Author:", packageInfo["author"])
+
+print("\n--- Testing Basic Package Functions ---\n")
+
+// Call a function from the 'greeter_pkg' package.
 greeter_pkg.sayHello("VintLang User")
 
 // Wait for a couple of seconds.
+print("Waiting 2 seconds...")
 time.sleep(2000)
 
 // Call another function to see the initialization time.
+print("\n--- Testing Package State ---\n")
 greeter_pkg.showInitTime()
 
+// Test version function
+print("Package Version:", greeter_pkg.getVersion())
+
 // Change the internal state of the package.
+print("\n--- Testing State Modification ---\n")
 greeter_pkg.setGreeting("Welcome")
 
 // Call the first function again to see the new message.
 greeter_pkg.sayHello("VintLang User")
 
-print("\n--- Example Finished ---\n") 
+// Test fancy greeting
+print("\n--- Testing Enhanced Features ---\n")
+greeter_pkg.fancyGreeting("Advanced User")
+
+print("\n--- Package Example Completed Successfully ---\n") 
