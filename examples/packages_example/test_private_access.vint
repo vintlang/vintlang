@@ -1,0 +1,12 @@
+// Test Private Member Protection - This should show errors
+import enhanced_test
+
+print("Testing Private Member Access Protection:")
+print("="*50)
+
+print("Attempting to access private members (should show errors):")
+
+// Test 1: Try to access private variable (this should show an error)
+print("Test 1: Accessing private variable _privateSecret...")
+let secret = enhanced_test._privateSecret
+print("Value:", secret)
