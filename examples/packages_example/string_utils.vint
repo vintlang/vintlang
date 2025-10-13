@@ -74,13 +74,30 @@ package string_utils {
         
         // Simple capitalization (assumes ASCII)
         let upperFirst = firstChar
-        if (firstChar >= "a" && firstChar <= "z") {
-            // Convert to uppercase (ASCII hack)
-            let charCode = ord(firstChar)
+        let charCode = ord(firstChar)
+        if (charCode >= 97 && charCode <= 122) {  // 'a' to 'z' in ASCII
+            // Convert to uppercase
             upperFirst = chr(charCode - 32)
         }
         
         return upperFirst + rest
+    }
+    
+    let toLowerCase = func(str) {
+        if (!_isValidString(str)) {
+            return str
+        }
+        let chars = str.split("")
+        let result = []
+        for char in chars {
+            let charCode = ord(char)
+            if (charCode >= 65 && charCode <= 90) {  // 'A' to 'Z' in ASCII
+                result.push(chr(charCode + 32))  // Convert to lowercase
+            } else {
+                result.push(char)
+            }
+        }
+        return result.join("")
     }
     
     let isPalindrome = func(str) {
@@ -89,7 +106,7 @@ package string_utils {
         }
         _updateStats(str)
         
-        let cleaned = str.toLowerCase()
+        let cleaned = toLowerCase(str)
         let reversed = reverse(cleaned)
         return cleaned == reversed
     }
@@ -209,7 +226,8 @@ package string_utils {
         let chars = str.split("")
         
         for char in chars {
-            if (char >= "0" && char <= "9") {
+            let charCode = ord(char)
+            if (charCode >= 48 && charCode <= 57) {  // '0' to '9' in ASCII
                 currentNumber = currentNumber + char
             } else {
                 if (len(currentNumber) > 0) {
