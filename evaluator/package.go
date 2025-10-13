@@ -26,7 +26,7 @@ func evalPackage(node *ast.Package, env *object.Environment) object.VintObject {
 			applyFunction(fn, []object.VintObject{}, 0)
 		}
 	}
-	
+
 	env.Define(node.Name.Value, Package)
 	return Package
 }
@@ -34,13 +34,13 @@ func evalPackage(node *ast.Package, env *object.Environment) object.VintObject {
 // evalPackageContents evaluates package contents and tracks private members
 func evalPackageContents(block *ast.BlockStatement, pkg *object.Package) object.VintObject {
 	var result object.VintObject
-	
+
 	for _, statement := range block.Statements {
 		result = Eval(statement, pkg.Scope)
 		if result != nil && result.Type() == object.ERROR_OBJ {
 			return result
 		}
-		
+
 		// Track private identifiers based on naming convention
 		switch stmt := statement.(type) {
 		case *ast.LetStatement:
@@ -53,6 +53,6 @@ func evalPackageContents(block *ast.BlockStatement, pkg *object.Package) object.
 			}
 		}
 	}
-	
+
 	return result
 }
