@@ -19,9 +19,8 @@ print("\n--- Testing Basic Package Functions ---\n")
 // Call a function from the 'greeter_pkg' package.
 greeter_pkg.sayHello("VintLang User")
 
-// Wait for a couple of seconds.
-print("Waiting 2 seconds...")
-time.sleep(2000)
+// Skip sleep for testing
+print("Continuing without delay...")
 
 // Call another function to see the initialization time.
 print("\n--- Testing Package State ---\n")
