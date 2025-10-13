@@ -1,7 +1,6 @@
 package evaluator
 
 import (
-	"fmt"
 	"github.com/vintlang/vintlang/ast"
 	"github.com/vintlang/vintlang/object"
 )
@@ -22,14 +21,14 @@ func evalPropertyExpression(node *ast.PropertyExpression, env *object.Environmen
 		obj := left.(*object.Package)
 		prop := node.Property.(*ast.Identifier).Value
 
-		// Check if accessing a private member from outside the package
-		if obj.IsPrivate(prop) {
-			return newError("Cannot access private member '%s' from outside package '%s'", prop, obj.Name.Value)
-		}
-
 		// Use GetPublic to ensure only public members are accessible
 		if val, ok := obj.GetPublic(prop); ok {
 			return val
+		}
+		
+		// If GetPublic failed, check if it's because the member is private
+		if obj.IsPrivate(prop) {
+			return newError("cannot access private property '%s' from package", prop)
 		}
 		// case *object.Module:
 		// 	mod := left.(*object.Module)
