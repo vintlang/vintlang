@@ -315,14 +315,17 @@ func listFiles(args []object.VintObject, defs map[string]object.VintObject) obje
 		)
 	}
 
-	files, err := ioutil.ReadDir(path.Value)
+	entries, err := ioutil.ReadDir(path.Value)
 	if err != nil {
 		return &object.Error{Message: "Failed to list directory: " + err.Error()}
 	}
 
-	fileObjects := make([]object.VintObject, len(files))
-	for i, file := range files {
-		fileObjects[i] = &object.String{Value: file.Name()}
+	var fileObjects []object.VintObject
+	for _, entry := range entries {
+		// We Skip directories, and only include files
+		if !entry.IsDir() {
+			fileObjects = append(fileObjects, &object.String{Value: entry.Name()})
+		}
 	}
 
 	return &object.Array{Elements: fileObjects}

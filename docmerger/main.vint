@@ -1,7 +1,19 @@
 const os = import("os")
-const DIR = "../docs"
-let files = os.listDir(DIR).split(",") // listDir returns a comma-separated string of filenames
-println(files)
+const DOCS_DIR = "../docs"
+const OUTPUT_FILE = "merged-doc.md"
+// let files = os.listDir(DOCS_DIR).split(",") // listDir returns a comma-separated string of filenames
+let files = os.listFiles(DOCS_DIR) // listFiles returns an array of filenames
+let mergedContent = "# Merged Documentation\n\n"
+for file in files {
+    if (file.endsWith(".md")) {
+        let content = os.readFile(DOCS_DIR + "/" + file)
+        mergedContent = mergedContent + "## " + file + "\n\n"
+        mergedContent = mergedContent + "```markdown\n" + content + "\n```\n\n"
+    }
+}
+
+os.writeFile(OUTPUT_FILE, mergedContent)
+print("Documentation merged into " + OUTPUT_FILE)
 // get the list of all file in the dir
 // loop through them and read their content
 // merge them into a single string

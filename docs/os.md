@@ -74,17 +74,17 @@ files = os.listDir(".")
 print(files)  // Outputs a comma-separated string of files in the current directory
 ```
 
-### Get Directory Contents as Array
+### Get Files as Array (Excluding Directories)
 
-For more convenient file manipulation, use `os.listFiles()` which returns an array:
+For more convenient file manipulation, use `os.listFiles()` which returns an array of files only (directories are excluded):
 
 ```js
 files = os.listFiles(".")
-print(files)  // Outputs: ["file1.txt", "file2.txt", "subdirectory", ...]
+print(files)  // Outputs: ["file1.txt", "file2.txt", "script.vint", ...]
 
-// Iterate through files
+// Iterate through files only
 for (file in files) {
-    print("Found:", file)
+    print("Found file:", file)
 }
 
 // Check for specific files
@@ -95,10 +95,11 @@ if ("README.md" in files) {
 
 The `listFiles()` function is particularly useful when you need to:
 
+- Work with files only (directories are automatically filtered out)
 - Iterate through files individually
 - Filter files based on conditions
-- Count the number of files
-- Process files programmatically
+- Count the number of files in a directory
+- Process files programmatically without worrying about subdirectories
 
 ## Create a Directory
 
