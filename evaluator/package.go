@@ -1,6 +1,7 @@
 package evaluator
 
 import (
+	"fmt"
 	"strings"
 
 	"github.com/vintlang/vintlang/ast"
@@ -45,10 +46,12 @@ func evalPackageContents(block *ast.BlockStatement, pkg *object.Package) object.
 		switch stmt := statement.(type) {
 		case *ast.LetStatement:
 			if strings.HasPrefix(stmt.Name.Value, "_") {
+				fmt.Printf("DEBUG: Marking as private: %s\n", stmt.Name.Value)
 				pkg.DefinePrivate(stmt.Name.Value)
 			}
 		case *ast.ConstStatement:
 			if strings.HasPrefix(stmt.Name.Value, "_") {
+				fmt.Printf("DEBUG: Marking const as private: %s\n", stmt.Name.Value)
 				pkg.DefinePrivate(stmt.Name.Value)
 			}
 		}

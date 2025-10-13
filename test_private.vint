@@ -1,0 +1,10 @@
+include "./examples/packages_example/enhanced_test.vint"
+
+// Test accessing public members - should work
+debug("Testing public access:")
+debug(enhanced_test.VERSION)
+debug(enhanced_test.getVersion())
+
+// Test accessing private members - should fail with error
+debug("Testing private member access...")
+debug(enhanced_test._privateSecret)  // This should cause an error

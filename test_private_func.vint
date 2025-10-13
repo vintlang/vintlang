@@ -1,0 +1,4 @@
+include "./examples/packages_example/enhanced_test.vint"
+
+// Test private function access
+debug(enhanced_test._validateInput("test"))
