@@ -1,0 +1,348 @@
+package string_utils {
+    // Package-level constants
+    let VERSION = "1.5.2"
+    let PACKAGE_NAME = "String Processing Utilities"
+    let AUTHOR = "VintLang Development Team"
+    let MAX_STRING_LENGTH = 1000000
+    let DEFAULT_SEPARATOR = ", "
+    
+    let processedStrings = 0
+    let lastProcessedLength = 0
+    let totalCharactersProcessed = 0
+    
+    // Auto-initialization
+    let init = func() {
+        processedStrings = 0
+        totalCharactersProcessed = 0
+        print("String Utils v" + VERSION + " ready for text processing!")
+        print("Maximum supported string length: " + str(MAX_STRING_LENGTH))
+    }
+    
+    // Private helper functions
+    let _updateStats = func(str) {
+        processedStrings = processedStrings + 1
+        lastProcessedLength = len(str)
+        totalCharactersProcessed = totalCharactersProcessed + len(str)
+    }
+    
+    let _isValidString = func(str) {
+        return type(str) == "STRING"
+    }
+    
+    let _charAt = func(str, index) {
+        if (index < 0 || index >= len(str)) {
+            return ""
+        }
+        let chars = str.split("")
+        return chars[index]
+    }
+    
+    // String transformation functions
+    let reverse = func(str) {
+        if (!_isValidString(str)) {
+            return "Error: Argument must be a string"
+        }
+        _updateStats(str)
+        
+        let chars = str.split("")
+        let reversed = []
+        for i in range(len(chars) - 1, -1, -1) {
+            reversed.push(chars[i])
+        }
+        return reversed.join("")
+    }
+    
+    let capitalize = func(str) {
+        if (!_isValidString(str)) {
+            return "Error: Argument must be a string"
+        }
+        if (len(str) == 0) {
+            return str
+        }
+        _updateStats(str)
+        
+        let firstChar = _charAt(str, 0)
+        let rest = ""
+        if (len(str) > 1) {
+            let chars = str.split("")
+            let restChars = []
+            for i in range(1, len(chars)) {
+                restChars.push(chars[i])
+            }
+            rest = restChars.join("")
+        }
+        
+        // Simple capitalization (assumes ASCII)
+        let upperFirst = firstChar
+        let charCode = ord(firstChar)
+        if (charCode >= 97 && charCode <= 122) {  // 'a' to 'z' in ASCII
+            // Convert to uppercase
+            upperFirst = chr(charCode - 32)
+        }
+        
+        return upperFirst + rest
+    }
+    
+    let toLowerCase = func(str) {
+        if (!_isValidString(str)) {
+            return str
+        }
+        let chars = str.split("")
+        let result = []
+        for char in chars {
+            let charCode = ord(char)
+            if (charCode >= 65 && charCode <= 90) {  // 'A' to 'Z' in ASCII
+                result.push(chr(charCode + 32))  // Convert to lowercase
+            } else {
+                result.push(char)
+            }
+        }
+        return result.join("")
+    }
+    
+    let isPalindrome = func(str) {
+        if (!_isValidString(str)) {
+            return "Error: Argument must be a string"
+        }
+        _updateStats(str)
+        
+        let cleaned = toLowerCase(str)
+        let reversed = reverse(cleaned)
+        return cleaned == reversed
+    }
+    
+    let countWords = func(str) {
+        if (!_isValidString(str)) {
+            return "Error: Argument must be a string"
+        }
+        _updateStats(str)
+        
+        if (len(str) == 0) {
+            return 0
+        }
+        
+        let words = str.split(" ")
+        let count = 0
+        for word in words {
+            if (len(word) > 0) {
+                count = count + 1
+            }
+        }
+        return count
+    }
+    
+    let countCharacter = func(str, char) {
+        if (!_isValidString(str) || !_isValidString(char)) {
+            return "Error: Both arguments must be strings"
+        }
+        if (len(char) != 1) {
+            return "Error: Second argument must be a single character"
+        }
+        _updateStats(str)
+        
+        let count = 0
+        let chars = str.split("")
+        for c in chars {
+            if (c == char) {
+                count = count + 1
+            }
+        }
+        return count
+    }
+    
+    let removeSpaces = func(str) {
+        if (!_isValidString(str)) {
+            return "Error: Argument must be a string"
+        }
+        _updateStats(str)
+        
+        let chars = str.split("")
+        let result = []
+        for char in chars {
+            if (char != " ") {
+                result.push(char)
+            }
+        }
+        return result.join("")
+    }
+    
+    let padLeft = func(str, length, padChar) {
+        if (!_isValidString(str) || !_isValidString(padChar)) {
+            return "Error: String and pad character must be strings"
+        }
+        if (type(length) != "INTEGER" || length < 0) {
+            return "Error: Length must be a non-negative integer"
+        }
+        if (len(padChar) != 1) {
+            return "Error: Pad character must be a single character"
+        }
+        _updateStats(str)
+        
+        if (len(str) >= length) {
+            return str
+        }
+        
+        let padding = ""
+        let paddingNeeded = length - len(str)
+        for i in range(paddingNeeded) {
+            padding = padding + padChar
+        }
+        return padding + str
+    }
+    
+    let padRight = func(str, length, padChar) {
+        if (!_isValidString(str) || !_isValidString(padChar)) {
+            return "Error: String and pad character must be strings"
+        }
+        if (type(length) != "INTEGER" || length < 0) {
+            return "Error: Length must be a non-negative integer"
+        }
+        if (len(padChar) != 1) {
+            return "Error: Pad character must be a single character"
+        }
+        _updateStats(str)
+        
+        if (len(str) >= length) {
+            return str
+        }
+        
+        let padding = ""
+        let paddingNeeded = length - len(str)
+        for i in range(paddingNeeded) {
+            padding = padding + padChar
+        }
+        return str + padding
+    }
+    
+    // Advanced string operations
+    let extractNumbers = func(str) {
+        if (!_isValidString(str)) {
+            return "Error: Argument must be a string"
+        }
+        _updateStats(str)
+        
+        let numbers = []
+        let currentNumber = ""
+        let chars = str.split("")
+        
+        for char in chars {
+            let charCode = ord(char)
+            if (charCode >= 48 && charCode <= 57) {  // '0' to '9' in ASCII
+                currentNumber = currentNumber + char
+            } else {
+                if (len(currentNumber) > 0) {
+                    numbers.push(parseInt(currentNumber))
+                    currentNumber = ""
+                }
+            }
+        }
+        
+        // Don't forget the last number
+        if (len(currentNumber) > 0) {
+            numbers.push(parseInt(currentNumber))
+        }
+        
+        return numbers
+    }
+    
+    let truncate = func(str, maxLength, suffix) {
+        if (!_isValidString(str)) {
+            return "Error: Argument must be a string"
+        }
+        if (type(maxLength) != "INTEGER" || maxLength < 0) {
+            return "Error: Max length must be a non-negative integer"
+        }
+        if (suffix == null) {
+            suffix = "..."
+        }
+        if (!_isValidString(suffix)) {
+            return "Error: Suffix must be a string"
+        }
+        _updateStats(str)
+        
+        if (len(str) <= maxLength) {
+            return str
+        }
+        
+        let truncateAt = maxLength - len(suffix)
+        if (truncateAt < 0) {
+            truncateAt = 0
+        }
+        
+        let chars = str.split("")
+        let truncated = []
+        for i in range(truncateAt) {
+            truncated.push(chars[i])
+        }
+        
+        return truncated.join("") + suffix
+    }
+    
+    // Package statistics and utilities
+    let getStats = func() {
+        let avgLength = 0
+        if (processedStrings > 0) {
+            avgLength = totalCharactersProcessed / processedStrings
+        }
+        
+        return {
+            "package_name": PACKAGE_NAME,
+            "version": VERSION,
+            "author": AUTHOR,
+            "strings_processed": processedStrings,
+            "total_characters": totalCharactersProcessed,
+            "last_string_length": lastProcessedLength,
+            "average_length": avgLength
+        }
+    }
+    
+    let getConstants = func() {
+        return {
+            "max_length": MAX_STRING_LENGTH,
+            "default_separator": DEFAULT_SEPARATOR,
+            "version": VERSION
+        }
+    }
+    
+    let resetStats = func() {
+        processedStrings = 0
+        totalCharactersProcessed = 0
+        lastProcessedLength = 0
+        return "String processing statistics have been reset"
+    }
+    
+    // Utility for testing multiple operations
+    let processText = func(text, operations) {
+        if (!_isValidString(text)) {
+            return "Error: Text must be a string"
+        }
+        if (type(operations) != "ARRAY") {
+            return "Error: Operations must be an array"
+        }
+        
+        let result = text
+        let appliedOps = []
+        
+        for operation in operations {
+            if (operation == "reverse") {
+                result = reverse(result)
+                appliedOps.push("reversed")
+            } else if (operation == "capitalize") {
+                result = capitalize(result)
+                appliedOps.push("capitalized")
+            } else if (operation == "remove_spaces") {
+                result = removeSpaces(result)
+                appliedOps.push("spaces_removed")
+            } else {
+                appliedOps.push("unknown_operation: " + operation)
+            }
+        }
+        
+        return {
+            "original": text,
+            "result": result,
+            "operations_applied": appliedOps,
+            "length_change": len(result) - len(text)
+        }
+    }
+}

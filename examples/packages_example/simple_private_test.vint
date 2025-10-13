@@ -1,0 +1,13 @@
+// Simple test to verify private member detection
+import enhanced_test
+
+print("Testing private member detection:")
+
+// Check what happens with public access
+print("Public access test:")
+print("Public counter:", enhanced_test.publicCounter)
+
+// Check what happens with private access (should fail)
+print("Private access test (should fail):")
+let privateValue = enhanced_test._privateSecret
+print("Private secret:", privateValue)

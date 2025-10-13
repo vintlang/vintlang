@@ -20,8 +20,15 @@ func evalPropertyExpression(node *ast.PropertyExpression, env *object.Environmen
 	case *object.Package:
 		obj := left.(*object.Package)
 		prop := node.Property.(*ast.Identifier).Value
-		if val, ok := obj.Scope.Get(prop); ok {
+
+		// Use GetPublic to ensure only public members are accessible
+		if val, ok := obj.GetPublic(prop); ok {
 			return val
+		}
+
+		// If GetPublic failed, check if it's because the member is private
+		if obj.IsPrivate(prop) {
+			return newError("cannot access private property '%s' from package", prop)
 		}
 		// case *object.Module:
 		// 	mod := left.(*object.Module)
@@ -47,6 +54,12 @@ func evalPropertyAssignment(name *ast.PropertyExpression, val object.VintObject,
 	case *object.Package:
 		obj := left.(*object.Package)
 		prop := name.Property.(*ast.Identifier).Value
+
+		// Check if trying to assign to a private member from outside
+		if obj.IsPrivate(prop) {
+			return newError("Cannot assign to private member '%s' from outside package '%s'", prop, obj.Name.Value)
+		}
+
 		obj.Scope.SetScoped(prop, val)
 		return NULL
 	default:
