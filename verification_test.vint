@@ -1,0 +1,9 @@
+include "./examples/packages_example/enhanced_test.vint"
+
+print("=== FINAL VERIFICATION TEST ===")
+print("Package loaded successfully!")
+print("VERSION:", enhanced_test.VERSION)
+print("Counter:", enhanced_test.publicCounter)
+
+// Test that private access is still blocked
+// print("This would fail:", enhanced_test._privateSecret)

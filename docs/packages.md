@@ -20,10 +20,58 @@ package MyPackage {
 ### Package Members
 
 Inside a package block, you can define:
-- **Variables**: To hold the package's state.
+
+- **Variables**: To hold the package's state using `let`.
+- **Constants**: Immutable values using the `const` keyword.
 - **Functions**: To provide the package's functionality.
 
-All members defined with `let` inside a package are public and can be accessed after the package is imported.
+#### Constants in Packages
+
+VintLang supports package-level constants using the `const` keyword. Constants are immutable and are often used for configuration values, version numbers, or other fixed data:
+
+```js
+package Config {
+    const VERSION = "1.2.3"
+    const MAX_CONNECTIONS = 100
+    const API_BASE_URL = "https://api.example.com"
+    
+    let getConfig = func() {
+        return {
+            "version": VERSION,
+            "max_conn": MAX_CONNECTIONS,
+            "api_url": API_BASE_URL
+        }
+    }
+}
+```
+
+#### Public vs Private Members
+
+VintLang supports access control for package members using a naming convention:
+
+- **Public members**: Names that do NOT start with an underscore `_` are accessible from outside the package.
+- **Private members**: Names that start with an underscore `_` are only accessible within the package itself.
+
+```js
+package MyPackage {
+    // Public members (accessible from outside)
+    let publicVariable = "I'm accessible"
+    const PUBLIC_CONSTANT = 42
+    let publicFunction = func() { return "Hello!" }
+    
+    // Private members (internal use only)
+    let _privateVariable = "Internal only"
+    const _PRIVATE_KEY = "secret-key-123"
+    let _privateFunction = func() { return "Internal helper" }
+}
+```
+
+Attempting to access private members from outside the package will result in an error:
+```js
+import "MyPackage"
+
+print(MyPackage.publicVariable)  // ✅ Works
+print(MyPackage._privateVariable) // ❌ Error: cannot access private property
 
 ---
 
@@ -84,9 +132,9 @@ Using `@` is necessary to distinguish between a package-level variable and a loc
 
 To use a package, you import the file that contains its definition. The package object is then assigned to a variable with the same name as the package.
 
-1.  **Create your package file** (e.g., `utils.vint`).
-2.  **Import it in another file** (e.g., `main.vint`).
-3.  **Access its members** using dot notation.
+1. **Create your package file** (e.g., `utils.vint`).
+2. **Import it in another file** (e.g., `main.vint`).
+3. **Access its members** using dot notation.
 
 If `utils.vint` contains `package utils { ... }`, you would use it like this:
 
@@ -101,4 +149,61 @@ utils.doSomething()
 ```
 
 ---
-For a complete, runnable example, see the files in the `examples/packages_example/` directory.
+
+## Complete Examples
+
+For comprehensive, runnable examples that demonstrate all package features including constants, private members, and initialization, see the files in the `examples/packages_example/` directory:
+
+- **`enhanced_test.vint`**: Showcases constants, private members, auto-initialization, and complex package functionality.
+- **`greeter_pkg.vint`**: Simple package with state management and initialization.
+- **`enhanced_system_test.vint`**: Demonstrates how to use packages with private member protection.
+
+### Key Features Summary
+
+✅ **Package-level constants** with `const` keyword
+✅ **Private member protection** using underscore `_` prefix
+✅ **Auto-initialization** with `init()` functions  
+✅ **State management** with the `@` operator
+✅ **Comprehensive access control** for variables, constants, and functions
+
+```js
+// Complete example demonstrating all features
+package EnhancedExample {
+    // Public constants
+    const VERSION = "2.0.0"
+    const MAX_ITEMS = 100
+    
+    // Private constants  
+    const _SECRET_KEY = "internal-key-123"
+    
+    // Public variables
+    let counter = 0
+    
+    // Private variables
+    let _internalState = "hidden"
+    
+    // Auto-initialization
+    let init = func() {
+        print("Package initialized! Version:", VERSION)
+        @.counter = 10
+    }
+    
+    // Public functions
+    let increment = func() {
+        @.counter = @.counter + 1
+        return @.counter
+    }
+    
+    // Private functions
+    let _validate = func(value) {
+        return value != null && value > 0
+    }
+    
+    let processValue = func(value) {
+        if (!_validate(value)) {
+            return "Invalid value"
+        }
+        return "Processed: " + string(value)
+    }
+}
+```

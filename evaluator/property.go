@@ -25,7 +25,7 @@ func evalPropertyExpression(node *ast.PropertyExpression, env *object.Environmen
 		if val, ok := obj.GetPublic(prop); ok {
 			return val
 		}
-		
+
 		// If GetPublic failed, check if it's because the member is private
 		if obj.IsPrivate(prop) {
 			return newError("cannot access private property '%s' from package", prop)
