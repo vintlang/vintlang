@@ -23,6 +23,7 @@ func init() {
 	OsFunctions["readFile"] = readFile
 	OsFunctions["writeFile"] = writeFile
 	OsFunctions["listDir"] = listDir
+	OsFunctions["listFiles"] = listFiles
 	OsFunctions["deleteFile"] = deleteFile
 	OsFunctions["makeDir"] = makeDir
 	OsFunctions["removeDir"] = removeDir
@@ -292,6 +293,39 @@ func listDir(args []object.VintObject, defs map[string]object.VintObject) object
 	}
 
 	return &object.String{Value: strings.Join(fileList, ", ")}
+}
+
+func listFiles(args []object.VintObject, defs map[string]object.VintObject) object.VintObject {
+	if len(args) != 1 {
+		return ErrorMessage(
+			"os", "listFiles",
+			"1 string argument (directory path)",
+			fmt.Sprintf("%d arguments", len(args)),
+			`os.listFiles("/path/to/directory")`,
+		)
+	}
+
+	path, ok := args[0].(*object.String)
+	if !ok {
+		return ErrorMessage(
+			"os", "listFiles",
+			"string argument for directory path",
+			string(args[0].Type()),
+			`os.listFiles("/path/to/directory")`,
+		)
+	}
+
+	files, err := ioutil.ReadDir(path.Value)
+	if err != nil {
+		return &object.Error{Message: "Failed to list directory: " + err.Error()}
+	}
+
+	fileObjects := make([]object.VintObject, len(files))
+	for i, file := range files {
+		fileObjects[i] = &object.String{Value: file.Name()}
+	}
+
+	return &object.Array{Elements: fileObjects}
 }
 
 func deleteFile(args []object.VintObject, defs map[string]object.VintObject) object.VintObject {

@@ -1,16 +1,8 @@
-// Simple string manipulation and message printing
-import greetings_module
-import time
-
-// Print a greeting
-print("Hello, VintLang World! it currently",time.now())
-
-// Demonstrate string splitting
-let phrase = "VintLang"
-let letters = phrase.split("")
-for letter in letters {
-    print(letter)
-}
-
-//from the greetings_module
-greetings_module.greet("Developer")
+const os = import("os")
+const DIR = "../docs"
+let files = os.listDir(DIR).split(",") // listDir returns a comma-separated string of filenames
+println(files)
+// get the list of all file in the dir
+// loop through them and read their content
+// merge them into a single string
+// write the string to a new file called merged-doc.md
