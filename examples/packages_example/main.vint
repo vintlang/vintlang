@@ -1,6 +1,6 @@
 // Import the built-in 'time' module to use its sleep function.
-// import time //Both ways work
-const time = import("time")
+import time //Both ways work
+// const time = import("time")
 
 // Import the file containing the 'greeter' package.
 // Because it's in the same directory, we can refer to it directly.
@@ -10,18 +10,18 @@ import greeter_pkg
 print("\n--- Running Package Example ---\n")
 
 // Call a function from the 'greeter' package.
-greeter.sayHello("VintLang User")
+greeter_pkg.sayHello("VintLang User")
 
 // Wait for a couple of seconds.
 time.sleep(2000)
 
 // Call another function to see the initialization time.
-greeter.showInitTime()
+greeter_pkg.showInitTime()
 
 // Change the internal state of the package.
-greeter.setGreeting("Welcome")
+greeter_pkg.setGreeting("Welcome")
 
 // Call the first function again to see the new message.
-greeter.sayHello("VintLang User")
+greeter_pkg.sayHello("VintLang User")
 
 print("\n--- Example Finished ---\n") 
