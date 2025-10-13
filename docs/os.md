@@ -65,12 +65,40 @@ print(content)  // Outputs: "Hello, Vint!"
 
 ## List Directory Contents
 
+### Get Directory Contents as String
+
 You can list the files in a directory using `os.listDir()`:
 
 ```js
 files = os.listDir(".")
-print(files)  // Outputs a list of files in the current directory
+print(files)  // Outputs a comma-separated string of files in the current directory
 ```
+
+### Get Directory Contents as Array
+
+For more convenient file manipulation, use `os.listFiles()` which returns an array:
+
+```js
+files = os.listFiles(".")
+print(files)  // Outputs: ["file1.txt", "file2.txt", "subdirectory", ...]
+
+// Iterate through files
+for (file in files) {
+    print("Found:", file)
+}
+
+// Check for specific files
+if ("README.md" in files) {
+    print("README found!")
+}
+```
+
+The `listFiles()` function is particularly useful when you need to:
+
+- Iterate through files individually
+- Filter files based on conditions
+- Count the number of files
+- Process files programmatically
 
 ## Create a Directory
 
