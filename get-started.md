@@ -286,38 +286,57 @@ test_logical_operators()
 
 ## 10. OS
 
+The OS module provides comprehensive system-level functionality for interacting with the operating system.
+
 ```js
 import os
 
-// Exit with a status code
-// os.exit(1)
+// Process information
+print("Process ID:", os.getpid())
+print("Parent Process ID:", os.getppid())
+print("User ID:", os.getuid())
 
-// Run a shell command
-let result = os.run("ls -la")
-print(result)
-// print(os.run("go run . vintLang/main.vint"))
+// System information  
+print("CPU Count:", os.cpuCount())
+print("Hostname:", os.hostname())
+print("Page Size:", os.getpagesize())
 
-// Get and set environment variables
-// os.setEnv("API_KEY", "12345")
-let api_key = os.getEnv("API_KEY")
-print(api_key)
+// Environment variables
+os.setEnv("MYVAR", "hello")
+print("MYVAR:", os.getEnv("MYVAR"))
 
-// Unset environment variables
-// os.unsetEnv("API_KEY")
+// Advanced environment functions
+let pathResult = os.lookupEnv("PATH")
+if (pathResult["exists"]) {
+    print("PATH is set")
+}
 
-// Get system information
-let home = os.homedir()
-print("Home:", home)
-let temp = os.tmpdir()
-print("Temp:", temp)
-let cpus = os.cpuCount()
-print("CPUs:", cpus)
-let hostname = os.hostname()
-print("Hostname:", hostname)
+let expanded = os.expandEnv("Home is $HOME")
+print(expanded)
 
-// Read and write files
-os.writeFile("example.txt", "Hello, Vint!")
-let content = os.readFile("example.txt")
+// User directories
+print("Home:", os.userHomeDir())
+print("Cache:", os.userCacheDir())
+print("Config:", os.userConfigDir())
+print("Temp:", os.tempDir())
+
+// File operations
+os.writeFile("test.txt", "Hello, Vint!")
+let content = os.readFile("test.txt")
+print("Content:", content)
+
+// File information
+let fileInfo = os.stat("test.txt")
+print("File size:", fileInfo["size"])
+print("Is directory:", fileInfo["isDir"])
+
+// Directory operations
+os.mkdirAll("path/to/directory")
+files = os.readDir(".")
+print("Directory contents:", files)
+
+// Cleanup
+os.remove("test.txt")
 print(content)
 
 // List directory contents

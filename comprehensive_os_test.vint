@@ -61,4 +61,3 @@ println("  File exists after deletion:", fileExistsAfter)
 println("")
 
 println("✅ All enhanced OS functions are working correctly!")
-println("🎉 The OS module now mimics Go's os package with", len(os), "functions!")

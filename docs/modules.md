@@ -39,6 +39,7 @@ print(result)  // Output: 8
 ## Module Structure
 
 A module can contain:
+
 - Functions
 - Variables
 - Other modules
@@ -131,25 +132,29 @@ print("Multiplication: " + result2) // Output: Multiplication: 12
 VintLang provides several built-in modules for common functionality:
 
 ### Core Modules
+
 - **`math`** - Mathematical functions (`abs`, `sqrt`, `sin`, `cos`, etc.)
 - **`string`** - String manipulation (`toUpper`, `toLower`, `trim`, etc.)
 - **`random`** - Random number generation (`int`, `float`, `choice`, etc.)
 - **`kv`** - In-memory key-value store with TTL support and atomic operations
 
 ### I/O and System
-- **`os`** - Operating system interface (file operations, environment variables)
+
+- **`os`** - Comprehensive operating system interface (file operations, process management, environment variables, permissions, links, system info)
 - **`time`** - Date and time utilities
 - **`datetime`** - Advanced date/time formatting and parsing
 - **`path`** - File path manipulation
 - **`shell`** - Shell command execution
 
 ### Network and Web
+
 - **`net`** - Network utilities
 - **`http`** - HTTP client and server functionality
 - **`url`** - URL parsing and manipulation
 - **`email`** - Email sending capabilities
 
 ### Data Processing
+
 - **`json`** - JSON parsing and serialization
 - **`csv`** - CSV file processing
 - **`xml`** - XML parsing and generation
@@ -157,16 +162,19 @@ VintLang provides several built-in modules for common functionality:
 - **`encoding`** - Text encoding utilities
 
 ### Security and Crypto
+
 - **`crypto`** - Cryptographic functions
 - **`hash`** - Hashing algorithms (MD5, SHA1, SHA256, etc.)
 
 ### Database
+
 - **`sqlite`** - SQLite database interface
 - **`mysql`** - MySQL database connectivity
 - **`postgres`** - PostgreSQL database connectivity
 - **`redis`** - Redis client
 
 ### Development Tools
+
 - **`regex`** - Regular expression support
 - **`term`** - Terminal manipulation
 - **`cli`** - Command-line interface utilities
@@ -175,6 +183,7 @@ VintLang provides several built-in modules for common functionality:
 - **`reflect`** - Runtime reflection
 
 ### Specialized
+
 - **`schedule`** - Task scheduling
 - **`dotenv`** - Environment file loading
 - **`sysinfo`** - System information
