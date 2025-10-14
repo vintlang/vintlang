@@ -95,12 +95,12 @@ func init() {
 
 	// Path utilities
 	OsFunctions["tempDir"] = tempDir
-	OsFunctions["abs"] = abs
-	OsFunctions["base"] = base
-	OsFunctions["dir"] = dir
-	OsFunctions["ext"] = ext
-	OsFunctions["join"] = join
-	OsFunctions["clean"] = clean
+	OsFunctions["absPath"] = absPath
+	OsFunctions["baseName"] = baseName
+	OsFunctions["dirName"] = dirName
+	OsFunctions["extName"] = extName
+	OsFunctions["joinPath"] = joinPath
+	OsFunctions["cleanPath"] = cleanPath
 }
 
 func exit(args []object.VintObject, defs map[string]object.VintObject) object.VintObject {
@@ -763,4 +763,1224 @@ func moveFile(args []object.VintObject, defs map[string]object.VintObject) objec
 	}
 
 	return &object.String{Value: "File moved successfully"}
+}
+
+// File permissions and ownership functions
+
+// chmod changes file mode/permissions
+func chmod(args []object.VintObject, defs map[string]object.VintObject) object.VintObject {
+	if len(args) != 2 {
+		return ErrorMessage(
+			"os", "chmod",
+			"2 arguments (file path, mode)",
+			fmt.Sprintf("%d arguments", len(args)),
+			`os.chmod("file.txt", 0o644)`,
+		)
+	}
+
+	path, ok1 := args[0].(*object.String)
+	mode, ok2 := args[1].(*object.Integer)
+	if !ok1 || !ok2 {
+		return ErrorMessage(
+			"os", "chmod",
+			"string and integer arguments for path and mode",
+			fmt.Sprintf("path: %s, mode: %s", args[0].Type(), args[1].Type()),
+			`os.chmod("file.txt", 0o644)`,
+		)
+	}
+
+	err := os.Chmod(path.Value, os.FileMode(mode.Value))
+	if err != nil {
+		return &object.Error{Message: "Failed to change file mode: " + err.Error()}
+	}
+
+	return &object.String{Value: "File mode changed successfully"}
+}
+
+// chown changes file owner and group
+func chown(args []object.VintObject, defs map[string]object.VintObject) object.VintObject {
+	if len(args) != 3 {
+		return ErrorMessage(
+			"os", "chown",
+			"3 arguments (file path, uid, gid)",
+			fmt.Sprintf("%d arguments", len(args)),
+			`os.chown("file.txt", 1000, 1000)`,
+		)
+	}
+
+	path, ok1 := args[0].(*object.String)
+	uid, ok2 := args[1].(*object.Integer)
+	gid, ok3 := args[2].(*object.Integer)
+	if !ok1 || !ok2 || !ok3 {
+		return ErrorMessage(
+			"os", "chown",
+			"string and integer arguments for path, uid, and gid",
+			fmt.Sprintf("path: %s, uid: %s, gid: %s", args[0].Type(), args[1].Type(), args[2].Type()),
+			`os.chown("file.txt", 1000, 1000)`,
+		)
+	}
+
+	err := os.Chown(path.Value, int(uid.Value), int(gid.Value))
+	if err != nil {
+		return &object.Error{Message: "Failed to change file owner: " + err.Error()}
+	}
+
+	return &object.String{Value: "File owner changed successfully"}
+}
+
+// lchown changes symlink owner and group (doesn't follow the link)
+func lchown(args []object.VintObject, defs map[string]object.VintObject) object.VintObject {
+	if len(args) != 3 {
+		return ErrorMessage(
+			"os", "lchown",
+			"3 arguments (file path, uid, gid)",
+			fmt.Sprintf("%d arguments", len(args)),
+			`os.lchown("symlink", 1000, 1000)`,
+		)
+	}
+
+	path, ok1 := args[0].(*object.String)
+	uid, ok2 := args[1].(*object.Integer)
+	gid, ok3 := args[2].(*object.Integer)
+	if !ok1 || !ok2 || !ok3 {
+		return ErrorMessage(
+			"os", "lchown",
+			"string and integer arguments for path, uid, and gid",
+			fmt.Sprintf("path: %s, uid: %s, gid: %s", args[0].Type(), args[1].Type(), args[2].Type()),
+			`os.lchown("symlink", 1000, 1000)`,
+		)
+	}
+
+	err := os.Lchown(path.Value, int(uid.Value), int(gid.Value))
+	if err != nil {
+		return &object.Error{Message: "Failed to change symlink owner: " + err.Error()}
+	}
+
+	return &object.String{Value: "Symlink owner changed successfully"}
+}
+
+// chtimes changes file access and modification times
+func chtimes(args []object.VintObject, defs map[string]object.VintObject) object.VintObject {
+	if len(args) != 3 {
+		return ErrorMessage(
+			"os", "chtimes",
+			"3 arguments (file path, access time, modification time)",
+			fmt.Sprintf("%d arguments", len(args)),
+			`os.chtimes("file.txt", 1640995200, 1640995200)`,
+		)
+	}
+
+	path, ok1 := args[0].(*object.String)
+	atime, ok2 := args[1].(*object.Integer)
+	mtime, ok3 := args[2].(*object.Integer)
+	if !ok1 || !ok2 || !ok3 {
+		return ErrorMessage(
+			"os", "chtimes",
+			"string and integer arguments for path, atime, and mtime",
+			fmt.Sprintf("path: %s, atime: %s, mtime: %s", args[0].Type(), args[1].Type(), args[2].Type()),
+			`os.chtimes("file.txt", 1640995200, 1640995200)`,
+		)
+	}
+
+	atimeVal := time.Unix(atime.Value, 0)
+	mtimeVal := time.Unix(mtime.Value, 0)
+
+	err := os.Chtimes(path.Value, atimeVal, mtimeVal)
+	if err != nil {
+		return &object.Error{Message: "Failed to change file times: " + err.Error()}
+	}
+
+	return &object.String{Value: "File times changed successfully"}
+}
+
+// Process information functions
+
+// getpid returns the process ID
+func getpid(args []object.VintObject, defs map[string]object.VintObject) object.VintObject {
+	if len(args) != 0 {
+		return ErrorMessage(
+			"os", "getpid",
+			"no arguments",
+			fmt.Sprintf("%d arguments", len(args)),
+			"os.getpid()",
+		)
+	}
+
+	return &object.Integer{Value: int64(os.Getpid())}
+}
+
+// getppid returns the parent process ID
+func getppid(args []object.VintObject, defs map[string]object.VintObject) object.VintObject {
+	if len(args) != 0 {
+		return ErrorMessage(
+			"os", "getppid",
+			"no arguments",
+			fmt.Sprintf("%d arguments", len(args)),
+			"os.getppid()",
+		)
+	}
+
+	return &object.Integer{Value: int64(os.Getppid())}
+}
+
+// getuid returns the user ID
+func getuid(args []object.VintObject, defs map[string]object.VintObject) object.VintObject {
+	if len(args) != 0 {
+		return ErrorMessage(
+			"os", "getuid",
+			"no arguments",
+			fmt.Sprintf("%d arguments", len(args)),
+			"os.getuid()",
+		)
+	}
+
+	return &object.Integer{Value: int64(os.Getuid())}
+}
+
+// getgid returns the group ID
+func getgid(args []object.VintObject, defs map[string]object.VintObject) object.VintObject {
+	if len(args) != 0 {
+		return ErrorMessage(
+			"os", "getgid",
+			"no arguments",
+			fmt.Sprintf("%d arguments", len(args)),
+			"os.getgid()",
+		)
+	}
+
+	return &object.Integer{Value: int64(os.Getgid())}
+}
+
+// geteuid returns the effective user ID
+func geteuid(args []object.VintObject, defs map[string]object.VintObject) object.VintObject {
+	if len(args) != 0 {
+		return ErrorMessage(
+			"os", "geteuid",
+			"no arguments",
+			fmt.Sprintf("%d arguments", len(args)),
+			"os.geteuid()",
+		)
+	}
+
+	return &object.Integer{Value: int64(os.Geteuid())}
+}
+
+// getegid returns the effective group ID
+func getegid(args []object.VintObject, defs map[string]object.VintObject) object.VintObject {
+	if len(args) != 0 {
+		return ErrorMessage(
+			"os", "getegid",
+			"no arguments",
+			fmt.Sprintf("%d arguments", len(args)),
+			"os.getegid()",
+		)
+	}
+
+	return &object.Integer{Value: int64(os.Getegid())}
+}
+
+// getgroups returns the list of supplemental group IDs
+func getgroups(args []object.VintObject, defs map[string]object.VintObject) object.VintObject {
+	if len(args) != 0 {
+		return ErrorMessage(
+			"os", "getgroups",
+			"no arguments",
+			fmt.Sprintf("%d arguments", len(args)),
+			"os.getgroups()",
+		)
+	}
+
+	groups, err := os.Getgroups()
+	if err != nil {
+		return &object.Error{Message: "Failed to get groups: " + err.Error()}
+	}
+
+	groupObjects := make([]object.VintObject, len(groups))
+	for i, group := range groups {
+		groupObjects[i] = &object.Integer{Value: int64(group)}
+	}
+
+	return &object.Array{Elements: groupObjects}
+}
+
+// getpagesize returns the system page size
+func getpagesize(args []object.VintObject, defs map[string]object.VintObject) object.VintObject {
+	if len(args) != 0 {
+		return ErrorMessage(
+			"os", "getpagesize",
+			"no arguments",
+			fmt.Sprintf("%d arguments", len(args)),
+			"os.getpagesize()",
+		)
+	}
+
+	return &object.Integer{Value: int64(os.Getpagesize())}
+}
+
+// Environment functions
+
+// environ returns all environment variables
+func environ(args []object.VintObject, defs map[string]object.VintObject) object.VintObject {
+	if len(args) != 0 {
+		return ErrorMessage(
+			"os", "environ",
+			"no arguments",
+			fmt.Sprintf("%d arguments", len(args)),
+			"os.environ()",
+		)
+	}
+
+	envVars := os.Environ()
+	envObjects := make([]object.VintObject, len(envVars))
+	for i, env := range envVars {
+		envObjects[i] = &object.String{Value: env}
+	}
+
+	return &object.Array{Elements: envObjects}
+}
+
+// clearenv clears all environment variables
+func clearenv(args []object.VintObject, defs map[string]object.VintObject) object.VintObject {
+	if len(args) != 0 {
+		return ErrorMessage(
+			"os", "clearenv",
+			"no arguments",
+			fmt.Sprintf("%d arguments", len(args)),
+			"os.clearenv()",
+		)
+	}
+
+	os.Clearenv()
+	return &object.String{Value: "Environment cleared successfully"}
+}
+
+// lookupEnv looks up an environment variable and returns whether it exists
+func lookupEnv(args []object.VintObject, defs map[string]object.VintObject) object.VintObject {
+	if len(args) != 1 {
+		return ErrorMessage(
+			"os", "lookupEnv",
+			"1 string argument (environment variable name)",
+			fmt.Sprintf("%d arguments", len(args)),
+			`os.lookupEnv("PATH")`,
+		)
+	}
+
+	key, ok := args[0].(*object.String)
+	if !ok {
+		return ErrorMessage(
+			"os", "lookupEnv",
+			"string argument for environment variable name",
+			string(args[0].Type()),
+			`os.lookupEnv("PATH")`,
+		)
+	}
+
+	value, exists := os.LookupEnv(key.Value)
+	valuePair := object.DictPair{
+		Key:   &object.String{Value: "value"},
+		Value: &object.String{Value: value},
+	}
+	existsPair := object.DictPair{
+		Key:   &object.String{Value: "exists"},
+		Value: &object.Boolean{Value: exists},
+	}
+
+	pairs := map[object.HashKey]object.DictPair{
+		(&object.String{Value: "value"}).HashKey():  valuePair,
+		(&object.String{Value: "exists"}).HashKey(): existsPair,
+	}
+
+	return &object.Dict{Pairs: pairs}
+}
+
+// expand expands variables in string using provided mapping function
+func expand(args []object.VintObject, defs map[string]object.VintObject) object.VintObject {
+	if len(args) != 1 {
+		return ErrorMessage(
+			"os", "expand",
+			"1 string argument (string with variables)",
+			fmt.Sprintf("%d arguments", len(args)),
+			`os.expand("$HOME/file.txt")`,
+		)
+	}
+
+	str, ok := args[0].(*object.String)
+	if !ok {
+		return ErrorMessage(
+			"os", "expand",
+			"string argument",
+			string(args[0].Type()),
+			`os.expand("$HOME/file.txt")`,
+		)
+	}
+
+	expanded := os.Expand(str.Value, os.Getenv)
+	return &object.String{Value: expanded}
+}
+
+// expandEnv expands environment variables in string
+func expandEnv(args []object.VintObject, defs map[string]object.VintObject) object.VintObject {
+	if len(args) != 1 {
+		return ErrorMessage(
+			"os", "expandEnv",
+			"1 string argument (string with environment variables)",
+			fmt.Sprintf("%d arguments", len(args)),
+			`os.expandEnv("$HOME/file.txt")`,
+		)
+	}
+
+	str, ok := args[0].(*object.String)
+	if !ok {
+		return ErrorMessage(
+			"os", "expandEnv",
+			"string argument",
+			string(args[0].Type()),
+			`os.expandEnv("$HOME/file.txt")`,
+		)
+	}
+
+	expanded := os.ExpandEnv(str.Value)
+	return &object.String{Value: expanded}
+}
+
+// File/directory info and operations
+
+// stat returns file info
+func stat(args []object.VintObject, defs map[string]object.VintObject) object.VintObject {
+	if len(args) != 1 {
+		return ErrorMessage(
+			"os", "stat",
+			"1 string argument (file path)",
+			fmt.Sprintf("%d arguments", len(args)),
+			`os.stat("file.txt")`,
+		)
+	}
+
+	path, ok := args[0].(*object.String)
+	if !ok {
+		return ErrorMessage(
+			"os", "stat",
+			"string argument for file path",
+			string(args[0].Type()),
+			`os.stat("file.txt")`,
+		)
+	}
+
+	info, err := os.Stat(path.Value)
+	if err != nil {
+		return &object.Error{Message: "Failed to stat file: " + err.Error()}
+	}
+
+	namePair := object.DictPair{Key: &object.String{Value: "name"}, Value: &object.String{Value: info.Name()}}
+	sizePair := object.DictPair{Key: &object.String{Value: "size"}, Value: &object.Integer{Value: info.Size()}}
+	modePair := object.DictPair{Key: &object.String{Value: "mode"}, Value: &object.Integer{Value: int64(info.Mode())}}
+	modTimePair := object.DictPair{Key: &object.String{Value: "modTime"}, Value: &object.Integer{Value: info.ModTime().Unix()}}
+	isDirPair := object.DictPair{Key: &object.String{Value: "isDir"}, Value: &object.Boolean{Value: info.IsDir()}}
+
+	pairs := map[object.HashKey]object.DictPair{
+		(&object.String{Value: "name"}).HashKey():    namePair,
+		(&object.String{Value: "size"}).HashKey():    sizePair,
+		(&object.String{Value: "mode"}).HashKey():    modePair,
+		(&object.String{Value: "modTime"}).HashKey(): modTimePair,
+		(&object.String{Value: "isDir"}).HashKey():   isDirPair,
+	}
+
+	return &object.Dict{Pairs: pairs}
+}
+
+// lstat returns file info (doesn't follow symlinks)
+func lstat(args []object.VintObject, defs map[string]object.VintObject) object.VintObject {
+	if len(args) != 1 {
+		return ErrorMessage(
+			"os", "lstat",
+			"1 string argument (file path)",
+			fmt.Sprintf("%d arguments", len(args)),
+			`os.lstat("symlink")`,
+		)
+	}
+
+	path, ok := args[0].(*object.String)
+	if !ok {
+		return ErrorMessage(
+			"os", "lstat",
+			"string argument for file path",
+			string(args[0].Type()),
+			`os.lstat("symlink")`,
+		)
+	}
+
+	info, err := os.Lstat(path.Value)
+	if err != nil {
+		return &object.Error{Message: "Failed to lstat file: " + err.Error()}
+	}
+
+	namePair := object.DictPair{Key: &object.String{Value: "name"}, Value: &object.String{Value: info.Name()}}
+	sizePair := object.DictPair{Key: &object.String{Value: "size"}, Value: &object.Integer{Value: info.Size()}}
+	modePair := object.DictPair{Key: &object.String{Value: "mode"}, Value: &object.Integer{Value: int64(info.Mode())}}
+	modTimePair := object.DictPair{Key: &object.String{Value: "modTime"}, Value: &object.Integer{Value: info.ModTime().Unix()}}
+	isDirPair := object.DictPair{Key: &object.String{Value: "isDir"}, Value: &object.Boolean{Value: info.IsDir()}}
+
+	pairs := map[object.HashKey]object.DictPair{
+		(&object.String{Value: "name"}).HashKey():    namePair,
+		(&object.String{Value: "size"}).HashKey():    sizePair,
+		(&object.String{Value: "mode"}).HashKey():    modePair,
+		(&object.String{Value: "modTime"}).HashKey(): modTimePair,
+		(&object.String{Value: "isDir"}).HashKey():   isDirPair,
+	}
+
+	return &object.Dict{Pairs: pairs}
+}
+
+// readDir reads directory contents
+func readDir(args []object.VintObject, defs map[string]object.VintObject) object.VintObject {
+	if len(args) != 1 {
+		return ErrorMessage(
+			"os", "readDir",
+			"1 string argument (directory path)",
+			fmt.Sprintf("%d arguments", len(args)),
+			`os.readDir("/path/to/directory")`,
+		)
+	}
+
+	path, ok := args[0].(*object.String)
+	if !ok {
+		return ErrorMessage(
+			"os", "readDir",
+			"string argument for directory path",
+			string(args[0].Type()),
+			`os.readDir("/path/to/directory")`,
+		)
+	}
+
+	entries, err := os.ReadDir(path.Value)
+	if err != nil {
+		return &object.Error{Message: "Failed to read directory: " + err.Error()}
+	}
+
+	entryObjects := make([]object.VintObject, len(entries))
+	for i, entry := range entries {
+		info, _ := entry.Info()
+		
+		namePair := object.DictPair{Key: &object.String{Value: "name"}, Value: &object.String{Value: entry.Name()}}
+		isDirPair := object.DictPair{Key: &object.String{Value: "isDir"}, Value: &object.Boolean{Value: entry.IsDir()}}
+		
+		pairs := map[object.HashKey]object.DictPair{
+			(&object.String{Value: "name"}).HashKey():  namePair,
+			(&object.String{Value: "isDir"}).HashKey(): isDirPair,
+		}
+		
+		if info != nil {
+			sizePair := object.DictPair{Key: &object.String{Value: "size"}, Value: &object.Integer{Value: info.Size()}}
+			modePair := object.DictPair{Key: &object.String{Value: "mode"}, Value: &object.Integer{Value: int64(info.Mode())}}
+			modTimePair := object.DictPair{Key: &object.String{Value: "modTime"}, Value: &object.Integer{Value: info.ModTime().Unix()}}
+			
+			pairs[(&object.String{Value: "size"}).HashKey()] = sizePair
+			pairs[(&object.String{Value: "mode"}).HashKey()] = modePair
+			pairs[(&object.String{Value: "modTime"}).HashKey()] = modTimePair
+		}
+		
+		entryObjects[i] = &object.Dict{Pairs: pairs}
+	}
+
+	return &object.Array{Elements: entryObjects}
+}
+
+// Error checking functions
+func isExist(args []object.VintObject, defs map[string]object.VintObject) object.VintObject {
+	if len(args) != 1 {
+		return ErrorMessage(
+			"os", "isExist",
+			"1 string argument (error message)",
+			fmt.Sprintf("%d arguments", len(args)),
+			`os.isExist("file already exists")`,
+		)
+	}
+
+	errMsg, ok := args[0].(*object.String)
+	if !ok {
+		return ErrorMessage(
+			"os", "isExist",
+			"string argument for error message",
+			string(args[0].Type()),
+			`os.isExist("file already exists")`,
+		)
+	}
+
+	// Simple check for common "exists" error messages
+	exists := strings.Contains(strings.ToLower(errMsg.Value), "exist") &&
+		!strings.Contains(strings.ToLower(errMsg.Value), "not exist")
+
+	return &object.Boolean{Value: exists}
+}
+
+func isNotExist(args []object.VintObject, defs map[string]object.VintObject) object.VintObject {
+	if len(args) != 1 {
+		return ErrorMessage(
+			"os", "isNotExist",
+			"1 string argument (error message)",
+			fmt.Sprintf("%d arguments", len(args)),
+			`os.isNotExist("no such file")`,
+		)
+	}
+
+	errMsg, ok := args[0].(*object.String)
+	if !ok {
+		return ErrorMessage(
+			"os", "isNotExist",
+			"string argument for error message",
+			string(args[0].Type()),
+			`os.isNotExist("no such file")`,
+		)
+	}
+
+	// Simple check for common "not exists" error messages
+	notExists := strings.Contains(strings.ToLower(errMsg.Value), "not exist") ||
+		strings.Contains(strings.ToLower(errMsg.Value), "no such")
+
+	return &object.Boolean{Value: notExists}
+}
+
+func isPermission(args []object.VintObject, defs map[string]object.VintObject) object.VintObject {
+	if len(args) != 1 {
+		return ErrorMessage(
+			"os", "isPermission",
+			"1 string argument (error message)",
+			fmt.Sprintf("%d arguments", len(args)),
+			`os.isPermission("permission denied")`,
+		)
+	}
+
+	errMsg, ok := args[0].(*object.String)
+	if !ok {
+		return ErrorMessage(
+			"os", "isPermission",
+			"string argument for error message",
+			string(args[0].Type()),
+			`os.isPermission("permission denied")`,
+		)
+	}
+
+	// Simple check for common permission error messages
+	permissionDenied := strings.Contains(strings.ToLower(errMsg.Value), "permission") ||
+		strings.Contains(strings.ToLower(errMsg.Value), "denied") ||
+		strings.Contains(strings.ToLower(errMsg.Value), "access")
+
+	return &object.Boolean{Value: permissionDenied}
+}
+
+func isTimeout(args []object.VintObject, defs map[string]object.VintObject) object.VintObject {
+	if len(args) != 1 {
+		return ErrorMessage(
+			"os", "isTimeout",
+			"1 string argument (error message)",
+			fmt.Sprintf("%d arguments", len(args)),
+			`os.isTimeout("timeout occurred")`,
+		)
+	}
+
+	errMsg, ok := args[0].(*object.String)
+	if !ok {
+		return ErrorMessage(
+			"os", "isTimeout",
+			"string argument for error message",
+			string(args[0].Type()),
+			`os.isTimeout("timeout occurred")`,
+		)
+	}
+
+	// Simple check for common timeout error messages
+	timeout := strings.Contains(strings.ToLower(errMsg.Value), "timeout") ||
+		strings.Contains(strings.ToLower(errMsg.Value), "deadline")
+
+	return &object.Boolean{Value: timeout}
+}
+
+func sameFile(args []object.VintObject, defs map[string]object.VintObject) object.VintObject {
+	if len(args) != 2 {
+		return ErrorMessage(
+			"os", "sameFile",
+			"2 string arguments (file paths)",
+			fmt.Sprintf("%d arguments", len(args)),
+			`os.sameFile("file1.txt", "file2.txt")`,
+		)
+	}
+
+	path1, ok1 := args[0].(*object.String)
+	path2, ok2 := args[1].(*object.String)
+	if !ok1 || !ok2 {
+		return ErrorMessage(
+			"os", "sameFile",
+			"string arguments for file paths",
+			fmt.Sprintf("path1: %s, path2: %s", args[0].Type(), args[1].Type()),
+			`os.sameFile("file1.txt", "file2.txt")`,
+		)
+	}
+
+	info1, err1 := os.Stat(path1.Value)
+	info2, err2 := os.Stat(path2.Value)
+
+	if err1 != nil || err2 != nil {
+		return &object.Boolean{Value: false}
+	}
+
+	same := os.SameFile(info1, info2)
+	return &object.Boolean{Value: same}
+}
+
+func isPathSeparator(args []object.VintObject, defs map[string]object.VintObject) object.VintObject {
+	if len(args) != 1 {
+		return ErrorMessage(
+			"os", "isPathSeparator",
+			"1 string argument (character)",
+			fmt.Sprintf("%d arguments", len(args)),
+			`os.isPathSeparator("/")`,
+		)
+	}
+
+	char, ok := args[0].(*object.String)
+	if !ok {
+		return ErrorMessage(
+			"os", "isPathSeparator",
+			"string argument for character",
+			string(args[0].Type()),
+			`os.isPathSeparator("/")`,
+		)
+	}
+
+	if len(char.Value) != 1 {
+		return &object.Boolean{Value: false}
+	}
+
+	isSep := os.IsPathSeparator(char.Value[0])
+	return &object.Boolean{Value: isSep}
+}
+
+// Link functions
+
+func link(args []object.VintObject, defs map[string]object.VintObject) object.VintObject {
+	if len(args) != 2 {
+		return ErrorMessage(
+			"os", "link",
+			"2 string arguments (oldname, newname)",
+			fmt.Sprintf("%d arguments", len(args)),
+			`os.link("file.txt", "link.txt")`,
+		)
+	}
+
+	oldname, ok1 := args[0].(*object.String)
+	newname, ok2 := args[1].(*object.String)
+	if !ok1 || !ok2 {
+		return ErrorMessage(
+			"os", "link",
+			"string arguments for oldname and newname",
+			fmt.Sprintf("oldname: %s, newname: %s", args[0].Type(), args[1].Type()),
+			`os.link("file.txt", "link.txt")`,
+		)
+	}
+
+	err := os.Link(oldname.Value, newname.Value)
+	if err != nil {
+		return &object.Error{Message: "Failed to create hard link: " + err.Error()}
+	}
+
+	return &object.String{Value: "Hard link created successfully"}
+}
+
+func symlink(args []object.VintObject, defs map[string]object.VintObject) object.VintObject {
+	if len(args) != 2 {
+		return ErrorMessage(
+			"os", "symlink",
+			"2 string arguments (oldname, newname)",
+			fmt.Sprintf("%d arguments", len(args)),
+			`os.symlink("file.txt", "symlink.txt")`,
+		)
+	}
+
+	oldname, ok1 := args[0].(*object.String)
+	newname, ok2 := args[1].(*object.String)
+	if !ok1 || !ok2 {
+		return ErrorMessage(
+			"os", "symlink",
+			"string arguments for oldname and newname",
+			fmt.Sprintf("oldname: %s, newname: %s", args[0].Type(), args[1].Type()),
+			`os.symlink("file.txt", "symlink.txt")`,
+		)
+	}
+
+	err := os.Symlink(oldname.Value, newname.Value)
+	if err != nil {
+		return &object.Error{Message: "Failed to create symbolic link: " + err.Error()}
+	}
+
+	return &object.String{Value: "Symbolic link created successfully"}
+}
+
+func readlink(args []object.VintObject, defs map[string]object.VintObject) object.VintObject {
+	if len(args) != 1 {
+		return ErrorMessage(
+			"os", "readlink",
+			"1 string argument (symlink path)",
+			fmt.Sprintf("%d arguments", len(args)),
+			`os.readlink("symlink.txt")`,
+		)
+	}
+
+	path, ok := args[0].(*object.String)
+	if !ok {
+		return ErrorMessage(
+			"os", "readlink",
+			"string argument for symlink path",
+			string(args[0].Type()),
+			`os.readlink("symlink.txt")`,
+		)
+	}
+
+	target, err := os.Readlink(path.Value)
+	if err != nil {
+		return &object.Error{Message: "Failed to read symbolic link: " + err.Error()}
+	}
+
+	return &object.String{Value: target}
+}
+
+// Advanced file operations
+
+func truncate(args []object.VintObject, defs map[string]object.VintObject) object.VintObject {
+	if len(args) != 2 {
+		return ErrorMessage(
+			"os", "truncate",
+			"2 arguments (file path, size)",
+			fmt.Sprintf("%d arguments", len(args)),
+			`os.truncate("file.txt", 100)`,
+		)
+	}
+
+	path, ok1 := args[0].(*object.String)
+	size, ok2 := args[1].(*object.Integer)
+	if !ok1 || !ok2 {
+		return ErrorMessage(
+			"os", "truncate",
+			"string and integer arguments for path and size",
+			fmt.Sprintf("path: %s, size: %s", args[0].Type(), args[1].Type()),
+			`os.truncate("file.txt", 100)`,
+		)
+	}
+
+	err := os.Truncate(path.Value, size.Value)
+	if err != nil {
+		return &object.Error{Message: "Failed to truncate file: " + err.Error()}
+	}
+
+	return &object.String{Value: "File truncated successfully"}
+}
+
+func mkdirAll(args []object.VintObject, defs map[string]object.VintObject) object.VintObject {
+	if len(args) != 2 {
+		return ErrorMessage(
+			"os", "mkdirAll",
+			"2 arguments (directory path, mode)",
+			fmt.Sprintf("%d arguments", len(args)),
+			`os.mkdirAll("/path/to/nested/dir", 0o755)`,
+		)
+	}
+
+	path, ok1 := args[0].(*object.String)
+	mode, ok2 := args[1].(*object.Integer)
+	if !ok1 || !ok2 {
+		return ErrorMessage(
+			"os", "mkdirAll",
+			"string and integer arguments for path and mode",
+			fmt.Sprintf("path: %s, mode: %s", args[0].Type(), args[1].Type()),
+			`os.mkdirAll("/path/to/nested/dir", 0o755)`,
+		)
+	}
+
+	err := os.MkdirAll(path.Value, os.FileMode(mode.Value))
+	if err != nil {
+		return &object.Error{Message: "Failed to create directory tree: " + err.Error()}
+	}
+
+	return &object.String{Value: "Directory tree created successfully"}
+}
+
+func mkdirTemp(args []object.VintObject, defs map[string]object.VintObject) object.VintObject {
+	if len(args) != 2 {
+		return ErrorMessage(
+			"os", "mkdirTemp",
+			"2 string arguments (dir, pattern)",
+			fmt.Sprintf("%d arguments", len(args)),
+			`os.mkdirTemp("", "temp-*")`,
+		)
+	}
+
+	dir, ok1 := args[0].(*object.String)
+	pattern, ok2 := args[1].(*object.String)
+	if !ok1 || !ok2 {
+		return ErrorMessage(
+			"os", "mkdirTemp",
+			"string arguments for dir and pattern",
+			fmt.Sprintf("dir: %s, pattern: %s", args[0].Type(), args[1].Type()),
+			`os.mkdirTemp("", "temp-*")`,
+		)
+	}
+
+	tempDir, err := os.MkdirTemp(dir.Value, pattern.Value)
+	if err != nil {
+		return &object.Error{Message: "Failed to create temporary directory: " + err.Error()}
+	}
+
+	return &object.String{Value: tempDir}
+}
+
+func createTemp(args []object.VintObject, defs map[string]object.VintObject) object.VintObject {
+	if len(args) != 2 {
+		return ErrorMessage(
+			"os", "createTemp",
+			"2 string arguments (dir, pattern)",
+			fmt.Sprintf("%d arguments", len(args)),
+			`os.createTemp("", "temp-*.txt")`,
+		)
+	}
+
+	dir, ok1 := args[0].(*object.String)
+	pattern, ok2 := args[1].(*object.String)
+	if !ok1 || !ok2 {
+		return ErrorMessage(
+			"os", "createTemp",
+			"string arguments for dir and pattern",
+			fmt.Sprintf("dir: %s, pattern: %s", args[0].Type(), args[1].Type()),
+			`os.createTemp("", "temp-*.txt")`,
+		)
+	}
+
+	file, err := os.CreateTemp(dir.Value, pattern.Value)
+	if err != nil {
+		return &object.Error{Message: "Failed to create temporary file: " + err.Error()}
+	}
+	
+	// Close the file immediately and return just the name
+	file.Close()
+
+	return &object.String{Value: file.Name()}
+}
+
+func executable(args []object.VintObject, defs map[string]object.VintObject) object.VintObject {
+	if len(args) != 0 {
+		return ErrorMessage(
+			"os", "executable",
+			"no arguments",
+			fmt.Sprintf("%d arguments", len(args)),
+			"os.executable()",
+		)
+	}
+
+	exec, err := os.Executable()
+	if err != nil {
+		return &object.Error{Message: "Failed to get executable path: " + err.Error()}
+	}
+
+	return &object.String{Value: exec}
+}
+
+func rename(args []object.VintObject, defs map[string]object.VintObject) object.VintObject {
+	if len(args) != 2 {
+		return ErrorMessage(
+			"os", "rename",
+			"2 string arguments (oldpath, newpath)",
+			fmt.Sprintf("%d arguments", len(args)),
+			`os.rename("old.txt", "new.txt")`,
+		)
+	}
+
+	oldpath, ok1 := args[0].(*object.String)
+	newpath, ok2 := args[1].(*object.String)
+	if !ok1 || !ok2 {
+		return ErrorMessage(
+			"os", "rename",
+			"string arguments for oldpath and newpath",
+			fmt.Sprintf("oldpath: %s, newpath: %s", args[0].Type(), args[1].Type()),
+			`os.rename("old.txt", "new.txt")`,
+		)
+	}
+
+	err := os.Rename(oldpath.Value, newpath.Value)
+	if err != nil {
+		return &object.Error{Message: "Failed to rename: " + err.Error()}
+	}
+
+	return &object.String{Value: "File renamed successfully"}
+}
+
+func remove(args []object.VintObject, defs map[string]object.VintObject) object.VintObject {
+	if len(args) != 1 {
+		return ErrorMessage(
+			"os", "remove",
+			"1 string argument (path)",
+			fmt.Sprintf("%d arguments", len(args)),
+			`os.remove("file.txt")`,
+		)
+	}
+
+	path, ok := args[0].(*object.String)
+	if !ok {
+		return ErrorMessage(
+			"os", "remove",
+			"string argument for path",
+			string(args[0].Type()),
+			`os.remove("file.txt")`,
+		)
+	}
+
+	err := os.Remove(path.Value)
+	if err != nil {
+		return &object.Error{Message: "Failed to remove: " + err.Error()}
+	}
+
+	return &object.String{Value: "File removed successfully"}
+}
+
+func removeAll(args []object.VintObject, defs map[string]object.VintObject) object.VintObject {
+	if len(args) != 1 {
+		return ErrorMessage(
+			"os", "removeAll",
+			"1 string argument (path)",
+			fmt.Sprintf("%d arguments", len(args)),
+			`os.removeAll("directory")`,
+		)
+	}
+
+	path, ok := args[0].(*object.String)
+	if !ok {
+		return ErrorMessage(
+			"os", "removeAll",
+			"string argument for path",
+			string(args[0].Type()),
+			`os.removeAll("directory")`,
+		)
+	}
+
+	err := os.RemoveAll(path.Value)
+	if err != nil {
+		return &object.Error{Message: "Failed to remove all: " + err.Error()}
+	}
+
+	return &object.String{Value: "Path removed successfully"}
+}
+
+// User directory functions
+
+func userCacheDir(args []object.VintObject, defs map[string]object.VintObject) object.VintObject {
+	if len(args) != 0 {
+		return ErrorMessage(
+			"os", "userCacheDir",
+			"no arguments",
+			fmt.Sprintf("%d arguments", len(args)),
+			"os.userCacheDir()",
+		)
+	}
+
+	dir, err := os.UserCacheDir()
+	if err != nil {
+		return &object.Error{Message: "Failed to get user cache directory: " + err.Error()}
+	}
+
+	return &object.String{Value: dir}
+}
+
+func userConfigDir(args []object.VintObject, defs map[string]object.VintObject) object.VintObject {
+	if len(args) != 0 {
+		return ErrorMessage(
+			"os", "userConfigDir",
+			"no arguments",
+			fmt.Sprintf("%d arguments", len(args)),
+			"os.userConfigDir()",
+		)
+	}
+
+	dir, err := os.UserConfigDir()
+	if err != nil {
+		return &object.Error{Message: "Failed to get user config directory: " + err.Error()}
+	}
+
+	return &object.String{Value: dir}
+}
+
+func userHomeDir(args []object.VintObject, defs map[string]object.VintObject) object.VintObject {
+	if len(args) != 0 {
+		return ErrorMessage(
+			"os", "userHomeDir",
+			"no arguments",
+			fmt.Sprintf("%d arguments", len(args)),
+			"os.userHomeDir()",
+		)
+	}
+
+	dir, err := os.UserHomeDir()
+	if err != nil {
+		return &object.Error{Message: "Failed to get user home directory: " + err.Error()}
+	}
+
+	return &object.String{Value: dir}
+}
+
+// Path utility functions
+
+func tempDir(args []object.VintObject, defs map[string]object.VintObject) object.VintObject {
+	if len(args) != 0 {
+		return ErrorMessage(
+			"os", "tempDir",
+			"no arguments",
+			fmt.Sprintf("%d arguments", len(args)),
+			"os.tempDir()",
+		)
+	}
+
+	return &object.String{Value: os.TempDir()}
+}
+
+func absPath(args []object.VintObject, defs map[string]object.VintObject) object.VintObject {
+	if len(args) != 1 {
+		return ErrorMessage(
+			"os", "absPath",
+			"1 string argument (path)",
+			fmt.Sprintf("%d arguments", len(args)),
+			`os.absPath("relative/path")`,
+		)
+	}
+
+	path, ok := args[0].(*object.String)
+	if !ok {
+		return ErrorMessage(
+			"os", "absPath",
+			"string argument for path",
+			string(args[0].Type()),
+			`os.absPath("relative/path")`,
+		)
+	}
+
+	absPathResult, err := filepath.Abs(path.Value)
+	if err != nil {
+		return &object.Error{Message: "Failed to get absolute path: " + err.Error()}
+	}
+
+	return &object.String{Value: absPathResult}
+}
+
+func base(args []object.VintObject, defs map[string]object.VintObject) object.VintObject {
+	if len(args) != 1 {
+		return ErrorMessage(
+			"os", "base",
+			"1 string argument (path)",
+			fmt.Sprintf("%d arguments", len(args)),
+			`os.base("/path/to/file.txt")`,
+		)
+	}
+
+	path, ok := args[0].(*object.String)
+	if !ok {
+		return ErrorMessage(
+			"os", "base",
+			"string argument for path",
+			string(args[0].Type()),
+			`os.base("/path/to/file.txt")`,
+		)
+	}
+
+	return &object.String{Value: filepath.Base(path.Value)}
+}
+
+func dir(args []object.VintObject, defs map[string]object.VintObject) object.VintObject {
+	if len(args) != 1 {
+		return ErrorMessage(
+			"os", "dir",
+			"1 string argument (path)",
+			fmt.Sprintf("%d arguments", len(args)),
+			`os.dir("/path/to/file.txt")`,
+		)
+	}
+
+	path, ok := args[0].(*object.String)
+	if !ok {
+		return ErrorMessage(
+			"os", "dir",
+			"string argument for path",
+			string(args[0].Type()),
+			`os.dir("/path/to/file.txt")`,
+		)
+	}
+
+	return &object.String{Value: filepath.Dir(path.Value)}
+}
+
+func ext(args []object.VintObject, defs map[string]object.VintObject) object.VintObject {
+	if len(args) != 1 {
+		return ErrorMessage(
+			"os", "ext",
+			"1 string argument (path)",
+			fmt.Sprintf("%d arguments", len(args)),
+			`os.ext("file.txt")`,
+		)
+	}
+
+	path, ok := args[0].(*object.String)
+	if !ok {
+		return ErrorMessage(
+			"os", "ext",
+			"string argument for path",
+			string(args[0].Type()),
+			`os.ext("file.txt")`,
+		)
+	}
+
+	return &object.String{Value: filepath.Ext(path.Value)}
+}
+
+func join(args []object.VintObject, defs map[string]object.VintObject) object.VintObject {
+	if len(args) == 0 {
+		return ErrorMessage(
+			"os", "join",
+			"at least 1 string argument (path elements)",
+			"0 arguments",
+			`os.join("path", "to", "file.txt")`,
+		)
+	}
+
+	paths := make([]string, len(args))
+	for i, arg := range args {
+		path, ok := arg.(*object.String)
+		if !ok {
+			return ErrorMessage(
+				"os", "join",
+				"string arguments for path elements",
+				fmt.Sprintf("argument %d: %s", i+1, arg.Type()),
+				`os.join("path", "to", "file.txt")`,
+			)
+		}
+		paths[i] = path.Value
+	}
+
+	return &object.String{Value: filepath.Join(paths...)}
+}
+
+func clean(args []object.VintObject, defs map[string]object.VintObject) object.VintObject {
+	if len(args) != 1 {
+		return ErrorMessage(
+			"os", "clean",
+			"1 string argument (path)",
+			fmt.Sprintf("%d arguments", len(args)),
+			`os.clean("/path/../to/./file.txt")`,
+		)
+	}
+
+	path, ok := args[0].(*object.String)
+	if !ok {
+		return ErrorMessage(
+			"os", "clean",
+			"string argument for path",
+			string(args[0].Type()),
+			`os.clean("/path/../to/./file.txt")`,
+		)
+	}
+
+	return &object.String{Value: filepath.Clean(path.Value)}
 }
