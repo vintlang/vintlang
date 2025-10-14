@@ -8,6 +8,7 @@ import (
 	"os/exec"
 	"runtime"
 	"strings"
+	"time"
 
 	"github.com/vintlang/vintlang/object"
 )
@@ -78,7 +79,6 @@ func init() {
 	OsFunctions["symlink"] = symlink
 	OsFunctions["readlink"] = readlink
 
-	// Advanced file operations
 	OsFunctions["truncate"] = truncate
 	OsFunctions["mkdirAll"] = mkdirAll
 	OsFunctions["mkdirTemp"] = mkdirTemp
@@ -93,14 +93,7 @@ func init() {
 	OsFunctions["userConfigDir"] = userConfigDir
 	OsFunctions["userHomeDir"] = userHomeDir
 
-	// Path utilities
 	OsFunctions["tempDir"] = tempDir
-	OsFunctions["absPath"] = absPath
-	OsFunctions["baseName"] = baseName
-	OsFunctions["dirName"] = dirName
-	OsFunctions["extName"] = extName
-	OsFunctions["joinPath"] = joinPath
-	OsFunctions["cleanPath"] = cleanPath
 }
 
 func exit(args []object.VintObject, defs map[string]object.VintObject) object.VintObject {
@@ -1260,25 +1253,25 @@ func readDir(args []object.VintObject, defs map[string]object.VintObject) object
 	entryObjects := make([]object.VintObject, len(entries))
 	for i, entry := range entries {
 		info, _ := entry.Info()
-		
+
 		namePair := object.DictPair{Key: &object.String{Value: "name"}, Value: &object.String{Value: entry.Name()}}
 		isDirPair := object.DictPair{Key: &object.String{Value: "isDir"}, Value: &object.Boolean{Value: entry.IsDir()}}
-		
+
 		pairs := map[object.HashKey]object.DictPair{
 			(&object.String{Value: "name"}).HashKey():  namePair,
 			(&object.String{Value: "isDir"}).HashKey(): isDirPair,
 		}
-		
+
 		if info != nil {
 			sizePair := object.DictPair{Key: &object.String{Value: "size"}, Value: &object.Integer{Value: info.Size()}}
 			modePair := object.DictPair{Key: &object.String{Value: "mode"}, Value: &object.Integer{Value: int64(info.Mode())}}
 			modTimePair := object.DictPair{Key: &object.String{Value: "modTime"}, Value: &object.Integer{Value: info.ModTime().Unix()}}
-			
+
 			pairs[(&object.String{Value: "size"}).HashKey()] = sizePair
 			pairs[(&object.String{Value: "mode"}).HashKey()] = modePair
 			pairs[(&object.String{Value: "modTime"}).HashKey()] = modTimePair
 		}
-		
+
 		entryObjects[i] = &object.Dict{Pairs: pairs}
 	}
 
@@ -1657,7 +1650,7 @@ func createTemp(args []object.VintObject, defs map[string]object.VintObject) obj
 	if err != nil {
 		return &object.Error{Message: "Failed to create temporary file: " + err.Error()}
 	}
-	
+
 	// Close the file immediately and return just the name
 	file.Close()
 
@@ -1836,151 +1829,4 @@ func tempDir(args []object.VintObject, defs map[string]object.VintObject) object
 	}
 
 	return &object.String{Value: os.TempDir()}
-}
-
-func absPath(args []object.VintObject, defs map[string]object.VintObject) object.VintObject {
-	if len(args) != 1 {
-		return ErrorMessage(
-			"os", "absPath",
-			"1 string argument (path)",
-			fmt.Sprintf("%d arguments", len(args)),
-			`os.absPath("relative/path")`,
-		)
-	}
-
-	path, ok := args[0].(*object.String)
-	if !ok {
-		return ErrorMessage(
-			"os", "absPath",
-			"string argument for path",
-			string(args[0].Type()),
-			`os.absPath("relative/path")`,
-		)
-	}
-
-	absPathResult, err := filepath.Abs(path.Value)
-	if err != nil {
-		return &object.Error{Message: "Failed to get absolute path: " + err.Error()}
-	}
-
-	return &object.String{Value: absPathResult}
-}
-
-func base(args []object.VintObject, defs map[string]object.VintObject) object.VintObject {
-	if len(args) != 1 {
-		return ErrorMessage(
-			"os", "base",
-			"1 string argument (path)",
-			fmt.Sprintf("%d arguments", len(args)),
-			`os.base("/path/to/file.txt")`,
-		)
-	}
-
-	path, ok := args[0].(*object.String)
-	if !ok {
-		return ErrorMessage(
-			"os", "base",
-			"string argument for path",
-			string(args[0].Type()),
-			`os.base("/path/to/file.txt")`,
-		)
-	}
-
-	return &object.String{Value: filepath.Base(path.Value)}
-}
-
-func dir(args []object.VintObject, defs map[string]object.VintObject) object.VintObject {
-	if len(args) != 1 {
-		return ErrorMessage(
-			"os", "dir",
-			"1 string argument (path)",
-			fmt.Sprintf("%d arguments", len(args)),
-			`os.dir("/path/to/file.txt")`,
-		)
-	}
-
-	path, ok := args[0].(*object.String)
-	if !ok {
-		return ErrorMessage(
-			"os", "dir",
-			"string argument for path",
-			string(args[0].Type()),
-			`os.dir("/path/to/file.txt")`,
-		)
-	}
-
-	return &object.String{Value: filepath.Dir(path.Value)}
-}
-
-func ext(args []object.VintObject, defs map[string]object.VintObject) object.VintObject {
-	if len(args) != 1 {
-		return ErrorMessage(
-			"os", "ext",
-			"1 string argument (path)",
-			fmt.Sprintf("%d arguments", len(args)),
-			`os.ext("file.txt")`,
-		)
-	}
-
-	path, ok := args[0].(*object.String)
-	if !ok {
-		return ErrorMessage(
-			"os", "ext",
-			"string argument for path",
-			string(args[0].Type()),
-			`os.ext("file.txt")`,
-		)
-	}
-
-	return &object.String{Value: filepath.Ext(path.Value)}
-}
-
-func join(args []object.VintObject, defs map[string]object.VintObject) object.VintObject {
-	if len(args) == 0 {
-		return ErrorMessage(
-			"os", "join",
-			"at least 1 string argument (path elements)",
-			"0 arguments",
-			`os.join("path", "to", "file.txt")`,
-		)
-	}
-
-	paths := make([]string, len(args))
-	for i, arg := range args {
-		path, ok := arg.(*object.String)
-		if !ok {
-			return ErrorMessage(
-				"os", "join",
-				"string arguments for path elements",
-				fmt.Sprintf("argument %d: %s", i+1, arg.Type()),
-				`os.join("path", "to", "file.txt")`,
-			)
-		}
-		paths[i] = path.Value
-	}
-
-	return &object.String{Value: filepath.Join(paths...)}
-}
-
-func clean(args []object.VintObject, defs map[string]object.VintObject) object.VintObject {
-	if len(args) != 1 {
-		return ErrorMessage(
-			"os", "clean",
-			"1 string argument (path)",
-			fmt.Sprintf("%d arguments", len(args)),
-			`os.clean("/path/../to/./file.txt")`,
-		)
-	}
-
-	path, ok := args[0].(*object.String)
-	if !ok {
-		return ErrorMessage(
-			"os", "clean",
-			"string argument for path",
-			string(args[0].Type()),
-			`os.clean("/path/../to/./file.txt")`,
-		)
-	}
-
-	return &object.String{Value: filepath.Clean(path.Value)}
 }

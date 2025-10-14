@@ -1,0 +1,23 @@
+const os = import("os")
+
+println("Process ID:", os.getpid())
+println("Parent Process ID:", os.getppid())
+println("User ID:", os.getuid())
+println("Group ID:", os.getgid())
+println("Effective User ID:", os.geteuid())
+println("Effective Group ID:", os.getegid())
+println("CPU Count:", os.cpuCount())
+println("Hostname:", os.hostname())
+println("Page Size:", os.getpagesize())
+
+println("Temp Dir:", os.tempDir())
+println("User Home:", os.userHomeDir())
+
+let envs = os.environ()
+println("Number of environment variables:", len(envs))
+
+let pathResult = os.lookupEnv("PATH")
+println("PATH lookup result:", pathResult)
+
+let expanded = os.expandEnv("Home is $HOME")
+println("Expanded env var:", expanded)
