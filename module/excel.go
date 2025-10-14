@@ -109,15 +109,15 @@ func excelCreate(args []object.VintObject, defs map[string]object.VintObject) ob
 				"excel.create(\"workbook.xlsx\")",
 			)
 		}
-		
+
 		filePath := args[0].(*object.String).Value
 		if err := f.SaveAs(filePath); err != nil {
 			return &object.Error{Message: fmt.Sprintf("Failed to create Excel file: %v", err)}
 		}
-		
+
 		// Store in registry for later use
 		openFiles[filePath] = f
-		
+
 		return &object.String{Value: filePath}
 	}
 
@@ -138,7 +138,7 @@ func excelOpen(args []object.VintObject, defs map[string]object.VintObject) obje
 	}
 
 	filePath := args[0].(*object.String).Value
-	
+
 	f, err := excelize.OpenFile(filePath)
 	if err != nil {
 		return &object.Error{Message: fmt.Sprintf("Failed to open Excel file: %v", err)}
@@ -205,7 +205,7 @@ func excelSaveAs(args []object.VintObject, defs map[string]object.VintObject) ob
 
 	fileID := args[0].(*object.String).Value
 	newPath := args[1].(*object.String).Value
-	
+
 	f, exists := openFiles[fileID]
 	if !exists {
 		return &object.Error{Message: "File not found in registry"}
@@ -218,7 +218,7 @@ func excelSaveAs(args []object.VintObject, defs map[string]object.VintObject) ob
 	// Update registry with new path
 	openFiles[newPath] = f
 	delete(openFiles, fileID)
-	
+
 	return &object.String{Value: newPath}
 }
 
@@ -299,7 +299,7 @@ func excelAddSheet(args []object.VintObject, defs map[string]object.VintObject) 
 
 	fileID := args[0].(*object.String).Value
 	sheetName := args[1].(*object.String).Value
-	
+
 	f, exists := openFiles[fileID]
 	if !exists {
 		return &object.Error{Message: "File not found in registry"}
@@ -325,7 +325,7 @@ func excelDeleteSheet(args []object.VintObject, defs map[string]object.VintObjec
 
 	fileID := args[0].(*object.String).Value
 	sheetName := args[1].(*object.String).Value
-	
+
 	f, exists := openFiles[fileID]
 	if !exists {
 		return &object.Error{Message: "File not found in registry"}
@@ -351,7 +351,7 @@ func excelRenameSheet(args []object.VintObject, defs map[string]object.VintObjec
 	fileID := args[0].(*object.String).Value
 	oldName := args[1].(*object.String).Value
 	newName := args[2].(*object.String).Value
-	
+
 	f, exists := openFiles[fileID]
 	if !exists {
 		return &object.Error{Message: "File not found in registry"}
@@ -375,7 +375,7 @@ func excelSetActiveSheet(args []object.VintObject, defs map[string]object.VintOb
 	}
 
 	fileID := args[0].(*object.String).Value
-	
+
 	f, exists := openFiles[fileID]
 	if !exists {
 		return &object.Error{Message: "File not found in registry"}
@@ -434,7 +434,7 @@ func excelGetCell(args []object.VintObject, defs map[string]object.VintObject) o
 	fileID := args[0].(*object.String).Value
 	sheetName := args[1].(*object.String).Value
 	cellRef := args[2].(*object.String).Value
-	
+
 	f, exists := openFiles[fileID]
 	if !exists {
 		return &object.Error{Message: "File not found in registry"}
@@ -461,7 +461,7 @@ func excelSetCell(args []object.VintObject, defs map[string]object.VintObject) o
 	fileID := args[0].(*object.String).Value
 	sheetName := args[1].(*object.String).Value
 	cellRef := args[2].(*object.String).Value
-	
+
 	f, exists := openFiles[fileID]
 	if !exists {
 		return &object.Error{Message: "File not found in registry"}
@@ -501,7 +501,7 @@ func excelGetCellFormula(args []object.VintObject, defs map[string]object.VintOb
 	fileID := args[0].(*object.String).Value
 	sheetName := args[1].(*object.String).Value
 	cellRef := args[2].(*object.String).Value
-	
+
 	f, exists := openFiles[fileID]
 	if !exists {
 		return &object.Error{Message: "File not found in registry"}
@@ -529,7 +529,7 @@ func excelSetCellFormula(args []object.VintObject, defs map[string]object.VintOb
 	sheetName := args[1].(*object.String).Value
 	cellRef := args[2].(*object.String).Value
 	formula := args[3].(*object.String).Value
-	
+
 	f, exists := openFiles[fileID]
 	if !exists {
 		return &object.Error{Message: "File not found in registry"}
@@ -556,7 +556,7 @@ func excelGetRange(args []object.VintObject, defs map[string]object.VintObject) 
 	fileID := args[0].(*object.String).Value
 	sheetName := args[1].(*object.String).Value
 	rangeRef := args[2].(*object.String).Value
-	
+
 	f, exists := openFiles[fileID]
 	if !exists {
 		return &object.Error{Message: "File not found in registry"}
@@ -595,7 +595,7 @@ func excelSetRange(args []object.VintObject, defs map[string]object.VintObject) 
 	sheetName := args[1].(*object.String).Value
 	rangeRef := args[2].(*object.String).Value
 	data := args[3].(*object.Array)
-	
+
 	f, exists := openFiles[fileID]
 	if !exists {
 		return &object.Error{Message: "File not found in registry"}
@@ -606,9 +606,9 @@ func excelSetRange(args []object.VintObject, defs map[string]object.VintObject) 
 	if len(parts) < 1 {
 		return &object.Error{Message: "Invalid range format"}
 	}
-	
+
 	startCell := parts[0]
-	
+
 	// Convert data to interface{} slice
 	values := make([][]interface{}, len(data.Elements))
 	for i, row := range data.Elements {
@@ -651,7 +651,7 @@ func excelInsertRow(args []object.VintObject, defs map[string]object.VintObject)
 
 	fileID := args[0].(*object.String).Value
 	sheetName := args[1].(*object.String).Value
-	
+
 	f, exists := openFiles[fileID]
 	if !exists {
 		return &object.Error{Message: "File not found in registry"}
@@ -685,7 +685,7 @@ func excelInsertColumn(args []object.VintObject, defs map[string]object.VintObje
 	fileID := args[0].(*object.String).Value
 	sheetName := args[1].(*object.String).Value
 	column := args[2].(*object.String).Value
-	
+
 	f, exists := openFiles[fileID]
 	if !exists {
 		return &object.Error{Message: "File not found in registry"}
@@ -710,7 +710,7 @@ func excelDeleteRow(args []object.VintObject, defs map[string]object.VintObject)
 
 	fileID := args[0].(*object.String).Value
 	sheetName := args[1].(*object.String).Value
-	
+
 	f, exists := openFiles[fileID]
 	if !exists {
 		return &object.Error{Message: "File not found in registry"}
@@ -744,7 +744,7 @@ func excelDeleteColumn(args []object.VintObject, defs map[string]object.VintObje
 	fileID := args[0].(*object.String).Value
 	sheetName := args[1].(*object.String).Value
 	column := args[2].(*object.String).Value
-	
+
 	f, exists := openFiles[fileID]
 	if !exists {
 		return &object.Error{Message: "File not found in registry"}
@@ -771,7 +771,7 @@ func excelMergeCells(args []object.VintObject, defs map[string]object.VintObject
 	fileID := args[0].(*object.String).Value
 	sheetName := args[1].(*object.String).Value
 	rangeRef := args[2].(*object.String).Value
-	
+
 	f, exists := openFiles[fileID]
 	if !exists {
 		return &object.Error{Message: "File not found in registry"}
@@ -782,7 +782,7 @@ func excelMergeCells(args []object.VintObject, defs map[string]object.VintObject
 	if len(parts) != 2 {
 		return &object.Error{Message: "Invalid range format, expected format like A1:C1"}
 	}
-	
+
 	if err := f.MergeCell(sheetName, parts[0], parts[1]); err != nil {
 		return &object.Error{Message: fmt.Sprintf("Failed to merge cells: %v", err)}
 	}
@@ -803,7 +803,7 @@ func excelUnmergeCells(args []object.VintObject, defs map[string]object.VintObje
 	fileID := args[0].(*object.String).Value
 	sheetName := args[1].(*object.String).Value
 	rangeRef := args[2].(*object.String).Value
-	
+
 	f, exists := openFiles[fileID]
 	if !exists {
 		return &object.Error{Message: "File not found in registry"}
@@ -814,7 +814,7 @@ func excelUnmergeCells(args []object.VintObject, defs map[string]object.VintObje
 	if len(parts) != 2 {
 		return &object.Error{Message: "Invalid range format, expected format like A1:C1"}
 	}
-	
+
 	if err := f.UnmergeCell(sheetName, parts[0], parts[1]); err != nil {
 		return &object.Error{Message: fmt.Sprintf("Failed to unmerge cells: %v", err)}
 	}
@@ -841,7 +841,7 @@ func excelGetFileInfo(args []object.VintObject, defs map[string]object.VintObjec
 
 	sheets := f.GetSheetList()
 	activeSheet := f.GetActiveSheetIndex()
-	
+
 	result := make(map[string]object.VintObject)
 	result["sheets"] = &object.Array{Elements: func() []object.VintObject {
 		elements := make([]object.VintObject, len(sheets))
