@@ -6,13 +6,8 @@ import (
 	"io/ioutil"
 	"os"
 	"os/exec"
-	"os/user"
-	"path/filepath"
 	"runtime"
-	"strconv"
 	"strings"
-	"syscall"
-	"time"
 
 	"github.com/vintlang/vintlang/object"
 )
@@ -43,13 +38,13 @@ func init() {
 	OsFunctions["hostname"] = hostname
 	OsFunctions["copy"] = copyFile
 	OsFunctions["move"] = moveFile
-	
+
 	// File permissions and ownership
 	OsFunctions["chmod"] = chmod
 	OsFunctions["chown"] = chown
 	OsFunctions["lchown"] = lchown
 	OsFunctions["chtimes"] = chtimes
-	
+
 	// Process information
 	OsFunctions["getpid"] = getpid
 	OsFunctions["getppid"] = getppid
@@ -59,14 +54,14 @@ func init() {
 	OsFunctions["getegid"] = getegid
 	OsFunctions["getgroups"] = getgroups
 	OsFunctions["getpagesize"] = getpagesize
-	
+
 	// Environment functions
 	OsFunctions["environ"] = environ
 	OsFunctions["clearenv"] = clearenv
 	OsFunctions["lookupEnv"] = lookupEnv
 	OsFunctions["expand"] = expand
 	OsFunctions["expandEnv"] = expandEnv
-	
+
 	// File/directory info and operations
 	OsFunctions["stat"] = stat
 	OsFunctions["lstat"] = lstat
@@ -77,12 +72,12 @@ func init() {
 	OsFunctions["isTimeout"] = isTimeout
 	OsFunctions["sameFile"] = sameFile
 	OsFunctions["isPathSeparator"] = isPathSeparator
-	
+
 	// Links
 	OsFunctions["link"] = link
 	OsFunctions["symlink"] = symlink
 	OsFunctions["readlink"] = readlink
-	
+
 	// Advanced file operations
 	OsFunctions["truncate"] = truncate
 	OsFunctions["mkdirAll"] = mkdirAll
@@ -92,13 +87,13 @@ func init() {
 	OsFunctions["rename"] = rename
 	OsFunctions["remove"] = remove
 	OsFunctions["removeAll"] = removeAll
-	
+
 	// User directories
 	OsFunctions["userCacheDir"] = userCacheDir
 	OsFunctions["userConfigDir"] = userConfigDir
 	OsFunctions["userHomeDir"] = userHomeDir
-	
-	// Path utilities  
+
+	// Path utilities
 	OsFunctions["tempDir"] = tempDir
 	OsFunctions["abs"] = abs
 	OsFunctions["base"] = base
