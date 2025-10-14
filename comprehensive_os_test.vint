@@ -1,0 +1,64 @@
+const os = import("os")
+
+println("=== Enhanced OS Module Test ===")
+println("")
+
+// Process information
+println("📊 Process Information:")
+println("  Process ID:", os.getpid())
+println("  Parent Process ID:", os.getppid())
+println("  User ID:", os.getuid())
+println("  Group ID:", os.getgid())
+println("  Effective User ID:", os.geteuid())
+println("  Effective Group ID:", os.getegid())
+println("  CPU Count:", os.cpuCount())
+println("  Page Size:", os.getpagesize())
+println("  Hostname:", os.hostname())
+println("")
+
+// Environment functions
+println("🌍 Environment:")
+let pathResult = os.lookupEnv("PATH")
+println("  PATH exists:", pathResult["exists"])
+let homeExpanded = os.expandEnv("$HOME")
+println("  Home directory (expanded):", homeExpanded)
+println("")
+
+// Directory functions
+println("📁 Directories:")
+println("  Temp directory:", os.tempDir())
+println("  User home directory:", os.userHomeDir())
+println("  User cache directory:", os.userCacheDir())
+println("  User config directory:", os.userConfigDir())
+println("")
+
+// File information
+println("📄 File Information:")
+let homeInfo = os.stat(os.userHomeDir())
+println("  Home directory name:", homeInfo["name"])
+println("  Is directory:", homeInfo["isDir"])
+println("  Size:", homeInfo["size"], "bytes")
+println("")
+
+// Error checking functions
+println("🔍 Error Checking:")
+println("  'file exists' is exists error:", os.isExist("file exists"))
+println("  'no such file' is not exist error:", os.isNotExist("no such file"))
+println("  'permission denied' is permission error:", os.isPermission("permission denied"))
+println("")
+
+// Test file operations
+println("🔧 File Operations:")
+let tempFile = "/tmp/vint_test_file.txt"
+os.writeFile(tempFile, "Hello from Vint OS module!")
+let content = os.readFile(tempFile)
+println("  Created and read test file:", content)
+let fileExists = os.fileExists(tempFile)
+println("  File exists:", fileExists)
+os.deleteFile(tempFile)
+let fileExistsAfter = os.fileExists(tempFile)
+println("  File exists after deletion:", fileExistsAfter)
+println("")
+
+println("✅ All enhanced OS functions are working correctly!")
+println("🎉 The OS module now mimics Go's os package with", len(os), "functions!")

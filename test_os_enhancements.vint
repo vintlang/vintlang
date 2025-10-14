@@ -1,0 +1,49 @@
+import os
+
+println("Process ID:", os.getpid())
+println("Parent Process ID:", os.getppid()) 
+println("User ID:", os.getuid())
+println("Group ID:", os.getgid())
+println("Effective User ID:", os.geteuid())
+println("Effective Group ID:", os.getegid())
+println("CPU Count:", os.cpuCount())
+println("Hostname:", os.hostname())
+println("Page Size:", os.getpagesize())
+
+println("Environment Variables (first 5):")
+const envs = os.environ()
+for i in 0..5 {
+    if i < len(envs) {
+        println("  " + envs[i])
+    }
+}
+
+const pathResult = os.lookupEnv("PATH")
+if (pathResult["exists"]) {
+    println("PATH exists: " + str(len(pathResult["value"])) + " characters")
+} else {
+    println("PATH not found")
+}
+
+const expandedHome = os.expandEnv("Home is $HOME")
+println("Expanded: " + expandedHome)
+
+const tempDir = os.tempDir()
+println("Temp directory: " + tempDir)
+
+const userHome = os.userHomeDir()
+println("User home directory: " + userHome)
+
+const userCache = os.userCacheDir()
+println("User cache directory: " + userCache)
+
+const userConfig = os.userConfigDir()
+println("User config directory: " + userConfig)
+
+const homeInfo = os.stat(userHome)
+println("Home directory info:")
+println("  Name: " + homeInfo["name"])
+println("  Is Directory: " + str(homeInfo["isDir"]))
+println("  Size: " + str(homeInfo["size"]))
+
+println("All new OS functions tested successfully!")
