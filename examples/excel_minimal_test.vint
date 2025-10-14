@@ -1,0 +1,16 @@
+import excel
+
+print("Testing Excel Module")
+let file_id = excel.create("simple_test.xlsx")
+print("Created file:", file_id)
+
+excel.setCell(file_id, "Sheet1", "A1", "Hello")
+excel.setCell(file_id, "Sheet1", "B1", "World")
+
+let value = excel.getCell(file_id, "Sheet1", "A1")
+print("Read value:", value)
+
+excel.save(file_id)
+excel.close(file_id)
+
+print("Test completed successfully!")
