@@ -50,6 +50,7 @@ func init() {
 	Mapper["redis"] = &object.Module{Name: "redis", Functions: RedisFunctions}
 	Mapper["kv"] = &object.Module{Name: "kv", Functions: KvFunctions}
 	Mapper["jwt"] = &object.Module{Name: "jwt", Functions: JwtFunctions}
+	Mapper["excel"] = &object.Module{Name: "excel", Functions: ExcelFunctions}
 }
 
 // ErrorMessage formats an error message for module functions
