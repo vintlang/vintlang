@@ -683,7 +683,7 @@ func evalIncludeStatement(node *ast.IncludeStatement, env *object.Environment) o
 	}
 
 	// Create a new lexer, parser and evaluate the program
-	l := lexer.New(string(content))
+	l := lexer.NewWithFilename(string(content), path.Value)
 	p := parser.New(l)
 	program := p.ParseProgram()
 	if len(p.Errors()) != 0 {

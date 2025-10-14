@@ -1,7 +1,0 @@
-
-package greetings_module{
-	// Demonstrate a simple function from a package
-	let greet = func(name) {
-		print("Hello, " + name + "!")
-	}
-}

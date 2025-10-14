@@ -12,7 +12,7 @@ package greeter_pkg {
         // Import time module for current package scope
         let time = import("time")
         // Use the '@' operator to modify the package's internal state.
-        initializedAt = time.now()
+        @.initializedAt = time.now()
         print("Greeter package v" + VERSION + " initialized successfully!")
         print("Package by: " + AUTHOR)
     }
