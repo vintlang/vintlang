@@ -86,7 +86,7 @@ func registerCoreBuiltins() {
 				return newError("first argument to `format` must be STRING, got %T", args[0])
 			}
 
-			formatArgs := make([]interface{}, len(args)-1)
+			formatArgs := make([]any, len(args)-1)
 			for i, arg := range args[1:] {
 				switch obj := arg.(type) {
 				case *object.Integer:

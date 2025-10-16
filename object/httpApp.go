@@ -133,7 +133,7 @@ type HTTPRequest struct {
 	BodyBytes  []byte
 	Cookies    map[string]string
 	FormData   map[string]string
-	JSON       map[string]interface{}
+	JSON       map[string]any
 	RawRequest *http.Request
 	// Enterprise features
 	Files   map[string]*UploadedFile
@@ -454,7 +454,7 @@ func NewHTTPRequest(r *http.Request) *HTTPRequest {
 	}
 
 	// Parse JSON data
-	var jsonData map[string]interface{}
+	var jsonData map[string]any
 	if strings.Contains(r.Header.Get("Content-Type"), "application/json") {
 		json.Unmarshal(bodyBytes, &jsonData)
 	}
@@ -504,7 +504,7 @@ func (res *HTTPResponse) Send(text string) {
 }
 
 // Send JSON response
-func (res *HTTPResponse) JSON(data interface{}) {
+func (res *HTTPResponse) JSON(data any) {
 	if res.Sent {
 		log.Println("Warning: Response already sent")
 		return

@@ -44,7 +44,7 @@ func yamlDecode(args []object.VintObject, defs map[string]object.VintObject) obj
 		)
 	}
 
-	var i interface{}
+	var i any
 	input := args[0].(*object.String).Value
 	err := yaml.Unmarshal([]byte(input), &i)
 	if err != nil {
@@ -107,16 +107,16 @@ func yamlMerge(args []object.VintObject, defs map[string]object.VintObject) obje
 	obj1 := args[0]
 	obj2 := args[1]
 
-	// Convert objects to interface{} for merging
-	map1, ok1 := convertObjectToYAML(obj1).(map[string]interface{})
-	map2, ok2 := convertObjectToYAML(obj2).(map[string]interface{})
+	// Convert objects to any for merging
+	map1, ok1 := convertObjectToYAML(obj1).(map[string]any)
+	map2, ok2 := convertObjectToYAML(obj2).(map[string]any)
 
 	if !ok1 || !ok2 {
 		return &object.Error{Message: "Arguments must be dictionary-like objects"}
 	}
 
 	// Create a new map and merge
-	merged := make(map[string]interface{})
+	merged := make(map[string]any)
 	for k, v := range map1 {
 		merged[k] = v
 	}
@@ -158,7 +158,7 @@ func yamlGet(args []object.VintObject, defs map[string]object.VintObject) object
 		)
 	}
 
-	mapObj, ok := convertObjectToYAML(obj).(map[string]interface{})
+	mapObj, ok := convertObjectToYAML(obj).(map[string]any)
 	if !ok {
 		return &object.Error{Message: "First argument must be a dictionary-like object"}
 	}
@@ -171,10 +171,10 @@ func yamlGet(args []object.VintObject, defs map[string]object.VintObject) object
 	return convertYAMLToObject(val)
 }
 
-// convertYAMLToObject converts a Go interface{} from YAML parsing to a Vint object
-func convertYAMLToObject(i interface{}) object.VintObject {
+// convertYAMLToObject converts a Go any from YAML parsing to a Vint object
+func convertYAMLToObject(i any) object.VintObject {
 	switch v := i.(type) {
-	case map[string]interface{}:
+	case map[string]any:
 		dict := &object.Dict{}
 		dict.Pairs = make(map[object.HashKey]object.DictPair)
 
@@ -187,8 +187,8 @@ func convertYAMLToObject(i interface{}) object.VintObject {
 		}
 		return dict
 
-	case map[interface{}]interface{}:
-		// Handle YAML's tendency to use interface{} keys
+	case map[any]any:
+		// Handle YAML's tendency to use any keys
 		dict := &object.Dict{}
 		dict.Pairs = make(map[object.HashKey]object.DictPair)
 
@@ -215,7 +215,7 @@ func convertYAMLToObject(i interface{}) object.VintObject {
 		}
 		return dict
 
-	case []interface{}:
+	case []any:
 		list := &object.Array{}
 		for _, e := range v {
 			list.Elements = append(list.Elements, convertYAMLToObject(e))
@@ -245,11 +245,11 @@ func convertYAMLToObject(i interface{}) object.VintObject {
 	return &object.String{Value: fmt.Sprintf("%v", i)}
 }
 
-// convertObjectToYAML converts a Vint object to a Go interface{} for YAML marshaling
-func convertObjectToYAML(obj object.VintObject) interface{} {
+// convertObjectToYAML converts a Vint object to a Go any for YAML marshaling
+func convertObjectToYAML(obj object.VintObject) any {
 	switch v := obj.(type) {
 	case *object.Dict:
-		m := make(map[string]interface{})
+		m := make(map[string]any)
 		for _, pair := range v.Pairs {
 			key := pair.Key.(*object.String).Value
 			m[key] = convertObjectToYAML(pair.Value)
@@ -257,7 +257,7 @@ func convertObjectToYAML(obj object.VintObject) interface{} {
 		return m
 
 	case *object.Array:
-		list := make([]interface{}, len(v.Elements))
+		list := make([]any, len(v.Elements))
 		for i, e := range v.Elements {
 			list[i] = convertObjectToYAML(e)
 		}

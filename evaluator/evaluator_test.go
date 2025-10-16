@@ -11,7 +11,7 @@ import (
 func TestNullCoalescingOperator(t *testing.T) {
 	tests := []struct {
 		input    string
-		expected interface{}
+		expected any
 	}{
 		// Basic null coalescing
 		{"null ?? \"default\"", "default"},
@@ -90,7 +90,7 @@ func TestIfExpressionAndStatement(t *testing.T) {
 func TestAsyncFunctions(t *testing.T) {
 	tests := []struct {
 		input    string
-		expected interface{}
+		expected any
 	}{
 		{
 			"let f = async func() { return 42 }; let p = f(); await p",
@@ -127,7 +127,7 @@ func TestAsyncFunctions(t *testing.T) {
 func TestChannels(t *testing.T) {
 	tests := []struct {
 		input    string
-		expected interface{}
+		expected any
 	}{
 		{
 			"let ch = chan; ch",

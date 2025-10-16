@@ -13,7 +13,7 @@ import (
 
 type vmTestCase struct {
 	input    string
-	expected interface{}
+	expected any
 }
 
 func TestIntegerArithmetic(t *testing.T) {
@@ -64,7 +64,7 @@ func runVmTests(t *testing.T, tests []vmTestCase) {
 
 func testExpectedObject(
 	t *testing.T,
-	expected interface{},
+	expected any,
 	actual object.VintObject,
 ) {
 	t.Helper()

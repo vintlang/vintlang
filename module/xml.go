@@ -106,7 +106,7 @@ func xmlValidate(args []object.VintObject, defs map[string]object.VintObject) ob
 	input := data.(*object.String).Value
 
 	// Try to parse the XML
-	var v interface{}
+	var v any
 	err := xml.Unmarshal([]byte(input), &v)
 
 	if err != nil {
