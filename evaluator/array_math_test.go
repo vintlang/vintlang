@@ -11,7 +11,7 @@ import (
 func TestArrayMathMethods(t *testing.T) {
 	tests := []struct {
 		input    string
-		expected interface{}
+		expected any
 	}{
 		// Test sum
 		{"[1, 2, 3, 4, 5].sum()", 15},

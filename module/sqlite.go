@@ -102,8 +102,8 @@ func fetchAll(args []object.VintObject, defs map[string]object.VintObject) objec
 	result := make([]object.VintObject, 0)
 	cols, _ := rows.Columns()
 	for rows.Next() {
-		values := make([]interface{}, len(cols))
-		scanArgs := make([]interface{}, len(cols))
+		values := make([]any, len(cols))
+		scanArgs := make([]any, len(cols))
 		for i := range values {
 			scanArgs[i] = &values[i]
 		}
@@ -169,7 +169,7 @@ func dropTable(args []object.VintObject, defs map[string]object.VintObject) obje
 	return &object.Null{}
 }
 
-func convertToObject(val interface{}) object.VintObject {
+func convertToObject(val any) object.VintObject {
 	switch v := val.(type) {
 	case int64:
 		return &object.Integer{Value: v}
@@ -186,8 +186,8 @@ func convertToObject(val interface{}) object.VintObject {
 	}
 }
 
-func convertObjectsToParams(objects []object.VintObject) []interface{} {
-	params := make([]interface{}, len(objects))
+func convertObjectsToParams(objects []object.VintObject) []any {
+	params := make([]any, len(objects))
 	for i, obj := range objects {
 		switch v := obj.(type) {
 		case *object.String:

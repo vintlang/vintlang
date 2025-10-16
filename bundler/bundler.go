@@ -20,16 +20,16 @@ func logError(err error) {
 	}
 	defer f.Close()
 	timestamp := time.Now().Format(time.RFC3339)
-	f.WriteString(fmt.Sprintf("[%s] %v\n", timestamp, err))
+	fmt.Fprintf(f, "[%s] %v\n", timestamp, err)
 }
 
 // printVerbose prints only if verbose mode is enabled
-func printVerbose(verbose bool, a ...interface{}) {
+func printVerbose(verbose bool, a ...any) {
 	if verbose {
 		fmt.Print(a...)
 	}
 }
-func printlnVerbose(verbose bool, a ...interface{}) {
+func printlnVerbose(verbose bool, a ...any) {
 	if verbose {
 		fmt.Println(a...)
 	}

@@ -1,4 +1,5 @@
 # VintLang Programming Documentation
+
 This documentation introduces VintLang programming concepts and progresses from basic to advanced usage with well-structured examples.
 
 ---
@@ -6,6 +7,7 @@ This documentation introduces VintLang programming concepts and progresses from 
 ## 1. Basics
 
 ### 1.1 Variables and Data Types
+
 ```js
 // Define a variable
 let name = "VintLang"
@@ -13,6 +15,7 @@ print(name)  // Output: VintLang
 ```
 
 ### 1.2 String Operations
+
 ```js
 let name = "VintLang"
 let characters = name.split("")
@@ -68,6 +71,7 @@ print(int(false))    // 0
 ## 2. Control Flow
 
 ### 2.1 Conditional Statements
+
 ```js
 let age = "10"
 age = convert(age, "INTEGER")  // Convert string to integer
@@ -82,6 +86,7 @@ if (age == 20) {
 ```
 
 ### 2.2 Loops
+
 ```js
 let numbers = [1, 2, 3, 4]
 for n in numbers {
@@ -94,6 +99,7 @@ for n in numbers {
 ## 3. Functions
 
 ### 3.1 Defining Functions
+
 ```js
 let printDetails = func(name, age, height) {
     print("My name is " + name + ", I am " + age + " years old, and my height is " + height + " feet.")
@@ -111,6 +117,7 @@ printDetails(name, age, height)
 ## 4. Built-in Modules
 
 ### 4.1 Time Module
+
 ```js
 import time
 print(time.now())  // Print current timestamp
@@ -120,6 +127,7 @@ print("Is", year, "Leap year:", time.isLeapYear(year))
 ```
 
 ### 4.2 Networking (HTTP Requests)
+
 ```js
 import net
 let res = net.get("https://tachera.com")
@@ -131,6 +139,7 @@ print(res)  // Prints the response
 ## 5. Advanced Features
 
 ### 5.1 String Manipulation
+
 ```js
 import string
 let trimmed = string.trim("  Hello, World!  ")
@@ -144,6 +153,7 @@ print(replaced)  // Output: "Hello, Vint!"
 ```
 
 ### 5.2 Regex Module
+
 ```js
 // Sample usage of the Regex module in Vint
 import regex
@@ -183,6 +193,7 @@ print(maskedString)  // Expected output: "My phone number is *********"
 ## 6. File System Operations
 
 ### 6.1 Using the OS Module
+
 ```js
 import os
 os.writeFile("example.txt", "Hello, Vint!")
@@ -198,6 +209,7 @@ print(files)  // List directory contents
 ## 7. Error Handling and Debugging
 
 ### 7.1 Switch Case
+
 ```js
 let n = 1
 switch (n) {
@@ -215,6 +227,7 @@ switch (n) {
 ---
 
 ## 8. Json
+
 ```js
 import json
 
@@ -366,6 +379,7 @@ print(lines) // Outputs: ["Hello", "World"]
 ```
 
 ## 11.String module
+
 ```js
 // Sample usage of the string module
 import "string"
@@ -427,6 +441,7 @@ simirality
 ```
 
 ## 12. UUID
+
 ```js
 import uuid
 
@@ -465,9 +480,11 @@ print("Woo hoo you've guessed it right")
 print("Game over!")
 
 ```
+
 ---
 
 ## Inventory Game
+
 ```js
 /*
 THIS IS A SIMPLE TERMINAL GAME WRITTEN IN VINTLANG
@@ -568,6 +585,7 @@ gameLoop()
 ## Comprehensive Example
 
 This example integrates modules and features to create a simple application.
+
 ```js
 import net
 import time
@@ -595,4 +613,3 @@ print(logContent)
 ```
 
 ---
-

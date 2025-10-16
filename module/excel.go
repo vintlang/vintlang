@@ -467,7 +467,7 @@ func excelSetCell(args []object.VintObject, defs map[string]object.VintObject) o
 		return &object.Error{Message: "File not found in registry"}
 	}
 
-	var value interface{}
+	var value any
 	switch v := args[3].(type) {
 	case *object.String:
 		value = v.Value
@@ -609,11 +609,11 @@ func excelSetRange(args []object.VintObject, defs map[string]object.VintObject) 
 
 	startCell := parts[0]
 
-	// Convert data to interface{} slice
-	values := make([][]interface{}, len(data.Elements))
+	// Convert data to any slice
+	values := make([][]any, len(data.Elements))
 	for i, row := range data.Elements {
 		if rowArray, ok := row.(*object.Array); ok {
-			values[i] = make([]interface{}, len(rowArray.Elements))
+			values[i] = make([]any, len(rowArray.Elements))
 			for j, cell := range rowArray.Elements {
 				switch v := cell.(type) {
 				case *object.String:
