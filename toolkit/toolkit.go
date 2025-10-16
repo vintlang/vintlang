@@ -205,29 +205,98 @@ type VintConfig struct {
 	Description string `json:"description"`
 }
 
-const sampleVintCode = `// Simple string manipulation and message printing
+const sampleReadme = `# 🚀 Welcome to Your VintLang Project!
+
+This is a modern VintLang starter template. It demonstrates:
+- Data structures
+- String and array operations
+- CLI interaction
+- Modular code
+- Project metadata
+
+## Quick Start
+
+1. Run your project:
+   $ vint main.vint
+2. Explore the code in main.vint and greetings_module.vint.
+3. Edit vintconfig.json to update your project info.
+
+Happy coding! 💡
+`
+
+const sampleVintCode = `// Main entry point for your VintLang project
 import greetings_module
 import time
+import os
+import json
 
-// Print a greeting
-print("Hello, VintLang World! it currently",time.now())
+println("\n🎉 Welcome to your VintLang project!")
+println("Today's date:", time.format(time.now(), "2006-01-02 15:04:05"))
 
-// Demonstrate string splitting
+// Data structure example
+let app = {
+    name: "VintLang Starter",
+    version: "1.0.0",
+    author: "You!",
+    features: ["strings", "arrays", "modules", "cli", "file", "json", "env", "http"]
+}
+println("App features:", app["features"])
+
+// String and array operations
 let phrase = "VintLang"
 let letters = phrase.split("")
-for letter in letters {
-    print(letter)
+println("Letters:", letters)
+println("Uppercase:", phrase.upper())
+println("Reversed:", phrase.reverse())
+
+// CLI TODO demo
+let todos = ["Buy groceries", "Walk the dog", "Finish project"]
+println("\nYour TODOs:")
+for todo in todos {
+    println("- " + todo)
 }
 
-//from the greetings_module
-greetings_module.greet("Developer")`
+// Use a module function
+greetings_module.greet("Developer")
 
-const sampleGreetingsCode = `
-package greetings_module{
-	// Demonstrate a simple function from a package
-	let greet = func(name) {
-		print("Hello, " + name + "!")
-	}
+// File I/O example
+println("\n📄 Writing to file example.txt...")
+os.writeFile("example.txt", "Hello from VintLang!")
+let fileContent = os.readFile("example.txt")
+println("Read from file:", fileContent)
+
+// JSON example
+println("\n🔢 JSON encode/decode:")
+let obj = {"hello": "world", "count": 42}
+let jsonStr = json.encode(obj)
+println("JSON string:", jsonStr)
+let decoded = json.decode(jsonStr)
+println("Decoded:", decoded)
+
+// Environment variable example
+println("\n🌍 Environment demo:")
+os.setEnv("VINT_DEMO", "42")
+println("VINT_DEMO:", os.getEnv("VINT_DEMO"))
+os.unsetEnv("VINT_DEMO")
+println("VINT_DEMO after unset:", os.getEnv("VINT_DEMO"))
+
+// Simple HTTP request example (if http module available)
+try {
+    import http
+    println("\n🌐 HTTP GET example:")
+    let response = http.get("https://api.github.com")
+    println("Status:", response['status'])
+    println("Body (truncated):", response['body'].slice(0, 100))
+} catch err {
+    println("HTTP module not available or request failed:", err)
+}
+`
+
+const sampleGreetingsCode = `package greetings_module{
+    // Simple greeting function
+    let greet = func(name) {
+        println("👋 Hello, " + name + "! Welcome to VintLang.")
+    }
 }
 `
 
@@ -237,13 +306,27 @@ func createProject(projectName string) {
 	var vintConfig = VintConfig{
 		Name:        projectName,
 		Version:     "1.0.0",
-		VintVersion:  config.VINT_VERSION,
-		Description: "I love VintLang",
+		VintVersion: config.VINT_VERSION,
+		Description: "A modern VintLang starter project",
 	}
 
 	// creating the project directory
 	os.Mkdir(projectName, 0755)
 	os.Chdir(projectName)
+
+	// Creating README.md
+	fmt.Println("🫠 Creating README.md...")
+	readmeFile, err := os.Create("README.md")
+	if err != nil {
+		fmt.Printf("❌ Error creating README.md: %v\n", err)
+		return
+	}
+	defer readmeFile.Close()
+	if _, err := readmeFile.WriteString(sampleReadme); err != nil {
+		fmt.Printf("❌ Error writing to README.md: %v\n", err)
+		return
+	}
+	fmt.Println("✅ README.md created successfully!")
 
 	// Creating vintconfig.json
 	fmt.Println("🫠 Creating vintconfig.json...")
@@ -280,17 +363,17 @@ func createProject(projectName string) {
 	}
 	fmt.Println("✅ main.vint created successfully!")
 
-	//creating greetings_module
-	greetings_module_file, err := os.Create("greetings_module.vint")
+	// Creating greetings_module.vint
+	greetingsModuleFile, err := os.Create("greetings_module.vint")
 	if err != nil {
 		fmt.Printf("❌ Error creating greetings_module.vint: %v\n", err)
 		return
 	}
-	defer greetings_module_file.Close()
-	if _, err := greetings_module_file.WriteString(sampleGreetingsCode); err != nil {
+	defer greetingsModuleFile.Close()
+	if _, err := greetingsModuleFile.WriteString(sampleGreetingsCode); err != nil {
 		fmt.Printf("❌ Error writing to greetings_module.vint: %v\n", err)
 	}
-	fmt.Println("✅ greetings_module.vint creates succesfully")
+	fmt.Println("✅ greetings_module.vint created successfully!")
 
 	// Success message
 	fmt.Printf("🚀 Project '%s' initialized successfully!\n", projectName)
