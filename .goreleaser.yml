@@ -1,7 +1,7 @@
 # GoReleaser configuration for VintLang
 # See https://goreleaser.com for documentation
 
-version: 1
+version: 2
 
 before:
   hooks:
@@ -30,18 +30,13 @@ builds:
 
 archives:
   - id: vintlang-archives
-    builds:
-      - vintlang
-    format: tar.gz
     name_template: >-
       vintLang_
       {{- title .Os }}_
       {{- if eq .Arch "amd64" }}x86_64
       {{- else if eq .Arch "386" }}i386
       {{- else }}{{ .Arch }}{{ end }}
-    format_overrides:
-      - goos: windows
-        format: zip
+    wrap_in_directory: false
     files:
       - README.md
       - docs/**/*
@@ -53,7 +48,7 @@ checksum:
   algorithm: sha256
 
 snapshot:
-  name_template: "{{ incpatch .Version }}-next"
+  version_template: "{{ incpatch .Version }}-next"
 
 changelog:
   sort: asc
@@ -117,3 +112,21 @@ nfpms:
     contents:
       - src: README.md
         dst: /usr/share/doc/vintlang/README.md
+
+dockers:
+  - id: vintlang-docker
+    image_templates:
+      - "vintlang/vintlang:{{ .Tag }}"
+      - "vintlang/vintlang:latest"
+    dockerfile: Dockerfile
+    build_flag_templates:
+      - "--pull"
+      - "--label=org.opencontainers.image.created={{.Date}}"
+      - "--label=org.opencontainers.image.name={{.ProjectName}}"
+      - "--label=org.opencontainers.image.revision={{.FullCommit}}"
+      - "--label=org.opencontainers.image.version={{.Version}}"
+      - "--label=org.opencontainers.image.source={{.GitURL}}"
+    extra_files:
+      - README.md
+      - docs/
+      - examples/
