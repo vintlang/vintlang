@@ -1,5 +1,5 @@
 package config
 
 const (
-	VINT_VERSION = "0.2.3"
+	VINT_VERSION = "0.2.4"
 )
