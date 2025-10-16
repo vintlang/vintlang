@@ -30,7 +30,7 @@ func chat(args []object.VintObject, defs map[string]object.VintObject) object.Vi
 		return &object.Error{Message: "Both api_key and message must be strings"}
 	}
 
-	requestBody := map[string]interface{}{
+	requestBody := map[string]any{
 		"model": "gpt-3.5-turbo",
 		"messages": []map[string]string{
 			{"role": "user", "content": message.Value},
@@ -63,18 +63,18 @@ func chat(args []object.VintObject, defs map[string]object.VintObject) object.Vi
 		return &object.Error{Message: fmt.Sprintf("OpenAI API error (%d): %s", resp.StatusCode, string(body))}
 	}
 
-	var responseData map[string]interface{}
+	var responseData map[string]any
 	if err := json.Unmarshal(body, &responseData); err != nil {
 		return &object.Error{Message: fmt.Sprintf("Failed to parse response: %s", err)}
 	}
 
-	choices, ok := responseData["choices"].([]interface{})
+	choices, ok := responseData["choices"].([]any)
 	if !ok || len(choices) == 0 {
 		return &object.Error{Message: "Unexpected response format or empty response"}
 	}
 
-	firstChoice := choices[0].(map[string]interface{})
-	content := firstChoice["message"].(map[string]interface{})["content"].(string)
+	firstChoice := choices[0].(map[string]any)
+	content := firstChoice["message"].(map[string]any)["content"].(string)
 
 	return &object.String{Value: content}
 }
@@ -92,7 +92,7 @@ func complete(args []object.VintObject, defs map[string]object.VintObject) objec
 		return &object.Error{Message: "Both api_key and prompt must be strings"}
 	}
 
-	requestBody := map[string]interface{}{
+	requestBody := map[string]any{
 		"model":      "text-davinci-003",
 		"prompt":     prompt.Value,
 		"max_tokens": 100,
@@ -124,17 +124,17 @@ func complete(args []object.VintObject, defs map[string]object.VintObject) objec
 		return &object.Error{Message: fmt.Sprintf("OpenAI API error (%d): %s", resp.StatusCode, string(body))}
 	}
 
-	var responseData map[string]interface{}
+	var responseData map[string]any
 	if err := json.Unmarshal(body, &responseData); err != nil {
 		return &object.Error{Message: fmt.Sprintf("Failed to parse response: %s", err)}
 	}
 
-	choices, ok := responseData["choices"].([]interface{})
+	choices, ok := responseData["choices"].([]any)
 	if !ok || len(choices) == 0 {
 		return &object.Error{Message: "Unexpected response format or empty response"}
 	}
 
-	firstChoice := choices[0].(map[string]interface{})
+	firstChoice := choices[0].(map[string]any)
 	text := firstChoice["text"].(string)
 
 	return &object.String{Value: text}

@@ -24,12 +24,12 @@ func logError(err error) {
 }
 
 // printVerbose prints only if verbose mode is enabled
-func printVerbose(verbose bool, a ...interface{}) {
+func printVerbose(verbose bool, a ...any) {
 	if verbose {
 		fmt.Print(a...)
 	}
 }
-func printlnVerbose(verbose bool, a ...interface{}) {
+func printlnVerbose(verbose bool, a ...any) {
 	if verbose {
 		fmt.Println(a...)
 	}

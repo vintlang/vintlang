@@ -46,7 +46,7 @@ func decode(args []object.VintObject, defs map[string]object.VintObject) object.
 		)
 	}
 
-	var i interface{}
+	var i any
 
 	input := args[0].(*object.String).Value
 	err := json.Unmarshal([]byte(input), &i)
@@ -57,9 +57,9 @@ func decode(args []object.VintObject, defs map[string]object.VintObject) object.
 	return convertWhateverToObject(i)
 }
 
-func convertWhateverToObject(i interface{}) object.VintObject {
+func convertWhateverToObject(i any) object.VintObject {
 	switch v := i.(type) {
-	case map[string]interface{}:
+	case map[string]any:
 		dict := &object.Dict{}
 		dict.Pairs = make(map[object.HashKey]object.DictPair)
 
@@ -72,7 +72,7 @@ func convertWhateverToObject(i interface{}) object.VintObject {
 		}
 
 		return dict
-	case []interface{}:
+	case []any:
 		list := &object.Array{}
 		for _, e := range v {
 			list.Elements = append(list.Elements, convertWhateverToObject(e))
@@ -148,17 +148,17 @@ func encode(args []object.VintObject, defs map[string]object.VintObject) object.
 	return &object.String{Value: string(data)}
 }
 
-func convertObjectToWhatever(obj object.VintObject) interface{} {
+func convertObjectToWhatever(obj object.VintObject) any {
 	switch v := obj.(type) {
 	case *object.Dict:
-		m := make(map[string]interface{})
+		m := make(map[string]any)
 		for _, pair := range v.Pairs {
 			key := pair.Key.(*object.String).Value
 			m[key] = convertObjectToWhatever(pair.Value)
 		}
 		return m
 	case *object.Array:
-		list := make([]interface{}, len(v.Elements))
+		list := make([]any, len(v.Elements))
 		for i, e := range v.Elements {
 			list[i] = convertObjectToWhatever(e)
 		}
@@ -183,7 +183,7 @@ func pretty(args []object.VintObject, defs map[string]object.VintObject) object.
 		return &object.Error{Message: "Expect a single string argument"}
 	}
 
-	var i interface{}
+	var i any
 	input := args[0].(*object.String).Value
 	err := json.Unmarshal([]byte(input), &i)
 	if err != nil {
@@ -206,8 +206,8 @@ func merge(args []object.VintObject, defs map[string]object.VintObject) object.V
 
 	obj1 := args[0]
 	obj2 := args[1]
-	map1, ok1 := convertObjectToWhatever(obj1).(map[string]interface{})
-	map2, ok2 := convertObjectToWhatever(obj2).(map[string]interface{})
+	map1, ok1 := convertObjectToWhatever(obj1).(map[string]any)
+	map2, ok2 := convertObjectToWhatever(obj2).(map[string]any)
 	if !ok1 || !ok2 {
 		return &object.Error{Message: "Arguments must be JSON objects"}
 	}
@@ -237,7 +237,7 @@ func get(args []object.VintObject, defs map[string]object.VintObject) object.Vin
 		return &object.Error{Message: "Key must be a string"}
 	}
 
-	mapObj, ok := convertObjectToWhatever(obj).(map[string]interface{})
+	mapObj, ok := convertObjectToWhatever(obj).(map[string]any)
 	if !ok {
 		return &object.Error{Message: "First argument must be a JSON object"}
 	}

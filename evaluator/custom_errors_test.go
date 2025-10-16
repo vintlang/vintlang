@@ -11,7 +11,7 @@ import (
 func TestCustomErrorTypes(t *testing.T) {
 	tests := []struct {
 		input    string
-		expected interface{}
+		expected any
 	}{
 		{
 			// Test error type declaration
