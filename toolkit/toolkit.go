@@ -217,11 +217,9 @@ This is a modern VintLang starter template. It demonstrates:
 ## Quick Start
 
 1. Run your project:
-   ```sh
-   vint main.vint
-   ```
-2. Explore the code in `main.vint` and `greetings_module.vint`.
-3. Edit `vintconfig.json` to update your project info.
+   $ vint main.vint
+2. Explore the code in main.vint and greetings_module.vint.
+3. Edit vintconfig.json to update your project info.
 
 Happy coding! 💡
 `
