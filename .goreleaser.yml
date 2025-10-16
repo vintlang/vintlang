@@ -44,7 +44,7 @@ archives:
       - "*.md"
 
 checksum:
-  name_template: 'checksums.txt'
+  name_template: "checksums.txt"
   algorithm: sha256
 
 snapshot:
@@ -55,22 +55,22 @@ changelog:
   use: github
   filters:
     exclude:
-      - '^docs:'
-      - '^test:'
-      - '^ci:'
-      - '^chore:'
-      - '^style:'
-      - '^refactor:'
+      - "^docs:"
+      - "^test:"
+      - "^ci:"
+      - "^chore:"
+      - "^style:"
+      - "^refactor:"
       - Merge pull request
       - Merge branch
   groups:
     - title: Features
       regexp: '^.*?feat(\([[:word:]]+\))??!?:.+$'
       order: 0
-    - title: 'Bug fixes'
+    - title: "Bug fixes"
       regexp: '^.*?fix(\([[:word:]]+\))??!?:.+$'
       order: 1
-    - title: 'Performance improvements'
+    - title: "Performance improvements"
       regexp: '^.*?perf(\([[:word:]]+\))??!?:.+$'
       order: 2
     - title: Others
@@ -84,15 +84,15 @@ release:
   draft: false
   footer: |
     ## Installation
-    
+
     ### Download binary
     Download the appropriate binary for your platform from the assets below.
-    
+
     ### Using Go install
     ```bash
     go install github.com/vintlang/vintlang@{{ .Tag }}
     ```
-    
+
     ## What's Changed
     * Full Changelog: https://github.com/vintlang/vintlang/compare/{{ .PreviousTag }}...{{ .Tag }}
 
