@@ -391,13 +391,13 @@ func createHTTPHandler(app *object.HTTPApp) http.HandlerFunc {
 			// Enhanced error response structure
 			w.WriteHeader(404)
 			w.Header().Set("Content-Type", "application/json")
-			errorResponse := map[string]interface{}{
-				"error": map[string]interface{}{
+			errorResponse := map[string]any{
+				"error": map[string]any{
 					"type":    "NOT_FOUND",
 					"message": fmt.Sprintf("Cannot %s %s", r.Method, r.URL.Path),
 					"code":    "ROUTE_NOT_FOUND",
 					"status":  404,
-					"details": map[string]interface{}{
+					"details": map[string]any{
 						"method":    r.Method,
 						"path":      r.URL.Path,
 						"timestamp": time.Now().UTC().Format(time.RFC3339),

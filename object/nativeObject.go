@@ -3,7 +3,7 @@ package object
 import "fmt"
 
 type NativeObject struct {
-	Value interface{}
+	Value any
 }
 
 func (n *NativeObject) Type() ObjectType { return "NATIVE_OBJ" }

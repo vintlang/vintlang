@@ -77,7 +77,7 @@ type Iterable interface {
 }
 
 // newError creates a formatted error object with red text
-func newError(format string, a ...interface{}) *Error {
+func newError(format string, a ...any) *Error {
 	redFormat := fmt.Sprintf("\x1b[%dm%s\x1b[0m", 31, format) // Red-colored error message
 	return &Error{Message: fmt.Sprintf(redFormat, a...)}
 }

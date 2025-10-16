@@ -528,7 +528,7 @@ func redisMSet(args []object.VintObject, defs map[string]object.VintObject) obje
 		return &object.Error{Message: "Invalid Redis connection"}
 	}
 
-	pairs := make([]interface{}, len(args)-1)
+	pairs := make([]any, len(args)-1)
 	for i, arg := range args[1:] {
 		if arg.Type() != object.STRING_OBJ {
 			return ErrorMessage(
@@ -877,7 +877,7 @@ func redisLPush(args []object.VintObject, defs map[string]object.VintObject) obj
 	}
 
 	key := args[1].(*object.String).Value
-	values := make([]interface{}, len(args)-2)
+	values := make([]any, len(args)-2)
 	for i, arg := range args[2:] {
 		if arg.Type() != object.STRING_OBJ {
 			return ErrorMessage(
@@ -917,7 +917,7 @@ func redisRPush(args []object.VintObject, defs map[string]object.VintObject) obj
 	}
 
 	key := args[1].(*object.String).Value
-	values := make([]interface{}, len(args)-2)
+	values := make([]any, len(args)-2)
 	for i, arg := range args[2:] {
 		if arg.Type() != object.STRING_OBJ {
 			return ErrorMessage(
@@ -1080,7 +1080,7 @@ func redisSAdd(args []object.VintObject, defs map[string]object.VintObject) obje
 	}
 
 	key := args[1].(*object.String).Value
-	members := make([]interface{}, len(args)-2)
+	members := make([]any, len(args)-2)
 	for i, arg := range args[2:] {
 		if arg.Type() != object.STRING_OBJ {
 			return ErrorMessage(
@@ -1120,7 +1120,7 @@ func redisSRem(args []object.VintObject, defs map[string]object.VintObject) obje
 	}
 
 	key := args[1].(*object.String).Value
-	members := make([]interface{}, len(args)-2)
+	members := make([]any, len(args)-2)
 	for i, arg := range args[2:] {
 		if arg.Type() != object.STRING_OBJ {
 			return ErrorMessage(
@@ -1308,7 +1308,7 @@ func redisZRem(args []object.VintObject, defs map[string]object.VintObject) obje
 	}
 
 	key := args[1].(*object.String).Value
-	members := make([]interface{}, len(args)-2)
+	members := make([]any, len(args)-2)
 	for i, arg := range args[2:] {
 		if arg.Type() != object.STRING_OBJ {
 			return ErrorMessage(

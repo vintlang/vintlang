@@ -3,6 +3,7 @@
 The **Vint** `os` module provides comprehensive functions to interact with the operating system, file system, processes, and environment. This module closely mirrors Go's standard `os` package functionality, offering powerful system-level operations.
 
 ## Table of Contents
+
 - [Process Management](#process-management)
 - [Environment Variables](#environment-variables)
 - [File Operations](#file-operations)
@@ -17,18 +18,21 @@ The **Vint** `os` module provides comprehensive functions to interact with the o
 ## Process Management
 
 ### Exit with Status Code
+
 ```js
 os.exit(1)  // Exit with status code 1 (error)
 os.exit(0)  // Exit with status code 0 (success)
 ```
 
 ### Run Shell Commands
+
 ```js
 result = os.run("ls -la")
 print(result)  // Outputs the directory listing
 ```
 
 ### Process Information
+
 Get detailed information about the current process:
 
 ```js
@@ -53,6 +57,7 @@ pageSize = os.getpagesize()  // Memory page size
 ## Environment Variables
 
 ### Basic Environment Operations
+
 ```js
 // Set environment variable
 os.setEnv("API_KEY", "12345")
@@ -66,6 +71,7 @@ os.unsetEnv("API_KEY")
 ```
 
 ### Advanced Environment Functions
+
 ```js
 // Get all environment variables
 envVars = os.environ()

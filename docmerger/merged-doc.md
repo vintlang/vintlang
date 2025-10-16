@@ -44,6 +44,7 @@ The easiest way to create a release is using the provided release script:
 ```
 
 This script will:
+
 - Validate the version format
 - Check you're on the main branch
 - Check for uncommitted changes
@@ -93,6 +94,7 @@ Before creating an official release, you can test the build process locally usin
 ```
 
 This script will:
+
 - Install GoReleaser if not already installed
 - Build binaries for all platforms in snapshot mode
 - Create archives and packages
@@ -502,10 +504,12 @@ if (outputFile) {
 Creates a new argument parser.
 
 **Parameters:**
+
 - `name` (string): The name of the parser
 - `description` (string, optional): A description of the application
 
 **Returns:**
+
 - A parser ID string that can be used with other functions
 
 ### addArgument(parser, name, options)
@@ -513,6 +517,7 @@ Creates a new argument parser.
 Adds a positional argument to the parser.
 
 **Parameters:**
+
 - `parser` (string): The parser ID
 - `name` (string): The name of the argument
 - `options` (dict, optional): Options for the argument
@@ -523,6 +528,7 @@ Adds a positional argument to the parser.
   - `choices` (array): List of valid values for the argument
 
 **Returns:**
+
 - `true` if the argument was added successfully
 
 ### addFlag(parser, name, options)
@@ -530,6 +536,7 @@ Adds a positional argument to the parser.
 Adds a flag (optional named argument) to the parser.
 
 **Parameters:**
+
 - `parser` (string): The parser ID
 - `name` (string): The name of the flag
 - `options` (dict, optional): Options for the flag
@@ -540,6 +547,7 @@ Adds a flag (optional named argument) to the parser.
   - `type` (string): Type of the flag ("string", "integer", "float", "boolean")
 
 **Returns:**
+
 - `true` if the flag was added successfully
 
 ### parse(parser, args)
@@ -547,10 +555,12 @@ Adds a flag (optional named argument) to the parser.
 Parses command line arguments according to the parser definition.
 
 **Parameters:**
+
 - `parser` (string): The parser ID
 - `args` (array, optional): Array of strings representing the arguments to parse. If not provided, the system arguments will be used.
 
 **Returns:**
+
 - A dictionary containing the parsed arguments and flags
 
 ### help(parser)
@@ -558,9 +568,11 @@ Parses command line arguments according to the parser definition.
 Generates help text for the parser.
 
 **Parameters:**
+
 - `parser` (string): The parser ID
 
 **Returns:**
+
 - A string containing the help text
 
 ### version(parser, versionString)
@@ -568,10 +580,12 @@ Generates help text for the parser.
 Sets the version information for the parser.
 
 **Parameters:**
+
 - `parser` (string): The parser ID
 - `versionString` (string): The version string
 
 **Returns:**
+
 - `true` if the version was set successfully
 
 ## Examples
@@ -1791,7 +1805,6 @@ for a in conditions {
 }
 ```
 
-
 ```
 
 ## builtins.md
@@ -2250,10 +2263,10 @@ This allows you to write code in VintLang, bundle it into an executable, and run
 
 ## Why Use the Bundler?
 
-* Package and distribute VintLang scripts as self-contained executables
-* End-users don’t need to install Go or VintLang
-* Ideal for deploying scripts, shipping CLI tools, and automating workflows
-* Internally powered by the `vintlang/repl` package for code execution
+- Package and distribute VintLang scripts as self-contained executables
+- End-users don’t need to install Go or VintLang
+- Ideal for deploying scripts, shipping CLI tools, and automating workflows
+- Internally powered by the `vintlang/repl` package for code execution
 
 ---
 
@@ -2294,15 +2307,15 @@ This makes the `vint` CLI available, including the `bundle` command.
 
 ## Multi-File Package Support (NEW!)
 
-The VintLang Bundler now supports bundling multi-file packages with both imports and includes! 
+The VintLang Bundler now supports bundling multi-file packages with both imports and includes!
 
 ### Key Features
 
-* ✅ **Automatic Dependency Discovery**: Finds all imported and included `.vint` files recursively
-* ✅ **Package System Integration**: Handles `package` declarations and `import` statements
-* ✅ **Include Statement Support**: Handles `include` statements for direct file embedding
-* ✅ **Self-Contained Binaries**: No external `.vint` files needed at runtime
-* ✅ **Compatible with Built-ins**: Works with all VintLang built-in modules
+- ✅ **Automatic Dependency Discovery**: Finds all imported and included `.vint` files recursively
+- ✅ **Package System Integration**: Handles `package` declarations and `import` statements
+- ✅ **Include Statement Support**: Handles `include` statements for direct file embedding
+- ✅ **Self-Contained Binaries**: No external `.vint` files needed at runtime
+- ✅ **Compatible with Built-ins**: Works with all VintLang built-in modules
 
 ### Example Multi-File Project (Imports)
 
@@ -2372,9 +2385,9 @@ The bundler automatically discovers all included files and embeds their content 
 
 ### Differences between Import and Include
 
-* **Import statements** (`import module_name`) work with the package system and wrap content in packages
-* **Include statements** (`include "file_path"`) directly embed file content without package wrapping
-* Both are automatically discovered and bundled into self-contained binaries
+- **Import statements** (`import module_name`) work with the package system and wrap content in packages
+- **Include statements** (`include "file_path"`) directly embed file content without package wrapping
+- Both are automatically discovered and bundled into self-contained binaries
 
 ---
 
@@ -2439,6 +2452,7 @@ main.vint
 ```
 
 **What happens:**
+
 - Parses main file's AST to find `import` and `include` statements
 - Sets up search paths (main file directory, current directory, `./modules/`)
 - Recursively discovers all dependency files
@@ -2460,6 +2474,7 @@ Processing:
 ```
 
 **What happens:**
+
 - **Import files**: Wrapped in package structure if not already packaged
 - **Include files**: Content embedded directly, imports/includes removed  
 - **Main file**: Import/include statements removed for bundled dependencies
@@ -2481,6 +2496,7 @@ func main() {
 ```
 
 **What happens:**
+
 - Escapes VintLang code for safe embedding in Go string literals
 - Generates Go main.go file using template
 - Adds metadata (bundler version, build time)
@@ -2497,6 +2513,7 @@ Binary Output (self-contained executable)
 ```
 
 **What happens:**
+
 - Creates temporary build directory
 - Runs `go mod tidy` to resolve Go dependencies  
 - Compiles with `go build -o binary_name`
@@ -2506,7 +2523,7 @@ Binary Output (self-contained executable)
 ### 🎯 Key Features of Current Implementation
 
 1. **Automatic Dependency Discovery**: Recursively finds all `.vint` files through AST parsing
-2. **Dual Processing Modes**: 
+2. **Dual Processing Modes**:
    - `import module_name` → wraps content in packages
    - `include "file.vint"` → directly embeds content
 3. **Smart Module Resolution**: Searches multiple paths, handles built-ins
@@ -2691,12 +2708,12 @@ The generated Go code looks like this:
 package main
 
 import (
-	"github.com/vintlang/vintlang/repl"
+ "github.com/vintlang/vintlang/repl"
 )
 
 func main() {
-	code := ` + "`<your VintLang source code>`" + `
-	repl.Read(code)
+ code := ` + "`<your VintLang source code>`" + `
+ repl.Read(code)
 }
 ```
 
@@ -2704,27 +2721,27 @@ func main() {
 
 ## Use Cases
 
-* Distribute command-line tools built in VintLang
-* Deploy scripts on systems where VintLang is not installed
-* Share portable binaries for automation or education
-* Build lightweight tools using VintLang and Go’s compiler
+- Distribute command-line tools built in VintLang
+- Deploy scripts on systems where VintLang is not installed
+- Share portable binaries for automation or education
+- Build lightweight tools using VintLang and Go’s compiler
 
 ---
 
 ## Notes for Developers
 
-* Temporary build directories are automatically created and cleaned
-* Uses `text/template` for safe source code embedding
-* The Go module created during bundling is isolated from your current project
-* Spinner and CLI output are available for build feedback
+- Temporary build directories are automatically created and cleaned
+- Uses `text/template` for safe source code embedding
+- The Go module created during bundling is isolated from your current project
+- Spinner and CLI output are available for build feedback
 
 ---
 
 ## Important Details
 
-* Go is required only during **build time**
-* The resulting binary is portable and self-contained
-* Cross-compilation is not supported out-of-the-box; build on the target OS/arch
+- Go is required only during **build time**
+- The resulting binary is portable and self-contained
+- Cross-compilation is not supported out-of-the-box; build on the target OS/arch
 
 ---
 
@@ -2737,7 +2754,6 @@ vint bundle yourfile.vint
 ```
 
 Build once. Run anywhere. No dependencies. No interpreter. Just execution.
-
 
 ```
 
@@ -3091,6 +3107,7 @@ print("Modified clipboard content:", clipboard.read())
 ## Platform Support
 
 The clipboard module works across different platforms:
+
 - **Windows**: Uses Windows Clipboard API
 - **macOS**: Uses NSPasteboard
 - **Linux**: Uses X11 clipboard (requires X11 environment)
@@ -3123,7 +3140,7 @@ In this example, the comment text "This line will be ignored by the vint interpr
 
 ## Multi-Line Comments
 
-Multi-line comments are used to provide more detailed explanations or documentation for multiple lines of code. To write a multi-line comment in vint, use a forward slash followed by an asterisk ( /* ) to start the comment, and an asterisk followed by a forward slash ( */ ) to end the comment. Here's an example:
+Multi-line comments are used to provide more detailed explanations or documentation for multiple lines of code. To write a multi-line comment in vint, use a forward slash followed by an asterisk ( /*) to start the comment, and an asterisk followed by a forward slash (*/ ) to end the comment. Here's an example:
 
 ```s
 /*
@@ -3134,7 +3151,7 @@ ignored
 */
 ```
 
-In this example, all the lines between the /* and */ symbols will be ignored by the vint interpreter, so they will not affect the behavior of the program.
+In this example, all the lines between the /*and*/ symbols will be ignored by the vint interpreter, so they will not affect the behavior of the program.
 
 By utilizing single-line and multi-line comments in vint, you can make your code more readable and easier to maintain for yourself and others who may need to work with your code in the future.
 
@@ -3170,7 +3187,7 @@ In the examples above, `PI` and `GREETING` are declared as constants and can be 
 
 Once a constant is declared, its value cannot be changed. Attempting to reassign a `const` variable will result in an error.
 
-### Example of an Invalid Reassignment:
+### Example of an Invalid Reassignment
 
 ```js
 const MAX_CONNECTIONS = 5
@@ -3232,7 +3249,7 @@ print("Max Users:", Config.MAX_USERS)  // ✅ Works
 print(Config._SECRET_KEY)  // ❌ Error: cannot access private property
 ```
 
-For more information about packages and access control, see the [Packages documentation](packages.md). 
+For more information about packages and access control, see the [Packages documentation](packages.md).
 
 ```
 
@@ -3511,7 +3528,7 @@ users = [
 
 csv.write("users.csv", users)
 // This will create 'users.csv' with the provided data.
-``` 
+```
 
 ```
 
@@ -3826,6 +3843,7 @@ The datetime module supports timezone-aware operations:
 ### Available Timezones
 
 Common timezone identifiers include:
+
 - `UTC`
 - `America/New_York`
 - `America/Los_Angeles`
@@ -3955,7 +3973,7 @@ Running this script will output:
 ```
 [DEBUG]: Current value is: 42
 Done.
-``` 
+```
 
 ```
 
@@ -4036,6 +4054,7 @@ dict = {"name": "John", "age": 30}
 ```
 
 In this dictionary:
+
 - `"name"` is the key, and `"John"` is the value.
 - `"age"` is the key, and `30` is the value.
 
@@ -4602,6 +4621,7 @@ while (true) {
 Creates a new text editor.
 
 **Parameters:**
+
 - `options` (dict, optional): Options for the editor
   - `filename` (string): Initial file to load
   - `width` (integer): Width of the editor in characters (default: 80)
@@ -4610,6 +4630,7 @@ Creates a new text editor.
   - `syntax` (string): Syntax highlighting mode (default: "text")
 
 **Returns:**
+
 - An editor ID string that can be used with other functions
 
 ### setText(editorId, text)
@@ -4617,10 +4638,12 @@ Creates a new text editor.
 Sets the entire text content of the editor.
 
 **Parameters:**
+
 - `editorId` (string): The editor ID
 - `text` (string): The text content to set
 
 **Returns:**
+
 - `true` if the text was set successfully
 
 ### getText(editorId)
@@ -4628,9 +4651,11 @@ Sets the entire text content of the editor.
 Gets the entire text content of the editor.
 
 **Parameters:**
+
 - `editorId` (string): The editor ID
 
 **Returns:**
+
 - A string containing the editor's text content
 
 ### insertLine(editorId, lineNumber, text)
@@ -4638,11 +4663,13 @@ Gets the entire text content of the editor.
 Inserts a new line at the specified position.
 
 **Parameters:**
+
 - `editorId` (string): The editor ID
 - `lineNumber` (integer, optional): The line number where to insert the text. If not provided, inserts at the current cursor position.
 - `text` (string): The text to insert
 
 **Returns:**
+
 - `true` if the line was inserted successfully
 
 ### deleteLine(editorId, lineNumber)
@@ -4650,10 +4677,12 @@ Inserts a new line at the specified position.
 Deletes a line at the specified position.
 
 **Parameters:**
+
 - `editorId` (string): The editor ID
 - `lineNumber` (integer, optional): The line number to delete. If not provided, deletes the line at the current cursor position.
 
 **Returns:**
+
 - `true` if the line was deleted successfully
 
 ### updateLine(editorId, lineNumber, text)
@@ -4661,11 +4690,13 @@ Deletes a line at the specified position.
 Updates a line at the specified position.
 
 **Parameters:**
+
 - `editorId` (string): The editor ID
 - `lineNumber` (integer, optional): The line number to update. If not provided, updates the line at the current cursor position.
 - `text` (string): The new text for the line
 
 **Returns:**
+
 - `true` if the line was updated successfully
 
 ### getLine(editorId, lineNumber)
@@ -4673,10 +4704,12 @@ Updates a line at the specified position.
 Gets a line at the specified position.
 
 **Parameters:**
+
 - `editorId` (string): The editor ID
 - `lineNumber` (integer, optional): The line number to get. If not provided, gets the line at the current cursor position.
 
 **Returns:**
+
 - A string containing the line's text
 
 ### getLineCount(editorId)
@@ -4684,9 +4717,11 @@ Gets a line at the specified position.
 Gets the number of lines in the editor.
 
 **Parameters:**
+
 - `editorId` (string): The editor ID
 
 **Returns:**
+
 - An integer representing the number of lines
 
 ### render(editorId)
@@ -4694,9 +4729,11 @@ Gets the number of lines in the editor.
 Renders the editor content as a string.
 
 **Parameters:**
+
 - `editorId` (string): The editor ID
 
 **Returns:**
+
 - A string containing the rendered editor content
 
 ### handleKeypress(editorId, key)
@@ -4704,10 +4741,12 @@ Renders the editor content as a string.
 Handles a keypress in the editor.
 
 **Parameters:**
+
 - `editorId` (string): The editor ID
 - `key` (string): The key that was pressed
 
 **Returns:**
+
 - `true` if the keypress was handled successfully
 
 ### save(editorId, filename)
@@ -4715,10 +4754,12 @@ Handles a keypress in the editor.
 Saves the editor content to a file.
 
 **Parameters:**
+
 - `editorId` (string): The editor ID
 - `filename` (string, optional): The filename to save to. If not provided, uses the editor's current filename.
 
 **Returns:**
+
 - `true` if the file was saved successfully
 
 ### load(editorId, filename)
@@ -4726,10 +4767,12 @@ Saves the editor content to a file.
 Loads a file into the editor.
 
 **Parameters:**
+
 - `editorId` (string): The editor ID
 - `filename` (string): The filename to load
 
 **Returns:**
+
 - `true` if the file was loaded successfully
 
 ## Editor Modes
@@ -5568,7 +5611,7 @@ Error in [module].[function]():
   See documentation for details.
 ```
 
-### Key Features:
+### Key Features
 
 1. **🎨 Color Coding**: Red highlighting for error identification
 2. **📝 Clear Structure**: Consistent four-line format
@@ -5578,7 +5621,7 @@ Error in [module].[function]():
 
 ## Benefits of the New System
 
-### For Developers:
+### For Developers
 
 - **Instant Recognition**: Red coloring makes errors immediately visible
 - **Clear Guidance**: Know exactly what's expected vs what was provided
@@ -5586,7 +5629,7 @@ Error in [module].[function]():
 - **Consistent Experience**: Same error format across all modules
 - **Reduced Debugging Time**: Precise error information speeds up fixes
 
-### For the Language:
+### For the Language
 
 - **Professional Appearance**: Consistent, polished error messages
 - **Better Learning Curve**: New users learn faster with clear examples
@@ -5595,7 +5638,7 @@ Error in [module].[function]():
 
 ## Examples by Category
 
-### Argument Count Errors:
+### Argument Count Errors
 
 ```
 Error in time.sleep():
@@ -5605,7 +5648,7 @@ Error in time.sleep():
   See documentation for details.
 ```
 
-### Type Errors:
+### Type Errors
 
 ```
 Error in math.abs():
@@ -5615,7 +5658,7 @@ Error in math.abs():
   See documentation for details.
 ```
 
-### Parameter-Specific Errors:
+### Parameter-Specific Errors
 
 ```
 Error in net.post():
@@ -5625,7 +5668,7 @@ Error in net.post():
   See documentation for details.
 ```
 
-### Range Validation Errors:
+### Range Validation Errors
 
 ```
 Error in colors.rgbToHex():
@@ -5708,7 +5751,7 @@ If `data.json` does not exist, running this script will output:
 Error: Critical file 'data.json' not found.
 ```
 
-And the script will stop. 
+And the script will stop.
 
 ```
 
@@ -5734,7 +5777,7 @@ import "errors"
 
 errors.new("something went wrong")
 # The script will stop here and print the error message
-``` 
+```
 
 ```
 
@@ -6135,6 +6178,7 @@ setTimeout(func() {
 Watches a file for changes and calls a callback function when changes are detected.
 
 **Parameters:**
+
 - `path` (string): The path to the file to watch
 - `callback` (function): The function to call when the file changes. The callback receives an event object with the following properties:
   - `path` (string): The path to the file that changed
@@ -6144,6 +6188,7 @@ Watches a file for changes and calls a callback function when changes are detect
   - `interval` (integer): The polling interval in milliseconds (default: 1000)
 
 **Returns:**
+
 - A watcher ID string that can be used to stop watching
 
 ### watchDir(path, callback, options)
@@ -6151,6 +6196,7 @@ Watches a file for changes and calls a callback function when changes are detect
 Watches a directory for changes and calls a callback function when changes are detected.
 
 **Parameters:**
+
 - `path` (string): The path to the directory to watch
 - `callback` (function): The function to call when changes are detected. The callback receives an event object with the following properties:
   - `path` (string): The path to the file that changed
@@ -6162,6 +6208,7 @@ Watches a directory for changes and calls a callback function when changes are d
   - `extensions` (array): Array of file extensions to watch (e.g., [".js", ".vint"]). If not provided, all files are watched.
 
 **Returns:**
+
 - A watcher ID string that can be used to stop watching
 
 ### stopWatch(watcherId)
@@ -6169,9 +6216,11 @@ Watches a directory for changes and calls a callback function when changes are d
 Stops a file or directory watcher.
 
 **Parameters:**
+
 - `watcherId` (string): The watcher ID returned by `watch` or `watchDir`
 
 **Returns:**
+
 - `true` if the watcher was stopped successfully, `false` otherwise
 
 ### isWatching(path)
@@ -6179,9 +6228,11 @@ Stops a file or directory watcher.
 Checks if a file or directory is being watched.
 
 **Parameters:**
+
 - `path` (string): The path to check
 
 **Returns:**
+
 - `true` if the path is being watched, `false` otherwise
 
 ## Examples
@@ -7654,7 +7705,7 @@ if (a > 100) {
 // Output: The value of a is 10
 ```
 
-### Explanation:
+### Explanation
 
 1. The condition `a > 100` is false.
 2. The next condition `a < 10` is also false.
@@ -7783,7 +7834,7 @@ let customMessage = greeting + " How are you?"
 println(customMessage) // Output: Hello, Vint! How are you?
 ```
 
-In this example, the `include` statement at the beginning of `main.vint` makes the `greeting` variable and the `sayHello` function from `greetings.vint` available for use. This helps in keeping the code modular and easy to manage. 
+In this example, the `include` statement at the beginning of `main.vint` makes the `greeting` variable and the `sayHello` function from `greetings.vint` available for use. This helps in keeping the code modular and easy to manage.
 
 ```
 
@@ -7814,7 +7865,7 @@ Running this script will output:
 ```
 [INFO]: Starting the backup process.
 Backup in progress...
-``` 
+```
 
 ```
 
@@ -8217,6 +8268,7 @@ import kv
 Sets a key-value pair in the store.
 
 **Parameters:**
+
 - `key` (string): The key to set
 - `value` (any): The value to store
 
@@ -8237,6 +8289,7 @@ kv.set("counter", 42)
 Retrieves a value by its key.
 
 **Parameters:**
+
 - `key` (string): The key to retrieve
 
 **Returns:** The stored value, or `null` if not found or expired
@@ -8256,6 +8309,7 @@ println("Missing:", missing) // null
 Removes a key-value pair from the store.
 
 **Parameters:**
+
 - `key` (string): The key to delete
 
 **Returns:** `boolean` - `true` if key existed and was deleted
@@ -8272,6 +8326,7 @@ println("Deleted:", deleted) // true
 Checks if a key exists in the store (and is not expired).
 
 **Parameters:**
+
 - `key` (string): The key to check
 
 **Returns:** `boolean` - `true` if key exists and is not expired
@@ -8360,6 +8415,7 @@ if (kv.isEmpty()) {
 Sets a key-value pair with automatic expiration.
 
 **Parameters:**
+
 - `key` (string): The key to set
 - `value` (any): The value to store
 - `ttl_seconds` (integer): Time-to-live in seconds
@@ -8381,6 +8437,7 @@ kv.setTTL("cache:user:123", userData, 3600)
 Gets the remaining time-to-live for a key.
 
 **Parameters:**
+
 - `key` (string): The key to check
 
 **Returns:** `integer` - Remaining seconds, or `-1` if no TTL set, or `null` if key doesn't exist
@@ -8399,6 +8456,7 @@ if (remaining != null && remaining > 0) {
 Sets or updates the TTL for an existing key.
 
 **Parameters:**
+
 - `key` (string): The key to set expiration for
 - `ttl_seconds` (integer): Time-to-live in seconds (must be positive)
 
@@ -8418,6 +8476,7 @@ kv.expire("temp:data", 60) // Expire in 1 minute
 Gets multiple values in a single operation.
 
 **Parameters:**
+
 - `keys` (array): Array of string keys to retrieve
 
 **Returns:** `array` - Array of values in same order as keys (`null` for missing/expired keys)
@@ -8437,6 +8496,7 @@ println("Users:", users) // ["Alice", "Bob", null]
 Sets multiple key-value pairs in a single operation.
 
 **Parameters:**
+
 - `pairs` (dictionary): Dictionary of key-value pairs to set
 
 **Returns:** `boolean` - `true` if all pairs were set successfully
@@ -8459,12 +8519,14 @@ kv.mset(bulkData)
 Atomically increments a numeric value.
 
 **Parameters:**
+
 - `key` (string): The key to increment
 - `delta` (integer, optional): Amount to increment by (default: 1)
 
 **Returns:** `integer` - The new value after increment
 
 **Notes:**
+
 - If key doesn't exist, creates it with the delta value
 - If key exists but value is not an integer, returns an error
 - Thread-safe for concurrent increments
@@ -8491,12 +8553,14 @@ println("New count:", newCount) // 8
 Atomically decrements a numeric value.
 
 **Parameters:**
+
 - `key` (string): The key to decrement
 - `delta` (integer, optional): Amount to decrement by (default: 1)
 
 **Returns:** `integer` - The new value after decrement
 
 **Notes:**
+
 - If key doesn't exist, creates it with the negative delta value
 - If key exists but value is not an integer, returns an error
 - Thread-safe for concurrent decrements
@@ -8536,6 +8600,7 @@ println("All data:", allData) // {key1: value1, key2: 42}
 Returns statistics about the KV store.
 
 **Returns:** `dictionary` - Statistics including:
+
 - `total_keys`: Total number of keys (including expired)
 - `active_keys`: Number of active (non-expired) keys
 - `expired_keys`: Number of expired keys
@@ -8852,7 +8917,7 @@ if err != null {
 
 - Requires an internet connection.
 - Make sure your API key is kept secret.
-- See OpenAI docs for more on models and parameters. 
+- See OpenAI docs for more on models and parameters.
 
 ```
 
@@ -9142,14 +9207,14 @@ println("x =", x)
 
 ## When to Use Main Functions
 
-### Use main functions when:
+### Use main functions when
 
 - Building larger, structured programs
 - You want clear separation between setup and execution
 - Coming from Go, C, C++, or similar languages
 - Building command-line tools or applications
 
-### Stick with the traditional approach when:
+### Stick with the traditional approach when
 
 - Writing simple scripts
 - Prototyping or testing small code snippets
@@ -9432,7 +9497,7 @@ Here is a complete list of the available functions and constants:
 
 - **Description**: Creates a complex number with the given real and imaginary parts.
 - **Returns**: A dictionary with `real` and `imag` keys.
-- **Example**: 
+- **Example**:
 
   ```js
   let c = math.complex(3, 4)
@@ -9443,7 +9508,7 @@ Here is a complete list of the available functions and constants:
 #### `abs(n)` (extended)
 
 - **Description**: Also works with complex numbers to calculate magnitude.
-- **Example**: 
+- **Example**:
 
   ```js
   let c = math.complex(3, 4)
@@ -9459,7 +9524,7 @@ Here is a complete list of the available functions and constants:
 - **Description**: Creates a big integer representation for arbitrary precision arithmetic.
 - **Parameters**: A string or integer representing a large number.
 - **Returns**: A dictionary with `value` (string) and `type` ("bigint") keys.
-- **Example**: 
+- **Example**:
 
   ```js
   let big = math.bigint("999999999999999999999")
@@ -9510,7 +9575,6 @@ Here is a complete list of the available functions and constants:
 - **Parameters**: `start` and `end` values, and `t` (0.0 to 1.0) as the interpolation factor.
 - **Example**: `math.lerp(0, 10, 0.5)` returns `5.0`.
 
-
 ```
 
 ## modules.md
@@ -9557,6 +9621,7 @@ print(result)  // Output: 8
 ## Module Structure
 
 A module can contain:
+
 - Functions
 - Variables
 - Other modules
@@ -9854,6 +9919,7 @@ net.get(
 ```
 
 **Arguments:**
+
 - `url` (string, required): The URL to request.
 - `headers` (dict, optional): HTTP headers as key-value pairs.
 - `body` (dict, optional): Data to send as JSON (rare for GET).
@@ -9879,6 +9945,7 @@ net.post(
 ```
 
 **Arguments:**
+
 - `url` (string, required): The URL to request.
 - `headers` (dict, optional): HTTP headers as key-value pairs.
 - `body` (dict, optional): Data to send as JSON.
@@ -9904,6 +9971,7 @@ net.put(
 ```
 
 **Arguments:**
+
 - `url` (string, required): The URL to request.
 - `headers` (dict, optional): HTTP headers as key-value pairs.
 - `body` (dict, optional): Data to send as JSON.
@@ -9928,6 +9996,7 @@ net.delete(
 ```
 
 **Arguments:**
+
 - `url` (string, required): The URL to request.
 - `headers` (dict, optional): HTTP headers as key-value pairs.
 
@@ -9952,6 +10021,7 @@ net.patch(
 ```
 
 **Arguments:**
+
 - `url` (string, required): The URL to request.
 - `headers` (dict, optional): HTTP headers as key-value pairs.
 - `body` (dict, optional): Data to send as JSON.
@@ -9997,7 +10067,7 @@ Running this script will output:
 ```
 [NOTE]: This script was last updated on 2024-06-01.
 Script running...
-``` 
+```
 
 ```
 
@@ -10769,20 +10839,20 @@ use `os.getwd()`
 
 Environment variables can be set, retrieved, and removed with `os.setEnv()`, `os.getEnv()`, and `os.unsetEnv()`.
 
-### Set Environment Variable:
+### Set Environment Variable
 
 ```js
 os.setEnv("API_KEY", "12345")
 ```
 
-### Get Environment Variable:
+### Get Environment Variable
 
 ```js
 api_key = os.getEnv("API_KEY")
 print(api_key)  // Outputs: "12345"
 ```
 
-### Unset Environment Variable:
+### Unset Environment Variable
 
 ```js
 os.unsetEnv("API_KEY")
@@ -10792,13 +10862,13 @@ print(api_key)  // Outputs: "" (empty string)
 
 ## Read and Write Files
 
-### Write to a File:
+### Write to a File
 
 ```js
 os.writeFile("example.txt", "Hello, Vint!")
 ```
 
-### Read from a File:
+### Read from a File
 
 ```js
 content = os.readFile("example.txt")
@@ -10882,28 +10952,28 @@ To delete a file, use `os.deleteFile()`:
 
 The `os` module provides several functions to get system information:
 
-### Get Home Directory:
+### Get Home Directory
 
 ```js
 home = os.homedir()
 print(home)  // Outputs: "/home/username"
 ```
 
-### Get Temporary Directory:
+### Get Temporary Directory
 
 ```js
 temp = os.tmpdir()
 print(temp)  // Outputs: "/tmp" (on Unix-like systems)
 ```
 
-### Get CPU Count:
+### Get CPU Count
 
 ```js
 cpus = os.cpuCount()
 print(cpus)  // Outputs: 4 (number of logical CPUs)
 ```
 
-### Get Hostname:
+### Get Hostname
 
 ```js
 hostname = os.hostname()
@@ -10912,14 +10982,14 @@ print(hostname)  // Outputs: "my-computer"
 
 ## File Operations
 
-### Copy a File:
+### Copy a File
 
 ```js
 os.copy("source.txt", "destination.txt")
 print("File copied successfully")
 ```
 
-### Move or Rename a File:
+### Move or Rename a File
 
 ```js
 os.move("old_name.txt", "new_name.txt")
@@ -11202,7 +11272,7 @@ print(p) // Outputs: true
 
 p2 = path.isAbs("docs/file.txt")
 print(p2) // Outputs: false
-``` 
+```
 
 ```
 
@@ -11397,7 +11467,7 @@ Returns a random element from an array.
 items = ["apple", "banana", "cherry"]
 item = random.choice(items)
 print(item) // Outputs one of the fruits
-``` 
+```
 
 ```
 
@@ -12122,6 +12192,7 @@ schedule.stopTicker(ticker)
 Stops a running ticker.
 
 **Parameters:**
+
 - `tickerObj`: The ticker object returned by `ticker()`
 
 **Returns:** Boolean indicating if the ticker was successfully stopped
@@ -12131,6 +12202,7 @@ Stops a running ticker.
 Schedules a function to execute at specific times using cron-like expressions.
 
 **Parameters:**
+
 - `cronExpr` (string): A cron expression in the format "second minute hour day month weekday"
 - `callback` (function): The function to execute when the schedule triggers
 
@@ -12182,6 +12254,7 @@ schedule.schedule("0 0 17 * * 5", func() {
 Stops a running scheduled task.
 
 **Parameters:**
+
 - `scheduleObj`: The schedule object returned by `schedule()`
 
 **Returns:** Boolean indicating if the schedule was successfully stopped
@@ -12231,6 +12304,7 @@ let job = schedule.everyHour(func() {
 Executes a callback daily at the specified time.
 
 **Parameters:**
+
 - `hour` (integer): Hour of the day (0-23)
 - `minute` (integer): Minute of the hour (0-59)
 - `callback` (function): The function to execute
@@ -12303,7 +12377,7 @@ The module provides comprehensive error messages for common mistakes:
 - Malformed cron expressions
 - Negative intervals for tickers
 
-All errors include usage examples to help with correct implementation. 
+All errors include usage examples to help with correct implementation.
 
 ```
 
@@ -12446,13 +12520,13 @@ sqlite.close(db)
 
 You can execute `INSERT`, `UPDATE`, `DELETE`, and other queries using `sqlite.execute()`.
 
-### Insert Data:
+### Insert Data
 
 ```js
 sqlite.execute(db, "INSERT INTO users (name, age) VALUES (?, ?)", "Alice", 25)
 ```
 
-### Update Data:
+### Update Data
 
 ```js
 sqlite.execute(db, "UPDATE users SET age = ? WHERE name = ?", 26, "Alice")
@@ -12994,7 +13068,7 @@ Running this script will output:
 ```
 [SUCCESS]: Backup completed successfully!
 All done.
-``` 
+```
 
 ```
 
@@ -13016,12 +13090,12 @@ Each case uses the keyword `case`, followed by a value to check. Multiple values
 let a = 2
 
 switch (a) {
-	case 3 {
-		print("a is three")
-	}
-	case 2 {
-		print("a is two")
-	}
+ case 3 {
+  print("a is three")
+ }
+ case 2 {
+  print("a is two")
+ }
 }
 ```
 
@@ -13029,16 +13103,16 @@ switch (a) {
 
 A single `case` can handle multiple possible values. These values are separated by commas `,`.
 
-### Example:
+### Example
 
 ```js
 switch (a) {
-	case 1, 2, 3 {
-		print("a is one, two, or three")
-	}
-	case 4 {
-		print("a is four")
-	}
+ case 1, 2, 3 {
+  print("a is one, two, or three")
+ }
+ case 4 {
+  print("a is four")
+ }
 }
 ```
 
@@ -13046,21 +13120,21 @@ switch (a) {
 
 The `default` statement is executed when none of the specified cases match. It is represented by the `default` keyword.
 
-### Example:
+### Example
 
 ```js
 let z = 20
 
 switch(z) {
-	case 10 {
-		print("ten")
-	}
-	case 30 {
-		print("thirty")
-	}
-	default {
-		print("twenty")
-	}
+ case 10 {
+  print("ten")
+ }
+ case 30 {
+  print("thirty")
+ }
+ default {
+  print("twenty")
+ }
 }
 ```
 
@@ -13068,26 +13142,26 @@ switch(z) {
 
 Switch statements can be nested to handle more complex conditions.
 
-### Example:
+### Example
 
 ```js
 let x = 1
 let y = 2
 
 switch (x) {
-	case 1 {
-		switch (y) {
-			case 2 {
-				print("x is one and y is two")
-			}
-			case 3 {
-				print("x is one and y is three")
-			}
-		}
-	}
-	case 2 {
-		print("x is two")
-	}
+ case 1 {
+  switch (y) {
+   case 2 {
+    print("x is one and y is two")
+   }
+   case 3 {
+    print("x is one and y is three")
+   }
+  }
+ }
+ case 2 {
+  print("x is two")
+ }
 }
 ```
 
@@ -13095,22 +13169,22 @@ switch (x) {
 
 Cases can also be used with logical conditions.
 
-### Example:
+### Example
 
 ```js
 let isTrue = true
 let isFalse = false
 
 switch (isTrue) {
-	case true {
-		print("isTrue is true")
-	}
-	case isFalse {
-		print("isFalse is true")
-	}
-	default {
-		print("Neither condition is true")
-	}
+ case true {
+  print("isTrue is true")
+ }
+ case isFalse {
+  print("isFalse is true")
+ }
+ default {
+  print("Neither condition is true")
+ }
 }
 ```
 
@@ -14070,7 +14144,7 @@ Running this script will output:
 ```
 TODO: "Implement user authentication"
 10
-``` 
+```
 
 ```
 
@@ -14135,7 +14209,7 @@ vint get <package>
 
 ---
 
-For more information, run `vint help` or see the README. 
+For more information, run `vint help` or see the README.
 
 ```
 
@@ -14174,6 +14248,7 @@ Builds a URL from a dictionary of components.
 - `components` (dict): A dictionary containing URL components.
 
 **Valid components:**
+
 - `scheme` (string): The URL scheme (e.g., "https", "http", "ftp")
 - `host` (string): The hostname (e.g., "example.com", "localhost")
 - `path` (string): The path component (e.g., "/api/v1")
@@ -14459,7 +14534,7 @@ Running this will output:
 [WARN]: Configuration file not found, using default settings.
 
 Program is running with default configuration.
-``` 
+```
 
 ```
 
@@ -14483,7 +14558,7 @@ while (i <= 5) {
 }
 ```
 
-### Output:
+### Output
 
 ```js
 1
@@ -14512,7 +14587,7 @@ while (i < 5) {
 }
 ```
 
-### Output:
+### Output
 
 ```js
 1
@@ -14537,7 +14612,7 @@ while (i < 5) {
 }
 ```
 
-### Output:
+### Output
 
 ```js
 1
@@ -14812,6 +14887,7 @@ print(yamlData) // {"name": "John", "age": 30, "active": true}
 Converts a Vint object to YAML format string.
 
 **Parameters:**
+
 - `object`: Any Vint object (dict, array, string, number, boolean, or null)
 
 **Returns:** String containing YAML representation
@@ -14835,6 +14911,7 @@ print(yamlString)
 Merges two YAML-compatible objects into one. Properties from the second object will overwrite properties from the first object with the same key.
 
 **Parameters:**
+
 - `object1`: First object to merge
 - `object2`: Second object to merge
 
@@ -14856,6 +14933,7 @@ print(merged) // {"name": "John", "age": 35, "city": "NYC"}
 Retrieves a value from a YAML-compatible object by key.
 
 **Parameters:**
+
 - `object`: The object to search in
 - `key` (string): The key to look for
 
@@ -14874,6 +14952,7 @@ print(name) // "Jane"
 ## Supported YAML Features
 
 The YAML module supports:
+
 - Scalar values (strings, numbers, booleans, null)
 - Sequences (arrays)
 - Mappings (dictionaries/objects)
@@ -14883,6 +14962,7 @@ The YAML module supports:
 ## Error Handling
 
 All YAML functions return error objects when:
+
 - Invalid YAML syntax is provided to `decode()`
 - Incorrect argument types are passed
 - Wrong number of arguments are provided

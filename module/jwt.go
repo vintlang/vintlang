@@ -145,7 +145,7 @@ func verifyJWT(args []object.VintObject, defs map[string]object.VintObject) obje
 	secret := args[1].(*object.String).Value
 
 	// Parse and verify the token
-	token, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
+	token, err := jwt.Parse(tokenString, func(token *jwt.Token) (any, error) {
 		// Validate the signing method
 		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
 			return nil, fmt.Errorf("unexpected signing method: %v", token.Header["alg"])
@@ -194,7 +194,7 @@ func verifyJWTHS256(args []object.VintObject, defs map[string]object.VintObject)
 	secret := args[1].(*object.String).Value
 
 	// Parse and verify the token with explicit HS256 method
-	token, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
+	token, err := jwt.Parse(tokenString, func(token *jwt.Token) (any, error) {
 		// Ensure the signing method is HS256
 		if token.Method != jwt.SigningMethodHS256 {
 			return nil, fmt.Errorf("unexpected signing method: expected HS256, got %v", token.Header["alg"])
@@ -267,7 +267,7 @@ func decodeJWT(args []object.VintObject, defs map[string]object.VintObject) obje
 }
 
 // Helper function to convert VintLang object to Go value
-func convertToGoValue(obj object.VintObject) interface{} {
+func convertToGoValue(obj object.VintObject) any {
 	switch o := obj.(type) {
 	case *object.Integer:
 		return o.Value
@@ -315,8 +315,8 @@ func convertClaimsToHash(claims jwt.MapClaims) *object.Dict {
 	return &object.Dict{Pairs: pairs}
 }
 
-// Helper function to convert map[string]interface{} to VintLang Dict
-func convertMapToHash(m map[string]interface{}) *object.Dict {
+// Helper function to convert map[string]any to VintLang Dict
+func convertMapToHash(m map[string]any) *object.Dict {
 	pairs := make(map[object.HashKey]object.DictPair)
 
 	for key, value := range m {

@@ -111,8 +111,8 @@ func fetchAllPq(args []object.VintObject, defs map[string]object.VintObject) obj
 	result := make([]object.VintObject, 0)
 	cols, _ := rows.Columns()
 	for rows.Next() {
-		values := make([]interface{}, len(cols))
-		scanArgs := make([]interface{}, len(cols))
+		values := make([]any, len(cols))
+		scanArgs := make([]any, len(cols))
 		for i := range values {
 			scanArgs[i] = &values[i]
 		}
@@ -145,7 +145,7 @@ func fetchOnePq(args []object.VintObject, defs map[string]object.VintObject) obj
 	return &object.Null{}
 }
 
-func convertPqToObject(val interface{}) object.VintObject {
+func convertPqToObject(val any) object.VintObject {
 	switch v := val.(type) {
 	case int64:
 		return &object.Integer{Value: v}
@@ -164,8 +164,8 @@ func convertPqToObject(val interface{}) object.VintObject {
 	}
 }
 
-func convertObjectsToPqParams(objects []object.VintObject) []interface{} {
-	params := make([]interface{}, len(objects))
+func convertObjectsToPqParams(objects []object.VintObject) []any {
+	params := make([]any, len(objects))
 	for i, obj := range objects {
 		switch v := obj.(type) {
 		case *object.String:
