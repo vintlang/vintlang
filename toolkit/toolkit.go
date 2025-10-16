@@ -227,6 +227,8 @@ Happy coding! 💡
 const sampleVintCode = `// Main entry point for your VintLang project
 import greetings_module
 import time
+import os
+import json
 
 println("\n🎉 Welcome to your VintLang project!")
 println("Today's date:", time.format(time.now(), "2006-01-02 15:04:05"))
@@ -236,7 +238,7 @@ let app = {
     name: "VintLang Starter",
     version: "1.0.0",
     author: "You!",
-    features: ["strings", "arrays", "modules", "cli"]
+    features: ["strings", "arrays", "modules", "cli", "file", "json", "env", "http"]
 }
 println("App features:", app["features"])
 
@@ -256,6 +258,38 @@ for todo in todos {
 
 // Use a module function
 greetings_module.greet("Developer")
+
+// File I/O example
+println("\n📄 Writing to file example.txt...")
+os.writeFile("example.txt", "Hello from VintLang!")
+let fileContent = os.readFile("example.txt")
+println("Read from file:", fileContent)
+
+// JSON example
+println("\n🔢 JSON encode/decode:")
+let obj = {"hello": "world", "count": 42}
+let jsonStr = json.encode(obj)
+println("JSON string:", jsonStr)
+let decoded = json.decode(jsonStr)
+println("Decoded:", decoded)
+
+// Environment variable example
+println("\n🌍 Environment demo:")
+os.setEnv("VINT_DEMO", "42")
+println("VINT_DEMO:", os.getEnv("VINT_DEMO"))
+os.unsetEnv("VINT_DEMO")
+println("VINT_DEMO after unset:", os.getEnv("VINT_DEMO"))
+
+// Simple HTTP request example (if http module available)
+try {
+    import http
+    println("\n🌐 HTTP GET example:")
+    let response = http.get("https://api.github.com")
+    println("Status:", response['status'])
+    println("Body (truncated):", response['body'].slice(0, 100))
+} catch err {
+    println("HTTP module not available or request failed:", err)
+}
 `
 
 const sampleGreetingsCode = `package greetings_module{
@@ -268,81 +302,81 @@ const sampleGreetingsCode = `package greetings_module{
 
 // createProject scaffolds a new Vint project in the given directory
 func createProject(projectName string) {
-    // Structure for vintconfig.json
-    var vintConfig = VintConfig{
-        Name:        projectName,
-        Version:     "1.0.0",
-        VintVersion:  config.VINT_VERSION,
-        Description: "A modern VintLang starter project",
-    }
+	// Structure for vintconfig.json
+	var vintConfig = VintConfig{
+		Name:        projectName,
+		Version:     "1.0.0",
+		VintVersion: config.VINT_VERSION,
+		Description: "A modern VintLang starter project",
+	}
 
-    // creating the project directory
-    os.Mkdir(projectName, 0755)
-    os.Chdir(projectName)
+	// creating the project directory
+	os.Mkdir(projectName, 0755)
+	os.Chdir(projectName)
 
-    // Creating README.md
-    fmt.Println("🫠 Creating README.md...")
-    readmeFile, err := os.Create("README.md")
-    if err != nil {
-        fmt.Printf("❌ Error creating README.md: %v\n", err)
-        return
-    }
-    defer readmeFile.Close()
-    if _, err := readmeFile.WriteString(sampleReadme); err != nil {
-        fmt.Printf("❌ Error writing to README.md: %v\n", err)
-        return
-    }
-    fmt.Println("✅ README.md created successfully!")
+	// Creating README.md
+	fmt.Println("🫠 Creating README.md...")
+	readmeFile, err := os.Create("README.md")
+	if err != nil {
+		fmt.Printf("❌ Error creating README.md: %v\n", err)
+		return
+	}
+	defer readmeFile.Close()
+	if _, err := readmeFile.WriteString(sampleReadme); err != nil {
+		fmt.Printf("❌ Error writing to README.md: %v\n", err)
+		return
+	}
+	fmt.Println("✅ README.md created successfully!")
 
-    // Creating vintconfig.json
-    fmt.Println("🫠 Creating vintconfig.json...")
-    vintFile, err := os.Create("vintconfig.json")
-    if err != nil {
-        fmt.Printf("❌ Error creating vintconfig.json: %v\n", err)
-        return
-    }
-    defer vintFile.Close()
+	// Creating vintconfig.json
+	fmt.Println("🫠 Creating vintconfig.json...")
+	vintFile, err := os.Create("vintconfig.json")
+	if err != nil {
+		fmt.Printf("❌ Error creating vintconfig.json: %v\n", err)
+		return
+	}
+	defer vintFile.Close()
 
-    vintData, err := json.MarshalIndent(vintConfig, "", "  ")
-    if err != nil {
-        fmt.Printf("❌ Error marshalling vintconfig.json: %v\n", err)
-        return
-    }
-    if _, err := vintFile.Write(vintData); err != nil {
-        fmt.Printf("❌ Error writing to vintconfig.json: %v\n", err)
-        return
-    }
-    fmt.Println("✅ vintconfig.json created successfully!")
+	vintData, err := json.MarshalIndent(vintConfig, "", "  ")
+	if err != nil {
+		fmt.Printf("❌ Error marshalling vintconfig.json: %v\n", err)
+		return
+	}
+	if _, err := vintFile.Write(vintData); err != nil {
+		fmt.Printf("❌ Error writing to vintconfig.json: %v\n", err)
+		return
+	}
+	fmt.Println("✅ vintconfig.json created successfully!")
 
-    // Creating main.vint
-    fmt.Println("🫠 Creating main.vint...")
-    mainFile, err := os.Create("main.vint")
-    if err != nil {
-        fmt.Printf("❌ Error creating main.vint: %v\n", err)
-        return
-    }
-    defer mainFile.Close()
+	// Creating main.vint
+	fmt.Println("🫠 Creating main.vint...")
+	mainFile, err := os.Create("main.vint")
+	if err != nil {
+		fmt.Printf("❌ Error creating main.vint: %v\n", err)
+		return
+	}
+	defer mainFile.Close()
 
-    if _, err := mainFile.WriteString(sampleVintCode); err != nil {
-        fmt.Printf("❌ Error writing to main.vint: %v\n", err)
-        return
-    }
-    fmt.Println("✅ main.vint created successfully!")
+	if _, err := mainFile.WriteString(sampleVintCode); err != nil {
+		fmt.Printf("❌ Error writing to main.vint: %v\n", err)
+		return
+	}
+	fmt.Println("✅ main.vint created successfully!")
 
-    // Creating greetings_module.vint
-    greetingsModuleFile, err := os.Create("greetings_module.vint")
-    if err != nil {
-        fmt.Printf("❌ Error creating greetings_module.vint: %v\n", err)
-        return
-    }
-    defer greetingsModuleFile.Close()
-    if _, err := greetingsModuleFile.WriteString(sampleGreetingsCode); err != nil {
-        fmt.Printf("❌ Error writing to greetings_module.vint: %v\n", err)
-    }
-    fmt.Println("✅ greetings_module.vint created successfully!")
+	// Creating greetings_module.vint
+	greetingsModuleFile, err := os.Create("greetings_module.vint")
+	if err != nil {
+		fmt.Printf("❌ Error creating greetings_module.vint: %v\n", err)
+		return
+	}
+	defer greetingsModuleFile.Close()
+	if _, err := greetingsModuleFile.WriteString(sampleGreetingsCode); err != nil {
+		fmt.Printf("❌ Error writing to greetings_module.vint: %v\n", err)
+	}
+	fmt.Println("✅ greetings_module.vint created successfully!")
 
-    // Success message
-    fmt.Printf("🚀 Project '%s' initialized successfully!\n", projectName)
+	// Success message
+	fmt.Printf("🚀 Project '%s' initialized successfully!\n", projectName)
 }
 
 // Init is the legacy project initializer, now uses createProject
