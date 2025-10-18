@@ -1,0 +1,16 @@
+// Simple VintLang program using all package features
+import greetings_module
+import time
+
+println("Hello from VintLang!")
+println("Current time:", time.now())
+greetings_module.greet("World")
+
+// Use package constants and utility
+println("Module info:", greetings_module.getInfo())
+
+// Use encapsulated process function
+println(greetings_module.process("sample data"))
+
+// Show counter after greetings
+println("Greeted count:", greetings_module.getInfo()["counter"])
