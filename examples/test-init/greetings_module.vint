@@ -17,12 +17,12 @@ package greetings_module{
     let init = func() {
         @.greeting = "Welcome"
         @.publicCounter = 1
-        print("greetings_module v" + VERSION + " initialized!")
+        println("greetings_module v" + VERSION + " initialized!")
     }
 
     // Public function
     let greet = func(name) {
-        print(greeting + ", " + name + "!")
+        println(greeting + ", " + name + "!")
         publicCounter = publicCounter + 1
     }
 
@@ -38,7 +38,7 @@ package greetings_module{
 
     // Encapsulated private function
     let _logDebug = func(msg) {
-        print("[DEBUG] " + msg)
+        println("[DEBUG] " + msg)
     }
 
     // Public function using private
