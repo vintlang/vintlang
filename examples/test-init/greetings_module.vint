@@ -1,0 +1,49 @@
+package greetings_module{
+    // Public constants
+    const VERSION = "2.0.0"
+    const AUTHOR = "VintLang Team"
+    const DESCRIPTION = "A demo package with all features"
+
+    // Public variables
+    let greeting = "Hello"
+    let publicCounter = 0
+
+    // Private members
+    let _privateSecret = "shhh"
+    const _PRIVATE_KEY = "abc123"
+    let _internalCounter = 0
+
+    // Auto-init function
+    let init = func() {
+        @.greeting = "Welcome"
+        @.publicCounter = 1
+        print("greetings_module v" + VERSION + " initialized!")
+    }
+
+    // Public function
+    let greet = func(name) {
+        print(greeting + ", " + name + "!")
+        publicCounter = publicCounter + 1
+    }
+
+    // Utility function
+    let getInfo = func() {
+        return {
+            "version": VERSION,
+            "author": AUTHOR,
+            "desc": DESCRIPTION,
+            "counter": publicCounter
+        }
+    }
+
+    // Encapsulated private function
+    let _logDebug = func(msg) {
+        print("[DEBUG] " + msg)
+    }
+
+    // Public function using private
+    let process = func(data) {
+        _logDebug("Processing: " + data)
+        return "Processed: " + data
+    }
+}
