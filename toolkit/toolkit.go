@@ -210,18 +210,71 @@ const sampleReadme = `# Simple VintLang Starter
 This is a minimal VintLang project using built-in modules and a custom package.
 `
 
-const sampleVintCode = `// Simple VintLang program
+const sampleVintCode = `// Simple VintLang program using all package features
 import greetings_module
 import time
 
 println("Hello from VintLang!")
 println("Current time:", time.now())
 greetings_module.greet("World")
+
+// Use package constants and utility
+println("Module info:", greetings_module.getInfo())
+
+// Use encapsulated process function
+println(greetings_module.process("sample data"))
+
+// Show counter after greetings
+println("Greeted count:", greetings_module.getInfo()["counter"])
 `
 
 const sampleGreetingsCode = `package greetings_module{
+    // Public constants
+    const VERSION = "2.0.0"
+    const AUTHOR = "VintLang Team"
+    const DESCRIPTION = "A demo package with all features"
+
+    // Public variables
+    let greeting = "Hello"
+    let publicCounter = 0
+
+    // Private members
+    let _privateSecret = "shhh"
+    const _PRIVATE_KEY = "abc123"
+    let _internalCounter = 0
+
+    // Auto-init function
+    let init = func() {
+        @.greeting = "Welcome"
+        @.publicCounter = 1
+        print("greetings_module v" + VERSION + " initialized!")
+    }
+
+    // Public function
     let greet = func(name) {
-        println("Hi, " + name + "!")
+        print(greeting + ", " + name + "!")
+        publicCounter = publicCounter + 1
+    }
+
+    // Utility function
+    let getInfo = func() {
+        return {
+            "version": VERSION,
+            "author": AUTHOR,
+            "desc": DESCRIPTION,
+            "counter": publicCounter
+        }
+    }
+
+    // Encapsulated private function
+    let _logDebug = func(msg) {
+        print("[DEBUG] " + msg)
+    }
+
+    // Public function using private
+    let process = func(data) {
+        _logDebug("Processing: " + data)
+        return "Processed: " + data
     }
 }
 `
