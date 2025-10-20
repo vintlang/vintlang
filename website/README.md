@@ -2,14 +2,15 @@
 
 ## Installing vintLang on Linux
 
-You can install **vintLang** on your Linux computer using the following steps. This guide will walk you through downloading, extracting, and confirming the installation.
+You can install **vintlang** on your Linux computer using the following steps. This guide will walk you through downloading, extracting, and confirming the installation.
 
 ### Step 1: Download the vintLang Binary
 
 First, download the binary release of vintLang for Linux using the following `curl` command:
 
 ```bash
-curl -O -L https://github.com/vintlang/vintlang/releases/download/0.1.0/vintLang_linux_amd64_v0.1.2.tar.gz
+# Replace <version> with the release tag (for example: v0.1.2)
+curl -O -L https://github.com/vintlang/vintlang/releases/download/<version>/vintlang_linux_amd64_<version>.tar.gz
 ```
 
 ### Step 2: Extract the Binary to a Global Location
@@ -20,11 +21,11 @@ Once the download is complete, extract the file and place the binary in a direct
 sudo tar -C /usr/local/bin -xzvf vintLang_linux_amd64_v0.1.2.tar.gz
 ```
 
-This will unpack the binary and make the `vintLang` command available to all users on your system.
+This will unpack the binary and make the `vint` command available to all users on your system.
 
 ### Step 3: Confirm the Installation
 
-To verify that **vintLang** has been installed correctly, run the following command to check its version:
+To verify that **vintlang** has been installed correctly, run the following command to check its version:
 
 ```bash
 vint -v
@@ -34,9 +35,8 @@ If the installation was successful, this command will output the version of **vi
 
 ---
 
-
-
 ### How to Install `vintLang`:
+
 1. Open your terminal.
 2. Run the `curl` command to download the `vintLang` binary.
 3. Extract the downloaded archive to a globally accessible directory (`/usr/local/bin`).
@@ -46,10 +46,9 @@ This guide should be easy to follow for installing `vintLang` on Linux!
 
 Now you can start using **vintLang** on your Linux system!
 
-
 ## Sample Code
 
-Here are some sample code snippets that show how to use **vintLang**. More examples are located in the `./vintLang` folder of the codebase.
+Here are some sample code snippets that show how to use **vintlang**. More examples are located in the `./vint` folder of the codebase.
 
 ### Example 1: String Splitting and Printing
 
@@ -60,8 +59,8 @@ import time      // Importing time module to work with date and time
 
 // Main logic to split and print characters of a string
 let name = "VintLang"
-s = name.split("") 
-for i in s { 
+s = name.split("")
+for i in s {
     print(i)
 }
 ```
@@ -70,17 +69,17 @@ for i in s {
 
 ```js
 // Demonstrating type conversion and conditional statements
-age = "10"
-convert(age, "INTEGER")  // Convert age string to integer
-print(type(age))          // Uncomment to check the type of ageInInt
+age = "10";
+convert(age, "INTEGER"); // Convert age string to integer
+print(type(age)); // Uncomment to check the type of ageInInt
 
 // Conditional statements to compare the age variable
 if (age == 20) {
-    print(age)
+  print(age);
 } else if (age == 10) {
-    print("Age is " + age)
+  print("Age is " + age);
 } else {
-    print((age == "20"))
+  print(age == "20");
 }
 ```
 
@@ -136,21 +135,21 @@ greet("John")
 
 ```js
 // Example of a GET request using the net module
-let res = net.get("https://tachera.com")
-print(res)
+let res = net.get("https://tachera.com");
+print(res);
 ```
 
 ### Example 6: Built-in Functions and Output
 
 ```js
 // Built-in functions
-print(type(123))             // Print the type of an integer
-let a = "123"                // Initialize a string variable
-convert(a, "INTEGER")        // Convert the string to an integer
-type(a)
-print(a)                     // Check the type of the variable
-print("Hello", "World")      // Print multiple values
-write("Hello World")         // Write a string (useful in returning output)
+print(type(123)); // Print the type of an integer
+let a = "123"; // Initialize a string variable
+convert(a, "INTEGER"); // Convert the string to an integer
+type(a);
+print(a); // Check the type of the variable
+print("Hello", "World"); // Print multiple values
+write("Hello World"); // Write a string (useful in returning output)
 ```
 
 ### Step 4: Run the Sample Code
