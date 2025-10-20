@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { Moon, Sun } from "lucide-react";
+import { Moon, Sun, Github } from "lucide-react";
 import { useTheme } from "next-themes";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
@@ -53,6 +53,21 @@ export default function Header() {
           </nav>
         </div>
         <div className="flex flex-1 items-center justify-between space-x-2 md:justify-end">
+          <Button
+            asChild
+            variant="ghost"
+            size="icon"
+            aria-label="Open GitHub"
+            className="mr-2"
+          >
+            <a
+              href="https://github.com/vintlang/vintlang"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <Github className="h-5 w-5" />
+            </a>
+          </Button>
           <Button
             variant="ghost"
             size="icon"
