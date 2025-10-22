@@ -19,10 +19,10 @@ Creates a JWT token with the provided payload and secret using HS256 signing met
 
 **Example:**
 
-```vint
-let payload = {"user": "john", "role": "admin"}
-let token = jwt.create(payload, "my-secret-key")
-print(token) // eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+```js
+let payload = { user: "john", role: "admin" };
+let token = jwt.create(payload, "my-secret-key");
+print(token); // eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
 ```
 
 ### `jwt.createHS256(payload, secret, [expiration_hours])`
@@ -41,10 +41,10 @@ Creates a JWT token with HS256 signing method, with optional expiration.
 
 **Example:**
 
-```vint
-let payload = {"user": "john", "role": "admin"}
-let token = jwt.createHS256(payload, "my-secret-key", 24) // Expires in 24 hours
-print(token)
+```js
+let payload = { user: "john", role: "admin" };
+let token = jwt.createHS256(payload, "my-secret-key", 24); // Expires in 24 hours
+print(token);
 ```
 
 ### `jwt.verify(token, secret)`
@@ -63,15 +63,15 @@ Verifies a JWT token and returns the payload if valid.
 
 **Example:**
 
-```vint
-let token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
-let result = jwt.verify(token, "my-secret-key")
+```js
+let token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...";
+let result = jwt.verify(token, "my-secret-key");
 
 if (result.type != "ERROR") {
-    print("User:", result["user"])
-    print("Role:", result["role"])
+  print("User:", result["user"]);
+  print("Role:", result["role"]);
 } else {
-    print("Invalid token:", result.message)
+  print("Invalid token:", result.message);
 }
 ```
 
@@ -91,12 +91,12 @@ Verifies a JWT token with explicit HS256 signing method check.
 
 **Example:**
 
-```vint
-let token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
-let result = jwt.verifyHS256(token, "my-secret-key")
+```js
+let token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...";
+let result = jwt.verifyHS256(token, "my-secret-key");
 
 if (result.type != "ERROR") {
-    print("Verified HS256 token:", result)
+  print("Verified HS256 token:", result);
 }
 ```
 
@@ -115,22 +115,22 @@ Decodes a JWT token without verification (useful for inspecting headers/payload)
 
 **Example:**
 
-```vint
-let token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
-let decoded = jwt.decode(token)
+```js
+let token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...";
+let decoded = jwt.decode(token);
 
-print("Header:", decoded["header"])
-print("Payload:", decoded["payload"])
+print("Header:", decoded["header"]);
+print("Payload:", decoded["payload"]);
 ```
 
 ## Error Handling
 
 All JWT functions return error objects when something goes wrong:
 
-```vint
-let result = jwt.verify("invalid-token", "secret")
+```js
+let result = jwt.verify("invalid-token", "secret");
 if (result.type == "ERROR") {
-    print("Error:", result.message)
+  print("Error:", result.message);
 }
 ```
 
@@ -145,44 +145,44 @@ if (result.type == "ERROR") {
 
 ### User Authentication
 
-```vint
+```js
 // Login endpoint - create token
 let payload = {
-    "user_id": 123,
-    "username": "john_doe",
-    "exp": time.now() + (24 * 3600) // 24 hours
-}
-let token = jwt.create(payload, env.JWT_SECRET)
+  user_id: 123,
+  username: "john_doe",
+  exp: time.now() + 24 * 3600, // 24 hours
+};
+let token = jwt.create(payload, env.JWT_SECRET);
 
-// Protected endpoint - verify token  
-let result = jwt.verify(request_token, env.JWT_SECRET)
+// Protected endpoint - verify token
+let result = jwt.verify(request_token, env.JWT_SECRET);
 if (result.type == "ERROR") {
-    return {"error": "Unauthorized"}
+  return { error: "Unauthorized" };
 }
-let user_id = result["user_id"]
+let user_id = result["user_id"];
 ```
 
 ### API Rate Limiting
 
-```vint
+```js
 // Create token with rate limit info
 let payload = {
-    "client_id": "app123",
-    "requests_remaining": 1000,
-    "exp": time.now() + 3600 // 1 hour
-}
-let token = jwt.create(payload, "rate-limit-secret")
+  client_id: "app123",
+  requests_remaining: 1000,
+  exp: time.now() + 3600, // 1 hour
+};
+let token = jwt.create(payload, "rate-limit-secret");
 ```
 
 ### Session Management
 
-```vint
+```js
 // Create session token
 let session = {
-    "session_id": uuid.generate(),
-    "user_id": user.id,
-    "permissions": ["read", "write"],
-    "exp": time.now() + (8 * 3600) // 8 hours
-}
-let session_token = jwt.createHS256(session, "session-secret", 8)
+  session_id: uuid.generate(),
+  user_id: user.id,
+  permissions: ["read", "write"],
+  exp: time.now() + 8 * 3600, // 8 hours
+};
+let session_token = jwt.createHS256(session, "session-secret", 8);
 ```
