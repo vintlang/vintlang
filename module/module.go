@@ -20,6 +20,7 @@ func init() {
 	Mapper["term"] = &object.Module{Name: "term", Functions: TermFunctions}
 	Mapper["uuid"] = &object.Module{Name: "uuid", Functions: UuidFunctions}
 	Mapper["string"] = &object.Module{Name: "string", Functions: StringFunctions}
+	Mapper["styled"] = &object.Module{Name: "styled", Functions: StyledFunctions}
 	Mapper["crypto"] = &object.Module{Name: "crypto", Functions: CryptoFunctions}
 	Mapper["regex"] = &object.Module{Name: "regex", Functions: RegexFunctions}
 	Mapper["shell"] = &object.Module{Name: "shell", Functions: ShellFunctions}
