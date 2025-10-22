@@ -1,4 +1,3 @@
-
 # VintChart Module (Experimental)
 
 The `vintChart` module provides functions for creating various types of charts and saving them as HTML files. This module is experimental and its API may change in the future.
@@ -15,7 +14,7 @@ Creates a bar chart.
 
 **Usage:**
 
-```vint
+```js
 import vintChart
 
 let labels = ["A", "B", "C"]
@@ -33,7 +32,7 @@ Creates a pie chart.
 
 **Usage:**
 
-```vint
+```js
 import vintChart
 
 let labels = ["Work", "Sleep", "Play"]
@@ -51,7 +50,7 @@ Creates a line graph.
 
 **Usage:**
 
-```vint
+```js
 import vintChart
 
 let labels = ["Jan", "Feb", "Mar"]

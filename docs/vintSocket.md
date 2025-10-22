@@ -1,4 +1,3 @@
-
 # VintSocket Module (Experimental)
 
 The `vintSocket` module provides functions for working with WebSockets. It allows you to create WebSocket servers and connect to WebSocket servers as a client. This module is experimental and its API may change in the future.
@@ -13,7 +12,7 @@ Creates a WebSocket server on the specified port.
 
 **Usage:**
 
-```vint
+```js
 import vintSocket
 
 vintSocket.createServer("8080")
@@ -28,7 +27,7 @@ Connects to a WebSocket server.
 
 **Usage:**
 
-```vint
+```js
 import vintSocket
 
 vintSocket.connect("ws://localhost:8080")
@@ -43,7 +42,7 @@ Sends a message to a specific connected client.
 
 **Usage:**
 
-```vint
+```js
 import vintSocket
 
 // Assuming a client is connected at index 0
@@ -58,7 +57,7 @@ Sends a message to all connected clients.
 
 **Usage:**
 
-```vint
+```js
 import vintSocket
 
 vintSocket.broadcast("Hello, everyone!")

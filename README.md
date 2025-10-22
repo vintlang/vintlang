@@ -4,7 +4,7 @@ Follow the steps below to easily install **VintLang** on your Linux or macOS sys
 
 ---
 
-### For Linux:
+## For Linux
 
 1. **Download the Binary:**
 
@@ -32,7 +32,7 @@ Follow the steps below to easily install **VintLang** on your Linux or macOS sys
    vint -v
    ```
 
-4. **Initialize a vint project:**
+4. **Initialize a vint project**
 
    Create a simple boilerplate vint project
 
@@ -42,13 +42,11 @@ Follow the steps below to easily install **VintLang** on your Linux or macOS sys
 
 ---
 
-5. **Install the vintlang extension from vscode**
-
-   Install the official vint language support extension int vscode called **`vintlang`**
+Note: Install the `vintlang` VSCode extension for language support (syntax highlighting, snippets, and tooling).
 
 ---
 
-### For macOS:
+## For macOS
 
 1. **Download the Binary:**
 
@@ -76,7 +74,7 @@ Follow the steps below to easily install **VintLang** on your Linux or macOS sys
    vint -v
    ```
 
-4. **Initialize a vint project:**
+4. **Initialize a vint project**
 
    Create a simple boilerplate vint project
 
@@ -86,14 +84,11 @@ Follow the steps below to easily install **VintLang** on your Linux or macOS sys
 
 ---
 
-5. **Install the vintlang extension from vscode**
-
-   Install the official vint language support extension int vscode called **`vintlang`**
+Note: Install the `vintlang` VSCode extension for language support (syntax highlighting, snippets, and tooling).
 
 ---
 
-
-### Summary of Installation Steps:
+## Summary of Installation Steps
 
 1. **Download the Binary** using `curl` for your system (Linux or macOS).
 2. **Extract the Binary** to `/usr/local/bin` (or another globally accessible directory).
@@ -101,164 +96,92 @@ Follow the steps below to easily install **VintLang** on your Linux or macOS sys
 4. **Initialize a vintlang project** by running `vint init <projectname>`.
 5. **Install the vintlang extension from vscode** install vintlang extension in vscode
 
+## Sample Code — Rich example
 
-## Sample Code
-
-### Example 1: String Splitting and Printing
-
+The simple examples below have been replaced with a single, richer example that demonstrates several recent and powerful VintLang features: packages, dynamic `import()` at runtime, YAML and JSON handling, file I/O, and reusable functions.
+<!-- using ```js so that we get syntax highlighting-->
 ```js
-// Importing modules
-import net       // Importing networking module for HTTP operations
-import time      // Importing time module to work with date and time
+// Rich example: packages, dynamic import(), YAML/JSON, file I/O
 
-// Main logic to split and print characters of a string
-let name = "VintLang"
-s = name.split("")
-for i in s {
-    print(i)
-}
-```
+// Static imports (modules available at compile time)
+import os
+import json
 
-### Example 2: Type Conversion and Conditional Statements
+// If you have a local package (see `examples/packages_example`) you can import it
+// using a package name. The example package defines `greeter_pkg.greet()`.
+// import greeter_pkg
 
-```js
-// Demonstrating type conversion and conditional statements
-age = "10"
-convert(age, "INTEGER")  // Convert age string to integer
-print(type(age))          // Uncomment to check the type of ageInInt
+// Dynamic import() lets you load modules at runtime (useful for plugins)
+let yaml = import("yaml")
+let time = import("time")
+let math = import("math")
 
-// Conditional statements to compare the age variable
-if (age == 20) {
-    print(age)
-} else if (age == 10) {
-    print("Age is " + age)
+// Load a YAML configuration if present; otherwise write a sensible default
+let cfgStr = ""
+if (os.fileExists("config.yaml")) {
+   cfgStr = os.readFile("config.yaml")
+   print("Loaded config.yaml")
 } else {
-    print((age == "20"))
-}
-```
-
-### Example 3: Working with Height Variable
-
-```js
-// Working with height variable
-height = "6.0" // Height in feet
-print("My name is " + name)
-
-// Define a function to print details
-let printDetails = func(name, age, height) {
-    print("My name is " + name + ", I am " + age + " years old, and my height is " + height + " feet.")
+   let defaultCfg = {
+      "app": {"name": "vint-app", "port": 8080},
+      "features": ["web", "logging", "yaml"]
+   }
+   cfgStr = yaml.encode(defaultCfg)
+   os.writeFile("config.yaml", cfgStr)
+   print("Wrote default config.yaml")
 }
 
-// Calling the printDetails function with initial values
-printDetails(name, age, height)
+let cfg = yaml.decode(cfgStr)
+print("App name:", yaml.get(cfg, "app.name"))
 
-// Update height and call the function again
-height = "7"
-printDetails(name, age, height)
-```
+// Use dynamic math module
+let pow = math.pow(2, 10)  // 2^10
+print("2^10 =", pow)
 
-### Example 4: Time-Related Operations
+// Optional: call into a package if available (see examples/packages_example)
+// Example package API (greeter_pkg): sayHello, setGreeting, getPackageInfo
+// To use it uncomment and run:
+// import greeter_pkg
+// greeter_pkg.sayHello("Vint User")
+// print(greeter_pkg.getPackageInfo())
 
-```js
-// Print the current timestamp
-print(time.now())
-
-// Function to greet a user based on the time of the day
-let greet = func(nameParam) {
-    let currentTime = time.now()  // Get the current time
-    print(currentTime)            // Print the current time
-    if (true) {                   // Placeholder condition, modify for actual logic
-        print("Good morning, " + nameParam + "!")
-    } else {
-        print("Good evening, " + nameParam + "!")
-    }
+// Produce a JSON summary
+let summary = {
+   "generated_at": time.format(time.now(), "2006-01-02T15:04:05"),
+   "app": yaml.get(cfg, "app.name"),
+   "value": pow
 }
 
-// Time-related operations
-year = 2024
-print("Is", year, "Leap year:", time.isLeapYear(year))
-print(time.format(time.now(), "02-01-2006 15:04:05"))
-print(time.add(time.now(), "1h"))
-print(time.subtract(time.now(), "2h30m45s"))
+os.writeFile("summary.json", json.encode(summary))
+print("Wrote summary.json")
 
-// Call the greet function with a sample name
-greet("John")
+// Small reusable function
+let report = func(path) {
+   let content = os.readFile(path)
+   print("Report (" + path + ") size:", string(len(content)))
+}
+
+report("summary.json")
+
+// End of example
 ```
 
-### Example 5: Networking with HTTP GET Request
-
-```js
-// Example of a GET request using the net module
-let res = net.get("https://tachera.com")
-print(res)
-```
-
-### Example 6: Built-in Functions and Output
-
-```js
-// Built-in functions
-print(type(123))             // Print the type of an integer
-let a = "123"                // Initialize a string variable
-convert(a, "INTEGER")        // Convert the string to an integer
-type(a)
-print(a)                     // Check the type of the variable
-print("Hello", "World")      // Print multiple values
-write("Hello World")         // Write a string (useful in returning output)
-```
-
-### Step 4: Run the Sample Code
-
-Once you have the sample code files saved, you can run them using the following command:
+How to run this example locally:
 
 ```bash
-vint <filename>.vint
+vint examples/comprehensive_showcase.vint
 ```
 
-Replace `<filename>` with the actual name of the file you want to run (e.g., `hello.vint`, `fibonacci.vint`, etc.).
+Notes:
+
+- The example above intentionally mixes static and dynamic imports to show both workflows.
+- Some examples in `examples/` (LLM, HTTP, enterprise integrations) require network access or API keys — they are safe to read but may need extra setup to run.
 
 ---
 
-## 🎯 Showcase Applications
-
-VintLang includes comprehensive showcase applications demonstrating real-world capabilities:
-
-- **`comprehensive_showcase.vint`** - Complete feature demonstration with data processing, JSON operations, file I/O, and reporting
-- **`vintlang_showcase.vint`** - Personal Information Manager with contact management and CSV export
-- **`feature_test.vint`** - Basic feature validation suite
-- **`web_fetcher.vint`** - Network operations and HTTP requests (requires internet)
-- **`math_showcase.vint`** - Mathematical algorithms and computational demonstrations
-
-These applications prove VintLang's production readiness for:
-- Business applications and data processing
-- File management and automation scripts  
-- API integration and JSON processing
-- Educational programming and rapid prototyping
-
-See `SHOWCASE_README.md` for detailed information about each showcase application.
-
----
-
-## 🤝 Contributing
+## Contributing
 
 We welcome contributions to VintLang! Whether you're fixing bugs, adding features, or improving documentation, your help is appreciated.
-
-### For Maintainers: Creating Releases
-
-If you're a maintainer looking to create a new release, please refer to our comprehensive [Release Process Documentation](docs/RELEASE_PROCESS.md) which covers:
-
-- How to use GoReleaser to build and publish releases
-- Testing releases locally before publishing
-- Understanding the GitHub Actions workflow
-- Troubleshooting common release issues
-
-Quick start for creating a release:
-```bash
-# Test the build locally first
-./scripts/test-goreleaser.sh
-
-# Create and publish a release
-./scripts/release.sh v0.3.0
-```
 
 ---
 
