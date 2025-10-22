@@ -1,4 +1,3 @@
-
 # CLI Module
 
 The `cli` module provides a comprehensive set of tools for building command-line applications in VintLang. It allows you to parse arguments, handle flags, prompt for user input, execute external commands, and more.
@@ -11,7 +10,7 @@ Returns an array of all command-line arguments passed to the script.
 
 **Usage:**
 
-```vint
+```js
 import cli
 
 let allArgs = cli.getArgs()
@@ -24,7 +23,7 @@ Parses command-line arguments and returns a dictionary of flags (arguments start
 
 **Usage:**
 
-```vint
+```js
 import cli
 
 // Command: vint my_script.vint --verbose --output "file.txt"
@@ -39,7 +38,7 @@ Returns an array of positional arguments (arguments that are not flags or their 
 
 **Usage:**
 
-```vint
+```js
 import cli
 
 // Command: vint my_script.vint my_file.txt --verbose
@@ -56,7 +55,7 @@ Gets the value of a named argument (flag). It supports both `--flag=value` and `
 
 **Usage:**
 
-```vint
+```js
 import cli
 
 // Command: vint my_script.vint --output="report.txt"
@@ -72,7 +71,7 @@ Checks if a named argument (flag) is present in the command-line arguments.
 
 **Usage:**
 
-```vint
+```js
 import cli
 
 // Command: vint my_script.vint --verbose
@@ -87,7 +86,7 @@ A more advanced argument parser that returns a dictionary containing parsed flag
 
 **Usage:**
 
-```vint
+```js
 import cli
 
 // Command: vint my_script.vint --input="data.csv" process
@@ -109,7 +108,7 @@ Displays a message to the user and waits for them to enter a line of text.
 
 **Usage:**
 
-```vint
+```js
 import cli
 
 let name = cli.prompt("Enter your name: ")
@@ -124,7 +123,7 @@ Asks the user a yes/no question and returns `true` for "yes" and `false` for "no
 
 **Usage:**
 
-```vint
+```js
 import cli
 
 if (cli.confirm("Are you sure you want to continue?")) {
@@ -142,7 +141,7 @@ Executes a shell command and returns its combined standard output and standard e
 
 **Usage:**t
 
-```vint
+```js
 import cli
 
 let files = cli.execCommand("ls -l")
@@ -157,7 +156,7 @@ Terminates the script with a given status code.
 
 **Usage:**
 
-```vint
+```js
 import cli
 
 if (error) {
@@ -174,7 +173,7 @@ Generates and prints a standard help message for a CLI application.
 
 **Usage:**
 
-```vint
+```js
 import cli
 
 cli.help("My Awesome App", "This app does awesome things.")
@@ -189,7 +188,7 @@ Prints version information for the CLI application.
 
 **Usage:**
 
-```vint
+```js
 import cli
 
 cli.version("My Awesome App", "1.0.0")

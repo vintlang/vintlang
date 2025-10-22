@@ -1,4 +1,3 @@
-
 # Crypto Module
 
 The `crypto` module provides a set of functions for common cryptographic operations, including hashing, symmetric encryption (AES), asymmetric encryption (RSA), and digital signatures.
@@ -15,7 +14,7 @@ Computes the MD5 hash of a string.
 
 **Usage:**
 
-```vint
+```js
 import crypto
 
 let hashed = crypto.hashMD5("hello world")
@@ -32,7 +31,7 @@ Computes the SHA-256 hash of a string.
 
 **Usage:**
 
-```vint
+```js
 import crypto
 
 let hashed = crypto.hashSHA256("hello world")
@@ -52,7 +51,7 @@ Encrypts a string using AES (Advanced Encryption Standard).
 
 **Usage:**
 
-```vint
+```js
 import crypto
 
 let secret = "this is a secret message"
@@ -73,7 +72,7 @@ Decrypts an AES-encrypted hexadecimal string.
 
 **Usage:**
 
-```vint
+```js
 import crypto
 
 let key = "a_16_byte_secret_key"
@@ -95,7 +94,7 @@ Generates an RSA key pair with the specified bit size.
 
 **Usage:**
 
-```vint
+```js
 import crypto
 
 // Generate 2048-bit RSA key pair (default)
@@ -119,7 +118,7 @@ Encrypts data using RSA public key encryption.
 
 **Usage:**
 
-```vint
+```js
 import crypto
 
 let keys = crypto.generateRSA(2048)
@@ -140,7 +139,7 @@ Decrypts data using RSA private key decryption.
 
 **Usage:**
 
-```vint
+```js
 import crypto
 
 let keys = crypto.generateRSA(2048)
@@ -163,7 +162,7 @@ Creates a digital signature using RSA private key and SHA-256 hashing.
 
 **Usage:**
 
-```vint
+```js
 import crypto
 
 let keys = crypto.generateRSA(2048)
@@ -185,7 +184,7 @@ Verifies a digital signature using RSA public key and SHA-256 hashing.
 
 **Usage:**
 
-```vint
+```js
 import crypto
 
 let keys = crypto.generateRSA(2048)
@@ -201,7 +200,7 @@ println("Tampered signature valid:", isTampered) // false
 
 ## Complete Example
 
-```vint
+```js
 import crypto
 
 // Generate RSA key pair
