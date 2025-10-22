@@ -16,9 +16,9 @@ Establishes a connection to a Redis server.
 
 **Example**:
 
-```vint
-conn = redis.connect("localhost:6379")
-auth_conn = redis.connect("localhost:6379", "mypassword", 1)
+```js
+conn = redis.connect("localhost:6379");
+auth_conn = redis.connect("localhost:6379", "mypassword", 1);
 ```
 
 ### `redis.close(connection)`
@@ -27,8 +27,8 @@ Closes the Redis connection.
 
 **Example**:
 
-```vint
-redis.close(conn)
+```js
+redis.close(conn);
 ```
 
 ### `redis.ping(connection)`
@@ -39,8 +39,8 @@ Tests the connection to Redis.
 
 **Example**:
 
-```vint
-result = redis.ping(conn)  // Returns "PONG"
+```js
+result = redis.ping(conn); // Returns "PONG"
 ```
 
 ## String Operations
@@ -51,8 +51,8 @@ Sets a string value.
 
 **Example**:
 
-```vint
-redis.set(conn, "mykey", "myvalue")
+```js
+redis.set(conn, "mykey", "myvalue");
 ```
 
 ### `redis.get(connection, key)`
@@ -63,8 +63,8 @@ Gets a string value.
 
 **Example**:
 
-```vint
-value = redis.get(conn, "mykey")
+```js
+value = redis.get(conn, "mykey");
 ```
 
 ### `redis.setex(connection, key, value, seconds)`
@@ -73,8 +73,8 @@ Sets a string value with expiration time.
 
 **Example**:
 
-```vint
-redis.setex(conn, "session:123", "userdata", 3600)  // Expires in 1 hour
+```js
+redis.setex(conn, "session:123", "userdata", 3600); // Expires in 1 hour
 ```
 
 ### `redis.mset(connection, key1, value1, key2, value2, ...)`
@@ -83,8 +83,8 @@ Sets multiple key-value pairs.
 
 **Example**:
 
-```vint
-redis.mset(conn, "key1", "value1", "key2", "value2")
+```js
+redis.mset(conn, "key1", "value1", "key2", "value2");
 ```
 
 ### `redis.mget(connection, key1, key2, ...)`
@@ -95,8 +95,8 @@ Gets multiple values.
 
 **Example**:
 
-```vint
-values = redis.mget(conn, "key1", "key2")
+```js
+values = redis.mget(conn, "key1", "key2");
 ```
 
 ## Numeric Operations
@@ -107,8 +107,8 @@ Increments the integer value of a key by 1.
 
 **Example**:
 
-```vint
-counter = redis.incr(conn, "visits")  // Increments and returns new value
+```js
+counter = redis.incr(conn, "visits"); // Increments and returns new value
 ```
 
 ### `redis.decr(connection, key)`
@@ -155,8 +155,8 @@ Returns all keys matching a pattern.
 
 **Example**:
 
-```vint
-keys = redis.keys(conn, "user:*")  // All keys starting with "user:"
+```js
+keys = redis.keys(conn, "user:*"); // All keys starting with "user:"
 ```
 
 ## Hash Operations
@@ -219,8 +219,8 @@ Returns a range of elements from a list.
 
 **Example**:
 
-```vint
-elements = redis.lrange(conn, "mylist", 0, -1)  // All elements
+```js
+elements = redis.lrange(conn, "mylist", 0, -1); // All elements
 ```
 
 ## Set Operations
@@ -253,8 +253,8 @@ Adds one or more members to a sorted set with scores.
 
 **Example**:
 
-```vint
-redis.zadd(conn, "leaderboard", 100, "player1", 85, "player2")
+```js
+redis.zadd(conn, "leaderboard", 100, "player1", 85, "player2");
 ```
 
 ### `redis.zrem(connection, key, member1, [member2, ...])`
@@ -275,26 +275,26 @@ Returns the score of a member in a sorted set.
 
 ## Usage Example
 
-```vint
+```js
 // Connect to Redis
-conn = redis.connect("localhost:6379")
+conn = redis.connect("localhost:6379");
 
 // Basic string operations
-redis.set(conn, "greeting", "Hello, World!")
-message = redis.get(conn, "greeting")
-print(message)  // Output: Hello, World!
+redis.set(conn, "greeting", "Hello, World!");
+message = redis.get(conn, "greeting");
+print(message); // Output: Hello, World!
 
 // Working with hashes
-redis.hset(conn, "user:1", "name", "John Doe")
-redis.hset(conn, "user:1", "email", "john@example.com")
-user = redis.hgetall(conn, "user:1")
-print(user)  // Output: {"name": "John Doe", "email": "john@example.com"}
+redis.hset(conn, "user:1", "name", "John Doe");
+redis.hset(conn, "user:1", "email", "john@example.com");
+user = redis.hgetall(conn, "user:1");
+print(user); // Output: {"name": "John Doe", "email": "john@example.com"}
 
 // Working with lists
-redis.rpush(conn, "tasks", "task1", "task2", "task3")
-task = redis.lpop(conn, "tasks")
-print(task)  // Output: task1
+redis.rpush(conn, "tasks", "task1", "task2", "task3");
+task = redis.lpop(conn, "tasks");
+print(task); // Output: task1
 
 // Close connection
-redis.close(conn)
+redis.close(conn);
 ```

@@ -1,4 +1,3 @@
-
 # URL Module
 
 The `url` module provides a set of functions for working with URLs. You can use it to parse, encode, decode, join, build, and validate URLs.
@@ -15,7 +14,7 @@ Parses a URL string and returns its components.
 
 **Usage:**
 
-```vint
+```js
 import url
 
 let components = url.parse("https://example.com/path?query=value#fragment")
@@ -30,6 +29,7 @@ Builds a URL from a dictionary of components.
 - `components` (dict): A dictionary containing URL components.
 
 **Valid components:**
+
 - `scheme` (string): The URL scheme (e.g., "https", "http", "ftp")
 - `host` (string): The hostname (e.g., "example.com", "localhost")
 - `path` (string): The path component (e.g., "/api/v1")
@@ -42,7 +42,7 @@ Builds a URL from a dictionary of components.
 
 **Usage:**
 
-```vint
+```js
 import url
 
 let components = {"scheme": "https", "host": "api.example.com", "path": "/v1/users", "query": "limit=10"}
@@ -64,7 +64,7 @@ URL-encodes a string.
 
 **Usage:**
 
-```vint
+```js
 import url
 
 let encoded = url.encode("hello world!")
@@ -81,7 +81,7 @@ Decodes a URL-encoded string.
 
 **Usage:**
 
-```vint
+```js
 import url
 
 let decoded = url.decode("hello%20world%21")
@@ -99,7 +99,7 @@ Joins a base URL and a relative path to create a full URL.
 
 **Usage:**
 
-```vint
+```js
 import url
 
 let fullURL = url.join("https://example.com/", "/path/to/resource")
@@ -116,7 +116,7 @@ Checks if a string is a valid URL.
 
 **Usage:**
 
-```vint
+```js
 import url
 
 println(url.isValid("https://example.com")) // true

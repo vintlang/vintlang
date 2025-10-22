@@ -42,9 +42,7 @@ Follow the steps below to easily install **VintLang** on your Linux or macOS sys
 
 ---
 
-5. **Install the vintlang extension from vscode**
-
-   Install the official vint language support extension int vscode called **`vintlang`**
+Note: Install the `vintlang` VSCode extension for language support (syntax highlighting, snippets, and tooling).
 
 ---
 
@@ -86,12 +84,9 @@ Follow the steps below to easily install **VintLang** on your Linux or macOS sys
 
 ---
 
-5. **Install the vintlang extension from vscode**
-
-   Install the official vint language support extension int vscode called **`vintlang`**
+Note: Install the `vintlang` VSCode extension for language support (syntax highlighting, snippets, and tooling).
 
 ---
-
 
 ## Summary of Installation Steps
 
@@ -101,12 +96,11 @@ Follow the steps below to easily install **VintLang** on your Linux or macOS sys
 4. **Initialize a vintlang project** by running `vint init <projectname>`.
 5. **Install the vintlang extension from vscode** install vintlang extension in vscode
 
-
 ## Sample Code — Rich example
 
 The simple examples below have been replaced with a single, richer example that demonstrates several recent and powerful VintLang features: packages, dynamic `import()` at runtime, YAML and JSON handling, file I/O, and reusable functions.
-
-```vint
+<!-- using ```js so that we get syntax highlighting-->
+```js
 // Rich example: packages, dynamic import(), YAML/JSON, file I/O
 
 // Static imports (modules available at compile time)
@@ -174,7 +168,6 @@ report("summary.json")
 
 How to run this example locally:
 
-
 ```bash
 vint examples/comprehensive_showcase.vint
 ```
@@ -184,50 +177,11 @@ Notes:
 - The example above intentionally mixes static and dynamic imports to show both workflows.
 - Some examples in `examples/` (LLM, HTTP, enterprise integrations) require network access or API keys — they are safe to read but may need extra setup to run.
 
-
-## 🎯 Showcase Applications
-
-VintLang includes comprehensive showcase applications demonstrating real-world capabilities:
-
-- **`comprehensive_showcase.vint`** - Complete feature demonstration with data processing, JSON operations, file I/O, and reporting
-- **`vintlang_showcase.vint`** - Personal Information Manager with contact management and CSV export
-- **`feature_test.vint`** - Basic feature validation suite
-- **`web_fetcher.vint`** - Network operations and HTTP requests (requires internet)
-- **`math_showcase.vint`** - Mathematical algorithms and computational demonstrations
-
-These applications prove VintLang's production readiness for:
-
-- Business applications and data processing
-- File management and automation scripts  
-- API integration and JSON processing
-- Educational programming and rapid prototyping
-
-See `SHOWCASE_README.md` for detailed information about each showcase application.
-
 ---
 
-## 🤝 Contributing
+## Contributing
 
 We welcome contributions to VintLang! Whether you're fixing bugs, adding features, or improving documentation, your help is appreciated.
-
-### For Maintainers: Creating Releases
-
-If you're a maintainer looking to create a new release, please refer to our comprehensive [Release Process Documentation](docs/RELEASE_PROCESS.md) which covers:
-
-- How to use GoReleaser to build and publish releases
-- Testing releases locally before publishing
-- Understanding the GitHub Actions workflow
-- Troubleshooting common release issues
-
-Quick start for creating a release:
-
-```bash
-# Test the build locally first
-./scripts/test-goreleaser.sh
-
-# Create and publish a release
-./scripts/release.sh v0.3.0
-```
 
 ---
 

@@ -9,12 +9,14 @@ The YAML module provides functionality to work with YAML (YAML Ain't Markup Lang
 Parses a YAML string and converts it to Vint objects.
 
 **Parameters:**
+
 - `yamlString` (string): A valid YAML string to parse
 
 **Returns:** Vint object (dict, array, string, number, boolean, or null)
 
 **Example:**
-```vint
+
+```js
 import yaml
 
 let yamlData = yaml.decode("name: John\nage: 30\nactive: true")
@@ -26,12 +28,14 @@ print(yamlData) // {"name": "John", "age": 30, "active": true}
 Converts a Vint object to YAML format string.
 
 **Parameters:**
+
 - `object`: Any Vint object (dict, array, string, number, boolean, or null)
 
 **Returns:** String containing YAML representation
 
 **Example:**
-```vint
+
+```js
 import yaml
 
 let data = {
@@ -48,13 +52,15 @@ print(yamlString)
 Merges two YAML-compatible objects into one. Properties from the second object will overwrite properties from the first object with the same key.
 
 **Parameters:**
+
 - `object1`: First object to merge
 - `object2`: Second object to merge
 
 **Returns:** New merged object
 
 **Example:**
-```vint
+
+```js
 import yaml
 
 let obj1 = {"name": "John", "age": 30}
@@ -68,13 +74,15 @@ print(merged) // {"name": "John", "age": 35, "city": "NYC"}
 Retrieves a value from a YAML-compatible object by key.
 
 **Parameters:**
+
 - `object`: The object to search in
 - `key` (string): The key to look for
 
 **Returns:** The value associated with the key, or null if not found
 
 **Example:**
-```vint
+
+```js
 import yaml
 
 let data = yaml.decode("person:\n  name: Jane\n  age: 25")
@@ -85,6 +93,7 @@ print(name) // "Jane"
 ## Supported YAML Features
 
 The YAML module supports:
+
 - Scalar values (strings, numbers, booleans, null)
 - Sequences (arrays)
 - Mappings (dictionaries/objects)
@@ -94,6 +103,7 @@ The YAML module supports:
 ## Error Handling
 
 All YAML functions return error objects when:
+
 - Invalid YAML syntax is provided to `decode()`
 - Incorrect argument types are passed
 - Wrong number of arguments are provided
@@ -109,7 +119,7 @@ All YAML functions return error objects when:
 
 You can combine the YAML module with file operations to work with YAML configuration files:
 
-```vint
+```js
 import yaml
 import os
 

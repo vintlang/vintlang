@@ -2,7 +2,7 @@
 
 ## RELEASE_PROCESS.md
 
-```markdown
+````markdown
 # VintLang Release Process
 
 This document explains how to create and publish releases for VintLang using GoReleaser and GitHub Actions.
@@ -42,6 +42,7 @@ The easiest way to create a release is using the provided release script:
 ```bash
 ./scripts/release.sh v0.3.0
 ```
+````
 
 This script will:
 
@@ -171,11 +172,11 @@ If the version number is incorrect:
 
 VintLang is built for the following platforms:
 
-| OS      | Architectures        | Formats          |
-|---------|---------------------|------------------|
-| Linux   | amd64, arm64, 386   | tar.gz, deb, rpm, apk |
-| macOS   | amd64, arm64        | tar.gz           |
-| Windows | amd64, 386          | zip              |
+| OS      | Architectures     | Formats               |
+| ------- | ----------------- | --------------------- |
+| Linux   | amd64, arm64, 386 | tar.gz, deb, rpm, apk |
+| macOS   | amd64, arm64      | tar.gz                |
+| Windows | amd64, 386        | zip                   |
 
 Note: Windows arm64 and macOS 386 are excluded due to lack of support.
 
@@ -204,7 +205,7 @@ Each release includes:
 - [VintLang Releases](https://github.com/vintlang/vintlang/releases)
 - [GitHub Actions Documentation](https://docs.github.com/en/actions)
 
-```
+````
 
 ## SHOWCASE_README.md
 
@@ -233,7 +234,7 @@ A complete demonstration of VintLang's core features including:
 
 ```bash
 vint comprehensive_showcase.vint
-```
+````
 
 ### Output
 
@@ -374,7 +375,7 @@ Comprehensive task management with:
 The following examples have been fixed to work correctly with current VintLang syntax:
 
 - `examples/json.vint` - Fixed variable declarations
-- `examples/os.vint` - Fixed variable declarations  
+- `examples/os.vint` - Fixed variable declarations
 - `examples/strings.vint` - Fixed variable declarations
 - `examples/regex.vint` - Identified syntax issues (needs further work)
 
@@ -429,7 +430,7 @@ These showcases prove VintLang's readiness for:
 
 VintLang demonstrates production-ready capabilities for modern software development!
 
-```
+````
 
 ## argparse.md
 
@@ -495,7 +496,7 @@ print("Input file:", inputFile)
 if (outputFile) {
     print("Output file:", outputFile)
 }
-```
+````
 
 ## API Reference
 
@@ -723,14 +724,14 @@ if (count) {
     let lines = content.split("\n").length
     let words = content.split(/\s+/).length
     let chars = content.length
-    
+
     print("Lines:", lines)
     print("Words:", words)
     print("Characters:", chars)
 }
 ```
 
-```
+````
 
 ## args.md
 
@@ -747,7 +748,7 @@ Vint now provides built-in support for parsing command line arguments, making it
 // Get all command line arguments as an array
 let allArgs = args()
 print(allArgs)  // ["input.txt", "--verbose", "--output", "result.txt"]
-```
+````
 
 ### Using the CLI Module
 
@@ -837,7 +838,7 @@ if (verbose) {
 - The `args()` builtin and `cli.args()` return the same result
 - All functions handle quotes in arguments properly
 
-```
+````
 
 ## arrays.md
 
@@ -852,7 +853,7 @@ To create an array, use square brackets [] and separate items with commas:
 
 ```s
 list = [1, "second", true]
-```
+````
 
 ## Accessing and Modifying Array Elements
 
@@ -1027,7 +1028,7 @@ filter() will go through every single element of an array and checks if that ele
 a = [1, 2, 3, 4]
 
 b = a.filter(func(x){
-    if (x % 2 == 0) 
+    if (x % 2 == 0)
         {return true}
     return false
     })
@@ -1298,7 +1299,7 @@ words.sortBy(func(x){ return len(x) })
 print(words)  // ["a", "hi", "hello", "world"]
 ```
 
-```
+````
 
 ## async.md
 
@@ -1324,7 +1325,7 @@ let promise = fetchData("https://api.example.com")
 // Wait for the result
 let result = await promise
 print("Result:", result)
-```
+````
 
 ## Async/Await
 
@@ -1359,23 +1360,23 @@ Channels provide communication between concurrent operations.
 
 ```javascript
 // Unbuffered channel
-let ch = chan
+let ch = chan;
 
 // Buffered channel with size 5
-let bufferedCh = chan(5)
+let bufferedCh = chan(5);
 ```
 
 ### Channel Operations
 
 ```javascript
 // Send to channel
-send(ch, "Hello")
+send(ch, "Hello");
 
 // Receive from channel
-let message = receive(ch)
+let message = receive(ch);
 
 // Close channel
-close(ch)
+close(ch);
 ```
 
 ### Producer-Consumer Pattern
@@ -1406,13 +1407,13 @@ Combine async functions with channels for powerful patterns:
 ```javascript
 let processInBackground = async func(input) {
     let resultChan = chan
-    
+
     // Process in background
     go func() {
         let processed = "Processed: " + input
         send(resultChan, processed)
     }()
-    
+
     // Wait for result
     let result = receive(resultChan)
     return result
@@ -1469,7 +1470,7 @@ print("All tasks done:", r1, r2, r3)
 
 The async operations in VintLang provide a simple yet powerful way to handle concurrency and asynchronous operations in your programs.
 
-```
+````
 
 ## bool.md
 
@@ -1488,7 +1489,7 @@ In vint, you can evaluate simple expressions that return a boolean value:
 print(1 > 2) // Output: `false`
 
 print(1 + 3 < 10) // Output: `true`
-```
+````
 
 ### Evaluating Complex Expressions
 
@@ -1805,7 +1806,7 @@ for a in conditions {
 }
 ```
 
-```
+````
 
 ## builtins.md
 
@@ -1823,7 +1824,7 @@ Prints messages to the standard output. It can take zero or more arguments, whic
 ```js
 print("Hello,", "world!") // Output: Hello, world!
 print(1, 2, 3)         // Output: 1 2 3
-```
+````
 
 ### `println(...)`
 
@@ -1834,8 +1835,8 @@ Similar to `print`, but it adds a newline character at the end of the output.
 Reads a line of input from the user from standard input. It can optionally take a string argument to use as a prompt.
 
 ```js
-let name = input("Enter your name: ")
-println("Hello,", name)
+let name = input("Enter your name: ");
+println("Hello,", name);
 ```
 
 ### `sleep(milliseconds)`
@@ -1843,9 +1844,9 @@ println("Hello,", name)
 Pauses the program's execution for a specified duration in milliseconds.
 
 ```js
-println("Waiting for 1 second...")
-sleep(1000)
-println("Done.")
+println("Waiting for 1 second...");
+sleep(1000);
+println("Done.");
 ```
 
 ### `exit(code)`
@@ -1854,8 +1855,8 @@ Terminates the program with a specified exit code. An exit code of `0` typically
 
 ```js
 if (some_error) {
-    println("An error occurred!")
-    exit(1)
+  println("An error occurred!");
+  exit(1);
 }
 ```
 
@@ -1868,9 +1869,9 @@ if (some_error) {
 Returns a string representing the type of the given object.
 
 ```js
-type(10)      // Output: "INTEGER"
-type("hello") // Output: "STRING"
-type([])      // Output: "ARRAY"
+type(10); // Output: "INTEGER"
+type("hello"); // Output: "STRING"
+type([]); // Output: "ARRAY"
 ```
 
 ### `len(object)`
@@ -1878,9 +1879,9 @@ type([])      // Output: "ARRAY"
 Returns the length of a string, array, or dictionary.
 
 ```js
-len("hello")      // Output: 5
-len([1, 2, 3])    // Output: 3
-len({"a": 1})   // Output: 1
+len("hello"); // Output: 5
+len([1, 2, 3]); // Output: 3
+len({ a: 1 }); // Output: 1
 ```
 
 ---
@@ -1889,12 +1890,12 @@ len({"a": 1})   // Output: 1
 
 ### `append(array, element1, ...)`
 
-Returns a *new* array with the given elements added to the end.
+Returns a _new_ array with the given elements added to the end.
 
 ```js
-let arr = [1, 2]
-let new_arr = append(arr, 3, 4)
-println(new_arr) // Output: [1, 2, 3, 4]
+let arr = [1, 2];
+let new_arr = append(arr, 3, 4);
+println(new_arr); // Output: [1, 2, 3, 4]
 ```
 
 ### `pop(array)`
@@ -1902,10 +1903,10 @@ println(new_arr) // Output: [1, 2, 3, 4]
 Removes the last element from an array and returns that element. This function modifies the array in-place.
 
 ```js
-let arr = [1, 2, 3]
-let last = pop(arr)
-println(last) // Output: 3
-println(arr)  // Output: [1, 2]
+let arr = [1, 2, 3];
+let last = pop(arr);
+println(last); // Output: 3
+println(arr); // Output: [1, 2]
 ```
 
 ---
@@ -1917,8 +1918,8 @@ println(arr)  // Output: [1, 2]
 Returns an array containing all the keys from a dictionary. The order is not guaranteed.
 
 ```js
-let dict = {"name": "Alex", "age": 30}
-println(keys(dict)) // Output: ["name", "age"] (or ["age", "name"])
+let dict = { name: "Alex", age: 30 };
+println(keys(dict)); // Output: ["name", "age"] (or ["age", "name"])
 ```
 
 ### `values(dictionary)`
@@ -1926,8 +1927,8 @@ println(keys(dict)) // Output: ["name", "age"] (or ["age", "name"])
 Returns an array containing all the values from a dictionary. The order corresponds to the order of the keys returned by `keys()`.
 
 ```js
-let dict = {"name": "Alex", "age": 30}
-println(values(dict)) // Output: ["Alex", 30] (or [30, "Alex"])
+let dict = { name: "Alex", age: 30 };
+println(values(dict)); // Output: ["Alex", 30] (or [30, "Alex"])
 ```
 
 ### `has_key(dictionary, key)`
@@ -1935,9 +1936,9 @@ println(values(dict)) // Output: ["Alex", 30] (or [30, "Alex"])
 Returns `true` if the dictionary contains the given key, and `false` otherwise. This is also available as a method on dictionary objects: `my_dict.has_key(key)`.
 
 ```js
-let dict = {"a": 1}
-println(has_key(dict, "a")) // Output: true
-println(dict.has_key("b"))  // Output: false
+let dict = { a: 1 };
+println(has_key(dict, "a")); // Output: true
+println(dict.has_key("b")); // Output: false
 ```
 
 ---
@@ -1949,7 +1950,7 @@ println(dict.has_key("b"))  // Output: false
 Returns a single-character string corresponding to the given integer ASCII code.
 
 ```js
-println(chr(65)) // Output: "A"
+println(chr(65)); // Output: "A"
 ```
 
 ### `ord(string)`
@@ -1957,7 +1958,7 @@ println(chr(65)) // Output: "A"
 Returns the integer ASCII code of the first character of a given string.
 
 ```js
-println(ord("A")) // Output: 65
+println(ord("A")); // Output: 65
 ```
 
 ---
@@ -1969,7 +1970,7 @@ println(ord("A")) // Output: 65
 Opens a file and returns a file object. This is typically used for reading file contents.
 
 ```js
-let file = open("data.txt")
+let file = open("data.txt");
 // You can then use methods on the file object
 ```
 
@@ -1982,9 +1983,9 @@ let file = open("data.txt")
 Performs a logical AND operation on two boolean values. Returns `true` only if both arguments are `true`.
 
 ```js
-and(true, true)    // Output: true
-and(true, false)   // Output: false
-and(false, false)  // Output: false
+and(true, true); // Output: true
+and(true, false); // Output: false
+and(false, false); // Output: false
 ```
 
 ### `or(boolean1, boolean2)`
@@ -1992,9 +1993,9 @@ and(false, false)  // Output: false
 Performs a logical OR operation on two boolean values. Returns `true` if at least one of the arguments is `true`.
 
 ```js
-or(true, false)    // Output: true
-or(false, false)   // Output: false
-or(true, true)     // Output: true
+or(true, false); // Output: true
+or(false, false); // Output: false
+or(true, true); // Output: true
 ```
 
 ### `not(boolean)`
@@ -2002,8 +2003,8 @@ or(true, true)     // Output: true
 Performs a logical NOT operation on a boolean value. Returns the opposite of the input.
 
 ```js
-not(true)          // Output: false
-not(false)         // Output: true
+not(true); // Output: false
+not(false); // Output: true
 ```
 
 ### `xor(boolean1, boolean2)`
@@ -2011,10 +2012,10 @@ not(false)         // Output: true
 Performs a logical XOR (exclusive OR) operation on two boolean values. Returns `true` when exactly one of the arguments is `true`.
 
 ```js
-xor(true, false)   // Output: true
-xor(false, true)   // Output: true
-xor(true, true)    // Output: false
-xor(false, false)  // Output: false
+xor(true, false); // Output: true
+xor(false, true); // Output: true
+xor(true, true); // Output: false
+xor(false, false); // Output: false
 ```
 
 ### `nand(boolean1, boolean2)`
@@ -2022,9 +2023,9 @@ xor(false, false)  // Output: false
 Performs a logical NAND (NOT AND) operation on two boolean values. Returns `false` only when both arguments are `true`.
 
 ```js
-nand(true, true)   // Output: false
-nand(true, false)  // Output: true
-nand(false, false) // Output: true
+nand(true, true); // Output: false
+nand(true, false); // Output: true
+nand(false, false); // Output: true
 ```
 
 ### `nor(boolean1, boolean2)`
@@ -2032,9 +2033,9 @@ nand(false, false) // Output: true
 Performs a logical NOR (NOT OR) operation on two boolean values. Returns `true` only when both arguments are `false`.
 
 ```js
-nor(false, false)  // Output: true
-nor(true, false)   // Output: false
-nor(true, true)    // Output: false
+nor(false, false); // Output: true
+nor(true, false); // Output: false
+nor(true, true); // Output: false
 ```
 
 ---
@@ -2048,8 +2049,8 @@ nor(true, true)    // Output: false
 Checks if a string starts with the specified prefix.
 
 ```js
-startsWith("VintLang", "Vint")    // Output: true
-startsWith("hello", "hi")         // Output: false
+startsWith("VintLang", "Vint"); // Output: true
+startsWith("hello", "hi"); // Output: false
 ```
 
 #### `endsWith(string, suffix)`
@@ -2057,8 +2058,8 @@ startsWith("hello", "hi")         // Output: false
 Checks if a string ends with the specified suffix.
 
 ```js
-endsWith("VintLang", "Lang")      // Output: true
-endsWith("hello", "world")        // Output: false
+endsWith("VintLang", "Lang"); // Output: true
+endsWith("hello", "world"); // Output: false
 ```
 
 ### Array Functions
@@ -2068,9 +2069,9 @@ endsWith("hello", "world")        // Output: false
 Returns the index of the first occurrence of an element in an array, or -1 if not found.
 
 ```js
-let arr = [1, 2, 3, 2, 4]
-indexOf(arr, 2)    // Output: 1
-indexOf(arr, 5)    // Output: -1
+let arr = [1, 2, 3, 2, 4];
+indexOf(arr, 2); // Output: 1
+indexOf(arr, 5); // Output: -1
 ```
 
 #### `unique(array)`
@@ -2078,9 +2079,9 @@ indexOf(arr, 5)    // Output: -1
 Returns a new array containing only the unique elements from the input array, removing duplicates.
 
 ```js
-let arr = [1, 2, 2, 3, 1, 4]
-unique(arr)        // Output: [1, 2, 3, 4]
-unique([])         // Output: []
+let arr = [1, 2, 2, 3, 1, 4];
+unique(arr); // Output: [1, 2, 3, 4]
+unique([]); // Output: []
 ```
 
 ### Type Checking Functions
@@ -2090,9 +2091,9 @@ unique([])         // Output: []
 Returns true if the value is an integer.
 
 ```js
-isInt(42)          // Output: true
-isInt(3.14)        // Output: false
-isInt("hello")     // Output: false
+isInt(42); // Output: true
+isInt(3.14); // Output: false
+isInt("hello"); // Output: false
 ```
 
 #### `isFloat(value)`
@@ -2100,9 +2101,9 @@ isInt("hello")     // Output: false
 Returns true if the value is a float.
 
 ```js
-isFloat(3.14)      // Output: true
-isFloat(42)        // Output: false
-isFloat("hello")   // Output: false
+isFloat(3.14); // Output: true
+isFloat(42); // Output: false
+isFloat("hello"); // Output: false
 ```
 
 #### `isString(value)`
@@ -2110,9 +2111,9 @@ isFloat("hello")   // Output: false
 Returns true if the value is a string.
 
 ```js
-isString("hello")  // Output: true
-isString(42)       // Output: false
-isString(3.14)     // Output: false
+isString("hello"); // Output: true
+isString(42); // Output: false
+isString(3.14); // Output: false
 ```
 
 #### `isBool(value)`
@@ -2120,9 +2121,9 @@ isString(3.14)     // Output: false
 Returns true if the value is a boolean.
 
 ```js
-isBool(true)       // Output: true
-isBool(false)      // Output: true
-isBool(42)         // Output: false
+isBool(true); // Output: true
+isBool(false); // Output: true
+isBool(42); // Output: false
 ```
 
 #### `isArray(value)`
@@ -2130,9 +2131,9 @@ isBool(42)         // Output: false
 Returns true if the value is an array.
 
 ```js
-isArray([1, 2, 3]) // Output: true
-isArray("hello")   // Output: false
-isArray(42)        // Output: false
+isArray([1, 2, 3]); // Output: true
+isArray("hello"); // Output: false
+isArray(42); // Output: false
 ```
 
 #### `isDict(value)`
@@ -2140,9 +2141,9 @@ isArray(42)        // Output: false
 Returns true if the value is a dictionary.
 
 ```js
-isDict({"key": "value"})  // Output: true
-isDict([1, 2, 3])         // Output: false
-isDict("hello")           // Output: false
+isDict({ key: "value" }); // Output: true
+isDict([1, 2, 3]); // Output: false
+isDict("hello"); // Output: false
 ```
 
 #### `isNull(value)`
@@ -2150,9 +2151,9 @@ isDict("hello")           // Output: false
 Returns true if the value is null.
 
 ```js
-isNull(null)       // Output: true
-isNull(42)         // Output: false
-isNull("")         // Output: false
+isNull(null); // Output: true
+isNull(42); // Output: false
+isNull(""); // Output: false
 ```
 
 ### Parsing Functions
@@ -2162,9 +2163,9 @@ isNull("")         // Output: false
 Parses a string and returns an integer.
 
 ```js
-parseInt("42")     // Output: 42
-parseInt("-10")    // Output: -10
-parseInt("abc")    // Error: cannot parse 'abc' as integer
+parseInt("42"); // Output: 42
+parseInt("-10"); // Output: -10
+parseInt("abc"); // Error: cannot parse 'abc' as integer
 ```
 
 #### `parseFloat(string)`
@@ -2172,9 +2173,9 @@ parseInt("abc")    // Error: cannot parse 'abc' as integer
 Parses a string and returns a float.
 
 ```js
-parseFloat("3.14")    // Output: 3.14
-parseFloat("-2.5")    // Output: -2.5
-parseFloat("hello")   // Error: cannot parse 'hello' as float
+parseFloat("3.14"); // Output: 3.14
+parseFloat("-2.5"); // Output: -2.5
+parseFloat("hello"); // Error: cannot parse 'hello' as float
 ```
 
 ### Utility Functions
@@ -2199,7 +2200,7 @@ let debouncedPrint = debounce(500, print)
 
 // These rapid calls will be debounced - only the last one executes
 debouncedPrint("First call")
-debouncedPrint("Second call")  
+debouncedPrint("Second call")
 debouncedPrint("Third call")   // Only this prints after 500ms
 
 // Example with user-defined function
@@ -2218,7 +2219,7 @@ debouncedLog("This will be logged after 1 second of inactivity")
 VintLang also provides specialized modules for advanced functionality:
 
 - **Math functions** like `abs`, `min`, `max`, `sqrt`, etc. are available in the `math` module
-- **String functions** like `toUpper`, `toLower`, `trim`, `contains`, etc. are available in the `string` module  
+- **String functions** like `toUpper`, `toLower`, `trim`, `contains`, etc. are available in the `string` module
 - **Random functions** like `random.int()` and `random.float()` are available in the `random` module
 - **KV functions** like `set`, `get`, `delete`, `increment`, etc. are available in the `kv` module for in-memory key-value storage
 - **Array methods** like `reverse()` and `sort()` are available as methods on array objects
@@ -2242,7 +2243,7 @@ let user = kv.get("user:123")    // {name: Alice}
 kv.increment("page_views")       // 1
 ```
 
-```
+````
 
 ## bundler.md
 
@@ -2255,7 +2256,7 @@ The **VintLang Bundler** compiles `.vint` source files into standalone Go binari
 
 ```sh
 vint bundle yourfile.vint
-```
+````
 
 This allows you to write code in VintLang, bundle it into an executable, and run it on any system without requiring the VintLang interpreter or Go to be installed on the target machine.
 
@@ -2363,8 +2364,8 @@ print("Result:", processData("test"))
 **config.vint**:
 
 ```js
-let appName = "My VintLang App"
-let version = "1.0.0"
+let appName = "My VintLang App";
+let version = "1.0.0";
 ```
 
 **helpers.vint**:
@@ -2414,7 +2415,7 @@ To run the binary:
 Given a simple `hello.vint` file:
 
 ```js
-print("Hello, World!")
+print("Hello, World!");
 ```
 
 Run:
@@ -2447,7 +2448,7 @@ The VintLang bundler has evolved into a sophisticated multi-stage pipeline that 
 main.vint
     ↓ (parse AST)
     ├── import math_utils → finds math_utils.vint
-    ├── include "config.vint" → finds config.vint  
+    ├── include "config.vint" → finds config.vint
     └── import os → skips (built-in module)
 ```
 
@@ -2476,7 +2477,7 @@ Processing:
 **What happens:**
 
 - **Import files**: Wrapped in package structure if not already packaged
-- **Include files**: Content embedded directly, imports/includes removed  
+- **Include files**: Content embedded directly, imports/includes removed
 - **Main file**: Import/include statements removed for bundled dependencies
 - All code combined into single VintLang program
 
@@ -2515,7 +2516,7 @@ Binary Output (self-contained executable)
 **What happens:**
 
 - Creates temporary build directory
-- Runs `go mod tidy` to resolve Go dependencies  
+- Runs `go mod tidy` to resolve Go dependencies
 - Compiles with `go build -o binary_name`
 - Moves final binary to output location
 - Cleans up temporary files
@@ -2603,13 +2604,13 @@ The resulting binary is completely portable and self-contained - no VintLang int
 
 The bundler is built with several specialized components:
 
-| Component | File | Purpose |
-|-----------|------|---------|
-| **Bundle Controller** | `bundler.go` | Main entry point, coordinates the entire bundling process |
-| **Dependency Analyzer** | `dependencies.go` | Discovers and analyzes all imported/included files recursively |
-| **String Processor** | `string_processor.go` | Combines files and handles import/include statement processing |
-| **Bundled Evaluator** | `bundled_evaluator.go` | Generates the final Go code with embedded VintLang content |
-| **Package Processor** | `package_processor.go` | Handles package structure and wrapping for imported modules |
+| Component               | File                   | Purpose                                                        |
+| ----------------------- | ---------------------- | -------------------------------------------------------------- |
+| **Bundle Controller**   | `bundler.go`           | Main entry point, coordinates the entire bundling process      |
+| **Dependency Analyzer** | `dependencies.go`      | Discovers and analyzes all imported/included files recursively |
+| **String Processor**    | `string_processor.go`  | Combines files and handles import/include statement processing |
+| **Bundled Evaluator**   | `bundled_evaluator.go` | Generates the final Go code with embedded VintLang content     |
+| **Package Processor**   | `package_processor.go` | Handles package structure and wrapping for imported modules    |
 
 **Flow**: Bundle Controller → Dependency Analyzer → String Processor → Bundled Evaluator → Go Compiler
 
@@ -2617,14 +2618,14 @@ The bundler is built with several specialized components:
 
 The bundler has significantly evolved from the simple design originally described:
 
-| Original Design | Current Implementation |
-|----------------|----------------------|
-| ✅ Single file bundling | ✅ Multi-file project support with dependency resolution |
-| ✅ Simple string embedding | ✅ Advanced AST parsing and code processing |
-| ❌ No import support | ✅ Full import/include statement handling |
-| ❌ No package system | ✅ Package wrapping and module resolution |
-| ❌ Manual dependency management | ✅ Automatic recursive dependency discovery |
-| ✅ Basic Go template | ✅ Sophisticated string processing and escaping |
+| Original Design                 | Current Implementation                                   |
+| ------------------------------- | -------------------------------------------------------- |
+| ✅ Single file bundling         | ✅ Multi-file project support with dependency resolution |
+| ✅ Simple string embedding      | ✅ Advanced AST parsing and code processing              |
+| ❌ No import support            | ✅ Full import/include statement handling                |
+| ❌ No package system            | ✅ Package wrapping and module resolution                |
+| ❌ Manual dependency management | ✅ Automatic recursive dependency discovery              |
+| ✅ Basic Go template            | ✅ Sophisticated string processing and escaping          |
 
 The current implementation handles complex multi-file projects automatically while maintaining the same simple command-line interface.
 
@@ -2641,7 +2642,7 @@ include "config.vint"
 print("App:", appName)
 print("Result:", math_utils.add(5, 3))
 
-// math_utils.vint  
+// math_utils.vint
 package math_utils {
     let add = func(a, b) { return a + b }
 }
@@ -2755,7 +2756,7 @@ vint bundle yourfile.vint
 
 Build once. Run anywhere. No dependencies. No interpreter. Just execution.
 
-```
+````
 
 ## cli.md
 
@@ -2773,12 +2774,12 @@ Returns an array of all command-line arguments passed to the script.
 
 **Usage:**
 
-```vint
+```js
 import cli
 
 let allArgs = cli.getArgs()
 println("All arguments:", allArgs)
-```
+````
 
 ### `getFlags()`
 
@@ -2786,7 +2787,7 @@ Parses command-line arguments and returns a dictionary of flags (arguments start
 
 **Usage:**
 
-```vint
+```js
 import cli
 
 // Command: vint my_script.vint --verbose --output "file.txt"
@@ -2801,7 +2802,7 @@ Returns an array of positional arguments (arguments that are not flags or their 
 
 **Usage:**
 
-```vint
+```js
 import cli
 
 // Command: vint my_script.vint my_file.txt --verbose
@@ -2818,7 +2819,7 @@ Gets the value of a named argument (flag). It supports both `--flag=value` and `
 
 **Usage:**
 
-```vint
+```js
 import cli
 
 // Command: vint my_script.vint --output="report.txt"
@@ -2834,7 +2835,7 @@ Checks if a named argument (flag) is present in the command-line arguments.
 
 **Usage:**
 
-```vint
+```js
 import cli
 
 // Command: vint my_script.vint --verbose
@@ -2849,7 +2850,7 @@ A more advanced argument parser that returns a dictionary containing parsed flag
 
 **Usage:**
 
-```vint
+```js
 import cli
 
 // Command: vint my_script.vint --input="data.csv" process
@@ -2871,7 +2872,7 @@ Displays a message to the user and waits for them to enter a line of text.
 
 **Usage:**
 
-```vint
+```js
 import cli
 
 let name = cli.prompt("Enter your name: ")
@@ -2886,7 +2887,7 @@ Asks the user a yes/no question and returns `true` for "yes" and `false` for "no
 
 **Usage:**
 
-```vint
+```js
 import cli
 
 if (cli.confirm("Are you sure you want to continue?")) {
@@ -2904,7 +2905,7 @@ Executes a shell command and returns its combined standard output and standard e
 
 **Usage:**t
 
-```vint
+```js
 import cli
 
 let files = cli.execCommand("ls -l")
@@ -2919,7 +2920,7 @@ Terminates the script with a given status code.
 
 **Usage:**
 
-```vint
+```js
 import cli
 
 if (error) {
@@ -2936,7 +2937,7 @@ Generates and prints a standard help message for a CLI application.
 
 **Usage:**
 
-```vint
+```js
 import cli
 
 cli.help("My Awesome App", "This app does awesome things.")
@@ -2951,13 +2952,13 @@ Prints version information for the CLI application.
 
 **Usage:**
 
-```vint
+```js
 import cli
 
 cli.version("My Awesome App", "1.0.0")
 ```
 
-```
+````
 
 ## clipboard.md
 
@@ -2974,7 +2975,7 @@ Writes text content to the system clipboard.
 **Parameters:**
 - `text` - The text to write to clipboard (string, integer, float, or boolean)
 
-**Returns:** 
+**Returns:**
 - `true` if successful
 - Error object if operation fails
 
@@ -3047,7 +3048,7 @@ print("Clipboard cleared")
 // Check all data after clear
 let emptyData = clipboard.all()
 print("Clipboard after clear:", emptyData)
-```
+````
 
 ### Writing Different Data Types
 
@@ -3119,7 +3120,7 @@ The clipboard module works across different platforms:
 - The module handles text content only; binary data is not supported
 - Error handling is important as clipboard operations can fail due to system restrictions or lack of permissions
 
-```
+````
 
 ## comments.md
 
@@ -3134,28 +3135,28 @@ Single-line comments are used to provide brief explanations or documentation for
 
 ```s
 // This line will be ignored by the vint interpreter
-```
+````
 
 In this example, the comment text "This line will be ignored by the vint interpreter" will be ignored by the interpreter, so it will not affect the behavior of the program.
 
 ## Multi-Line Comments
 
-Multi-line comments are used to provide more detailed explanations or documentation for multiple lines of code. To write a multi-line comment in vint, use a forward slash followed by an asterisk ( /*) to start the comment, and an asterisk followed by a forward slash (*/ ) to end the comment. Here's an example:
+Multi-line comments are used to provide more detailed explanations or documentation for multiple lines of code. To write a multi-line comment in vint, use a forward slash followed by an asterisk ( /_) to start the comment, and an asterisk followed by a forward slash (_/ ) to end the comment. Here's an example:
 
 ```s
 /*
 These lines
-Will 
-be 
+Will
+be
 ignored
 */
 ```
 
-In this example, all the lines between the /*and*/ symbols will be ignored by the vint interpreter, so they will not affect the behavior of the program.
+In this example, all the lines between the /_and_/ symbols will be ignored by the vint interpreter, so they will not affect the behavior of the program.
 
 By utilizing single-line and multi-line comments in vint, you can make your code more readable and easier to maintain for yourself and others who may need to work with your code in the future.
 
-```
+````
 
 ## const.md
 
@@ -3179,7 +3180,7 @@ print(PI)  // Output: 3.14159
 
 const GREETING = "Hello, Vint!"
 print(GREETING)  // Output: "Hello, Vint!"
-```
+````
 
 In the examples above, `PI` and `GREETING` are declared as constants and can be used throughout the program.
 
@@ -3190,11 +3191,11 @@ Once a constant is declared, its value cannot be changed. Attempting to reassign
 ### Example of an Invalid Reassignment
 
 ```js
-const MAX_CONNECTIONS = 5
-print(MAX_CONNECTIONS) // Output: 5
+const MAX_CONNECTIONS = 5;
+print(MAX_CONNECTIONS); // Output: 5
 
 // This will cause an error
-MAX_CONNECTIONS = 10 
+MAX_CONNECTIONS = 10;
 // Error: Cannot assign to constant 'MAX_CONNECTIONS'
 ```
 
@@ -3207,7 +3208,7 @@ This immutability ensures that critical values in your program remain constant, 
 2. **Use Uppercase for Global Constants:** It's a common convention to use `UPPER_SNAKE_CASE` for global constants to make them easily distinguishable from regular variables.
 
    ```js
-   const API_KEY = "your-secret-key"
+   const API_KEY = "your-secret-key";
    ```
 
 3. **Prefer `const` Over `let`:** Whenever possible, prefer `const` over `let` to make your code safer and more predictable. Only use `let` when you know a variable's value needs to change.
@@ -3221,11 +3222,11 @@ package Config {
     // Public constants (accessible from outside)
     const VERSION = "2.1.0"
     const MAX_USERS = 1000
-    
+
     // Private constants (internal use only)
     const _SECRET_KEY = "internal-key-abc123"
     const _DEBUG_MODE = true
-    
+
     let getPublicConfig = func() {
         return {
             "version": VERSION,
@@ -3239,19 +3240,19 @@ package Config {
 ### Package Constant Usage
 
 ```js
-import "Config"
+import "Config";
 
 // Accessing public constants
-print("App Version:", Config.VERSION)  // ✅ Works
-print("Max Users:", Config.MAX_USERS)  // ✅ Works
+print("App Version:", Config.VERSION); // ✅ Works
+print("Max Users:", Config.MAX_USERS); // ✅ Works
 
 // Attempting to access private constants
-print(Config._SECRET_KEY)  // ❌ Error: cannot access private property
+print(Config._SECRET_KEY); // ❌ Error: cannot access private property
 ```
 
 For more information about packages and access control, see the [Packages documentation](packages.md).
 
-```
+````
 
 ## crypto.md
 
@@ -3273,12 +3274,12 @@ Computes the MD5 hash of a string.
 
 **Usage:**
 
-```vint
+```js
 import crypto
 
 let hashed = crypto.hashMD5("hello world")
 println(hashed) // "5eb63bbbe01eeed093cb22bb8f5acdc3"
-```
+````
 
 ### `hashSHA256(data)`
 
@@ -3290,7 +3291,7 @@ Computes the SHA-256 hash of a string.
 
 **Usage:**
 
-```vint
+```js
 import crypto
 
 let hashed = crypto.hashSHA256("hello world")
@@ -3310,7 +3311,7 @@ Encrypts a string using AES (Advanced Encryption Standard).
 
 **Usage:**
 
-```vint
+```js
 import crypto
 
 let secret = "this is a secret message"
@@ -3331,7 +3332,7 @@ Decrypts an AES-encrypted hexadecimal string.
 
 **Usage:**
 
-```vint
+```js
 import crypto
 
 let key = "a_16_byte_secret_key"
@@ -3353,7 +3354,7 @@ Generates an RSA key pair with the specified bit size.
 
 **Usage:**
 
-```vint
+```js
 import crypto
 
 // Generate 2048-bit RSA key pair (default)
@@ -3377,7 +3378,7 @@ Encrypts data using RSA public key encryption.
 
 **Usage:**
 
-```vint
+```js
 import crypto
 
 let keys = crypto.generateRSA(2048)
@@ -3398,7 +3399,7 @@ Decrypts data using RSA private key decryption.
 
 **Usage:**
 
-```vint
+```js
 import crypto
 
 let keys = crypto.generateRSA(2048)
@@ -3421,7 +3422,7 @@ Creates a digital signature using RSA private key and SHA-256 hashing.
 
 **Usage:**
 
-```vint
+```js
 import crypto
 
 let keys = crypto.generateRSA(2048)
@@ -3443,7 +3444,7 @@ Verifies a digital signature using RSA public key and SHA-256 hashing.
 
 **Usage:**
 
-```vint
+```js
 import crypto
 
 let keys = crypto.generateRSA(2048)
@@ -3459,7 +3460,7 @@ println("Tampered signature valid:", isTampered) // false
 
 ## Complete Example
 
-```vint
+```js
 import crypto
 
 // Generate RSA key pair
@@ -3490,7 +3491,7 @@ println("SHA256:", crypto.hashSHA256(message))
 - **Digital Signatures**: Always verify signatures before trusting signed data.
 - **MD5**: Consider deprecated for security-critical applications. Use SHA-256 or stronger hash functions instead.
 
-```
+````
 
 ## csv.md
 
@@ -3511,9 +3512,9 @@ Reads a CSV file and returns its contents as an array of arrays.
 // bob,25
 
 data = csv.read("data.csv")
-print(data) 
+print(data)
 // Outputs: [["name", "age"], ["alice", "30"], ["bob", "25"]]
-```
+````
 
 ### `csv.write(filePath, data)`
 
@@ -3521,16 +3522,16 @@ Writes a 2D array to a CSV file. The `data` argument must be an array of arrays,
 
 ```js
 users = [
-    ["name", "email"],
-    ["John Doe", "john.doe@example.com"],
-    ["Jane Smith", "jane.smith@example.com"]
-]
+  ["name", "email"],
+  ["John Doe", "john.doe@example.com"],
+  ["Jane Smith", "jane.smith@example.com"],
+];
 
-csv.write("users.csv", users)
+csv.write("users.csv", users);
 // This will create 'users.csv' with the provided data.
 ```
 
-```
+````
 
 ## datetime.md
 
@@ -3543,7 +3544,7 @@ The `datetime` module provides comprehensive date and time manipulation capabili
 
 ```js
 import datetime
-```
+````
 
 ## Basic Functions
 
@@ -3552,11 +3553,11 @@ import datetime
 Get the current date and time, optionally in a specific timezone.
 
 ```js
-let current = datetime.now()
-print(current)  // 10:15:32 26-09-2025
+let current = datetime.now();
+print(current); // 10:15:32 26-09-2025
 
-let ny_time = datetime.now("America/New_York") 
-print(ny_time)  // 06:15:32 26-09-2025
+let ny_time = datetime.now("America/New_York");
+print(ny_time); // 06:15:32 26-09-2025
 ```
 
 ### `datetime.utcNow()`
@@ -3564,8 +3565,8 @@ print(ny_time)  // 06:15:32 26-09-2025
 Get the current UTC time.
 
 ```js
-let utc = datetime.utcNow()
-print(utc)  // 10:15:32 26-09-2025
+let utc = datetime.utcNow();
+print(utc); // 10:15:32 26-09-2025
 ```
 
 ### `datetime.parse(datetime_string, [format], [timezone])`
@@ -3573,10 +3574,14 @@ print(utc)  // 10:15:32 26-09-2025
 Parse a datetime string into a Time object.
 
 ```js
-let parsed = datetime.parse("2024-12-25 15:30:00", "2006-01-02 15:04:05")
-print(parsed)  // 15:30:00 25-12-2024
+let parsed = datetime.parse("2024-12-25 15:30:00", "2006-01-02 15:04:05");
+print(parsed); // 15:30:00 25-12-2024
 
-let with_tz = datetime.parse("2024-01-01 00:00:00", "2006-01-02 15:04:05", "America/New_York")
+let with_tz = datetime.parse(
+  "2024-01-01 00:00:00",
+  "2006-01-02 15:04:05",
+  "America/New_York"
+);
 ```
 
 ### `datetime.fromTimestamp(timestamp, [timezone])`
@@ -3584,8 +3589,8 @@ let with_tz = datetime.parse("2024-01-01 00:00:00", "2006-01-02 15:04:05", "Amer
 Create a Time object from a Unix timestamp.
 
 ```js
-let time_from_ts = datetime.fromTimestamp(1704063000)
-print(time_from_ts)  // Unix timestamp converted to local time
+let time_from_ts = datetime.fromTimestamp(1704063000);
+print(time_from_ts); // Unix timestamp converted to local time
 ```
 
 ## Duration Functions
@@ -3596,10 +3601,16 @@ Create a Duration object from a string or keyword arguments.
 
 ```js
 // From string
-let dur1 = datetime.duration("2h30m15s")
+let dur1 = datetime.duration("2h30m15s");
 
 // From keyword arguments
-let dur2 = datetime.duration(hours=2, minutes=30, seconds=15, days=1, weeks=1)
+let dur2 = datetime.duration(
+  (hours = 2),
+  (minutes = 30),
+  (seconds = 15),
+  (days = 1),
+  (weeks = 1)
+);
 
 // Supported units: nanoseconds, microseconds, milliseconds, seconds, minutes, hours, days, weeks
 ```
@@ -3609,9 +3620,9 @@ let dur2 = datetime.duration(hours=2, minutes=30, seconds=15, days=1, weeks=1)
 Sleep for a specified duration.
 
 ```js
-datetime.sleep(datetime.duration("2s"))  // Sleep for 2 seconds
-datetime.sleep(5)  // Sleep for 5 seconds (integer)
-datetime.sleep("1m30s")  // Sleep for 1 minute 30 seconds (string)
+datetime.sleep(datetime.duration("2s")); // Sleep for 2 seconds
+datetime.sleep(5); // Sleep for 5 seconds (integer)
+datetime.sleep("1m30s"); // Sleep for 1 minute 30 seconds (string)
 ```
 
 ## Time Utility Functions
@@ -3621,9 +3632,9 @@ datetime.sleep("1m30s")  // Sleep for 1 minute 30 seconds (string)
 Get the duration since a specific time.
 
 ```js
-let past_time = datetime.parse("2024-01-01 00:00:00", "2006-01-02 15:04:05")
-let duration_since = datetime.since(past_time)
-print(duration_since)  // Duration since Jan 1, 2024
+let past_time = datetime.parse("2024-01-01 00:00:00", "2006-01-02 15:04:05");
+let duration_since = datetime.since(past_time);
+print(duration_since); // Duration since Jan 1, 2024
 ```
 
 ### `datetime.until(time)`
@@ -3631,9 +3642,9 @@ print(duration_since)  // Duration since Jan 1, 2024
 Get the duration until a future time.
 
 ```js
-let future_time = datetime.parse("2025-12-31 23:59:59", "2006-01-02 15:04:05")
-let duration_until = datetime.until(future_time)
-print(duration_until)  // Duration until Dec 31, 2025
+let future_time = datetime.parse("2025-12-31 23:59:59", "2006-01-02 15:04:05");
+let duration_until = datetime.until(future_time);
+print(duration_until); // Duration until Dec 31, 2025
 ```
 
 ### `datetime.isLeapYear(year)`
@@ -3641,8 +3652,8 @@ print(duration_until)  // Duration until Dec 31, 2025
 Check if a year is a leap year.
 
 ```js
-print(datetime.isLeapYear(2024))  // true
-print(datetime.isLeapYear(2023))  // false
+print(datetime.isLeapYear(2024)); // true
+print(datetime.isLeapYear(2023)); // false
 ```
 
 ### `datetime.daysInMonth(year, month)`
@@ -3650,8 +3661,8 @@ print(datetime.isLeapYear(2023))  // false
 Get the number of days in a specific month.
 
 ```js
-print(datetime.daysInMonth(2024, 2))  // 29 (February in leap year)
-print(datetime.daysInMonth(2023, 2))  // 28 (February in regular year)
+print(datetime.daysInMonth(2024, 2)); // 29 (February in leap year)
+print(datetime.daysInMonth(2023, 2)); // 28 (February in regular year)
 ```
 
 ## Period Boundary Functions
@@ -3661,9 +3672,9 @@ print(datetime.daysInMonth(2023, 2))  // 28 (February in regular year)
 Get the start of the day (00:00:00) for a given time.
 
 ```js
-let current = datetime.now()
-let start = datetime.startOfDay(current)
-print(start)  // 00:00:00 26-09-2025
+let current = datetime.now();
+let start = datetime.startOfDay(current);
+print(start); // 00:00:00 26-09-2025
 ```
 
 ### `datetime.endOfDay(time)`
@@ -3671,9 +3682,9 @@ print(start)  // 00:00:00 26-09-2025
 Get the end of the day (23:59:59) for a given time.
 
 ```js
-let current = datetime.now()
-let end = datetime.endOfDay(current)
-print(end)  // 23:59:59 26-09-2025
+let current = datetime.now();
+let end = datetime.endOfDay(current);
+print(end); // 23:59:59 26-09-2025
 ```
 
 ### `datetime.startOfWeek(time)`
@@ -3681,7 +3692,7 @@ print(end)  // 23:59:59 26-09-2025
 Get the start of the week (Sunday 00:00:00) for a given time.
 
 ```js
-let start_week = datetime.startOfWeek(datetime.now())
+let start_week = datetime.startOfWeek(datetime.now());
 ```
 
 ### `datetime.endOfWeek(time)`
@@ -3689,7 +3700,7 @@ let start_week = datetime.startOfWeek(datetime.now())
 Get the end of the week (Saturday 23:59:59) for a given time.
 
 ```js
-let end_week = datetime.endOfWeek(datetime.now())
+let end_week = datetime.endOfWeek(datetime.now());
 ```
 
 ### `datetime.startOfMonth(time)`
@@ -3697,7 +3708,7 @@ let end_week = datetime.endOfWeek(datetime.now())
 Get the start of the month for a given time.
 
 ```js
-let start_month = datetime.startOfMonth(datetime.now())
+let start_month = datetime.startOfMonth(datetime.now());
 ```
 
 ### `datetime.endOfMonth(time)`
@@ -3705,7 +3716,7 @@ let start_month = datetime.startOfMonth(datetime.now())
 Get the end of the month for a given time.
 
 ```js
-let end_month = datetime.endOfMonth(datetime.now())
+let end_month = datetime.endOfMonth(datetime.now());
 ```
 
 ### `datetime.startOfYear(time)`
@@ -3713,7 +3724,7 @@ let end_month = datetime.endOfMonth(datetime.now())
 Get the start of the year for a given time.
 
 ```js
-let start_year = datetime.startOfYear(datetime.now())
+let start_year = datetime.startOfYear(datetime.now());
 ```
 
 ### `datetime.endOfYear(time)`
@@ -3721,7 +3732,7 @@ let start_year = datetime.startOfYear(datetime.now())
 Get the end of the year for a given time.
 
 ```js
-let end_year = datetime.endOfYear(datetime.now())
+let end_year = datetime.endOfYear(datetime.now());
 ```
 
 ## Time Object Methods
@@ -3731,81 +3742,81 @@ Time objects returned by datetime functions have many useful methods:
 ### Basic Properties
 
 ```js
-let time = datetime.now()
-print(time.year())      // 2025
-print(time.month())     // 9
-print(time.day())       // 26
-print(time.hour())      // 10
-print(time.minute())    // 15
-print(time.second())    // 32
-print(time.nanosecond()) // Nanosecond component
-print(time.weekday())   // "Friday"
-print(time.yearDay())   // Day of year (1-366)
+let time = datetime.now();
+print(time.year()); // 2025
+print(time.month()); // 9
+print(time.day()); // 26
+print(time.hour()); // 10
+print(time.minute()); // 15
+print(time.second()); // 32
+print(time.nanosecond()); // Nanosecond component
+print(time.weekday()); // "Friday"
+print(time.yearDay()); // Day of year (1-366)
 ```
 
 ### ISO Week
 
 ```js
-let iso = time.isoWeek()
-print(iso["year"])  // ISO week year
-print(iso["week"])  // ISO week number
+let iso = time.isoWeek();
+print(iso["year"]); // ISO week year
+print(iso["week"]); // ISO week number
 ```
 
 ### Time Arithmetic
 
 ```js
-let time = datetime.now()
-let duration = datetime.duration(hours=2, minutes=30)
+let time = datetime.now();
+let duration = datetime.duration((hours = 2), (minutes = 30));
 
 // Add/subtract durations
-let future = time.add(duration)
-let past = time.subtract(duration)
+let future = time.add(duration);
+let past = time.subtract(duration);
 
 // Add/subtract specific units
-let tomorrow = time.add(days=1)
-let last_week = time.subtract(weeks=1)
+let tomorrow = time.add((days = 1));
+let last_week = time.subtract((weeks = 1));
 ```
 
 ### Time Comparisons
 
 ```js
-let time1 = datetime.now()
-let time2 = datetime.parse("2025-01-01 00:00:00", "2006-01-02 15:04:05")
+let time1 = datetime.now();
+let time2 = datetime.parse("2025-01-01 00:00:00", "2006-01-02 15:04:05");
 
-print(time1.before(time2))  // true/false
-print(time1.after(time2))   // true/false
-print(time1.equal(time2))   // true/false
-print(time1.compare(time2)) // -1, 0, or 1
+print(time1.before(time2)); // true/false
+print(time1.after(time2)); // true/false
+print(time1.equal(time2)); // true/false
+print(time1.compare(time2)); // -1, 0, or 1
 ```
 
 ### Timezone Operations
 
 ```js
-let time = datetime.now()
+let time = datetime.now();
 
 // Get current timezone
-print(time.timezone())  // "UTC" or local timezone name
+print(time.timezone()); // "UTC" or local timezone name
 
 // Convert to specific timezone
-let ny_time = time.timezone("America/New_York")
-let utc_time = time.utc()
-let local_time = time.local()
+let ny_time = time.timezone("America/New_York");
+let utc_time = time.utc();
+let local_time = time.local();
 ```
 
 ### Other Methods
 
 ```js
-let time = datetime.now()
+let time = datetime.now();
 
 // Get Unix timestamp
-print(time.timestamp())  // Unix timestamp as integer
+print(time.timestamp()); // Unix timestamp as integer
 
 // Format the time
-print(time.format("2006-01-02 15:04:05"))  // Custom formatting
+print(time.format("2006-01-02 15:04:05")); // Custom formatting
 
 // Truncate/round to duration
-let truncated = time.truncate("1h")  // Truncate to hour boundary
-let rounded = time.round("15m")      // Round to nearest 15 minutes
+let truncated = time.truncate("1h"); // Truncate to hour boundary
+let rounded = time.round("15m"); // Round to nearest 15 minutes
 ```
 
 ## Duration Object Methods
@@ -3813,27 +3824,27 @@ let rounded = time.round("15m")      // Round to nearest 15 minutes
 Duration objects have methods for accessing different time units:
 
 ```js
-let duration = datetime.duration(hours=2, minutes=30, seconds=15)
+let duration = datetime.duration((hours = 2), (minutes = 30), (seconds = 15));
 
-print(duration.hours())        // 2.5041666666666664
-print(duration.minutes())      // 150.25
-print(duration.seconds())      // 9015
-print(duration.milliseconds()) // 9015000
-print(duration.nanoseconds())  // 9015000000000
-print(duration.string())       // "2h30m15s"
+print(duration.hours()); // 2.5041666666666664
+print(duration.minutes()); // 150.25
+print(duration.seconds()); // 9015
+print(duration.milliseconds()); // 9015000
+print(duration.nanoseconds()); // 9015000000000
+print(duration.string()); // "2h30m15s"
 ```
 
 ### Duration Arithmetic
 
 ```js
-let dur1 = datetime.duration("1h")
-let dur2 = datetime.duration("30m")
+let dur1 = datetime.duration("1h");
+let dur2 = datetime.duration("30m");
 
-let sum = dur1.add(dur2)          // 1h30m
-let diff = dur1.subtract(dur2)    // 30m
-let product = dur1.multiply(2)    // 2h
-let quotient = dur1.divide(2)     // 30m
-let ratio = dur1.divide(dur2)     // 2.0 (ratio as float)
+let sum = dur1.add(dur2); // 1h30m
+let diff = dur1.subtract(dur2); // 30m
+let product = dur1.multiply(2); // 2h
+let quotient = dur1.divide(2); // 30m
+let ratio = dur1.divide(dur2); // 2.0 (ratio as float)
 ```
 
 ## Timezone Support
@@ -3857,13 +3868,13 @@ Common timezone identifiers include:
 
 ```js
 // Current time in different timezones
-let utc = datetime.now("UTC")
-let ny = datetime.now("America/New_York")
-let tokyo = datetime.now("Asia/Tokyo")
+let utc = datetime.now("UTC");
+let ny = datetime.now("America/New_York");
+let tokyo = datetime.now("Asia/Tokyo");
 
 // Convert between timezones
-let local_time = datetime.now()
-let ny_time = local_time.timezone("America/New_York")
+let local_time = datetime.now();
+let ny_time = local_time.timezone("America/New_York");
 ```
 
 ## Practical Examples
@@ -3890,7 +3901,7 @@ let schedule_meeting = func(date_str, duration_str, timezone) {
     let start_time = datetime.parse(date_str, "2006-01-02 15:04:05", timezone)
     let duration = datetime.duration(duration_str)
     let end_time = start_time.add(duration)
-    
+
     print("Meeting scheduled:")
     print("Start:", start_time.format("2006-01-02 15:04:05 MST"))
     print("End:", end_time.format("2006-01-02 15:04:05 MST"))
@@ -3906,12 +3917,12 @@ schedule_meeting("2024-12-25 14:00:00", "1h30m", "America/New_York")
 let time_until_event = func(event_date_str) {
     let event = datetime.parse(event_date_str, "2006-01-02 15:04:05")
     let now = datetime.now()
-    
+
     if (now.after(event)) {
         print("Event has already passed!")
         return
     }
-    
+
     let duration = datetime.until(event)
     let days = duration.hours() / 24
     print("Time until event:", days.floor(), "days")
@@ -3932,7 +3943,7 @@ import datetime
 let time_now = time.now()
 print("Time module:", time_now)
 
-// Enhanced datetime module  
+// Enhanced datetime module
 let datetime_now = datetime.now()
 print("DateTime module:", datetime_now)
 
@@ -3943,7 +3954,7 @@ let parsed = datetime.parse(formatted, "2006-01-02 15:04:05")
 
 The datetime module provides all the functionality of the time module and much more, making it the recommended choice for complex date and time operations.
 
-```
+````
 
 ## debug.md
 
@@ -3956,7 +3967,7 @@ The `debug` keyword allows you to print debug messages at runtime for troublesho
 
 ```js
 debug "Your debug message here"
-```
+````
 
 When the Vint interpreter encounters a `debug` statement, it prints a magenta-colored debug message to the console and continues execution. This is useful for inspecting variable values or program flow during development.
 
@@ -3975,17 +3986,17 @@ Running this script will output:
 Done.
 ```
 
-```
+````
 
 ## declaratives.md
 
 ```markdown
 
-```
+````
 
 ## defer.md
 
-```markdown
+````markdown
 # Defer
 
 The `defer` keyword provides a convenient way to schedule a function call to be executed just before the surrounding function returns. This is particularly useful for cleanup tasks, such as closing files or releasing resources, ensuring that they are always executed, regardless of how the function exits.
@@ -3997,6 +4008,7 @@ The `defer` keyword is followed by a function call:
 ```js
 defer functionCall()
 ```
+````
 
 ## Example
 
@@ -4034,7 +4046,7 @@ another_function();
 
 This LIFO order is intuitive for managing resources. For example, if you acquire a resource and then lock it, you would want to unlock it first and then release it, which `defer` handles naturally.
 
-```
+````
 
 ## dictionaries.md
 
@@ -4043,7 +4055,7 @@ Here’s a detailed explanation of dictionaries in Vint, without the Swahili ter
 
 ### Dictionaries in Vint
 
-In the Vint programming language, dictionaries are key-value data structures that allow you to store and manage data efficiently. These dictionaries can store any type of value (such as strings, integers, booleans, or even functions) and are incredibly useful for organizing and accessing data. 
+In the Vint programming language, dictionaries are key-value data structures that allow you to store and manage data efficiently. These dictionaries can store any type of value (such as strings, integers, booleans, or even functions) and are incredibly useful for organizing and accessing data.
 
 ### Creating Dictionaries
 
@@ -4051,7 +4063,7 @@ In Vint, dictionaries are created using curly braces `{}`. Each key is followed 
 
 ```js
 dict = {"name": "John", "age": 30}
-```
+````
 
 In this dictionary:
 
@@ -4065,7 +4077,7 @@ Keys can be of various data types like strings, integers, floats, or booleans, a
 You can access individual elements in a dictionary by using the key. For example:
 
 ```js
-print(dict["name"]) // John
+print(dict["name"]); // John
 ```
 
 This will print `"John"`, the value associated with the key `"name"`.
@@ -4075,8 +4087,8 @@ This will print `"John"`, the value associated with the key `"name"`.
 To update the value of an existing key, simply assign a new value to the key:
 
 ```js
-dict["age"] = 35
-print(dict["age"]) // 35
+dict["age"] = 35;
+print(dict["age"]); // 35
 ```
 
 This updates the `"age"` key to have the value `35`.
@@ -4086,8 +4098,8 @@ This updates the `"age"` key to have the value `35`.
 To add a new key-value pair to a dictionary, assign a value to a new key:
 
 ```js
-dict["city"] = "Dar es Salaam"
-print(dict["city"]) // Dar es Salaam
+dict["city"] = "Dar es Salaam";
+print(dict["city"]); // Dar es Salaam
 ```
 
 This adds a new key `"city"` with the value `"Dar es Salaam"`.
@@ -4097,10 +4109,10 @@ This adds a new key `"city"` with the value `"Dar es Salaam"`.
 You can combine two dictionaries into one using the `+` operator:
 
 ```js
-dict1 = {"a": "apple", "b": "banana"}
-dict2 = {"c": "cherry", "d": "date"}
-combined = dict1 + dict2
-print(combined) // {"a": "apple", "b": "banana", "c": "cherry", "d": "date"}
+dict1 = { a: "apple", b: "banana" };
+dict2 = { c: "cherry", d: "date" };
+combined = dict1 + dict2;
+print(combined); // {"a": "apple", "b": "banana", "c": "cherry", "d": "date"}
 ```
 
 In this case, `dict1` and `dict2` are merged into a new dictionary called `combined`.
@@ -4110,8 +4122,8 @@ In this case, `dict1` and `dict2` are merged into a new dictionary called `combi
 To check if a particular key exists in a dictionary, you can use the `in` keyword:
 
 ```js
-"age" in dict // true
-"salary" in dict // false
+"age" in dict; // true
+"salary" in dict; // false
 ```
 
 This checks whether the key `"age"` exists in the dictionary, which returns `true`, and checks whether the key `"salary"` exists, which returns `false`.
@@ -4160,9 +4172,9 @@ Vint dictionaries come with several powerful built-in methods that make data man
 Get all keys from the dictionary as an array:
 
 ```js
-contacts = {"Alice": "alice@email.com", "Bob": "bob@email.com"}
-keyList = contacts.keys()
-print(keyList)  // ["Alice", "Bob"]
+contacts = { Alice: "alice@email.com", Bob: "bob@email.com" };
+keyList = contacts.keys();
+print(keyList); // ["Alice", "Bob"]
 ```
 
 ### values()
@@ -4170,9 +4182,9 @@ print(keyList)  // ["Alice", "Bob"]
 Get all values from the dictionary as an array:
 
 ```js
-contacts = {"Alice": "alice@email.com", "Bob": "bob@email.com"}
-valueList = contacts.values()
-print(valueList)  // ["alice@email.com", "bob@email.com"]
+contacts = { Alice: "alice@email.com", Bob: "bob@email.com" };
+valueList = contacts.values();
+print(valueList); // ["alice@email.com", "bob@email.com"]
 ```
 
 ### size()
@@ -4180,8 +4192,8 @@ print(valueList)  // ["alice@email.com", "bob@email.com"]
 Get the number of key-value pairs in the dictionary:
 
 ```js
-contacts = {"Alice": "alice@email.com", "Bob": "bob@email.com"}
-print(contacts.size())  // 2
+contacts = { Alice: "alice@email.com", Bob: "bob@email.com" };
+print(contacts.size()); // 2
 ```
 
 ### has()
@@ -4189,9 +4201,9 @@ print(contacts.size())  // 2
 Check if a key exists in the dictionary:
 
 ```js
-contacts = {"Alice": "alice@email.com", "Bob": "bob@email.com"}
-print(contacts.has("Alice"))   // true
-print(contacts.has("Charlie")) // false
+contacts = { Alice: "alice@email.com", Bob: "bob@email.com" };
+print(contacts.has("Alice")); // true
+print(contacts.has("Charlie")); // false
 ```
 
 ### get()
@@ -4199,11 +4211,11 @@ print(contacts.has("Charlie")) // false
 Get a value by key with an optional default value:
 
 ```js
-contacts = {"Alice": "alice@email.com", "Bob": "bob@email.com"}
-email = contacts.get("Alice", "unknown")        // "alice@email.com"
-unknownEmail = contacts.get("Charlie", "unknown") // "unknown"
-print(email)        // alice@email.com
-print(unknownEmail) // unknown
+contacts = { Alice: "alice@email.com", Bob: "bob@email.com" };
+email = contacts.get("Alice", "unknown"); // "alice@email.com"
+unknownEmail = contacts.get("Charlie", "unknown"); // "unknown"
+print(email); // alice@email.com
+print(unknownEmail); // unknown
 ```
 
 ### set()
@@ -4211,12 +4223,12 @@ print(unknownEmail) // unknown
 Set a key-value pair in the dictionary:
 
 ```js
-contacts = {"Alice": "alice@email.com"}
-contacts.set("Bob", "bob@email.com")
-print(contacts)  // {"Alice": "alice@email.com", "Bob": "bob@email.com"}
+contacts = { Alice: "alice@email.com" };
+contacts.set("Bob", "bob@email.com");
+print(contacts); // {"Alice": "alice@email.com", "Bob": "bob@email.com"}
 
 // Method chaining is supported
-contacts.set("Charlie", "charlie@email.com").set("Dave", "dave@email.com")
+contacts.set("Charlie", "charlie@email.com").set("Dave", "dave@email.com");
 ```
 
 ### remove()
@@ -4224,9 +4236,9 @@ contacts.set("Charlie", "charlie@email.com").set("Dave", "dave@email.com")
 Remove a key-value pair from the dictionary:
 
 ```js
-contacts = {"Alice": "alice@email.com", "Bob": "bob@email.com"}
-contacts.remove("Bob")
-print(contacts)  // {"Alice": "alice@email.com"}
+contacts = { Alice: "alice@email.com", Bob: "bob@email.com" };
+contacts.remove("Bob");
+print(contacts); // {"Alice": "alice@email.com"}
 ```
 
 ### clear()
@@ -4234,9 +4246,9 @@ print(contacts)  // {"Alice": "alice@email.com"}
 Remove all key-value pairs from the dictionary:
 
 ```js
-contacts = {"Alice": "alice@email.com", "Bob": "bob@email.com"}
-contacts.clear()
-print(contacts)  // {}
+contacts = { Alice: "alice@email.com", Bob: "bob@email.com" };
+contacts.clear();
+print(contacts); // {}
 ```
 
 ### merge()
@@ -4244,10 +4256,10 @@ print(contacts)  // {}
 Merge another dictionary into this one:
 
 ```js
-contacts = {"Alice": "alice@email.com"}
-newContacts = {"Bob": "bob@email.com", "Charlie": "charlie@email.com"}
-contacts.merge(newContacts)
-print(contacts)  // {"Alice": "alice@email.com", "Bob": "bob@email.com", "Charlie": "charlie@email.com"}
+contacts = { Alice: "alice@email.com" };
+newContacts = { Bob: "bob@email.com", Charlie: "charlie@email.com" };
+contacts.merge(newContacts);
+print(contacts); // {"Alice": "alice@email.com", "Bob": "bob@email.com", "Charlie": "charlie@email.com"}
 ```
 
 ### copy()
@@ -4255,11 +4267,11 @@ print(contacts)  // {"Alice": "alice@email.com", "Bob": "bob@email.com", "Charli
 Create a shallow copy of the dictionary:
 
 ```js
-original = {"Alice": "alice@email.com", "Bob": "bob@email.com"}
-backup = original.copy()
-backup.set("Charlie", "charlie@email.com")
-print(original)  // {"Alice": "alice@email.com", "Bob": "bob@email.com"}
-print(backup)    // {"Alice": "alice@email.com", "Bob": "bob@email.com", "Charlie": "charlie@email.com"}
+original = { Alice: "alice@email.com", Bob: "bob@email.com" };
+backup = original.copy();
+backup.set("Charlie", "charlie@email.com");
+print(original); // {"Alice": "alice@email.com", "Bob": "bob@email.com"}
+print(backup); // {"Alice": "alice@email.com", "Bob": "bob@email.com", "Charlie": "charlie@email.com"}
 ```
 
 ### filter()
@@ -4288,8 +4300,8 @@ Execute a function for each key-value pair:
 
 ```js
 contacts = {"Alice": "alice@email.com", "Bob": "bob@email.com"}
-contacts.forEach(func(key, value) { 
-    print("Name:", key, "Email:", value) 
+contacts.forEach(func(key, value) {
+    print("Name:", key, "Email:", value)
 })
 // Output:
 // Name: Alice Email: alice@email.com
@@ -4331,9 +4343,9 @@ print(allPassed)  // true
 Create a new dictionary with only specified keys:
 
 ```js
-user = {"name": "Alice", "age": 25, "email": "alice@email.com", "password": "secret"}
-publicInfo = user.pick("name", "age", "email")
-print(publicInfo)  // {"name": "Alice", "age": 25, "email": "alice@email.com"}
+user = { name: "Alice", age: 25, email: "alice@email.com", password: "secret" };
+publicInfo = user.pick("name", "age", "email");
+print(publicInfo); // {"name": "Alice", "age": 25, "email": "alice@email.com"}
 ```
 
 ### omit()
@@ -4341,9 +4353,9 @@ print(publicInfo)  // {"name": "Alice", "age": 25, "email": "alice@email.com"}
 Create a new dictionary excluding specified keys:
 
 ```js
-user = {"name": "Alice", "age": 25, "email": "alice@email.com", "password": "secret"}
-safeInfo = user.omit("password")
-print(safeInfo)  // {"name": "Alice", "age": 25, "email": "alice@email.com"}
+user = { name: "Alice", age: 25, email: "alice@email.com", password: "secret" };
+safeInfo = user.omit("password");
+print(safeInfo); // {"name": "Alice", "age": 25, "email": "alice@email.com"}
 ```
 
 ### isEmpty()
@@ -4351,10 +4363,10 @@ print(safeInfo)  // {"name": "Alice", "age": 25, "email": "alice@email.com"}
 Check if the dictionary is empty:
 
 ```js
-emptyDict = {}
-filledDict = {"key": "value"}
-print(emptyDict.isEmpty())   // true
-print(filledDict.isEmpty())  // false
+emptyDict = {};
+filledDict = { key: "value" };
+print(emptyDict.isEmpty()); // true
+print(filledDict.isEmpty()); // false
 ```
 
 ### equals()
@@ -4362,11 +4374,11 @@ print(filledDict.isEmpty())  // false
 Check if two dictionaries are equal:
 
 ```js
-dict1 = {"name": "Alice", "age": 25}
-dict2 = {"name": "Alice", "age": 25}
-dict3 = {"name": "Bob", "age": 30}
-print(dict1.equals(dict2))   // true
-print(dict1.equals(dict3))   // false
+dict1 = { name: "Alice", age: 25 };
+dict2 = { name: "Alice", age: 25 };
+dict3 = { name: "Bob", age: 30 };
+print(dict1.equals(dict2)); // true
+print(dict1.equals(dict3)); // false
 ```
 
 ### entries()
@@ -4374,9 +4386,9 @@ print(dict1.equals(dict3))   // false
 Get an array of [key, value] pairs:
 
 ```js
-contacts = {"Alice": "alice@email.com", "Bob": "bob@email.com"}
-entryList = contacts.entries()
-print(entryList)  // [["Alice", "alice@email.com"], ["Bob", "bob@email.com"]]
+contacts = { Alice: "alice@email.com", Bob: "bob@email.com" };
+entryList = contacts.entries();
+print(entryList); // [["Alice", "alice@email.com"], ["Bob", "bob@email.com"]]
 ```
 
 ### flatten()
@@ -4385,11 +4397,11 @@ Flatten nested dictionaries (one level deep):
 
 ```js
 nested = {
-    "user": {"name": "Alice", "age": 25},
-    "status": "active"
-}
-flattened = nested.flatten()
-print(flattened)  // {"user.name": "Alice", "user.age": 25, "status": "active"}
+  user: { name: "Alice", age: 25 },
+  status: "active",
+};
+flattened = nested.flatten();
+print(flattened); // {"user.name": "Alice", "user.age": 25, "status": "active"}
 ```
 
 ### deepMerge()
@@ -4397,15 +4409,15 @@ print(flattened)  // {"user.name": "Alice", "user.age": 25, "status": "active"}
 Recursively merge dictionaries:
 
 ```js
-dict1 = {"user": {"name": "Alice"}, "status": "active"}
-dict2 = {"user": {"age": 25}, "role": "admin"}
-merged = dict1.deepMerge(dict2)
-print(merged)  // {"user": {"name": "Alice", "age": 25}, "status": "active", "role": "admin"}
+dict1 = { user: { name: "Alice" }, status: "active" };
+dict2 = { user: { age: 25 }, role: "admin" };
+merged = dict1.deepMerge(dict2);
+print(merged); // {"user": {"name": "Alice", "age": 25}, "status": "active", "role": "admin"}
 ```
 
 ## Practical Examples
 
-```
+````
 
 ## Advanced Dictionary Usage
 
@@ -4438,9 +4450,9 @@ config.set("database", "localhost")
       .set("port", 5432)
       .set("timeout", 30)
 print("Config:", config)
-```
+````
 
-```
+````
 
 ## docs.go
 
@@ -4451,11 +4463,11 @@ import "embed"
 
 //go:embed *
 var Docs embed.FS
-```
+````
 
 ## dotenv.md
 
-```markdown
+````markdown
 # dotenv Module in Vint
 
 The `dotenv` module in Vint is designed to load environment variables from a `.env` file into the application. This allows you to manage sensitive information such as API keys, database credentials, and other configuration values outside your codebase.
@@ -4469,6 +4481,7 @@ To use the `dotenv` module, import it as follows:
 ```js
 import dotenv
 ```
+````
 
 ---
 
@@ -4481,7 +4494,7 @@ The `load` function loads environment variables from a `.env` file into the appl
 **Syntax**:
 
 ```js
-load(filePath)
+load(filePath);
 ```
 
 - `filePath`: The path to the `.env` file (relative or absolute).
@@ -4505,7 +4518,7 @@ After loading the environment variables, you can access specific variables using
 **Syntax**:
 
 ```js
-get(variableName)
+get(variableName);
 ```
 
 - `variableName`: The name of the environment variable to retrieve.
@@ -4543,16 +4556,16 @@ In this case, you would retrieve the value of `API_KEY` as shown in the previous
 
 ## Summary of Functions
 
-| Function           | Description                                             | Example Output                             |
-|--------------------|---------------------------------------------------------|--------------------------------------------|
+| Function            | Description                                                 | Example Output                                          |
+| ------------------- | ----------------------------------------------------------- | ------------------------------------------------------- |
 | `load(filePath)`    | Loads environment variables from the specified `.env` file. | No direct output, but environment variables are loaded. |
-| `get(variableName)` | Retrieves the value of a specified environment variable.  | The value of the variable (e.g., `"your_api_key_here"`) |
+| `get(variableName)` | Retrieves the value of a specified environment variable.    | The value of the variable (e.g., `"your_api_key_here"`) |
 
 ---
 
 The `dotenv` module is an essential tool for securely managing configuration settings in Vint applications. By keeping sensitive data in a `.env` file, you avoid hardcoding secrets into your source code, thus improving security and maintainability.
 
-```
+````
 
 ## editor.md
 
@@ -4598,21 +4611,21 @@ print(editorContent)
 // Handle keypresses
 while (true) {
     let key = term.getKey()
-    
+
     // Handle special keys
     if (key == "q") {
         break // Exit the loop
     }
-    
+
     // Pass the key to the editor
     editor.handleKeypress(ed, key)
-    
+
     // Re-render the editor
     editorContent = editor.render(ed)
     term.clear()
     print(editorContent)
 }
-```
+````
 
 ## API Reference
 
@@ -4855,10 +4868,10 @@ while (true) {
     let content = editor.render(ed)
     term.clear()
     print(content)
-    
+
     // Get keypress
     let key = term.getKey()
-    
+
     // Check for exit key (Ctrl+Q)
     if (key == "Ctrl+Q") {
         // Check if there are unsaved changes
@@ -4871,7 +4884,7 @@ while (true) {
         }
         break
     }
-    
+
     // Check for save key (Ctrl+S)
     if (key == "Ctrl+S") {
         let filename = args["file"]
@@ -4880,11 +4893,11 @@ while (true) {
             filename = term.input()
             args["file"] = filename
         }
-        
+
         editor.save(ed, filename)
         continue
     }
-    
+
     // Handle the keypress in the editor
     editor.handleKeypress(ed, key)
 }
@@ -4921,7 +4934,7 @@ let loadConfig = func(filename) {
             }
         }
     }
-    
+
     let content = open(filename)
     return JSON.parse(content)
 }
@@ -4936,17 +4949,17 @@ let saveConfig = func(filename, config) {
 let editSection = func(section, data) {
     // Convert the section data to a string
     let text = JSON.stringify(data, null, 2)
-    
+
     // Create an editor
     let ed = editor.newEditor({
         width: term.getSize().width,
         height: term.getSize().height - 4,
         syntax: "json"
     })
-    
+
     // Set the text
     editor.setText(ed, text)
-    
+
     // Edit loop
     term.clear()
     while (true) {
@@ -4956,15 +4969,15 @@ let editSection = func(section, data) {
         term.println("Editing " + section + " configuration", "#ffcc00")
         term.println("Press Ctrl+S to save, Ctrl+Q to cancel", "#88ff88")
         print(content)
-        
+
         // Get keypress
         let key = term.getKey()
-        
+
         // Check for exit key (Ctrl+Q)
         if (key == "Ctrl+Q") {
             return null
         }
-        
+
         // Check for save key (Ctrl+S)
         if (key == "Ctrl+S") {
             let newText = editor.getText(ed)
@@ -4977,7 +4990,7 @@ let editSection = func(section, data) {
                 continue
             }
         }
-        
+
         // Handle the keypress in the editor
         editor.handleKeypress(ed, key)
     }
@@ -4987,7 +5000,7 @@ let editSection = func(section, data) {
 let main = func() {
     let configFile = "config.json"
     let config = loadConfig(configFile)
-    
+
     while (true) {
         // Display menu
         term.clear()
@@ -4999,9 +5012,9 @@ let main = func() {
         term.println("5. Exit", "#88ff88")
         term.println("===========================", "#ffcc00")
         term.print("Enter your choice: ")
-        
+
         let choice = term.input()
-        
+
         if (choice == "1") {
             let result = editSection("server", config.server)
             if (result) {
@@ -5026,7 +5039,7 @@ let main = func() {
             break
         }
     }
-    
+
     term.clear()
     term.println("Goodbye!", "#88ff88")
 }
@@ -5046,29 +5059,29 @@ import markdown
 let markdownToHtml = func(text) {
     // This is a simplified markdown converter
     let html = text
-    
+
     // Convert headers
     html = html.replace(/^# (.+)$/gm, "<h1>$1</h1>")
     html = html.replace(/^## (.+)$/gm, "<h2>$1</h2>")
     html = html.replace(/^### (.+)$/gm, "<h3>$1</h3>")
-    
+
     // Convert bold and italic
     html = html.replace(/\*\*(.+?)\*\*/g, "<strong>$1</strong>")
     html = html.replace(/\*(.+?)\*/g, "<em>$1</em>")
-    
+
     // Convert lists
     html = html.replace(/^- (.+)$/gm, "<li>$1</li>")
-    
+
     // Convert links
     html = html.replace(/\[(.+?)\]\((.+?)\)/g, "<a href=\"$2\">$1</a>")
-    
+
     return html
 }
 
 // Function to display a preview of the markdown
 let previewMarkdown = func(text) {
     let html = markdownToHtml(text)
-    
+
     // Display the HTML preview
     term.clear()
     term.println("=== Markdown Preview ===", "#ffcc00")
@@ -5085,9 +5098,9 @@ let main = func() {
         term.println("Usage: vint markdown_editor.vint <filename>", "#ff5555")
         exit(1)
     }
-    
+
     let filename = args[1]
-    
+
     // Create an editor
     let ed = editor.newEditor({
         filename: filename,
@@ -5095,7 +5108,7 @@ let main = func() {
         height: term.getSize().height - 2,
         syntax: "markdown"
     })
-    
+
     // Main loop
     term.clear()
     while (true) {
@@ -5105,10 +5118,10 @@ let main = func() {
         term.println("Markdown Editor - " + filename, "#ffcc00")
         term.println("Ctrl+S: Save | Ctrl+P: Preview | Ctrl+Q: Quit", "#88ff88")
         print(content)
-        
+
         // Get keypress
         let key = term.getKey()
-        
+
         // Check for exit key (Ctrl+Q)
         if (key == "Ctrl+Q") {
             if (editor.isModified(ed)) {
@@ -5120,24 +5133,24 @@ let main = func() {
             }
             break
         }
-        
+
         // Check for save key (Ctrl+S)
         if (key == "Ctrl+S") {
             editor.save(ed, filename)
             continue
         }
-        
+
         // Check for preview key (Ctrl+P)
         if (key == "Ctrl+P") {
             let text = editor.getText(ed)
             previewMarkdown(text)
             continue
         }
-        
+
         // Handle the keypress in the editor
         editor.handleKeypress(ed, key)
     }
-    
+
     term.clear()
     term.println("Goodbye!", "#88ff88")
 }
@@ -5145,7 +5158,7 @@ let main = func() {
 main()
 ```
 
-```
+````
 
 ## email.md
 
@@ -5161,7 +5174,7 @@ The Email module in Vint provides email validation and processing functions. Thi
 To use the Email module, simply import it:
 ```js
 import email
-```
+````
 
 ---
 
@@ -5174,7 +5187,7 @@ The `validate` function checks if a given string is a valid email address format
 **Syntax**:
 
 ```js
-validate(emailAddress)
+validate(emailAddress);
 ```
 
 **Example**:
@@ -5221,7 +5234,7 @@ The `extractDomain` function extracts the domain part from an email address.
 **Syntax**:
 
 ```js
-extractDomain(emailAddress)
+extractDomain(emailAddress);
 ```
 
 **Example**:
@@ -5246,7 +5259,7 @@ The `extractUsername` function extracts the username part (before @) from an ema
 **Syntax**:
 
 ```js
-extractUsername(emailAddress)
+extractUsername(emailAddress);
 ```
 
 **Example**:
@@ -5271,7 +5284,7 @@ The `normalize` function converts an email address to lowercase and trims whites
 **Syntax**:
 
 ```js
-normalize(emailAddress)
+normalize(emailAddress);
 ```
 
 **Example**:
@@ -5308,23 +5321,23 @@ email_list = [
 print("Processing email addresses:")
 for email_addr in email_list {
     print("\n--- Processing: " + email_addr + " ---")
-    
+
     // Normalize the email first
     normalized = email.normalize(email_addr)
     print("Normalized: " + normalized)
-    
+
     // Validate the email
     is_valid = email.validate(normalized)
     print("Valid: " + string(is_valid))
-    
+
     if is_valid {
         // Extract components
         username = email.extractUsername(normalized)
         domain = email.extractDomain(normalized)
-        
+
         print("Username: " + username)
         print("Domain: " + domain)
-        
+
         // Example: Check for specific domains
         if domain == "company.com" {
             print("✓ Corporate email detected")
@@ -5370,7 +5383,7 @@ domain_count = {}
 for email_addr in emails {
     if email.validate(email_addr) {
         domain = email.extractDomain(email_addr)
-        
+
         if domain in domain_count {
             domain_count[domain] = domain_count[domain] + 1
         } else {
@@ -5389,16 +5402,16 @@ for domain, count in domain_count {
 
 ## Summary of Functions
 
-| Function           | Description                                    | Return Type |
-|--------------------|------------------------------------------------|-------------|
-| `validate`         | Validates email address format                 | Boolean     |
-| `extractDomain`    | Extracts domain part from email               | String      |
-| `extractUsername`  | Extracts username part from email             | String      |
-| `normalize`        | Normalizes email to lowercase and trims       | String      |
+| Function          | Description                             | Return Type |
+| ----------------- | --------------------------------------- | ----------- |
+| `validate`        | Validates email address format          | Boolean     |
+| `extractDomain`   | Extracts domain part from email         | String      |
+| `extractUsername` | Extracts username part from email       | String      |
+| `normalize`       | Normalizes email to lowercase and trims | String      |
 
 The Email module provides essential functionality for working with email addresses safely and efficiently in VintLang applications.
 
-```
+````
 
 ## encoding.md
 
@@ -5415,7 +5428,7 @@ To use the `encoding` module, import it as follows:
 
 ```js
 import encoding
-```
+````
 
 ---
 
@@ -5428,7 +5441,7 @@ The `base64Encode` function encodes a string into Base64 format. Base64 encoding
 **Syntax**:
 
 ```js
-base64Encode(inputString)
+base64Encode(inputString);
 ```
 
 - `inputString`: The string you want to encode.
@@ -5453,7 +5466,7 @@ The `base64Decode` function decodes a Base64-encoded string back into its origin
 **Syntax**:
 
 ```js
-base64Decode(encodedString)
+base64Decode(encodedString);
 ```
 
 - `encodedString`: The Base64-encoded string that you want to decode.
@@ -5476,16 +5489,16 @@ In this example, the Base64-encoded string is decoded back to its original value
 
 ## Summary of Functions
 
-| Function               | Description                                        | Example Output                             |
-|------------------------|----------------------------------------------------|--------------------------------------------|
-| `base64Encode(input)`   | Encodes a string to Base64 format.                 | `"SGVsbG8sIFdvcmxkIQ=="`                   |
-| `base64Decode(encoded)` | Decodes a Base64-encoded string back to its original form. | `"Hello, World!"`                           |
+| Function                | Description                                                | Example Output           |
+| ----------------------- | ---------------------------------------------------------- | ------------------------ |
+| `base64Encode(input)`   | Encodes a string to Base64 format.                         | `"SGVsbG8sIFdvcmxkIQ=="` |
+| `base64Decode(encoded)` | Decodes a Base64-encoded string back to its original form. | `"Hello, World!"`        |
 
 ---
 
 The `encoding` module in Vint is essential for working with different encoding schemes such as Base64. It simplifies the process of converting data between text and binary formats, making it easier to handle data transmission or storage in encoded formats.
 
-```
+````
 
 ## enhanced-errors.md
 
@@ -5511,7 +5524,7 @@ func ErrorMessage(module, function, expected, received, usage string) *object.Er
         ),
     }
 }
-```
+````
 
 ## What Was Enhanced
 
@@ -5700,7 +5713,7 @@ if len(args) != expectedCount {
 
 if args[0].Type() != expectedType {
     return ErrorMessage(
-        "moduleName", "functionName", 
+        "moduleName", "functionName",
         "description of expected type",
         string(args[0].Type()),
         "usage.example() -> expected output",
@@ -5720,7 +5733,7 @@ The ErrorMessage system enables future improvements:
 
 This enhanced error system represents a significant improvement in Vint's developer experience, making the language more approachable and professional.
 
-```
+````
 
 ## error.md
 
@@ -5743,7 +5756,7 @@ if !fs.exists(file_path) {
     error "Critical file 'data.json' not found."
 }
 println("This will not be printed if the file is missing.")
-```
+````
 
 If `data.json` does not exist, running this script will output:
 
@@ -5753,7 +5766,7 @@ Error: Critical file 'data.json' not found.
 
 And the script will stop.
 
-```
+````
 
 ## errors.md
 
@@ -5777,9 +5790,9 @@ import "errors"
 
 errors.new("something went wrong")
 # The script will stop here and print the error message
-```
+````
 
-```
+````
 
 ## files.md
 
@@ -5798,14 +5811,14 @@ You can open a file using the `open` keyword. This will return an object of type
 
 ```js
 fileObject = open("filename.txt")
-```
+````
 
 ### Example
 
 ```js
-myFile = open("file.txt")
+myFile = open("file.txt");
 
-aina(myFile) // Output: FAILI
+aina(myFile); // Output: FAILI
 ```
 
 ---
@@ -5819,9 +5832,9 @@ File objects in Vint come with powerful built-in methods for comprehensive file 
 Read the entire contents of a file as a string:
 
 ```js
-myFile = open("example.txt")
-contents = myFile.read()
-print(contents)
+myFile = open("example.txt");
+contents = myFile.read();
+print(contents);
 ```
 
 ### write()
@@ -5829,8 +5842,8 @@ print(contents)
 Write content to a file (overwrites existing content):
 
 ```js
-myFile = open("output.txt")
-myFile.write("Hello, World!")
+myFile = open("output.txt");
+myFile.write("Hello, World!");
 ```
 
 ### append()
@@ -5838,8 +5851,8 @@ myFile.write("Hello, World!")
 Append content to the end of a file:
 
 ```js
-logFile = open("app.log")
-logFile.append("New log entry\n")
+logFile = open("app.log");
+logFile.append("New log entry\n");
 ```
 
 ### exists()
@@ -5847,11 +5860,11 @@ logFile.append("New log entry\n")
 Check if the file exists:
 
 ```js
-myFile = open("config.txt")
+myFile = open("config.txt");
 if (myFile.exists()) {
-    print("File exists!")
+  print("File exists!");
 } else {
-    print("File not found!")
+  print("File not found!");
 }
 ```
 
@@ -5860,9 +5873,9 @@ if (myFile.exists()) {
 Get the size of the file in bytes:
 
 ```js
-myFile = open("data.txt")
-fileSize = myFile.size()
-print("File size:", fileSize, "bytes")
+myFile = open("data.txt");
+fileSize = myFile.size();
+print("File size:", fileSize, "bytes");
 ```
 
 ### delete()
@@ -5870,10 +5883,10 @@ print("File size:", fileSize, "bytes")
 Delete the file from the filesystem:
 
 ```js
-tempFile = open("temp.txt")
+tempFile = open("temp.txt");
 if (tempFile.exists()) {
-    tempFile.delete()
-    print("File deleted successfully")
+  tempFile.delete();
+  print("File deleted successfully");
 }
 ```
 
@@ -5882,9 +5895,9 @@ if (tempFile.exists()) {
 Copy the file to a new location:
 
 ```js
-sourceFile = open("original.txt")
-sourceFile.copy("backup.txt")
-print("File copied successfully")
+sourceFile = open("original.txt");
+sourceFile.copy("backup.txt");
+print("File copied successfully");
 ```
 
 ### move()
@@ -5892,9 +5905,9 @@ print("File copied successfully")
 Move or rename the file:
 
 ```js
-oldFile = open("old_name.txt")
-oldFile.move("new_name.txt")
-print("File moved/renamed successfully")
+oldFile = open("old_name.txt");
+oldFile.move("new_name.txt");
+print("File moved/renamed successfully");
 ```
 
 ### lines()
@@ -5914,12 +5927,12 @@ for line in lines {
 Get the file extension:
 
 ```js
-documentFile = open("report.pdf")
-ext = documentFile.extension()
-print("File extension:", ext)  // .pdf
+documentFile = open("report.pdf");
+ext = documentFile.extension();
+print("File extension:", ext); // .pdf
 
-imageFile = open("photo.jpg")
-print("Extension:", imageFile.extension())  // .jpg
+imageFile = open("photo.jpg");
+print("Extension:", imageFile.extension()); // .jpg
 ```
 
 ## Practical File Examples
@@ -5962,10 +5975,10 @@ let process_config = func(config_file) {
         file.write("debug=false\nport=8080\nhost=localhost\n")
         return
     }
-    
+
     let lines = file.lines()
     let settings = {}
-    
+
     for line in lines {
         if (line.contains("=")) {
             let parts = line.split("=")
@@ -5974,7 +5987,7 @@ let process_config = func(config_file) {
             }
         }
     }
-    
+
     print("Loaded settings:", settings)
     return settings
 }
@@ -5985,14 +5998,14 @@ let config = process_config("app.conf")
 let analyze_files = func(filenames) {
     let total_size = 0
     let file_info = []
-    
+
     for filename in filenames {
         let file = open(filename)
         if (file.exists()) {
             let size = file.size()
             let ext = file.extension()
             total_size += size
-            
+
             file_info.push({
                 "name": filename,
                 "size": size,
@@ -6000,7 +6013,7 @@ let analyze_files = func(filenames) {
             })
         }
     }
-    
+
     print("Total size:", total_size, "bytes")
     print("File details:")
     for info in file_info {
@@ -6013,25 +6026,25 @@ analyze_files(["document.pdf", "image.jpg", "data.csv"])
 // Text file processor with method chaining
 let process_text_file = func(input_file, output_file) {
     let inputFile = open(input_file)
-    
+
     if (!inputFile.exists()) {
         print("Input file not found")
         return false
     }
-    
+
     // Read and process content
     let content = inputFile.read()
     let processed = content.upper().replace("OLD", "NEW").trim()
-    
+
     // Write to output file
     let outputFile = open(output_file)
     outputFile.write(processed)
-    
+
     print("Processing complete:")
     print("  Input size:", inputFile.size(), "bytes")
     print("  Output size:", outputFile.size(), "bytes")
     print("  Output extension:", outputFile.extension())
-    
+
     return true
 }
 
@@ -6041,7 +6054,7 @@ process_text_file("input.txt", "output.txt")
 let cleanup_temp_files = func(directory_pattern) {
     let temp_files = ["temp1.tmp", "cache.tmp", "old_data.bak"]
     let deleted_count = 0
-    
+
     for filename in temp_files {
         let file = open(filename)
         if (file.exists()) {
@@ -6051,7 +6064,7 @@ let cleanup_temp_files = func(directory_pattern) {
             deleted_count++
         }
     }
-    
+
     print("Cleanup complete. Deleted", deleted_count, "files")
 }
 
@@ -6065,20 +6078,20 @@ When working with files, it's important to handle potential errors:
 ```js
 let safe_file_operation = func(filename, operation) {
     let file = open(filename)
-    
+
     // Always check if file exists for read operations
     if (operation == "read" && !file.exists()) {
         print("Error: File", filename, "does not exist")
         return null
     }
-    
+
     // Get file info before operations
     if (file.exists()) {
         print("File info:")
         print("  Size:", file.size(), "bytes")
         print("  Extension:", file.extension())
     }
-    
+
     // Perform the operation
     if (operation == "read") {
         return file.read()
@@ -6087,7 +6100,7 @@ let safe_file_operation = func(filename, operation) {
         file.copy(backup_name)
         return backup_name
     }
-    
+
     return null
 }
 
@@ -6110,7 +6123,7 @@ if (content != null) {
 
 ---
 
-```
+````
 
 ## filewatcher.md
 
@@ -6140,7 +6153,7 @@ let watcherId = filewatcher.watch("config.json", func(event) {
     print("File changed:", event["path"])
     print("Event type:", event["type"])
     print("Time:", event["time"])
-    
+
     // Read the updated file
     let content = open(event["path"])
     print("New content:", content)
@@ -6152,7 +6165,7 @@ let dirWatcherId = filewatcher.watchDir("src", func(event) {
     print("  Path:", event["path"])
     print("  Type:", event["type"]) // "created", "modified", or "deleted"
     print("  Time:", event["time"])
-    
+
     // React to the change
     if (event["type"] == "created") {
         print("New file created!")
@@ -6169,7 +6182,7 @@ setTimeout(func() {
     filewatcher.stopWatch(dirWatcherId)
     print("Stopped watching")
 }, 60000) // Stop after 60 seconds
-```
+````
 
 ## API Reference
 
@@ -6279,7 +6292,7 @@ let clients = []
 wsServer.on("connection", func(client) {
     print("New client connected")
     clients.push(client)
-    
+
     client.on("close", func() {
         // Remove client when disconnected
         let index = clients.indexOf(client)
@@ -6292,7 +6305,7 @@ wsServer.on("connection", func(client) {
 // Watch the public directory for changes
 filewatcher.watchDir("public", func(event) {
     print("File changed:", event["path"])
-    
+
     // Notify all connected clients to reload
     for (let client in clients) {
         client.send(JSON.stringify({
@@ -6318,23 +6331,23 @@ import shell
 // Function to build the project
 let buildProject = func() {
     print("Building project...")
-    
+
     // Compile all .vint files to .js
     let files = os.listDir("src")
     for (let file in files) {
         if (file.endsWith(".vint")) {
             let inputPath = "src/" + file
             let outputPath = "dist/" + file.replace(".vint", ".js")
-            
+
             print("Compiling", inputPath, "to", outputPath)
             shell.exec("vint compile " + inputPath + " -o " + outputPath)
         }
     }
-    
+
     // Bundle the JavaScript files
     print("Bundling JavaScript...")
     shell.exec("webpack --config webpack.config.js")
-    
+
     print("Build completed!")
 }
 
@@ -6374,16 +6387,16 @@ let tailFile = func(filePath, lines) {
     let content = open(filePath)
     let allLines = content.split("\n")
     let lastLines = allLines.slice(Math.max(0, allLines.length - lines))
-    
+
     // Clear the screen
     term.clear()
-    
+
     // Print header
     term.println("=== Log File Monitor ===", "#ffcc00")
     term.println("File: " + filePath, "#88ff88")
     term.println("Last " + lines + " lines:", "#88ff88")
     term.println("----------------------------", "#ffcc00")
-    
+
     // Print the lines with syntax highlighting
     for (let line in lastLines) {
         if (line.includes("ERROR")) {
@@ -6396,7 +6409,7 @@ let tailFile = func(filePath, lines) {
             term.println(line) // Default color for other lines
         }
     }
-    
+
     // Print footer
     term.println("----------------------------", "#ffcc00")
     term.println("Press Ctrl+C to exit", "#88ff88")
@@ -6428,7 +6441,7 @@ filewatcher.watch(logFile, func(event) {
 print("Monitoring log file. Press Ctrl+C to exit.")
 ```
 
-```
+````
 
 ## for.md
 
@@ -6447,7 +6460,7 @@ name = "hello"
 for i in name {
     print(i)
 }
-```
+````
 
 Output:
 
@@ -6615,7 +6628,7 @@ l
 o
 ```
 
-```
+````
 
 ## function.md
 
@@ -6632,7 +6645,7 @@ You can define and immediately execute a function:
 let go = func() {
     print("this is a function")
 }()
-```
+````
 
 This function `go` is defined and executed immediately upon declaration.
 
@@ -6669,7 +6682,7 @@ In this example, the function `w` is passed to another function and executed wit
 
 By understanding these basic concepts, you can start creating reusable and flexible code using functions in **Vint**.
 
-```
+````
 
 ## hash.md
 
@@ -6685,7 +6698,7 @@ The Hash module in Vint provides additional hashing algorithms that complement t
 To use the Hash module, simply import it:
 ```js
 import hash
-```
+````
 
 ---
 
@@ -6698,7 +6711,7 @@ The `sha1` function generates a SHA1 hash from the provided string data.
 **Syntax**:
 
 ```js
-sha1(data)
+sha1(data);
 ```
 
 **Example**:
@@ -6723,7 +6736,7 @@ The `sha512` function generates a SHA512 hash from the provided string data.
 **Syntax**:
 
 ```js
-sha512(data)
+sha512(data);
 ```
 
 **Example**:
@@ -6783,14 +6796,14 @@ print("Password SHA512:", hash.sha512(password))
 
 ## Summary of Functions
 
-| Function | Description                               | Output Length    |
-|----------|-------------------------------------------|------------------|
-| `sha1`   | Generates SHA1 hash from string data      | 40 characters    |
-| `sha512` | Generates SHA512 hash from string data    | 128 characters   |
+| Function | Description                            | Output Length  |
+| -------- | -------------------------------------- | -------------- |
+| `sha1`   | Generates SHA1 hash from string data   | 40 characters  |
+| `sha512` | Generates SHA512 hash from string data | 128 characters |
 
 Both functions return hexadecimal string representations of the hash values, making them easy to store and compare.
 
-```
+````
 
 ## http_enhanced.md
 
@@ -6819,7 +6832,7 @@ http.get("/users/:id", func(req, res) {
     let json = req.json()                 // Parsed JSON
     let form = req.form("username")       // Form field
 })
-```
+````
 
 ### 2. **Enhanced Response Object**
 
@@ -6835,7 +6848,7 @@ http.post("/login", func(req, res) {
        .cookie("session", "abc123")
        .header("X-Custom", "value")
        .json({"success": true})
-    
+
     // Or redirect
     res.redirect("/dashboard", 302)
 })
@@ -7023,7 +7036,7 @@ The enhanced HTTP module now supports:
 ✅ **Error Handling** - Comprehensive error management  
 ✅ **Rate Limiting** - Request throttling  
 ✅ **CORS Support** - Cross-origin requests  
-✅ **Content Types** - JSON, forms, files  
+✅ **Content Types** - JSON, forms, files
 
 ## 🚀 Production Ready
 
@@ -7037,7 +7050,7 @@ The enhanced HTTP module provides all the essential features needed for producti
 
 This makes Vint suitable for building everything from simple APIs to complex enterprise applications.
 
-```
+````
 
 ## http_enterprise.md
 
@@ -7086,11 +7099,11 @@ http.group("/api/v1", func() {
     // All routes in this group will be prefixed with /api/v1
 })
 
-// Create API v2 group  
+// Create API v2 group
 http.group("/api/v2", func() {
     // All routes in this group will be prefixed with /api/v2
 })
-```
+````
 
 ### Nested Route Groups
 
@@ -7101,7 +7114,7 @@ http.group("/admin", func() {
     http.group("/users", func() {
         // /admin/users/* routes
     })
-    
+
     // System routes
     http.group("/system", func() {
         // /admin/system/* routes
@@ -7117,19 +7130,19 @@ http.group("/admin", func() {
 http.post("/upload", func(req, res) {
     // Parse multipart form data
     http.multipart(req)
-    
+
     // Access uploaded file
     let avatar = req.file("avatar")
-    
+
     if avatar {
         // Get file information
         let name = avatar.name()
         let size = avatar.size()
         let type = avatar.type()
-        
+
         // Save the file
         let saved = avatar.save("/uploads/" + name)
-        
+
         res.json({
             "success": true,
             "file": {
@@ -7152,10 +7165,10 @@ http.post("/upload", func(req, res) {
 ```js
 http.post("/multiple-upload", func(req, res) {
     http.multipart(req)
-    
+
     let uploadedFiles = []
     let files = req.files()
-    
+
     // Process each file
     for file in files {
         let savedPath = file.save("/uploads/" + file.name())
@@ -7166,7 +7179,7 @@ http.post("/multiple-upload", func(req, res) {
             "path": savedPath
         })
     }
-    
+
     res.json({
         "success": true,
         "count": uploadedFiles.length,
@@ -7180,18 +7193,18 @@ http.post("/multiple-upload", func(req, res) {
 ```js
 http.post("/profile", func(req, res) {
     http.multipart(req)
-    
+
     // Access form fields
     let username = req.form("username")
     let email = req.form("email")
-    
+
     // Access uploaded file
     let avatar = req.file("avatar")
-    
+
     if avatar {
         avatar.save("/avatars/" + username + "_" + avatar.name())
     }
-    
+
     res.json({
         "message": "Profile updated",
         "user": {
@@ -7212,11 +7225,11 @@ Async handlers allow long-running operations without blocking other requests:
 let processDataAsync = http.async(func(req, res) {
     // This runs asynchronously and won't block other requests
     let data = req.json()
-    
+
     // Simulate heavy processing
     // In real applications: database operations, API calls, image processing
     processLargeDataset(data)
-    
+
     res.json({
         "message": "Processing started",
         "taskId": generateTaskId()
@@ -7237,11 +7250,11 @@ http.post("/quick", func(req, res) {
 
 ```js
 // Enable security features
-http.security()
+http.security();
 
 // This automatically adds:
 // - X-Content-Type-Options: nosniff
-// - X-Frame-Options: DENY  
+// - X-Frame-Options: DENY
 // - X-XSS-Protection: 1; mode=block
 // - CSRF protection (when enabled)
 ```
@@ -7341,7 +7354,7 @@ http.errorHandler(func(err, req, res) {
 ```js
 http.get("/users/:id", func(req, res) {
     let userId = req.param("id")
-    
+
     if !isValidId(userId) {
         res.status(400).json({
             "error": {
@@ -7358,7 +7371,7 @@ http.get("/users/:id", func(req, res) {
         })
         return
     }
-    
+
     let user = findUser(userId)
     if !user {
         res.status(404).json({
@@ -7374,7 +7387,7 @@ http.get("/users/:id", func(req, res) {
         })
         return
     }
-    
+
     res.json(user)
 })
 ```
@@ -7387,7 +7400,7 @@ http.get("/users/:id", func(req, res) {
 // Middleware to track request timing
 let timingMiddleware = func(req, res, next) {
     let startTime = Date.now()
-    
+
     // Add custom response method to track timing
     let originalSend = res.send
     res.send = func(data) {
@@ -7395,7 +7408,7 @@ let timingMiddleware = func(req, res, next) {
         res.header("X-Response-Time", duration + "ms")
         originalSend(data)
     }
-    
+
     next()
 }
 
@@ -7465,7 +7478,7 @@ http.group("/api/v1", func() {
     http.post("/auth/login", func(req, res) {
         let credentials = req.json()
         let token = authenticateUser(credentials)
-        
+
         if token {
             res.json({
                 "token": token,
@@ -7480,20 +7493,20 @@ http.group("/api/v1", func() {
             })
         }
     })
-    
+
     // Protected routes
     http.use(authMiddleware)
-    
+
     http.get("/users", func(req, res) {
         let page = req.query("page") || "1"
         let users = getUsers(page)
         res.json(users)
     })
-    
+
     http.post("/upload", func(req, res) {
         http.multipart(req)
         let file = req.file("document")
-        
+
         if file {
             let savedPath = file.save("/secure-uploads/" + generateFileName())
             res.json({
@@ -7547,10 +7560,10 @@ http.security()
 // File upload with validation
 http.post("/files", func(req, res) {
     http.multipart(req)
-    
+
     let files = req.files()
     let results = []
-    
+
     for file in files {
         // Validate file type
         let allowedTypes = ["image/jpeg", "image/png", "application/pdf"]
@@ -7561,7 +7574,7 @@ http.post("/files", func(req, res) {
             })
             continue
         }
-        
+
         // Validate file size (10MB max)
         if file.size() > 10485760 {
             results.push({
@@ -7570,11 +7583,11 @@ http.post("/files", func(req, res) {
             })
             continue
         }
-        
+
         // Save file
         let fileName = Date.now() + "_" + file.name()
         let savedPath = file.save("/uploads/" + fileName)
-        
+
         results.push({
             "name": file.name(),
             "fileName": fileName,
@@ -7584,7 +7597,7 @@ http.post("/files", func(req, res) {
             "status": "uploaded"
         })
     }
-    
+
     res.json({
         "message": "File upload processed",
         "results": results
@@ -7607,13 +7620,13 @@ The enterprise HTTP module provides all the features needed to build production-
 
 - **Scalable**: Route grouping and middleware composition for large applications
 - **Secure**: Built-in security features and customizable protection
-- **Performance**: Async handlers and monitoring capabilities  
+- **Performance**: Async handlers and monitoring capabilities
 - **Robust**: Structured error handling and comprehensive file upload support
 - **Production-Ready**: All features needed for enterprise backend development
 
 This makes VintLang suitable for building everything from simple APIs to complex enterprise applications with the same level of sophistication as modern frameworks like Express.js, FastAPI, or Spring Boot.
 
-```
+````
 
 ## identifiers.md
 
@@ -7637,7 +7650,7 @@ print(birth_year)  // Output: 2020
 
 let convert_c_to_p = "C to P"
 print(convert_c_to_p)  // Output: "C to P"
-```
+````
 
 In the examples above, `birth_year` and `convert_c_to_p` follow all syntax rules and are valid identifiers.
 
@@ -7653,6 +7666,7 @@ To make your **Vint** code more readable and maintainable, follow these best pra
    ```
 
 2. **Consistent Naming Conventions:** Stick to a single naming style across your codebase:
+
    - **camelCase**: `myVariableName`
    - **snake_case**: `my_variable_name`
 
@@ -7660,13 +7674,13 @@ To make your **Vint** code more readable and maintainable, follow these best pra
 
    ```js
    for (let i = 0; i < 10; i++) {
-       print(i)
+     print(i);
    }
    ```
 
 4. **Do Not Use Reserved Keywords:** Avoid using reserved keywords as identifiers (e.g., `let`, `if`, `switch`).
 
-```
+````
 
 ## ifStatements.md
 
@@ -7683,7 +7697,7 @@ The `if` statement checks a condition inside parentheses `()`. If the condition 
 if (2 > 1) {
     print(true)  // Output: true
 }
-```
+````
 
 In this example, the condition `2 > 1` is true, so `print(true)` is executed, and the output is `true`.
 
@@ -7692,14 +7706,14 @@ In this example, the condition `2 > 1` is true, so `print(true)` is executed, an
 You can use `else if` to test additional conditions after an `if` statement. The `else` block specifies code to execute if none of the previous conditions are met:
 
 ```js
-let a = 10
+let a = 10;
 
 if (a > 100) {
-    print("a is greater than 100")
+  print("a is greater than 100");
 } else if (a < 10) {
-    print("a is less than 10")
+  print("a is less than 10");
 } else {
-    print("The value of a is", a)
+  print("The value of a is", a);
 }
 
 // Output: The value of a is 10
@@ -7733,20 +7747,20 @@ The classic if statement executes a block of code if a condition is true. You ca
 
 ```js
 if (condition) {
-    // code to run if condition is true
+  // code to run if condition is true
 } else {
-    // code to run if condition is false
+  // code to run if condition is false
 }
 ```
 
 **Example:**
 
 ```js
-let x = 0
+let x = 0;
 if (true) {
-    x = 42
+  x = 42;
 }
-print("Classic if statement result: ", x)
+print("Classic if statement result: ", x);
 ```
 
 ---
@@ -7790,7 +7804,7 @@ print("If as an expression with no else: ", y) // prints: null
 - [Switch Statements](switch.md)
 - [Operators](operators.md)
 
-```
+````
 
 ## include.md
 
@@ -7803,7 +7817,7 @@ The `include` keyword is a language construct in Vint that allows you to include
 
 ```js
 include "path/to/your/file.vint"
-```
+````
 
 The path to the file can be relative or absolute. The file extension is not mandatory but is recommended for clarity.
 
@@ -7836,7 +7850,7 @@ println(customMessage) // Output: Hello, Vint! How are you?
 
 In this example, the `include` statement at the beginning of `main.vint` makes the `greeting` variable and the `sayHello` function from `greetings.vint` available for use. This helps in keeping the code modular and easy to manage.
 
-```
+````
 
 ## info.md
 
@@ -7849,7 +7863,7 @@ The `info` keyword allows you to print informational messages at runtime.
 
 ```js
 info "Your informational message here"
-```
+````
 
 When the Vint interpreter encounters an `info` statement, it prints a cyan-colored informational message to the console and continues execution. This is useful for providing helpful context or status updates to users or developers.
 
@@ -7867,7 +7881,7 @@ Running this script will output:
 Backup in progress...
 ```
 
-```
+````
 
 ## json.md
 
@@ -7883,7 +7897,7 @@ The JSON module in Vint provides powerful and straightforward functions for work
 To use the JSON module, simply import it:
 ```js
 import json
-```
+````
 
 ---
 
@@ -7896,7 +7910,7 @@ The `decode` function parses a JSON string into a Vint dictionary or array.
 **Syntax**:
 
 ```js
-decode(jsonString)
+decode(jsonString);
 ```
 
 **Example**:
@@ -7920,7 +7934,7 @@ The `encode` function converts a Vint dictionary or array into a JSON string. It
 **Syntax**:
 
 ```js
-encode(data, indent = 0)
+encode(data, (indent = 0));
 ```
 
 **Example**:
@@ -7953,7 +7967,7 @@ The `pretty` function reformats a JSON string into a human-readable format with 
 **Syntax**:
 
 ```js
-pretty(jsonString)
+pretty(jsonString);
 ```
 
 **Example**:
@@ -7983,7 +7997,7 @@ The `merge` function combines two JSON objects. If both objects have the same ke
 **Syntax**:
 
 ```js
-merge(json1, json2)
+merge(json1, json2);
 ```
 
 **Example**:
@@ -8008,7 +8022,7 @@ The `get` function retrieves a value associated with a key from a JSON object. I
 **Syntax**:
 
 ```js
-get(jsonObject, key)
+get(jsonObject, key);
 ```
 
 **Example**:
@@ -8032,17 +8046,17 @@ print("Country (missing key):", missing_value)
 
 ## Summary of Functions
 
-| Function         | Description                                         | Example Output                           |
-|------------------|-----------------------------------------------------|------------------------------------------|
-| `decode`         | Converts JSON string to a Vint object.             | `{"key": "value"}`                       |
-| `encode`         | Converts Vint object to a JSON string.             | `{"key":"value"}`                        |
-| `pretty`         | Formats JSON string for better readability.        | `{ "key": "value" }`                     |
-| `merge`          | Combines two JSON objects, overwriting duplicates. | `{"key1": "value1", "key2": "value2"}`   |
-| `get`            | Retrieves a value by key, returns `null` if absent.| `"value"` or `null`                      |
+| Function | Description                                         | Example Output                         |
+| -------- | --------------------------------------------------- | -------------------------------------- |
+| `decode` | Converts JSON string to a Vint object.              | `{"key": "value"}`                     |
+| `encode` | Converts Vint object to a JSON string.              | `{"key":"value"}`                      |
+| `pretty` | Formats JSON string for better readability.         | `{ "key": "value" }`                   |
+| `merge`  | Combines two JSON objects, overwriting duplicates.  | `{"key1": "value1", "key2": "value2"}` |
+| `get`    | Retrieves a value by key, returns `null` if absent. | `"value"` or `null`                    |
 
 These functions make working with JSON in Vint easy, flexible, and efficient.
 
-```
+````
 
 ## jwt.md
 
@@ -8068,11 +8082,11 @@ Creates a JWT token with the provided payload and secret using HS256 signing met
 
 **Example:**
 
-```vint
+```js
 let payload = {"user": "john", "role": "admin"}
 let token = jwt.create(payload, "my-secret-key")
 print(token) // eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
-```
+````
 
 ### `jwt.createHS256(payload, secret, [expiration_hours])`
 
@@ -8090,10 +8104,10 @@ Creates a JWT token with HS256 signing method, with optional expiration.
 
 **Example:**
 
-```vint
-let payload = {"user": "john", "role": "admin"}
-let token = jwt.createHS256(payload, "my-secret-key", 24) // Expires in 24 hours
-print(token)
+```js
+let payload = { user: "john", role: "admin" };
+let token = jwt.createHS256(payload, "my-secret-key", 24); // Expires in 24 hours
+print(token);
 ```
 
 ### `jwt.verify(token, secret)`
@@ -8112,15 +8126,15 @@ Verifies a JWT token and returns the payload if valid.
 
 **Example:**
 
-```vint
-let token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
-let result = jwt.verify(token, "my-secret-key")
+```js
+let token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...";
+let result = jwt.verify(token, "my-secret-key");
 
 if (result.type != "ERROR") {
-    print("User:", result["user"])
-    print("Role:", result["role"])
+  print("User:", result["user"]);
+  print("Role:", result["role"]);
 } else {
-    print("Invalid token:", result.message)
+  print("Invalid token:", result.message);
 }
 ```
 
@@ -8140,12 +8154,12 @@ Verifies a JWT token with explicit HS256 signing method check.
 
 **Example:**
 
-```vint
-let token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
-let result = jwt.verifyHS256(token, "my-secret-key")
+```js
+let token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...";
+let result = jwt.verifyHS256(token, "my-secret-key");
 
 if (result.type != "ERROR") {
-    print("Verified HS256 token:", result)
+  print("Verified HS256 token:", result);
 }
 ```
 
@@ -8164,22 +8178,22 @@ Decodes a JWT token without verification (useful for inspecting headers/payload)
 
 **Example:**
 
-```vint
-let token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
-let decoded = jwt.decode(token)
+```js
+let token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...";
+let decoded = jwt.decode(token);
 
-print("Header:", decoded["header"])
-print("Payload:", decoded["payload"])
+print("Header:", decoded["header"]);
+print("Payload:", decoded["payload"]);
 ```
 
 ## Error Handling
 
 All JWT functions return error objects when something goes wrong:
 
-```vint
-let result = jwt.verify("invalid-token", "secret")
+```js
+let result = jwt.verify("invalid-token", "secret");
 if (result.type == "ERROR") {
-    print("Error:", result.message)
+  print("Error:", result.message);
 }
 ```
 
@@ -8194,49 +8208,49 @@ if (result.type == "ERROR") {
 
 ### User Authentication
 
-```vint
+```js
 // Login endpoint - create token
 let payload = {
-    "user_id": 123,
-    "username": "john_doe",
-    "exp": time.now() + (24 * 3600) // 24 hours
-}
-let token = jwt.create(payload, env.JWT_SECRET)
+  user_id: 123,
+  username: "john_doe",
+  exp: time.now() + 24 * 3600, // 24 hours
+};
+let token = jwt.create(payload, env.JWT_SECRET);
 
-// Protected endpoint - verify token  
-let result = jwt.verify(request_token, env.JWT_SECRET)
+// Protected endpoint - verify token
+let result = jwt.verify(request_token, env.JWT_SECRET);
 if (result.type == "ERROR") {
-    return {"error": "Unauthorized"}
+  return { error: "Unauthorized" };
 }
-let user_id = result["user_id"]
+let user_id = result["user_id"];
 ```
 
 ### API Rate Limiting
 
-```vint
+```js
 // Create token with rate limit info
 let payload = {
-    "client_id": "app123",
-    "requests_remaining": 1000,
-    "exp": time.now() + 3600 // 1 hour
-}
-let token = jwt.create(payload, "rate-limit-secret")
+  client_id: "app123",
+  requests_remaining: 1000,
+  exp: time.now() + 3600, // 1 hour
+};
+let token = jwt.create(payload, "rate-limit-secret");
 ```
 
 ### Session Management
 
-```vint
+```js
 // Create session token
 let session = {
-    "session_id": uuid.generate(),
-    "user_id": user.id,
-    "permissions": ["read", "write"],
-    "exp": time.now() + (8 * 3600) // 8 hours
-}
-let session_token = jwt.createHS256(session, "session-secret", 8)
+  session_id: uuid.generate(),
+  user_id: user.id,
+  permissions: ["read", "write"],
+  exp: time.now() + 8 * 3600, // 8 hours
+};
+let session_token = jwt.createHS256(session, "session-secret", 8);
 ```
 
-```
+````
 
 ## kv.md
 
@@ -8247,9 +8261,9 @@ The **KV (Key-Value)** module provides a high-performance, thread-safe, in-memor
 
 ## Import
 
-```vint
+```js
 import kv
-```
+````
 
 ## Features
 
@@ -8276,7 +8290,7 @@ Sets a key-value pair in the store.
 
 **Example:**
 
-```vint
+```js
 import kv
 
 kv.set("user:123", {"name": "John", "age": 30})
@@ -8296,12 +8310,12 @@ Retrieves a value by its key.
 
 **Example:**
 
-```vint
-let user = kv.get("user:123")
-println("User:", user) // {name: John, age: 30}
+```js
+let user = kv.get("user:123");
+println("User:", user); // {name: John, age: 30}
 
-let missing = kv.get("nonexistent")
-println("Missing:", missing) // null
+let missing = kv.get("nonexistent");
+println("Missing:", missing); // null
 ```
 
 ### delete(key)
@@ -8316,9 +8330,9 @@ Removes a key-value pair from the store.
 
 **Example:**
 
-```vint
-let deleted = kv.delete("session:456")
-println("Deleted:", deleted) // true
+```js
+let deleted = kv.delete("session:456");
+println("Deleted:", deleted); // true
 ```
 
 ### exists(key)
@@ -8333,9 +8347,9 @@ Checks if a key exists in the store (and is not expired).
 
 **Example:**
 
-```vint
+```js
 if (kv.exists("user:123")) {
-    println("User exists")
+  println("User exists");
 }
 ```
 
@@ -8347,9 +8361,9 @@ Removes all key-value pairs from the store.
 
 **Example:**
 
-```vint
-kv.clear()
-println("Store cleared")
+```js
+kv.clear();
+println("Store cleared");
 ```
 
 ## Store Information
@@ -8362,11 +8376,11 @@ Returns an array of all keys in the store (excluding expired keys).
 
 **Example:**
 
-```vint
-kv.set("key1", "value1")
-kv.set("key2", "value2")
-let allKeys = kv.keys()
-println("Keys:", allKeys) // ["key1", "key2"]
+```js
+kv.set("key1", "value1");
+kv.set("key2", "value2");
+let allKeys = kv.keys();
+println("Keys:", allKeys); // ["key1", "key2"]
 ```
 
 ### values()
@@ -8377,9 +8391,9 @@ Returns an array of all values in the store (excluding expired values).
 
 **Example:**
 
-```vint
-let allValues = kv.values()
-println("Values:", allValues) // ["value1", "value2"]
+```js
+let allValues = kv.values();
+println("Values:", allValues); // ["value1", "value2"]
 ```
 
 ### size()
@@ -8390,8 +8404,8 @@ Returns the number of key-value pairs in the store.
 
 **Example:**
 
-```vint
-println("Store size:", kv.size()) // 2
+```js
+println("Store size:", kv.size()); // 2
 ```
 
 ### isEmpty()
@@ -8402,9 +8416,9 @@ Checks if the store is empty.
 
 **Example:**
 
-```vint
+```js
 if (kv.isEmpty()) {
-    println("Store is empty")
+  println("Store is empty");
 }
 ```
 
@@ -8424,12 +8438,12 @@ Sets a key-value pair with automatic expiration.
 
 **Example:**
 
-```vint
+```js
 // Set a session that expires in 5 minutes
-kv.setTTL("session:temp", "temporary_data", 300)
+kv.setTTL("session:temp", "temporary_data", 300);
 
 // Set a cache entry that expires in 1 hour
-kv.setTTL("cache:user:123", userData, 3600)
+kv.setTTL("cache:user:123", userData, 3600);
 ```
 
 ### getTTL(key)
@@ -8444,10 +8458,10 @@ Gets the remaining time-to-live for a key.
 
 **Example:**
 
-```vint
-let remaining = kv.getTTL("session:temp")
+```js
+let remaining = kv.getTTL("session:temp");
 if (remaining != null && remaining > 0) {
-    println("Session expires in", remaining, "seconds")
+  println("Session expires in", remaining, "seconds");
 }
 ```
 
@@ -8464,9 +8478,9 @@ Sets or updates the TTL for an existing key.
 
 **Example:**
 
-```vint
-kv.set("temp:data", "some data")
-kv.expire("temp:data", 60) // Expire in 1 minute
+```js
+kv.set("temp:data", "some data");
+kv.expire("temp:data", 60); // Expire in 1 minute
 ```
 
 ## Bulk Operations
@@ -8483,12 +8497,12 @@ Gets multiple values in a single operation.
 
 **Example:**
 
-```vint
-kv.set("user:1", "Alice")
-kv.set("user:2", "Bob")
+```js
+kv.set("user:1", "Alice");
+kv.set("user:2", "Bob");
 
-let users = kv.mget(["user:1", "user:2", "user:3"])
-println("Users:", users) // ["Alice", "Bob", null]
+let users = kv.mget(["user:1", "user:2", "user:3"]);
+println("Users:", users); // ["Alice", "Bob", null]
 ```
 
 ### mset(pairs)
@@ -8503,13 +8517,13 @@ Sets multiple key-value pairs in a single operation.
 
 **Example:**
 
-```vint
+```js
 let bulkData = {
-    "config:theme": "dark",
-    "config:language": "en",
-    "config:notifications": true
-}
-kv.mset(bulkData)
+  "config:theme": "dark",
+  "config:language": "en",
+  "config:notifications": true,
+};
+kv.mset(bulkData);
 ```
 
 ## Atomic Operations
@@ -8533,19 +8547,19 @@ Atomically increments a numeric value.
 
 **Example:**
 
-```vint
+```js
 // Simple counter
-let count = kv.increment("page:views")
-println("Views:", count) // 1
+let count = kv.increment("page:views");
+println("Views:", count); // 1
 
 // Increment by custom amount
-let score = kv.increment("user:score", 10)
-println("Score:", score) // 10
+let score = kv.increment("user:score", 10);
+println("Score:", score); // 10
 
 // Increment existing value
-kv.set("counter", 5)
-let newCount = kv.increment("counter", 3)
-println("New count:", newCount) // 8
+kv.set("counter", 5);
+let newCount = kv.increment("counter", 3);
+println("New count:", newCount); // 8
 ```
 
 ### decrement(key, [delta])
@@ -8567,15 +8581,15 @@ Atomically decrements a numeric value.
 
 **Example:**
 
-```vint
+```js
 // Simple countdown
-let remaining = kv.decrement("lives")
-println("Lives remaining:", remaining) // -1
+let remaining = kv.decrement("lives");
+println("Lives remaining:", remaining); // -1
 
 // Decrement by custom amount
-kv.set("inventory", 100)
-let newInventory = kv.decrement("inventory", 15)
-println("Inventory:", newInventory) // 85
+kv.set("inventory", 100);
+let newInventory = kv.decrement("inventory", 15);
+println("Inventory:", newInventory); // 85
 ```
 
 ## Utility Functions
@@ -8588,11 +8602,11 @@ Returns all key-value pairs in the store as a dictionary (excluding expired keys
 
 **Example:**
 
-```vint
-kv.set("key1", "value1")
-kv.set("key2", 42)
-let allData = kv.dump()
-println("All data:", allData) // {key1: value1, key2: 42}
+```js
+kv.set("key1", "value1");
+kv.set("key2", 42);
+let allData = kv.dump();
+println("All data:", allData); // {key1: value1, key2: 42}
 ```
 
 ### stats()
@@ -8608,9 +8622,9 @@ Returns statistics about the KV store.
 
 **Example:**
 
-```vint
-let statistics = kv.stats()
-println("Store stats:", statistics)
+```js
+let statistics = kv.stats();
+println("Store stats:", statistics);
 // {total_keys: 10, active_keys: 8, expired_keys: 2, keys_with_ttl: 5}
 ```
 
@@ -8618,7 +8632,7 @@ println("Store stats:", statistics)
 
 ### Session Management
 
-```vint
+```js
 import kv
 
 // Store user session with 30-minute expiration
@@ -8645,7 +8659,7 @@ func extendSession(sessionId) {
 
 ### Caching
 
-```vint
+```js
 import kv
 
 // Cache expensive computation results
@@ -8655,7 +8669,7 @@ func getCachedResult(cacheKey, computeFunc) {
     if (cached != null) {
         return cached
     }
-    
+
     // Compute and cache result
     let result = computeFunc()
     kv.setTTL(cacheKey, result, 300) // Cache for 5 minutes
@@ -8665,24 +8679,24 @@ func getCachedResult(cacheKey, computeFunc) {
 
 ### Rate Limiting
 
-```vint
+```js
 import kv
 
 // Simple rate limiter
 func isRateLimited(userId, limit, windowSeconds) {
     let key = "rate:" + userId
     let current = kv.get(key)
-    
+
     if (current == null) {
         // First request in window
         kv.setTTL(key, 1, windowSeconds)
         return false
     }
-    
+
     if (current >= limit) {
         return true // Rate limited
     }
-    
+
     // Increment counter
     kv.increment(key)
     return false
@@ -8696,7 +8710,7 @@ if (isRateLimited("user123", 100, 60)) {
 
 ### Counters and Metrics
 
-```vint
+```js
 import kv
 
 // Track page views
@@ -8723,7 +8737,7 @@ func getMetrics() {
 
 ### Configuration Management
 
-```vint
+```js
 import kv
 
 // Load configuration
@@ -8746,13 +8760,13 @@ func updateConfig(key, value) {
 func getConfig() {
     let allData = kv.dump()
     let config = {}
-    
+
     for (key, value in allData) {
         if (key.startsWith("config:")) {
             config[key] = value
         }
     }
-    
+
     return config
 }
 ```
@@ -8786,23 +8800,23 @@ func getConfig() {
 
 All KV functions return appropriate error messages for invalid usage:
 
-```vint
+```js
 // Invalid key type
-let result = kv.get(123) // Error: key must be a string
+let result = kv.get(123); // Error: key must be a string
 
 // Invalid TTL
-let result = kv.expire("key", -5) // Error: TTL must be positive
+let result = kv.expire("key", -5); // Error: TTL must be positive
 
 // Invalid increment target
-kv.set("text", "hello")
-let result = kv.increment("text") // Error: existing value must be an integer
+kv.set("text", "hello");
+let result = kv.increment("text"); // Error: existing value must be an integer
 ```
 
 ## Integration Examples
 
 ### With HTTP Server
 
-```vint
+```js
 import kv
 import http
 
@@ -8812,19 +8826,19 @@ let app = http.app()
 app.get("/api/user/:id", func(req, res) {
     let userId = req.params.id
     let cacheKey = "user:" + userId
-    
+
     // Try cache first
     let user = kv.get(cacheKey)
     if (user != null) {
         return res.json({"user": user, "cached": true})
     }
-    
+
     // Fetch from database (simulated)
     user = fetchUserFromDB(userId)
-    
+
     // Cache for 10 minutes
     kv.setTTL(cacheKey, user, 600)
-    
+
     res.json({"user": user, "cached": false})
 })
 
@@ -8838,7 +8852,7 @@ app.use(func(req, res, next) {
 
 ### With Async Operations
 
-```vint
+```js
 import kv
 
 // Async cache implementation
@@ -8847,7 +8861,7 @@ async func getCachedOrFetch(key, fetchFunc) {
     if (cached != null) {
         return cached
     }
-    
+
     let result = await fetchFunc()
     kv.setTTL(key, result, 300)
     return result
@@ -8856,7 +8870,7 @@ async func getCachedOrFetch(key, fetchFunc) {
 
 The KV module provides a robust foundation for in-memory data storage and caching in VintLang applications, with enterprise-grade features suitable for production use.
 
-```
+````
 
 ## llm.md
 
@@ -8911,7 +8925,7 @@ if err != null {
 } else {
     print("Completion: ", completion)
 }
-```
+````
 
 ## Notes
 
@@ -8919,7 +8933,7 @@ if err != null {
 - Make sure your API key is kept secret.
 - See OpenAI docs for more on models and parameters.
 
-```
+````
 
 ## logger.md
 
@@ -8935,7 +8949,7 @@ The Logger module in Vint provides structured logging functionality with differe
 To use the Logger module, simply import it:
 ```js
 import logger
-```
+````
 
 ---
 
@@ -8948,7 +8962,7 @@ The `info` function logs informational messages to stdout with a timestamp and I
 **Syntax**:
 
 ```js
-info(message)
+info(message);
 ```
 
 **Example**:
@@ -8969,7 +8983,7 @@ The `warn` function logs warning messages to stdout with a timestamp and WARN le
 **Syntax**:
 
 ```js
-warn(message)
+warn(message);
 ```
 
 **Example**:
@@ -8990,7 +9004,7 @@ The `error` function logs error messages to stderr with a timestamp and ERROR le
 **Syntax**:
 
 ```js
-error(message)
+error(message);
 ```
 
 **Example**:
@@ -9011,7 +9025,7 @@ The `debug` function logs debug information to stdout with a timestamp and DEBUG
 **Syntax**:
 
 ```js
-debug(message)
+debug(message);
 ```
 
 **Example**:
@@ -9032,7 +9046,7 @@ The `fatal` function logs fatal error messages to stderr with a timestamp and FA
 **Syntax**:
 
 ```js
-fatal(message)
+fatal(message);
 ```
 
 **Example**:
@@ -9068,17 +9082,17 @@ logger.fatal("Unable to recover from critical error")
 
 ## Summary of Functions
 
-| Function | Description                                           | Output Destination |
-|----------|------------------------------------------------------|--------------------|
-| `info`   | Logs informational messages with timestamp           | stdout             |
-| `warn`   | Logs warning messages with timestamp                  | stdout             |
-| `error`  | Logs error messages with timestamp                    | stderr             |
-| `debug`  | Logs debug information with timestamp                 | stdout             |
-| `fatal`  | Logs fatal error messages with timestamp              | stderr             |
+| Function | Description                                | Output Destination |
+| -------- | ------------------------------------------ | ------------------ |
+| `info`   | Logs informational messages with timestamp | stdout             |
+| `warn`   | Logs warning messages with timestamp       | stdout             |
+| `error`  | Logs error messages with timestamp         | stderr             |
+| `debug`  | Logs debug information with timestamp      | stdout             |
+| `fatal`  | Logs fatal error messages with timestamp   | stderr             |
 
 All log messages include timestamps in the format `YYYY-MM-DD HH:MM:SS` for easy tracking and debugging.
 
-```
+````
 
 ## main-function.md
 
@@ -9103,7 +9117,7 @@ let main = func() {
     println("Hello from main!")
     return 0
 }
-```
+````
 
 Or with `const`:
 
@@ -9133,12 +9147,12 @@ let calculate = func(a, b) {
 // Main function - entry point
 let main = func() {
     println("=== Main Function ===")
-    
+
     greet("Developer")
     let result = calculate(10, 20)
     println("Result:", result)
     println("Time:", time.now())
-    
+
     return result
 }
 
@@ -9200,9 +9214,9 @@ Programs **without** a main function continue to work exactly as before:
 
 ```javascript
 // This still works - no main function needed
-println("Hello World")
-let x = 42
-println("x =", x)
+println("Hello World");
+let x = 42;
+println("x =", x);
 ```
 
 ## When to Use Main Functions
@@ -9252,14 +9266,14 @@ import time  // Still runs in setup phase
 
 let main = func() {
     let x = 42
-    println("Hello World")  
+    println("Hello World")
     println("Time:", time.now())
 }
 ```
 
 The behavior remains identical, but the code is now more structured and explicit about the entry point.
 
-```
+````
 
 ## math.md
 
@@ -9272,13 +9286,13 @@ To use the `math` module, import it into your Vint script:
 
 ```js
 import math
-```
+````
 
 You can then call functions and access constants from the module:
 
 ```js
-println(math.PI())
-println(math.sqrt(16))
+println(math.PI());
+println(math.sqrt(16));
 ```
 
 ## Contents
@@ -9500,9 +9514,9 @@ Here is a complete list of the available functions and constants:
 - **Example**:
 
   ```js
-  let c = math.complex(3, 4)
-  print(c["real"])  // 3
-  print(c["imag"])  // 4
+  let c = math.complex(3, 4);
+  print(c["real"]); // 3
+  print(c["imag"]); // 4
   ```
 
 #### `abs(n)` (extended)
@@ -9511,8 +9525,8 @@ Here is a complete list of the available functions and constants:
 - **Example**:
 
   ```js
-  let c = math.complex(3, 4)
-  math.abs(c)  // returns 5.0
+  let c = math.complex(3, 4);
+  math.abs(c); // returns 5.0
   ```
 
 ---
@@ -9527,8 +9541,8 @@ Here is a complete list of the available functions and constants:
 - **Example**:
 
   ```js
-  let big = math.bigint("999999999999999999999")
-  print(big["value"])  // "999999999999999999999"
+  let big = math.bigint("999999999999999999999");
+  print(big["value"]); // "999999999999999999999"
   ```
 
 ---
@@ -9575,7 +9589,7 @@ Here is a complete list of the available functions and constants:
 - **Parameters**: `start` and `end` values, and `t` (0.0 to 1.0) as the interpolation factor.
 - **Example**: `math.lerp(0, 10, 0.5)` returns `5.0`.
 
-```
+````
 
 ## modules.md
 
@@ -9593,18 +9607,19 @@ module math {
     func add(a, b) {
         return a + b
     }
-    
+
     func subtract(a, b) {
         return a - b
     }
 }
-```
+````
 
 ## Using Modules
 
 To use a module, you need to:
 
 1. Create a file with the `.vint` extension in one of these locations:
+
    - Current working directory
    - `./modules` directory
    - `./vintLang/modules` directory
@@ -9632,11 +9647,11 @@ Example of a more complex module:
 ```js
 module utils {
     let version = "1.0.0"
-    
+
     func format(text) {
         return "Formatted: " + text
     }
-    
+
     module helpers {
         func validate(input) {
             return input != null
@@ -9682,15 +9697,15 @@ module calculator {
     func add(a, b) {
         return a + b
     }
-    
+
     func subtract(a, b) {
         return a - b
     }
-    
+
     func multiply(a, b) {
         return a * b
     }
-    
+
     func divide(a, b) {
         if b == 0 {
             return "Error: Division by zero"
@@ -9801,7 +9816,7 @@ let json_export = json.stringify(all_data)
 
 See individual module documentation for detailed API reference.
 
-```
+````
 
 ## mysql.md
 
@@ -9816,14 +9831,14 @@ To connect to a MySQL database, use `mysql.open()`. You need to provide a connec
 
 ```js
 conn = mysql.open("user:password@tcp(127.0.0.1:3306)/testdb")
-```
+````
 
 ## Closing the Connection
 
 Always close the connection when you're done with `mysql.close()`.
 
 ```js
-mysql.close(conn)
+mysql.close(conn);
 ```
 
 ## Executing Queries
@@ -9832,8 +9847,8 @@ Use `mysql.execute()` for `INSERT`, `UPDATE`, `DELETE`, or any other queries tha
 
 ```js
 // Inserting data with placeholders
-insert_query = "INSERT INTO users (name, age) VALUES (?, ?)"
-mysql.execute(conn, insert_query, "Alice", 30)
+insert_query = "INSERT INTO users (name, age) VALUES (?, ?)";
+mysql.execute(conn, insert_query, "Alice", 30);
 ```
 
 ## Fetching Data
@@ -9843,8 +9858,8 @@ mysql.execute(conn, insert_query, "Alice", 30)
 To get all rows from a query result, use `mysql.fetchAll()`.
 
 ```js
-users = mysql.fetchAll(conn, "SELECT * FROM users")
-print(users)
+users = mysql.fetchAll(conn, "SELECT * FROM users");
+print(users);
 ```
 
 ### Fetch a Single Row
@@ -9852,8 +9867,8 @@ print(users)
 To get only the first row from a query result, use `mysql.fetchOne()`.
 
 ```js
-user = mysql.fetchOne(conn, "SELECT * FROM users WHERE id = ?", 1)
-print(user)
+user = mysql.fetchOne(conn, "SELECT * FROM users WHERE id = ?", 1);
+print(user);
 ```
 
 ## Full Example
@@ -9886,12 +9901,12 @@ if conn.type() == "ERROR" {
     // Close the connection
     mysql.close(conn)
     print("Connection closed")
-} 
+}
 ```
 
 ## net.md
 
-```markdown
+````markdown
 # Net Module
 
 The `net` module provides functions for making HTTP requests (GET, POST, PUT, DELETE, PATCH) from your Vint scripts. Each function supports both simple and advanced usage, allowing you to specify URLs, headers, and request bodies.
@@ -9904,9 +9919,11 @@ The `net` module provides functions for making HTTP requests (GET, POST, PUT, DE
 Sends an HTTP GET request.
 
 **Usage:**
+
 ```js
-net.get("https://api.example.com/data")
+net.get("https://api.example.com/data");
 ```
+````
 
 Or with named arguments:
 
@@ -10038,7 +10055,7 @@ Response body as a string, or an error object.
 - Headers and body must be dictionaries.
 - For GET requests, the body is rarely used and may not be supported by all servers.
 
-```
+````
 
 ## note.md
 
@@ -10051,7 +10068,7 @@ The `note` keyword allows you to print general notes at runtime.
 
 ```js
 note "Your note message here"
-```
+````
 
 When the Vint interpreter encounters a `note` statement, it prints a blue-colored note message to the console and continues execution. This is useful for providing additional context or reminders in your scripts.
 
@@ -10069,7 +10086,7 @@ Running this script will output:
 Script running...
 ```
 
-```
+````
 
 ## null.md
 
@@ -10084,7 +10101,7 @@ A `null` data type is a data type with no value, defined with the `null` keyword
 
 ```js
 let a = null
-```
+````
 
 ## Evaluation
 
@@ -10092,9 +10109,9 @@ When evaluating a `null` data type in a conditional expression, it will evaluate
 
 ```js
 if (a) {
-    print("a is null")
+  print("a is null");
 } else {
-    print("a has a value")
+  print("a has a value");
 }
 
 // Output: a has a value
@@ -10109,8 +10126,8 @@ The `null` data type in Vint comes with several utility methods:
 Always returns `true` for null values:
 
 ```js
-let value = null
-print(value.isNull())  // true
+let value = null;
+print(value.isNull()); // true
 ```
 
 ### coalesce()
@@ -10118,9 +10135,9 @@ print(value.isNull())  // true
 Returns the first non-null value from the arguments:
 
 ```js
-let value = null
-let result = value.coalesce("default", "backup")
-print(result)  // "default"
+let value = null;
+let result = value.coalesce("default", "backup");
+print(result); // "default"
 ```
 
 ### ifNull()
@@ -10128,9 +10145,9 @@ print(result)  // "default"
 Returns the provided value if this is null:
 
 ```js
-let value = null
-let result = value.ifNull("default value")
-print(result)  // "default value"
+let value = null;
+let result = value.ifNull("default value");
+print(result); // "default value"
 ```
 
 ### toString()
@@ -10138,8 +10155,8 @@ print(result)  // "default value"
 Returns the string representation of null:
 
 ```js
-let value = null
-print(value.toString())  // "null"
+let value = null;
+print(value.toString()); // "null"
 ```
 
 ### equals()
@@ -10147,21 +10164,21 @@ print(value.toString())  // "null"
 Checks if another value is also null:
 
 ```js
-let value1 = null
-let value2 = null
-let value3 = "something"
-print(value1.equals(value2))  // true
-print(value1.equals(value3))  // false
+let value1 = null;
+let value2 = null;
+let value3 = "something";
+print(value1.equals(value2)); // true
+print(value1.equals(value3)); // false
 ```
 
 The `null` data type is useful in Vint when you need to represent an uninitialized, missing, or undefined value in your programs. By understanding the `null` data type and its methods, you can create more robust and flexible code.
 
-```
+````
 
 ## numbers.md
 
 ```markdown
-# INTEGERS  AND FLOATS 
+# INTEGERS  AND FLOATS
 
 Integers and floats are the basic numeric data types in vint, used for representing whole numbers and decimal numbers, respectively. This page covers the syntax and usage of integers and floats in vint, including precedence, unary increments, shorthand assignments, and negative numbers.
 
@@ -10175,7 +10192,7 @@ let a = 2.5
 let b = 3/5
 
 a + b // 2.8
-```
+````
 
 ## UNARY INCREMENTS
 
@@ -10189,7 +10206,7 @@ i++ // 3.4
 
 ## SHORTHAND ASSIGNMENT
 
-vint supports shorthand assignments with +=, -=, /=, *=, and %=:
+vint supports shorthand assignments with +=, -=, /=, \*=, and %=:
 You
 
 ```go
@@ -10238,7 +10255,7 @@ Output:
 6
 7
 8
-9 
+9
 ```
 
 ## Integer Methods
@@ -10697,7 +10714,7 @@ let normalized = score.clamp(0.0, 100.0) / 100.0
 print("Normalized score:", normalized.round(3))
 ```
 
-```
+````
 
 ## operators.md
 
@@ -10722,7 +10739,7 @@ For strings, arrays, and dictionaries, the `+=` operator is also valid. For exam
 
 ```js
 list1 += list2 // Equivalent to list1 = list1 + list2
-```
+````
 
 ---
 
@@ -10730,14 +10747,14 @@ list1 += list2 // Equivalent to list1 = list1 + list2
 
 Vint supports the following arithmetic operations:
 
-| Operator | Description                          | Example          |
-|----------|--------------------------------------|------------------|
-| `+`      | Addition                             | `2 + 3 = 5`      |
-| `-`      | Subtraction                          | `5 - 2 = 3`      |
-| `*`      | Multiplication                       | `3 * 4 = 12`     |
-| `/`      | Division                             | `10 / 2 = 5`     |
-| `%`      | Modulo (remainder of a division)     | `7 % 3 = 1`      |
-| `**`     | Exponential power                   | `2 ** 3 = 8`     |
+| Operator | Description                      | Example      |
+| -------- | -------------------------------- | ------------ |
+| `+`      | Addition                         | `2 + 3 = 5`  |
+| `-`      | Subtraction                      | `5 - 2 = 3`  |
+| `*`      | Multiplication                   | `3 * 4 = 12` |
+| `/`      | Division                         | `10 / 2 = 5` |
+| `%`      | Modulo (remainder of a division) | `7 % 3 = 1`  |
+| `**`     | Exponential power                | `2 ** 3 = 8` |
 
 ---
 
@@ -10745,14 +10762,14 @@ Vint supports the following arithmetic operations:
 
 Comparison operators evaluate relationships between two values. These return `true` or `false`:
 
-| Operator | Description                     | Example            |
-|----------|---------------------------------|--------------------|
-| `==`     | Equal to                        | `5 == 5 // true`   |
-| `!=`     | Not equal to                    | `5 != 3 // true`   |
-| `>`      | Greater than                    | `5 > 3 // true`    |
-| `>=`     | Greater than or equal to        | `5 >= 5 // true`   |
-| `<`      | Less than                       | `3 < 5 // true`    |
-| `<=`     | Less than or equal to           | `3 <= 3 // true`   |
+| Operator | Description              | Example          |
+| -------- | ------------------------ | ---------------- |
+| `==`     | Equal to                 | `5 == 5 // true` |
+| `!=`     | Not equal to             | `5 != 3 // true` |
+| `>`      | Greater than             | `5 > 3 // true`  |
+| `>=`     | Greater than or equal to | `5 >= 5 // true` |
+| `<`      | Less than                | `3 < 5 // true`  |
+| `<=`     | Less than or equal to    | `3 <= 3 // true` |
 
 ---
 
@@ -10761,10 +10778,10 @@ Comparison operators evaluate relationships between two values. These return `tr
 The membership operator `in` checks if an item exists within a collection:
 
 ```js
-names = ['juma', 'asha', 'haruna']
+names = ["juma", "asha", "haruna"];
 
-"haruna" in names // true
-"halima" in names // false
+"haruna" in names; // true
+"halima" in names; // false
 ```
 
 ---
@@ -10773,11 +10790,11 @@ names = ['juma', 'asha', 'haruna']
 
 Logical operators allow you to combine or invert conditions:
 
-| Operator | Description              | Example                   |
-|----------|--------------------------|---------------------------|
-| `&&`     | Logical AND              | `true && false // false` |
-| `||`     | Logical OR               | `true || false // true`  |
-| `!`      | Logical NOT (negation)   | `!true // false`         |
+| Operator | Description            | Example                  |
+| -------- | ---------------------- | ------------------------ | ---------- | ----- | --- | -------------- |
+| `&&`     | Logical AND            | `true && false // false` |
+| `        |                        | `                        | Logical OR | `true |     | false // true` |
+| `!`      | Logical NOT (negation) | `!true // false`         |
 
 ---
 
@@ -10786,8 +10803,8 @@ Logical operators allow you to combine or invert conditions:
 When multiple operators are used in an expression, operator precedence determines the order of execution. Below is the precedence order, from highest to lowest:
 
 1. `()` : Parentheses
-2. `!`  : Logical NOT
-3. `%`  : Modulo
+2. `!` : Logical NOT
+3. `%` : Modulo
 4. `**` : Exponential power
 5. `/`, `*` : Division and multiplication
 6. `+`, `+=`, `-`, `-=` : Addition and subtraction
@@ -10799,7 +10816,7 @@ When multiple operators are used in an expression, operator precedence determine
 
 ---
 
-```
+````
 
 ## os.md
 
@@ -10814,15 +10831,15 @@ You can exit a program and return a status code using `os.exit()`. A non-zero st
 
 ```js
 os.exit(1)  // Exit with status code 1
-```
+````
 
 ## Run a Shell Command
 
 Use `os.run()` to execute a shell command. It returns the result of the command as a string.
 
 ```js
-result = os.run("ls -la")
-print(result)  // Outputs the directory listing
+result = os.run("ls -la");
+print(result); // Outputs the directory listing
 ```
 
 You can also run other commands, like:
@@ -10842,22 +10859,22 @@ Environment variables can be set, retrieved, and removed with `os.setEnv()`, `os
 ### Set Environment Variable
 
 ```js
-os.setEnv("API_KEY", "12345")
+os.setEnv("API_KEY", "12345");
 ```
 
 ### Get Environment Variable
 
 ```js
-api_key = os.getEnv("API_KEY")
-print(api_key)  // Outputs: "12345"
+api_key = os.getEnv("API_KEY");
+print(api_key); // Outputs: "12345"
 ```
 
 ### Unset Environment Variable
 
 ```js
-os.unsetEnv("API_KEY")
-api_key = os.getEnv("API_KEY")
-print(api_key)  // Outputs: "" (empty string)
+os.unsetEnv("API_KEY");
+api_key = os.getEnv("API_KEY");
+print(api_key); // Outputs: "" (empty string)
 ```
 
 ## Read and Write Files
@@ -10865,14 +10882,14 @@ print(api_key)  // Outputs: "" (empty string)
 ### Write to a File
 
 ```js
-os.writeFile("example.txt", "Hello, Vint!")
+os.writeFile("example.txt", "Hello, Vint!");
 ```
 
 ### Read from a File
 
 ```js
-content = os.readFile("example.txt")
-print(content)  // Outputs: "Hello, Vint!"
+content = os.readFile("example.txt");
+print(content); // Outputs: "Hello, Vint!"
 ```
 
 ## List Directory Contents
@@ -10882,8 +10899,8 @@ print(content)  // Outputs: "Hello, Vint!"
 You can list the files in a directory using `os.listDir()`:
 
 ```js
-files = os.listDir(".")
-print(files)  // Outputs a comma-separated string of files in the current directory
+files = os.listDir(".");
+print(files); // Outputs a comma-separated string of files in the current directory
 ```
 
 ### Get Files as Array (Excluding Directories)
@@ -10891,17 +10908,17 @@ print(files)  // Outputs a comma-separated string of files in the current direct
 For more convenient file manipulation, use `os.listFiles()` which returns an array of files only (directories are excluded):
 
 ```js
-files = os.listFiles(".")
-print(files)  // Outputs: ["file1.txt", "file2.txt", "script.vint", ...]
+files = os.listFiles(".");
+print(files); // Outputs: ["file1.txt", "file2.txt", "script.vint", ...]
 
 // Iterate through files only
 for (file in files) {
-    print("Found file:", file)
+  print("Found file:", file);
 }
 
 // Check for specific files
 if ("README.md" in files) {
-    print("README found!")
+  print("README found!");
 }
 ```
 
@@ -10918,7 +10935,7 @@ The `listFiles()` function is particularly useful when you need to:
 Use `os.makeDir()` to create a new directory:
 
 ```js
-os.makeDir("new_folder")
+os.makeDir("new_folder");
 ```
 
 ## Check if a File Exists
@@ -10926,8 +10943,8 @@ os.makeDir("new_folder")
 To check if a file exists, use `os.fileExists()`:
 
 ```js
-exists = os.fileExists("example.txt")
-print(exists)  // Outputs: false (if the file doesn't exist)
+exists = os.fileExists("example.txt");
+print(exists); // Outputs: false (if the file doesn't exist)
 ```
 
 ## Read a File Line by Line
@@ -10935,9 +10952,9 @@ print(exists)  // Outputs: false (if the file doesn't exist)
 To read a file and get its lines in a list, use `os.readLines()`:
 
 ```js
-os.writeFile("example.txt", "Hello\nWorld")
-lines = os.readLines("example.txt")
-print(lines)  // Outputs: ["Hello", "World"]
+os.writeFile("example.txt", "Hello\nWorld");
+lines = os.readLines("example.txt");
+print(lines); // Outputs: ["Hello", "World"]
 ```
 
 ## Delete a File
@@ -10955,29 +10972,29 @@ The `os` module provides several functions to get system information:
 ### Get Home Directory
 
 ```js
-home = os.homedir()
-print(home)  // Outputs: "/home/username"
+home = os.homedir();
+print(home); // Outputs: "/home/username"
 ```
 
 ### Get Temporary Directory
 
 ```js
-temp = os.tmpdir()
-print(temp)  // Outputs: "/tmp" (on Unix-like systems)
+temp = os.tmpdir();
+print(temp); // Outputs: "/tmp" (on Unix-like systems)
 ```
 
 ### Get CPU Count
 
 ```js
-cpus = os.cpuCount()
-print(cpus)  // Outputs: 4 (number of logical CPUs)
+cpus = os.cpuCount();
+print(cpus); // Outputs: 4 (number of logical CPUs)
 ```
 
 ### Get Hostname
 
 ```js
-hostname = os.hostname()
-print(hostname)  // Outputs: "my-computer"
+hostname = os.hostname();
+print(hostname); // Outputs: "my-computer"
 ```
 
 ## File Operations
@@ -10985,20 +11002,20 @@ print(hostname)  // Outputs: "my-computer"
 ### Copy a File
 
 ```js
-os.copy("source.txt", "destination.txt")
-print("File copied successfully")
+os.copy("source.txt", "destination.txt");
+print("File copied successfully");
 ```
 
 ### Move or Rename a File
 
 ```js
-os.move("old_name.txt", "new_name.txt")
-print("File moved/renamed successfully")
+os.move("old_name.txt", "new_name.txt");
+print("File moved/renamed successfully");
 ```
 
 By utilizing the **Vint** `os` module, you can effectively manage files, directories, environment variables, and system information within your programs.
 
-```
+````
 
 ## packages.md
 
@@ -11020,7 +11037,7 @@ A single `.vint` file can contain one package definition. The name of the file d
 package MyPackage {
     // ... package members ...
 }
-```
+````
 
 ### Package Members
 
@@ -11039,7 +11056,7 @@ package Config {
     const VERSION = "1.2.3"
     const MAX_CONNECTIONS = 100
     const API_BASE_URL = "https://api.example.com"
-    
+
     let getConfig = func() {
         return {
             "version": VERSION,
@@ -11063,7 +11080,7 @@ package MyPackage {
     let publicVariable = "I'm accessible"
     const PUBLIC_CONSTANT = 42
     let publicFunction = func() { return "Hello!" }
-    
+
     // Private members (internal use only)
     let _privateVariable = "Internal only"
     const _PRIVATE_KEY = "secret-key-123"
@@ -11073,7 +11090,7 @@ package MyPackage {
 
 Attempting to access private members from outside the package will result in an error:
 
-```js
+````js
 import "MyPackage"
 
 print(MyPackage.publicVariable)  // ✅ Works
@@ -11102,7 +11119,7 @@ package Counter {
         return @.count
     }
 }
-```
+````
 
 ---
 
@@ -11150,10 +11167,10 @@ If `utils.vint` contains `package utils { ... }`, you would use it like this:
 // main.vint
 
 // Import the file containing the package
-import "utils"
+import "utils";
 
 // Now you can use the 'utils' package
-utils.doSomething()
+utils.doSomething();
 ```
 
 ---
@@ -11180,33 +11197,33 @@ package EnhancedExample {
     // Public constants
     const VERSION = "2.0.0"
     const MAX_ITEMS = 100
-    
-    // Private constants  
+
+    // Private constants
     const _SECRET_KEY = "internal-key-123"
-    
+
     // Public variables
     let counter = 0
-    
+
     // Private variables
     let _internalState = "hidden"
-    
+
     // Auto-initialization
     let init = func() {
         print("Package initialized! Version:", VERSION)
         @.counter = 10
     }
-    
+
     // Public functions
     let increment = func() {
         @.counter = @.counter + 1
         return @.counter
     }
-    
+
     // Private functions
     let _validate = func(value) {
         return value != null && value > 0
     }
-    
+
     let processValue = func(value) {
         if (!_validate(value)) {
             return "Invalid value"
@@ -11216,7 +11233,7 @@ package EnhancedExample {
 }
 ```
 
-```
+````
 
 ## path.md
 
@@ -11233,15 +11250,15 @@ Joins one or more path components intelligently.
 ```js
 p = path.join("/users", "alice", "docs", "file.txt")
 print(p) // Outputs: /users/alice/docs/file.txt
-```
+````
 
 ### `path.basename(path)`
 
 Returns the last portion of a path.
 
 ```js
-p = path.basename("/users/alice/docs/file.txt")
-print(p) // Outputs: file.txt
+p = path.basename("/users/alice/docs/file.txt");
+print(p); // Outputs: file.txt
 ```
 
 ### `path.dirname(path)`
@@ -11249,8 +11266,8 @@ print(p) // Outputs: file.txt
 Returns the directory name of a path.
 
 ```js
-p = path.dirname("/users/alice/docs/file.txt")
-print(p) // Outputs: /users/alice/docs
+p = path.dirname("/users/alice/docs/file.txt");
+print(p); // Outputs: /users/alice/docs
 ```
 
 ### `path.ext(path)`
@@ -11258,8 +11275,8 @@ print(p) // Outputs: /users/alice/docs
 Returns the file extension of the path.
 
 ```js
-p = path.ext("/users/alice/docs/file.txt")
-print(p) // Outputs: .txt
+p = path.ext("/users/alice/docs/file.txt");
+print(p); // Outputs: .txt
 ```
 
 ### `path.isAbs(path)`
@@ -11267,14 +11284,14 @@ print(p) // Outputs: .txt
 Returns `true` if the path is absolute.
 
 ```js
-p = path.isAbs("/users/alice/docs/file.txt")
-print(p) // Outputs: true
+p = path.isAbs("/users/alice/docs/file.txt");
+print(p); // Outputs: true
 
-p2 = path.isAbs("docs/file.txt")
-print(p2) // Outputs: false
+p2 = path.isAbs("docs/file.txt");
+print(p2); // Outputs: false
 ```
 
-```
+````
 
 ## pointers.md
 
@@ -11294,7 +11311,7 @@ VintLang now supports basic pointer operations, allowing you to reference and de
 ```js
 let x = 42
 let p = &x  # p is now a pointer to the value of x
-```
+````
 
 ### Dereferencing a Pointer
 
@@ -11336,7 +11353,7 @@ print(*p)   # Still 10, because p points to the original value
 - Use `*` to dereference pointers.
 - Pointers are useful for referencing values, but do not provide full variable reference semantics.
 
-```
+````
 
 ## postgres.md
 
@@ -11351,14 +11368,14 @@ To connect to a PostgreSQL database, use `postgres.open()`. The connection strin
 
 ```js
 conn = postgres.open("user=postgres password=password dbname=testdb sslmode=disable")
-```
+````
 
 ## Closing the Connection
 
 Make sure to close the connection with `postgres.close()` when you are finished.
 
 ```js
-postgres.close(conn)
+postgres.close(conn);
 ```
 
 ## Executing Queries
@@ -11367,8 +11384,8 @@ Use `postgres.execute()` for `INSERT`, `UPDATE`, `DELETE`, and other statements 
 
 ```js
 // Inserting data with placeholders
-insert_query = "INSERT INTO users (name, age) VALUES ($1, $2)"
-postgres.execute(conn, insert_query, "Alice", 30)
+insert_query = "INSERT INTO users (name, age) VALUES ($1, $2)";
+postgres.execute(conn, insert_query, "Alice", 30);
 ```
 
 ## Fetching Data
@@ -11378,8 +11395,8 @@ postgres.execute(conn, insert_query, "Alice", 30)
 To retrieve all rows from a query, use `postgres.fetchAll()`.
 
 ```js
-users = postgres.fetchAll(conn, "SELECT * FROM users")
-print(users)
+users = postgres.fetchAll(conn, "SELECT * FROM users");
+print(users);
 ```
 
 ### Fetch a Single Row
@@ -11387,8 +11404,8 @@ print(users)
 To retrieve just one row, use `postgres.fetchOne()`.
 
 ```js
-user = postgres.fetchOne(conn, "SELECT * FROM users WHERE id = $1", 1)
-print(user)
+user = postgres.fetchOne(conn, "SELECT * FROM users WHERE id = $1", 1);
+print(user);
 ```
 
 ## Full Example
@@ -11421,12 +11438,12 @@ if conn.type() == "ERROR" {
     // Close the connection
     postgres.close(conn)
     print("Connection closed")
-} 
+}
 ```
 
 ## random.md
 
-```markdown
+````markdown
 # Random Module in VintLang
 
 The `random` module provides functions for generating random numbers and data.
@@ -11434,20 +11451,22 @@ The `random` module provides functions for generating random numbers and data.
 ## Functions
 
 ### `random.int(min, max)`
+
 Returns a random integer in the range `[min, max]`, inclusive.
 
 ```js
-num = random.int(1, 100)
-print(num) // Outputs a random number between 1 and 100
+num = random.int(1, 100);
+print(num); // Outputs a random number between 1 and 100
 ```
+````
 
 ### `random.float()`
 
 Returns a random float in the range `[0.0, 1.0)`.
 
 ```js
-f = random.float()
-print(f)
+f = random.float();
+print(f);
 ```
 
 ### `random.string(length)`
@@ -11455,8 +11474,8 @@ print(f)
 Returns a random string of a given length.
 
 ```js
-s = random.string(12)
-print(s) // Outputs a random 12-character string
+s = random.string(12);
+print(s); // Outputs a random 12-character string
 ```
 
 ### `random.choice(array)`
@@ -11464,12 +11483,12 @@ print(s) // Outputs a random 12-character string
 Returns a random element from an array.
 
 ```js
-items = ["apple", "banana", "cherry"]
-item = random.choice(items)
-print(item) // Outputs one of the fruits
+items = ["apple", "banana", "cherry"];
+item = random.choice(items);
+print(item); // Outputs one of the fruits
 ```
 
-```
+````
 
 ## range.md
 
@@ -11486,7 +11505,7 @@ The `range` function in Vint generates a sequence of numbers and is commonly use
 range(end)
 range(start, end)
 range(start, end, step)
-```
+````
 
 ---
 
@@ -11556,7 +11575,7 @@ for i in range(10, 0, -1) {
 
 ---
 
-```
+````
 
 ## redis.md
 
@@ -11579,10 +11598,10 @@ Establishes a connection to a Redis server.
 
 **Example**:
 
-```vint
+```js
 conn = redis.connect("localhost:6379")
 auth_conn = redis.connect("localhost:6379", "mypassword", 1)
-```
+````
 
 ### `redis.close(connection)`
 
@@ -11590,8 +11609,8 @@ Closes the Redis connection.
 
 **Example**:
 
-```vint
-redis.close(conn)
+```js
+redis.close(conn);
 ```
 
 ### `redis.ping(connection)`
@@ -11602,8 +11621,8 @@ Tests the connection to Redis.
 
 **Example**:
 
-```vint
-result = redis.ping(conn)  // Returns "PONG"
+```js
+result = redis.ping(conn); // Returns "PONG"
 ```
 
 ## String Operations
@@ -11614,8 +11633,8 @@ Sets a string value.
 
 **Example**:
 
-```vint
-redis.set(conn, "mykey", "myvalue")
+```js
+redis.set(conn, "mykey", "myvalue");
 ```
 
 ### `redis.get(connection, key)`
@@ -11626,8 +11645,8 @@ Gets a string value.
 
 **Example**:
 
-```vint
-value = redis.get(conn, "mykey")
+```js
+value = redis.get(conn, "mykey");
 ```
 
 ### `redis.setex(connection, key, value, seconds)`
@@ -11636,8 +11655,8 @@ Sets a string value with expiration time.
 
 **Example**:
 
-```vint
-redis.setex(conn, "session:123", "userdata", 3600)  // Expires in 1 hour
+```js
+redis.setex(conn, "session:123", "userdata", 3600); // Expires in 1 hour
 ```
 
 ### `redis.mset(connection, key1, value1, key2, value2, ...)`
@@ -11646,8 +11665,8 @@ Sets multiple key-value pairs.
 
 **Example**:
 
-```vint
-redis.mset(conn, "key1", "value1", "key2", "value2")
+```js
+redis.mset(conn, "key1", "value1", "key2", "value2");
 ```
 
 ### `redis.mget(connection, key1, key2, ...)`
@@ -11658,8 +11677,8 @@ Gets multiple values.
 
 **Example**:
 
-```vint
-values = redis.mget(conn, "key1", "key2")
+```js
+values = redis.mget(conn, "key1", "key2");
 ```
 
 ## Numeric Operations
@@ -11670,8 +11689,8 @@ Increments the integer value of a key by 1.
 
 **Example**:
 
-```vint
-counter = redis.incr(conn, "visits")  // Increments and returns new value
+```js
+counter = redis.incr(conn, "visits"); // Increments and returns new value
 ```
 
 ### `redis.decr(connection, key)`
@@ -11718,8 +11737,8 @@ Returns all keys matching a pattern.
 
 **Example**:
 
-```vint
-keys = redis.keys(conn, "user:*")  // All keys starting with "user:"
+```js
+keys = redis.keys(conn, "user:*"); // All keys starting with "user:"
 ```
 
 ## Hash Operations
@@ -11782,8 +11801,8 @@ Returns a range of elements from a list.
 
 **Example**:
 
-```vint
-elements = redis.lrange(conn, "mylist", 0, -1)  // All elements
+```js
+elements = redis.lrange(conn, "mylist", 0, -1); // All elements
 ```
 
 ## Set Operations
@@ -11816,8 +11835,8 @@ Adds one or more members to a sorted set with scores.
 
 **Example**:
 
-```vint
-redis.zadd(conn, "leaderboard", 100, "player1", 85, "player2")
+```js
+redis.zadd(conn, "leaderboard", 100, "player1", 85, "player2");
 ```
 
 ### `redis.zrem(connection, key, member1, [member2, ...])`
@@ -11838,31 +11857,31 @@ Returns the score of a member in a sorted set.
 
 ## Usage Example
 
-```vint
+```js
 // Connect to Redis
-conn = redis.connect("localhost:6379")
+conn = redis.connect("localhost:6379");
 
 // Basic string operations
-redis.set(conn, "greeting", "Hello, World!")
-message = redis.get(conn, "greeting")
-print(message)  // Output: Hello, World!
+redis.set(conn, "greeting", "Hello, World!");
+message = redis.get(conn, "greeting");
+print(message); // Output: Hello, World!
 
 // Working with hashes
-redis.hset(conn, "user:1", "name", "John Doe")
-redis.hset(conn, "user:1", "email", "john@example.com")
-user = redis.hgetall(conn, "user:1")
-print(user)  // Output: {"name": "John Doe", "email": "john@example.com"}
+redis.hset(conn, "user:1", "name", "John Doe");
+redis.hset(conn, "user:1", "email", "john@example.com");
+user = redis.hgetall(conn, "user:1");
+print(user); // Output: {"name": "John Doe", "email": "john@example.com"}
 
 // Working with lists
-redis.rpush(conn, "tasks", "task1", "task2", "task3")
-task = redis.lpop(conn, "tasks")
-print(task)  // Output: task1
+redis.rpush(conn, "tasks", "task1", "task2", "task3");
+task = redis.lpop(conn, "tasks");
+print(task); // Output: task1
 
 // Close connection
-redis.close(conn)
+redis.close(conn);
 ```
 
-```
+````
 
 ## reflect.md
 
@@ -11872,9 +11891,9 @@ redis.close(conn)
 The `reflect` module provides runtime type inspection and reflection utilities for VintLang. It allows you to examine the type and structure of values, check for null, and determine if a value is an array, object, or function.
 
 ## Importing
-```vint
+```js
 import reflect
-```
+````
 
 ## Functions
 
@@ -11887,7 +11906,7 @@ Returns the type name of the given value as a string.
 - **Returns:** String (e.g., "STRING", "ARRAY", "DICT", "NULL", "FUNCTION", etc.)
 - **Example:**
 
-  ```vint
+  ```js
   reflect.typeOf("hello")        // "STRING"
   reflect.typeOf([1,2,3])        // "ARRAY"
   reflect.typeOf({"a": 1})      // "DICT"
@@ -11904,9 +11923,9 @@ Returns the raw value passed in (identity function).
 - **Returns:** The same value
 - **Example:**
 
-  ```vint
-  reflect.valueOf(42)            // 42
-  reflect.valueOf("foo")         // "foo"
+  ```js
+  reflect.valueOf(42); // 42
+  reflect.valueOf("foo"); // "foo"
   ```
 
 ### reflect.isNil(value)
@@ -11918,9 +11937,9 @@ Checks if the value is `null`.
 - **Returns:** Boolean
 - **Example:**
 
-  ```vint
-  reflect.isNil(null)            // true
-  reflect.isNil(123)             // false
+  ```js
+  reflect.isNil(null); // true
+  reflect.isNil(123); // false
   ```
 
 ### reflect.isArray(value)
@@ -11932,9 +11951,9 @@ Checks if the value is an array.
 - **Returns:** Boolean
 - **Example:**
 
-  ```vint
-  reflect.isArray([1,2,3])       // true
-  reflect.isArray("not array")   // false
+  ```js
+  reflect.isArray([1, 2, 3]); // true
+  reflect.isArray("not array"); // false
   ```
 
 ### reflect.isObject(value)
@@ -11946,9 +11965,9 @@ Checks if the value is a dictionary/object.
 - **Returns:** Boolean
 - **Example:**
 
-  ```vint
-  reflect.isObject({"a": 1})    // true
-  reflect.isObject([1,2,3])      // false
+  ```js
+  reflect.isObject({ a: 1 }); // true
+  reflect.isObject([1, 2, 3]); // false
   ```
 
 ### reflect.isFunction(value)
@@ -11960,7 +11979,7 @@ Checks if the value is a function.
 - **Returns:** Boolean
 - **Example:**
 
-  ```vint
+  ```js
   let f = func(x) { x * 2 }
   reflect.isFunction(f)          // true
   reflect.isFunction(123)        // false
@@ -11970,7 +11989,7 @@ Checks if the value is a function.
 
 See `examples/reflect.vint` for a full demonstration of all reflect module functions.
 
-```
+````
 
 ## regex.md
 
@@ -11987,7 +12006,7 @@ To use the Regex module, import it as follows:
 
 ```js
 import regex
-```
+````
 
 ---
 
@@ -12000,7 +12019,7 @@ The `match` function checks if a string matches a specified pattern. It returns 
 **Syntax**:
 
 ```js
-match(pattern, string)
+match(pattern, string);
 ```
 
 - `pattern`: The regular expression pattern.
@@ -12021,7 +12040,7 @@ In this case, the string starts with `"Hello"`, so it matches the pattern.
 
 ### 2. Using `match` to Check Non-Matches
 
-You can use `match` to check if a string does *not* match a given pattern. If the pattern is not found at the beginning of the string, it will return `false`.
+You can use `match` to check if a string does _not_ match a given pattern. If the pattern is not found at the beginning of the string, it will return `false`.
 
 **Example**:
 
@@ -12043,7 +12062,7 @@ The `replaceString` function replaces parts of a string that match a pattern wit
 **Syntax**:
 
 ```js
-replaceString(pattern, replacement, string)
+replaceString(pattern, replacement, string);
 ```
 
 - `pattern`: The regular expression pattern.
@@ -12070,7 +12089,7 @@ The `splitString` function splits a string into a list of substrings based on a 
 **Syntax**:
 
 ```js
-splitString(pattern, string)
+splitString(pattern, string);
 ```
 
 - `pattern`: The regular expression pattern used as a delimiter.
@@ -12142,17 +12161,17 @@ Here, `\\d` matches any digit, so the digits in the phone number are replaced wi
 
 ## Summary of Functions
 
-| Function           | Description                                             | Example Output                             |
-|--------------------|---------------------------------------------------------|--------------------------------------------|
-| `match(pattern, string)`  | Checks if the string matches the given pattern.         | `true` or `false`                          |
-| `replaceString(pattern, replacement, string)`  | Replaces parts of a string matching a pattern with a new value.  | A modified string                          |
-| `splitString(pattern, string)` | Splits a string into a list of substrings based on the pattern.   | List of substrings                         |
+| Function                                      | Description                                                     | Example Output     |
+| --------------------------------------------- | --------------------------------------------------------------- | ------------------ |
+| `match(pattern, string)`                      | Checks if the string matches the given pattern.                 | `true` or `false`  |
+| `replaceString(pattern, replacement, string)` | Replaces parts of a string matching a pattern with a new value. | A modified string  |
+| `splitString(pattern, string)`                | Splits a string into a list of substrings based on the pattern. | List of substrings |
 
 ---
 
 The `regex` module is extremely useful for text manipulation, pattern matching, and string processing tasks in Vint. Whether you need to validate input, split strings, or replace parts of a string, the regex module provides powerful tools to handle these tasks efficiently.
 
-```
+````
 
 ## schedule.md
 
@@ -12185,7 +12204,7 @@ let ticker = schedule.ticker(5, func() {
 // Stop the ticker after some time
 time.sleep(20)
 schedule.stopTicker(ticker)
-```
+````
 
 ### `stopTicker(tickerObj)`
 
@@ -12379,7 +12398,7 @@ The module provides comprehensive error messages for common mistakes:
 
 All errors include usage examples to help with correct implementation.
 
-```
+````
 
 ## shell.md
 
@@ -12396,7 +12415,7 @@ To use the Shell module, import it as follows:
 
 ```js
 import shell
-```
+````
 
 ---
 
@@ -12409,7 +12428,7 @@ The `run` function allows you to execute a shell command and capture its output.
 **Syntax**:
 
 ```js
-run(command)
+run(command);
 ```
 
 - `command` (string): The shell command to execute (e.g., `echo Hello` or `ls`).
@@ -12435,7 +12454,7 @@ The `exists` function checks whether a given command is available on the system.
 **Syntax**:
 
 ```js
-exists(command)
+exists(command);
 ```
 
 - `command` (string): The name of the command to check (e.g., `ls`, `python`, `echo`).
@@ -12482,16 +12501,16 @@ This runs the `ls` command with the `-l` flag to list files and directories with
 
 ### Summary of Functions
 
-| Function          | Description                                    | Example Output                              |
-|-------------------|------------------------------------------------|---------------------------------------------|
-| `run`             | Executes a shell command and returns its output. | `"Hello, Shell!"`                           |
-| `exists`          | Checks if a command is available in the shell.  | `true` or `false` depending on command existence |
+| Function | Description                                      | Example Output                                   |
+| -------- | ------------------------------------------------ | ------------------------------------------------ |
+| `run`    | Executes a shell command and returns its output. | `"Hello, Shell!"`                                |
+| `exists` | Checks if a command is available in the shell.   | `true` or `false` depending on command existence |
 
 ---
 
 The Shell module is a powerful tool for integrating system-level shell commands directly within your Vint programs. It is especially useful for automation tasks, system monitoring, or running external scripts.
 
-```
+````
 
 ## sqlite.md
 
@@ -12506,14 +12525,14 @@ Use `sqlite.open()` to open a connection to an SQLite database.
 
 ```js
 db = sqlite.open("example.db")
-```
+````
 
 ## Close a Database
 
 To close the database connection, use `sqlite.close()`.
 
 ```js
-sqlite.close(db)
+sqlite.close(db);
 ```
 
 ## Execute a Query
@@ -12523,13 +12542,13 @@ You can execute `INSERT`, `UPDATE`, `DELETE`, and other queries using `sqlite.ex
 ### Insert Data
 
 ```js
-sqlite.execute(db, "INSERT INTO users (name, age) VALUES (?, ?)", "Alice", 25)
+sqlite.execute(db, "INSERT INTO users (name, age) VALUES (?, ?)", "Alice", 25);
 ```
 
 ### Update Data
 
 ```js
-sqlite.execute(db, "UPDATE users SET age = ? WHERE name = ?", 26, "Alice")
+sqlite.execute(db, "UPDATE users SET age = ? WHERE name = ?", 26, "Alice");
 ```
 
 ## Fetch Data
@@ -12537,15 +12556,15 @@ sqlite.execute(db, "UPDATE users SET age = ? WHERE name = ?", 26, "Alice")
 Use `sqlite.fetchAll()` to retrieve all rows from a query.
 
 ```js
-users = sqlite.fetchAll(db, "SELECT * FROM users")
-print(users)
+users = sqlite.fetchAll(db, "SELECT * FROM users");
+print(users);
 ```
 
 You can also fetch a single row with `sqlite.fetchOne()`.
 
 ```js
-first_user = sqlite.fetchOne(db, "SELECT * FROM users LIMIT 1")
-print(first_user)
+first_user = sqlite.fetchOne(db, "SELECT * FROM users LIMIT 1");
+print(first_user);
 ```
 
 ## Create a Table
@@ -12553,7 +12572,10 @@ print(first_user)
 To create a new table, use `sqlite.createTable()`.
 
 ```js
-sqlite.createTable(db, "CREATE TABLE IF NOT EXISTS users (id INTEGER PRIMARY KEY, name TEXT, age INTEGER)")
+sqlite.createTable(
+  db,
+  "CREATE TABLE IF NOT EXISTS users (id INTEGER PRIMARY KEY, name TEXT, age INTEGER)"
+);
 ```
 
 ## Drop a Table
@@ -12561,7 +12583,7 @@ sqlite.createTable(db, "CREATE TABLE IF NOT EXISTS users (id INTEGER PRIMARY KEY
 Use `sqlite.dropTable()` to delete a table from the database.
 
 ```js
-sqlite.dropTable(db, "users")
+sqlite.dropTable(db, "users");
 ```
 
 ## Example Usage
@@ -12592,7 +12614,7 @@ sqlite.close(db)
 
 By using the **VintLang** `sqlite` module, you can easily manage SQLite databases in your programs.
 
-```
+````
 
 ## strings.md
 
@@ -12611,28 +12633,28 @@ print("Hello")  // Output: Hello
 let name = 'Tachera'
 
 print("Hello", name)  // Output: Hello Tachera
-```
+````
 
 ## Concatenating Strings
 
 Strings can be concatenated using the `+` operator:
 
 ```js
-let greeting = "Hello" + " " + "World"
-print(greeting)  // Output: Hello World
+let greeting = "Hello" + " " + "World";
+print(greeting); // Output: Hello World
 
-let message = "Hello"
-message += " World"
+let message = "Hello";
+message += " World";
 // Output: Hello World
 ```
 
 You can also repeat a string a specific number of times using the `*` operator:
 
 ```js
-print("Hello " * 3)  // Output: Hello Hello Hello
+print("Hello " * 3); // Output: Hello Hello Hello
 
-let repeated = "World"
-repeated *= 2
+let repeated = "World";
+repeated *= 2;
 // Output: WorldWorld
 ```
 
@@ -12679,9 +12701,9 @@ for i, char in name {
 You can compare two strings using the `==` operator:
 
 ```js
-let a = "Vint"
-print(a == "Vint")  // Output: true
-print(a == "vint")  // Output: false
+let a = "Vint";
+print(a == "Vint"); // Output: true
+print(a == "vint"); // Output: false
 ```
 
 ## String Methods
@@ -12691,8 +12713,8 @@ print(a == "vint")  // Output: false
 You can find the length of a string using the `length` method. It does not accept any parameters:
 
 ```js
-let message = "Vint"
-print(message.length())  // Output: 4
+let message = "Vint";
+print(message.length()); // Output: 4
 ```
 
 ### Convert to Uppercase (`upper`)
@@ -12700,8 +12722,8 @@ print(message.length())  // Output: 4
 This method converts the string to uppercase:
 
 ```js
-let text = "vint"
-print(text.upper())  // Output: VINT
+let text = "vint";
+print(text.upper()); // Output: VINT
 ```
 
 ### Convert to Lowercase (`lower`)
@@ -12709,8 +12731,8 @@ print(text.upper())  // Output: VINT
 This method converts the string to lowercase:
 
 ```js
-let text = "VINT"
-print(text.lower())  // Output: vint
+let text = "VINT";
+print(text.lower()); // Output: vint
 ```
 
 ### Split a String (`split`)
@@ -12720,17 +12742,17 @@ The `split` method splits a string into an array based on a specified delimiter.
 Example without a delimiter:
 
 ```js
-let sentence = "Vint programming language"
-let words = sentence.split()
-print(words)  // Output: ["Vint", "programming", "language"]
+let sentence = "Vint programming language";
+let words = sentence.split();
+print(words); // Output: ["Vint", "programming", "language"]
 ```
 
 Example with a delimiter:
 
 ```js
-let sentence = "Vint,programming,language"
-let words = sentence.split(",")
-print(words)  // Output: ["Vint", "programming", "language"]
+let sentence = "Vint,programming,language";
+let words = sentence.split(",");
+print(words); // Output: ["Vint", "programming", "language"]
 ```
 
 ### Replace Substrings (`replace`)
@@ -12738,9 +12760,9 @@ print(words)  // Output: ["Vint", "programming", "language"]
 You can replace a substring with another string using the `replace` method:
 
 ```js
-let greeting = "Hello World"
-let newGreeting = greeting.replace("World", "Vint")
-print(newGreeting)  // Output: Hello Vint
+let greeting = "Hello World";
+let newGreeting = greeting.replace("World", "Vint");
+print(newGreeting); // Output: Hello Vint
 ```
 
 ### Trim Whitespace (`trim`)
@@ -12748,8 +12770,8 @@ print(newGreeting)  // Output: Hello Vint
 You can remove whitespace from the start and end of a string using the `trim` method:
 
 ```js
-let text = "  Hello World  "
-print(text.trim())  // Output: "Hello World"
+let text = "  Hello World  ";
+print(text.trim()); // Output: "Hello World"
 ```
 
 ### Check String Start (`startsWith`)
@@ -12757,9 +12779,9 @@ print(text.trim())  // Output: "Hello World"
 The `startsWith` method checks if a string starts with a specified prefix:
 
 ```js
-let text = "Hello World"
-print(text.startsWith("Hello"))  // Output: true
-print(text.startsWith("World"))  // Output: false
+let text = "Hello World";
+print(text.startsWith("Hello")); // Output: true
+print(text.startsWith("World")); // Output: false
 ```
 
 ### Check String End (`endsWith`)
@@ -12767,9 +12789,9 @@ print(text.startsWith("World"))  // Output: false
 The `endsWith` method checks if a string ends with a specified suffix:
 
 ```js
-let text = "Hello World"
-print(text.endsWith("World"))   // Output: true
-print(text.endsWith("Hello"))   // Output: false
+let text = "Hello World";
+print(text.endsWith("World")); // Output: true
+print(text.endsWith("Hello")); // Output: false
 ```
 
 ### Check String Contains (`includes`)
@@ -12777,9 +12799,9 @@ print(text.endsWith("Hello"))   // Output: false
 The `includes` method checks if a string contains a specified substring:
 
 ```js
-let text = "Hello World"
-print(text.includes("lo Wo"))   // Output: true
-print(text.includes("xyz"))     // Output: false
+let text = "Hello World";
+print(text.includes("lo Wo")); // Output: true
+print(text.includes("xyz")); // Output: false
 ```
 
 ### Repeat String (`repeat`)
@@ -12787,9 +12809,9 @@ print(text.includes("xyz"))     // Output: false
 The `repeat` method repeats a string a specified number of times:
 
 ```js
-let text = "Ha"
-print(text.repeat(3))  // Output: "HaHaHa"
-print("X".repeat(5))   // Output: "XXXXX"
+let text = "Ha";
+print(text.repeat(3)); // Output: "HaHaHa"
+print("X".repeat(5)); // Output: "XXXXX"
 ```
 
 ### Capitalize String (`capitalize`)
@@ -12797,8 +12819,8 @@ print("X".repeat(5))   // Output: "XXXXX"
 The `capitalize` method capitalizes the first letter of a string:
 
 ```js
-let text = "hello world"
-print(text.capitalize())  // Output: "Hello world"
+let text = "hello world";
+print(text.capitalize()); // Output: "Hello world"
 ```
 
 ### Check if Numeric (`isNumeric`)
@@ -12806,10 +12828,10 @@ print(text.capitalize())  // Output: "Hello world"
 The `isNumeric` method checks if a string contains only numeric characters:
 
 ```js
-print("123".isNumeric())      // Output: true
-print("12.34".isNumeric())    // Output: true
-print("abc".isNumeric())      // Output: false
-print("12a".isNumeric())      // Output: false
+print("123".isNumeric()); // Output: true
+print("12.34".isNumeric()); // Output: true
+print("abc".isNumeric()); // Output: false
+print("12a".isNumeric()); // Output: false
 ```
 
 ### Check if Alphabetic (`isAlpha`)
@@ -12817,10 +12839,10 @@ print("12a".isNumeric())      // Output: false
 The `isAlpha` method checks if a string contains only alphabetic characters:
 
 ```js
-print("hello".isAlpha())      // Output: true
-print("Hello".isAlpha())      // Output: true
-print("hello123".isAlpha())   // Output: false
-print("hello world".isAlpha()) // Output: false (space is not alphabetic)
+print("hello".isAlpha()); // Output: true
+print("Hello".isAlpha()); // Output: true
+print("hello123".isAlpha()); // Output: false
+print("hello world".isAlpha()); // Output: false (space is not alphabetic)
 ```
 
 ### Case-Insensitive Compare (`compareIgnoreCase`)
@@ -12828,10 +12850,10 @@ print("hello world".isAlpha()) // Output: false (space is not alphabetic)
 The `compareIgnoreCase` method compares strings ignoring case differences:
 
 ```js
-let text = "Hello"
-print(text.compareIgnoreCase("hello"))   // Output: 0 (equal)
-print(text.compareIgnoreCase("apple"))   // Output: 1 (greater)
-print(text.compareIgnoreCase("zebra"))   // Output: -1 (less)
+let text = "Hello";
+print(text.compareIgnoreCase("hello")); // Output: 0 (equal)
+print(text.compareIgnoreCase("apple")); // Output: 1 (greater)
+print(text.compareIgnoreCase("zebra")); // Output: -1 (less)
 ```
 
 ### Format String (`format`)
@@ -12839,11 +12861,11 @@ print(text.compareIgnoreCase("zebra"))   // Output: -1 (less)
 The `format` method applies simple formatting to strings using placeholders:
 
 ```js
-let template = "Hello {0}, you are {1} years old"
-print(template.format("John", 25))  // Output: "Hello John, you are 25 years old"
+let template = "Hello {0}, you are {1} years old";
+print(template.format("John", 25)); // Output: "Hello John, you are 25 years old"
 
-let message = "The result is {0}"
-print(message.format(42))  // Output: "The result is 42"
+let message = "The result is {0}";
+print(message.format(42)); // Output: "The result is 42"
 ```
 
 ### Remove Accents (`removeAccents`)
@@ -12851,9 +12873,9 @@ print(message.format(42))  // Output: "The result is 42"
 The `removeAccents` method removes accent characters from a string:
 
 ```js
-print("café".removeAccents())     // Output: "cafe"
-print("naïve".removeAccents())    // Output: "naive"
-print("résumé".removeAccents())   // Output: "resume"
+print("café".removeAccents()); // Output: "cafe"
+print("naïve".removeAccents()); // Output: "naive"
+print("résumé".removeAccents()); // Output: "resume"
 ```
 
 ### Convert to Integer (`toInt`)
@@ -12861,14 +12883,14 @@ print("résumé".removeAccents())   // Output: "resume"
 The `toInt` method converts a string to an integer:
 
 ```js
-print("123".toInt())    // Output: 123
-print("-456".toInt())   // Output: -456
+print("123".toInt()); // Output: 123
+print("-456".toInt()); // Output: -456
 // Note: Returns an error if the string is not a valid integer
 ```
 
 ```js
-let message = "  Hello World  "
-print(message.trim())  // Output: Hello World
+let message = "  Hello World  ";
+print(message.trim()); // Output: Hello World
 ```
 
 ### Get a Substring (`substring`)
@@ -12876,8 +12898,8 @@ print(message.trim())  // Output: Hello World
 You can extract a substring from a string by specifying the starting and ending indices:
 
 ```js
-let sentence = "Vint programming"
-print(sentence.substring(0, 4))  // Output: Vint
+let sentence = "Vint programming";
+print(sentence.substring(0, 4)); // Output: Vint
 ```
 
 ### Find the Index of a Substring (`indexOf`)
@@ -12885,8 +12907,8 @@ print(sentence.substring(0, 4))  // Output: Vint
 You can find the index of a substring within a string using the `indexOf` method:
 
 ```js
-let sentence = "Vint programming"
-print(sentence.indexOf("programming"))  // Output: 5
+let sentence = "Vint programming";
+print(sentence.indexOf("programming")); // Output: 5
 ```
 
 ### Slugify a String (`slug`)
@@ -12894,8 +12916,8 @@ print(sentence.indexOf("programming"))  // Output: 5
 You can convert a string into a URL-friendly format (slug) using the `slug` method:
 
 ```js
-let title = "Creating a Slug String"
-print(title.slug())  // Output: creating-a-slug-string
+let title = "Creating a Slug String";
+print(title.slug()); // Output: creating-a-slug-string
 ```
 
 ### Checking Substring Presence (`contains`)
@@ -12903,8 +12925,8 @@ print(title.slug())  // Output: creating-a-slug-string
 Check if a string contains a specific substring:
 
 ```js
-let name = "Tachera Sasi"
-print(name.contains("Sasi"))  // Output: true
+let name = "Tachera Sasi";
+print(name.contains("Sasi")); // Output: true
 ```
 
 ### Get Character at Index (`charAt`)
@@ -12912,9 +12934,9 @@ print(name.contains("Sasi"))  // Output: true
 Get the character at a specific index:
 
 ```js
-let word = "Hello"
-print(word.charAt(1))  // Output: e
-print(word.charAt(10)) // Output: "" (empty string for out of bounds)
+let word = "Hello";
+print(word.charAt(1)); // Output: e
+print(word.charAt(10)); // Output: "" (empty string for out of bounds)
 ```
 
 ### Repeat String (`times`)
@@ -12922,8 +12944,8 @@ print(word.charAt(10)) // Output: "" (empty string for out of bounds)
 Repeat a string a specified number of times:
 
 ```js
-let pattern = "Ha"
-print(pattern.times(3))  // Output: HaHaHa
+let pattern = "Ha";
+print(pattern.times(3)); // Output: HaHaHa
 ```
 
 ### Pad String Start (`padStart`)
@@ -12931,11 +12953,11 @@ print(pattern.times(3))  // Output: HaHaHa
 Pad the string to a target length from the beginning:
 
 ```js
-let num = "5"
-print(num.padStart(3, "0"))  // Output: 005
+let num = "5";
+print(num.padStart(3, "0")); // Output: 005
 
-let word = "hi"
-print(word.padStart(5, "*"))  // Output: ***hi
+let word = "hi";
+print(word.padStart(5, "*")); // Output: ***hi
 ```
 
 ### Pad String End (`padEnd`)
@@ -12943,11 +12965,11 @@ print(word.padStart(5, "*"))  // Output: ***hi
 Pad the string to a target length from the end:
 
 ```js
-let num = "5"
-print(num.padEnd(3, "0"))  // Output: 500
+let num = "5";
+print(num.padEnd(3, "0")); // Output: 500
 
-let word = "hi"
-print(word.padEnd(5, "*"))  // Output: hi***
+let word = "hi";
+print(word.padEnd(5, "*")); // Output: hi***
 ```
 
 ### Check String Start (`startsWith`)
@@ -12955,9 +12977,9 @@ print(word.padEnd(5, "*"))  // Output: hi***
 Check if a string starts with a specified prefix:
 
 ```js
-let message = "Hello World"
-print(message.startsWith("Hello"))  // Output: true
-print(message.startsWith("World"))  // Output: false
+let message = "Hello World";
+print(message.startsWith("Hello")); // Output: true
+print(message.startsWith("World")); // Output: false
 ```
 
 ### Check String End (`endsWith`)
@@ -12965,9 +12987,9 @@ print(message.startsWith("World"))  // Output: false
 Check if a string ends with a specified suffix:
 
 ```js
-let filename = "document.pdf"
-print(filename.endsWith(".pdf"))  // Output: true
-print(filename.endsWith(".txt"))  // Output: false
+let filename = "document.pdf";
+print(filename.endsWith(".pdf")); // Output: true
+print(filename.endsWith(".txt")); // Output: false
 ```
 
 ### Extract Slice (`slice`)
@@ -12975,10 +12997,10 @@ print(filename.endsWith(".txt"))  // Output: false
 Extract a section of the string:
 
 ```js
-let text = "Hello World"
-print(text.slice(0, 5))   // Output: Hello
-print(text.slice(6))      // Output: World
-print(text.slice(-5))     // Output: World
+let text = "Hello World";
+print(text.slice(0, 5)); // Output: Hello
+print(text.slice(6)); // Output: World
+print(text.slice(-5)); // Output: World
 ```
 
 ## Example Usage
@@ -12986,39 +13008,39 @@ print(text.slice(-5))     // Output: World
 Here’s an example of how you might use these string operations in Vint:
 
 ```js
-import "string"
+import "string";
 
 // Example: Trim whitespace
-let trimmed = string.trim("  Hello, World!  ")
-print(trimmed)  // Output: "Hello, World!"
+let trimmed = string.trim("  Hello, World!  ");
+print(trimmed); // Output: "Hello, World!"
 
 // Example: Check if a string contains a substring
-let containsResult = string.contains("Hello, World!", "World")
-print(containsResult)  // Output: true
+let containsResult = string.contains("Hello, World!", "World");
+print(containsResult); // Output: true
 
 // Example: Convert to uppercase
-let upperResult = string.toUpper("hello")
-print(upperResult)  // Output: "HELLO"
+let upperResult = string.toUpper("hello");
+print(upperResult); // Output: "HELLO"
 
 // Example: Convert to lowercase
-let lowerResult = string.toLower("HELLO")
-print(lowerResult)  // Output: "hello"
+let lowerResult = string.toLower("HELLO");
+print(lowerResult); // Output: "hello"
 
 // Example: Replace a substring
-let replaceResult = string.replace("Hello, World!", "World", "Vint")
-print(replaceResult)  // Output: "Hello, Vint!"
+let replaceResult = string.replace("Hello, World!", "World", "Vint");
+print(replaceResult); // Output: "Hello, Vint!"
 
 // Example: Split a string into parts
-let splitResult = string.split("a,b,c,d", ",")
-print(splitResult)  // Output: ["a", "b", "c", "d"]
+let splitResult = string.split("a,b,c,d", ",");
+print(splitResult); // Output: ["a", "b", "c", "d"]
 
 // Example: Join string parts
-let joinResult = string.join(["a", "b", "c"], "-")
-print(joinResult)  // Output: "a-b-c"
+let joinResult = string.join(["a", "b", "c"], "-");
+print(joinResult); // Output: "a-b-c"
 
 // Example: Get the length of a string
-let lengthResult = string.length("Hello")
-print(lengthResult)  // Output: 5
+let lengthResult = string.length("Hello");
+print(lengthResult); // Output: 5
 ```
 
 ## Example with Vint Data
@@ -13026,20 +13048,20 @@ print(lengthResult)  // Output: 5
 Here's an example using Vint-specific strings:
 
 ```js
-let name = "Tachera Sasi"
-let reversed = name.reverse()
-print(reversed)  // Output: "isaS arehcaT"
+let name = "Tachera Sasi";
+let reversed = name.reverse();
+print(reversed); // Output: "isaS arehcaT"
 
-let upperName = name.upper()
-print(upperName)  // Output: "TACHERA SASI"
+let upperName = name.upper();
+print(upperName); // Output: "TACHERA SASI"
 
-let trimmedName = name.trim("T")
-print(trimmedName)  // Output: "achera Sasi"
+let trimmedName = name.trim("T");
+print(trimmedName); // Output: "achera Sasi"
 ```
 
 Understanding how to manipulate and work with strings in Vint allows you to efficiently handle text data in your programs.
 
-```
+````
 
 ## success.md
 
@@ -13052,7 +13074,7 @@ The `success` keyword allows you to print success messages at runtime.
 
 ```js
 success "Your success message here"
-```
+````
 
 When the Vint interpreter encounters a `success` statement, it prints a green-colored success message to the console and continues execution. This is useful for indicating when an operation has completed successfully.
 
@@ -13070,7 +13092,7 @@ Running this script will output:
 All done.
 ```
 
-```
+````
 
 ## switch.md
 
@@ -13097,7 +13119,7 @@ switch (a) {
   print("a is two")
  }
 }
-```
+````
 
 ## Multiple Values in a Case
 
@@ -13190,7 +13212,7 @@ switch (isTrue) {
 
 By mastering switch statements in **Vint**, you can write clean, structured, and efficient code that efficiently handles complex branching logic.
 
-```
+````
 
 ## sysinfo.md
 
@@ -13207,7 +13229,7 @@ To use the Sysinfo module, import it as follows:
 
 ```js
 import sysinfo
-```
+````
 
 ---
 
@@ -13220,7 +13242,7 @@ The `os` function returns the name of the operating system on which the Vint pro
 **Syntax**:
 
 ```js
-os()
+os();
 ```
 
 - Returns a string representing the operating system (e.g., `"Linux"`, `"Windows"`, `"macOS"`).
@@ -13244,7 +13266,7 @@ The `arch` function returns the architecture of the system (e.g., 32-bit or 64-b
 **Syntax**:
 
 ```js
-arch()
+arch();
 ```
 
 - Returns a string representing the architecture (e.g., `"x86_64"` for 64-bit or `"i386"` for 32-bit).
@@ -13288,7 +13310,7 @@ The `memInfo` function returns detailed information about system memory usage.
 **Syntax**:
 
 ```js
-memInfo()
+memInfo();
 ```
 
 - Returns a dictionary containing memory statistics in GB and usage percentage.
@@ -13321,7 +13343,7 @@ The `cpuInfo` function returns detailed information about the CPU.
 **Syntax**:
 
 ```js
-cpuInfo()
+cpuInfo();
 ```
 
 - Returns a dictionary containing CPU model, cores, frequency, and current usage.
@@ -13352,7 +13374,7 @@ The `diskInfo` function returns information about disk usage for the root filesy
 **Syntax**:
 
 ```js
-diskInfo()
+diskInfo();
 ```
 
 - Returns a dictionary containing disk space information in GB and usage percentage.
@@ -13383,7 +13405,7 @@ The `netInfo` function returns information about all network interfaces with add
 **Syntax**:
 
 ```js
-netInfo()
+netInfo();
 ```
 
 - Returns an array of dictionaries, each containing interface name and addresses.
@@ -13448,20 +13470,20 @@ print("Network interfaces:", len(net))
 
 ### Summary of Functions
 
-| Function          | Description                                    | Example Output                              |
-|-------------------|------------------------------------------------|---------------------------------------------|
-| `os`              | Returns the operating system name.             | `"Linux"`, `"Windows"`, `"macOS"`           |
-| `arch`            | Returns the system architecture.               | `"x86_64"`, `"i386"`                        |
-| `memInfo`         | Returns memory usage information.              | `{"total": "15.62 GB", "used": "1.08 GB", "percent": "6.89"}` |
-| `cpuInfo`         | Returns CPU information and usage.             | `{"model": "AMD EPYC", "cores": "1", "usage": "33.33"}` |
-| `diskInfo`        | Returns disk usage information.                | `{"total": "71.61 GB", "used": "49.81 GB", "percent": "69.58"}` |
-| `netInfo`         | Returns network interface information.         | `[{"name": "eth0", "addrs": ["10.1.0.75/20"]}]` |
+| Function   | Description                            | Example Output                                                  |
+| ---------- | -------------------------------------- | --------------------------------------------------------------- |
+| `os`       | Returns the operating system name.     | `"Linux"`, `"Windows"`, `"macOS"`                               |
+| `arch`     | Returns the system architecture.       | `"x86_64"`, `"i386"`                                            |
+| `memInfo`  | Returns memory usage information.      | `{"total": "15.62 GB", "used": "1.08 GB", "percent": "6.89"}`   |
+| `cpuInfo`  | Returns CPU information and usage.     | `{"model": "AMD EPYC", "cores": "1", "usage": "33.33"}`         |
+| `diskInfo` | Returns disk usage information.        | `{"total": "71.61 GB", "used": "49.81 GB", "percent": "69.58"}` |
+| `netInfo`  | Returns network interface information. | `[{"name": "eth0", "addrs": ["10.1.0.75/20"]}]`                 |
 
 ---
 
 The `sysinfo` module is useful for comprehensive system monitoring and diagnostics in your Vint programs. It provides detailed information about memory, CPU, disk, and network resources, making it perfect for system administration tools, monitoring applications, and resource-aware programs.
 
-```
+````
 
 ## term.md
 
@@ -13780,19 +13802,21 @@ Creates a dashboard layout with multiple widgets.
 
 - `widgets` (dict): A dictionary where keys are the widget titles and values are their content.
 
-```
+````
 
 ## time.md
 
-```markdown
+````markdown
 # Time in Vint
 
 ## Importing Time
 
 To use time-related functionalities in Vint, you first need to import the `time` module as follows:
+
 ```js
 import time
 ```
+````
 
 ## Time Methods
 
@@ -13827,7 +13851,7 @@ now.since("00:00:00 01-01-1900") // returns the since time in seconds since that
 Use `sleep()` if you want your program to pause or "sleep." It accepts one argument, which is the total time to sleep in seconds:
 
 ```js
-time.sleep(10) // will pause the program for ten seconds
+time.sleep(10); // will pause the program for ten seconds
 ```
 
 ### `add()`
@@ -13854,7 +13878,7 @@ It will return a `time` object with the specified time added.
 ### Print the current timestamp
 
 ```js
-print(time.now())
+print(time.now());
 ```
 
 ### Function to greet a user based on the time of the day
@@ -13874,11 +13898,11 @@ let greet = func(name) {
 ### Time-related operations
 
 ```js
-year = 2024
-print("Is", year, "Leap year:", time.isLeapYear(year))
-print(time.format(time.now(), "02-01-2006 15:04:05"))
-print(time.add(time.now(), "1h"))
-print(time.subtract(time.now(), "2h30m45s"))
+year = 2024;
+print("Is", year, "Leap year:", time.isLeapYear(year));
+print(time.format(time.now(), "02-01-2006 15:04:05"));
+print(time.add(time.now(), "1h"));
+print(time.subtract(time.now(), "2h30m45s"));
 ```
 
 ## Time Object Methods
@@ -14010,10 +14034,10 @@ let display_date = func() {
     let day = now.day()
     let month = now.month()
     let year = now.year()
-    
+
     let months = ["", "January", "February", "March", "April", "May", "June",
                   "July", "August", "September", "October", "November", "December"]
-    
+
     let formatted = weekday + ", " + months[month] + " " + day.to_string() + ", " + year.to_string()
     print(formatted)
 }
@@ -14025,7 +14049,7 @@ display_date()
 let get_greeting = func() {
     let now = time.now()
     let hour = now.hour()
-    
+
     if (hour < 12) {
         return "Good morning!"
     } else if (hour < 18) {
@@ -14042,11 +14066,11 @@ let is_business_hours = func() {
     let now = time.now()
     let hour = now.hour()
     let weekday = now.weekday()
-    
+
     // Check if it's a weekday (Monday-Friday) and between 9 AM and 5 PM
     let is_weekday = weekday != "Saturday" && weekday != "Sunday"
     let is_work_time = hour >= 9 && hour < 17
-    
+
     return is_weekday && is_work_time
 }
 
@@ -14070,9 +14094,9 @@ print("Age:", age)
 let check_deadline = func(deadline_date) {
     let now = time.now()
     let deadline = time.parse(deadline_date)  // Assuming we have a parse method
-    
+
     let days_left = deadline.since(now) / (24 * 60 * 60)  // Convert seconds to days
-    
+
     if (days_left > 0) {
         print("Deadline in", days_left.floor(), "days")
     } else {
@@ -14090,7 +14114,7 @@ import time
 
 // Get a formatted timestamp for a specific time
 let birthday = time.now().add(days=30)
-let birthday_info = "Birthday: " + birthday.weekday() + ", " + 
+let birthday_info = "Birthday: " + birthday.weekday() + ", " +
                    birthday.format("January 2, 2006") + " at " +
                    birthday.format("15:04")
 
@@ -14100,12 +14124,12 @@ print(birthday_info)
 // Create time-based file naming
 let create_backup_filename = func(base_name) {
     let now = time.now()
-    let timestamp = now.year().to_string() + 
+    let timestamp = now.year().to_string() +
                    now.month().to_string().padStart(2, "0") +
                    now.day().to_string().padStart(2, "0") + "_" +
                    now.hour().to_string().padStart(2, "0") +
                    now.minute().to_string().padStart(2, "0")
-    
+
     return base_name + "_" + timestamp + ".backup"
 }
 
@@ -14113,7 +14137,7 @@ let filename = create_backup_filename("database")
 print(filename)  // database_20240811_1530.backup
 ```
 
-```
+````
 
 ## todo.md
 
@@ -14126,7 +14150,7 @@ The `todo` keyword allows you to leave compiler-visible TODOs that warn at runti
 
 ```js
 todo "Your todo message here"
-```
+````
 
 When the Vint interpreter encounters a `todo` statement, it will print a warning to the console with your message, and then continue execution.
 
@@ -14146,7 +14170,7 @@ TODO: "Implement user authentication"
 10
 ```
 
-```
+````
 
 ## tooling.md
 
@@ -14164,7 +14188,7 @@ Automatically formats your Vint code for consistency.
 **Usage:**
 ```sh
 vint fmt <file.vint>
-```
+````
 
 This will overwrite the file with a pretty-printed version.
 
@@ -14211,7 +14235,7 @@ vint get <package>
 
 For more information, run `vint help` or see the README.
 
-```
+````
 
 ## url.md
 
@@ -14233,13 +14257,13 @@ Parses a URL string and returns its components.
 
 **Usage:**
 
-```vint
+```js
 import url
 
 let components = url.parse("https://example.com/path?query=value#fragment")
 println(components)
 // Output: scheme:https host:example.com path:/path query:query=value fragment:fragment
-```
+````
 
 ### `build(components)`
 
@@ -14261,7 +14285,7 @@ Builds a URL from a dictionary of components.
 
 **Usage:**
 
-```vint
+```js
 import url
 
 let components = {"scheme": "https", "host": "api.example.com", "path": "/v1/users", "query": "limit=10"}
@@ -14283,7 +14307,7 @@ URL-encodes a string.
 
 **Usage:**
 
-```vint
+```js
 import url
 
 let encoded = url.encode("hello world!")
@@ -14300,7 +14324,7 @@ Decodes a URL-encoded string.
 
 **Usage:**
 
-```vint
+```js
 import url
 
 let decoded = url.decode("hello%20world%21")
@@ -14318,7 +14342,7 @@ Joins a base URL and a relative path to create a full URL.
 
 **Usage:**
 
-```vint
+```js
 import url
 
 let fullURL = url.join("https://example.com/", "/path/to/resource")
@@ -14335,14 +14359,14 @@ Checks if a string is a valid URL.
 
 **Usage:**
 
-```vint
+```js
 import url
 
 println(url.isValid("https://example.com")) // true
 println(url.isValid("not a url")) // false
 ```
 
-```
+````
 
 ## uuid.md
 
@@ -14362,13 +14386,13 @@ import uuid
 
 // Generate and print a new UUID
 print(uuid.generate())
-```
+````
 
 Each time `uuid.generate()` is called, it generates a new, unique UUID value. This is useful for ensuring that each identifier is distinct across systems.
 
 The generated UUID can be used for various purposes such as tracking sessions, unique IDs for objects, or database keys.
 
-```
+````
 
 ## vintChart.md
 
@@ -14390,13 +14414,13 @@ Creates a bar chart.
 
 **Usage:**
 
-```vint
+```js
 import vintChart
 
 let labels = ["A", "B", "C"]
 let values = [10, 20, 15]
 vintChart.barChart(labels, values, "my_bar_chart.html")
-```
+````
 
 ### `pieChart(labels, values, outputFile)`
 
@@ -14408,7 +14432,7 @@ Creates a pie chart.
 
 **Usage:**
 
-```vint
+```js
 import vintChart
 
 let labels = ["Work", "Sleep", "Play"]
@@ -14426,7 +14450,7 @@ Creates a line graph.
 
 **Usage:**
 
-```vint
+```js
 import vintChart
 
 let labels = ["Jan", "Feb", "Mar"]
@@ -14434,7 +14458,7 @@ let values = [100, 120, 110]
 vintChart.lineGraph(labels, values, "my_line_graph.html")
 ```
 
-```
+````
 
 ## vintSocket.md
 
@@ -14454,12 +14478,12 @@ Creates a WebSocket server on the specified port.
 
 **Usage:**
 
-```vint
+```js
 import vintSocket
 
 vintSocket.createServer("8080")
 println("WebSocket server started on port 8080")
-```
+````
 
 ### `connect(url)`
 
@@ -14469,7 +14493,7 @@ Connects to a WebSocket server.
 
 **Usage:**
 
-```vint
+```js
 import vintSocket
 
 vintSocket.connect("ws://localhost:8080")
@@ -14484,7 +14508,7 @@ Sends a message to a specific connected client.
 
 **Usage:**
 
-```vint
+```js
 import vintSocket
 
 // Assuming a client is connected at index 0
@@ -14499,13 +14523,13 @@ Sends a message to all connected clients.
 
 **Usage:**
 
-```vint
+```js
 import vintSocket
 
 vintSocket.broadcast("Hello, everyone!")
 ```
 
-```
+````
 
 ## warn.md
 
@@ -14525,7 +14549,7 @@ When the interpreter encounters a `warn` statement, it will print a formatted wa
 ```js
 warn "Configuration file not found, using default settings."
 println("Program is running with default configuration.")
-```
+````
 
 Running this will output:
 
@@ -14536,7 +14560,7 @@ Running this will output:
 Program is running with default configuration.
 ```
 
-```
+````
 
 ## while.md
 
@@ -14556,16 +14580,16 @@ while (i <= 5) {
     print(i)
     i++
 }
-```
+````
 
 ### Output
 
 ```js
-1
-2
-3
-4
-5
+1;
+2;
+3;
+4;
+5;
 ```
 
 ## Break and Continue
@@ -14575,24 +14599,24 @@ while (i <= 5) {
 Use the `break` keyword to terminate a loop:
 
 ```js
-let i = 1
+let i = 1;
 
 while (i < 5) {
-    if (i == 3) {
-        print("broken")
-        break
-    }
-    print(i)
-    i++
+  if (i == 3) {
+    print("broken");
+    break;
+  }
+  print(i);
+  i++;
 }
 ```
 
 ### Output
 
 ```js
-1
-2
-broken
+1;
+2;
+broken;
 ```
 
 ### Continue
@@ -14600,26 +14624,26 @@ broken
 Use the `continue` keyword to skip a specific iteration:
 
 ```js
-let i = 0
+let i = 0;
 
 while (i < 5) {
-    i++
-    if (i == 3) {
-        print("skipped")
-        continue
-    }
-    print(i)
+  i++;
+  if (i == 3) {
+    print("skipped");
+    continue;
+  }
+  print(i);
 }
 ```
 
 ### Output
 
 ```js
-1
-2
-skipped
-4
-5
+1;
+2;
+skipped;
+4;
+5;
 ```
 
 By understanding while loops in Vint, you can create code that repeats a specific action or checks for certain conditions, offering more flexibility and control over your code execution.
@@ -14657,7 +14681,7 @@ repeat n {
 
 The variable `i` is always available in the scope of the repeat block.
 
-```
+````
 
 ## xml.md
 
@@ -14673,7 +14697,7 @@ The XML module in Vint provides basic XML processing capabilities including vali
 To use the XML module, simply import it:
 ```js
 import xml
-```
+````
 
 ---
 
@@ -14686,7 +14710,7 @@ The `validate` function checks if a given XML string is well-formed and valid.
 **Syntax**:
 
 ```js
-validate(xmlString)
+validate(xmlString);
 ```
 
 **Example**:
@@ -14718,7 +14742,7 @@ The `extract` function extracts the value from a specific XML tag.
 **Syntax**:
 
 ```js
-extract(xmlString, tagName)
+extract(xmlString, tagName);
 ```
 
 **Example**:
@@ -14734,7 +14758,7 @@ email = xml.extract(xml_data, "email")
 
 print("Name:", name)
 print("Email:", email)
-// Output: 
+// Output:
 // Name: John Doe
 // Email: john@example.com
 ```
@@ -14748,7 +14772,7 @@ The `escape` function escapes special XML characters to make text safe for XML c
 **Syntax**:
 
 ```js
-escape(text)
+escape(text);
 ```
 
 **Example**:
@@ -14774,7 +14798,7 @@ The `unescape` function converts XML entities back to their original characters.
 **Syntax**:
 
 ```js
-unescape(escapedText)
+unescape(escapedText);
 ```
 
 **Example**:
@@ -14815,15 +14839,15 @@ print("Generated XML:", xml_string)
 // Validate the XML
 if xml.validate(xml_string) {
     print("XML is valid!")
-    
+
     // Extract values
     extracted_name = xml.extract(xml_string, "name")
     extracted_email = xml.extract(xml_string, "email")
-    
+
     // Unescape extracted values
     final_name = xml.unescape(extracted_name)
     final_email = xml.unescape(extracted_email)
-    
+
     print("Final Name:", final_name)
     print("Final Email:", final_email)
 } else {
@@ -14845,16 +14869,16 @@ if xml.validate(xml_string) {
 
 ## Summary of Functions
 
-| Function    | Description                                         | Return Type |
-|-------------|-----------------------------------------------------|-------------|
-| `validate`  | Validates XML structure and syntax                  | Boolean     |
-| `extract`   | Extracts value from a specific XML tag             | String      |
-| `escape`    | Escapes special characters for safe XML content    | String      |
-| `unescape`  | Converts XML entities back to original characters  | String      |
+| Function   | Description                                       | Return Type |
+| ---------- | ------------------------------------------------- | ----------- |
+| `validate` | Validates XML structure and syntax                | Boolean     |
+| `extract`  | Extracts value from a specific XML tag            | String      |
+| `escape`   | Escapes special characters for safe XML content   | String      |
+| `unescape` | Converts XML entities back to original characters | String      |
 
 The XML module provides essential functionality for working with XML data safely and efficiently in VintLang applications.
 
-```
+````
 
 ## yaml.md
 
@@ -14875,12 +14899,12 @@ Parses a YAML string and converts it to Vint objects.
 **Returns:** Vint object (dict, array, string, number, boolean, or null)
 
 **Example:**
-```vint
+```js
 import yaml
 
 let yamlData = yaml.decode("name: John\nage: 30\nactive: true")
 print(yamlData) // {"name": "John", "age": 30, "active": true}
-```
+````
 
 ### yaml.encode(object)
 
@@ -14894,7 +14918,7 @@ Converts a Vint object to YAML format string.
 
 **Example:**
 
-```vint
+```js
 import yaml
 
 let data = {
@@ -14919,7 +14943,7 @@ Merges two YAML-compatible objects into one. Properties from the second object w
 
 **Example:**
 
-```vint
+```js
 import yaml
 
 let obj1 = {"name": "John", "age": 30}
@@ -14941,7 +14965,7 @@ Retrieves a value from a YAML-compatible object by key.
 
 **Example:**
 
-```vint
+```js
 import yaml
 
 let data = yaml.decode("person:\n  name: Jane\n  age: 25")
@@ -14978,7 +15002,7 @@ All YAML functions return error objects when:
 
 You can combine the YAML module with file operations to work with YAML configuration files:
 
-```vint
+```js
 import yaml
 import os
 
@@ -14994,3 +15018,4 @@ os.write("config.yaml", newYaml)
 
 ```
 
+```
