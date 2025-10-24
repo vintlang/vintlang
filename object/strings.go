@@ -19,7 +19,7 @@ type String struct {
 func (s *String) Inspect() string { return s.Value }
 
 // Type returns the object type for String.
-func (s *String) Type() ObjectType { return STRING_OBJ }
+func (s *String) Type() VintObjectType { return STRING_OBJ }
 
 // HashKey generates a hash key for the String object.
 func (s *String) HashKey() HashKey {

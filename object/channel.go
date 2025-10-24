@@ -12,7 +12,7 @@ type Channel struct {
 	size     int
 }
 
-func (c *Channel) Type() ObjectType {
+func (c *Channel) Type() VintObjectType {
 	return CHANNEL_OBJ
 }
 
