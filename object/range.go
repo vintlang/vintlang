@@ -8,7 +8,7 @@ type Range struct {
 	Current int64
 }
 
-func (r *Range) Type() ObjectType { return "RANGE" }
+func (r *Range) Type() VintObjectType { return "RANGE" }
 
 func (r *Range) Inspect() string {
 	return fmt.Sprintf("%d..%d", r.Start, r.End)

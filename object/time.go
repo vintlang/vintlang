@@ -10,8 +10,8 @@ type Time struct {
 	TimeValue string
 }
 
-func (t *Time) Type() ObjectType { return TIME_OBJ }
-func (t *Time) Inspect() string  { return t.TimeValue }
+func (t *Time) Type() VintObjectType { return TIME_OBJ }
+func (t *Time) Inspect() string      { return t.TimeValue }
 func (t *Time) Method(method string, args []VintObject, defs map[string]VintObject) VintObject {
 	switch method {
 	case "add":

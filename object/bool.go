@@ -11,7 +11,7 @@ func (b *Boolean) Inspect() string {
 		return "false"
 	}
 }
-func (b *Boolean) Type() ObjectType { return BOOLEAN_OBJ }
+func (b *Boolean) Type() VintObjectType { return BOOLEAN_OBJ }
 
 func (b *Boolean) HashKey() HashKey {
 	var value uint64

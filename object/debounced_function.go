@@ -19,7 +19,7 @@ type DebouncedFunction struct {
 	lastResult VintObject            // Store the last result
 }
 
-func (df *DebouncedFunction) Type() ObjectType { return DEBOUNCED_FUNC_OBJ }
+func (df *DebouncedFunction) Type() VintObjectType { return DEBOUNCED_FUNC_OBJ }
 
 func (df *DebouncedFunction) Inspect() string {
 	return "debounced function"
