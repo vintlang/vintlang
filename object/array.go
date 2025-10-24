@@ -12,7 +12,7 @@ type Array struct {
 	offset   int
 }
 
-func (ao *Array) Type() ObjectType { return ARRAY_OBJ }
+func (ao *Array) Type() VintObjectType { return ARRAY_OBJ }
 func (ao *Array) Inspect() string {
 	var out bytes.Buffer
 

@@ -10,8 +10,8 @@ type Float struct {
 	Value float64
 }
 
-func (f *Float) Inspect() string  { return strconv.FormatFloat(f.Value, 'f', -1, 64) }
-func (f *Float) Type() ObjectType { return FLOAT_OBJ }
+func (f *Float) Inspect() string      { return strconv.FormatFloat(f.Value, 'f', -1, 64) }
+func (f *Float) Type() VintObjectType { return FLOAT_OBJ }
 
 func (f *Float) HashKey() HashKey {
 	h := fnv.New64a()

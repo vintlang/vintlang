@@ -14,7 +14,7 @@ type AsyncFunction struct {
 	Env        *Environment
 }
 
-func (af *AsyncFunction) Type() ObjectType {
+func (af *AsyncFunction) Type() VintObjectType {
 	return ASYNC_FUNC_OBJ
 }
 

@@ -1,0 +1,156 @@
+// VintLang fmt module comprehensive demo
+// Demonstrates all the formatting capabilities
+
+import fmt
+
+print("🎨 VintLang fmt Module Demo")
+print("=" * 50)
+
+// 1. Basic string formatting with sprintf
+print("\n📝 String Formatting:")
+let name = "VintLang"
+let version = "1.0"
+let users = 1234
+
+let intro = fmt.sprintf("Welcome to %s v%s! We have %d active users.", name, version, users)
+print(intro)
+
+// 2. Printf for direct output
+print("\n🖨️  Direct Printing:")
+fmt.printf("Temperature: %.1f°C, Humidity: %d%%\n", 23.7, 65)
+fmt.printf("Processing %s... [%d/%d] %.1f%% complete\n", "data.txt", 75, 100, 75.0)
+
+// 3. Number formatting in different bases
+print("\n🔢 Number Formatting:")
+let number = 255
+print("Decimal:", fmt.formatInt(number, 10))
+print("Binary: ", fmt.formatBin(number))
+print("Hex (lower):", fmt.formatHex(number))
+print("Hex (upper):", fmt.formatHex(number, true))
+print("Octal:", fmt.formatOct(number))
+
+// 4. Float precision
+print("\n🎯 Float Precision:")
+let pi = 3.14159265359
+print("π with 2 decimals:", fmt.formatFloat(pi, 2))
+print("π with 4 decimals:", fmt.formatFloat(pi, 4))
+print("π with precision:", fmt.precision(pi, 6))
+
+// 5. Padding and alignment
+print("\n📏 Padding & Alignment:")
+let items = ["Apple", "Banana", "Orange", "Grape"]
+
+print("Left-padded (width 10):")
+for item in items {
+    print("  ", fmt.padLeft(item, 10, "."))
+}
+
+print("\nRight-padded (width 10):")
+for item in items {
+    print("  ", fmt.padRight(item, 10, "."))
+}
+
+print("\nCentered (width 12):")
+for item in items {
+    print("  ", fmt.padCenter(item, 12, "-"))
+}
+
+// 6. Table formatting demo
+print("\n📊 Table Formatting:")
+let products = [
+    {"name": "Laptop", "price": 999.99, "stock": 15, "category": "Electronics"},
+    {"name": "Mouse", "price": 25.50, "stock": 150, "category": "Accessories"},
+    {"name": "Keyboard", "price": 75.00, "stock": 45, "category": "Accessories"},
+    {"name": "Monitor", "price": 299.99, "stock": 8, "category": "Electronics"}
+]
+
+// Table header
+let border = fmt.repeat("-", 60)
+print(border)
+fmt.printf("| %-12s | %8s | %5s | %-12s |\n", "Product", "Price", "Stock", "Category")
+print(border)
+
+// Table rows
+for product in products {
+    fmt.printf("| %-12s | $%7.2f | %5d | %-12s |\n", 
+        product["name"], 
+        product["price"], 
+        product["stock"], 
+        product["category"])
+}
+print(border)
+
+// 7. Report generation with formatting
+print("\n📋 Report Generation:")
+let reportTitle = "MONTHLY SALES REPORT"
+let reportWidth = 40
+
+print(fmt.repeat("=", reportWidth))
+print(fmt.padCenter(reportTitle, reportWidth))
+print(fmt.repeat("=", reportWidth))
+
+let totalSales = 1245.75
+let totalOrders = 28
+let avgOrder = totalSales / totalOrders
+
+fmt.printf("Total Sales:    %s\n", fmt.padLeft(fmt.sprintf("$%.2f", totalSales), 12))
+fmt.printf("Total Orders:   %s\n", fmt.padLeft(fmt.sprintf("%d", totalOrders), 12))
+fmt.printf("Average Order:  %s\n", fmt.padLeft(fmt.sprintf("$%.2f", avgOrder), 12))
+
+// 8. Progress bar using repeat and formatting
+print("\n📈 Progress Indicators:")
+let progress = [25, 50, 75, 100]
+
+for p in progress {
+    let filled = p / 5  // Scale to 20 chars max
+    let empty = 20 - filled
+    let bar = fmt.repeat("█", filled) + fmt.repeat("░", empty)
+    fmt.printf("Progress: [%s] %3d%%\n", bar, p)
+}
+
+// 9. Error formatting
+print("\n❌ Error Formatting:")
+let err = fmt.errorf("Connection failed to %s:%d - %s", "localhost", 8080, "refused")
+print("Error:", err.Inspect())
+
+// 10. Utility functions
+print("\n🔧 Utility Functions:")
+let longText = "This is a very long text that needs to be truncated for display"
+print("Original:", longText)
+print("Truncated (30):", fmt.truncate(longText, 30))
+
+let separator = fmt.repeat("*", 25)
+print("Separator:", separator)
+
+// 11. Width formatting
+print("\n📐 Width Formatting:")
+let titles = ["Short", "Medium Title", "Very Long Title That Exceeds Width"]
+
+print("Fixed width (15 chars):")
+for title in titles {
+    print("  [" + fmt.width(title, 15) + "]")
+}
+
+// 12. Complex formatting combinations
+print("\n🎪 Complex Combinations:")
+let timestamp = "2024-10-24 14:30:00"
+let level = "INFO"
+let message = "System initialized successfully"
+
+// Log-style formatting
+let logEntry = fmt.sprintf("[%s] %s: %s", 
+    timestamp, 
+    fmt.padRight(level, 5), 
+    message)
+print(logEntry)
+
+// Status display with alignment
+let status = "READY"
+let statusLine = fmt.sprintf("System Status: [%s] %s", 
+    fmt.padCenter(status, 8), 
+    fmt.repeat("●", 3))
+print(statusLine)
+
+print("\n" + fmt.repeat("=", 50))
+print("🎉 fmt Module Demo Complete!")
+print("All formatting functions demonstrated successfully.")

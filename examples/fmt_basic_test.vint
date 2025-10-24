@@ -1,0 +1,17 @@
+import fmt
+
+print("Testing fmt module:")
+
+// Test sprintf
+let result = fmt.sprintf("Hello %s number %d", "world", 42)
+print(result)
+
+// Test number formatting
+print(fmt.formatHex(255))
+print(fmt.formatBin(15))
+
+// Test padding
+print(fmt.padLeft("hi", 8))
+print(fmt.padRight("hi", 8))
+
+print("fmt module works!")
