@@ -7,7 +7,7 @@ type Instance struct {
 	Env     *Environment
 }
 
-func (i *Instance) Type() ObjectType { return INSTANCE }
+func (i *Instance) Type() VintObjectType { return INSTANCE }
 func (i *Instance) Inspect() string {
 	return fmt.Sprintf("Package: %s", i.Package.Name.Value)
 }

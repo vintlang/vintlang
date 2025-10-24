@@ -8,8 +8,8 @@ type Duration struct {
 	Value time.Duration
 }
 
-func (d *Duration) Type() ObjectType { return DURATION_OBJ }
-func (d *Duration) Inspect() string  { return d.Value.String() }
+func (d *Duration) Type() VintObjectType { return DURATION_OBJ }
+func (d *Duration) Inspect() string      { return d.Value.String() }
 
 func (d *Duration) Method(method string, args []VintObject, defs map[string]VintObject) VintObject {
 	switch method {

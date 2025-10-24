@@ -8,16 +8,16 @@ import (
 )
 
 type Function struct {
-	Name       string
-	Parameters []*ast.Identifier
-	Defaults   map[string]ast.Expression
-	Body       *ast.BlockStatement
-	Env        *Environment
-	IsAsync    bool // Support for async handlers
+	Name        string
+	Parameters  []*ast.Identifier
+	Defaults    map[string]ast.Expression
+	Body        *ast.BlockStatement
+	Env         *Environment
+	IsAsync     bool // Support for async handlers
 	IsStreaming bool // Support for streaming responses
 }
 
-func (f *Function) Type() ObjectType { return FUNCTION_OBJ }
+func (f *Function) Type() VintObjectType { return FUNCTION_OBJ }
 func (f *Function) Inspect() string {
 	var out bytes.Buffer
 

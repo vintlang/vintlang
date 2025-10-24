@@ -12,8 +12,8 @@ type File struct {
 	Content  string
 }
 
-func (f *File) Type() ObjectType { return FILE_OBJ }
-func (f *File) Inspect() string  { return f.Filename }
+func (f *File) Type() VintObjectType { return FILE_OBJ }
+func (f *File) Inspect() string      { return f.Filename }
 
 func (f *File) Method(method string, args []VintObject) VintObject {
 	switch method {

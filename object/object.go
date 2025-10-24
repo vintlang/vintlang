@@ -5,8 +5,8 @@ import (
 	"strings"
 )
 
-// ObjectType represents various types of objects
-type ObjectType string
+// VintObjectType represents various types of objects
+type VintObjectType string
 
 // Constants for object types
 const (
@@ -55,13 +55,13 @@ const (
 
 // VintObject interface represents any object in the system
 type VintObject interface {
-	Type() ObjectType
+	Type() VintObjectType
 	Inspect() string
 }
 
 // HashKey is used for hashable objects like strings and integers
 type HashKey struct {
-	Type  ObjectType
+	Type  VintObjectType
 	Value uint64
 }
 
@@ -88,7 +88,7 @@ type DeferredCall struct {
 	Args []VintObject
 }
 
-func (dc *DeferredCall) Type() ObjectType { return DEFERRED_CALL_OBJ }
+func (dc *DeferredCall) Type() VintObjectType { return DEFERRED_CALL_OBJ }
 func (dc *DeferredCall) Inspect() string {
 	return "deferred call"
 }
@@ -99,7 +99,7 @@ type ErrorType struct {
 	Parameters []string
 }
 
-func (et *ErrorType) Type() ObjectType { return ERROR_TYPE_OBJ }
+func (et *ErrorType) Type() VintObjectType { return ERROR_TYPE_OBJ }
 func (et *ErrorType) Inspect() string {
 	return fmt.Sprintf("error type: %s(%s)", et.Name, strings.Join(et.Parameters, ", "))
 }
@@ -110,7 +110,7 @@ type CustomError struct {
 	Arguments []VintObject
 }
 
-func (ce *CustomError) Type() ObjectType { return CUSTOM_ERROR_OBJ }
+func (ce *CustomError) Type() VintObjectType { return CUSTOM_ERROR_OBJ }
 func (ce *CustomError) Inspect() string {
 	args := []string{}
 	for _, arg := range ce.Arguments {
