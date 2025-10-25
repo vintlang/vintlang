@@ -6,7 +6,7 @@ type Pointer struct {
 	Ref VintObject
 }
 
-func (p *Pointer) Type() ObjectType {
+func (p *Pointer) Type() VintObjectType {
 	return POINTER_OBJ
 }
 

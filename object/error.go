@@ -21,6 +21,6 @@ func (e *Error) Inspect() string {
 }
 
 // Type returns the object type of the error.
-func (e *Error) Type() ObjectType {
+func (e *Error) Type() VintObjectType {
 	return ERROR_OBJ
 }

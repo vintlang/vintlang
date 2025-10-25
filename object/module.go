@@ -67,7 +67,7 @@ func (m *Module) ListSubmodules() []string {
 	return keys
 }
 
-func (m *Module) Type() ObjectType {
+func (m *Module) Type() VintObjectType {
 	switch m.Name {
 	case "time":
 		return TIME_OBJ
