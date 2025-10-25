@@ -15,15 +15,17 @@ for file in docFiles {
 
 os.writeFile(OUTPUT_FILE, mergedContent)
 
-// let exampleFiles = os.listFiles(EXAMPLE_DIR)
-// let EXAMPLES_OUTPUT_FILE = "merged-examples.md"
-// let exampleContent = "# Example Code Snippets\n\n"
-// for file in exampleFiles {
-//     if (file.endsWith(".vint")) {
-//         let content = os.readFile(EXAMPLE_DIR + "/" + file)
-//         exampleContent = exampleContent + "## " + file + "\n\n"
-//         exampleContent = exampleContent + "```js\n" + content + "\n```\n\n"
-//     }
-// }
-// os.writeFile(EXAMPLES_OUTPUT_FILE, exampleContent)
+let exampleFiles = os.listFiles(EXAMPLE_DIR)
+let EXAMPLES_OUTPUT_FILE = "merged-examples.md"
+let exampleContent = "# Example Code Snippets\n\n"
+for file in exampleFiles {
+    let isCorrectFile = file.endsWith(".vint")
+    println(file.)
+    if () {
+        let content = os.readFile(EXAMPLE_DIR + "/" + file)
+        exampleContent = exampleContent + "## " + file + "\n\n"
+        exampleContent = exampleContent + "```js\n" + content + "\n```\n\n"
+    }
+}
+os.writeFile(EXAMPLES_OUTPUT_FILE, exampleContent)
 print("Documentation and examples merged into " + OUTPUT_FILE)
