@@ -17,7 +17,7 @@ type Dict struct {
 	offset int
 }
 
-func (d *Dict) Type() ObjectType { return DICT_OBJ }
+func (d *Dict) Type() VintObjectType { return DICT_OBJ }
 func (d *Dict) Inspect() string {
 	var out bytes.Buffer
 

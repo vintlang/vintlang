@@ -15,7 +15,7 @@ type Promise struct {
 	waitChan  chan struct{}
 }
 
-func (p *Promise) Type() ObjectType {
+func (p *Promise) Type() VintObjectType {
 	return PROMISE_OBJ
 }
 

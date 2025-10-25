@@ -14,7 +14,7 @@ type Package struct {
 	PrivateNames map[string]bool // Track private identifiers (those starting with _)
 }
 
-func (p *Package) Type() ObjectType { return PACKAGE_OBJ }
+func (p *Package) Type() VintObjectType { return PACKAGE_OBJ }
 func (p *Package) Inspect() string {
 	return fmt.Sprintf("package: %s", p.Name.Value)
 }

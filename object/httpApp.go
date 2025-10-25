@@ -66,7 +66,7 @@ type UploadedFile struct {
 	Content  []byte
 }
 
-func (file *UploadedFile) Type() ObjectType { return UPLOADED_FILE_OBJ }
+func (file *UploadedFile) Type() VintObjectType { return UPLOADED_FILE_OBJ }
 func (file *UploadedFile) Inspect() string {
 	return fmt.Sprintf("UploadedFile{name: %s, size: %d, type: %s}", file.Name, file.Size, file.MimeType)
 }
@@ -108,7 +108,7 @@ func (file *UploadedFile) Method(name string, args []VintObject) VintObject {
 	}
 }
 
-func (app *HTTPApp) Type() ObjectType { return HTTP_APP_OBJ }
+func (app *HTTPApp) Type() VintObjectType { return HTTP_APP_OBJ }
 func (app *HTTPApp) Inspect() string {
 	var out bytes.Buffer
 	out.WriteString("HTTPApp{")
@@ -140,7 +140,7 @@ type HTTPRequest struct {
 	IsAsync bool
 }
 
-func (req *HTTPRequest) Type() ObjectType { return HTTP_REQUEST_OBJ }
+func (req *HTTPRequest) Type() VintObjectType { return HTTP_REQUEST_OBJ }
 func (req *HTTPRequest) Inspect() string {
 	var out bytes.Buffer
 	out.WriteString("HTTPRequest{")
@@ -275,7 +275,7 @@ type HTTPResponse struct {
 	Request *HTTPRequest
 }
 
-func (res *HTTPResponse) Type() ObjectType { return HTTP_RESPONSE_OBJ }
+func (res *HTTPResponse) Type() VintObjectType { return HTTP_RESPONSE_OBJ }
 func (res *HTTPResponse) Inspect() string {
 	var out bytes.Buffer
 	out.WriteString("HTTPResponse{")
