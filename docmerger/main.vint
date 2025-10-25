@@ -20,7 +20,7 @@ let EXAMPLES_OUTPUT_FILE = "merged-examples.md"
 let exampleContent = "# Example Code Snippets\n\n"
 for file in exampleFiles {
     let isCorrectFile = file.endsWith(".vint")
-    println(isCorrectFile)
+    // println(isCorrectFile)
     if (isCorrectFile) {
         let content = os.readFile(EXAMPLE_DIR + "/" + file)
         exampleContent = exampleContent + "## " + file + "\n\n"
@@ -28,4 +28,4 @@ for file in exampleFiles {
     }
 }
 os.writeFile(EXAMPLES_OUTPUT_FILE, exampleContent)
-print("Documentation and examples merged into " + OUTPUT_FILE)
+print("Documentation and examples merged into " + OUTPUT_FILE + EXAMPLES_OUTPUT_FILE)
