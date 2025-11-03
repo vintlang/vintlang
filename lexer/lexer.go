@@ -182,7 +182,14 @@ func (l *Lexer) NextToken() token.Token {
 		if l.peekChar() == rune('.') {
 			ch := l.ch
 			l.readChar()
-			tok = token.Token{Type: token.RANGE, Literal: string(ch) + string(l.ch), Line: l.line}
+			// Check for third dot to make ellipsis (...)
+			if l.peekChar() == rune('.') {
+				second := l.ch
+				l.readChar()
+				tok = token.Token{Type: token.ELLIPSIS, Literal: string(ch) + string(second) + string(l.ch), Line: l.line}
+			} else {
+				tok = token.Token{Type: token.RANGE, Literal: string(ch) + string(l.ch), Line: l.line}
+			}
 		} else {
 			tok = newToken(token.DOT, l.line, l.ch)
 		}
