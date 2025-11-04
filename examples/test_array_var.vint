@@ -1,0 +1,9 @@
+// Test array pattern with variable
+let arr = [42]
+
+println("Testing array pattern with variable:")
+
+match arr {
+    [x] => println("Single element:", x)
+    _ => println("Not single")
+}

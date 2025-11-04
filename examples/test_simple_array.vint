@@ -1,0 +1,9 @@
+// Simple array pattern test
+let arr = [1, 2]
+
+println("Testing simple array pattern:")
+
+match arr {
+    [] => println("Empty")
+    _ => println("Not empty")
+}
