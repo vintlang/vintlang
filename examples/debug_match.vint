@@ -1,0 +1,11 @@
+// Debug match pattern
+let config = {"database": {"host": "localhost", "port": 5432}}
+
+match config {
+    {"database": db} => {
+        println("Found database config:", db)
+    }
+    _ => {
+        println("No match")
+    }
+}
