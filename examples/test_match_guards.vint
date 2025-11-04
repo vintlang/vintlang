@@ -1,0 +1,12 @@
+// Test enhanced match with guard conditions
+// This is a simple test to verify our match guard condition implementation
+
+let user = {"role": "admin", "age": 30}
+
+println("Testing match with guard conditions")
+
+match user {
+    {"role": "admin", "age": age} if age >= 18 => println("Adult admin, age:", age)
+    {"role": "user"} => println("Regular user")
+    _ => println("Unknown user type")
+}
