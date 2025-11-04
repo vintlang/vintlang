@@ -302,10 +302,12 @@ func (rs *RepeatStatement) String() string {
 
 // Switch expressions
 type CaseExpression struct {
-	Token   token.Token
-	Default bool
-	Expr    []Expression
-	Block   *BlockStatement
+	Token    token.Token
+	Default  bool
+	Expr     []Expression
+	Guard    Expression  // Optional guard condition: case x if x > 0
+	Variable *Identifier // Optional variable binding: case x
+	Block    *BlockStatement
 }
 
 func (ce *CaseExpression) expressionNode()      {}
@@ -318,11 +320,20 @@ func (ce *CaseExpression) String() string {
 	} else {
 		out.WriteString("case ")
 
-		tmp := []string{}
-		for _, exp := range ce.Expr {
-			tmp = append(tmp, exp.String())
+		if ce.Variable != nil {
+			out.WriteString(ce.Variable.String())
+		} else {
+			tmp := []string{}
+			for _, exp := range ce.Expr {
+				tmp = append(tmp, exp.String())
+			}
+			out.WriteString(strings.Join(tmp, ","))
 		}
-		out.WriteString(strings.Join(tmp, ","))
+
+		if ce.Guard != nil {
+			out.WriteString(" if ")
+			out.WriteString(ce.Guard.String())
+		}
 	}
 	out.WriteString(ce.Block.String())
 	return out.String()
@@ -482,9 +493,11 @@ func (re *RangeExpression) String() string {
 
 // Match expressions
 type MatchCase struct {
-	Token   token.Token
-	Pattern Expression // Dict pattern or "_" for wildcard
-	Block   *BlockStatement
+	Token     token.Token
+	Pattern   Expression    // Dict, array, or value pattern
+	Guard     Expression    // Optional guard condition: pattern if condition
+	Variables []*Identifier // Variable bindings extracted from pattern
+	Block     *BlockStatement
 }
 
 func (mc *MatchCase) expressionNode()      {}
@@ -493,6 +506,12 @@ func (mc *MatchCase) String() string {
 	var out bytes.Buffer
 
 	out.WriteString(mc.Pattern.String())
+
+	if mc.Guard != nil {
+		out.WriteString(" if ")
+		out.WriteString(mc.Guard.String())
+	}
+
 	out.WriteString(" => ")
 	out.WriteString(mc.Block.String())
 
@@ -521,5 +540,49 @@ func (me *MatchExpression) String() string {
 	}
 
 	out.WriteString("}")
+	return out.String()
+}
+
+// Array pattern for destructuring: [first, second, ...rest]
+type ArrayPattern struct {
+	Token    token.Token  // the '[' token
+	Elements []Expression // individual pattern elements
+	Rest     *Identifier  // spread/rest pattern element (...name)
+}
+
+func (ap *ArrayPattern) expressionNode()      {}
+func (ap *ArrayPattern) TokenLiteral() string { return ap.Token.Literal }
+func (ap *ArrayPattern) String() string {
+	var out bytes.Buffer
+	out.WriteString("[")
+
+	elements := []string{}
+	for _, e := range ap.Elements {
+		elements = append(elements, e.String())
+	}
+
+	if ap.Rest != nil {
+		elements = append(elements, "..."+ap.Rest.String())
+	}
+
+	out.WriteString(strings.Join(elements, ", "))
+	out.WriteString("]")
+	return out.String()
+}
+
+// Spread pattern for array destructuring: ...rest
+type SpreadPattern struct {
+	Token token.Token // the '...' token
+	Name  *Identifier // variable name to bind remaining elements
+}
+
+func (sp *SpreadPattern) expressionNode()      {}
+func (sp *SpreadPattern) TokenLiteral() string { return sp.Token.Literal }
+func (sp *SpreadPattern) String() string {
+	var out bytes.Buffer
+	out.WriteString("...")
+	if sp.Name != nil {
+		out.WriteString(sp.Name.String())
+	}
 	return out.String()
 }

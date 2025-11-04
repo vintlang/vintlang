@@ -128,6 +128,7 @@ func New(l *lexer.Lexer) *Parser {
 	p.registerPrefix(token.ERROR, p.parseErrorStatement)
 	p.registerPrefix(token.DEFER, p.parseDeferStatement)
 	p.registerPrefix(token.AT, p.parseAt)
+	p.registerPrefix(token.ELLIPSIS, p.parseSpreadPattern)
 	p.registerPrefix(token.INFO, p.parseInfoStatement)
 	p.registerPrefix(token.DEBUG, p.parseDebugStatement)
 	p.registerPrefix(token.NOTE, p.parseNoteStatement)

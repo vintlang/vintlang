@@ -1,0 +1,31 @@
+// Test array patterns in match statements
+let arr1 = []
+let arr2 = [1]
+let arr3 = [1, 2]
+let arr4 = [1, 2, 3, 4, 5]
+
+println("Testing array patterns:")
+
+println("Empty array:")
+match arr1 {
+    [] => println("  Matched empty array")
+    _ => println("  Not empty")
+}
+
+println("Single element:")
+match arr2 {
+    [x] => println("  Single element:", x)
+    _ => println("  Not single")
+}
+
+println("Two elements:")
+match arr3 {
+    [a, b] => println("  Two elements:", a, "and", b)
+    _ => println("  Not two elements")
+}
+
+println("Multiple elements with spread:")
+match arr4 {
+    [first, ...rest] => println("  First:", first, "Rest length:", len(rest))
+    _ => println("  No match")
+}

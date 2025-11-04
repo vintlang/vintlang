@@ -1,0 +1,11 @@
+// Test switch with string length
+let s = "hello"
+
+switch (s) {
+    case x if len(x) > 3 {
+        println("Long string:", x)
+    }
+    default {
+        println("Short string")
+    }
+}

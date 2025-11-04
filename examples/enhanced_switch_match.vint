@@ -1,0 +1,101 @@
+// Enhanced Switch and Match Statement Examples
+// This demonstrates the new features: guard conditions, variable binding, and array patterns
+
+println("=== Enhanced Switch Statements ===")
+
+// Test 1: Switch with guard conditions
+let testNumbers = [5, -3, 0, 15, 100]
+
+for num in testNumbers {
+    println("Testing number:", num)
+    
+    switch (num) {
+        case x if x > 0 && x < 10 {
+            println("  Small positive number:", x)
+        }
+        case x if x > 10 {
+            println("  Large positive number:", x)  
+        }
+        case x if x < 0 {
+            println("  Negative number:", x)
+        }
+        case 0 {
+            println("  Zero")
+        }
+        default {
+            println("  Other number")
+        }
+    }
+}
+
+println("\n=== Enhanced Match Statements ===")
+
+// Test 2: Array pattern matching with destructuring
+let arrays = [
+    [],
+    [1],
+    [1, 2], 
+    [1, 2, 3, 4, 5]
+]
+
+for arr in arrays {
+    println("Testing array:", arr)
+    
+    match arr {
+        [] => println("  Empty array")
+        [single] => println("  Single element:", single)
+        [first, second] => println("  Two elements:", first, "and", second)
+        [head, ...tail] => println("  Head:", head, "Tail:", tail)
+    }
+}
+
+// Test 3: Dictionary pattern matching with guard conditions  
+let users = [
+    {"role": "admin", "active": true, "age": 30},
+    {"role": "user", "active": false, "age": 25}, 
+    {"role": "guest", "age": 45},
+    {"name": "John", "type": "visitor"}
+]
+
+println("\n=== Dictionary Pattern Matching with Guards ===")
+
+for user in users {
+    println("Testing user:", user)
+    
+    match user {
+        {"role": "admin", "active": active} if active => 
+            println("  Active admin user")
+        {"role": role, "age": age} if age >= 18 => 
+            println("  Adult user with role:", role)
+        {"role": "guest"} => 
+            println("  Guest user")
+        _ => 
+            println("  Unknown user type")
+    }
+}
+
+// Test 4: Complex array patterns with variable binding
+let complexArrays = [
+    [1, 2, 3, 4, 5, 6],
+    ["a", "b"],
+    [true, false, true]
+]
+
+println("\n=== Complex Array Patterns ===")
+
+for arr in complexArrays {
+    println("Testing complex array:", arr)
+    
+    match arr {
+        [first, second, ...rest] if len(rest) > 2 => 
+            println("  Long array - first:", first, "second:", second, "rest has", len(rest), "items")
+        [a, b] if type(a) == "STRING" => 
+            println("  String pair:", a, "and", b)
+        [x, y, z] if type(x) == "BOOLEAN" => 
+            println("  Boolean triple:", x, y, z)
+        _ => 
+            println("  Other pattern")
+    }
+}
+
+println("\n=== Tests completed! ===")
