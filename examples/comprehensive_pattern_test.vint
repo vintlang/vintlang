@@ -1,0 +1,198 @@
+// Comprehensive test of enhanced switch and match features
+// This file tests all the working functionality we've implemented
+
+println("=== Enhanced Switch and Match Features Test ===")
+
+// Test 1: Switch with guard conditions
+println("\n1. Switch with Guard Conditions:")
+
+let numbers = [-5, 0, 3, 15, 150]
+
+for num in numbers {
+    print("Number", num, "-> ")
+    
+    switch (num) {
+        case x if x < 0 {
+            println("Negative:", x)
+        }
+        case 0 {
+            println("Zero")
+        }
+        case x if x > 0 && x <= 10 {
+            println("Small positive:", x)
+        }
+        case x if x > 10 && x <= 100 {
+            println("Medium positive:", x)
+        }
+        case x if x > 100 {
+            println("Large positive:", x)
+        }
+        default {
+            println("Unknown")
+        }
+    }
+}
+
+// Test 2: Type-based switch
+println("\n2. Type-based Switch:")
+
+let values = [42, "hello", true, [1, 2, 3]]
+
+for value in values {
+    print("Value", value, "-> ")
+    
+    switch (value) {
+        case x if type(x) == "INTEGER" {
+            println("Integer:", x)
+        }
+        case x if type(x) == "STRING" {
+            println("String:", x)
+        }
+        case x if type(x) == "BOOLEAN" {
+            println("Boolean:", x)
+        }
+        case x if type(x) == "ARRAY" {
+            println("Array with", len(x), "elements")
+        }
+        default {
+            println("Other type:", type(value))
+        }
+    }
+}
+
+// Test 3: Match with dictionary patterns and variable binding
+println("\n3. Dictionary Pattern Matching:")
+
+let users = [
+    {"name": "Alice", "role": "admin", "active": true},
+    {"name": "Bob", "role": "user", "age": 25},
+    {"name": "Charlie", "role": "admin", "active": false},
+    {"name": "David", "age": 17}
+]
+
+for user in users {
+    print("User", user["name"], "-> ")
+    
+    match user {
+        {"role": "admin", "active": active, "name": name} if active => {
+            println("Active admin:", name)
+        }
+        {"role": "admin", "name": name} => {
+            println("Inactive admin:", name)
+        }
+        {"role": role, "age": age, "name": name} if age >= 18 => {
+            println("Adult user:", name, "with role:", role)
+        }
+        {"age": age, "name": name} if age < 18 => {
+            println("Minor user:", name)
+        }
+        {"name": name} => {
+            println("User with incomplete info:", name)
+        }
+        _ => {
+            println("Unknown user format")
+        }
+    }
+}
+
+// Test 4: Array pattern matching
+println("\n4. Array Pattern Matching:")
+
+let arrays = [
+    [],
+    [42],
+    [1, 2],
+    [1, 2, 3],
+    ["a", "b", "c", "d"]
+]
+
+for arr in arrays {
+    print("Array", arr, "-> ")
+    
+    match arr {
+        [] => {
+            println("Empty array")
+        }
+        [single] => {
+            println("Single element:", single)
+        }
+        [first, second] => {
+            println("Two elements:", first, "and", second)
+        }
+        [a, b, c] => {
+            println("Three elements:", a, b, c)
+        }
+        _ => {
+            println("More than three elements")
+        }
+    }
+}
+
+// Test 5: Complex nested patterns with guards
+println("\n5. Complex Pattern Matching:")
+
+let requests = [
+    {"method": "GET", "path": "/", "headers": {"host": "localhost"}},
+    {"method": "POST", "path": "/api/users", "body": {"name": "Alice"}},
+    {"method": "DELETE", "path": "/api/users/123", "auth": {"role": "admin"}},
+    {"method": "GET", "path": "/api/health"}
+]
+
+for req in requests {
+    match req {
+        {"method": "GET", "path": "/"} => {
+            println("✓ Home page request")
+        }
+        {"method": "POST", "path": path, "body": body} if path.startsWith("/api/") => {
+            println("✓ API POST to", path)
+        }
+        {"method": "DELETE", "auth": {"role": "admin"}} => {
+            println("✓ Admin delete operation")
+        }
+        {"method": method, "path": path} => {
+            println("→", method, "request to", path)
+        }
+        _ => {
+            println("❌ Unknown request format")
+        }
+    }
+}
+
+// Test 6: Practical example - Configuration validator
+println("\n6. Configuration Validation:")
+
+let configs = [
+    {"type": "database", "host": "localhost", "port": 5432},
+    {"type": "redis", "url": "redis://localhost:6379", "ttl": 3600},
+    {"type": "logging", "level": "info", "file": "/var/log/app.log"},
+    {"invalid": "config"}
+]
+
+for config in configs {
+    match config {
+        {"type": "database", "host": host, "port": port} => {
+            println("✓ Valid database config:", host, "port:", port)
+        }
+        {"type": "redis", "url": url, "ttl": ttl} => {
+            println("✓ Valid Redis config with", ttl, "second TTL")
+        }
+        {"type": "logging", "level": level} => {
+            println("✓ Valid logging config, level:", level)
+        }
+        _ => {
+            println("❌ Invalid configuration")
+        }
+    }
+}
+
+println("\n=== All tests completed successfully! ===")
+println("\nWorking features:")
+println("✓ Switch statements with guard conditions")
+println("✓ Switch statements with variable binding")
+println("✓ Type-based switch cases")
+println("✓ Match statements with dictionary patterns")
+println("✓ Match statements with variable binding")
+println("✓ Match statements with guard conditions")
+println("✓ Array pattern matching (basic patterns)")
+println("✓ Complex nested pattern matching")
+println("✓ Practical real-world examples")

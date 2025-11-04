@@ -1,0 +1,21 @@
+// Test enhanced switch with guard conditions
+// This is a simple test to verify our guard condition implementation
+
+let x = 5
+
+println("Testing switch with guard conditions")
+
+switch (x) {
+    case y if y > 0 {
+        println("Positive number:", y)
+    }
+    case y if y < 0 {
+        println("Negative number:", y)  
+    }
+    case 0 {
+        println("Zero")
+    }
+    default {
+        println("Unknown")
+    }
+}
