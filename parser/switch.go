@@ -55,12 +55,32 @@ func (p *Parser) parseSwitchStatement() ast.Expression {
 			if p.curTokenIs(token.DEFAULT) {
 				tmp.Default = true
 			} else {
-				tmp.Expr = append(tmp.Expr, p.parseExpression(LOWEST))
-				// Handle multiple expressions in the case.
-				for p.peekTokenIs(token.COMMA) {
-					p.nextToken()
-					p.nextToken()
+				// Check if this is a variable binding case (case x if ...)
+				if p.curTokenIs(token.IDENT) && p.peekTokenIs(token.IF) {
+					// Variable binding case: case x if condition
+					tmp.Variable = &ast.Identifier{
+						Token: p.curToken,
+						Value: p.curToken.Literal,
+					}
+					p.nextToken() // move to IF
+					p.nextToken() // move to condition
+					tmp.Guard = p.parseExpression(LOWEST)
+				} else {
+					// Regular value-based case
 					tmp.Expr = append(tmp.Expr, p.parseExpression(LOWEST))
+					// Handle multiple expressions in the case.
+					for p.peekTokenIs(token.COMMA) {
+						p.nextToken()
+						p.nextToken()
+						tmp.Expr = append(tmp.Expr, p.parseExpression(LOWEST))
+					}
+
+					// Check for guard condition after values
+					if p.peekTokenIs(token.IF) {
+						p.nextToken() // move to IF
+						p.nextToken() // move to condition
+						tmp.Guard = p.parseExpression(LOWEST)
+					}
 				}
 			}
 		} else {

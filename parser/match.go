@@ -35,11 +35,18 @@ func (p *Parser) parseMatchExpression() ast.Expression {
 
 		matchCase := &ast.MatchCase{Token: p.curToken}
 
-		// Parse the pattern (dict literal or wildcard _)
-		matchCase.Pattern = p.parseExpression(LOWEST)
+		// Parse the pattern (dict literal, array pattern, or wildcard _)
+		matchCase.Pattern = p.parseMatchPattern()
 
 		if matchCase.Pattern == nil {
 			return nil
+		}
+
+		// Check for guard condition (pattern if condition)
+		if p.peekTokenIs(token.IF) {
+			p.nextToken() // move to IF
+			p.nextToken() // move to condition
+			matchCase.Guard = p.parseExpression(LOWEST)
 		}
 
 		// Expect an arrow token.
@@ -61,14 +68,14 @@ func (p *Parser) parseMatchExpression() ast.Expression {
 			if expr == nil {
 				return nil
 			}
-			
+
 			exprStmt := &ast.ExpressionStatement{
-				Token: p.curToken,
+				Token:      p.curToken,
 				Expression: expr,
 			}
-			
+
 			matchCase.Block = &ast.BlockStatement{
-				Token: p.curToken,
+				Token:      p.curToken,
 				Statements: []ast.Statement{exprStmt},
 			}
 		}
@@ -77,4 +84,24 @@ func (p *Parser) parseMatchExpression() ast.Expression {
 	}
 
 	return expression
+}
+
+func (p *Parser) parseMatchPattern() ast.Expression {
+	switch p.curToken.Type {
+	case token.LBRACKET:
+		// Parse array pattern in match context
+		return p.parseArrayPattern()
+	case token.LBRACE:
+		// Parse dict pattern
+		return p.parseDictLiteral()
+	case token.IDENT:
+		// Parse identifier (variable binding or wildcard)
+		return &ast.Identifier{
+			Token: p.curToken,
+			Value: p.curToken.Literal,
+		}
+	default:
+		// For other patterns, use regular expression parsing
+		return p.parseExpression(LOWEST)
+	}
 }
