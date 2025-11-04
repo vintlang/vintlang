@@ -9,6 +9,7 @@ A switch statement starts with the `switch` keyword, followed by the expression 
 Each case uses the keyword `case`, followed by a value to check. Multiple values in a case can be separated by commas `,`. The block of code to execute if the condition is met is placed within curly braces `{}`.
 
 ### Example:
+
 ```js
 let a = 2
 
@@ -27,6 +28,7 @@ switch (a) {
 A single `case` can handle multiple possible values. These values are separated by commas `,`.
 
 ### Example:
+
 ```js
 switch (a) {
 	case 1, 2, 3 {
@@ -43,6 +45,7 @@ switch (a) {
 The `default` statement is executed when none of the specified cases match. It is represented by the `default` keyword.
 
 ### Example:
+
 ```js
 let z = 20
 
@@ -64,6 +67,7 @@ switch(z) {
 Switch statements can be nested to handle more complex conditions.
 
 ### Example:
+
 ```js
 let x = 1
 let y = 2
@@ -90,6 +94,7 @@ switch (x) {
 Cases can also be used with logical conditions.
 
 ### Example:
+
 ```js
 let isTrue = true
 let isFalse = false
@@ -107,4 +112,95 @@ switch (isTrue) {
 }
 ```
 
-By mastering switch statements in **Vint**, you can write clean, structured, and efficient code that efficiently handles complex branching logic.
+## Guard Conditions (Advanced)
+
+Switch statements now support **guard conditions** using the `if` keyword. This allows you to bind the switch value to a variable and add additional conditions.
+
+### Variable Binding with Guards
+
+You can bind the switch value to a variable and use it in guard conditions:
+
+```js
+let number = 15
+
+switch (number) {
+    case x if x > 0 && x < 10 {
+        print("Small positive number:", x)
+    }
+    case x if x >= 10 && x < 100 {
+        print("Medium positive number:", x)
+    }
+    case x if x >= 100 {
+        print("Large positive number:", x)
+    }
+    case x if x < 0 {
+        print("Negative number:", x)
+    }
+    case 0 {
+        print("Zero")
+    }
+    default {
+        print("Unknown number")
+    }
+}
+// Output: Medium positive number: 15
+```
+
+### Type-Based Switch Cases
+
+Guard conditions enable type checking in switch statements:
+
+```js
+let value = "hello world"
+
+switch (value) {
+    case x if type(x) == "STRING" && len(x) > 5 {
+        print("Long string:", x)
+    }
+    case x if type(x) == "STRING" {
+        print("Short string:", x)
+    }
+    case x if type(x) == "INTEGER" && x > 0 {
+        print("Positive integer:", x)
+    }
+    case x if type(x) == "BOOLEAN" {
+        print("Boolean value:", x)
+    }
+    default {
+        print("Other type:", type(value))
+    }
+}
+// Output: Long string: hello world
+```
+
+### Combining Regular Cases with Guard Cases
+
+You can mix regular value-based cases with guard condition cases:
+
+```js
+let input = 42
+
+switch (input) {
+    case 0 {
+        print("Exactly zero")
+    }
+    case 1 {
+        print("Exactly one")
+    }
+    case x if x > 1 && x <= 10 {
+        print("Small number:", x)
+    }
+    case x if x > 10 && x <= 100 {
+        print("Medium number:", x)
+    }
+    case x if x > 100 {
+        print("Large number:", x)
+    }
+    default {
+        print("Negative or unknown")
+    }
+}
+// Output: Medium number: 42
+```
+
+By mastering switch statements in **Vint**, you can write clean, structured, and efficient code that efficiently handles complex branching logic with powerful guard conditions and variable binding.
