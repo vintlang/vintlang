@@ -7,24 +7,58 @@ import (
 
 func evalSwitchStatement(se *ast.SwitchExpression, env *object.Environment) object.VintObject {
 	obj := Eval(se.Value, env)
-	for _, opt := range se.Choices {
 
+	for _, opt := range se.Choices {
 		if opt.Default {
 			continue
 		}
-		for _, val := range opt.Expr {
-			out := Eval(val, env)
-			if obj.Type() == out.Type() && obj.Inspect() == out.Inspect() {
-				blockOut := evalBlockStatement(opt.Block, env)
-				return blockOut
+
+		// Handle variable binding cases (case x if condition)
+		if opt.Variable != nil {
+			// Create new scope for the variable
+			caseEnv := object.NewEnclosedEnvironment(env)
+			caseEnv.Define(opt.Variable.Value, obj)
+
+			// Evaluate guard condition in the new scope
+			if opt.Guard != nil {
+				guardResult := Eval(opt.Guard, caseEnv)
+				if isError(guardResult) {
+					return guardResult
+				}
+				if isTruthy(guardResult) {
+					return evalBlockStatement(opt.Block, caseEnv)
+				}
+			} else {
+				// No guard, always match
+				return evalBlockStatement(opt.Block, caseEnv)
+			}
+		} else {
+			// Handle regular value-based cases
+			for _, val := range opt.Expr {
+				out := Eval(val, env)
+				if obj.Type() == out.Type() && obj.Inspect() == out.Inspect() {
+					// Check guard condition if present
+					if opt.Guard != nil {
+						guardResult := Eval(opt.Guard, env)
+						if isError(guardResult) {
+							return guardResult
+						}
+						if !isTruthy(guardResult) {
+							continue // Guard failed, try next case
+						}
+					}
+					return evalBlockStatement(opt.Block, env)
+				}
 			}
 		}
 	}
+
+	// Handle default cases
 	for _, opt := range se.Choices {
 		if opt.Default {
-			out := evalBlockStatement(opt.Block, env)
-			return out
+			return evalBlockStatement(opt.Block, env)
 		}
 	}
-	return nil
+
+	return NULL
 }
