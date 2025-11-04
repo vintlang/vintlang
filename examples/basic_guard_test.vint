@@ -1,0 +1,11 @@
+// Basic test of switch case value
+let x = 5
+
+switch (x) {
+    case 5 if x > 0 {
+        println("Positive 5")
+    }
+    default {
+        println("Something else")
+    }
+}
