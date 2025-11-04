@@ -1,0 +1,7 @@
+// Very simple spread test
+let arr = [1, 2]
+
+match arr {
+    [a, b] => println("Two elements:", a, b)
+    _ => println("Other")
+}
