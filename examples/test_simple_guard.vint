@@ -1,0 +1,9 @@
+// Test match with simple guard
+let user = {"role": "admin"}
+
+println("Testing simple match with guard")
+
+match user {
+    {"role": role} if role == "admin" => println("Found admin with role:", role)
+    _ => println("Not admin")
+}

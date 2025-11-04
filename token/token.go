@@ -59,6 +59,7 @@ const (
 	COLON     = ":"
 	DOT       = "."
 	RANGE     = ".."
+	ELLIPSIS  = "..."
 	AT        = "@"
 	ARROW     = "=>"
 
