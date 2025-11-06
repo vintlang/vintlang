@@ -101,9 +101,6 @@ Note: Install the `vintlang` VSCode extension for language support (syntax highl
 The simple examples below have been replaced with a single, richer example that demonstrates several recent and powerful VintLang features: packages, dynamic `import()` at runtime, YAML and JSON handling, file I/O, and reusable functions.
 <!-- using ```js so that we get syntax highlighting-->
 ```js
-// Rich example: packages, dynamic import(), YAML/JSON, file I/O
-
-// Static imports (modules available at compile time)
 import os
 import json
 
