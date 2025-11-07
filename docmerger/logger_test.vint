@@ -1,0 +1,5 @@
+import logger_pkg
+
+println("Test before logger")
+logger_pkg.log("Test message")
+println("Test after logger")

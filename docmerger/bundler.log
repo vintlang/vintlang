@@ -1,0 +1,1 @@
+[2025-11-07T09:24:00+03:00] failed to analyze dependencies: failed to process dependencies: failed to parse file '/Users/tacherasasi/tach/vint/vint/docmerger/main.vint': parse errors: [main.vint:11: Expected next token to be (, got IDENT instead]
