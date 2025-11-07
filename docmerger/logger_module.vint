@@ -1,0 +1,8 @@
+package logger_pkg {
+    const init = func() {
+        println("Logger package initialized.")
+    }
+    const log = func(message) {
+        println("[LOG]: " + message)
+    }
+}

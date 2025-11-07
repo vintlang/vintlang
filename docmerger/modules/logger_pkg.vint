@@ -1,8 +1,0 @@
-package logger_pkg {
-    let init  = func(){
-        print("Logger package initialized.")
-    }
-    let log = func(message){
-        print("[LOG]: " + message)
-    }
-}

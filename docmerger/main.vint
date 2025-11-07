@@ -1,5 +1,33 @@
-import logger_pkg
+import logger_module
 
-println("Hello from VintLang!")
-logger_pkg.log("Starting documentation merge process.")
-println("Documentation merge process completed!")
+const os = import("os")
+const DOCS_DIR = "../docs"
+const OUTPUT_FILE = "merged-doc.md"
+const EXAMPLE_DIR = "../examples"
+// let files = os.listDir(DOCS_DIR).split(",") // listDir returns a comma-separated string of filenames
+let docFiles = os.listFiles(DOCS_DIR) // listFiles returns an array of filenames
+let mergedContent = "# Merged Documentation\n\n"
+for file in docFiles {
+    if (file.endsWith(".md")) {
+        let content = os.readFile(DOCS_DIR + "/" + file)
+        mergedContent = mergedContent + "## " + file + "\n\n"
+        mergedContent = mergedContent + "```markdown\n" + content + "\n```\n\n"
+    }
+}
+
+os.writeFile(OUTPUT_FILE, mergedContent)
+
+let exampleFiles = os.listFiles(EXAMPLE_DIR)
+let EXAMPLES_OUTPUT_FILE = "merged-examples.md"
+let exampleContent = "# Example Code Snippets\n\n"
+for file in exampleFiles {
+    let isCorrectFile = file.endsWith(".vint")
+    // println(isCorrectFile)
+    if (isCorrectFile) {
+        let content = os.readFile(EXAMPLE_DIR + "/" + file)
+        exampleContent = exampleContent + "## " + file + "\n\n"
+        exampleContent = exampleContent + "```js\n" + content + "\n```\n\n"
+    }
+}
+os.writeFile(EXAMPLES_OUTPUT_FILE, exampleContent)
+print("Documentation and examples merged into " + OUTPUT_FILE + EXAMPLES_OUTPUT_FILE)
