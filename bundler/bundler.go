@@ -99,7 +99,7 @@ func Bundle(args []string) error {
 
 go 1.24
 
-require github.com/vintlang/vintlang v0.2.0
+require github.com/vintlang/vintlang v0.2.4
 `
 	if err := os.WriteFile(filepath.Join(tempDir, "go.mod"), []byte(goMod), 0644); err != nil {
 		err = fmt.Errorf("failed to create go.mod in temp dir '%s': %w", tempDir, err)
