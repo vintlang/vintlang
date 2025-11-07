@@ -1,4 +1,4 @@
-import logger_module
+// import logger_module
 
 const os = import("os")
 const DOCS_DIR = "../docs"
