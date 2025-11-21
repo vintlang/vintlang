@@ -26,7 +26,7 @@ func GetDocsItem() []Item{
 	}
 	var items []Item
 	for _,file := range f{
-		if !file.IsDir(){
+		if !file.IsDir() && strings.HasSuffix(file.Name(),".md"){
 			items = append(items,Item{
 				title:    file.Name(),
 				desc:     GetDocDescription(file),
