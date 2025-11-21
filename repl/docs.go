@@ -37,13 +37,13 @@ var (
 				Padding(2)
 )
 
-type item struct {
+type Item struct {
 	title, desc, filename string
 }
 
-func (i item) Title() string       { return i.title }
-func (i item) Description() string { return i.desc }
-func (i item) FilterValue() string { return i.title }
+func (i Item) Title() string       { return i.title }
+func (i Item) Description() string { return i.desc }
+func (i Item) FilterValue() string { return i.title }
 
 type playground struct {
 	id           string
@@ -87,7 +87,7 @@ func (pg playground) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 			fmt.Println(pg.editor.Value())
 			return pg, tea.Quit
 		case tea.KeyEnter:
-			i, ok := pg.toc.SelectedItem().(item)
+			i, ok := pg.toc.SelectedItem().(Item)
 			if ok {
 				pg.filename = i.filename
 				content, err := res.ReadFile(pg.filename)
