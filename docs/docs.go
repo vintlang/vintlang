@@ -2,8 +2,8 @@ package docs
 
 import (
 	"embed"
+	"io/fs"
 )
-
 
 //go:embed *
 var Docs embed.FS
@@ -34,4 +34,53 @@ func GetDocsItem() []Item{
 		}
 	}
 	return items
+}
+
+func getDocDescription(file fs.DirEntry) string {
+	content, err := Docs.ReadFile(file.Name())
+	if err != nil {
+		return "No description available."
+	}
+	lines := string(content)
+	firstLine := ""
+	for _, line := range SplitLines(lines) {
+		trimmed := TrimWhitespace(line)
+		if trimmed != "" {
+			firstLine = trimmed
+			break
+		}
+	}
+	return firstLine
+}
+
+func SplitLines(s string) []string {
+	var lines []string
+	currentLine := ""
+	for _, r := range s {
+		if r == '\n' {
+			lines = append(lines, currentLine)
+			currentLine = ""
+		} else {
+			currentLine += string(r)
+		}
+	}
+	if currentLine != "" {
+		lines = append(lines, currentLine)
+	}
+	return lines
+}
+
+func TrimWhitespace(s string) string {
+	start := 0
+	end := len(s) - 1
+	for start <= end && (s[start] == ' ' || s[start] == '\t') {
+		start++
+	}
+	for end >= start && (s[end] == ' ' || s[end] == '\t') {
+		end--
+	}
+	if start > end {
+		return ""
+	}
+	return s[start : end+1]
 }
