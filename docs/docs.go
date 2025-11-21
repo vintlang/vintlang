@@ -3,6 +3,7 @@ package docs
 import (
 	"embed"
 	"io/fs"
+	"strings"
 )
 
 //go:embed *
@@ -28,7 +29,7 @@ func GetDocsItem() []Item{
 		if !file.IsDir(){
 			items = append(items,Item{
 				title:    file.Name(),
-				desc:     "Vintlang documentation file",
+				desc:     GetDocDescription(file),
 				filename: file.Name(),
 			})
 		}
@@ -36,7 +37,7 @@ func GetDocsItem() []Item{
 	return items
 }
 
-func getDocDescription(file fs.DirEntry) string {
+func GetDocDescription(file fs.DirEntry) string {
 	content, err := Docs.ReadFile(file.Name())
 	if err != nil {
 		return "No description available."
@@ -50,7 +51,7 @@ func getDocDescription(file fs.DirEntry) string {
 			break
 		}
 	}
-	return firstLine
+	return strings.ReplaceAll(firstLine, "#", "")
 }
 
 func SplitLines(s string) []string {
