@@ -90,20 +90,24 @@ func (pg playground) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 			i, ok := pg.toc.SelectedItem().(item)
 			if ok {
 				pg.filename = i.filename
-				content, err := res.ReadFile("docs/en/" + pg.filename)
+				content, err := res.ReadFile("docs/" + pg.filename)
 				if err != nil {
-					panic(err)
+					pg.docs.SetContent(styles.ErrorStyle.Render("Documentation file not found: ") + pg.filename)
+					pg.fileSelected = true
+					pg.editor.Focus()
+				} else {
+					pg.content = content
+					str, err := pg.docRenderer.Render(string(pg.content))
+					if err != nil {
+						pg.docs.SetContent(styles.ErrorStyle.Render("Error rendering documentation: ") + err.Error())
+						pg.fileSelected = true
+						pg.editor.Focus()
+					} else {
+						pg.docs.SetContent(str + "\n\n\n\n\n\n")
+						pg.fileSelected = true
+						pg.editor.Focus()
+					}
 				}
-				pg.content = content
-				str, err := pg.docRenderer.Render(string(pg.content))
-				if err != nil {
-					panic(err)
-				}
-
-				pg.docs.SetContent(str + "\n\n\n\n\n\n")
-
-				pg.fileSelected = true
-				pg.editor.Focus()
 			}
 		case tea.KeyCtrlR:
 			if strings.Contains(pg.editor.Value(), "input") {
