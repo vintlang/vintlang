@@ -90,7 +90,7 @@ func (pg playground) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 			i, ok := pg.toc.SelectedItem().(item)
 			if ok {
 				pg.filename = i.filename
-				content, err := res.ReadFile("docs/" + pg.filename)
+				content, err := res.ReadFile(pg.filename)
 				if err != nil {
 					pg.docs.SetContent(styles.ErrorStyle.Render("Documentation file not found: ") + pg.filename)
 					pg.fileSelected = true
