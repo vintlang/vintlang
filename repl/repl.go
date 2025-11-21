@@ -123,33 +123,10 @@ func Docs() {
 	}
 }
 
-var (
-	englishItems = []list.Item{
-		Item{title: "Arrays", desc: "🚀 Unleash the power of arrays in vint", filename: "arrays.md"},
-		Item{title: "Booleans", desc: "👍👎 Master the world of 'if' and 'else' with bools", filename: "bool.md"},
-		Item{title: "Builtins", desc: "💡 Reveal the secrets of builtin functions in vint", filename: "builtins.md"},
-		Item{title: "Comments", desc: "💬 Speak your mind with comments in vint", filename: "comments.md"},
-		Item{title: "CSV", desc: "📈 Handle CSV data with ease", filename: "csv.md"},
-		Item{title: "Dictionaries", desc: "📚 Unlock the knowledge of dictionaries in vint", filename: "dictionaries.md"},
-		Item{title: "Files", desc: "💾 Handle files effortlessly in vint", filename: "files.md"},
-		Item{title: "For", desc: "🔄 Loop like a pro with 'for' in vint", filename: "for.md"},
-		Item{title: "Function", desc: "🔧 Create powerful functions in vint", filename: "function.md"},
-		Item{title: "Identifiers", desc: "🔖 Give your variables their own identity in vint", filename: "identifiers.md"},
-		Item{title: "If Statements", desc: "🔮 Control the flow with 'if' statements in vint", filename: "ifStatements.md"},
-		Item{title: "JSON", desc: "📄 Master the art of JSON in vint", filename: "json.md"},
-		Item{title: "Keywords", desc: "🔑 Learn the secret language of vint's keywords", filename: "keywords.md"},
-		Item{title: "MySQL", desc: "🗄️ Interact with MySQL databases", filename: "mysql.md"},
-		Item{title: "PostgreSQL", desc: "🐘 Work with PostgreSQL databases", filename: "postgres.md"},
-		Item{title: "Net", desc: "🌐 Explore the world of networking in vint", filename: "net.md"},
-		Item{title: "Null", desc: "🌌 Embrace the void with Null in vint", filename: "null.md"},
-		Item{title: "Numbers", desc: "🔢 Discover the magic of numbers in vint", filename: "numbers.md"},
-		Item{title: "Operators", desc: "🧙 Perform spells with vint's operators", filename: "operators.md"},
-		Item{title: "Packages", desc: "📦 Harness the power of packages in vint", filename: "packages.md"},
-		Item{title: "Path", desc: "🛤️ Manipulate file paths like a pro", filename: "path.md"},
-		Item{title: "Random", desc: "🎲 Generate random numbers and more", filename: "random.md"},
-		Item{title: "Strings", desc: "🎼 Compose stories with strings in vint", filename: "strings.md"},
-		Item{title: "Switch", desc: "🧭 Navigate complex scenarios with 'switch' in vint", filename: "switch.md"},
-		Item{title: "Time", desc: "⏰ Manage time with ease in vint", filename: "time.md"},
-		Item{title: "While", desc: "⌛ Learn the art of patience with 'while' loops in vint", filename: "while.md"},
+var englishItems []list.Item
+
+func init() {
+	for _, docItem := range docs.GetDocsItem() {
+		englishItems = append(englishItems, docItem)
 	}
-)
+}

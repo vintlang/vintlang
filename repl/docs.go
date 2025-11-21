@@ -12,6 +12,7 @@ import (
 	"github.com/charmbracelet/glamour"
 	"github.com/charmbracelet/lipgloss"
 	zone "github.com/lrstanley/bubblezone"
+	"github.com/vintlang/vintlang/docs"
 	"github.com/vintlang/vintlang/evaluator"
 	"github.com/vintlang/vintlang/lexer"
 	"github.com/vintlang/vintlang/object"
@@ -37,13 +38,6 @@ var (
 				Padding(2)
 )
 
-type Item struct {
-	title, desc, filename string
-}
-
-func (i Item) Title() string       { return i.title }
-func (i Item) Description() string { return i.desc }
-func (i Item) FilterValue() string { return i.title }
 
 type playground struct {
 	id           string
@@ -87,9 +81,9 @@ func (pg playground) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 			fmt.Println(pg.editor.Value())
 			return pg, tea.Quit
 		case tea.KeyEnter:
-			i, ok := pg.toc.SelectedItem().(Item)
+			i, ok := pg.toc.SelectedItem().(docs.Item)
 			if ok {
-				pg.filename = i.filename
+				pg.filename = i.Filename()
 				content, err := res.ReadFile(pg.filename)
 				if err != nil {
 					pg.docs.SetContent(styles.ErrorStyle.Render("Documentation file not found: ") + pg.filename)
@@ -196,8 +190,7 @@ func (pg playground) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 
 			pg.output = viewport.New(msg.Width/2, msg.Height/3-4)
 			pg.output.Style = lipgloss.NewStyle().PaddingLeft(3)
-			var output string
-			output = "Your code output will be displayed here..." + strings.Repeat(" ", msg.Width-6)
+			var output string = "Your code output will be displayed here..." + strings.Repeat(" ", msg.Width-6)
 			pg.output.SetContent(output)
 
 			pg.docs = viewport.New(msg.Width/2, msg.Height)
