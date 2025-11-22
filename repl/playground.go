@@ -55,7 +55,6 @@ var (
 			MarginTop(1)
 )
 
-// New types for enhanced features
 type ExecutionResult struct {
 	output   string
 	duration time.Duration
