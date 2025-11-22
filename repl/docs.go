@@ -127,8 +127,8 @@ func (d documentation) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		contentCmd tea.Cmd
 	)
 
-	d.sidebar, sidebarCmd = d.sidebar.Update(msg)
-	d.content, contentCmd = d.content.Update(msg)
+	// Only update child components if they've been initialized.
+	// Components are initialized in handleResize when we receive a WindowSizeMsg.
 
 	switch msg := msg.(type) {
 	case tea.KeyMsg:
@@ -148,7 +148,7 @@ func (d documentation) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		case key.Matches(msg, d.keys.Quit):
 			return d, tea.Quit
 		case msg.Type == tea.KeyEnter:
-			if !d.inDocView {
+			if !d.inDocView && d.ready {
 				// Load selected documentation
 				i, ok := d.sidebar.SelectedItem().(docs.Item)
 				if ok {
@@ -162,7 +162,7 @@ func (d documentation) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	case tea.MouseMsg:
 		switch msg.Type {
 		case tea.MouseLeft:
-			if zone.Get(d.id+"sidebar").InBounds(msg) && !d.inDocView {
+			if d.ready && zone.Get(d.id+"sidebar").InBounds(msg) && !d.inDocView {
 				// Handle click in sidebar to select and open doc
 				i, ok := d.sidebar.SelectedItem().(docs.Item)
 				if ok {
@@ -175,6 +175,12 @@ func (d documentation) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 
 	case tea.WindowSizeMsg:
 		return d.handleResize(msg)
+	}
+
+	// NOTE: We Update child components after handling messages, but only if initialized.
+	if d.ready {
+		d.sidebar, sidebarCmd = d.sidebar.Update(msg)
+		d.content, contentCmd = d.content.Update(msg)
 	}
 
 	return d, tea.Batch(sidebarCmd, contentCmd)
@@ -215,7 +221,7 @@ func (d *documentation) initializeComponents(msg tea.WindowSizeMsg) {
 	delegate.Styles.SelectedTitle = delegate.Styles.SelectedTitle.
 		Foreground(lipgloss.Color("#aa6f5a")).
 		BorderForeground(lipgloss.Color("#aa6f5a"))
-	
+
 	d.sidebar = list.New(items, delegate, msg.Width/3, msg.Height-4)
 	d.sidebar.Title = "Vint Documentation"
 	d.sidebar.Styles.Title = titleStyle
@@ -225,12 +231,12 @@ func (d *documentation) initializeComponents(msg tea.WindowSizeMsg) {
 	// Initialize content viewport
 	d.content = viewport.New(2*msg.Width/3-6, msg.Height-4)
 	d.content.KeyMap = viewport.KeyMap{
-		Up:            key.NewBinding(key.WithKeys("up", "k")),
-		Down:          key.NewBinding(key.WithKeys("down", "j")),
-		PageUp:        key.NewBinding(key.WithKeys("pgup")),
-		PageDown:      key.NewBinding(key.WithKeys("pgdown")),
-		HalfPageUp:    key.NewBinding(key.WithKeys("u")),
-		HalfPageDown:  key.NewBinding(key.WithKeys("d")),
+		Up:           key.NewBinding(key.WithKeys("up", "k")),
+		Down:         key.NewBinding(key.WithKeys("down", "j")),
+		PageUp:       key.NewBinding(key.WithKeys("pgup")),
+		PageDown:     key.NewBinding(key.WithKeys("pgdown")),
+		HalfPageUp:   key.NewBinding(key.WithKeys("u")),
+		HalfPageDown: key.NewBinding(key.WithKeys("d")),
 	}
 
 	// Initialize markdown renderer
@@ -280,7 +286,7 @@ func (d documentation) View() string {
 	}
 
 	// Sidebar panel
-	sidebarPanel := zone.Mark(d.id+"sidebar", 
+	sidebarPanel := zone.Mark(d.id+"sidebar",
 		sidebarStyle.
 			Width(d.windowWidth/3-4).
 			Height(d.windowHeight-6).
@@ -290,7 +296,7 @@ func (d documentation) View() string {
 	// Content panel
 	var contentPanel string
 	if d.inDocView {
-		contentPanel = zone.Mark(d.id+"content", 
+		contentPanel = zone.Mark(d.id+"content",
 			contentStyle.
 				Width(2*d.windowWidth/3-8).
 				Height(d.windowHeight-6).
@@ -298,8 +304,8 @@ func (d documentation) View() string {
 		)
 	} else {
 		contentPanel = contentStyle.
-			Width(2*d.windowWidth/3-8).
-			Height(d.windowHeight-6).
+			Width(2*d.windowWidth/3 - 8).
+			Height(d.windowHeight - 6).
 			Render("Select a documentation topic from the sidebar to view its content.\n\nNavigation:\n• Use arrow keys or j/k to navigate the list\n• Press Enter or click to open a document\n• Press Esc to return to the list\n• Use F1 to toggle this help")
 	}
 
@@ -335,7 +341,7 @@ func (d documentation) View() string {
 
 	// Main layout - sidebar on left, content on right
 	mainContent := lipgloss.JoinHorizontal(lipgloss.Top, sidebarPanel, contentPanel)
-	
+
 	if d.showHelp {
 		return zone.Scan(lipgloss.JoinVertical(lipgloss.Left, mainContent, helpPanel, statusBar))
 	}
@@ -349,7 +355,7 @@ func getDocItems() []list.Item {
 	var items []list.Item
 	docFiles := []string{
 		"introduction.md",
-		"getting-started.md", 
+		"getting-started.md",
 		"syntax.md",
 		"types.md",
 		"functions.md",
@@ -364,24 +370,24 @@ func getDocItems() []list.Item {
 		title = strings.Title(title)
 
 		item := docs.NewDocsItem(title, fmt.Sprintf("Documentation for %s", title), file)
-		
+
 		items = append(items, item)
 	}
 	return items
 }
 
-// StartDocumentation starts the documentation viewer
-func StartDocumentation() {
+// Docs starts the documentation viewer
+func Docs() {
 	zone.NewGlobal()
-	
+
 	d := newDocumentation()
 	d.id = zone.NewPrefix()
 
-	program := tea.NewProgram(d, 
-		tea.WithMouseAllMotion(), 
+	program := tea.NewProgram(d,
+		tea.WithMouseAllMotion(),
 		tea.WithAltScreen(),
 	)
-	
+
 	if _, err := program.Run(); err != nil {
 		log.Fatal("Error running documentation viewer:", err)
 	}

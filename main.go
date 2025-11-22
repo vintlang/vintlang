@@ -78,8 +78,10 @@ func main() {
 		switch args[1] {
 		case "help", "-help", "--help", "-h":
 			fmt.Println(Help)
-		case "docs", "-docs", "--docs", "-d":
+		case "play", "-play", "--play", "-p":
 			repl.Playground()
+		case "docs", "-docs", "--docs", "-d":
+			repl.Docs()
 		case "version", "-version", "--version", "-v", "v":
 			fmt.Println(versionMsg)
 		case "bundle", "-bundle", "--bundle", "-b", "--b":
