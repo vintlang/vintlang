@@ -362,12 +362,10 @@ func getDocItems() []list.Item {
 		title := strings.TrimSuffix(file, ".md")
 		title = strings.ReplaceAll(title, "-", " ")
 		title = strings.Title(title)
+
+		item := docs.NewDocsItem(title, fmt.Sprintf("Documentation for %s", title), file)
 		
-		items = append(items, docs.Item{
-			Title: title,
-			Desc:  fmt.Sprintf("Documentation for %s", title),
-			File:  file,
-		})
+		items = append(items, item)
 	}
 	return items
 }
