@@ -79,7 +79,7 @@ func main() {
 		case "help", "-help", "--help", "-h":
 			fmt.Println(Help)
 		case "docs", "-docs", "--docs", "-d":
-			repl.Docs()
+			repl.Playground()
 		case "version", "-version", "--version", "-v", "v":
 			fmt.Println(versionMsg)
 		case "bundle", "-bundle", "--bundle", "-b", "--b":
