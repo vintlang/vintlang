@@ -3,7 +3,6 @@ package repl
 import (
 	"fmt"
 	"log"
-	"strings"
 	"time"
 
 	"github.com/charmbracelet/bubbles/key"
@@ -350,28 +349,14 @@ func (d documentation) View() string {
 
 // Helper function to get documentation items
 func getDocItems() []list.Item {
-	// This would typically come from your docs package
-	// For now, using a placeholder - replace with actual doc items
 	var items []list.Item
-	docFiles := []string{
-		"introduction.md",
-		"getting-started.md",
-		"syntax.md",
-		"types.md",
-		"functions.md",
-		"control-flow.md",
-		"standard-library.md",
+	docsList := docs.GetDocsItem()
+	if docsList == nil {
+		return items
 	}
-
-	for _, file := range docFiles {
-		// Convert filename to readable title
-		title := strings.TrimSuffix(file, ".md")
-		title = strings.ReplaceAll(title, "-", " ")
-		title = strings.Title(title)
-
-		item := docs.NewDocsItem(title, fmt.Sprintf("Documentation for %s", title), file)
-
-		items = append(items, item)
+	for _, d := range docsList {
+		// docs.Item implements the methods required by list.Item
+		items = append(items, d)
 	}
 	return items
 }
