@@ -18,6 +18,14 @@ func (i Item) Filename() string       { return i.filename }
 func (i Item) Description() string { return i.desc }
 func (i Item) FilterValue() string { return i.title }
 
+func NewDocsItem(title,desc,filename string) Item {
+	return Item{
+		title:    title,
+		desc:     desc,
+		filename: filename,
+	}
+}
+
 
 func GetDocsItem() []Item{
 	f,err :=Docs.ReadDir(".")
