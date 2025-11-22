@@ -109,7 +109,7 @@ func completer(in prompt.Document) []prompt.Suggest {
 	return []prompt.Suggest{}
 }
 
-func Docs() {
+func Playground() {
 	zone.NewGlobal()
 
 	var p playground
