@@ -6,6 +6,7 @@ VERSION=0.2.1
 # Windows: Download from https://github.com/upx/upx/releases
 
 build:
+	go run toolkit/count.go
 	make build_android
 	make build_linux
 	make build_windows

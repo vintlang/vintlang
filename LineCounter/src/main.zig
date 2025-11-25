@@ -28,7 +28,7 @@ pub fn main() !void {
                 }
             }
             if (should_ignore) {
-                try walker.skip();
+                try walker.next();
                 continue;
             }
         } else if (entry.kind == .file) {
