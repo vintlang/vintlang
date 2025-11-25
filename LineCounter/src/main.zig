@@ -7,8 +7,10 @@ pub fn main() !void {
     defer if (gpa.deinit() != .ok) @panic("leak");
     const allocator = gpa.allocator();
 
+    // var count = 0;
+
     // In order to walk the directry, `iterate` must be set to true.
-    var dir = try fs.cwd().openDir("zig-out", .{ .iterate = true });
+    var dir = try fs.cwd().openDir("../../", .{ .iterate = true });
     defer dir.close();
 
     var walker = try dir.walk(allocator);
