@@ -83,7 +83,7 @@ func main() {
 		case "docs", "-docs", "--docs", "-d":
 			repl.Docs()
 		case "lines":
-			// Implement the lines command functionality here
+			toolkit.Lines()
 		case "version", "-version", "--version", "-v", "v":
 			fmt.Println(versionMsg)
 		case "bundle", "-bundle", "--bundle", "-b", "--b":
