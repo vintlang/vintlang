@@ -42,7 +42,7 @@ repeated *= 2
 You can loop through each character of a string using the `for` keyword:
 
 ```js
-let name = "Avicenna"
+let name = "Tachera"
 
 for char in name {
     print(char)

@@ -1,5 +1,5 @@
 let PrintHelloFromVint = func() {
-    println("Hello from vint!")
+    println("Hello from vint!".upper())
     const os = import("os")
     const filePath = "ascii.txt"
     const content = os.readFile(filePath)
