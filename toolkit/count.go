@@ -8,6 +8,7 @@ import (
 	"strings"
 )
 
+// Lines counts and prints the total number of lines in files with specific extensions in the current directory and its subdirectories.
 func Lines() {
 	extensions := []string{".go", ".vint", ".h", ".hpp", ".S"}
 
