@@ -1,13 +1,10 @@
 let PrintHelloFromVint = func(){
-
-    // step 1 check if the ascii.txt file exists
     const os = import("os")
     const filePath = "ascii.txtj"
     if (!os.fileExists(filePath)) {
         println("ascii.txt file not found!")
         return
     }
-
     const content = os.readFile(filePath)
     println(content)
-}
+}()
