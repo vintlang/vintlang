@@ -7,8 +7,7 @@ let PrintHelloFromVint = func(){
         println("ascii.txt file not found!")
         return
     }
-    
-    println("
-    
-    ")
+
+    const content = os.readFile(filePath)
+    println(content)
 }
