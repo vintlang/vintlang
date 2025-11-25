@@ -6,6 +6,7 @@ pub fn main() !void {
     var gpa = std.heap.GeneralPurposeAllocator(.{}){};
     defer if (gpa.deinit() != .ok) @panic("leak");
     const allocator = gpa.allocator();
+    const ignoreDirs = [_][]const u8{ ".git", "zig-out", "node_modules" };
 
     // var count = 0;
 
@@ -17,6 +18,19 @@ pub fn main() !void {
     defer walker.deinit();
 
     while (try walker.next()) |entry| {
+        if(entry.kind == .Dir) {
+            var should_ignore = false;
+            for (ignoreDirs) |ignoreDir| {
+                if (entry.basename == ignoreDir) {
+                    should_ignore = true;
+                    break;
+                }
+            }
+            if (should_ignore) {
+                walker.skip();
+                continue;
+            }
+        }
         print("path: {s}, basename:{s}, type:{s}\n", .{
             entry.path,
             entry.basename,
