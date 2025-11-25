@@ -1,39 +1,14 @@
-// Simple demo vint code
-// import greetings_module
-import time
+let PrintHelloFromVint = func(){
 
-const sysInfo = import("sysinfo")
-
-println("Operating System:", sysInfo.os())
-
-let x = 42
-
-println('This is a simple VintLang program')
-
-// Print a greeting
-println("Hello, VintLang World! it currently",time.now())
-
-const timeNow = import("time").now()
-println("Current time from inline-imported time module:", timeNow)
-
-// Demonstrate string splitting
-let phrase = "VintLang"
-let letters = phrase.split("")
-for letter in letters 
-//Vint also allow this syntax
-{
-    println(letter)
+    // step 1 check if the ascii.txt file exists
+    const os = import("os")
+    const filePath = "ascii.txtj"
+    if (!os.fileExists(filePath)) {
+        println("ascii.txt file not found!")
+        return
+    }
+    
+    println("
+    
+    ")
 }
-
-
-let thisWillBePrintedLast = func() {
-    println("This will be printed last");
-};
-const my_function = func() { // you can also use const
-    defer thisWillBePrintedLast()
-    defer println("This will be printed last. 2");
-    println("This will be printed first");
-}();
-
-//from the greetings_module
-// greetings_module.greet("Developer")
