@@ -1,436 +1,5 @@
 # Merged Documentation
 
-## RELEASE_PROCESS.md
-
-```markdown
-# VintLang Release Process
-
-This document explains how to create and publish releases for VintLang using GoReleaser and GitHub Actions.
-
-## Overview
-
-VintLang uses [GoReleaser](https://goreleaser.com) to automate the build and release process. When a new version tag is pushed to the repository, GitHub Actions automatically:
-
-1. Builds binaries for multiple platforms (Linux, macOS, Windows)
-2. Creates archives (tar.gz for Linux/macOS, zip for Windows)
-3. Generates Linux packages (deb, rpm, apk)
-4. Calculates checksums
-5. Creates a GitHub release with all artifacts
-6. Generates release notes from the changelog
-
-## Prerequisites
-
-- Maintainer access to the repository
-- Git configured with proper credentials
-- Go 1.21 or later installed (for local testing)
-
-## Release Process
-
-### 1. Prepare for Release
-
-Before creating a release, ensure:
-
-- All changes are merged to the `main` branch
-- All tests are passing
-- Documentation is up to date
-- CHANGELOG.md is updated with the new version
-
-### 2. Create a Release (Using the Release Script)
-
-The easiest way to create a release is using the provided release script:
-
-```bash
-./scripts/release.sh v0.3.0
-```
-
-This script will:
-
-- Validate the version format
-- Check you're on the main branch
-- Check for uncommitted changes
-- Create and push the version tag
-- Trigger the GitHub Actions workflow
-
-#### Version Format
-
-Versions must follow the format: `vX.Y.Z` (e.g., `v0.3.0`, `v1.0.0`)
-
-Optional suffixes are supported: `v0.3.0-beta.1`, `v0.3.0-rc.1`
-
-### 3. Manual Release Process
-
-If you prefer to create a release manually:
-
-```bash
-# Ensure you're on main branch
-git checkout main
-
-# Pull latest changes
-git pull origin main
-
-# Create and push the tag
-git tag -a v0.3.0 -m "Release v0.3.0"
-git push origin main
-git push origin v0.3.0
-```
-
-### 4. Monitor the Release
-
-After pushing the tag:
-
-1. Go to the [Actions tab](https://github.com/vintlang/vintlang/actions)
-2. Find the "Release" workflow for your tag
-3. Monitor the build progress
-4. Once complete, verify the [release page](https://github.com/vintlang/vintlang/releases)
-
-## Testing Releases Locally
-
-Before creating an official release, you can test the build process locally using GoReleaser:
-
-### Using the Test Script
-
-```bash
-./scripts/test-goreleaser.sh
-```
-
-This script will:
-
-- Install GoReleaser if not already installed
-- Build binaries for all platforms in snapshot mode
-- Create archives and packages
-- Generate checksums
-
-All artifacts will be in the `dist/` directory.
-
-### Manual Testing
-
-```bash
-# Install goreleaser (if not installed)
-go install github.com/goreleaser/goreleaser@latest
-
-# Ensure it's in your PATH
-export PATH="$HOME/go/bin:$PATH"
-
-# Test the configuration
-goreleaser check
-
-# Build for a single platform (fast)
-goreleaser build --snapshot --clean --single-target
-
-# Build for all platforms (slower)
-goreleaser release --snapshot --clean --skip=publish
-```
-
-## Configuration
-
-### GoReleaser Configuration
-
-The GoReleaser configuration is in `.goreleaser.yml`. Key settings:
-
-- **Builds**: Configured for Linux, macOS, and Windows (amd64, arm64, 386)
-- **Archives**: tar.gz for Unix-like systems, zip for Windows
-- **Packages**: Generates deb, rpm, and apk packages for Linux
-- **Checksums**: SHA256 checksums for all artifacts
-
-### GitHub Actions Workflow
-
-The release workflow is in `.github/workflows/build.yml`. It:
-
-- Triggers on tags matching `v*`
-- Runs tests before building
-- Uses GoReleaser to build and publish
-- Requires `GITHUB_TOKEN` (automatically provided)
-
-## Troubleshooting
-
-### Build Fails
-
-If the build fails:
-
-1. Check the Actions logs for detailed error messages
-2. Test locally with `./scripts/test-goreleaser.sh`
-3. Ensure `.goreleaser.yml` is valid with `goreleaser check`
-
-### Missing Artifacts
-
-If some artifacts are missing from the release:
-
-1. Check the GoReleaser configuration for the platform
-2. Verify the build succeeded for that platform in the Actions logs
-3. Test locally with `goreleaser release --snapshot --clean --skip=publish`
-
-### Wrong Version Number
-
-If the version number is incorrect:
-
-1. Check that the tag name is correct (should start with `v`)
-2. Verify the ldflags in `.goreleaser.yml` are set correctly
-3. The version is injected at build time from the Git tag
-
-## Platform Support
-
-VintLang is built for the following platforms:
-
-| OS      | Architectures        | Formats          |
-|---------|---------------------|------------------|
-| Linux   | amd64, arm64, 386   | tar.gz, deb, rpm, apk |
-| macOS   | amd64, arm64        | tar.gz           |
-| Windows | amd64, 386          | zip              |
-
-Note: Windows arm64 and macOS 386 are excluded due to lack of support.
-
-## Release Artifacts
-
-Each release includes:
-
-1. **Binaries**: Pre-built executables for each platform
-2. **Archives**: Compressed archives containing the binary and documentation
-3. **Linux Packages**: Native packages for Debian/Ubuntu (deb), Red Hat/Fedora (rpm), and Alpine (apk)
-4. **Checksums**: SHA256 checksums for verifying downloads
-5. **Release Notes**: Auto-generated from commit messages
-
-## Best Practices
-
-1. **Always test locally first**: Run `./scripts/test-goreleaser.sh` before pushing a tag
-2. **Follow semantic versioning**: Use major.minor.patch (e.g., v1.2.3)
-3. **Update documentation**: Ensure README.md and CHANGELOG.md are current
-4. **Test the binaries**: Download and test artifacts from the release page
-5. **Announce the release**: Update the community about new releases
-
-## Additional Resources
-
-- [GoReleaser Documentation](https://goreleaser.com)
-- [Semantic Versioning](https://semver.org)
-- [VintLang Releases](https://github.com/vintlang/vintlang/releases)
-- [GitHub Actions Documentation](https://docs.github.com/en/actions)
-
-```
-
-## SHOWCASE_README.md
-
-```markdown
-# VintLang Showcase Applications
-
-This directory contains comprehensive showcase applications demonstrating VintLang's real-world capabilities.
-
-## 🎯 Comprehensive Feature Showcase
-
-**File:** `comprehensive_showcase.vint`
-
-A complete demonstration of VintLang's core features including:
-
-- **Data Structures**: Variables, arrays, dictionaries
-- **String Processing**: Manipulation, splitting, transformation
-- **Functions**: Definition, calls, parameters
-- **JSON Operations**: Encoding, decoding, data processing
-- **File I/O**: Reading, writing, directory management
-- **Time Operations**: Formatting, timestamps
-- **UUID Generation**: Unique identifiers
-- **Data Analysis**: Statistics, processing
-- **Report Generation**: Multiple output formats
-
-### Usage
-
-```bash
-vint comprehensive_showcase.vint
-```
-
-### Output
-
-- Creates employee database with JSON processing
-- Generates comprehensive reports
-- Demonstrates data analysis capabilities
-- Shows file management operations
-
-## 🗂️ Personal Information Manager
-
-**File:** `vintlang_showcase.vint`
-
-A practical application showcasing:
-
-- Contact management system
-- JSON data persistence
-- CSV export functionality
-- Report generation
-- Statistical analysis
-- File operations
-
-### Usage
-
-```bash
-vint vintlang_showcase.vint
-```
-
-### Features Demonstrated
-
-- UUID generation for unique records
-- Time formatting and timestamps
-- JSON encoding/decoding
-- String manipulation (splitting, processing)
-- Data structures (arrays, dictionaries)
-- File I/O operations
-- Statistical calculations
-
-## 🔧 Feature Testing Suite
-
-**File:** `feature_test.vint`
-
-Basic feature validation covering:
-
-- Time functions
-- UUID generation
-- JSON operations
-- File operations
-- Arrays and loops
-- String operations
-
-### Usage
-
-```bash
-vint feature_test.vint
-```
-
-## 🌐 Web Data Fetcher
-
-**File:** `web_fetcher.vint`
-
-Network capabilities demonstration:
-
-- HTTP GET requests
-- JSON response processing
-- Error handling
-- Performance analysis
-- Data storage
-
-### Usage
-
-```bash
-vint web_fetcher.vint
-```
-
-**Note:** Network features require internet connectivity.
-
-## 🧮 Mathematical Algorithms
-
-**File:** `math_showcase.vint`
-
-Computational capabilities including:
-
-- Fibonacci sequence generation
-- Prime number detection
-- Factorial calculations
-- Sorting algorithms
-- Statistical analysis
-
-### Usage
-
-```bash
-vint math_showcase.vint
-```
-
-## 📁 File Management System
-
-**File:** `file_manager.vint`
-
-Advanced file operations:
-
-- Directory management
-- File analysis
-- Backup functionality
-- Logging systems
-- Configuration management
-
-### Usage
-
-```bash
-vint file_manager.vint
-```
-
-## 📝 Task Management Applications
-
-### Simple Task Manager
-
-**File:** `simple_task_manager.vint`
-
-Basic task management with:
-
-- Task creation and completion
-- JSON persistence
-- Statistics tracking
-
-### Advanced Task Manager
-
-**File:** `showcase_task_manager.vint`
-
-Comprehensive task management with:
-
-- Categories and priorities
-- Advanced filtering
-- Export functionality
-- Interactive menus
-
-## 🛠️ Fixed Examples
-
-The following examples have been fixed to work correctly with current VintLang syntax:
-
-- `examples/json.vint` - Fixed variable declarations
-- `examples/os.vint` - Fixed variable declarations  
-- `examples/strings.vint` - Fixed variable declarations
-- `examples/regex.vint` - Identified syntax issues (needs further work)
-
-## 📚 Key Language Features Demonstrated
-
-### Working Features ✅
-
-- **Variables**: `let` declarations, type inference
-- **Data Types**: strings, numbers, booleans, arrays, dictionaries
-- **Control Flow**: if/else, loops, functions
-- **Modules**: time, os, json, uuid, math
-- **String Operations**: split, upper, lower, contains, reverse
-- **File I/O**: read, write, directory operations
-- **JSON**: encode, decode, manipulation
-- **Time**: formatting, timestamps
-- **UUID**: generation
-
-### Known Issues ⚠️
-
-- **Regex Module**: Parsing issues with function calls
-- **Network Module**: May require internet connectivity
-- **CSV Module**: Some syntax parsing issues
-
-## 🚀 Running the Showcases
-
-1. Ensure VintLang is installed and available as `vint`
-2. Navigate to the VintLang directory
-3. Run any showcase file:
-
-   ```bash
-   ./vint comprehensive_showcase.vint
-   ```
-
-## 📊 Performance Notes
-
-- All showcases run efficiently on the current VintLang interpreter
-- File operations create temporary files for demonstration
-- JSON processing handles complex nested structures
-- String operations support Unicode text
-- Memory usage is optimized for typical business applications
-
-## 🎯 Real-World Applications
-
-These showcases prove VintLang's readiness for:
-
-- **Business Applications**: Data processing, reporting
-- **File Management**: Backup, organization, analysis
-- **API Integration**: JSON processing, data transformation
-- **Automation Scripts**: Task management, file operations
-- **Educational Programming**: Clear syntax, comprehensive features
-- **Rapid Prototyping**: Quick development cycles
-
-VintLang demonstrates production-ready capabilities for modern software development!
-
-```
-
 ## argparse.md
 
 ```markdown
@@ -504,12 +73,10 @@ if (outputFile) {
 Creates a new argument parser.
 
 **Parameters:**
-
 - `name` (string): The name of the parser
 - `description` (string, optional): A description of the application
 
 **Returns:**
-
 - A parser ID string that can be used with other functions
 
 ### addArgument(parser, name, options)
@@ -517,7 +84,6 @@ Creates a new argument parser.
 Adds a positional argument to the parser.
 
 **Parameters:**
-
 - `parser` (string): The parser ID
 - `name` (string): The name of the argument
 - `options` (dict, optional): Options for the argument
@@ -528,7 +94,6 @@ Adds a positional argument to the parser.
   - `choices` (array): List of valid values for the argument
 
 **Returns:**
-
 - `true` if the argument was added successfully
 
 ### addFlag(parser, name, options)
@@ -536,7 +101,6 @@ Adds a positional argument to the parser.
 Adds a flag (optional named argument) to the parser.
 
 **Parameters:**
-
 - `parser` (string): The parser ID
 - `name` (string): The name of the flag
 - `options` (dict, optional): Options for the flag
@@ -547,7 +111,6 @@ Adds a flag (optional named argument) to the parser.
   - `type` (string): Type of the flag ("string", "integer", "float", "boolean")
 
 **Returns:**
-
 - `true` if the flag was added successfully
 
 ### parse(parser, args)
@@ -555,12 +118,10 @@ Adds a flag (optional named argument) to the parser.
 Parses command line arguments according to the parser definition.
 
 **Parameters:**
-
 - `parser` (string): The parser ID
 - `args` (array, optional): Array of strings representing the arguments to parse. If not provided, the system arguments will be used.
 
 **Returns:**
-
 - A dictionary containing the parsed arguments and flags
 
 ### help(parser)
@@ -568,11 +129,9 @@ Parses command line arguments according to the parser definition.
 Generates help text for the parser.
 
 **Parameters:**
-
 - `parser` (string): The parser ID
 
 **Returns:**
-
 - A string containing the help text
 
 ### version(parser, versionString)
@@ -580,12 +139,10 @@ Generates help text for the parser.
 Sets the version information for the parser.
 
 **Parameters:**
-
 - `parser` (string): The parser ID
 - `versionString` (string): The version string
 
 **Returns:**
-
 - `true` if the version was set successfully
 
 ## Examples
@@ -729,7 +286,6 @@ if (count) {
     print("Characters:", chars)
 }
 ```
-
 ```
 
 ## args.md
@@ -814,11 +370,9 @@ if (verbose) {
 ## Available Functions
 
 ### Built-in Functions
-
 - `args()` - Returns array of all command line arguments
 
 ### CLI Module Functions
-
 - `cli.args()` - Same as `args()`
 - `cli.getPositional()` - Returns array of positional arguments
 - `cli.getFlags()` - Returns dictionary of flags
@@ -853,7 +407,6 @@ To create an array, use square brackets [] and separate items with commas:
 ```s
 list = [1, "second", true]
 ```
-
 ## Accessing and Modifying Array Elements
 
 Arrays in vint are zero-indexed. To access an element, use the element's index in square brackets:
@@ -1022,7 +575,6 @@ print(b) // [2, 4, 6]
 ### filter()
 
 filter() will go through every single element of an array and checks if that element returns true or false when passed into a function. It will return a new array with elements that returned true:
-
 ```s
 a = [1, 2, 3, 4]
 
@@ -1468,7 +1020,6 @@ print("All tasks done:", r1, r2, r3)
 5. Combine async/await with goroutines for powerful concurrent patterns
 
 The async operations in VintLang provide a simple yet powerful way to handle concurrency and asynchronous operations in your programs.
-
 ```
 
 ## bool.md
@@ -1542,9 +1093,7 @@ print(true || false) // Output: `true`
 
 print(false || false) // Output: `false`
 ```
-
 ### The or() Function
-
 ```s
 print(or(true,false)) // Output: `true`
 
@@ -1805,6 +1354,7 @@ for a in conditions {
 }
 ```
 
+
 ```
 
 ## builtins.md
@@ -1826,22 +1376,17 @@ print(1, 2, 3)         // Output: 1 2 3
 ```
 
 ### `println(...)`
-
 Similar to `print`, but it adds a newline character at the end of the output.
 
 ### `input(prompt)`
-
 Reads a line of input from the user from standard input. It can optionally take a string argument to use as a prompt.
-
 ```js
 let name = input("Enter your name: ")
 println("Hello,", name)
 ```
 
 ### `sleep(milliseconds)`
-
 Pauses the program's execution for a specified duration in milliseconds.
-
 ```js
 println("Waiting for 1 second...")
 sleep(1000)
@@ -1849,9 +1394,7 @@ println("Done.")
 ```
 
 ### `exit(code)`
-
 Terminates the program with a specified exit code. An exit code of `0` typically indicates success, while any other number indicates an error.
-
 ```js
 if (some_error) {
     println("An error occurred!")
@@ -1864,9 +1407,7 @@ if (some_error) {
 ## Type and General Information Functions
 
 ### `type(object)`
-
 Returns a string representing the type of the given object.
-
 ```js
 type(10)      // Output: "INTEGER"
 type("hello") // Output: "STRING"
@@ -1874,9 +1415,7 @@ type([])      // Output: "ARRAY"
 ```
 
 ### `len(object)`
-
 Returns the length of a string, array, or dictionary.
-
 ```js
 len("hello")      // Output: 5
 len([1, 2, 3])    // Output: 3
@@ -1888,9 +1427,7 @@ len({"a": 1})   // Output: 1
 ## Array Functions
 
 ### `append(array, element1, ...)`
-
 Returns a *new* array with the given elements added to the end.
-
 ```js
 let arr = [1, 2]
 let new_arr = append(arr, 3, 4)
@@ -1898,9 +1435,7 @@ println(new_arr) // Output: [1, 2, 3, 4]
 ```
 
 ### `pop(array)`
-
 Removes the last element from an array and returns that element. This function modifies the array in-place.
-
 ```js
 let arr = [1, 2, 3]
 let last = pop(arr)
@@ -1913,27 +1448,21 @@ println(arr)  // Output: [1, 2]
 ## Dictionary Functions
 
 ### `keys(dictionary)`
-
 Returns an array containing all the keys from a dictionary. The order is not guaranteed.
-
 ```js
 let dict = {"name": "Alex", "age": 30}
 println(keys(dict)) // Output: ["name", "age"] (or ["age", "name"])
 ```
 
 ### `values(dictionary)`
-
 Returns an array containing all the values from a dictionary. The order corresponds to the order of the keys returned by `keys()`.
-
 ```js
 let dict = {"name": "Alex", "age": 30}
 println(values(dict)) // Output: ["Alex", 30] (or [30, "Alex"])
 ```
 
 ### `has_key(dictionary, key)`
-
 Returns `true` if the dictionary contains the given key, and `false` otherwise. This is also available as a method on dictionary objects: `my_dict.has_key(key)`.
-
 ```js
 let dict = {"a": 1}
 println(has_key(dict, "a")) // Output: true
@@ -1945,17 +1474,13 @@ println(dict.has_key("b"))  // Output: false
 ## String and Character Functions
 
 ### `chr(integer)`
-
 Returns a single-character string corresponding to the given integer ASCII code.
-
 ```js
 println(chr(65)) // Output: "A"
 ```
 
 ### `ord(string)`
-
 Returns the integer ASCII code of the first character of a given string.
-
 ```js
 println(ord("A")) // Output: 65
 ```
@@ -1965,9 +1490,7 @@ println(ord("A")) // Output: 65
 ## File Functions
 
 ### `open(filepath)`
-
 Opens a file and returns a file object. This is typically used for reading file contents.
-
 ```js
 let file = open("data.txt")
 // You can then use methods on the file object
@@ -1978,9 +1501,7 @@ let file = open("data.txt")
 ## Logical Functions
 
 ### `and(boolean1, boolean2)`
-
 Performs a logical AND operation on two boolean values. Returns `true` only if both arguments are `true`.
-
 ```js
 and(true, true)    // Output: true
 and(true, false)   // Output: false
@@ -1988,9 +1509,7 @@ and(false, false)  // Output: false
 ```
 
 ### `or(boolean1, boolean2)`
-
 Performs a logical OR operation on two boolean values. Returns `true` if at least one of the arguments is `true`.
-
 ```js
 or(true, false)    // Output: true
 or(false, false)   // Output: false
@@ -1998,18 +1517,14 @@ or(true, true)     // Output: true
 ```
 
 ### `not(boolean)`
-
 Performs a logical NOT operation on a boolean value. Returns the opposite of the input.
-
 ```js
 not(true)          // Output: false
 not(false)         // Output: true
 ```
 
 ### `xor(boolean1, boolean2)`
-
 Performs a logical XOR (exclusive OR) operation on two boolean values. Returns `true` when exactly one of the arguments is `true`.
-
 ```js
 xor(true, false)   // Output: true
 xor(false, true)   // Output: true
@@ -2018,9 +1533,7 @@ xor(false, false)  // Output: false
 ```
 
 ### `nand(boolean1, boolean2)`
-
 Performs a logical NAND (NOT AND) operation on two boolean values. Returns `false` only when both arguments are `true`.
-
 ```js
 nand(true, true)   // Output: false
 nand(true, false)  // Output: true
@@ -2028,9 +1541,7 @@ nand(false, false) // Output: true
 ```
 
 ### `nor(boolean1, boolean2)`
-
 Performs a logical NOR (NOT OR) operation on two boolean values. Returns `true` only when both arguments are `false`.
-
 ```js
 nor(false, false)  // Output: true
 nor(true, false)   // Output: false
@@ -2044,18 +1555,14 @@ nor(true, true)    // Output: false
 ### String Functions
 
 #### `startsWith(string, prefix)`
-
 Checks if a string starts with the specified prefix.
-
 ```js
 startsWith("VintLang", "Vint")    // Output: true
 startsWith("hello", "hi")         // Output: false
 ```
 
 #### `endsWith(string, suffix)`
-
 Checks if a string ends with the specified suffix.
-
 ```js
 endsWith("VintLang", "Lang")      // Output: true
 endsWith("hello", "world")        // Output: false
@@ -2064,9 +1571,7 @@ endsWith("hello", "world")        // Output: false
 ### Array Functions
 
 #### `indexOf(array, element)`
-
 Returns the index of the first occurrence of an element in an array, or -1 if not found.
-
 ```js
 let arr = [1, 2, 3, 2, 4]
 indexOf(arr, 2)    // Output: 1
@@ -2074,9 +1579,7 @@ indexOf(arr, 5)    // Output: -1
 ```
 
 #### `unique(array)`
-
 Returns a new array containing only the unique elements from the input array, removing duplicates.
-
 ```js
 let arr = [1, 2, 2, 3, 1, 4]
 unique(arr)        // Output: [1, 2, 3, 4]
@@ -2086,9 +1589,7 @@ unique([])         // Output: []
 ### Type Checking Functions
 
 #### `isInt(value)`
-
 Returns true if the value is an integer.
-
 ```js
 isInt(42)          // Output: true
 isInt(3.14)        // Output: false
@@ -2096,9 +1597,7 @@ isInt("hello")     // Output: false
 ```
 
 #### `isFloat(value)`
-
 Returns true if the value is a float.
-
 ```js
 isFloat(3.14)      // Output: true
 isFloat(42)        // Output: false
@@ -2106,9 +1605,7 @@ isFloat("hello")   // Output: false
 ```
 
 #### `isString(value)`
-
 Returns true if the value is a string.
-
 ```js
 isString("hello")  // Output: true
 isString(42)       // Output: false
@@ -2116,9 +1613,7 @@ isString(3.14)     // Output: false
 ```
 
 #### `isBool(value)`
-
 Returns true if the value is a boolean.
-
 ```js
 isBool(true)       // Output: true
 isBool(false)      // Output: true
@@ -2126,9 +1621,7 @@ isBool(42)         // Output: false
 ```
 
 #### `isArray(value)`
-
 Returns true if the value is an array.
-
 ```js
 isArray([1, 2, 3]) // Output: true
 isArray("hello")   // Output: false
@@ -2136,9 +1629,7 @@ isArray(42)        // Output: false
 ```
 
 #### `isDict(value)`
-
 Returns true if the value is a dictionary.
-
 ```js
 isDict({"key": "value"})  // Output: true
 isDict([1, 2, 3])         // Output: false
@@ -2146,9 +1637,7 @@ isDict("hello")           // Output: false
 ```
 
 #### `isNull(value)`
-
 Returns true if the value is null.
-
 ```js
 isNull(null)       // Output: true
 isNull(42)         // Output: false
@@ -2158,9 +1647,7 @@ isNull("")         // Output: false
 ### Parsing Functions
 
 #### `parseInt(string)`
-
 Parses a string and returns an integer.
-
 ```js
 parseInt("42")     // Output: 42
 parseInt("-10")    // Output: -10
@@ -2168,9 +1655,7 @@ parseInt("abc")    // Error: cannot parse 'abc' as integer
 ```
 
 #### `parseFloat(string)`
-
 Parses a string and returns a float.
-
 ```js
 parseFloat("3.14")    // Output: 3.14
 parseFloat("-2.5")    // Output: -2.5
@@ -2241,7 +1726,6 @@ kv.set("user:123", {"name": "Alice"})
 let user = kv.get("user:123")    // {name: Alice}
 kv.increment("page_views")       // 1
 ```
-
 ```
 
 ## bundler.md
@@ -2263,10 +1747,10 @@ This allows you to write code in VintLang, bundle it into an executable, and run
 
 ## Why Use the Bundler?
 
-- Package and distribute VintLang scripts as self-contained executables
-- End-users don’t need to install Go or VintLang
-- Ideal for deploying scripts, shipping CLI tools, and automating workflows
-- Internally powered by the `vintlang/repl` package for code execution
+* Package and distribute VintLang scripts as self-contained executables
+* End-users don’t need to install Go or VintLang
+* Ideal for deploying scripts, shipping CLI tools, and automating workflows
+* Internally powered by the `vintlang/repl` package for code execution
 
 ---
 
@@ -2307,20 +1791,19 @@ This makes the `vint` CLI available, including the `bundle` command.
 
 ## Multi-File Package Support (NEW!)
 
-The VintLang Bundler now supports bundling multi-file packages with both imports and includes!
+The VintLang Bundler now supports bundling multi-file packages with both imports and includes! 
 
 ### Key Features
 
-- ✅ **Automatic Dependency Discovery**: Finds all imported and included `.vint` files recursively
-- ✅ **Package System Integration**: Handles `package` declarations and `import` statements
-- ✅ **Include Statement Support**: Handles `include` statements for direct file embedding
-- ✅ **Self-Contained Binaries**: No external `.vint` files needed at runtime
-- ✅ **Compatible with Built-ins**: Works with all VintLang built-in modules
+* ✅ **Automatic Dependency Discovery**: Finds all imported and included `.vint` files recursively
+* ✅ **Package System Integration**: Handles `package` declarations and `import` statements
+* ✅ **Include Statement Support**: Handles `include` statements for direct file embedding
+* ✅ **Self-Contained Binaries**: No external `.vint` files needed at runtime
+* ✅ **Compatible with Built-ins**: Works with all VintLang built-in modules
 
 ### Example Multi-File Project (Imports)
 
 **main.vint**:
-
 ```js
 import my_utils
 import os
@@ -2331,7 +1814,6 @@ print("Result:", result)
 ```
 
 **my_utils.vint**:
-
 ```js
 package my_utils {
     let process_data = func(input) {
@@ -2341,7 +1823,6 @@ package my_utils {
 ```
 
 Bundle the entire project:
-
 ```sh
 vint bundle main.vint
 ```
@@ -2351,7 +1832,6 @@ The bundler automatically discovers `my_utils.vint`, processes the package struc
 ### Example Multi-File Project (Includes)
 
 **main.vint**:
-
 ```js
 include "config.vint"
 include "helpers.vint"
@@ -2361,14 +1841,12 @@ print("Result:", processData("test"))
 ```
 
 **config.vint**:
-
 ```js
 let appName = "My VintLang App"
 let version = "1.0.0"
 ```
 
 **helpers.vint**:
-
 ```js
 let processData = func(input) {
     return "processed: " + input
@@ -2376,7 +1854,6 @@ let processData = func(input) {
 ```
 
 Bundle the entire project:
-
 ```sh
 vint bundle main.vint
 ```
@@ -2385,9 +1862,9 @@ The bundler automatically discovers all included files and embeds their content 
 
 ### Differences between Import and Include
 
-- **Import statements** (`import module_name`) work with the package system and wrap content in packages
-- **Include statements** (`include "file_path"`) directly embed file content without package wrapping
-- Both are automatically discovered and bundled into self-contained binaries
+* **Import statements** (`import module_name`) work with the package system and wrap content in packages
+* **Include statements** (`include "file_path"`) directly embed file content without package wrapping
+* Both are automatically discovered and bundled into self-contained binaries
 
 ---
 
@@ -2442,7 +1919,6 @@ Hello, World!
 The VintLang bundler has evolved into a sophisticated multi-stage pipeline that handles complex multi-file projects with automatic dependency resolution. Here's how it works:
 
 ### 🔍 Phase 1: Dependency Analysis
-
 ```
 main.vint
     ↓ (parse AST)
@@ -2452,7 +1928,6 @@ main.vint
 ```
 
 **What happens:**
-
 - Parses main file's AST to find `import` and `include` statements
 - Sets up search paths (main file directory, current directory, `./modules/`)
 - Recursively discovers all dependency files
@@ -2460,7 +1935,6 @@ main.vint
 - Skips built-in modules (like `os`, `http`, etc.)
 
 ### ⚙️ Phase 2: String Processing & Code Combination
-
 ```
 Files discovered:
 ├── main.vint (import math_utils; include "config.vint"; ...)
@@ -2474,14 +1948,12 @@ Processing:
 ```
 
 **What happens:**
-
 - **Import files**: Wrapped in package structure if not already packaged
 - **Include files**: Content embedded directly, imports/includes removed  
 - **Main file**: Import/include statements removed for bundled dependencies
 - All code combined into single VintLang program
 
 ### 🏗️ Phase 3: Go Code Generation
-
 ```
 Combined VintLang Code
     ↓ (escape for Go)
@@ -2496,14 +1968,12 @@ func main() {
 ```
 
 **What happens:**
-
 - Escapes VintLang code for safe embedding in Go string literals
 - Generates Go main.go file using template
 - Adds metadata (bundler version, build time)
 - Creates go.mod file for dependencies
 
 ### 🔨 Phase 4: Binary Compilation
-
 ```
 Temporary Directory
 ├── main.go (generated)
@@ -2513,7 +1983,6 @@ Binary Output (self-contained executable)
 ```
 
 **What happens:**
-
 - Creates temporary build directory
 - Runs `go mod tidy` to resolve Go dependencies  
 - Compiles with `go build -o binary_name`
@@ -2523,7 +1992,7 @@ Binary Output (self-contained executable)
 ### 🎯 Key Features of Current Implementation
 
 1. **Automatic Dependency Discovery**: Recursively finds all `.vint` files through AST parsing
-2. **Dual Processing Modes**:
+2. **Dual Processing Modes**: 
    - `import module_name` → wraps content in packages
    - `include "file.vint"` → directly embeds content
 3. **Smart Module Resolution**: Searches multiple paths, handles built-ins
@@ -2633,7 +2102,6 @@ The current implementation handles complex multi-file projects automatically whi
 Let's see exactly what happens when bundling a multi-file project:
 
 **Input Files:**
-
 ```js
 // main.vint
 import math_utils
@@ -2651,7 +2119,6 @@ let appName = "Calculator"
 ```
 
 **After Dependency Analysis:**
-
 ```
 Found 3 files:
 ├── main.vint (main file)
@@ -2660,7 +2127,6 @@ Found 3 files:
 ```
 
 **After String Processing:**
-
 ```js
 // Combined VintLang code:
 package math_utils {
@@ -2674,7 +2140,6 @@ print("Result:", math_utils.add(5, 3))
 ```
 
 **After Go Code Generation:**
-
 ```go
 package main
 import "github.com/vintlang/vintlang/repl"
@@ -2692,7 +2157,6 @@ print("Result:", math_utils.add(5, 3))`
 ```
 
 **Final Result:** Self-contained binary that outputs:
-
 ```
 App: Calculator
 Result: 8
@@ -2708,12 +2172,12 @@ The generated Go code looks like this:
 package main
 
 import (
- "github.com/vintlang/vintlang/repl"
+	"github.com/vintlang/vintlang/repl"
 )
 
 func main() {
- code := ` + "`<your VintLang source code>`" + `
- repl.Read(code)
+	code := ` + "`<your VintLang source code>`" + `
+	repl.Read(code)
 }
 ```
 
@@ -2721,27 +2185,27 @@ func main() {
 
 ## Use Cases
 
-- Distribute command-line tools built in VintLang
-- Deploy scripts on systems where VintLang is not installed
-- Share portable binaries for automation or education
-- Build lightweight tools using VintLang and Go’s compiler
+* Distribute command-line tools built in VintLang
+* Deploy scripts on systems where VintLang is not installed
+* Share portable binaries for automation or education
+* Build lightweight tools using VintLang and Go’s compiler
 
 ---
 
 ## Notes for Developers
 
-- Temporary build directories are automatically created and cleaned
-- Uses `text/template` for safe source code embedding
-- The Go module created during bundling is isolated from your current project
-- Spinner and CLI output are available for build feedback
+* Temporary build directories are automatically created and cleaned
+* Uses `text/template` for safe source code embedding
+* The Go module created during bundling is isolated from your current project
+* Spinner and CLI output are available for build feedback
 
 ---
 
 ## Important Details
 
-- Go is required only during **build time**
-- The resulting binary is portable and self-contained
-- Cross-compilation is not supported out-of-the-box; build on the target OS/arch
+* Go is required only during **build time**
+* The resulting binary is portable and self-contained
+* Cross-compilation is not supported out-of-the-box; build on the target OS/arch
 
 ---
 
@@ -2754,6 +2218,7 @@ vint bundle yourfile.vint
 ```
 
 Build once. Run anywhere. No dependencies. No interpreter. Just execution.
+
 
 ```
 
@@ -3106,7 +2571,6 @@ print("Modified clipboard content:", clipboard.read())
 ## Platform Support
 
 The clipboard module works across different platforms:
-
 - **Windows**: Uses Windows Clipboard API
 - **macOS**: Uses NSPasteboard
 - **Linux**: Uses X11 clipboard (requires X11 environment)
@@ -3117,7 +2581,6 @@ The clipboard module works across different platforms:
 - On some systems, clipboard access might require the application to be running in a graphical environment
 - The module handles text content only; binary data is not supported
 - Error handling is important as clipboard operations can fail due to system restrictions or lack of permissions
-
 ```
 
 ## comments.md
@@ -3139,7 +2602,7 @@ In this example, the comment text "This line will be ignored by the vint interpr
 
 ## Multi-Line Comments
 
-Multi-line comments are used to provide more detailed explanations or documentation for multiple lines of code. To write a multi-line comment in vint, use a forward slash followed by an asterisk ( /*) to start the comment, and an asterisk followed by a forward slash (*/ ) to end the comment. Here's an example:
+Multi-line comments are used to provide more detailed explanations or documentation for multiple lines of code. To write a multi-line comment in vint, use a forward slash followed by an asterisk ( /* ) to start the comment, and an asterisk followed by a forward slash ( */ ) to end the comment. Here's an example:
 
 ```s
 /*
@@ -3150,10 +2613,9 @@ ignored
 */
 ```
 
-In this example, all the lines between the /*and*/ symbols will be ignored by the vint interpreter, so they will not affect the behavior of the program.
+In this example, all the lines between the /* and */ symbols will be ignored by the vint interpreter, so they will not affect the behavior of the program.
 
 By utilizing single-line and multi-line comments in vint, you can make your code more readable and easier to maintain for yourself and others who may need to work with your code in the future.
-
 ```
 
 ## const.md
@@ -3186,7 +2648,7 @@ In the examples above, `PI` and `GREETING` are declared as constants and can be 
 
 Once a constant is declared, its value cannot be changed. Attempting to reassign a `const` variable will result in an error.
 
-### Example of an Invalid Reassignment
+### Example of an Invalid Reassignment:
 
 ```js
 const MAX_CONNECTIONS = 5
@@ -3248,8 +2710,7 @@ print("Max Users:", Config.MAX_USERS)  // ✅ Works
 print(Config._SECRET_KEY)  // ❌ Error: cannot access private property
 ```
 
-For more information about packages and access control, see the [Packages documentation](packages.md).
-
+For more information about packages and access control, see the [Packages documentation](packages.md). 
 ```
 
 ## crypto.md
@@ -3514,7 +2975,6 @@ print(data)
 ```
 
 ### `csv.write(filePath, data)`
-
 Writes a 2D array to a CSV file. The `data` argument must be an array of arrays, and all cell values must be strings.
 
 ```js
@@ -3526,8 +2986,7 @@ users = [
 
 csv.write("users.csv", users)
 // This will create 'users.csv' with the provided data.
-```
-
+``` 
 ```
 
 ## datetime.md
@@ -3727,7 +3186,6 @@ let end_year = datetime.endOfYear(datetime.now())
 Time objects returned by datetime functions have many useful methods:
 
 ### Basic Properties
-
 ```js
 let time = datetime.now()
 print(time.year())      // 2025
@@ -3742,7 +3200,6 @@ print(time.yearDay())   // Day of year (1-366)
 ```
 
 ### ISO Week
-
 ```js
 let iso = time.isoWeek()
 print(iso["year"])  // ISO week year
@@ -3750,7 +3207,6 @@ print(iso["week"])  // ISO week number
 ```
 
 ### Time Arithmetic
-
 ```js
 let time = datetime.now()
 let duration = datetime.duration(hours=2, minutes=30)
@@ -3765,7 +3221,6 @@ let last_week = time.subtract(weeks=1)
 ```
 
 ### Time Comparisons
-
 ```js
 let time1 = datetime.now()
 let time2 = datetime.parse("2025-01-01 00:00:00", "2006-01-02 15:04:05")
@@ -3777,7 +3232,6 @@ print(time1.compare(time2)) // -1, 0, or 1
 ```
 
 ### Timezone Operations
-
 ```js
 let time = datetime.now()
 
@@ -3791,7 +3245,6 @@ let local_time = time.local()
 ```
 
 ### Other Methods
-
 ```js
 let time = datetime.now()
 
@@ -3822,7 +3275,6 @@ print(duration.string())       // "2h30m15s"
 ```
 
 ### Duration Arithmetic
-
 ```js
 let dur1 = datetime.duration("1h")
 let dur2 = datetime.duration("30m")
@@ -3839,9 +3291,7 @@ let ratio = dur1.divide(dur2)     // 2.0 (ratio as float)
 The datetime module supports timezone-aware operations:
 
 ### Available Timezones
-
 Common timezone identifiers include:
-
 - `UTC`
 - `America/New_York`
 - `America/Los_Angeles`
@@ -3852,7 +3302,6 @@ Common timezone identifiers include:
 - And many more standard IANA timezone identifiers
 
 ### Examples
-
 ```js
 // Current time in different timezones
 let utc = datetime.now("UTC")
@@ -3867,7 +3316,6 @@ let ny_time = local_time.timezone("America/New_York")
 ## Practical Examples
 
 ### Age Calculator
-
 ```js
 let calculate_age = func(birth_date_str) {
     let birth = datetime.parse(birth_date_str, "2006-01-02")
@@ -3882,7 +3330,6 @@ print("Age:", age, "years")
 ```
 
 ### Meeting Scheduler
-
 ```js
 let schedule_meeting = func(date_str, duration_str, timezone) {
     let start_time = datetime.parse(date_str, "2006-01-02 15:04:05", timezone)
@@ -3899,7 +3346,6 @@ schedule_meeting("2024-12-25 14:00:00", "1h30m", "America/New_York")
 ```
 
 ### Time Until Event
-
 ```js
 let time_until_event = func(event_date_str) {
     let event = datetime.parse(event_date_str, "2006-01-02 15:04:05")
@@ -3940,7 +3386,6 @@ let parsed = datetime.parse(formatted, "2006-01-02 15:04:05")
 ```
 
 The datetime module provides all the functionality of the time module and much more, making it the recommended choice for complex date and time operations.
-
 ```
 
 ## debug.md
@@ -3971,8 +3416,7 @@ Running this script will output:
 ```
 [DEBUG]: Current value is: 42
 Done.
-```
-
+``` 
 ```
 
 ## declaratives.md
@@ -4052,7 +3496,6 @@ dict = {"name": "John", "age": 30}
 ```
 
 In this dictionary:
-
 - `"name"` is the key, and `"John"` is the value.
 - `"age"` is the key, and `30` is the value.
 
@@ -4402,7 +3845,6 @@ print(merged)  // {"user": {"name": "Alice", "age": 25}, "status": "active", "ro
 ```
 
 ## Practical Examples
-
 ```
 
 ## Advanced Dictionary Usage
@@ -4445,10 +3887,99 @@ print("Config:", config)
 ```markdown
 package docs
 
-import "embed"
+import (
+	"embed"
+	"io/fs"
+	"strings"
+)
 
 //go:embed *
 var Docs embed.FS
+
+type Item struct {
+	title, desc, filename string
+}
+
+func (i Item) Title() string       { return i.title }
+func (i Item) Filename() string       { return i.filename }
+func (i Item) Description() string { return i.desc }
+func (i Item) FilterValue() string { return i.title }
+
+func NewDocsItem(title,desc,filename string) Item {
+	return Item{
+		title:    title,
+		desc:     desc,
+		filename: filename,
+	}
+}
+
+
+func GetDocsItem() []Item{
+	f,err :=Docs.ReadDir(".")
+	if err != nil {
+		return nil
+	}
+	var items []Item
+	for _,file := range f{
+		if !file.IsDir() && strings.HasSuffix(file.Name(),".md"){
+			items = append(items,Item{
+				title:    file.Name(),
+				desc:     GetDocDescription(file),
+				filename: file.Name(),
+			})
+		}
+	}
+	return items
+}
+
+func GetDocDescription(file fs.DirEntry) string {
+	content, err := Docs.ReadFile(file.Name())
+	if err != nil {
+		return "No description available."
+	}
+	lines := string(content)
+	firstLine := ""
+	for _, line := range SplitLines(lines) {
+		trimmed := TrimWhitespace(line)
+		if trimmed != "" {
+			firstLine = trimmed
+			break
+		}
+	}
+	return strings.ReplaceAll(firstLine, "#", "")
+}
+
+func SplitLines(s string) []string {
+	var lines []string
+	currentLine := ""
+	for _, r := range s {
+		if r == '\n' {
+			lines = append(lines, currentLine)
+			currentLine = ""
+		} else {
+			currentLine += string(r)
+		}
+	}
+	if currentLine != "" {
+		lines = append(lines, currentLine)
+	}
+	return lines
+}
+
+func TrimWhitespace(s string) string {
+	start := 0
+	end := len(s) - 1
+	for start <= end && (s[start] == ' ' || s[start] == '\t') {
+		start++
+	}
+	for end >= start && (s[end] == ' ' || s[end] == '\t') {
+		end--
+	}
+	if start > end {
+		return ""
+	}
+	return s[start : end+1]
+}
 ```
 
 ## dotenv.md
@@ -4473,43 +4004,34 @@ import dotenv
 ## Functions and Examples
 
 ### 1. Loading Environment Variables with `load()`
-
 The `load` function loads environment variables from a `.env` file into the application's environment. This function should be called at the start of your application to ensure all the necessary environment variables are available.
 
 **Syntax**:
-
 ```js
 load(filePath)
 ```
-
 - `filePath`: The path to the `.env` file (relative or absolute).
 
 **Example**:
-
 ```js
 import dotenv
 
 dotenv.load(".env")
 ```
-
 This loads the environment variables from the `.env` file located in the current directory.
 
 ---
 
 ### 2. Accessing an Environment Variable with `get()`
-
 After loading the environment variables, you can access specific variables using the `get` function. This function retrieves the value of a given environment variable by its name.
 
 **Syntax**:
-
 ```js
 get(variableName)
 ```
-
 - `variableName`: The name of the environment variable to retrieve.
 
 **Example**:
-
 ```js
 import dotenv
 
@@ -4517,7 +4039,6 @@ dotenv.load(".env")
 apiKey = dotenv.get("API_KEY")
 print(apiKey)  // Expected output: The value of the "API_KEY" from the .env file
 ```
-
 In this example, the value of the `API_KEY` environment variable is retrieved and printed.
 
 ---
@@ -4527,7 +4048,6 @@ In this example, the value of the `API_KEY` environment variable is retrieved an
 The `.env` file should contain key-value pairs of environment variables. Each line in the file represents a separate environment variable.
 
 **Example `.env` file**:
-
 ```
 API_KEY=your_api_key_here
 DB_HOST=localhost
@@ -4549,7 +4069,6 @@ In this case, you would retrieve the value of `API_KEY` as shown in the previous
 ---
 
 The `dotenv` module is an essential tool for securely managing configuration settings in Vint applications. By keeping sensitive data in a `.env` file, you avoid hardcoding secrets into your source code, thus improving security and maintainability.
-
 ```
 
 ## editor.md
@@ -4619,7 +4138,6 @@ while (true) {
 Creates a new text editor.
 
 **Parameters:**
-
 - `options` (dict, optional): Options for the editor
   - `filename` (string): Initial file to load
   - `width` (integer): Width of the editor in characters (default: 80)
@@ -4628,7 +4146,6 @@ Creates a new text editor.
   - `syntax` (string): Syntax highlighting mode (default: "text")
 
 **Returns:**
-
 - An editor ID string that can be used with other functions
 
 ### setText(editorId, text)
@@ -4636,12 +4153,10 @@ Creates a new text editor.
 Sets the entire text content of the editor.
 
 **Parameters:**
-
 - `editorId` (string): The editor ID
 - `text` (string): The text content to set
 
 **Returns:**
-
 - `true` if the text was set successfully
 
 ### getText(editorId)
@@ -4649,11 +4164,9 @@ Sets the entire text content of the editor.
 Gets the entire text content of the editor.
 
 **Parameters:**
-
 - `editorId` (string): The editor ID
 
 **Returns:**
-
 - A string containing the editor's text content
 
 ### insertLine(editorId, lineNumber, text)
@@ -4661,13 +4174,11 @@ Gets the entire text content of the editor.
 Inserts a new line at the specified position.
 
 **Parameters:**
-
 - `editorId` (string): The editor ID
 - `lineNumber` (integer, optional): The line number where to insert the text. If not provided, inserts at the current cursor position.
 - `text` (string): The text to insert
 
 **Returns:**
-
 - `true` if the line was inserted successfully
 
 ### deleteLine(editorId, lineNumber)
@@ -4675,12 +4186,10 @@ Inserts a new line at the specified position.
 Deletes a line at the specified position.
 
 **Parameters:**
-
 - `editorId` (string): The editor ID
 - `lineNumber` (integer, optional): The line number to delete. If not provided, deletes the line at the current cursor position.
 
 **Returns:**
-
 - `true` if the line was deleted successfully
 
 ### updateLine(editorId, lineNumber, text)
@@ -4688,13 +4197,11 @@ Deletes a line at the specified position.
 Updates a line at the specified position.
 
 **Parameters:**
-
 - `editorId` (string): The editor ID
 - `lineNumber` (integer, optional): The line number to update. If not provided, updates the line at the current cursor position.
 - `text` (string): The new text for the line
 
 **Returns:**
-
 - `true` if the line was updated successfully
 
 ### getLine(editorId, lineNumber)
@@ -4702,12 +4209,10 @@ Updates a line at the specified position.
 Gets a line at the specified position.
 
 **Parameters:**
-
 - `editorId` (string): The editor ID
 - `lineNumber` (integer, optional): The line number to get. If not provided, gets the line at the current cursor position.
 
 **Returns:**
-
 - A string containing the line's text
 
 ### getLineCount(editorId)
@@ -4715,11 +4220,9 @@ Gets a line at the specified position.
 Gets the number of lines in the editor.
 
 **Parameters:**
-
 - `editorId` (string): The editor ID
 
 **Returns:**
-
 - An integer representing the number of lines
 
 ### render(editorId)
@@ -4727,11 +4230,9 @@ Gets the number of lines in the editor.
 Renders the editor content as a string.
 
 **Parameters:**
-
 - `editorId` (string): The editor ID
 
 **Returns:**
-
 - A string containing the rendered editor content
 
 ### handleKeypress(editorId, key)
@@ -4739,12 +4240,10 @@ Renders the editor content as a string.
 Handles a keypress in the editor.
 
 **Parameters:**
-
 - `editorId` (string): The editor ID
 - `key` (string): The key that was pressed
 
 **Returns:**
-
 - `true` if the keypress was handled successfully
 
 ### save(editorId, filename)
@@ -4752,12 +4251,10 @@ Handles a keypress in the editor.
 Saves the editor content to a file.
 
 **Parameters:**
-
 - `editorId` (string): The editor ID
 - `filename` (string, optional): The filename to save to. If not provided, uses the editor's current filename.
 
 **Returns:**
-
 - `true` if the file was saved successfully
 
 ### load(editorId, filename)
@@ -4765,12 +4262,10 @@ Saves the editor content to a file.
 Loads a file into the editor.
 
 **Parameters:**
-
 - `editorId` (string): The editor ID
 - `filename` (string): The filename to load
 
 **Returns:**
-
 - `true` if the file was loaded successfully
 
 ## Editor Modes
@@ -5142,7 +4637,6 @@ let main = func() {
 
 main()
 ```
-
 ```
 
 ## email.md
@@ -5166,17 +4660,14 @@ import email
 ## Functions and Examples
 
 ### 1. Validate Email Address (`validate`)
-
 The `validate` function checks if a given string is a valid email address format.
 
 **Syntax**:
-
 ```js
 validate(emailAddress)
 ```
 
 **Example**:
-
 ```js
 import email
 
@@ -5213,17 +4704,14 @@ for invalid_email in invalid_emails {
 ---
 
 ### 2. Extract Domain (`extractDomain`)
-
 The `extractDomain` function extracts the domain part from an email address.
 
 **Syntax**:
-
 ```js
 extractDomain(emailAddress)
 ```
 
 **Example**:
-
 ```js
 import email
 
@@ -5238,17 +4726,14 @@ print("Domain: ", domain)
 ---
 
 ### 3. Extract Username (`extractUsername`)
-
 The `extractUsername` function extracts the username part (before @) from an email address.
 
 **Syntax**:
-
 ```js
 extractUsername(emailAddress)
 ```
 
 **Example**:
-
 ```js
 import email
 
@@ -5263,17 +4748,14 @@ print("Username: ", username)
 ---
 
 ### 4. Normalize Email (`normalize`)
-
 The `normalize` function converts an email address to lowercase and trims whitespace for consistent formatting.
 
 **Syntax**:
-
 ```js
 normalize(emailAddress)
 ```
 
 **Example**:
-
 ```js
 import email
 
@@ -5395,7 +4877,6 @@ for domain, count in domain_count {
 | `normalize`        | Normalizes email to lowercase and trims       | String      |
 
 The Email module provides essential functionality for working with email addresses safely and efficiently in VintLang applications.
-
 ```
 
 ## encoding.md
@@ -5420,44 +4901,35 @@ import encoding
 ## Functions and Examples
 
 ### 1. Base64 Encoding with `base64Encode()`
-
 The `base64Encode` function encodes a string into Base64 format. Base64 encoding is often used for encoding binary data as text, making it suitable for transmission over text-based protocols such as email or HTTP.
 
 **Syntax**:
-
 ```js
 base64Encode(inputString)
 ```
-
 - `inputString`: The string you want to encode.
 
 **Example**:
-
 ```js
 import encoding
 
 encoded = encoding.base64Encode("Hello, World!")
 print(encoded)  // Expected output: "SGVsbG8sIFdvcmxkIQ=="
 ```
-
 In this example, the string `"Hello, World!"` is encoded into Base64 format.
 
 ---
 
 ### 2. Base64 Decoding with `base64Decode()`
-
 The `base64Decode` function decodes a Base64-encoded string back into its original format.
 
 **Syntax**:
-
 ```js
 base64Decode(encodedString)
 ```
-
 - `encodedString`: The Base64-encoded string that you want to decode.
 
 **Example**:
-
 ```js
 import encoding
 
@@ -5467,7 +4939,6 @@ print(encoded)  // Expected output: "SGVsbG8sIFdvcmxkIQ=="
 decoded = encoding.base64Decode(encoded)
 print(decoded)  // Expected output: "Hello, World!"
 ```
-
 In this example, the Base64-encoded string is decoded back to its original value.
 
 ---
@@ -5482,7 +4953,6 @@ In this example, the Base64-encoded string is decoded back to its original value
 ---
 
 The `encoding` module in Vint is essential for working with different encoding schemes such as Base64. It simplifies the process of converting data between text and binary formats, making it easier to handle data transmission or storage in encoded formats.
-
 ```
 
 ## enhanced-errors.md
@@ -5514,7 +4984,6 @@ func ErrorMessage(module, function, expected, received, usage string) *object.Er
 ## What Was Enhanced
 
 ### 1. **CLI Module** (`import cli`)
-
 - **Functions**: `cli.prompt()`, `cli.confirm()`, `cli.execCommand()`, `cli.exit()`, `cli.hasArg()`, `cli.getArgValue()`, `cli.getPositional()`
 - **Improvements**:
   - Consistent error formatting with colors
@@ -5523,7 +4992,6 @@ func ErrorMessage(module, function, expected, received, usage string) *object.Er
   - Descriptive parameter names
 
 **New Format Example**:
-
 ```
 Error in cli.prompt():
   Expected: 1 string argument (prompt message)
@@ -5533,7 +5001,6 @@ Error in cli.prompt():
 ```
 
 ### 2. **Net Module** (`import net`)
-
 - **Functions**: `net.get()`, `net.post()`, `net.put()`, `net.delete()`, `net.patch()`
 - **Improvements**:
   - Parameter-specific error messages
@@ -5541,7 +5008,6 @@ Error in cli.prompt():
   - HTTP method-specific examples
 
 **New Format Example**:
-
 ```
 Error in net.get():
   Expected: string value for 'url' parameter
@@ -5551,7 +5017,6 @@ Error in net.get():
 ```
 
 ### 3. **OS Module** (`import os`)
-
 - **Functions**: `os.run()`, `os.getEnv()`
 - **Improvements**:
   - Command execution context
@@ -5559,7 +5024,6 @@ Error in net.get():
   - Clear parameter descriptions
 
 ### 4. **Math Module** (`import math`)
-
 - **Functions**: `math.abs()` and similar numeric functions
 - **Improvements**:
   - Mathematical operation context
@@ -5567,7 +5031,6 @@ Error in net.get():
   - Calculation examples
 
 ### 5. **Time Module** (`import time`)
-
 - **Functions**: `time.now()`, `time.sleep()`
 - **Improvements**:
   - Time operation context
@@ -5575,7 +5038,6 @@ Error in net.get():
   - Temporal examples
 
 ### 6. **Crypto Module** (`import crypto`)
-
 - **Functions**: `crypto.hashMD5()`, `crypto.hashSHA256()`, `crypto.encryptAES()`, `crypto.decryptAES()`
 - **Improvements**:
   - Cryptographic operation context
@@ -5583,7 +5045,6 @@ Error in net.get():
   - Encryption examples
 
 ### 7. **Colors Module** (`import colors`)
-
 - **Functions**: `colors.rgbToHex()`
 - **Improvements**:
   - Color value specifications
@@ -5591,7 +5052,6 @@ Error in net.get():
   - Visual examples
 
 ### 8. **String Module** (`import string`)
-
 - **Functions**: `string.slug()` and others
 - **Improvements**:
   - Text processing context
@@ -5609,7 +5069,7 @@ Error in [module].[function]():
   See documentation for details.
 ```
 
-### Key Features
+### Key Features:
 
 1. **🎨 Color Coding**: Red highlighting for error identification
 2. **📝 Clear Structure**: Consistent four-line format
@@ -5619,16 +5079,14 @@ Error in [module].[function]():
 
 ## Benefits of the New System
 
-### For Developers
-
+### For Developers:
 - **Instant Recognition**: Red coloring makes errors immediately visible
 - **Clear Guidance**: Know exactly what's expected vs what was provided
 - **Learn by Example**: Usage examples teach correct syntax
 - **Consistent Experience**: Same error format across all modules
 - **Reduced Debugging Time**: Precise error information speeds up fixes
 
-### For the Language
-
+### For the Language:
 - **Professional Appearance**: Consistent, polished error messages
 - **Better Learning Curve**: New users learn faster with clear examples
 - **Maintainability**: Centralized error formatting makes updates easier
@@ -5636,8 +5094,7 @@ Error in [module].[function]():
 
 ## Examples by Category
 
-### Argument Count Errors
-
+### Argument Count Errors:
 ```
 Error in time.sleep():
   Expected: 1 numeric argument (seconds to sleep)
@@ -5646,8 +5103,7 @@ Error in time.sleep():
   See documentation for details.
 ```
 
-### Type Errors
-
+### Type Errors:
 ```
 Error in math.abs():
   Expected: numeric argument (integer or float)
@@ -5656,8 +5112,7 @@ Error in math.abs():
   See documentation for details.
 ```
 
-### Parameter-Specific Errors
-
+### Parameter-Specific Errors:
 ```
 Error in net.post():
   Expected: dictionary value for 'headers' parameter
@@ -5666,8 +5121,7 @@ Error in net.post():
   See documentation for details.
 ```
 
-### Range Validation Errors
-
+### Range Validation Errors:
 ```
 Error in colors.rgbToHex():
   RGB values must be in the range 0-255.
@@ -5742,15 +5196,11 @@ if !fs.exists(file_path) {
 }
 println("This will not be printed if the file is missing.")
 ```
-
 If `data.json` does not exist, running this script will output:
-
 ```
 Error: Critical file 'data.json' not found.
 ```
-
-And the script will stop.
-
+And the script will stop. 
 ```
 
 ## errors.md
@@ -5775,8 +5225,7 @@ import "errors"
 
 errors.new("something went wrong")
 # The script will stop here and print the error message
-```
-
+``` 
 ```
 
 ## excel.md
@@ -5816,7 +5265,6 @@ import excel
 ### Create New Excel File
 
 #### `excel.create(filepath?)`
-
 Creates a new Excel workbook. Optionally saves it to the specified path.
 
 ```js
@@ -5832,7 +5280,6 @@ file_id = excel.create("new_workbook.xlsx")
 ### Open Existing File
 
 #### `excel.open(filepath)`
-
 Opens an existing Excel file.
 
 ```js
@@ -5840,7 +5287,6 @@ file_id = excel.open("existing_workbook.xlsx")
 ```
 
 #### `excel.openWithPassword(filepath, password)`
-
 Opens a password-protected Excel file.
 
 ```js
@@ -5850,7 +5296,6 @@ file_id = excel.openWithPassword("protected_workbook.xlsx", "secret123")
 ### Save Operations
 
 #### `excel.save(file_id)`
-
 Saves the current file.
 
 ```js
@@ -5858,7 +5303,6 @@ excel.save(file_id)
 ```
 
 #### `excel.saveAs(file_id, new_filepath)`
-
 Saves the file with a new name or location.
 
 ```js
@@ -5866,7 +5310,6 @@ new_file_id = excel.saveAs(file_id, "backup_workbook.xlsx")
 ```
 
 #### `excel.close(file_id)`
-
 Closes the Excel file and frees memory.
 
 ```js
@@ -5880,7 +5323,6 @@ excel.close(file_id)
 ### Get Sheet Information
 
 #### `excel.getSheets(file_id)`
-
 Returns an array of all sheet names.
 
 ```js
@@ -5892,7 +5334,6 @@ print("Available sheets:", sheets)
 ### Add and Delete Sheets
 
 #### `excel.addSheet(file_id, sheet_name)`
-
 Adds a new worksheet.
 
 ```js
@@ -5901,7 +5342,6 @@ print("Created sheet at index:", sheet_index)
 ```
 
 #### `excel.deleteSheet(file_id, sheet_name)`
-
 Deletes a worksheet.
 
 ```js
@@ -5911,7 +5351,6 @@ excel.deleteSheet(file_id, "OldSheet")
 ### Rename Sheet
 
 #### `excel.renameSheet(file_id, old_name, new_name)`
-
 Renames an existing worksheet.
 
 ```js
@@ -5921,7 +5360,6 @@ excel.renameSheet(file_id, "Sheet1", "DataSheet")
 ### Active Sheet Management
 
 #### `excel.setActiveSheet(file_id, sheet_index)`
-
 Sets the active worksheet by index.
 
 ```js
@@ -5929,7 +5367,6 @@ excel.setActiveSheet(file_id, 0)  // Make first sheet active
 ```
 
 #### `excel.getActiveSheet(file_id)`
-
 Gets the index of the currently active sheet.
 
 ```js
@@ -5943,7 +5380,6 @@ active_index = excel.getActiveSheet(file_id)
 ### Read and Write Cells
 
 #### `excel.getCell(file_id, sheet_name, cell_reference)`
-
 Reads the value from a specific cell.
 
 ```js
@@ -5952,7 +5388,6 @@ print("Cell A1 contains:", value)
 ```
 
 #### `excel.setCell(file_id, sheet_name, cell_reference, value)`
-
 Writes a value to a specific cell.
 
 ```js
@@ -5965,7 +5400,6 @@ excel.setCell(file_id, "Sheet1", "D1", true)
 ### Formula Operations
 
 #### `excel.getCellFormula(file_id, sheet_name, cell_reference)`
-
 Gets the formula from a cell.
 
 ```js
@@ -5974,7 +5408,6 @@ print("Formula:", formula)
 ```
 
 #### `excel.setCellFormula(file_id, sheet_name, cell_reference, formula)`
-
 Sets a formula in a cell.
 
 ```js
@@ -5990,7 +5423,6 @@ excel.setCellFormula(file_id, "Sheet1", "G1", "=IF(B1>0,\"Positive\",\"Zero or N
 ### Work with Cell Ranges
 
 #### `excel.getRange(file_id, sheet_name, range_reference)`
-
 Gets data from a cell range as a 2D array.
 
 ```js
@@ -6003,7 +5435,6 @@ print("Cell B2:", data[1][1])
 ```
 
 #### `excel.setRange(file_id, sheet_name, range_reference, data)`
-
 Sets data for a cell range using a 2D array.
 
 ```js
@@ -6025,7 +5456,6 @@ excel.setRange(file_id, "Sheet1", "A1:C4", data)
 ### Insert and Delete Operations
 
 #### `excel.insertRow(file_id, sheet_name, row_number)`
-
 Inserts a new row at the specified position.
 
 ```js
@@ -6033,7 +5463,6 @@ excel.insertRow(file_id, "Sheet1", 2)  // Insert row at position 2
 ```
 
 #### `excel.insertColumn(file_id, sheet_name, column_letter)`
-
 Inserts a new column at the specified position.
 
 ```js
@@ -6041,7 +5470,6 @@ excel.insertColumn(file_id, "Sheet1", "B")  // Insert column B
 ```
 
 #### `excel.deleteRow(file_id, sheet_name, row_number)`
-
 Deletes a row.
 
 ```js
@@ -6049,7 +5477,6 @@ excel.deleteRow(file_id, "Sheet1", 3)  // Delete row 3
 ```
 
 #### `excel.deleteColumn(file_id, sheet_name, column_letter)`
-
 Deletes a column.
 
 ```js
@@ -6063,7 +5490,6 @@ excel.deleteColumn(file_id, "Sheet1", "C")  // Delete column C
 ### Merge and Unmerge Cells
 
 #### `excel.mergeCells(file_id, sheet_name, range_reference)`
-
 Merges cells in the specified range.
 
 ```js
@@ -6071,7 +5497,6 @@ excel.mergeCells(file_id, "Sheet1", "A1:C1")  // Merge header cells
 ```
 
 #### `excel.unmergeCells(file_id, sheet_name, range_reference)`
-
 Unmerges previously merged cells.
 
 ```js
@@ -6085,7 +5510,6 @@ excel.unmergeCells(file_id, "Sheet1", "A1:C1")
 ### Get File Information
 
 #### `excel.getFileInfo(file_id)`
-
 Returns comprehensive information about the Excel file.
 
 ```js
@@ -6274,7 +5698,6 @@ try {
 ## Summary of Functions
 
 ### File Operations
-
 | Function | Description | Return Type |
 |----------|-------------|-------------|
 | `create(filepath?)` | Create new Excel file | String (file_id) |
@@ -6285,7 +5708,6 @@ try {
 | `close(file_id)` | Close and cleanup file | Boolean |
 
 ### Sheet Management  
-
 | Function | Description | Return Type |
 |----------|-------------|-------------|
 | `getSheets(file_id)` | Get list of sheet names | Array |
@@ -6296,7 +5718,6 @@ try {
 | `getActiveSheet(file_id)` | Get active sheet index | Integer |
 
 ### Cell Operations
-
 | Function | Description | Return Type |
 |----------|-------------|-------------|
 | `getCell(file_id, sheet, cell)` | Read cell value | String |
@@ -6305,14 +5726,12 @@ try {
 | `setCellFormula(file_id, sheet, cell, formula)` | Set cell formula | Boolean |
 
 ### Range Operations
-
 | Function | Description | Return Type |
 |----------|-------------|-------------|
 | `getRange(file_id, sheet, range)` | Get range data | Array (2D) |
 | `setRange(file_id, sheet, range, data)` | Set range data | Boolean |
 
 ### Row/Column Operations
-
 | Function | Description | Return Type |
 |----------|-------------|-------------|
 | `insertRow(file_id, sheet, row)` | Insert row | Boolean |
@@ -6321,20 +5740,17 @@ try {
 | `deleteColumn(file_id, sheet, col)` | Delete column | Boolean |
 
 ### Formatting
-
 | Function | Description | Return Type |
 |----------|-------------|-------------|
 | `mergeCells(file_id, sheet, range)` | Merge cells | Boolean |
 | `unmergeCells(file_id, sheet, range)` | Unmerge cells | Boolean |
 
 ### Utilities
-
 | Function | Description | Return Type |
 |----------|-------------|-------------|
 | `getFileInfo(file_id)` | Get file information | Dictionary |
 
 The Excel module provides a powerful and comprehensive interface for working with Excel files in VintLang, supporting both simple data operations and advanced spreadsheet manipulation.
-
 ```
 
 ## files.md
@@ -6665,7 +6081,6 @@ if (content != null) {
 - File extensions are returned with the leading dot (e.g., ".txt", ".pdf")
 
 ---
-
 ```
 
 ## filewatcher.md
@@ -6734,7 +6149,6 @@ setTimeout(func() {
 Watches a file for changes and calls a callback function when changes are detected.
 
 **Parameters:**
-
 - `path` (string): The path to the file to watch
 - `callback` (function): The function to call when the file changes. The callback receives an event object with the following properties:
   - `path` (string): The path to the file that changed
@@ -6744,7 +6158,6 @@ Watches a file for changes and calls a callback function when changes are detect
   - `interval` (integer): The polling interval in milliseconds (default: 1000)
 
 **Returns:**
-
 - A watcher ID string that can be used to stop watching
 
 ### watchDir(path, callback, options)
@@ -6752,7 +6165,6 @@ Watches a file for changes and calls a callback function when changes are detect
 Watches a directory for changes and calls a callback function when changes are detected.
 
 **Parameters:**
-
 - `path` (string): The path to the directory to watch
 - `callback` (function): The function to call when changes are detected. The callback receives an event object with the following properties:
   - `path` (string): The path to the file that changed
@@ -6764,7 +6176,6 @@ Watches a directory for changes and calls a callback function when changes are d
   - `extensions` (array): Array of file extensions to watch (e.g., [".js", ".vint"]). If not provided, all files are watched.
 
 **Returns:**
-
 - A watcher ID string that can be used to stop watching
 
 ### stopWatch(watcherId)
@@ -6772,11 +6183,9 @@ Watches a directory for changes and calls a callback function when changes are d
 Stops a file or directory watcher.
 
 **Parameters:**
-
 - `watcherId` (string): The watcher ID returned by `watch` or `watchDir`
 
 **Returns:**
-
 - `true` if the watcher was stopped successfully, `false` otherwise
 
 ### isWatching(path)
@@ -6784,11 +6193,9 @@ Stops a file or directory watcher.
 Checks if a file or directory is being watched.
 
 **Parameters:**
-
 - `path` (string): The path to check
 
 **Returns:**
-
 - `true` if the path is being watched, `false` otherwise
 
 ## Examples
@@ -6983,6 +6390,265 @@ filewatcher.watch(logFile, func(event) {
 
 print("Monitoring log file. Press Ctrl+C to exit.")
 ```
+```
+
+## fmt.md
+
+```markdown
+# fmt Module
+
+The `fmt` module provides comprehensive text formatting capabilities for VintLang, including string formatting, padding, alignment, number formatting, and utility functions.
+
+## Overview
+
+- **Purpose**: Advanced text formatting and manipulation
+- **Module Name**: `fmt`
+- **Usage**: `import fmt` or `let fmt = import("fmt")`
+
+## Functions
+
+### String Formatting Functions
+
+#### `sprintf(format, ...args) -> string`
+
+Formats a string using Go's fmt.Sprintf format specifiers.
+
+```vint
+import fmt
+let result = fmt.sprintf("Hello, %s! You have %d messages.", "Alice", 5)
+print(result)  // "Hello, Alice! You have 5 messages."
+```
+
+#### `printf(format, ...args) -> nil`
+
+Prints formatted text to stdout.
+
+```vint
+import fmt
+fmt.printf("Temperature: %.2f°C\n", 23.456)  // "Temperature: 23.46°C"
+```
+
+#### `fprintf(file, format, ...args) -> nil`
+
+Prints formatted text to a file or writer (currently outputs to stdout).
+
+```vint
+import fmt
+fmt.fprintf(null, "Debug: %s = %d\n", "count", 42)
+```
+
+#### `errorf(format, ...args) -> error`
+
+Creates a formatted error object.
+
+```vint
+import fmt
+let err = fmt.errorf("failed to process %s: %s", "file.txt", "not found")
+```
+
+### Padding and Alignment Functions
+
+#### `padLeft(str, width, [padChar]) -> string`
+
+Pads a string to the left with spaces or specified character.
+
+```vint
+import fmt
+let padded = fmt.padLeft("hello", 10)        // "     hello"
+let custom = fmt.padLeft("test", 8, "0")     // "0000test"
+```
+
+#### `padRight(str, width, [padChar]) -> string`
+
+Pads a string to the right with spaces or specified character.
+
+```vint
+import fmt
+let padded = fmt.padRight("hello", 10)       // "hello     "
+let custom = fmt.padRight("test", 8, "-")    // "test----"
+```
+
+#### `padCenter(str, width, [padChar]) -> string`
+
+Centers a string with padding.
+
+```vint
+import fmt
+let centered = fmt.padCenter("hello", 11)    // "   hello   "
+let custom = fmt.padCenter("test", 10, "*")  // "***test***"
+```
+
+### Number Formatting Functions
+
+#### `formatInt(number, [base], [width]) -> string`
+
+Formats an integer with specified base and width.
+
+```vint
+import fmt
+let decimal = fmt.formatInt(42, 10, 5)       // "   42"
+let binary = fmt.formatInt(15, 2)            // "1111"
+let hex = fmt.formatInt(255, 16)             // "ff"
+```
+
+#### `formatFloat(number, [precision]) -> string`
+
+Formats a float with specified precision.
+
+```vint
+import fmt
+let rounded = fmt.formatFloat(3.14159, 2)    // "3.14"
+let precise = fmt.formatFloat(1.2345, 4)     // "1.2345"
+```
+
+#### `formatHex(number, [uppercase]) -> string`
+
+Formats an integer as hexadecimal.
+
+```vint
+import fmt
+let lower = fmt.formatHex(255)               // "ff"
+let upper = fmt.formatHex(255, true)         // "FF"
+```
+
+#### `formatOct(number) -> string`
+
+Formats an integer as octal.
+
+```vint
+import fmt
+let octal = fmt.formatOct(64)                // "100"
+```
+
+#### `formatBin(number) -> string`
+
+Formats an integer as binary.
+
+```vint
+import fmt
+let binary = fmt.formatBin(15)               // "1111"
+```
+
+### Width and Precision Functions
+
+#### `width(str, width) -> string`
+
+Formats a string to a specific width (truncates if too long).
+
+```vint
+import fmt
+let fixed = fmt.width("hello world", 5)      // "hello"
+let padded = fmt.width("hi", 8)              // "hi      "
+```
+
+#### `precision(number, precision) -> string`
+
+Formats a float with specific precision.
+
+```vint
+import fmt
+let precise = fmt.precision(3.14159, 2)      // "3.14"
+```
+
+### Utility Functions
+
+#### `repeat(str, count) -> string`
+
+Repeats a string n times.
+
+```vint
+import fmt
+let repeated = fmt.repeat("ha", 3)           // "hahaha"
+let line = fmt.repeat("-", 20)               // "--------------------"
+```
+
+#### `truncate(str, maxLength) -> string`
+
+Limits a string to a maximum length.
+
+```vint
+import fmt
+let short = fmt.truncate("hello world", 5)   // "hello"
+let unchanged = fmt.truncate("hi", 10)       // "hi"
+```
+
+## Format Specifiers
+
+When using `sprintf`, `printf`, and `fprintf`, you can use Go's format specifiers:
+
+- `%s` - string
+- `%d` - decimal integer
+- `%f` - floating point
+- `%.2f` - floating point with 2 decimal places
+- `%x` - hexadecimal (lowercase)
+- `%X` - hexadecimal (uppercase)
+- `%o` - octal
+- `%b` - binary
+- `%t` - boolean
+- `%v` - default format
+- `%%` - literal %
+
+## Complete Example
+
+```vint
+import fmt
+
+// Basic formatting
+let name = "Alice"
+let age = 30
+let height = 5.75
+
+let intro = fmt.sprintf("Hi, I'm %s, %d years old, %.1f feet tall", name, age, height)
+print(intro)
+
+// Number formatting
+let num = 255
+print("Decimal:", fmt.formatInt(num, 10))     // "255"
+print("Binary:", fmt.formatBin(num))          // "11111111"
+print("Hex:", fmt.formatHex(num, true))       // "FF"
+print("Octal:", fmt.formatOct(num))           // "377"
+
+// Padding and alignment
+let title = "REPORT"
+let border = fmt.repeat("=", 20)
+
+print(border)
+print(fmt.padCenter(title, 20))
+print(border)
+
+// Table formatting
+let items = [
+    {"name": "Apple", "price": 1.25, "qty": 10},
+    {"name": "Banana", "price": 0.75, "qty": 25},
+    {"name": "Orange", "price": 1.50, "qty": 15}
+]
+
+fmt.printf("%-10s %8s %5s\n", "Item", "Price", "Qty")
+fmt.printf("%s\n", fmt.repeat("-", 25))
+
+for item in items {
+    fmt.printf("%-10s $%7.2f %5d\n",
+        item["name"],
+        item["price"],
+        item["qty"])
+}
+```
+
+## Error Handling
+
+All functions validate their input types and return descriptive error messages for invalid usage:
+
+```vint
+import fmt
+let err = fmt.padLeft(123, "invalid")  // Returns error object
+```
+
+## Notes
+
+- The `fprintf` function currently writes to stdout but can be extended to write to actual file objects
+- Padding functions default to space character if no pad character is specified
+- Number formatting functions handle negative numbers appropriately
+- Width and truncation functions preserve string integrity while enforcing limits
 
 ```
 
@@ -7004,7 +6670,6 @@ for i in name {
     print(i)
 }
 ```
-
 Output:
 
 ```s
@@ -7062,14 +6727,12 @@ for v in "mojo" {
 ```
 
 Output:
-
 ```s
 m
 o
 j
 o
 ```
-
 To iterate over both the keys and the values in a string, use two temporary identifiers:
 
 ```s
@@ -7077,9 +6740,7 @@ for i, v in "mojo" {
     print(i, "->", v)
 }
 ```
-
 Output:
-
 ```s
 0 -> m
 1 -> o
@@ -7170,7 +6831,6 @@ skipping iteration
 l
 o
 ```
-
 ```
 
 ## function.md
@@ -7224,7 +6884,6 @@ func(w) {
 In this example, the function `w` is passed to another function and executed within it.
 
 By understanding these basic concepts, you can start creating reusable and flexible code using functions in **Vint**.
-
 ```
 
 ## hash.md
@@ -7248,17 +6907,14 @@ import hash
 ## Functions and Examples
 
 ### 1. SHA1 Hash (`sha1`)
-
 The `sha1` function generates a SHA1 hash from the provided string data.
 
 **Syntax**:
-
 ```js
 sha1(data)
 ```
 
 **Example**:
-
 ```js
 import hash
 
@@ -7273,17 +6929,14 @@ print("SHA1 Hash:", sha1_hash)
 ---
 
 ### 2. SHA512 Hash (`sha512`)
-
 The `sha512` function generates a SHA512 hash from the provided string data.
 
 **Syntax**:
-
 ```js
 sha512(data)
 ```
 
 **Example**:
-
 ```js
 import hash
 
@@ -7345,7 +6998,6 @@ print("Password SHA512:", hash.sha512(password))
 | `sha512` | Generates SHA512 hash from string data    | 128 characters   |
 
 Both functions return hexadecimal string representations of the hash values, making them easy to store and compare.
-
 ```
 
 ## http_enhanced.md
@@ -7378,7 +7030,6 @@ http.get("/users/:id", func(req, res) {
 ```
 
 ### 2. **Enhanced Response Object**
-
 - **Method Chaining**: Chain response methods for cleaner code
 - **Redirect Support**: Easy redirects with custom status codes
 - **Cookie Setting**: Set response cookies with options
@@ -7398,7 +7049,6 @@ http.post("/login", func(req, res) {
 ```
 
 ### 3. **Interceptors**
-
 Request and response interceptors for cross-cutting concerns:
 
 ```js
@@ -7416,7 +7066,6 @@ http.interceptor("response", func(res) {
 ```
 
 ### 4. **Guards**
-
 Security guards for authentication, authorization, and rate limiting:
 
 ```js
@@ -7440,7 +7089,6 @@ http.guard(func(req) {
 ```
 
 ### 5. **Enhanced Middleware**
-
 Built-in middleware for common backend needs:
 
 ```js
@@ -7462,7 +7110,6 @@ http.errorHandler(func(err, req, res) {
 ```
 
 ### 6. **Route Parameters**
-
 Support for parameterized routes:
 
 ```js
@@ -7479,7 +7126,6 @@ http.get("/users/:userId/posts/:postId", func(req, res) {
 ```
 
 ### 7. **Security Features**
-
 - **Automatic CORS**: CORS headers added automatically
 - **OPTIONS Handling**: Preflight requests handled automatically
 - **Security Headers**: Enhanced security header management
@@ -7592,7 +7238,6 @@ The enhanced HTTP module provides all the essential features needed for producti
 - **Standards**: RESTful API support with proper HTTP semantics
 
 This makes Vint suitable for building everything from simple APIs to complex enterprise applications.
-
 ```
 
 ## http_enterprise.md
@@ -8168,7 +7813,6 @@ The enterprise HTTP module provides all the features needed to build production-
 - **Production-Ready**: All features needed for enterprise backend development
 
 This makes VintLang suitable for building everything from simple APIs to complex enterprise applications with the same level of sophistication as modern frameworks like Express.js, FastAPI, or Spring Boot.
-
 ```
 
 ## identifiers.md
@@ -8202,7 +7846,6 @@ In the examples above, `birth_year` and `convert_c_to_p` follow all syntax rules
 To make your **Vint** code more readable and maintainable, follow these best practices:
 
 1. **Use Descriptive Names:** Choose names that clearly describe the purpose or content of the variable or function.
-
    ```js
    let total_score = 85
    let calculate_average = func() { /* logic */ }
@@ -8213,7 +7856,6 @@ To make your **Vint** code more readable and maintainable, follow these best pra
    - **snake_case**: `my_variable_name`
 
 3. **Avoid Ambiguity:** Use meaningful names instead of single letters, except for common cases like loop counters:
-
    ```js
    for (let i = 0; i < 10; i++) {
        print(i)
@@ -8261,8 +7903,7 @@ if (a > 100) {
 // Output: The value of a is 10
 ```
 
-### Explanation
-
+### Explanation:
 1. The condition `a > 100` is false.
 2. The next condition `a < 10` is also false.
 3. Therefore, the `else` block is executed, and the output is `The value of a is 10`.
@@ -8286,7 +7927,6 @@ Vint supports both classic if statements and the new if expressions, allowing yo
 The classic if statement executes a block of code if a condition is true. You can optionally provide an `else` block.
 
 **Syntax:**
-
 ```js
 if (condition) {
     // code to run if condition is true
@@ -8296,7 +7936,6 @@ if (condition) {
 ```
 
 **Example:**
-
 ```js
 let x = 0
 if (true) {
@@ -8312,7 +7951,6 @@ print("Classic if statement result: ", x)
 You can now use `if` as an expression, which returns a value. This allows you to assign the result of a conditional directly to a variable, or use it in any expression context.
 
 **Syntax:**
-
 ```js
 let result = if (condition) { valueIfTrue } else { valueIfFalse }
 ```
@@ -8321,7 +7959,6 @@ let result = if (condition) { valueIfTrue } else { valueIfFalse }
 - If the condition is false and there is no `else`, the result is `null`.
 
 **Examples:**
-
 ```js
 let status = ""
 status = if (x > 0) { "Online" } else { "Offline" }
@@ -8334,7 +7971,6 @@ print("If as an expression with no else: ", y) // prints: null
 ---
 
 ## Notes
-
 - Parentheses around the condition are required: `if (condition) { ... }`.
 - Both the classic statement and the new expression form are fully supported and can be mixed in your code.
 - Use `//` for single-line comments and `/* ... */` for multi-line comments in Vint.
@@ -8342,10 +7978,8 @@ print("If as an expression with no else: ", y) // prints: null
 ---
 
 ## See Also
-
 - [Switch Statements](switch.md)
 - [Operators](operators.md)
-
 ```
 
 ## include.md
@@ -8368,7 +8002,6 @@ The path to the file can be relative or absolute. The file extension is not mand
 Let's say you have a file named `greetings.vint` with the following content:
 
 **greetings.vint**
-
 ```js
 let greeting = "Hello, Vint!"
 
@@ -8380,7 +8013,6 @@ func sayHello() {
 You can include this file in another file, for instance, `main.vint`, and use the `greeting` variable and the `sayHello` function:
 
 **main.vint**
-
 ```js
 include "greetings.vint"
 
@@ -8390,8 +8022,7 @@ let customMessage = greeting + " How are you?"
 println(customMessage) // Output: Hello, Vint! How are you?
 ```
 
-In this example, the `include` statement at the beginning of `main.vint` makes the `greeting` variable and the `sayHello` function from `greetings.vint` available for use. This helps in keeping the code modular and easy to manage.
-
+In this example, the `include` statement at the beginning of `main.vint` makes the `greeting` variable and the `sayHello` function from `greetings.vint` available for use. This helps in keeping the code modular and easy to manage. 
 ```
 
 ## info.md
@@ -8421,8 +8052,7 @@ Running this script will output:
 ```
 [INFO]: Starting the backup process.
 Backup in progress...
-```
-
+``` 
 ```
 
 ## json.md
@@ -8446,17 +8076,14 @@ import json
 ## Functions and Examples
 
 ### 1. Decode JSON (`decode`)
-
 The `decode` function parses a JSON string into a Vint dictionary or array.
 
 **Syntax**:
-
 ```js
 decode(jsonString)
 ```
 
 **Example**:
-
 ```js
 import json
 
@@ -8470,17 +8097,14 @@ print("Decoded Object:", decoded)
 ---
 
 ### 2. Encode JSON (`encode`)
-
 The `encode` function converts a Vint dictionary or array into a JSON string. It optionally supports pretty formatting with an `indent` parameter.
 
 **Syntax**:
-
 ```js
 encode(data, indent = 0)
 ```
 
 **Example**:
-
 ```js
 import json
 
@@ -8503,17 +8127,14 @@ print("Encoded JSON:", encoded_json)
 ---
 
 ### 3. Pretty Print JSON (`pretty`)
-
 The `pretty` function reformats a JSON string into a human-readable format with proper indentation.
 
 **Syntax**:
-
 ```js
 pretty(jsonString)
 ```
 
 **Example**:
-
 ```js
 import json
 
@@ -8533,17 +8154,14 @@ print("Pretty JSON:\n", pretty_json)
 ---
 
 ### 4. Merge JSON Objects (`merge`)
-
 The `merge` function combines two JSON objects. If both objects have the same key, the value from the second object overwrites the first.
 
 **Syntax**:
-
 ```js
 merge(json1, json2)
 ```
 
 **Example**:
-
 ```js
 import json
 
@@ -8558,17 +8176,14 @@ print("Merged JSON:", merged_json)
 ---
 
 ### 5. Get Value by Key (`get`)
-
 The `get` function retrieves a value associated with a key from a JSON object. If the key is not found, it returns `null`.
 
 **Syntax**:
-
 ```js
 get(jsonObject, key)
 ```
 
 **Example**:
-
 ```js
 import json
 
@@ -8597,7 +8212,6 @@ print("Country (missing key):", missing_value)
 | `get`            | Retrieves a value by key, returns `null` if absent.| `"value"` or `null`                      |
 
 These functions make working with JSON in Vint easy, flexible, and efficient.
-
 ```
 
 ## jwt.md
@@ -9470,11 +9084,9 @@ if err != null {
 ```
 
 ## Notes
-
 - Requires an internet connection.
 - Make sure your API key is kept secret.
-- See OpenAI docs for more on models and parameters.
-
+- See OpenAI docs for more on models and parameters. 
 ```
 
 ## logger.md
@@ -9498,17 +9110,14 @@ import logger
 ## Functions and Examples
 
 ### 1. Log Info Messages (`info`)
-
 The `info` function logs informational messages to stdout with a timestamp and INFO level indicator.
 
 **Syntax**:
-
 ```js
 info(message)
 ```
 
 **Example**:
-
 ```js
 import logger
 
@@ -9519,17 +9128,14 @@ logger.info("Application started successfully")
 ---
 
 ### 2. Log Warning Messages (`warn`)
-
 The `warn` function logs warning messages to stdout with a timestamp and WARN level indicator.
 
 **Syntax**:
-
 ```js
 warn(message)
 ```
 
 **Example**:
-
 ```js
 import logger
 
@@ -9540,17 +9146,14 @@ logger.warn("This is a warning message")
 ---
 
 ### 3. Log Error Messages (`error`)
-
 The `error` function logs error messages to stderr with a timestamp and ERROR level indicator.
 
 **Syntax**:
-
 ```js
 error(message)
 ```
 
 **Example**:
-
 ```js
 import logger
 
@@ -9561,17 +9164,14 @@ logger.error("Something went wrong")
 ---
 
 ### 4. Log Debug Messages (`debug`)
-
 The `debug` function logs debug information to stdout with a timestamp and DEBUG level indicator.
 
 **Syntax**:
-
 ```js
 debug(message)
 ```
 
 **Example**:
-
 ```js
 import logger
 
@@ -9582,17 +9182,14 @@ logger.debug("Debug information for troubleshooting")
 ---
 
 ### 5. Log Fatal Messages (`fatal`)
-
 The `fatal` function logs fatal error messages to stderr with a timestamp and FATAL level indicator.
 
 **Syntax**:
-
 ```js
 fatal(message)
 ```
 
 **Example**:
-
 ```js
 import logger
 
@@ -9633,7 +9230,6 @@ logger.fatal("Unable to recover from critical error")
 | `fatal`  | Logs fatal error messages with timestamp              | stderr             |
 
 All log messages include timestamps in the format `YYYY-MM-DD HH:MM:SS` for easy tracking and debugging.
-
 ```
 
 ## main-function.md
@@ -9703,7 +9299,6 @@ println("⚙️ Setup complete")
 ```
 
 **Output:**
-
 ```
 🚀 Program starting...
 ⚙️ Setup complete
@@ -9717,7 +9312,6 @@ Time: 16:42:00 26-09-2025
 ## Main Function Features
 
 ### Parameters
-
 Main functions currently don't receive command-line arguments, but this could be extended in the future:
 
 ```javascript
@@ -9728,7 +9322,6 @@ let main = func() {
 ```
 
 ### Return Values
-
 The main function's return value becomes the program's final result:
 
 ```javascript
@@ -9738,7 +9331,6 @@ let main = func() {
 ```
 
 ### Error Handling
-
 If the main function returns an error, it will be propagated:
 
 ```javascript
@@ -9763,15 +9355,13 @@ println("x =", x)
 
 ## When to Use Main Functions
 
-### Use main functions when
-
+### Use main functions when:
 - Building larger, structured programs
 - You want clear separation between setup and execution
 - Coming from Go, C, C++, or similar languages
 - Building command-line tools or applications
 
-### Stick with the traditional approach when
-
+### Stick with the traditional approach when:
 - Writing simple scripts
 - Prototyping or testing small code snippets
 - Using VintLang in REPL mode
@@ -9793,7 +9383,6 @@ println("x =", x)
 To convert existing VintLang programs to use main functions:
 
 **Before:**
-
 ```javascript
 import time
 let x = 42
@@ -9802,7 +9391,6 @@ println("Time:", time.now())
 ```
 
 **After:**
-
 ```javascript
 import time  // Still runs in setup phase
 
@@ -9814,6 +9402,268 @@ let main = func() {
 ```
 
 The behavior remains identical, but the code is now more structured and explicit about the entry point.
+```
+
+## make_module.md
+
+```markdown
+# Make Module Documentation
+
+The `make` module provides a programmable build system for VintLang, designed to replace traditional Makefiles with a more flexible and powerful scripting approach.
+
+## Overview
+
+The `make` module allows you to:
+- Execute shell commands
+- Set environment variables
+- Check for command availability
+- Create complex build workflows using VintLang's full programming capabilities
+
+## Installation
+
+The `make` module is built-in to VintLang. Simply import it in your vint script:
+
+```js
+import make
+```
+
+## Functions
+
+### make.check(command: string) -> boolean
+
+Check if a command exists in the system PATH.
+
+**Parameters:**
+- `command`: Name of the command to check
+
+**Returns:** `true` if the command exists, `false` otherwise
+
+**Example:**
+```js
+if (make.check("upx")) {
+    print("UPX is available")
+} else {
+    print("UPX not found. Please install it.")
+}
+```
+
+### make.env(key: string, value: string) -> boolean
+
+Set an environment variable for the current process.
+
+**Parameters:**
+- `key`: Environment variable name
+- `value`: Environment variable value
+
+**Returns:** `true` on success, error on failure
+
+**Example:**
+```js
+make.env("GOOS", "linux")
+make.env("GOARCH", "amd64")
+```
+
+### make.exec(command: string) -> string
+
+Execute a shell command and return its output.
+
+**Parameters:**
+- `command`: Shell command to execute
+
+**Returns:** Command output as a string, or error object on failure
+
+**Example:**
+```js
+let output = make.exec("go build -o myapp")
+print(output)
+```
+
+### make.echo(message: string) -> null
+
+Print a message to stdout (similar to Makefile's `@echo`).
+
+**Parameters:**
+- `message`: Message to print
+
+**Example:**
+```js
+make.echo("Building Linux binary...")
+```
+
+## Complete Example: Build System
+
+Here's a complete example of a build system using the `make` module:
+
+```js
+// build.vint - A programmable build system
+import make
+import os
+import cli
+
+const VERSION = "1.0.0"
+const LDFLAGS = "-s -w"
+
+let echo = func(msg) {
+    print("🔨 " + msg)
+}
+
+// Define build tasks
+let tasks = {
+    "build": func() {
+        echo("Building application...")
+        make.env("CGO_ENABLED", "0")
+        let result = make.exec("go build -ldflags=\"" + LDFLAGS + "\" -o app")
+        if (result.type != "error") {
+            echo("✅ Build successful!")
+        } else {
+            print("❌ Build failed")
+        }
+    },
+    
+    "build_linux": func() {
+        echo("Building for Linux...")
+        make.env("GOOS", "linux")
+        make.env("GOARCH", "amd64")
+        make.exec("go build -ldflags=\"" + LDFLAGS + "\" -o app-linux")
+        echo("✅ Linux build complete!")
+    },
+    
+    "test": func() {
+        echo("Running tests...")
+        make.exec("go test ./...")
+        echo("✅ Tests complete!")
+    },
+    
+    "clean": func() {
+        echo("Cleaning build artifacts...")
+        make.exec("rm -f app app-linux app-windows.exe")
+        echo("✅ Clean complete!")
+    },
+    
+    "install_deps": func() {
+        echo("Installing dependencies...")
+        if (!make.check("go")) {
+            print("❌ Go not found. Please install Go first.")
+            os.exit(1)
+        }
+        make.exec("go mod download")
+        echo("✅ Dependencies installed!")
+    }
+}
+
+// Main execution
+let args = cli.getArgs()
+if (len(args) < 1) {
+    print("Usage: vint build.vint <task>")
+    print("Available tasks:", tasks.keys())
+    os.exit(1)
+}
+
+let taskName = args[0]
+if (tasks[taskName] != null) {
+    tasks[taskName]()
+} else {
+    print("Unknown task:", taskName)
+    os.exit(1)
+}
+```
+
+**Usage:**
+```bash
+# Build the application
+vint build.vint build
+
+# Build for Linux
+vint build.vint build_linux
+
+# Run tests
+vint build.vint test
+
+# Clean build artifacts
+vint build.vint clean
+```
+
+## Advantages Over Makefile
+
+1. **Full Programming Language**: Use loops, conditionals, functions, and all VintLang features
+2. **Cross-Platform**: Works consistently across Windows, Linux, and macOS
+3. **Better Error Handling**: Proper error handling with try-catch patterns
+4. **Modularity**: Import other modules (json, yaml, http, etc.) for advanced build scripts
+5. **Type Safety**: Benefit from VintLang's type system
+6. **Debugging**: Easier to debug than shell scripts
+
+## Migration from Makefile
+
+Here's how common Makefile patterns translate to the `make` module:
+
+### Setting Variables
+**Makefile:**
+```makefile
+VERSION=1.0.0
+LDFLAGS=-s -w
+```
+
+**VintLang:**
+```js
+const VERSION = "1.0.0"
+const LDFLAGS = "-s -w"
+```
+
+### Environment Variables
+**Makefile:**
+```makefile
+build:
+	GOOS=linux GOARCH=amd64 go build
+```
+
+**VintLang:**
+```js
+make.env("GOOS", "linux")
+make.env("GOARCH", "amd64")
+make.exec("go build")
+```
+
+### Command Execution
+**Makefile:**
+```makefile
+build:
+	@echo "Building..."
+	go build -o app
+```
+
+**VintLang:**
+```js
+make.echo("Building...")
+make.exec("go build -o app")
+```
+
+### Conditional Execution
+**Makefile:**
+```makefile
+build:
+	@which upx || echo "UPX not found"
+```
+
+**VintLang:**
+```js
+if (!make.check("upx")) {
+    print("UPX not found")
+}
+```
+
+## Best Practices
+
+1. **Organize Tasks**: Use dictionaries or functions to organize your build tasks
+2. **Error Handling**: Check return values from `make.exec()` for errors
+3. **Logging**: Use `make.echo()` for user-friendly progress messages
+4. **Modularity**: Split complex build scripts into multiple files
+5. **Documentation**: Add comments explaining what each task does
+
+## See Also
+
+- [OS Module](./os_module.md) - File system operations
+- [Shell Module](./shell_module.md) - Additional shell utilities
+- [Examples](../examples/) - More build script examples
 
 ```
 
@@ -9866,157 +9716,126 @@ Here is a complete list of the available functions and constants:
 ### Functions
 
 #### `abs(n)`
-
 - **Description**: Calculates the absolute value of a number.
 - **Example**: `math.abs(-42)` returns `42`.
 
 #### `acos(n)`
-
 - **Description**: Calculates the arccosine (inverse cosine) of a number in radians.
 - **Example**: `math.acos(0.5)` returns `1.047...`.
 
 #### `acosh(n)`
-
 - **Description**: Calculates the inverse hyperbolic cosine of a number.
 - **Example**: `math.acosh(2.0)` returns `1.316...`.
 
 #### `asin(n)`
-
 - **Description**: Calculates the arcsine (inverse sine) of a number in radians.
 - **Example**: `math.asin(0.5)` returns `0.523...`.
 
 #### `asinh(n)`
-
 - **Description**: Calculates the inverse hyperbolic sine of a number.
 - **Example**: `math.asinh(2.0)` returns `1.443...`.
 
 #### `atan(n)`
-
 - **Description**: Calculates the arctangent (inverse tangent) of a number in radians.
 - **Example**: `math.atan(1.0)` returns `0.785...`.
 
 #### `atan2(y, x)`
-
 - **Description**: Calculates the arctangent of the quotient of its arguments (`y/x`) in radians.
 - **Example**: `math.atan2(1.0, 1.0)` returns `0.785...`.
 
 #### `atanh(n)`
-
 - **Description**: Calculates the inverse hyperbolic tangent of a number.
 - **Example**: `math.atanh(0.5)` returns `0.549...`.
 
 #### `cbrt(n)`
-
 - **Description**: Calculates the cube root of a number.
 - **Example**: `math.cbrt(8)` returns `2.0`.
 
 #### `ceil(n)`
-
 - **Description**: Rounds a number up to the nearest integer.
 - **Example**: `math.ceil(4.3)` returns `5`.
 
 #### `cos(n)`
-
 - **Description**: Calculates the cosine of an angle (in radians).
 - **Example**: `math.cos(0.0)` returns `1.0`.
 
 #### `cosh(n)`
-
 - **Description**: Calculates the hyperbolic cosine of a number.
 - **Example**: `math.cosh(0.0)` returns `1.0`.
 
 #### `exp(n)`
-
 - **Description**: Calculates `e` raised to the power of `n`.
 - **Example**: `math.exp(2.0)` returns `7.389...`.
 
 #### `expm1(n)`
-
 - **Description**: Calculates `e` raised to the power of a number, minus 1.
 - **Example**: `math.expm1(1.0)` returns `1.718...`.
 
 #### `factorial(n)`
-
 - **Description**: Calculates the factorial of a non-negative integer.
 - **Example**: `math.factorial(5)` returns `120`.
 
 #### `floor(n)`
-
 - **Description**: Rounds a number down to the nearest integer.
 - **Example**: `math.floor(4.7)` returns `4`.
 
 #### `hypot(numbers)`
-
 - **Description**: Calculates the square root of the sum of the squares of the numbers in an array.
 - **Example**: `math.hypot([3, 4])` returns `5.0`.
 
 #### `log10(n)`
-
 - **Description**: Calculates the base-10 logarithm of a number.
 - **Example**: `math.log10(100.0)` returns `2.0`.
 
 #### `log1p(n)`
-
 - **Description**: Calculates the natural logarithm of 1 plus the given number.
 - **Example**: `math.log1p(1.0)` returns `0.693...`.
 
 #### `log2(n)`
-
 - **Description**: Calculates the base-2 logarithm of a number.
 - **Example**: `math.log2(8)` returns `3.0`.
 
 #### `max(numbers)`
-
 - **Description**: Finds the maximum value in an array of numbers.
 - **Example**: `math.max([4, 2, 9, 5])` returns `9.0`.
 
 #### `min(numbers)`
-
 - **Description**: Finds the minimum value in an array of numbers.
 - **Example**: `math.min([4, 2, 9, 5])` returns `2.0`.
 
 #### `random()`
-
 - **Description**: Returns a random floating-point number between 0.0 and 1.0.
 - **Example**: `math.random()` returns a value like `0.12345...`.
 
 #### `round(n)`
-
 - **Description**: Rounds a floating-point number to the nearest integer.
 - **Example**: `math.round(4.6)` returns `5`.
 
 #### `root(x, n)`
-
 - **Description**: Calculates the nth root of a number `x`.
 - **Example**: `math.root(27, 3)` returns `3.0`.
 
 #### `sign(n)`
-
 - **Description**: Returns the sign of a number (`-1` for negative, `0` for zero, `1` for positive).
 - **Example**: `math.sign(-5)` returns `-1`.
 
 #### `sin(n)`
-
 - **Description**: Calculates the sine of an angle (in radians).
 - **Example**: `math.sin(1.0)` returns `0.841...`.
 
 #### `sinh(n)`
-
 - **Description**: Calculates the hyperbolic sine of a number.
 - **Example**: `math.sinh(1.0)` returns `1.175...`.
 
 #### `sqrt(n)`
-
 - **Description**: Calculates the square root of a number.
 - **Example**: `math.sqrt(4)` returns `2.0`.
 
 #### `tan(n)`
-
 - **Description**: Calculates the tangent of an angle (in radians).
 - **Example**: `math.tan(1.0)` returns `1.557...`.
 
 #### `tanh(n)`
-
 - **Description**: Calculates the hyperbolic tangent of a number.
 - **Example**: `math.tanh(1.0)` returns `0.761...`.
 
@@ -10025,23 +9844,19 @@ Here is a complete list of the available functions and constants:
 ## Statistics Functions
 
 #### `mean(array)`
-
 - **Description**: Calculates the arithmetic mean (average) of an array of numbers.
 - **Example**: `math.mean([1, 2, 3, 4, 5])` returns `3.0`.
 
 #### `median(array)`
-
 - **Description**: Calculates the median (middle value) of an array of numbers.
 - **Example**: `math.median([1, 2, 3, 4, 5])` returns `3.0`.
 - **Note**: For even-length arrays, returns the average of the two middle values.
 
 #### `variance(array)`
-
 - **Description**: Calculates the variance of an array of numbers.
 - **Example**: `math.variance([1, 2, 3, 4, 5])` returns `2.0`.
 
 #### `stddev(array)`
-
 - **Description**: Calculates the standard deviation of an array of numbers.
 - **Example**: `math.stddev([1, 2, 3, 4, 5])` returns `1.414...`.
 
@@ -10050,11 +9865,9 @@ Here is a complete list of the available functions and constants:
 ## Complex Numbers
 
 #### `complex(real, imag)`
-
 - **Description**: Creates a complex number with the given real and imaginary parts.
 - **Returns**: A dictionary with `real` and `imag` keys.
-- **Example**:
-
+- **Example**: 
   ```js
   let c = math.complex(3, 4)
   print(c["real"])  // 3
@@ -10062,10 +9875,8 @@ Here is a complete list of the available functions and constants:
   ```
 
 #### `abs(n)` (extended)
-
 - **Description**: Also works with complex numbers to calculate magnitude.
-- **Example**:
-
+- **Example**: 
   ```js
   let c = math.complex(3, 4)
   math.abs(c)  // returns 5.0
@@ -10076,12 +9887,10 @@ Here is a complete list of the available functions and constants:
 ## Arbitrary Precision
 
 #### `bigint(value)`
-
 - **Description**: Creates a big integer representation for arbitrary precision arithmetic.
 - **Parameters**: A string or integer representing a large number.
 - **Returns**: A dictionary with `value` (string) and `type` ("bigint") keys.
-- **Example**:
-
+- **Example**: 
   ```js
   let big = math.bigint("999999999999999999999")
   print(big["value"])  // "999999999999999999999"
@@ -10092,17 +9901,14 @@ Here is a complete list of the available functions and constants:
 ## Linear Algebra
 
 #### `dot(array1, array2)`
-
 - **Description**: Calculates the dot product of two vectors (arrays).
 - **Example**: `math.dot([1, 2, 3], [4, 5, 6])` returns `32.0`.
 
 #### `cross(array1, array2)`
-
 - **Description**: Calculates the cross product of two 3D vectors.
 - **Example**: `math.cross([1, 2, 3], [4, 5, 6])` returns `[-3, 6, -3]`.
 
 #### `magnitude(array)`
-
 - **Description**: Calculates the magnitude (length) of a vector.
 - **Example**: `math.magnitude([3, 4])` returns `5.0`.
 
@@ -10111,25 +9917,22 @@ Here is a complete list of the available functions and constants:
 ## Numerical Methods
 
 #### `gcd(a, b)`
-
 - **Description**: Calculates the greatest common divisor of two integers.
 - **Example**: `math.gcd(48, 18)` returns `6`.
 
 #### `lcm(a, b)`
-
 - **Description**: Calculates the least common multiple of two integers.
 - **Example**: `math.lcm(12, 15)` returns `60`.
 
 #### `clamp(value, min, max)`
-
 - **Description**: Clamps a value between a minimum and maximum.
 - **Example**: `math.clamp(15, 0, 10)` returns `10.0`.
 
 #### `lerp(start, end, t)`
-
 - **Description**: Linear interpolation between two values.
 - **Parameters**: `start` and `end` values, and `t` (0.0 to 1.0) as the interpolation factor.
 - **Example**: `math.lerp(0, 10, 0.5)` returns `5.0`.
+
 
 ```
 
@@ -10463,9 +10266,7 @@ Sends an HTTP GET request.
 ```js
 net.get("https://api.example.com/data")
 ```
-
 Or with named arguments:
-
 ```js
 net.get(
   url: "https://api.example.com/data",
@@ -10475,7 +10276,6 @@ net.get(
 ```
 
 **Arguments:**
-
 - `url` (string, required): The URL to request.
 - `headers` (dict, optional): HTTP headers as key-value pairs.
 - `body` (dict, optional): Data to send as JSON (rare for GET).
@@ -10491,7 +10291,6 @@ Response body as a string, or an error object.
 Sends an HTTP POST request.
 
 **Usage:**
-
 ```js
 net.post(
   url: "https://api.example.com/data",
@@ -10501,7 +10300,6 @@ net.post(
 ```
 
 **Arguments:**
-
 - `url` (string, required): The URL to request.
 - `headers` (dict, optional): HTTP headers as key-value pairs.
 - `body` (dict, optional): Data to send as JSON.
@@ -10517,7 +10315,6 @@ Response body as a string, or an error object.
 Sends an HTTP PUT request.
 
 **Usage:**
-
 ```js
 net.put(
   url: "https://api.example.com/data/1",
@@ -10527,7 +10324,6 @@ net.put(
 ```
 
 **Arguments:**
-
 - `url` (string, required): The URL to request.
 - `headers` (dict, optional): HTTP headers as key-value pairs.
 - `body` (dict, optional): Data to send as JSON.
@@ -10543,7 +10339,6 @@ Response body as a string, or an error object.
 Sends an HTTP DELETE request.
 
 **Usage:**
-
 ```js
 net.delete(
   url: "https://api.example.com/data/1",
@@ -10552,7 +10347,6 @@ net.delete(
 ```
 
 **Arguments:**
-
 - `url` (string, required): The URL to request.
 - `headers` (dict, optional): HTTP headers as key-value pairs.
 
@@ -10567,7 +10361,6 @@ Response body as a string, or an error object.
 Sends an HTTP PATCH request.
 
 **Usage:**
-
 ```js
 net.patch(
   url: "https://api.example.com/data/1",
@@ -10577,7 +10370,6 @@ net.patch(
 ```
 
 **Arguments:**
-
 - `url` (string, required): The URL to request.
 - `headers` (dict, optional): HTTP headers as key-value pairs.
 - `body` (dict, optional): Data to send as JSON.
@@ -10623,8 +10415,7 @@ Running this script will output:
 ```
 [NOTE]: This script was last updated on 2024-06-01.
 Script running...
-```
-
+``` 
 ```
 
 ## null.md
@@ -10711,7 +10502,6 @@ print(value1.equals(value3))  // false
 ```
 
 The `null` data type is useful in Vint when you need to represent an uninitialized, missing, or undefined value in your programs. By understanding the `null` data type and its methods, you can create more robust and flexible code.
-
 ```
 
 ## numbers.md
@@ -10747,7 +10537,6 @@ i++ // 3.4
 
 vint supports shorthand assignments with +=, -=, /=, *=, and %=:
 You
-
 ```go
 let i = 2
 
@@ -10771,9 +10560,7 @@ while (i < 0) {
 }
 
 ```
-
 Output:
-
 ```s
 -10
 -9
@@ -11789,7 +11576,6 @@ package MyPackage {
 ```
 
 Attempting to access private members from outside the package will result in an error:
-
 ```js
 import "MyPackage"
 
@@ -11832,7 +11618,6 @@ This is similar to `this` or `self` in other object-oriented languages.
 You use it with dot notation to access other members within the same package.
 
 **Example:**
-
 ```js
 package Greeter {
     let greeting = "Hello"
@@ -11848,7 +11633,6 @@ package Greeter {
     }
 }
 ```
-
 Using `@` is necessary to distinguish between a package-level variable and a local variable with the same name.
 
 ---
@@ -11953,7 +11737,6 @@ print(p) // Outputs: /users/alice/docs/file.txt
 ```
 
 ### `path.basename(path)`
-
 Returns the last portion of a path.
 
 ```js
@@ -11962,7 +11745,6 @@ print(p) // Outputs: file.txt
 ```
 
 ### `path.dirname(path)`
-
 Returns the directory name of a path.
 
 ```js
@@ -11971,7 +11753,6 @@ print(p) // Outputs: /users/alice/docs
 ```
 
 ### `path.ext(path)`
-
 Returns the file extension of the path.
 
 ```js
@@ -11980,7 +11761,6 @@ print(p) // Outputs: .txt
 ```
 
 ### `path.isAbs(path)`
-
 Returns `true` if the path is absolute.
 
 ```js
@@ -11989,7 +11769,374 @@ print(p) // Outputs: true
 
 p2 = path.isAbs("docs/file.txt")
 print(p2) // Outputs: false
+``` 
 ```
+
+## pattern_matching.md
+
+```markdown
+# Pattern Matching in VintLang
+
+VintLang supports powerful pattern matching through the `match` statement, allowing you to destructure data, bind variables, and use guard conditions for complex control flow.
+
+## Basic Match Syntax
+
+The `match` statement uses the `=>` arrow syntax to map patterns to actions:
+
+```js
+let user = {"role": "admin", "name": "Alice"}
+
+match user {
+    {"role": "admin"} => print("Admin user!")
+    {"role": "user"} => print("Regular user")
+    _ => print("Unknown user type")
+}
+// Output: Admin user!
+```
+
+## Dictionary Pattern Matching
+
+### Simple Dictionary Patterns
+
+Match specific key-value pairs in dictionaries:
+
+```js
+let request = {"method": "GET", "path": "/api/users", "status": 200}
+
+match request {
+    {"method": "GET"} => print("GET request")
+    {"method": "POST"} => print("POST request")
+    {"status": 404} => print("Not found")
+    _ => print("Other request")
+}
+// Output: GET request
+```
+
+### Variable Binding in Dictionary Patterns
+
+Extract values from dictionaries and bind them to variables:
+
+```js
+let user = {"name": "Alice", "age": 30, "role": "admin"}
+
+match user {
+    {"name": name, "role": "admin"} => print("Admin:", name)
+    {"name": name, "age": age} => print("User:", name, "Age:", age)
+    _ => print("Unknown format")
+}
+// Output: Admin: Alice
+```
+
+### Nested Dictionary Patterns
+
+Match complex nested structures:
+
+```js
+let config = {
+    "database": {
+        "host": "localhost",
+        "port": 5432
+    },
+    "cache": {
+        "enabled": true
+    }
+}
+
+match config {
+    {"database": {"host": host, "port": port}} => {
+        print("Database at", host + ":" + str(port))
+    }
+    {"cache": {"enabled": enabled}} => {
+        print("Cache enabled:", enabled)
+    }
+    _ => print("Unknown config")
+}
+// Output: Database at localhost:5432
+```
+
+## Array Pattern Matching
+
+### Basic Array Patterns
+
+Match arrays based on their structure:
+
+```js
+let arrays = [[], [1], [1, 2], [1, 2, 3]]
+
+for arr in arrays {
+    match arr {
+        [] => print("Empty array")
+        [single] => print("Single element:", single)
+        [first, second] => print("Two elements:", first, second)
+        _ => print("More than two elements")
+    }
+}
+// Output:
+// Empty array
+// Single element: 1
+// Two elements: 1 2
+// More than two elements
+```
+
+### Variable Binding in Array Patterns
+
+Extract and bind array elements:
+
+```js
+let coordinates = [[0, 0], [3, 4], [1, 2, 3]]
+
+for coord in coordinates {
+    match coord {
+        [x, y] => print("2D coordinate:", x, y)
+        [x, y, z] => print("3D coordinate:", x, y, z)
+        _ => print("Unknown coordinate format")
+    }
+}
+// Output:
+// 2D coordinate: 0 0
+// 2D coordinate: 3 4
+// 3D coordinate: 1 2 3
+```
+
+## Guard Conditions
+
+### Basic Guards
+
+Add conditions to patterns using the `if` keyword:
+
+```js
+let users = [
+    {"name": "Alice", "age": 25, "role": "admin"},
+    {"name": "Bob", "age": 17, "role": "user"},
+    {"name": "Charlie", "age": 35, "role": "user"}
+]
+
+for user in users {
+    match user {
+        {"role": "admin", "name": name} => print("Admin:", name)
+        {"age": age, "name": name} if age < 18 => print("Minor:", name)
+        {"age": age, "name": name} if age >= 18 => print("Adult:", name)
+        _ => print("Unknown user")
+    }
+}
+// Output:
+// Admin: Alice
+// Minor: Bob
+// Adult: Charlie
+```
+
+### Complex Guards
+
+Combine multiple conditions in guards:
+
+```js
+let events = [
+    {"type": "error", "severity": "high", "message": "Database down"},
+    {"type": "warning", "count": 5},
+    {"type": "info", "user": "alice"}
+]
+
+for event in events {
+    match event {
+        {"type": "error", "severity": severity} if severity == "high" => {
+            print("CRITICAL ERROR!")
+        }
+        {"type": "warning", "count": count} if count > 3 => {
+            print("Many warnings:", count)
+        }
+        {"type": type, "user": user} => {
+            print("User event:", type, "for", user)
+        }
+        _ => print("Other event")
+    }
+}
+// Output:
+// CRITICAL ERROR!
+// Many warnings: 5
+// User event: info for alice
+```
+
+## Advanced Pattern Matching
+
+### Multiple Pattern Matching
+
+Combine different pattern types:
+
+```js
+let data = [
+    {"users": [{"name": "Alice"}, {"name": "Bob"}]},
+    {"config": {"debug": true}},
+    [1, 2, 3]
+]
+
+for item in data {
+    match item {
+        {"users": users} => {
+            print("Found", len(users), "users")
+        }
+        {"config": {"debug": debug}} if debug => {
+            print("Debug mode enabled")
+        }
+        [first, second, third] => {
+            print("Array with three numbers:", first, second, third)
+        }
+        _ => print("Unknown data format")
+    }
+}
+// Output:
+// Found 2 users
+// Debug mode enabled
+// Array with three numbers: 1 2 3
+```
+
+### Type-Based Pattern Matching
+
+Use guards to match based on types:
+
+```js
+let mixed = [42, "hello", true, {"key": "value"}, [1, 2, 3]]
+
+for item in mixed {
+    match item {
+        x if type(x) == "INTEGER" && x > 0 => print("Positive integer:", x)
+        x if type(x) == "STRING" => print("String:", x)
+        x if type(x) == "BOOLEAN" => print("Boolean:", x)
+        x if type(x) == "DICT" => print("Dictionary with keys:", keys(x))
+        x if type(x) == "ARRAY" => print("Array with", len(x), "elements")
+        _ => print("Unknown type")
+    }
+}
+// Output:
+// Positive integer: 42
+// String: hello
+// Boolean: true
+// Dictionary with keys: ["key"]
+// Array with 3 elements
+```
+
+## Practical Examples
+
+### HTTP Request Router
+
+```js
+let handleRequest = func(request) {
+    match request {
+        {"method": "GET", "path": "/"} => "Home page"
+        {"method": "GET", "path": path} if path.startsWith("/api/") => {
+            "API endpoint: " + path
+        }
+        {"method": "POST", "path": "/users", "body": body} => {
+            "Creating user: " + body["name"]
+        }
+        {"method": method, "path": path} => {
+            "Unsupported: " + method + " " + path
+        }
+        _ => "Invalid request"
+    }
+}
+```
+
+### Configuration Validation
+
+```js
+let validateConfig = func(config) {
+    match config {
+        {"database": {"host": host, "port": port}} if len(host) > 0 && port > 0 => {
+            print("✓ Valid database config")
+        }
+        {"redis": {"url": url}} if len(url) > 0 => {
+            print("✓ Valid Redis config")
+        }
+        {"logging": {"level": level}} if level in ["debug", "info", "warn", "error"] => {
+            print("✓ Valid logging config")
+        }
+        _ => {
+            print("❌ Invalid configuration")
+        }
+    }
+}
+```
+
+### Data Processing Pipeline
+
+```js
+let processMessage = func(message) {
+    match message {
+        {"type": "user_action", "action": "login", "user": user} => {
+            logUserLogin(user)
+        }
+        {"type": "system_event", "event": event, "severity": severity} if severity >= 3 => {
+            alertSystemEvent(event)
+        }
+        {"type": "data_update", "table": table, "records": records} if len(records) > 0 => {
+            updateDatabase(table, records)
+        }
+        {"type": type} => {
+            print("Unhandled message type:", type)
+        }
+        _ => {
+            print("Invalid message format")
+        }
+    }
+}
+```
+
+## Best Practices
+
+### 1. Order Patterns from Specific to General
+
+```js
+// ✅ Correct - specific patterns first
+match user {
+    {"role": "admin", "active": true} => handleActiveAdmin()
+    {"role": "admin"} => handleInactiveAdmin()
+    {"role": role} => handleUser(role)
+    _ => handleUnknown()
+}
+```
+
+### 2. Use Meaningful Variable Names
+
+```js
+// ❌ Unclear
+match request {
+    {"a": a, "b": b} => process(a, b)
+}
+
+// ✅ Clear
+match request {
+    {"method": method, "body": body} => process(method, body)
+}
+```
+
+### 3. Leverage Guards for Complex Logic
+
+```js
+// ✅ Use guards instead of nested conditions
+match user {
+    {"age": age, "role": role} if age >= 18 && role == "admin" => {
+        grantAdminAccess()
+    }
+    {"age": age} if age < 18 => {
+        requireParentalConsent()
+    }
+    _ => handleRegularUser()
+}
+```
+
+### 4. Handle All Cases
+
+Always include a wildcard pattern (`_`) to handle unexpected cases:
+
+```js
+match data {
+    {"type": "A"} => handleA()
+    {"type": "B"} => handleB()
+    _ => handleUnknown() // Don't forget this!
+}
+```
+
+Pattern matching in VintLang provides a powerful and expressive way to handle complex data structures and control flow, making your code more readable and maintainable.
 
 ```
 
@@ -12014,26 +12161,22 @@ let p = &x  # p is now a pointer to the value of x
 ```
 
 ### Dereferencing a Pointer
-
 ```js
 print(*p)  # prints 42
 ```
 
 ### Printing a Pointer
-
 ```js
 print(p)  # prints something like Pointer(42) or Pointer(addr=0x..., value=42)
 ```
 
 ## Limitations
-
 - **Pointers in VintLang are pointers to values, not to variables.**
   - If you change the value of `x` after creating `p = &x`, the pointer `p` will still point to the original value, not the updated value of `x`.
 - You cannot assign through a pointer (e.g., `*p = 100` is not supported).
 - Pointers to literals (e.g., `let p = &42`) are allowed, but they are just pointers to the value at the time of creation.
 
 ## Example
-
 ```js
 let x = 10
 let p = &x
@@ -12044,11 +12187,9 @@ print(*p)   # Still 10, because p points to the original value
 ```
 
 ## Error Handling
-
 - Dereferencing a non-pointer or a nil pointer will result in a runtime error.
 
 ## Summary
-
 - Use `&` to create pointers to values.
 - Use `*` to dereference pointers.
 - Pointers are useful for referencing values, but do not provide full variable reference semantics.
@@ -12159,7 +12300,6 @@ print(num) // Outputs a random number between 1 and 100
 ```
 
 ### `random.float()`
-
 Returns a random float in the range `[0.0, 1.0)`.
 
 ```js
@@ -12168,7 +12308,6 @@ print(f)
 ```
 
 ### `random.string(length)`
-
 Returns a random string of a given length.
 
 ```js
@@ -12177,15 +12316,13 @@ print(s) // Outputs a random 12-character string
 ```
 
 ### `random.choice(array)`
-
 Returns a random element from an array.
 
 ```js
 items = ["apple", "banana", "cherry"]
 item = random.choice(items)
 print(item) // Outputs one of the fruits
-```
-
+``` 
 ```
 
 ## range.md
@@ -12224,7 +12361,6 @@ The function returns an array of integers.
 ## Examples
 
 ### Basic Usage
-
 ```js
 // Generate numbers from 0 to 4
 for i in range(5) {
@@ -12234,7 +12370,6 @@ for i in range(5) {
 ```
 
 ### Specifying a Start and End
-
 ```js
 // Generate numbers from 1 to 9
 for i in range(1, 10) {
@@ -12244,7 +12379,6 @@ for i in range(1, 10) {
 ```
 
 ### Using a Step Value
-
 ```js
 // Generate even numbers from 0 to 8
 for i in range(0, 10, 2) {
@@ -12254,7 +12388,6 @@ for i in range(0, 10, 2) {
 ```
 
 ### Generating a Reverse Sequence
-
 ```js
 // Generate numbers in reverse order
 for i in range(10, 0, -1) {
@@ -12604,7 +12737,6 @@ Returns the type name of the given value as a string.
   - `value`: Any value
 - **Returns:** String (e.g., "STRING", "ARRAY", "DICT", "NULL", "FUNCTION", etc.)
 - **Example:**
-
   ```js
   reflect.typeOf("hello")        // "STRING"
   reflect.typeOf([1,2,3])        // "ARRAY"
@@ -12621,7 +12753,6 @@ Returns the raw value passed in (identity function).
   - `value`: Any value
 - **Returns:** The same value
 - **Example:**
-
   ```js
   reflect.valueOf(42); // 42
   reflect.valueOf("foo"); // "foo"
@@ -12635,7 +12766,6 @@ Checks if the value is `null`.
   - `value`: Any value
 - **Returns:** Boolean
 - **Example:**
-
   ```js
   reflect.isNil(null); // true
   reflect.isNil(123); // false
@@ -12649,7 +12779,6 @@ Checks if the value is an array.
   - `value`: Any value
 - **Returns:** Boolean
 - **Example:**
-
   ```js
   reflect.isArray([1, 2, 3]); // true
   reflect.isArray("not array"); // false
@@ -12663,7 +12792,6 @@ Checks if the value is a dictionary/object.
   - `value`: Any value
 - **Returns:** Boolean
 - **Example:**
-
   ```js
   reflect.isObject({ a: 1 }); // true
   reflect.isObject([1, 2, 3]); // false
@@ -12677,7 +12805,6 @@ Checks if the value is a function.
   - `value`: Any value
 - **Returns:** Boolean
 - **Example:**
-
   ```js
   let f = func(x) { x * 2 }
   reflect.isFunction(f)          // true
@@ -12712,148 +12839,121 @@ import regex
 ## Functions and Examples
 
 ### 1. Matching a Pattern with `match`
-
 The `match` function checks if a string matches a specified pattern. It returns `true` if the string matches the pattern and `false` if it does not.
 
 **Syntax**:
-
 ```js
 match(pattern, string)
 ```
-
 - `pattern`: The regular expression pattern.
 - `string`: The string to match against the pattern.
 
 **Example**:
-
 ```js
 import regex
 
 result = regex.match("^Hello", "Hello World")
 print(result)  // Expected output: true
 ```
-
 In this case, the string starts with `"Hello"`, so it matches the pattern.
 
 ---
 
 ### 2. Using `match` to Check Non-Matches
-
 You can use `match` to check if a string does *not* match a given pattern. If the pattern is not found at the beginning of the string, it will return `false`.
 
 **Example**:
-
 ```js
 import regex
 
 result = regex.match("^World", "Hello World")
 print(result)  // Expected output: false
 ```
-
 Since the string does not start with `"World"`, the result is `false`.
 
 ---
 
 ### 3. Replacing Part of a String with `replaceString`
-
 The `replaceString` function replaces parts of a string that match a pattern with a new value.
 
 **Syntax**:
-
 ```js
 replaceString(pattern, replacement, string)
 ```
-
 - `pattern`: The regular expression pattern.
 - `replacement`: The string to replace the matched part with.
 - `string`: The input string.
 
 **Example**:
-
 ```js
 import regex
 
 newString = regex.replaceString("World", "VintLang", "Hello World")
 print(newString)  // Expected output: "Hello VintLang"
 ```
-
 In this case, `"World"` is replaced by `"VintLang"`, resulting in `"Hello VintLang"`.
 
 ---
 
 ### 4. Splitting a String with `splitString`
-
 The `splitString` function splits a string into a list of substrings based on a regular expression pattern.
 
 **Syntax**:
-
 ```js
 splitString(pattern, string)
 ```
-
 - `pattern`: The regular expression pattern used as a delimiter.
 - `string`: The string to be split.
 
 **Example**:
-
 ```js
 import regex
 
 words = regex.splitString("\\s+", "Hello World VintLang")
 print(words)  // Expected output: ["Hello", "World", "VintLang"]
 ```
-
 Here, `\\s+` matches one or more whitespace characters, so the string is split into words.
 
 ---
 
 ### 5. Splitting a String by a Comma
-
 You can also split a string by a specific delimiter, such as a comma, using `splitString`.
 
 **Example**:
-
 ```js
 import regex
 
 csv = regex.splitString(",", "apple,banana,orange")
 print(csv)  // Expected output: ["apple", "banana", "orange"]
 ```
-
 The string `"apple,banana,orange"` is split at each comma.
 
 ---
 
 ### 6. Matching a Complex Pattern
-
 You can match more complex patterns, such as an email address, using `match` with a regex pattern.
 
 **Example**:
-
 ```js
 import regex
 
 emailMatch = regex.match("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$", "test@example.com")
 print(emailMatch)  // Expected output: true
 ```
-
 This pattern matches valid email addresses, so `"test@example.com"` matches successfully.
 
 ---
 
 ### 7. Replacing Digits in a String
-
 You can use `replaceString` to replace parts of a string that match a pattern, such as replacing digits with asterisks.
 
 **Example**:
-
 ```js
 import regex
 
 maskedString = regex.replaceString("\\d", "*", "My phone number is 123456789")
 print(maskedString)  // Expected output: "My phone number is *********"
 ```
-
 Here, `\\d` matches any digit, so the digits in the phone number are replaced with asterisks.
 
 ---
@@ -12869,7 +12969,6 @@ Here, `\\d` matches any digit, so the digits in the phone number are replaced wi
 ---
 
 The `regex` module is extremely useful for text manipulation, pattern matching, and string processing tasks in Vint. Whether you need to validate input, split strings, or replace parts of a string, the regex module provides powerful tools to handle these tasks efficiently.
-
 ```
 
 ## schedule.md
@@ -12910,7 +13009,6 @@ schedule.stopTicker(ticker)
 Stops a running ticker.
 
 **Parameters:**
-
 - `tickerObj`: The ticker object returned by `ticker()`
 
 **Returns:** Boolean indicating if the ticker was successfully stopped
@@ -12920,14 +13018,12 @@ Stops a running ticker.
 Schedules a function to execute at specific times using cron-like expressions.
 
 **Parameters:**
-
 - `cronExpr` (string): A cron expression in the format "second minute hour day month weekday"
 - `callback` (function): The function to execute when the schedule triggers
 
 **Returns:** A schedule object that can be stopped with `stopSchedule()`
 
 **Cron Expression Format:**
-
 ```
 second minute hour day month weekday
   |      |     |    |    |      |
@@ -12942,7 +13038,6 @@ second minute hour day month weekday
 Use `*` for wildcards (any value).
 
 **Examples:**
-
 ```javascript
 import schedule
 
@@ -12972,7 +13067,6 @@ schedule.schedule("0 0 17 * * 5", func() {
 Stops a running scheduled task.
 
 **Parameters:**
-
 - `scheduleObj`: The schedule object returned by `schedule()`
 
 **Returns:** Boolean indicating if the schedule was successfully stopped
@@ -12986,7 +13080,6 @@ The module provides convenient helper functions for common scheduling patterns:
 Executes a callback every second. Equivalent to `ticker(1, callback)`.
 
 **Example:**
-
 ```javascript
 let job = schedule.everySecond(func() {
     print("Ping!")
@@ -12998,7 +13091,6 @@ let job = schedule.everySecond(func() {
 Executes a callback every minute at second 0. Equivalent to `schedule("0 * * * * *", callback)`.
 
 **Example:**
-
 ```javascript
 let job = schedule.everyMinute(func() {
     print("Another minute passed")
@@ -13010,7 +13102,6 @@ let job = schedule.everyMinute(func() {
 Executes a callback every hour at minute 0, second 0. Equivalent to `schedule("0 0 * * * *", callback)`.
 
 **Example:**
-
 ```javascript
 let job = schedule.everyHour(func() {
     print("It's a new hour!")
@@ -13022,13 +13113,11 @@ let job = schedule.everyHour(func() {
 Executes a callback daily at the specified time.
 
 **Parameters:**
-
 - `hour` (integer): Hour of the day (0-23)
 - `minute` (integer): Minute of the hour (0-59)
 - `callback` (function): The function to execute
 
 **Example:**
-
 ```javascript
 // Daily reminder at 2:30 PM
 let job = schedule.daily(14, 30, func() {
@@ -13095,8 +13184,7 @@ The module provides comprehensive error messages for common mistakes:
 - Malformed cron expressions
 - Negative intervals for tickers
 
-All errors include usage examples to help with correct implementation.
-
+All errors include usage examples to help with correct implementation. 
 ```
 
 ## shell.md
@@ -13121,11 +13209,9 @@ import shell
 ## Functions and Examples
 
 ### 1. Run a Shell Command (`run`)
-
 The `run` function allows you to execute a shell command and capture its output.
 
 **Syntax**:
-
 ```js
 run(command)
 ```
@@ -13133,7 +13219,6 @@ run(command)
 - `command` (string): The shell command to execute (e.g., `echo Hello` or `ls`).
 
 **Example**:
-
 ```js
 import shell
 
@@ -13147,11 +13232,9 @@ In the example, the `echo` command prints the string `Hello, Shell!` to the term
 ---
 
 ### 2. Check if a Command Exists (`exists`)
-
 The `exists` function checks whether a given command is available on the system.
 
 **Syntax**:
-
 ```js
 exists(command)
 ```
@@ -13159,7 +13242,6 @@ exists(command)
 - `command` (string): The name of the command to check (e.g., `ls`, `python`, `echo`).
 
 **Example**:
-
 ```js
 import shell
 
@@ -13181,11 +13263,9 @@ In the example, `exists("ls")` checks if the `ls` command is available, returnin
 ---
 
 ### 3. Running Commands with Parameters
-
 You can also pass arguments to shell commands within the `run` function.
 
 **Example**:
-
 ```js
 import shell
 
@@ -13208,7 +13288,6 @@ This runs the `ls` command with the `-l` flag to list files and directories with
 ---
 
 The Shell module is a powerful tool for integrating system-level shell commands directly within your Vint programs. It is especially useful for automation tasks, system monitoring, or running external scripts.
-
 ```
 
 ## sqlite.md
@@ -13238,13 +13317,13 @@ sqlite.close(db)
 
 You can execute `INSERT`, `UPDATE`, `DELETE`, and other queries using `sqlite.execute()`.
 
-### Insert Data
+### Insert Data:
 
 ```js
 sqlite.execute(db, "INSERT INTO users (name, age) VALUES (?, ?)", "Alice", 25)
 ```
 
-### Update Data
+### Update Data:
 
 ```js
 sqlite.execute(db, "UPDATE users SET age = ? WHERE name = ?", 26, "Alice")
@@ -13359,7 +13438,7 @@ repeated *= 2
 You can loop through each character of a string using the `for` keyword:
 
 ```js
-let name = "Avicenna"
+let name = "Tachera"
 
 for char in name {
     print(char)
@@ -13756,7 +13835,6 @@ print(trimmedName)  // Output: "achera Sasi"
 ```
 
 Understanding how to manipulate and work with strings in Vint allows you to efficiently handle text data in your programs.
-
 ```
 
 ## success.md
@@ -13786,8 +13864,7 @@ Running this script will output:
 ```
 [SUCCESS]: Backup completed successfully!
 All done.
-```
-
+``` 
 ```
 
 ## switch.md
@@ -13804,16 +13881,17 @@ A switch statement starts with the `switch` keyword, followed by the expression 
 Each case uses the keyword `case`, followed by a value to check. Multiple values in a case can be separated by commas `,`. The block of code to execute if the condition is met is placed within curly braces `{}`.
 
 ### Example:
+
 ```js
 let a = 2
 
 switch (a) {
- case 3 {
-  print("a is three")
- }
- case 2 {
-  print("a is two")
- }
+	case 3 {
+		print("a is three")
+	}
+	case 2 {
+		print("a is two")
+	}
 }
 ```
 
@@ -13821,16 +13899,16 @@ switch (a) {
 
 A single `case` can handle multiple possible values. These values are separated by commas `,`.
 
-### Example
+### Example:
 
 ```js
 switch (a) {
- case 1, 2, 3 {
-  print("a is one, two, or three")
- }
- case 4 {
-  print("a is four")
- }
+	case 1, 2, 3 {
+		print("a is one, two, or three")
+	}
+	case 4 {
+		print("a is four")
+	}
 }
 ```
 
@@ -13838,21 +13916,21 @@ switch (a) {
 
 The `default` statement is executed when none of the specified cases match. It is represented by the `default` keyword.
 
-### Example
+### Example:
 
 ```js
 let z = 20
 
 switch(z) {
- case 10 {
-  print("ten")
- }
- case 30 {
-  print("thirty")
- }
- default {
-  print("twenty")
- }
+	case 10 {
+		print("ten")
+	}
+	case 30 {
+		print("thirty")
+	}
+	default {
+		print("twenty")
+	}
 }
 ```
 
@@ -13860,26 +13938,26 @@ switch(z) {
 
 Switch statements can be nested to handle more complex conditions.
 
-### Example
+### Example:
 
 ```js
 let x = 1
 let y = 2
 
 switch (x) {
- case 1 {
-  switch (y) {
-   case 2 {
-    print("x is one and y is two")
-   }
-   case 3 {
-    print("x is one and y is three")
-   }
-  }
- }
- case 2 {
-  print("x is two")
- }
+	case 1 {
+		switch (y) {
+			case 2 {
+				print("x is one and y is two")
+			}
+			case 3 {
+				print("x is one and y is three")
+			}
+		}
+	}
+	case 2 {
+		print("x is two")
+	}
 }
 ```
 
@@ -13887,26 +13965,117 @@ switch (x) {
 
 Cases can also be used with logical conditions.
 
-### Example
+### Example:
 
 ```js
 let isTrue = true
 let isFalse = false
 
 switch (isTrue) {
- case true {
-  print("isTrue is true")
- }
- case isFalse {
-  print("isFalse is true")
- }
- default {
-  print("Neither condition is true")
- }
+	case true {
+		print("isTrue is true")
+	}
+	case isFalse {
+		print("isFalse is true")
+	}
+	default {
+		print("Neither condition is true")
+	}
 }
 ```
 
-By mastering switch statements in **Vint**, you can write clean, structured, and efficient code that efficiently handles complex branching logic.
+## Guard Conditions (Advanced)
+
+Switch statements now support **guard conditions** using the `if` keyword. This allows you to bind the switch value to a variable and add additional conditions.
+
+### Variable Binding with Guards
+
+You can bind the switch value to a variable and use it in guard conditions:
+
+```js
+let number = 15
+
+switch (number) {
+    case x if x > 0 && x < 10 {
+        print("Small positive number:", x)
+    }
+    case x if x >= 10 && x < 100 {
+        print("Medium positive number:", x)
+    }
+    case x if x >= 100 {
+        print("Large positive number:", x)
+    }
+    case x if x < 0 {
+        print("Negative number:", x)
+    }
+    case 0 {
+        print("Zero")
+    }
+    default {
+        print("Unknown number")
+    }
+}
+// Output: Medium positive number: 15
+```
+
+### Type-Based Switch Cases
+
+Guard conditions enable type checking in switch statements:
+
+```js
+let value = "hello world"
+
+switch (value) {
+    case x if type(x) == "STRING" && len(x) > 5 {
+        print("Long string:", x)
+    }
+    case x if type(x) == "STRING" {
+        print("Short string:", x)
+    }
+    case x if type(x) == "INTEGER" && x > 0 {
+        print("Positive integer:", x)
+    }
+    case x if type(x) == "BOOLEAN" {
+        print("Boolean value:", x)
+    }
+    default {
+        print("Other type:", type(value))
+    }
+}
+// Output: Long string: hello world
+```
+
+### Combining Regular Cases with Guard Cases
+
+You can mix regular value-based cases with guard condition cases:
+
+```js
+let input = 42
+
+switch (input) {
+    case 0 {
+        print("Exactly zero")
+    }
+    case 1 {
+        print("Exactly one")
+    }
+    case x if x > 1 && x <= 10 {
+        print("Small number:", x)
+    }
+    case x if x > 10 && x <= 100 {
+        print("Medium number:", x)
+    }
+    case x if x > 100 {
+        print("Large number:", x)
+    }
+    default {
+        print("Negative or unknown")
+    }
+}
+// Output: Medium number: 42
+```
+
+By mastering switch statements in **Vint**, you can write clean, structured, and efficient code that efficiently handles complex branching logic with powerful guard conditions and variable binding.
 
 ```
 
@@ -13932,11 +14101,9 @@ import sysinfo
 ## Functions and Examples
 
 ### 1. Get the Operating System (`os`)
-
 The `os` function returns the name of the operating system on which the Vint program is running.
 
 **Syntax**:
-
 ```js
 os()
 ```
@@ -13944,7 +14111,6 @@ os()
 - Returns a string representing the operating system (e.g., `"Linux"`, `"Windows"`, `"macOS"`).
 
 **Example**:
-
 ```js
 import sysinfo
 
@@ -13956,11 +14122,9 @@ print("Operating System:", os_name)
 ---
 
 ### 2. Get the System Architecture (`arch`)
-
 The `arch` function returns the architecture of the system (e.g., 32-bit or 64-bit).
 
 **Syntax**:
-
 ```js
 arch()
 ```
@@ -13968,7 +14132,6 @@ arch()
 - Returns a string representing the architecture (e.g., `"x86_64"` for 64-bit or `"i386"` for 32-bit).
 
 **Example**:
-
 ```js
 import sysinfo
 
@@ -13980,11 +14143,9 @@ print("System Architecture:", architecture)
 ---
 
 ### 3. Example Combining `os` and `arch`
-
 You can combine both the `os()` and `arch()` functions to display comprehensive system information.
 
 **Example**:
-
 ```js
 import sysinfo
 
@@ -14000,11 +14161,9 @@ This will print out both the operating system and the architecture in a single o
 ---
 
 ### 4. Get Memory Information (`memInfo`)
-
 The `memInfo` function returns detailed information about system memory usage.
 
 **Syntax**:
-
 ```js
 memInfo()
 ```
@@ -14012,7 +14171,6 @@ memInfo()
 - Returns a dictionary containing memory statistics in GB and usage percentage.
 
 **Example**:
-
 ```js
 import sysinfo
 
@@ -14033,11 +14191,9 @@ print("Usage Percentage:", memory["percent"] + "%")
 ---
 
 ### 5. Get CPU Information (`cpuInfo`)
-
 The `cpuInfo` function returns detailed information about the CPU.
 
 **Syntax**:
-
 ```js
 cpuInfo()
 ```
@@ -14045,7 +14201,6 @@ cpuInfo()
 - Returns a dictionary containing CPU model, cores, frequency, and current usage.
 
 **Example**:
-
 ```js
 import sysinfo
 
@@ -14064,11 +14219,9 @@ print("CPU Usage:", cpu["usage"] + "%")
 ---
 
 ### 6. Get Disk Information (`diskInfo`)
-
 The `diskInfo` function returns information about disk usage for the root filesystem.
 
 **Syntax**:
-
 ```js
 diskInfo()
 ```
@@ -14076,7 +14229,6 @@ diskInfo()
 - Returns a dictionary containing disk space information in GB and usage percentage.
 
 **Example**:
-
 ```js
 import sysinfo
 
@@ -14095,11 +14247,9 @@ print("Disk Usage:", disk["percent"] + "%")
 ---
 
 ### 7. Get Network Information (`netInfo`)
-
 The `netInfo` function returns information about all network interfaces with addresses.
 
 **Syntax**:
-
 ```js
 netInfo()
 ```
@@ -14107,7 +14257,6 @@ netInfo()
 - Returns an array of dictionaries, each containing interface name and addresses.
 
 **Example**:
-
 ```js
 import sysinfo
 
@@ -14131,11 +14280,9 @@ for i = 0; i < len(interfaces); i = i + 1 {
 ---
 
 ### 8. Comprehensive Example
-
 Here's an example that demonstrates all available sysinfo functions:
 
 **Example**:
-
 ```js
 import sysinfo
 
@@ -14178,7 +14325,6 @@ print("Network interfaces:", len(net))
 ---
 
 The `sysinfo` module is useful for comprehensive system monitoring and diagnostics in your Vint programs. It provides detailed information about memory, CPU, disk, and network resources, making it perfect for system administration tools, monitoring applications, and resource-aware programs.
-
 ```
 
 ## term.md
@@ -14517,7 +14663,6 @@ import time
 ### `now()`
 
 To get the current time, use the `time.now()` method. This will return the current time as a `time` object:
-
 ```js
 import time
 
@@ -14570,13 +14715,11 @@ It will return a `time` object with the specified time added.
 ## Example Usage
 
 ### Print the current timestamp
-
 ```js
 print(time.now())
 ```
 
 ### Function to greet a user based on the time of the day
-
 ```js
 let greet = func(name) {
     let current_time = time.now()  // Get the current time
@@ -14590,7 +14733,6 @@ let greet = func(name) {
 ```
 
 ### Time-related operations
-
 ```js
 year = 2024
 print("Is", year, "Leap year:", time.isLeapYear(year))
@@ -14830,7 +14972,6 @@ let create_backup_filename = func(base_name) {
 let filename = create_backup_filename("database")
 print(filename)  // database_20240811_1530.backup
 ```
-
 ```
 
 ## todo.md
@@ -14862,8 +15003,7 @@ Running this script will output:
 ```
 TODO: "Implement user authentication"
 10
-```
-
+``` 
 ```
 
 ## tooling.md
@@ -14883,7 +15023,6 @@ Automatically formats your Vint code for consistency.
 ```sh
 vint fmt <file.vint>
 ```
-
 This will overwrite the file with a pretty-printed version.
 
 ---
@@ -14893,7 +15032,6 @@ This will overwrite the file with a pretty-printed version.
 A linter will analyze your code for common mistakes and style issues.
 
 **Planned Usage:**
-
 ```sh
 vint lint <file.vint>
 ```
@@ -14905,12 +15043,10 @@ vint lint <file.vint>
 Quickly create a new Vint project with the recommended structure and sample files.
 
 **Usage:**
-
 ```sh
 vint init <project-name>
 vint new <project-name>
 ```
-
 This creates a new directory with a `main.vint`, `greetings_module.vint`, and a `vintconfig.json`.
 
 ---
@@ -14920,15 +15056,13 @@ This creates a new directory with a `main.vint`, `greetings_module.vint`, and a 
 Install and manage Vint packages (currently supports installing `vintpm`).
 
 **Usage:**
-
 ```sh
 vint get <package>
 ```
 
 ---
 
-For more information, run `vint help` or see the README.
-
+For more information, run `vint help` or see the README. 
 ```
 
 ## url.md
@@ -15084,7 +15218,6 @@ print(uuid.generate())
 Each time `uuid.generate()` is called, it generates a new, unique UUID value. This is useful for ensuring that each identifier is distinct across systems.
 
 The generated UUID can be used for various purposes such as tracking sessions, unique IDs for objects, or database keys.
-
 ```
 
 ## vintChart.md
@@ -15241,16 +15374,13 @@ When the interpreter encounters a `warn` statement, it will print a formatted wa
 warn "Configuration file not found, using default settings."
 println("Program is running with default configuration.")
 ```
-
 Running this will output:
-
 ```
 
 [WARN]: Configuration file not found, using default settings.
 
 Program is running with default configuration.
-```
-
+``` 
 ```
 
 ## while.md
@@ -15273,8 +15403,7 @@ while (i <= 5) {
 }
 ```
 
-### Output
-
+### Output:
 ```js
 1
 2
@@ -15302,8 +15431,7 @@ while (i < 5) {
 }
 ```
 
-### Output
-
+### Output:
 ```js
 1
 2
@@ -15327,8 +15455,7 @@ while (i < 5) {
 }
 ```
 
-### Output
-
+### Output:
 ```js
 1
 2
@@ -15371,7 +15498,6 @@ repeat n {
 ```
 
 The variable `i` is always available in the scope of the repeat block.
-
 ```
 
 ## xml.md
@@ -15395,17 +15521,14 @@ import xml
 ## Functions and Examples
 
 ### 1. Validate XML (`validate`)
-
 The `validate` function checks if a given XML string is well-formed and valid.
 
 **Syntax**:
-
 ```js
 validate(xmlString)
 ```
 
 **Example**:
-
 ```js
 import xml
 
@@ -15427,17 +15550,14 @@ print("Invalid XML:", is_invalid)
 ---
 
 ### 2. Extract Value from XML Tag (`extract`)
-
 The `extract` function extracts the value from a specific XML tag.
 
 **Syntax**:
-
 ```js
 extract(xmlString, tagName)
 ```
 
 **Example**:
-
 ```js
 import xml
 
@@ -15457,17 +15577,14 @@ print("Email:", email)
 ---
 
 ### 3. Escape XML Characters (`escape`)
-
 The `escape` function escapes special XML characters to make text safe for XML content.
 
 **Syntax**:
-
 ```js
 escape(text)
 ```
 
 **Example**:
-
 ```js
 import xml
 
@@ -15483,17 +15600,14 @@ print("Escaped: ", safe_text)
 ---
 
 ### 4. Unescape XML Entities (`unescape`)
-
 The `unescape` function converts XML entities back to their original characters.
 
 **Syntax**:
-
 ```js
 unescape(escapedText)
 ```
 
 **Example**:
-
 ```js
 import xml
 
@@ -15568,7 +15682,6 @@ if xml.validate(xml_string) {
 | `unescape`  | Converts XML entities back to original characters  | String      |
 
 The XML module provides essential functionality for working with XML data safely and efficiently in VintLang applications.
-
 ```
 
 ## yaml.md
