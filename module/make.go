@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"os"
 	"os/exec"
+	"runtime"
 
 	"github.com/vintlang/vintlang/object"
 )
@@ -11,97 +12,18 @@ import (
 var MakeFunctions = map[string]object.ModuleFunction{}
 
 func init() {
-	MakeFunctions["task"] = makeTask
-	MakeFunctions["run"] = makeRun
 	MakeFunctions["env"] = makeEnv
 	MakeFunctions["exec"] = makeExec
 	MakeFunctions["check"] = makeCheck
 	MakeFunctions["echo"] = makeEcho
 }
 
-// task creates a task definition that can be executed
-// Usage: make.task("build", func() { ... })
-func makeTask(args []object.VintObject, defs map[string]object.VintObject) object.VintObject {
-	if len(args) != 2 || args[0].Type() != object.STRING_OBJ {
-		return ErrorMessage(
-			"make",
-			"task",
-			"2 arguments (name: string, function: function)",
-			formatArgs(args),
-			`make.task("build", func() { print("Building...") })`,
-		)
+// getShell returns the appropriate shell for the current OS
+func getShell() (string, string) {
+	if runtime.GOOS == "windows" {
+		return "cmd", "/C"
 	}
-
-	// Return a dict representing the task
-	taskName := args[0].(*object.String).Value
-	taskFn := args[1]
-
-	result := &object.Dict{Pairs: make(map[object.HashKey]object.DictPair)}
-	nameKey := &object.String{Value: "name"}
-	fnKey := &object.String{Value: "fn"}
-
-	result.Pairs[nameKey.HashKey()] = object.DictPair{
-		Key:   nameKey,
-		Value: &object.String{Value: taskName},
-	}
-	result.Pairs[fnKey.HashKey()] = object.DictPair{
-		Key:   fnKey,
-		Value: taskFn,
-	}
-
-	return result
-}
-
-// run executes a task by name
-// Usage: make.run("build")
-func makeRun(args []object.VintObject, defs map[string]object.VintObject) object.VintObject {
-	if len(args) != 1 {
-		return ErrorMessage(
-			"make",
-			"run",
-			"1 argument (task: dict or string)",
-			formatArgs(args),
-			`make.run(buildTask) or make.run("command")`,
-		)
-	}
-
-	arg := args[0]
-
-	// If it's a dict (task object), execute the function
-	if arg.Type() == object.DICT_OBJ {
-		dict := arg.(*object.Dict)
-		fnKey := &object.String{Value: "fn"}
-		fnPair, ok := dict.Pairs[fnKey.HashKey()]
-		if !ok {
-			return &object.Error{Message: "Task dict missing 'fn' key"}
-		}
-
-		// Execute the function
-		if _, ok := fnPair.Value.(*object.Function); ok {
-			// Note: In real implementation, this would need access to evaluator
-			// For now, return success
-			return &object.Boolean{Value: true}
-		}
-		return &object.Error{Message: "Task 'fn' value is not a function"}
-	}
-
-	// If it's a string, execute it as a command
-	if arg.Type() == object.STRING_OBJ {
-		cmd := arg.(*object.String).Value
-		output, err := exec.Command("sh", "-c", cmd).CombinedOutput()
-		if err != nil {
-			return &object.Error{Message: fmt.Sprintf("Command failed: %s\nOutput: %s", err.Error(), string(output))}
-		}
-		return &object.String{Value: string(output)}
-	}
-
-	return ErrorMessage(
-		"make",
-		"run",
-		"1 argument (task: dict or string)",
-		formatArgs(args),
-		`make.run(buildTask) or make.run("go build")`,
-	)
+	return "sh", "-c"
 }
 
 // env sets an environment variable for the current process
@@ -142,7 +64,8 @@ func makeExec(args []object.VintObject, defs map[string]object.VintObject) objec
 	}
 
 	cmd := args[0].(*object.String).Value
-	output, err := exec.Command("sh", "-c", cmd).CombinedOutput()
+	shell, flag := getShell()
+	output, err := exec.Command(shell, flag, cmd).CombinedOutput()
 	
 	if err != nil {
 		// Return both output and error information

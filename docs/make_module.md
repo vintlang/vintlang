@@ -89,6 +89,7 @@ Here's a complete example of a build system using the `make` module:
 // build.vint - A programmable build system
 import make
 import os
+import cli
 
 const VERSION = "1.0.0"
 const LDFLAGS = "-s -w"
@@ -142,14 +143,14 @@ let tasks = {
 }
 
 // Main execution
-let args = os.args()
-if (len(args) < 2) {
+let args = cli.getArgs()
+if (len(args) < 1) {
     print("Usage: vint build.vint <task>")
     print("Available tasks:", tasks.keys())
     os.exit(1)
 }
 
-let taskName = args[1]
+let taskName = args[0]
 if (tasks[taskName] != null) {
     tasks[taskName]()
 } else {
