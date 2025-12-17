@@ -1,0 +1,249 @@
+// VintFile - A programmable build system to replace Makefile
+// Usage: vint vintfile.vint <task>
+// Example: vint vintfile.vint build
+// Example: vint vintfile.vint build_linux
+
+import make
+import os
+import json
+
+// Configuration
+const VERSION = "0.2.1"
+const LDFLAGS = "-s -w"
+
+// Helper function to print colored messages
+let echo = func(msg) {
+    print("🔨 " + msg)
+}
+
+// Task definitions using closure pattern
+let tasks = {
+    "build": func() {
+        echo("Building all platforms...")
+        os.run("go run counter.go > toolkit/count.txt")
+        tasks["build_android"]()
+        tasks["build_linux"]()
+        tasks["build_windows"]()
+        tasks["build_mac"]()
+        echo("✅ All builds complete!")
+    },
+
+    "build_linux": func() {
+        echo("Building Linux binary...")
+        make.env("GOOS", "linux")
+        make.env("GOARCH", "amd64")
+        let result = make.exec("go build -ldflags=\"" + LDFLAGS + "\" -o vint")
+        if (result.type != "error") {
+            echo("Zipping build...")
+            make.exec("tar -zcvf binaries/vintLang_linux_amd64.tar.gz vint")
+            echo("Cleaning up...")
+            make.exec("rm vint")
+            echo("✅ Linux build complete!")
+        } else {
+            print("❌ Linux build failed: " + result)
+        }
+    },
+
+    "build_windows": func() {
+        echo("Building Windows executable...")
+        make.env("GOOS", "windows")
+        make.env("GOARCH", "amd64")
+        let result = make.exec("go build -ldflags=\"" + LDFLAGS + "\" -o vint_windows_amd64.exe")
+        if (result.type != "error") {
+            echo("Zipping build...")
+            make.exec("zip binaries/vintLang_windows_amd64.zip vint_windows_amd64.exe")
+            echo("Cleaning up...")
+            make.exec("rm vint_windows_amd64.exe")
+            echo("✅ Windows build complete!")
+        } else {
+            print("❌ Windows build failed: " + result)
+        }
+    },
+
+    "build_mac": func() {
+        echo("Building macOS binary...")
+        make.env("GOOS", "darwin")
+        make.env("GOARCH", "amd64")
+        let result = make.exec("go build -ldflags=\"" + LDFLAGS + "\" -o vint")
+        if (result.type != "error") {
+            echo("Zipping build...")
+            make.exec("tar -zcvf binaries/vintLang_mac_amd64.tar.gz vint")
+            echo("Cleaning up...")
+            make.exec("rm vint")
+            echo("✅ macOS build complete!")
+        } else {
+            print("❌ macOS build failed: " + result)
+        }
+    },
+
+    "build_android": func() {
+        echo("Building Android binary...")
+        make.env("GOOS", "android")
+        make.env("GOARCH", "arm64")
+        let result = make.exec("go build -ldflags=\"" + LDFLAGS + "\" -o vint")
+        if (result.type != "error") {
+            echo("Zipping build...")
+            make.exec("tar -zcvf binaries/vintLang_android_arm64.tar.gz vint")
+            echo("Cleaning up...")
+            make.exec("rm vint")
+            echo("✅ Android build complete!")
+        } else {
+            print("❌ Android build failed: " + result)
+        }
+    },
+
+    "build_upx": func() {
+        echo("Building with UPX compression...")
+        
+        // Check if UPX is installed
+        if (!make.check("upx")) {
+            print("❌ UPX not found. Please install UPX:")
+            print("  macOS: brew install upx")
+            print("  Linux: sudo apt-get install upx")
+            print("  Windows: Download from https://github.com/upx/upx/releases")
+            os.exit(1)
+        }
+        
+        tasks["build_linux_upx"]()
+        tasks["build_windows_upx"]()
+        tasks["build_mac_upx"]()
+        tasks["build_android_upx"]()
+        echo("✅ All UPX builds complete!")
+    },
+
+    "build_linux_upx": func() {
+        echo("Building Linux binary with UPX...")
+        make.env("GOOS", "linux")
+        make.env("GOARCH", "amd64")
+        make.exec("go build -ldflags=\"" + LDFLAGS + "\" -o vint")
+        echo("Compressing with UPX...")
+        make.exec("upx --best vint")
+        echo("Zipping build...")
+        make.exec("tar -zcvf binaries/vintLang_linux_amd64_upx.tar.gz vint")
+        echo("Cleaning up...")
+        make.exec("rm vint")
+        echo("✅ Linux UPX build complete!")
+    },
+
+    "build_windows_upx": func() {
+        echo("Building Windows executable with UPX...")
+        make.env("GOOS", "windows")
+        make.env("GOARCH", "amd64")
+        make.exec("go build -ldflags=\"" + LDFLAGS + "\" -o vint_windows_amd64.exe")
+        echo("Compressing with UPX...")
+        make.exec("upx --best vint_windows_amd64.exe")
+        echo("Zipping build...")
+        make.exec("zip binaries/vintLang_windows_amd64_upx.zip vint_windows_amd64.exe")
+        echo("Cleaning up...")
+        make.exec("rm vint_windows_amd64.exe")
+        echo("✅ Windows UPX build complete!")
+    },
+
+    "build_mac_upx": func() {
+        echo("Building macOS binary with UPX...")
+        make.env("GOOS", "darwin")
+        make.env("GOARCH", "amd64")
+        make.exec("go build -ldflags=\"" + LDFLAGS + "\" -o vint")
+        echo("Compressing with UPX...")
+        make.exec("upx --best vint")
+        echo("Zipping build...")
+        make.exec("tar -zcvf binaries/vintLang_mac_amd64_upx.tar.gz vint")
+        echo("Cleaning up...")
+        make.exec("rm vint")
+        echo("✅ macOS UPX build complete!")
+    },
+
+    "build_android_upx": func() {
+        echo("Building Android binary with UPX...")
+        make.env("GOOS", "android")
+        make.env("GOARCH", "arm64")
+        make.exec("go build -ldflags=\"" + LDFLAGS + "\" -o vint")
+        echo("Compressing with UPX...")
+        make.exec("upx --best vint")
+        echo("Zipping build...")
+        make.exec("tar -zcvf binaries/vintLang_android_arm64_upx.tar.gz vint")
+        echo("Cleaning up...")
+        make.exec("rm vint")
+        echo("✅ Android UPX build complete!")
+    },
+
+    "build_test": func() {
+        echo("Building test binary...")
+        let result = make.exec("go build -ldflags=\"" + LDFLAGS + "\" -o vint")
+        if (result.type != "error") {
+            echo("✅ Test build complete!")
+        } else {
+            print("❌ Test build failed: " + result)
+        }
+    },
+
+    "dependencies": func() {
+        echo("Checking dependencies...")
+        make.exec("go mod tidy")
+        echo("✅ Dependencies checked!")
+    },
+
+    "test": func() {
+        echo("Running tests...")
+        print("\nTesting Lexer...")
+        make.exec("./gotest --format testname ./lexer/")
+        print("\nTesting Parser...")
+        make.exec("./gotest --format testname ./parser/")
+        print("\nTesting AST...")
+        make.exec("./gotest --format testname ./ast/")
+        print("\nTesting Object...")
+        make.exec("./gotest --format testname ./object/")
+        print("\nTesting Evaluator...")
+        make.exec("./gotest --format testname ./evaluator/")
+        echo("✅ All tests complete!")
+    },
+
+    "clean": func() {
+        echo("Cleaning...")
+        make.exec("go clean")
+        echo("✅ Clean complete!")
+    },
+
+    "help": func() {
+        print("🔨 VintFile - Programmable Build System")
+        print("\nAvailable tasks:")
+        print("  build            - Build all platforms")
+        print("  build_linux      - Build for Linux")
+        print("  build_windows    - Build for Windows")
+        print("  build_mac        - Build for macOS")
+        print("  build_android    - Build for Android")
+        print("  build_upx        - Build all with UPX compression")
+        print("  build_linux_upx  - Build Linux with UPX")
+        print("  build_windows_upx- Build Windows with UPX")
+        print("  build_mac_upx    - Build macOS with UPX")
+        print("  build_android_upx- Build Android with UPX")
+        print("  build_test       - Build test binary")
+        print("  dependencies     - Check and tidy dependencies")
+        print("  test             - Run all tests")
+        print("  clean            - Clean build artifacts")
+        print("  help             - Show this help")
+        print("\nUsage: vint vintfile.vint <task>")
+    }
+}
+
+// Main execution logic
+let args = os.args()
+
+if (len(args) < 2) {
+    print("❌ No task specified!")
+    tasks["help"]()
+    os.exit(1)
+}
+
+let taskName = args[1]
+
+if (tasks[taskName] == null) {
+    print("❌ Task '" + taskName + "' not found!")
+    tasks["help"]()
+    os.exit(1)
+}
+
+// Execute the task
+echo("Starting task: " + taskName)
+tasks[taskName]()
+echo("Task completed: " + taskName)
