@@ -84,6 +84,9 @@ func (p *Parser) parseForInExpression(initialExpression *ast.For) ast.Expression
 	}
 	p.nextToken()
 	expression.Iterable = p.parseExpression(LOWEST)
+	if expression.Iterable == nil {
+		return nil
+	}
 	if !p.expectPeek(token.LBRACE) {
 		return nil
 	}
