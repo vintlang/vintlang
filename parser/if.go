@@ -29,10 +29,14 @@ func (p *Parser) parseIfExpression() ast.Expression {
 		p.nextToken()
 		if p.peekTokenIs(token.IF) {
 			p.nextToken()
+			nestedIf := p.parseIfExpression()
+			if nestedIf == nil {
+				return nil
+			}
 			expression.Alternative = &ast.BlockStatement{
 				Statements: []ast.Statement{
 					&ast.ExpressionStatement{
-						Expression: p.parseIfExpression(),
+						Expression: nestedIf,
 					},
 				},
 			}

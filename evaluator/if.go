@@ -13,9 +13,17 @@ func evalIfExpression(ie *ast.IfExpression, env *object.Environment) object.Vint
 	}
 
 	if isTruthy(condition) {
-		return Eval(ie.Consequence, env)
+		result := Eval(ie.Consequence, env)
+		if isError(result) {
+			return result
+		}
+		return result
 	} else if ie.Alternative != nil {
-		return Eval(ie.Alternative, env)
+		result := Eval(ie.Alternative, env)
+		if isError(result) {
+			return result
+		}
+		return result
 	} else {
 		return NULL
 	}
