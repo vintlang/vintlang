@@ -1,3 +1,5 @@
+// +build ignore
+
 package main
 
 import (
@@ -8,7 +10,7 @@ import (
 	"strings"
 )
 
-func main() {  // Ignore. linter error
+func main() {
 	extensions := []string{".go", ".vint"}
 
 	totalLines := 0
