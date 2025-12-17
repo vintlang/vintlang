@@ -6,20 +6,29 @@ import (
 )
 
 func evalWhileExpression(we *ast.WhileExpression, env *object.Environment) object.VintObject {
-	condition := Eval(we.Condition, env)
-	var evaluated object.VintObject
-	if isError(condition) {
-		return condition
-	}
-	if isTruthy(condition) {
-		evaluated = Eval(we.Consequence, env)
-		if isError(evaluated) {
-			return evaluated
+	var result object.VintObject
+	for {
+		condition := Eval(we.Condition, env)
+		if isError(condition) {
+			return condition
 		}
-		if evaluated != nil && evaluated.Type() == object.BREAK_OBJ {
-			return evaluated
+		if !isTruthy(condition) {
+			break
 		}
-		evaluated = evalWhileExpression(we, env)
+		result = Eval(we.Consequence, env)
+		if isError(result) {
+			return result
+		}
+		if result != nil {
+			switch result.Type() {
+			case object.BREAK_OBJ:
+				return NULL
+			case object.CONTINUE_OBJ:
+				continue // Continue to next iteration (re-evaluate condition)
+			case object.RETURN_VALUE_OBJ:
+				return result
+			}
+		}
 	}
-	return evaluated
+	return result
 }

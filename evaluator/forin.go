@@ -8,6 +8,9 @@ import (
 func evalForInExpression(fie *ast.ForIn, env *object.Environment, line int) object.VintObject {
 	// Evaluates the iterable expression
 	iterable := Eval(fie.Iterable, env)
+	if isError(iterable) {
+		return iterable
+	}
 
 	// Check if the iterable object supports iteration
 	switch i := iterable.(type) {
