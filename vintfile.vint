@@ -5,6 +5,7 @@
 
 import make
 import os
+import cli
 import json
 
 // Configuration
@@ -227,15 +228,15 @@ let tasks = {
 }
 
 // Main execution logic
-let args = os.args()
+let args = cli.getArgs()
 
-if (len(args) < 2) {
+if (len(args) < 1) {
     print("❌ No task specified!")
     tasks["help"]()
     os.exit(1)
 }
 
-let taskName = args[1]
+let taskName = args[0]
 
 if (tasks[taskName] == null) {
     print("❌ Task '" + taskName + "' not found!")
