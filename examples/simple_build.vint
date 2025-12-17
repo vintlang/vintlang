@@ -1,0 +1,97 @@
+// Simple Build Script Example
+// This demonstrates a basic build automation script using the make module
+// Usage: vint examples/simple_build.vint
+
+import make
+import cli
+
+print("🔨 Simple Build Automation Example\n")
+
+// Helper function for colored output
+let printSuccess = func(msg) {
+    print("✅ " + msg)
+}
+
+let printInfo = func(msg) {
+    print("ℹ️  " + msg)
+}
+
+// Define tasks as a dictionary
+let tasks = {
+    "check": func() {
+        printInfo("Checking build requirements...")
+        
+        if (make.check("go")) {
+            printSuccess("Go compiler found")
+        } else {
+            print("❌ Go compiler not found")
+            return false
+        }
+        
+        if (make.check("git")) {
+            printSuccess("Git found")
+        } else {
+            printInfo("Git not found (optional)")
+        }
+        
+        return true
+    },
+    
+    "info": func() {
+        printInfo("Getting system information...")
+        let goVersion = make.exec("go version")
+        print("Go: " + goVersion)
+    },
+    
+    "build": func() {
+        make.echo("Building application...")
+        
+        // Set build environment
+        make.env("CGO_ENABLED", "0")
+        
+        // Execute build command
+        let result = make.exec("go build -o example-app main.go")
+        
+        if (result.type != "error") {
+            printSuccess("Build completed successfully!")
+        } else {
+            print("❌ Build failed")
+        }
+    },
+    
+    "clean": func() {
+        make.echo("Cleaning build artifacts...")
+        make.exec("rm -f example-app")
+        printSuccess("Clean completed!")
+    },
+    
+    "help": func() {
+        print("Available tasks:")
+        print("  check - Check build requirements")
+        print("  info  - Show system information")
+        print("  build - Build the application")
+        print("  clean - Clean build artifacts")
+        print("  help  - Show this help")
+        print("\nUsage: vint examples/simple_build.vint <task>")
+    }
+}
+
+// Parse command line arguments
+let args = cli.getArgs()
+
+if (len(args) == 0) {
+    print("No task specified. Available tasks:")
+    tasks["help"]()
+} else {
+    let taskName = args[0]
+    
+    if (tasks[taskName] != null) {
+        print("Running task: " + taskName + "\n")
+        tasks[taskName]()
+    } else {
+        print("❌ Unknown task: " + taskName)
+        tasks["help"]()
+    }
+}
+
+print("\n✅ Done!")
