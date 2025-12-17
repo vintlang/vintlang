@@ -1,10 +1,160 @@
-# VintLang Installation Guide (Linux & macOS)
+# VintLang
 
-Follow the steps below to easily install **VintLang** on your Linux or macOS system.
+**VintLang** is a modern, expressive programming language designed for clarity and productivity. It combines familiar syntax with powerful features for building robust applications.
 
 ---
 
-## For Linux
+## Language Features
+
+### Modern Syntax & Control Flow
+
+```js
+// If expressions - use if as both statement and expression
+let status = if (user.isActive) { "Online" } else { "Offline" }
+
+// Pattern matching with guards
+match user.role {
+    "admin" if user.permissions > 10 => {
+        print("Full access granted")
+    }
+    "user" => {
+        print("Standard access")
+    }
+    _ => {
+        print("Guest access")
+    }
+}
+
+// Switch with variable binding
+switch (response.status) {
+    case code if code >= 200 && code < 300 {
+        print("Success:", code)
+    }
+    default {
+        print("Error occurred")
+    }
+}
+```
+
+### Flexible Loops & Iteration
+
+```js
+// For-in loops with arrays, strings, dictionaries
+for item in items {
+    process(item)
+}
+
+for key, value in data {
+    print(key + ":", value)
+}
+
+// While loops with break/continue
+while (condition) {
+    if (shouldSkip) {
+        continue
+    }
+    process()
+}
+
+// Repeat loops
+repeat 5 {
+    print("Iteration:", i)
+}
+```
+
+### Rich Data Structures
+
+```js
+// Arrays with built-in methods
+let numbers = [1, 2, 3, 4, 5]
+let doubled = map(numbers, func(x) { return x * 2 })
+let evens = filter(numbers, func(x) { return x % 2 == 0 })
+
+// Dictionaries
+let config = {
+    "app": {"name": "myapp", "port": 8080},
+    "features": ["web", "logging"]
+}
+```
+
+### Modules & Packages
+
+```js
+// Static imports
+import os
+import json
+import time
+
+// Dynamic imports at runtime
+let yaml = import("yaml")
+let math = import("math")
+
+// Custom packages
+import my_package
+my_package.doSomething()
+```
+
+### File I/O & System Operations
+
+```js
+// Read and write files
+let content = os.readFile("config.yaml")
+os.writeFile("output.json", json.encode(data))
+
+// Check file existence
+if (os.fileExists("config.json")) {
+    // load config
+}
+```
+
+### Comprehensive Example
+
+```js
+import os
+import json
+import time
+
+// Dynamic imports
+let yaml = import("yaml")
+let math = import("math")
+
+// Load or create configuration
+let cfgStr = ""
+if (os.fileExists("config.yaml")) {
+    cfgStr = os.readFile("config.yaml")
+} else {
+    let defaultCfg = {
+        "app": {"name": "vint-app", "port": 8080},
+        "features": ["web", "logging"]
+    }
+    cfgStr = yaml.encode(defaultCfg)
+    os.writeFile("config.yaml", cfgStr)
+}
+
+let cfg = yaml.decode(cfgStr)
+let pow = math.pow(2, 10)
+
+let summary = {
+    "generated_at": time.format(time.now(), "2006-01-02T15:04:05"),
+    "app": yaml.get(cfg, "app.name"),
+    "value": pow
+}
+
+os.writeFile("summary.json", json.encode(summary))
+```
+
+Run this example:
+```bash
+vint examples/comprehensive_showcase.vint
+```
+
+---
+
+## Installation
+
+Follow the steps below to easily install **VintLang** on your Linux or macOS system.
+
+### For Linux
 
 1. **Download the Binary:**
 
@@ -96,85 +246,6 @@ Note: Install the `vintlang` VSCode extension for language support (syntax highl
 4. **Initialize a vintlang project** by running `vint init <projectname>`.
 5. **Install the vintlang extension from vscode** install vintlang extension in vscode
 
-## Sample Code — Rich example
-
-The simple examples below have been replaced with a single, richer example that demonstrates several recent and powerful VintLang features: packages, dynamic `import()` at runtime, YAML and JSON handling, file I/O, and reusable functions.
-<!-- using ```js so that we get syntax highlighting-->
-```js
-import os
-import json
-
-// If you have a local package (see `examples/packages_example`) you can import it
-// using a package name. The example package defines `greeter_pkg.greet()`.
-// import greeter_pkg
-
-// Dynamic import() lets you load modules at runtime (useful for plugins)
-let yaml = import("yaml")
-let time = import("time")
-let math = import("math")
-
-// Load a YAML configuration if present; otherwise write a sensible default
-let cfgStr = ""
-if (os.fileExists("config.yaml")) {
-   cfgStr = os.readFile("config.yaml")
-   print("Loaded config.yaml")
-} else {
-   let defaultCfg = {
-      "app": {"name": "vint-app", "port": 8080},
-      "features": ["web", "logging", "yaml"]
-   }
-   cfgStr = yaml.encode(defaultCfg)
-   os.writeFile("config.yaml", cfgStr)
-   print("Wrote default config.yaml")
-}
-
-let cfg = yaml.decode(cfgStr)
-print("App name:", yaml.get(cfg, "app.name"))
-
-// Use dynamic math module
-let pow = math.pow(2, 10)  // 2^10
-print("2^10 =", pow)
-
-// Optional: call into a package if available (see examples/packages_example)
-// Example package API (greeter_pkg): sayHello, setGreeting, getPackageInfo
-// To use it uncomment and run:
-// import greeter_pkg
-// greeter_pkg.sayHello("Vint User")
-// print(greeter_pkg.getPackageInfo())
-
-// Produce a JSON summary
-let summary = {
-   "generated_at": time.format(time.now(), "2006-01-02T15:04:05"),
-   "app": yaml.get(cfg, "app.name"),
-   "value": pow
-}
-
-os.writeFile("summary.json", json.encode(summary))
-print("Wrote summary.json")
-
-// Small reusable function
-let report = func(path) {
-   let content = os.readFile(path)
-   print("Report (" + path + ") size:", string(len(content)))
-}
-
-report("summary.json")
-
-// End of example
-```
-
-How to run this example locally:
-
-```bash
-vint examples/comprehensive_showcase.vint
-```
-
-Notes:
-
-- The example above intentionally mixes static and dynamic imports to show both workflows.
-- Some examples in `examples/` (LLM, HTTP, enterprise integrations) require network access or API keys — they are safe to read but may need extra setup to run.
-
----
 
 ## Contributing
 
