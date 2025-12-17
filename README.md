@@ -14,7 +14,7 @@ let status = if (user.isActive) { "Online" } else { "Offline" }
 
 // Pattern matching with guards
 match user.role {
-    "admin" if user.permissions > 10 => {
+    "admin" => {
         print("Full access granted")
     }
     "user" => {
