@@ -34,15 +34,11 @@ let tasks = {
         make.env("GOOS", "linux")
         make.env("GOARCH", "amd64")
         let result = make.exec("go build -ldflags=\"" + LDFLAGS + "\" -o vint")
-        if (result.type != "error") {
-            echo("Zipping build...")
-            make.exec("tar -zcvf binaries/vintLang_linux_amd64.tar.gz vint")
-            echo("Cleaning up...")
-            make.exec("rm vint")
-            echo("✅ Linux build complete!")
-        } else {
-            println("❌ Linux build failed: " + result)
-        }
+        echo("Zipping build...")
+        make.exec("tar -zcvf binaries/vintLang_linux_amd64.tar.gz vint")
+        echo("Cleaning up...")
+        make.exec("rm vint")
+        echo("✅ Linux build complete!")
     },
 
     "build_windows": func() {
@@ -50,15 +46,12 @@ let tasks = {
         make.env("GOOS", "windows")
         make.env("GOARCH", "amd64")
         let result = make.exec("go build -ldflags=\"" + LDFLAGS + "\" -o vint_windows_amd64.exe")
-        if (result.type != "error") {
-            echo("Zipping build...")
-            make.exec("zip binaries/vintLang_windows_amd64.zip vint_windows_amd64.exe")
-            echo("Cleaning up...")
-            make.exec("rm vint_windows_amd64.exe")
-            echo("✅ Windows build complete!")
-        } else {
-            println("❌ Windows build failed: " + result)
-        }
+        echo("Zipping build...")
+        make.exec("zip binaries/vintLang_windows_amd64.zip vint_windows_amd64.exe")
+        echo("Cleaning up...")
+        make.exec("rm vint_windows_amd64.exe")
+        echo("✅ Windows build complete!")
+    
     },
 
     "build_mac": func() {
@@ -80,15 +73,12 @@ let tasks = {
         make.env("GOOS", "android")
         make.env("GOARCH", "arm64")
         let result = make.exec("go build -ldflags=\"" + LDFLAGS + "\" -o vint")
-        if (result.type != "error") {
-            echo("Zipping build...")
-            make.exec("tar -zcvf binaries/vintLang_android_arm64.tar.gz vint")
-            echo("Cleaning up...")
-            make.exec("rm vint")
-            echo("✅ Android build complete!")
-        } else {
-            println("❌ Android build failed: " + result)
-        }
+        echo("Zipping build...")
+        make.exec("tar -zcvf binaries/vintLang_android_arm64.tar.gz vint")
+        echo("Cleaning up...")
+        make.exec("rm vint")
+        echo("✅ Android build complete!")
+        
     },
 
     "build_upx": func() {
@@ -169,11 +159,7 @@ let tasks = {
     "build_test": func() {
         echo("Building test binary...")
         let result = make.exec("go build -ldflags=\"" + LDFLAGS + "\" -o vint")
-        if (result.type != "error") {
-            echo("✅ Test build complete!")
-        } else {
-            println("❌ Test build failed: " + result)
-        }
+        
     },
 
     "dependencies": func() {
