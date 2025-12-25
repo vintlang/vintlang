@@ -12,9 +12,9 @@ import json
 const VERSION = "0.2.1"
 const LDFLAGS = "-s -w"
 
-// Helper function to print colored messages
+// Helper function to println colored messages
 let echo = func(msg) {
-    print("🔨 " + msg)
+    println("🔨 " + msg)
 }
 
 // Task definitions using closure pattern
@@ -41,7 +41,7 @@ let tasks = {
             make.exec("rm vint")
             echo("✅ Linux build complete!")
         } else {
-            print("❌ Linux build failed: " + result)
+            println("❌ Linux build failed: " + result)
         }
     },
 
@@ -57,7 +57,7 @@ let tasks = {
             make.exec("rm vint_windows_amd64.exe")
             echo("✅ Windows build complete!")
         } else {
-            print("❌ Windows build failed: " + result)
+            println("❌ Windows build failed: " + result)
         }
     },
 
@@ -66,15 +66,13 @@ let tasks = {
         make.env("GOOS", "darwin")
         make.env("GOARCH", "amd64")
         let result = make.exec("go build -ldflags=\"" + LDFLAGS + "\" -o vint")
-        if (result.type != "error") {
+        println({"result":result})
             echo("Zipping build...")
             make.exec("tar -zcvf binaries/vintLang_mac_amd64.tar.gz vint")
             echo("Cleaning up...")
             make.exec("rm vint")
             echo("✅ macOS build complete!")
-        } else {
-            print("❌ macOS build failed: " + result)
-        }
+
     },
 
     "build_android": func() {
@@ -89,7 +87,7 @@ let tasks = {
             make.exec("rm vint")
             echo("✅ Android build complete!")
         } else {
-            print("❌ Android build failed: " + result)
+            println("❌ Android build failed: " + result)
         }
     },
 
@@ -98,10 +96,10 @@ let tasks = {
         
         // Check if UPX is installed
         if (!make.check("upx")) {
-            print("❌ UPX not found. Please install UPX:")
-            print("  macOS: brew install upx")
-            print("  Linux: sudo apt-get install upx")
-            print("  Windows: Download from https://github.com/upx/upx/releases")
+            println("❌ UPX not found. Please install UPX:")
+            println("  macOS: brew install upx")
+            println("  Linux: sudo apt-get install upx")
+            println("  Windows: Download from https://github.com/upx/upx/releases")
             os.exit(1)
         }
         
@@ -174,7 +172,7 @@ let tasks = {
         if (result.type != "error") {
             echo("✅ Test build complete!")
         } else {
-            print("❌ Test build failed: " + result)
+            println("❌ Test build failed: " + result)
         }
     },
 
@@ -186,15 +184,15 @@ let tasks = {
 
     "test": func() {
         echo("Running tests...")
-        print("\nTesting Lexer...")
+        println("\nTesting Lexer...")
         make.exec("./gotest --format testname ./lexer/")
-        print("\nTesting Parser...")
+        println("\nTesting Parser...")
         make.exec("./gotest --format testname ./parser/")
-        print("\nTesting AST...")
+        println("\nTesting AST...")
         make.exec("./gotest --format testname ./ast/")
-        print("\nTesting Object...")
+        println("\nTesting Object...")
         make.exec("./gotest --format testname ./object/")
-        print("\nTesting Evaluator...")
+        println("\nTesting Evaluator...")
         make.exec("./gotest --format testname ./evaluator/")
         echo("✅ All tests complete!")
     },
@@ -206,24 +204,24 @@ let tasks = {
     },
 
     "help": func() {
-        print("🔨 VintFile - Programmable Build System")
-        print("\nAvailable tasks:")
-        print("  build            - Build all platforms")
-        print("  build_linux      - Build for Linux")
-        print("  build_windows    - Build for Windows")
-        print("  build_mac        - Build for macOS")
-        print("  build_android    - Build for Android")
-        print("  build_upx        - Build all with UPX compression")
-        print("  build_linux_upx  - Build Linux with UPX")
-        print("  build_windows_upx- Build Windows with UPX")
-        print("  build_mac_upx    - Build macOS with UPX")
-        print("  build_android_upx- Build Android with UPX")
-        print("  build_test       - Build test binary")
-        print("  dependencies     - Check and tidy dependencies")
-        print("  test             - Run all tests")
-        print("  clean            - Clean build artifacts")
-        print("  help             - Show this help")
-        print("\nUsage: vint vintfile.vint <task>")
+        println("🔨 VintFile - Programmable Build System")
+        println("\nAvailable tasks:")
+        println("  build            - Build all platforms")
+        println("  build_linux      - Build for Linux")
+        println("  build_windows    - Build for Windows")
+        println("  build_mac        - Build for macOS")
+        println("  build_android    - Build for Android")
+        println("  build_upx        - Build all with UPX compression")
+        println("  build_linux_upx  - Build Linux with UPX")
+        println("  build_windows_upx- Build Windows with UPX")
+        println("  build_mac_upx    - Build macOS with UPX")
+        println("  build_android_upx- Build Android with UPX")
+        println("  build_test       - Build test binary")
+        println("  dependencies     - Check and tidy dependencies")
+        println("  test             - Run all tests")
+        println("  clean            - Clean build artifacts")
+        println("  help             - Show this help")
+        println("\nUsage: vint vintfile.vint <task>")
     }
 }
 
@@ -231,7 +229,7 @@ let tasks = {
 let args = cli.getArgs()
 
 if (len(args) < 1) {
-    print("❌ No task specified!")
+    println("❌ No task specified!")
     tasks["help"]()
     os.exit(1)
 }
@@ -239,7 +237,7 @@ if (len(args) < 1) {
 let taskName = args[0]
 
 if (tasks[taskName] == null) {
-    print("❌ Task '" + taskName + "' not found!")
+    println("❌ Task '" + taskName + "' not found!")
     tasks["help"]()
     os.exit(1)
 }
