@@ -262,3 +262,150 @@ func TestRangeInForLoop(t *testing.T) {
 		}
 	}
 }
+
+// TestWhileLoopReturnNull tests that while loops return NULL instead of nil
+// when the condition is false from the start (bug fix)
+func TestWhileLoopReturnNull(t *testing.T) {
+	tests := []struct {
+		input    string
+		expected object.VintObject
+	}{
+		// While loop that never executes should return NULL
+		{"while (false) { \"value\" }", &object.Null{}},
+		// While loop with false condition and variable
+		{"let x = while (false) { 42 }; x", &object.Null{}},
+		// While loop that executes should return NULL (not last iteration value)
+		{"let count = 0; let result = while (count < 3) { count = count + 1; count }; result", &object.Null{}},
+	}
+
+	for _, tt := range tests {
+		l := lexer.New(tt.input)
+		p := parser.New(l)
+		program := p.ParseProgram()
+		env := object.NewEnvironment()
+		result := Eval(program, env)
+
+		if result.Type() != tt.expected.Type() {
+			t.Errorf("input: %q - wrong type. got=%s, want=%s", tt.input, result.Type(), tt.expected.Type())
+		}
+	}
+}
+
+// TestEmptyBlocksReturnNull tests that empty blocks return NULL instead of nil (bug fix)
+func TestEmptyBlocksReturnNull(t *testing.T) {
+	tests := []struct {
+		input    string
+		expected object.VintObject
+	}{
+		// Empty if block
+		{"if (true) {}", &object.Null{}},
+		// Empty else block
+		{"if (false) {} else {}", &object.Null{}},
+		// Empty function body
+		{"let f = func() {}; f()", &object.Null{}},
+		// Empty while block (never executes)
+		{"while (false) {}", &object.Null{}},
+		// Empty switch case
+		{"switch (1) { case 1 {} }", &object.Null{}},
+		// Empty match case
+		{"match 1 { 1 => {} }", &object.Null{}},
+	}
+
+	for _, tt := range tests {
+		l := lexer.New(tt.input)
+		p := parser.New(l)
+		program := p.ParseProgram()
+		env := object.NewEnvironment()
+		result := Eval(program, env)
+
+		if result.Type() != tt.expected.Type() {
+			t.Errorf("input: %q - wrong type. got=%s, want=%s", tt.input, result.Type(), tt.expected.Type())
+		}
+	}
+}
+
+// TestControlFlowReturnValues tests that control flow structures return correct values
+func TestControlFlowReturnValues(t *testing.T) {
+	tests := []struct {
+		input    string
+		expected any
+	}{
+		// If expression with value
+		{"if (true) { 42 }", 42},
+		{"if (false) { 10 } else { 20 }", 20},
+		{"if (1 < 2) { \"yes\" } else { \"no\" }", "yes"},
+		
+		// If expression last statement
+		{"if (true) { let a = 1; let b = 2; a + b }", 3},
+		
+		// Switch expression with value
+		{"switch (1) { case 1 { \"one\" } case 2 { \"two\" } }", "one"},
+		{"switch (2) { case 1 { 10 } default { 99 } }", 99},
+		
+		// Match expression with value
+		{"match 1 { 1 => { \"matched\" } _ => { \"default\" } }", "matched"},
+		{"match 3 { 1 => { 10 } 2 => { 20 } _ => { 30 } }", 30},
+		
+		// For-in should return NULL
+		{"for i in [1, 2, 3] { i }", nil},
+	}
+
+	for _, tt := range tests {
+		l := lexer.New(tt.input)
+		p := parser.New(l)
+		program := p.ParseProgram()
+		env := object.NewEnvironment()
+		result := Eval(program, env)
+
+		switch expected := tt.expected.(type) {
+		case int:
+			testIntegerObject(t, result, int64(expected))
+		case string:
+			testStringObject(t, result, expected)
+		case nil:
+			if result.Type() != object.NULL_OBJ {
+				t.Errorf("input: %q - expected NULL, got=%s", tt.input, result.Type())
+			}
+		}
+	}
+}
+
+// TestNestedControlFlow tests nested control structures
+func TestNestedControlFlow(t *testing.T) {
+	tests := []struct {
+		input    string
+		expected any
+	}{
+		// Nested if
+		{"if (true) { if (true) { 42 } }", 42},
+		{"if (true) { if (false) { 10 } else { 20 } }", 20},
+		
+		// If inside while - x starts at 0, loops while x < 3
+		// Iteration 1: x=0, x<3 true, x != 2, x becomes 1
+		// Iteration 2: x=1, x<3 true, x != 2, x becomes 2
+		// Iteration 3: x=2, x<3 true, x == 2, x becomes 10, then 11
+		// Iteration 4: x=11, x<3 false, loop exits
+		{"let x = 0; while (x < 3) { if (x == 2) { x = 10 }; x = x + 1 }; x", 11},
+		
+		// Switch inside if
+		{"if (true) { switch (1) { case 1 { \"yes\" } } }", "yes"},
+		
+		// Match inside for-in - last iteration (i=3) matches the _ pattern
+		{"let result = \"\"; for i in [1, 2, 3] { result = match i { 2 => { \"two\" } _ => { \"other\" } } }; result", "other"},
+	}
+
+	for _, tt := range tests {
+		l := lexer.New(tt.input)
+		p := parser.New(l)
+		program := p.ParseProgram()
+		env := object.NewEnvironment()
+		result := Eval(program, env)
+
+		switch expected := tt.expected.(type) {
+		case int:
+			testIntegerObject(t, result, int64(expected))
+		case string:
+			testStringObject(t, result, expected)
+		}
+	}
+}

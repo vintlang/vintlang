@@ -36,22 +36,14 @@ func evalMatchExpression(me *ast.MatchExpression, env *object.Environment) objec
 					continue // Guard failed, try next pattern
 				}
 			}
-			result := evalBlockStatement(matchCase.Block, matchEnv)
-			if isError(result) {
-				return result
-			}
-			return result
+			return evalBlockStatement(matchCase.Block, matchEnv)
 		}
 	}
 
 	// If no specific pattern matched, look for wildcard pattern
 	for _, matchCase := range me.Cases {
 		if ident, ok := matchCase.Pattern.(*ast.Identifier); ok && ident.Value == "_" {
-			result := evalBlockStatement(matchCase.Block, env)
-			if isError(result) {
-				return result
-			}
-			return result
+			return evalBlockStatement(matchCase.Block, env)
 		}
 	}
 
