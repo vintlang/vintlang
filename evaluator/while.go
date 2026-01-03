@@ -6,7 +6,6 @@ import (
 )
 
 func evalWhileExpression(we *ast.WhileExpression, env *object.Environment) object.VintObject {
-	var result object.VintObject
 	for {
 		condition := Eval(we.Condition, env)
 		if isError(condition) {
@@ -15,7 +14,7 @@ func evalWhileExpression(we *ast.WhileExpression, env *object.Environment) objec
 		if !isTruthy(condition) {
 			break
 		}
-		result = Eval(we.Consequence, env)
+		result := Eval(we.Consequence, env)
 		if isError(result) {
 			return result
 		}
@@ -30,5 +29,5 @@ func evalWhileExpression(we *ast.WhileExpression, env *object.Environment) objec
 			}
 		}
 	}
-	return result
+	return NULL
 }

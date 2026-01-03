@@ -29,19 +29,11 @@ func evalSwitchStatement(se *ast.SwitchExpression, env *object.Environment) obje
 					return guardResult
 				}
 				if isTruthy(guardResult) {
-					result := evalBlockStatement(opt.Block, caseEnv)
-					if isError(result) {
-						return result
-					}
-					return result
+					return evalBlockStatement(opt.Block, caseEnv)
 				}
 			} else {
 				// No guard, always match
-				result := evalBlockStatement(opt.Block, caseEnv)
-				if isError(result) {
-					return result
-				}
-				return result
+				return evalBlockStatement(opt.Block, caseEnv)
 			}
 		} else {
 			// Handle regular value-based cases
@@ -61,11 +53,7 @@ func evalSwitchStatement(se *ast.SwitchExpression, env *object.Environment) obje
 							continue // Guard failed, try next case
 						}
 					}
-					result := evalBlockStatement(opt.Block, env)
-					if isError(result) {
-						return result
-					}
-					return result
+					return evalBlockStatement(opt.Block, env)
 				}
 			}
 		}
@@ -74,11 +62,7 @@ func evalSwitchStatement(se *ast.SwitchExpression, env *object.Environment) obje
 	// Handle default cases
 	for _, opt := range se.Choices {
 		if opt.Default {
-			result := evalBlockStatement(opt.Block, env)
-			if isError(result) {
-				return result
-			}
-			return result
+			return evalBlockStatement(opt.Block, env)
 		}
 	}
 
