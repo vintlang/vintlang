@@ -6,7 +6,7 @@ import (
 )
 
 func evalBlockStatement(block *ast.BlockStatement, env *object.Environment) object.VintObject {
-	var result object.VintObject
+	var result object.VintObject = NULL
 
 	for _, statement := range block.Statements {
 		result = Eval(statement, env)
