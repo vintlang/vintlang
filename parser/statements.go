@@ -13,6 +13,8 @@ func (p *Parser) parseStatement() ast.Statement {
 		return p.parseLetStatement()
 	case token.CONST:
 		return p.parseConstStatement()
+	case token.ENUM:
+		return p.parseEnumStatement()
 	case token.RETURN:
 		return p.parseReturnStatement()
 	case token.BREAK:
@@ -118,6 +120,76 @@ func (p *Parser) parseIncludeStatement() *ast.IncludeStatement {
 
 	stmt.Path = &ast.StringLiteral{Token: p.curToken, Value: p.curToken.Literal}
 
+	if p.peekTokenIs(token.SEMICOLON) {
+		p.nextToken()
+	}
+
+	return stmt
+}
+
+// parseEnumStatement parses enum declarations
+// Syntax: enum Name { MEMBER1 = value1, MEMBER2 = value2 }
+func (p *Parser) parseEnumStatement() *ast.EnumStatement {
+	stmt := &ast.EnumStatement{Token: p.curToken}
+	stmt.Values = make(map[string]ast.Expression)
+
+	// Expect enum name
+	if !p.expectPeek(token.IDENT) {
+		return nil
+	}
+
+	stmt.Name = &ast.Identifier{Token: p.curToken, Value: p.curToken.Literal}
+
+	// Expect opening brace
+	if !p.expectPeek(token.LBRACE) {
+		return nil
+	}
+
+	p.nextToken() // Move past {
+
+	// Parse enum members
+	for !p.curTokenIs(token.RBRACE) && !p.curTokenIs(token.EOF) {
+		// Get member name
+		if !p.curTokenIs(token.IDENT) {
+			p.errors = append(p.errors,
+				fmt.Sprintf("Line %d: Expected identifier in enum, got %s",
+					p.curToken.Line, p.curToken.Type))
+			return nil
+		}
+
+		memberName := p.curToken.Literal
+
+		// Expect '='
+		if !p.expectPeek(token.ASSIGN) {
+			return nil
+		}
+
+		p.nextToken() // Move to value
+
+		// Parse the value expression
+		value := p.parseExpression(LOWEST)
+		if value == nil {
+			return nil
+		}
+
+		stmt.Values[memberName] = value
+
+		// Check for comma or closing brace
+		if p.peekTokenIs(token.COMMA) {
+			p.nextToken() // Move to comma
+			p.nextToken() // Move past comma
+		} else if p.peekTokenIs(token.RBRACE) {
+			p.nextToken() // Move to closing brace
+			break
+		} else {
+			p.errors = append(p.errors,
+				fmt.Sprintf("Line %d: Expected ',' or '}' in enum, got %s",
+					p.peekToken.Line, p.peekToken.Type))
+			return nil
+		}
+	}
+
+	// Optional semicolon after closing brace
 	if p.peekTokenIs(token.SEMICOLON) {
 		p.nextToken()
 	}

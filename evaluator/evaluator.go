@@ -87,6 +87,9 @@ func Eval(node ast.Node, env *object.Environment) object.VintObject {
 		}
 		return env.DefineConst(node.Name.Value, val)
 
+	case *ast.EnumStatement:
+		return evalEnumStatement(node, env)
+
 	case *ast.Identifier:
 		return evalIdentifier(node, env)
 
