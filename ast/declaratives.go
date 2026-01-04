@@ -1,7 +1,9 @@
 package ast
 
 import (
+	"bytes"
 	"fmt"
+	"strings"
 
 	"github.com/vintlang/vintlang/token"
 )
@@ -148,4 +150,31 @@ func (ls *LogStatement) expressionNode()      {}
 func (ls *LogStatement) TokenLiteral() string { return ls.Token.Literal }
 func (ls *LogStatement) String() string {
 	return fmt.Sprintf("log %s", ls.Value.String())
+}
+
+// EnumStatement represents an enum declaration
+// Example: enum Status { PENDING = 0, ACTIVE = 1 }
+type EnumStatement struct {
+	Token  token.Token          // The 'enum' token
+	Name   *Identifier          // Enum name (e.g., "Status")
+	Values map[string]Expression // Map of member names to their values
+}
+
+func (es *EnumStatement) statementNode()       {}
+func (es *EnumStatement) TokenLiteral() string { return es.Token.Literal }
+func (es *EnumStatement) String() string {
+	var out bytes.Buffer
+
+	out.WriteString("enum ")
+	out.WriteString(es.Name.String())
+	out.WriteString(" { ")
+
+	members := []string{}
+	for key, value := range es.Values {
+		members = append(members, fmt.Sprintf("%s = %s", key, value.String()))
+	}
+	out.WriteString(strings.Join(members, ", "))
+	out.WriteString(" }")
+
+	return out.String()
 }

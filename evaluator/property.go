@@ -36,6 +36,14 @@ func evalPropertyExpression(node *ast.PropertyExpression, env *object.Environmen
 		// 	if val, ok := mod.Properties[prop]; ok {
 		// 		return val()
 		// 	}
+	case *object.Enum:
+		enum := left.(*object.Enum)
+		prop := node.Property.(*ast.Identifier).Value
+		member, ok := enum.GetMember(prop)
+		if !ok {
+			return newError("Enum '%s' has no member '%s'", enum.Name, prop)
+		}
+		return member
 	}
 	return newError("Value %s is not valid for %s", node.Property.(*ast.Identifier).Value, left.Inspect())
 }
