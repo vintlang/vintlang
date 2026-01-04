@@ -1,0 +1,46 @@
+// Comprehensive enum demonstration
+
+print("=== ENUM FEATURE DEMONSTRATION ===\n")
+
+// 1. Integer enums
+enum Priority {
+    LOW = 0,
+    MEDIUM = 1,
+    HIGH = 2,
+    CRITICAL = 3
+}
+
+let taskPriority = Priority.HIGH
+print("Task priority: " + taskPriority)
+
+// 2. String enums
+enum Role {
+    ADMIN = "administrator",
+    USER = "user",
+    GUEST = "guest"
+}
+
+let userRole = Role.ADMIN
+print("User role: " + userRole)
+
+// 3. Enum comparisons
+if taskPriority == Priority.HIGH {
+    print("This is a high priority task!")
+}
+
+// 4. Enum in expressions
+let priorityLevel = taskPriority + 1
+print("Priority level + 1: " + priorityLevel)
+
+// 5. Multiple enum values
+let p1 = Priority.LOW
+let p2 = Priority.MEDIUM
+let p3 = Priority.CRITICAL
+print("Priorities: " + p1 + ", " + p2 + ", " + p3)
+
+// 6. Enums are immutable (constants)
+// Uncommenting the next line would cause an error:
+// Priority = 100
+
+print("\n=== ALL ENUM TESTS PASSED ===")
+

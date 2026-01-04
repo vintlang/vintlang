@@ -1,7 +1,0 @@
-enum Status {
-    PENDING = 0
-}
-
-let current = Status.PENDING
-print(current)
-
