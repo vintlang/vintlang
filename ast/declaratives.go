@@ -155,8 +155,8 @@ func (ls *LogStatement) String() string {
 // EnumStatement represents an enum declaration
 // Example: enum Status { PENDING = 0, ACTIVE = 1 }
 type EnumStatement struct {
-	Token  token.Token          // The 'enum' token
-	Name   *Identifier          // Enum name (e.g., "Status")
+	Token  token.Token           // The 'enum' token
+	Name   *Identifier           // Enum name (e.g., "Status")
 	Values map[string]Expression // Map of member names to their values
 }
 

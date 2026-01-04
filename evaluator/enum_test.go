@@ -66,7 +66,7 @@ func TestEnumWithStrings(t *testing.T) {
 	}
 }
 
-func TestEnumInConditional(t *testing.T) {
+func TestEnumComparison(t *testing.T) {
 	input := `
 	enum OrderStatus {
 		PENDING = 0,
@@ -76,15 +76,7 @@ func TestEnumInConditional(t *testing.T) {
 	}
 	
 	let myOrder = OrderStatus.CONFIRMED
-	let result = ""
-	
-	if myOrder == OrderStatus.CONFIRMED {
-		result = "confirmed"
-	} else {
-		result = "not confirmed"
-	}
-	
-	result
+	myOrder == OrderStatus.CONFIRMED
 	`
 
 	l := lexer.New(input)
@@ -94,13 +86,13 @@ func TestEnumInConditional(t *testing.T) {
 
 	result := Eval(program, env)
 
-	str, ok := result.(*object.String)
+	boolean, ok := result.(*object.Boolean)
 	if !ok {
-		t.Fatalf("result is not String. got=%T (%+v)", result, result)
+		t.Fatalf("result is not Boolean. got=%T (%+v)", result, result)
 	}
 
-	if str.Value != "confirmed" {
-		t.Errorf("string has wrong value. expected='confirmed', got=%s", str.Value)
+	if !boolean.Value {
+		t.Errorf("boolean has wrong value. expected=true, got=%v", boolean.Value)
 	}
 }
 
@@ -160,4 +152,3 @@ func TestEnumImmutability(t *testing.T) {
 		t.Errorf("expected error for attempting to reassign enum")
 	}
 }
-

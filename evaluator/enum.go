@@ -27,4 +27,3 @@ func evalEnumStatement(node *ast.EnumStatement, env *object.Environment) object.
 	// Define the enum in the environment as a constant (immutable)
 	return env.DefineConst(node.Name.Value, enum)
 }
-
