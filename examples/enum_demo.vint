@@ -1,40 +1,21 @@
-// Enum demonstration for Vint
+// Simple enum example
 
-// Integer enums
-enum OrderStatus {
-    PENDING = 0,
-    CONFIRMED = 1,
-    SHIPPED = 2,
-    DELIVERED = 3
-}
-
-let myOrder = OrderStatus.CONFIRMED
-print("Order status: " + myOrder)
-
-// String enums
-enum Environment {
-    DEV = "development",
-    STAGING = "staging",
-    PROD = "production"
-}
-
-let env = Environment.PROD
-print("Environment: " + env)
-
-// Enums in comparisons
-if myOrder == OrderStatus.CONFIRMED {
-    print("Order confirmed!")
-}
-
-// HTTP status codes
 enum Status {
-    OK = 200,
-    NOTFOUND = 404,
-    ERROR = 500
+    PENDING = 0,
+    ACTIVE = 1,
+    COMPLETED = 2
 }
 
-let code = Status.OK
-print("Status code: " + code)
+let current = Status.ACTIVE
+print(current)
 
-print("=== All enum tests passed! ===")
+// String enum
+enum Color {
+    RED = "red",
+    GREEN = "green",
+    BLUE = "blue"
+}
+
+let myColor = Color.RED
+print(myColor)
 
