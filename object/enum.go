@@ -36,4 +36,3 @@ func (e *Enum) GetMember(name string) (VintObject, bool) {
 	val, ok := e.Members[name]
 	return val, ok
 }
-
