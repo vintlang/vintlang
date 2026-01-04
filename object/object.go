@@ -35,6 +35,7 @@ const (
 	POINTER_OBJ       = "POINTER"
 	AT                = "@"
 	DEFERRED_CALL_OBJ = "DEFERRED_CALL"
+	ENUM_OBJ          = "ENUM"
 
 	// Async/Concurrency Objects
 	PROMISE_OBJ        = "PROMISE"

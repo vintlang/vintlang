@@ -1,0 +1,9 @@
+enum Status {
+    PENDING = 0,
+    ACTIVE = 1,
+    COMPLETED = 2
+}
+
+let current = Status.ACTIVE
+print(current)
+
