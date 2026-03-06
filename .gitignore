@@ -81,3 +81,5 @@ new_folder/
 # Bundled test binaries
 include_test
 test_builtin
+
+build/*
