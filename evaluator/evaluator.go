@@ -93,6 +93,9 @@ func Eval(node ast.Node, env *object.Environment) object.VintObject {
 	case *ast.StructStatement:
 		return evalStructStatement(node, env)
 
+	case *ast.StructLiteral:
+		return evalStructLiteral(node, env)
+
 	case *ast.Identifier:
 		return evalIdentifier(node, env)
 

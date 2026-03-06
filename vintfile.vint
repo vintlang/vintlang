@@ -9,7 +9,7 @@ import cli
 import json
 
 // Configuration
-const VERSION = "0.2.1"
+const VERSION = "0.2.5"
 const LDFLAGS = "-s -w"
 
 // Helper function to println colored messages
