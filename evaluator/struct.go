@@ -7,6 +7,10 @@ import (
 
 // evalStructStatement evaluates struct declarations and registers them in the environment
 func evalStructStatement(node *ast.StructStatement, env *object.Environment) object.VintObject {
+	if node == nil {
+		return newError("invalid struct statement")
+	}
+
 	structDef := &object.Struct{
 		Name:    node.Name.Value,
 		Fields:  make([]object.StructField, 0, len(node.Fields)),
