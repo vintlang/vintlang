@@ -1,175 +1,193 @@
-// VintFile - A programmable build system to replace Makefile
-// Usage: vint vintfile.vint <task>
-// Example: vint vintfile.vint build
-// Example: vint vintfile.vint build_linux
+// build.vint - A programmable build system to replace Makefile
+// Usage: vint build.vint <task>
+// Example: vint build.vint build
+// Example: vint build.vint build-all
+// Example: vint build.vint release
 
+import make
+import os
+import cli
+import shell
 
-const make = import("make")
-const os = import("os")
-const cli = import("cli")
-const json = import("json")
-const shell = import("shell")
+// ── Configuration ────────────────────────────────────────────────────────────
+const APP_NAME  = "vint"
+const MODULE    = "github.com/vintlang/vintlang"
+const BUILD_DIR = "./build"
 
-// Configuration
-const VERSION = "0.2.5"
-const LDFLAGS = "-s -w"
+// Derive version / commit / date from git (fall back to "dev" / "unknown")
+let VERSION = shell.run("git describe --tags --always --dirty 2>/dev/null || echo dev")
+VERSION = VERSION.trim()
 
-// Helper function to println colored messages
+let COMMIT = shell.run("git rev-parse --short HEAD 2>/dev/null || echo unknown")
+COMMIT = COMMIT.trim()
+
+let BUILD_DATE = shell.run("date -u '+%Y-%m-%dT%H:%M:%SZ'")
+BUILD_DATE = BUILD_DATE.trim()
+
+const LDFLAGS = "-s -w" +
+    " -X '" + MODULE + "/config.VINT_VERSION=" + VERSION + "'" +
+    " -X '" + MODULE + "/config.Commit=" + COMMIT + "'" +
+    " -X '" + MODULE + "/config.BuildDate=" + BUILD_DATE + "'"
+
+// ── Helpers ──────────────────────────────────────────────────────────────────
 let echo = func(msg) {
     println("🔨 " + msg)
 }
 
-// Task definitions using closure pattern
+// Build a single binary: goBuild(goos, goarch, outputPath)
+let goBuild = func(goos, goarch, output) {
+    make.env("GOOS", goos)
+    make.env("GOARCH", goarch)
+    make.env("CGO_ENABLED", "0")
+    make.exec("go build -ldflags=\"" + LDFLAGS + "\" -o " + output + " .")
+}
+
+// Package a tar.gz: the archive contains a single binary named APP_NAME
+let packageTarGz = func(binaryPath, archiveName) {
+    make.exec("cd " + BUILD_DIR + " && cp " + binaryPath + " " + APP_NAME + " && tar czf " + archiveName + " " + APP_NAME + " && rm " + APP_NAME)
+}
+
+// Package a zip: the archive contains a single binary named APP_NAME.exe
+let packageZip = func(binaryPath, archiveName) {
+    make.exec("cd " + BUILD_DIR + " && cp " + binaryPath + " " + APP_NAME + ".exe && zip " + archiveName + " " + APP_NAME + ".exe && rm " + APP_NAME + ".exe")
+}
+
+// ── Task definitions ─────────────────────────────────────────────────────────
 let tasks = {
-    "build": func() {
-        echo("Building all platforms...")
-        os.run("go run counter.go > toolkit/count.txt")
-        tasks["build_android"]()
-        tasks["build_linux"]()
-        tasks["build_windows"]()
-        tasks["build_mac"]()
-        echo("✅ All builds complete!")
-    },
 
-    "build_linux": func() {
-        echo("Building Linux binary...")
-        shell.run("GOOS", "linux")
-        shell.run("GOARCH", "amd64")
-        let result = make.exec("go build -ldflags=\"" + LDFLAGS + "\" -o vint")
-        echo("Zipping build...")
-        make.exec("tar -zcvf binaries/vintLang_linux_amd64.tar.gz vint")
-        echo("Cleaning up...")
-        make.exec("rm vint")
-        echo("✅ Linux build complete!")
-    },
-
-    "build_windows": func() {
-        echo("Building Windows executable...")
-        shell.run("GOOS", "windows")
-        shell.run("GOARCH", "amd64")
-        let result = make.exec("go build -ldflags=\"" + LDFLAGS + "\" -o vint_windows_amd64.exe")
-        echo("Zipping build...")
-        make.exec("zip binaries/vintLang_windows_amd64.zip vint_windows_amd64.exe")
-        echo("Cleaning up...")
-        make.exec("rm vint_windows_amd64.exe")
-        echo("✅ Windows build complete!")
-    
-    },
-
-    "build_mac": func() {
-        echo("Building macOS binary...")
-        shell.run("GOOS", "darwin")
-        shell.run("GOARCH", "amd64")
-        let result = make.exec("go build -ldflags=\"" + LDFLAGS + "\" -o vint")
-        println({"result":result})
-            echo("Zipping build...")
-            make.exec("tar -zcvf binaries/vintLang_mac_amd64.tar.gz vint")
-            echo("Cleaning up...")
-            make.exec("rm vint")
-            echo("✅ macOS build complete!")
-
-    },
-
-    "build_android": func() {
-        echo("Building Android binary...")
-        shell.run("GOOS", "android")
-        shell.run("GOARCH", "arm64")
-        let result = make.exec("go build -ldflags=\"" + LDFLAGS + "\" -o vint")
-        echo("Zipping build...")
-        make.exec("tar -zcvf binaries/vintLang_android_arm64.tar.gz vint")
-        echo("Cleaning up...")
-        make.exec("rm vint")
-        echo("✅ Android build complete!")
-        
-    },
-
-    "build_upx": func() {
-        echo("Building with UPX compression...")
-        
-        // Check if UPX is installed
-        if (!make.check("upx")) {
-            println("❌ UPX not found. Please install UPX:")
-            println("  macOS: brew install upx")
-            println("  Linux: sudo apt-get install upx")
-            println("  Windows: Download from https://github.com/upx/upx/releases")
-            os.exit(1)
-        }
-        
-        tasks["build_linux_upx"]()
-        tasks["build_windows_upx"]()
-        tasks["build_mac_upx"]()
-        tasks["build_android_upx"]()
-        echo("✅ All UPX builds complete!")
-    },
-
-    "build_linux_upx": func() {
-        echo("Building Linux binary with UPX...")
-        shell.run("GOOS", "linux")
-        shell.run("GOARCH", "amd64")
-        make.exec("go build -ldflags=\"" + LDFLAGS + "\" -o vint")
-        echo("Compressing with UPX...")
-        make.exec("upx --best vint")
-        echo("Zipping build...")
-        make.exec("tar -zcvf binaries/vintLang_linux_amd64_upx.tar.gz vint")
-        echo("Cleaning up...")
-        make.exec("rm vint")
-        echo("✅ Linux UPX build complete!")
-    },
-
-    "build_windows_upx": func() {
-        echo("Building Windows executable with UPX...")
-        shell.run("GOOS", "windows")
-        shell.run("GOARCH", "amd64")
-        make.exec("go build -ldflags=\"" + LDFLAGS + "\" -o vint_windows_amd64.exe")
-        echo("Compressing with UPX...")
-        make.exec("upx --best vint_windows_amd64.exe")
-        echo("Zipping build...")
-        make.exec("zip binaries/vintLang_windows_amd64_upx.zip vint_windows_amd64.exe")
-        echo("Cleaning up...")
-        make.exec("rm vint_windows_amd64.exe")
-        echo("✅ Windows UPX build complete!")
-    },
-
-    "build_mac_upx": func() {
-        echo("Building macOS binary with UPX...")
-        shell.run("GOOS", "darwin")
-        shell.run("GOARCH", "amd64")
-        make.exec("go build -ldflags=\"" + LDFLAGS + "\" -o vint")
-        echo("Compressing with UPX...")
-        make.exec("upx --best vint")
-        echo("Zipping build...")
-        make.exec("tar -zcvf binaries/vintLang_mac_amd64_upx.tar.gz vint")
-        echo("Cleaning up...")
-        make.exec("rm vint")
-        echo("✅ macOS UPX build complete!")
-    },
-
-    "build_android_upx": func() {
-        echo("Building Android binary with UPX...")
-        shell.run("GOOS", "android")
-        shell.run("GOARCH", "arm64")
-        make.exec("go build -ldflags=\"" + LDFLAGS + "\" -o vint")
-        echo("Compressing with UPX...")
-        make.exec("upx --best vint")
-        echo("Zipping build...")
-        make.exec("tar -zcvf binaries/vintLang_android_arm64_upx.tar.gz vint")
-        echo("Cleaning up...")
-        make.exec("rm vint")
-        echo("✅ Android UPX build complete!")
-    },
-
-    "build_test": func() {
-        echo("Building test binary...")
-        let result = make.exec("go build -ldflags=\"" + LDFLAGS + "\" -o vint")
-        
-    },
-
-    "dependencies": func() {
+    // ── deps ─────────────────────────────────────────────────────────────
+    "deps": func() {
         echo("Checking dependencies...")
         make.exec("go mod tidy")
         echo("✅ Dependencies checked!")
     },
 
+    // ── build (local dev binary) ─────────────────────────────────────────
+    "build": func() {
+        tasks["deps"]()
+        echo("Building local binary...")
+        make.exec("go run counter.go > toolkit/count.txt")
+        make.env("CGO_ENABLED", "0")
+        make.exec("go build -ldflags=\"" + LDFLAGS + "\" -o " + APP_NAME + " .")
+        echo("✅ Build complete: ./" + APP_NAME)
+    },
+
+    // ── build-all (every platform + packaging) ──────────────────────────
+    "build-all": func() {
+        tasks["deps"]()
+        make.exec("go run counter.go > toolkit/count.txt")
+        echo("Building for all platforms (" + VERSION + ")...")
+        make.exec("mkdir -p " + BUILD_DIR)
+
+        // macOS Apple Silicon
+        echo("  darwin/arm64")
+        goBuild("darwin", "arm64", BUILD_DIR + "/" + APP_NAME + "-darwin-arm64")
+        // macOS Intel
+        echo("  darwin/amd64")
+        goBuild("darwin", "amd64", BUILD_DIR + "/" + APP_NAME + "-darwin-amd64")
+        // Linux amd64
+        echo("  linux/amd64")
+        goBuild("linux", "amd64", BUILD_DIR + "/" + APP_NAME + "-linux-amd64")
+        // Linux arm64
+        echo("  linux/arm64")
+        goBuild("linux", "arm64", BUILD_DIR + "/" + APP_NAME + "-linux-arm64")
+        // Windows amd64
+        echo("  windows/amd64")
+        goBuild("windows", "amd64", BUILD_DIR + "/" + APP_NAME + "-windows-amd64.exe")
+        // Windows arm64
+        echo("  windows/arm64")
+        goBuild("windows", "arm64", BUILD_DIR + "/" + APP_NAME + "-windows-arm64.exe")
+        // Android arm64
+        echo("  android/arm64")
+        goBuild("android", "arm64", BUILD_DIR + "/" + APP_NAME + "-android-arm64")
+
+        echo("Packaging archives...")
+        packageTarGz(APP_NAME + "-darwin-arm64",      APP_NAME + "-darwin-arm64.tar.gz")
+        packageTarGz(APP_NAME + "-darwin-amd64",      APP_NAME + "-darwin-amd64.tar.gz")
+        packageTarGz(APP_NAME + "-linux-amd64",       APP_NAME + "-linux-amd64.tar.gz")
+        packageTarGz(APP_NAME + "-linux-arm64",       APP_NAME + "-linux-arm64.tar.gz")
+        packageZip(APP_NAME + "-windows-amd64.exe",   APP_NAME + "-windows-amd64.zip")
+        packageZip(APP_NAME + "-windows-arm64.exe",   APP_NAME + "-windows-arm64.zip")
+        packageTarGz(APP_NAME + "-android-arm64",     APP_NAME + "-android-arm64.tar.gz")
+
+        echo("✅ All builds complete! Binaries in " + BUILD_DIR + "/")
+    },
+
+    // ── build-darwin ─────────────────────────────────────────────────────
+    "build-darwin": func() {
+        tasks["deps"]()
+        echo("Building for macOS...")
+        make.exec("mkdir -p " + BUILD_DIR)
+        goBuild("darwin", "arm64", BUILD_DIR + "/" + APP_NAME + "-darwin-arm64")
+        goBuild("darwin", "amd64", BUILD_DIR + "/" + APP_NAME + "-darwin-amd64")
+        packageTarGz(APP_NAME + "-darwin-arm64", APP_NAME + "-darwin-arm64.tar.gz")
+        packageTarGz(APP_NAME + "-darwin-amd64", APP_NAME + "-darwin-amd64.tar.gz")
+        echo("✅ macOS builds complete!")
+    },
+
+    // ── build-linux ──────────────────────────────────────────────────────
+    "build-linux": func() {
+        tasks["deps"]()
+        echo("Building for Linux...")
+        make.exec("mkdir -p " + BUILD_DIR)
+        goBuild("linux", "amd64", BUILD_DIR + "/" + APP_NAME + "-linux-amd64")
+        goBuild("linux", "arm64", BUILD_DIR + "/" + APP_NAME + "-linux-arm64")
+        packageTarGz(APP_NAME + "-linux-amd64", APP_NAME + "-linux-amd64.tar.gz")
+        packageTarGz(APP_NAME + "-linux-arm64", APP_NAME + "-linux-arm64.tar.gz")
+        echo("✅ Linux builds complete!")
+    },
+
+    // ── build-windows ────────────────────────────────────────────────────
+    "build-windows": func() {
+        tasks["deps"]()
+        echo("Building for Windows...")
+        make.exec("mkdir -p " + BUILD_DIR)
+        goBuild("windows", "amd64", BUILD_DIR + "/" + APP_NAME + "-windows-amd64.exe")
+        goBuild("windows", "arm64", BUILD_DIR + "/" + APP_NAME + "-windows-arm64.exe")
+        packageZip(APP_NAME + "-windows-amd64.exe", APP_NAME + "-windows-amd64.zip")
+        packageZip(APP_NAME + "-windows-arm64.exe", APP_NAME + "-windows-arm64.zip")
+        echo("✅ Windows builds complete!")
+    },
+
+    // ── build-android ────────────────────────────────────────────────────
+    "build-android": func() {
+        tasks["deps"]()
+        echo("Building for Android...")
+        make.exec("mkdir -p " + BUILD_DIR)
+        goBuild("android", "arm64", BUILD_DIR + "/" + APP_NAME + "-android-arm64")
+        packageTarGz(APP_NAME + "-android-arm64", APP_NAME + "-android-arm64.tar.gz")
+        echo("✅ Android build complete!")
+    },
+
+    // ── checksums ────────────────────────────────────────────────────────
+    "checksums": func() {
+        echo("Generating SHA-256 checksums...")
+        make.exec("cd " + BUILD_DIR + " && shasum -a 256 *.tar.gz *.zip > checksums.txt")
+        let sums = shell.run("cat " + BUILD_DIR + "/checksums.txt")
+        println(sums)
+        echo("✅ Checksums written to " + BUILD_DIR + "/checksums.txt")
+    },
+
+    // ── release (requires gh CLI) ────────────────────────────────────────
+    "release": func() {
+        if (!make.check("gh")) {
+            println("❌ GitHub CLI (gh) not found. Install it: https://cli.github.com")
+            os.exit(1)
+        }
+        tasks["clean"]()
+        tasks["build-all"]()
+        tasks["checksums"]()
+        echo("Creating GitHub release " + VERSION + "...")
+        make.exec("gh release create " + VERSION +
+            " --title \"VintLang " + VERSION + "\"" +
+            " --generate-notes" +
+            " " + BUILD_DIR + "/*.tar.gz" +
+            " " + BUILD_DIR + "/*.zip" +
+            " " + BUILD_DIR + "/checksums.txt")
+        echo("✅ Release " + VERSION + " published!")
+    },
+
+    // ── test ─────────────────────────────────────────────────────────────
     "test": func() {
         echo("Running tests...")
         println("\nTesting Lexer...")
@@ -185,35 +203,37 @@ let tasks = {
         echo("✅ All tests complete!")
     },
 
+    // ── clean ────────────────────────────────────────────────────────────
     "clean": func() {
-        echo("Cleaning...")
-        make.exec("go clean")
+        echo("Cleaning build artifacts...")
+        make.exec("rm -f " + APP_NAME)
+        make.exec("rm -rf " + BUILD_DIR)
         echo("✅ Clean complete!")
     },
 
+    // ── help ─────────────────────────────────────────────────────────────
     "help": func() {
-        println("🔨 VintFile - Programmable Build System")
-        println("\nAvailable tasks:")
-        println("  build            - Build all platforms")
-        println("  build_linux      - Build for Linux")
-        println("  build_windows    - Build for Windows")
-        println("  build_mac        - Build for macOS")
-        println("  build_android    - Build for Android")
-        println("  build_upx        - Build all with UPX compression")
-        println("  build_linux_upx  - Build Linux with UPX")
-        println("  build_windows_upx- Build Windows with UPX")
-        println("  build_mac_upx    - Build macOS with UPX")
-        println("  build_android_upx- Build Android with UPX")
-        println("  build_test       - Build test binary")
-        println("  dependencies     - Check and tidy dependencies")
-        println("  test             - Run all tests")
-        println("  clean            - Clean build artifacts")
-        println("  help             - Show this help")
-        println("\nUsage: vint vintfile.vint <task>")
+        println("🔨 build.vint - Programmable Build System for VintLang")
+        println("")
+        println("Available tasks:")
+        println("  build          - Build local dev binary")
+        println("  build-all      - Build for all platforms + package archives")
+        println("  build-darwin   - Build for macOS (arm64 + amd64)")
+        println("  build-linux    - Build for Linux (amd64 + arm64)")
+        println("  build-windows  - Build for Windows (amd64 + arm64)")
+        println("  build-android  - Build for Android (arm64)")
+        println("  checksums      - Generate SHA-256 checksums")
+        println("  release        - Build all, checksum, and publish GitHub release")
+        println("  deps           - Tidy Go module dependencies")
+        println("  test           - Run all tests")
+        println("  clean          - Remove build artifacts")
+        println("  help           - Show this help")
+        println("")
+        println("Usage: vint build.vint <task>")
     }
 }
 
-// Main execution logic
+// ── Main execution ───────────────────────────────────────────────────────────
 let args = cli.getArgs()
 
 if (len(args) < 1) {
@@ -230,7 +250,6 @@ if (tasks[taskName] == null) {
     os.exit(1)
 }
 
-// Execute the task
 echo("Starting task: " + taskName)
 tasks[taskName]()
 echo("Task completed: " + taskName)
