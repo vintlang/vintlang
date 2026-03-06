@@ -1,0 +1,192 @@
+// =============================================
+// VintLang Advanced Struct Tests
+// =============================================
+
+// Test 1: Struct methods calling other methods on the same instance
+struct Vector {
+    x: 0
+    y: 0
+
+    func length() {
+        return (this.x * this.x + this.y * this.y)
+    }
+
+    func scale(factor) {
+        return Vector(x = this.x * factor, y = this.y * factor)
+    }
+
+    func display() {
+        return "Vector(" + string(this.x) + ", " + string(this.y) + ")"
+    }
+}
+
+let v = Vector(x = 3, y = 4)
+print("Test 1 - Vector length: " + string(v.length()))
+let v2 = v.scale(2)
+print("Test 1 - Scaled vector: " + v2.display())
+print("Test 1 - Original unchanged: " + v.display())
+
+// Test 2: Struct instances stored in arrays
+struct TodoItem {
+    title: ""
+    completed: false
+
+    func status() {
+        if (this.completed) {
+            return "[x] " + this.title
+        } else {
+            return "[ ] " + this.title
+        }
+    }
+}
+
+let todos = [
+    TodoItem(title = "Buy groceries"),
+    TodoItem(title = "Write code", completed = true),
+    TodoItem(title = "Read docs")
+]
+
+print("Test 2 - Todo list:")
+for item in todos {
+    print("  " + item.status())
+}
+
+// Test 3: Struct instance as a method return value
+struct Account {
+    owner: ""
+    balance: 0
+
+    func deposit(amount) {
+        this.balance = this.balance + amount
+        return this.balance
+    }
+
+    func withdraw(amount) {
+        if (amount > this.balance) {
+            return "Insufficient funds"
+        }
+        this.balance = this.balance - amount
+        return this.balance
+    }
+
+    func summary() {
+        return this.owner + ": $" + string(this.balance)
+    }
+}
+
+let acc = Account(owner = "Alice", balance = 100)
+print("Test 3 - Initial: " + acc.summary())
+acc.deposit(50)
+print("Test 3 - After deposit: " + acc.summary())
+acc.withdraw(30)
+print("Test 3 - After withdraw: " + acc.summary())
+let result = acc.withdraw(200)
+print("Test 3 - Overdraw: " + string(result))
+
+// Test 4: Struct instances stored in dicts
+struct Student {
+    name: ""
+    grade: 0
+
+    func passing() {
+        return this.grade >= 60
+    }
+}
+
+let students = {
+    "s1": Student(name = "Alice", grade = 95),
+    "s2": Student(name = "Bob", grade = 55),
+    "s3": Student(name = "Charlie", grade = 72)
+}
+
+print("Test 4 - Student lookup:")
+for key, val in students {
+    let status = "PASS"
+    if (!val.passing()) {
+        status = "FAIL"
+    }
+    print("  " + val.name + ": " + string(val.grade) + " - " + status)
+}
+
+// Test 5: Struct with method that takes another struct instance
+struct Circle {
+    cx: 0
+    cy: 0
+    radius: 1
+
+    func containsPoint(px, py) {
+        let dx = this.cx - px
+        let dy = this.cy - py
+        return (dx * dx + dy * dy) <= (this.radius * this.radius)
+    }
+}
+
+let c = Circle(cx = 0, cy = 0, radius = 5)
+print("Test 5 - Point (3,4) in circle: " + string(c.containsPoint(3, 4)))
+print("Test 5 - Point (6,0) in circle: " + string(c.containsPoint(6, 0)))
+
+// Test 6: Struct field modification chain
+struct Counter {
+    count: 0
+
+    func increment() {
+        this.count = this.count + 1
+    }
+
+    func decrement() {
+        this.count = this.count - 1
+    }
+
+    func value() {
+        return this.count
+    }
+}
+
+let counter = Counter()
+counter.increment()
+counter.increment()
+counter.increment()
+counter.decrement()
+print("Test 6 - Counter value: " + string(counter.value()))
+
+// Test 7: Struct with string building method
+struct HTMLBuilder {
+    tag: "div"
+    content: ""
+
+    func render() {
+        return "<" + this.tag + ">" + this.content + "</" + this.tag + ">"
+    }
+}
+
+let h1 = HTMLBuilder(tag = "h1", content = "Hello VintLang")
+let para = HTMLBuilder(tag = "p", content = "Structs are awesome!")
+print("Test 7 - HTML: " + h1.render())
+print("Test 7 - HTML: " + para.render())
+
+// Test 8: Struct with multiple methods that compose
+struct StringHelper {
+    text: ""
+
+    func length() {
+        return len(this.text)
+    }
+
+    func isEmpty() {
+        return len(this.text) == 0
+    }
+
+    func wrap(prefix, suffix) {
+        return prefix + this.text + suffix
+    }
+}
+
+let sh = StringHelper(text = "Hello")
+print("Test 8 - Length: " + string(sh.length()))
+print("Test 8 - isEmpty: " + string(sh.isEmpty()))
+print("Test 8 - Wrapped: " + sh.wrap("[", "]"))
+
+let empty = StringHelper()
+print("Test 8 - Empty isEmpty: " + string(empty.isEmpty()))
+
+print("\n=== All advanced struct tests passed! ===")
