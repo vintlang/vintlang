@@ -1,8 +1,6 @@
-// build.vint - A programmable build system to replace Makefile
+// build.vint - A programmable build system for vintlang
 // Usage: vint build.vint <task>
-// Example: vint build.vint build
 // Example: vint build.vint build-all
-// Example: vint build.vint release
 
 import make
 import os
