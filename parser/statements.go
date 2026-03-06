@@ -15,6 +15,8 @@ func (p *Parser) parseStatement() ast.Statement {
 		return p.parseConstStatement()
 	case token.ENUM:
 		return p.parseEnumStatement()
+	case token.STRUCT:
+		return p.parseStructStatement()
 	case token.RETURN:
 		return p.parseReturnStatement()
 	case token.BREAK:
@@ -195,4 +197,126 @@ func (p *Parser) parseEnumStatement() *ast.EnumStatement {
 	}
 
 	return stmt
+}
+
+// parseStructStatement parses struct declarations
+// Syntax: struct Name { field1: default1, field2: default2, func method() { ... } }
+func (p *Parser) parseStructStatement() *ast.StructStatement {
+	stmt := &ast.StructStatement{Token: p.curToken}
+
+	// Expect struct name
+	if !p.expectPeek(token.IDENT) {
+		return nil
+	}
+
+	stmt.Name = &ast.Identifier{Token: p.curToken, Value: p.curToken.Literal}
+
+	// Expect opening brace
+	if !p.expectPeek(token.LBRACE) {
+		return nil
+	}
+
+	p.nextToken() // Move past {
+
+	// Parse struct members (fields and methods)
+	for !p.curTokenIs(token.RBRACE) && !p.curTokenIs(token.EOF) {
+		// Check if this is a method (starts with 'func')
+		if p.curTokenIs(token.FUNCTION) {
+			method := p.parseStructMethod()
+			if method == nil {
+				return nil
+			}
+			stmt.Methods = append(stmt.Methods, *method)
+		} else if p.curTokenIs(token.IDENT) {
+			// It's a field
+			field := ast.StructField{}
+			field.Name = &ast.Identifier{Token: p.curToken, Value: p.curToken.Literal}
+
+			// Check for default value with ':'
+			if p.peekTokenIs(token.COLON) {
+				p.nextToken() // Move to ':'
+				p.nextToken() // Move to value
+				field.Default = p.parseExpression(LOWEST)
+			}
+
+			stmt.Fields = append(stmt.Fields, field)
+
+			// Skip comma if present
+			if p.peekTokenIs(token.COMMA) {
+				p.nextToken()
+			}
+		} else {
+			p.errors = append(p.errors,
+				fmt.Sprintf("Line %d: Expected field name or 'func' in struct, got %s",
+					p.curToken.Line, p.curToken.Type))
+			return nil
+		}
+
+		p.nextToken()
+	}
+
+	// Optional semicolon after closing brace
+	if p.peekTokenIs(token.SEMICOLON) {
+		p.nextToken()
+	}
+
+	return stmt
+}
+
+// parseStructMethod parses a method inside a struct declaration
+func (p *Parser) parseStructMethod() *ast.StructMethod {
+	method := &ast.StructMethod{}
+	method.Defaults = make(map[string]ast.Expression)
+
+	// Expect method name
+	if !p.expectPeek(token.IDENT) {
+		return nil
+	}
+
+	method.Name = &ast.Identifier{Token: p.curToken, Value: p.curToken.Literal}
+
+	// Expect opening paren
+	if !p.expectPeek(token.LPAREN) {
+		return nil
+	}
+
+	// Parse parameters inline (similar to parseFunctionParameters but for struct methods)
+	hasDefaults := false
+	for !p.peekTokenIs(token.RPAREN) {
+		p.nextToken()
+		if p.curTokenIs(token.COMMA) {
+			continue
+		}
+		ident := &ast.Identifier{Token: p.curToken, Value: p.curToken.Literal}
+		method.Parameters = append(method.Parameters, ident)
+
+		if p.peekTokenIs(token.ASSIGN) {
+			p.nextToken() // Consume '='
+			p.nextToken() // Parse default expression
+			method.Defaults[ident.Value] = p.parseExpression(LOWEST)
+			hasDefaults = true
+		} else {
+			if hasDefaults {
+				p.addError("Non-default parameter cannot appear after a default parameter")
+				return nil
+			}
+		}
+
+		if !(p.peekTokenIs(token.COMMA) || p.peekTokenIs(token.RPAREN)) {
+			return nil
+		}
+	}
+
+	if !p.expectPeek(token.RPAREN) {
+		return nil
+	}
+
+	// Expect opening brace for body
+	if !p.expectPeek(token.LBRACE) {
+		return nil
+	}
+
+	method.Body = p.parseBlockStatement()
+
+	return method
 }
