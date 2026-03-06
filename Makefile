@@ -1,111 +1,107 @@
-VERSION=0.2.5
+.PHONY: build build-all build-linux build-darwin build-windows build-android deps clean test checksums release
 
-# UPX installation instructions
-# macOS: brew install upx
-# Linux: sudo apt-get install upx
-# Windows: Download from https://github.com/upx/upx/releases
+# ── Variables ──────────────────────────────────────────────────────────────────
+APP_NAME    := vint
+MODULE      := github.com/vintlang/vintlang
+VERSION     ?= $(shell git describe --tags --always --dirty 2>/dev/null || echo "dev")
+COMMIT      := $(shell git rev-parse --short HEAD 2>/dev/null || echo "unknown")
+BUILD_DATE  := $(shell date -u '+%Y-%m-%dT%H:%M:%SZ')
+LDFLAGS     := -s -w \
+	-X '$(MODULE)/config.VINT_VERSION=$(VERSION)' \
+	-X '$(MODULE)/config.Commit=$(COMMIT)' \
+	-X '$(MODULE)/config.BuildDate=$(BUILD_DATE)'
+BUILD_DIR   := ./build
+CGO_ENABLED ?= 0
 
-build:
+# ── Development ───────────────────────────────────────────────────────────────
+build: deps
 	go run counter.go > toolkit/count.txt
-	make build_android
-	make build_linux
-	make build_windows
-	make build_mac
+	CGO_ENABLED=0 go build -ldflags "$(LDFLAGS)" -o $(APP_NAME) .
 
-build_upx:
-	@echo 'Checking UPX installation...'
-	@which upx >/dev/null 2>&1 || (echo "UPX not found. Please install UPX:" && \
-		echo "macOS: brew install upx" && \
-		echo "Linux: sudo apt-get install upx" && \
-		echo "Windows: Download from https://github.com/upx/upx/releases" && exit 1)
-	@echo 'Building with UPX compression...'
-	make build_android_upx
-	make build_linux_upx
-	make build_windows_upx
-	make build_mac_upx
+# ── Cross-platform builds (all) ──────────────────────────────────────────────
+build-all: deps
+	go run counter.go > toolkit/count.txt
+	@echo "==> Building for all platforms ($(VERSION))..."
+	mkdir -p $(BUILD_DIR)
+	# macOS Apple Silicon (M1/M2/M3/M4)
+	GOOS=darwin  GOARCH=arm64 CGO_ENABLED=0 go build -ldflags "$(LDFLAGS)" -o $(BUILD_DIR)/$(APP_NAME)-darwin-arm64      .
+	# macOS Intel
+	GOOS=darwin  GOARCH=amd64 CGO_ENABLED=0 go build -ldflags "$(LDFLAGS)" -o $(BUILD_DIR)/$(APP_NAME)-darwin-amd64      .
+	# Linux amd64
+	GOOS=linux   GOARCH=amd64 CGO_ENABLED=0 go build -ldflags "$(LDFLAGS)" -o $(BUILD_DIR)/$(APP_NAME)-linux-amd64       .
+	# Linux arm64
+	GOOS=linux   GOARCH=arm64 CGO_ENABLED=0 go build -ldflags "$(LDFLAGS)" -o $(BUILD_DIR)/$(APP_NAME)-linux-arm64       .
+	# Windows amd64
+	GOOS=windows GOARCH=amd64 CGO_ENABLED=0 go build -ldflags "$(LDFLAGS)" -o $(BUILD_DIR)/$(APP_NAME)-windows-amd64.exe .
+	# Windows arm64
+	GOOS=windows GOARCH=arm64 CGO_ENABLED=0 go build -ldflags "$(LDFLAGS)" -o $(BUILD_DIR)/$(APP_NAME)-windows-arm64.exe .
+	# Android arm64
+	GOOS=android GOARCH=arm64 CGO_ENABLED=0 go build -ldflags "$(LDFLAGS)" -o $(BUILD_DIR)/$(APP_NAME)-android-arm64     .
+	@echo "==> Packaging archives..."
+	cd $(BUILD_DIR) && cp $(APP_NAME)-darwin-arm64 $(APP_NAME) && tar czf $(APP_NAME)-darwin-arm64.tar.gz  $(APP_NAME) && rm $(APP_NAME)
+	cd $(BUILD_DIR) && cp $(APP_NAME)-darwin-amd64 $(APP_NAME) && tar czf $(APP_NAME)-darwin-amd64.tar.gz  $(APP_NAME) && rm $(APP_NAME)
+	cd $(BUILD_DIR) && cp $(APP_NAME)-linux-amd64  $(APP_NAME) && tar czf $(APP_NAME)-linux-amd64.tar.gz   $(APP_NAME) && rm $(APP_NAME)
+	cd $(BUILD_DIR) && cp $(APP_NAME)-linux-arm64  $(APP_NAME) && tar czf $(APP_NAME)-linux-arm64.tar.gz   $(APP_NAME) && rm $(APP_NAME)
+	cd $(BUILD_DIR) && cp $(APP_NAME)-windows-amd64.exe $(APP_NAME).exe && zip $(APP_NAME)-windows-amd64.zip $(APP_NAME).exe && rm $(APP_NAME).exe
+	cd $(BUILD_DIR) && cp $(APP_NAME)-windows-arm64.exe $(APP_NAME).exe && zip $(APP_NAME)-windows-arm64.zip $(APP_NAME).exe && rm $(APP_NAME).exe
+	cd $(BUILD_DIR) && cp $(APP_NAME)-android-arm64 $(APP_NAME) && tar czf $(APP_NAME)-android-arm64.tar.gz $(APP_NAME) && rm $(APP_NAME)
+	@echo "==> Done! Binaries in $(BUILD_DIR)/"
 
-build_linux:
-	@echo 'building linux binary...'
-	env GOOS=linux GOARCH=amd64 go build -ldflags="-s -w" -o vint
-	@echo 'zipping build...'
-	tar -zcvf binaries/vintLang_linux_amd64.tar.gz vint
-	@echo 'cleaning up...'
-	rm vint     
+# ── Individual platform builds ───────────────────────────────────────────────
+build-darwin: deps
+	@echo "==> Building for macOS..."
+	mkdir -p $(BUILD_DIR)
+	GOOS=darwin GOARCH=arm64 CGO_ENABLED=0 go build -ldflags "$(LDFLAGS)" -o $(BUILD_DIR)/$(APP_NAME)-darwin-arm64 .
+	GOOS=darwin GOARCH=amd64 CGO_ENABLED=0 go build -ldflags "$(LDFLAGS)" -o $(BUILD_DIR)/$(APP_NAME)-darwin-amd64 .
+	cd $(BUILD_DIR) && cp $(APP_NAME)-darwin-arm64 $(APP_NAME) && tar czf $(APP_NAME)-darwin-arm64.tar.gz $(APP_NAME) && rm $(APP_NAME)
+	cd $(BUILD_DIR) && cp $(APP_NAME)-darwin-amd64 $(APP_NAME) && tar czf $(APP_NAME)-darwin-amd64.tar.gz $(APP_NAME) && rm $(APP_NAME)
 
-build_linux_upx:
-	@echo 'building linux binary with UPX...'
-	env GOOS=linux GOARCH=amd64 go build -ldflags="-s -w" -o vint
-	@echo 'compressing with UPX...'
-	upx --best vint
-	@echo 'zipping build...'
-	tar -zcvf binaries/vintLang_linux_amd64_upx.tar.gz vint
-	@echo 'cleaning up...'
-	rm vint
+build-linux: deps
+	@echo "==> Building for Linux..."
+	mkdir -p $(BUILD_DIR)
+	GOOS=linux GOARCH=amd64 CGO_ENABLED=0 go build -ldflags "$(LDFLAGS)" -o $(BUILD_DIR)/$(APP_NAME)-linux-amd64 .
+	GOOS=linux GOARCH=arm64 CGO_ENABLED=0 go build -ldflags "$(LDFLAGS)" -o $(BUILD_DIR)/$(APP_NAME)-linux-arm64 .
+	cd $(BUILD_DIR) && cp $(APP_NAME)-linux-amd64 $(APP_NAME) && tar czf $(APP_NAME)-linux-amd64.tar.gz $(APP_NAME) && rm $(APP_NAME)
+	cd $(BUILD_DIR) && cp $(APP_NAME)-linux-arm64 $(APP_NAME) && tar czf $(APP_NAME)-linux-arm64.tar.gz $(APP_NAME) && rm $(APP_NAME)
 
-build_windows:
-	@echo 'building windows executable...'
-	env GOOS=windows GOARCH=amd64 go build -ldflags="-s -w" -o vint_windows_amd64.exe
-	@echo 'zipping build...'
-	zip binaries/vintLang_windows_amd64.zip vint_windows_amd64.exe
-	@echo 'cleaning up...'
-	rm vint_windows_amd64.exe
+build-windows: deps
+	@echo "==> Building for Windows..."
+	mkdir -p $(BUILD_DIR)
+	GOOS=windows GOARCH=amd64 CGO_ENABLED=0 go build -ldflags "$(LDFLAGS)" -o $(BUILD_DIR)/$(APP_NAME)-windows-amd64.exe .
+	GOOS=windows GOARCH=arm64 CGO_ENABLED=0 go build -ldflags "$(LDFLAGS)" -o $(BUILD_DIR)/$(APP_NAME)-windows-arm64.exe .
+	cd $(BUILD_DIR) && cp $(APP_NAME)-windows-amd64.exe $(APP_NAME).exe && zip $(APP_NAME)-windows-amd64.zip $(APP_NAME).exe && rm $(APP_NAME).exe
+	cd $(BUILD_DIR) && cp $(APP_NAME)-windows-arm64.exe $(APP_NAME).exe && zip $(APP_NAME)-windows-arm64.zip $(APP_NAME).exe && rm $(APP_NAME).exe
 
-build_windows_upx:
-	@echo 'building windows executable with UPX...'
-	env GOOS=windows GOARCH=amd64 go build -ldflags="-s -w" -o vint_windows_amd64.exe
-	@echo 'compressing with UPX...'
-	upx --best vint_windows_amd64.exe
-	@echo 'zipping build...'
-	zip binaries/vintLang_windows_amd64_upx.zip vint_windows_amd64.exe
-	@echo 'cleaning up...'
-	rm vint_windows_amd64.exe
+build-android: deps
+	@echo "==> Building for Android..."
+	mkdir -p $(BUILD_DIR)
+	GOOS=android GOARCH=arm64 CGO_ENABLED=0 go build -ldflags "$(LDFLAGS)" -o $(BUILD_DIR)/$(APP_NAME)-android-arm64 .
+	cd $(BUILD_DIR) && cp $(APP_NAME)-android-arm64 $(APP_NAME) && tar czf $(APP_NAME)-android-arm64.tar.gz $(APP_NAME) && rm $(APP_NAME)
 
-build_mac:
-	@echo 'building mac binary...'
-	env GOOS=darwin GOARCH=amd64 go build -ldflags="-s -w" -o vint
-	@echo 'zipping build...'
-	tar -zcvf binaries/vintLang_mac_amd64.tar.gz vint
-	@echo 'cleaning up...'
-	rm vint
+# ── SHA256 checksums ─────────────────────────────────────────────────────────
+checksums:
+	@echo "==> Generating checksums..."
+	cd $(BUILD_DIR) && shasum -a 256 *.tar.gz *.zip > checksums.txt
+	@cat $(BUILD_DIR)/checksums.txt
 
-build_mac_upx:
-	@echo 'building mac binary with UPX...'
-	env GOOS=darwin GOARCH=amd64 go build -ldflags="-s -w" -o vint
-	@echo 'compressing with UPX...'
-	upx --best vint
-	@echo 'zipping build...'
-	tar -zcvf binaries/vintLang_mac_amd64_upx.tar.gz vint
-	@echo 'cleaning up...'
-	rm vint
+# ── GitHub Release (requires gh CLI) ─────────────────────────────────────────
+release: clean build-all checksums
+	@echo "==> Creating GitHub release $(VERSION)..."
+	gh release create $(VERSION) \
+		--title "VintLang $(VERSION)" \
+		--generate-notes \
+		$(BUILD_DIR)/*.tar.gz \
+		$(BUILD_DIR)/*.zip \
+		$(BUILD_DIR)/checksums.txt
 
-build_android:
-	@echo 'building android binary'
-	env GOOS=android GOARCH=arm64 go build -ldflags="-s -w" -o vint
-	@echo 'zipping build...'
-	tar -zcvf binaries/vintLang_android_arm64.tar.gz vint
-	@echo 'cleaning up...'
-	rm vint
-
-build_android_upx:
-	@echo 'building android binary with UPX...'
-	env GOOS=android GOARCH=arm64 go build -ldflags="-s -w" -o vint
-	@echo 'compressing with UPX...'
-	upx --best vint
-	@echo 'zipping build...'
-	tar -zcvf binaries/vintLang_android_arm64_upx.tar.gz vint
-	@echo 'cleaning up...'
-	rm vint
-
-build_test:
-	go build -ldflags="-s -w" -o vint
-
-dependencies:
-	@echo 'checking dependencies...'
+# ── Utilities ─────────────────────────────────────────────────────────────────
+deps:
+	@echo "==> Checking dependencies..."
 	go mod tidy
 
 test:
 	@echo -e '\nTesting Lexer...'
-	@./gotest --format testname ./lexer/ 
+	@./gotest --format testname ./lexer/
 	@echo -e '\nTesting Parser...'
 	@./gotest --format testname ./parser/
 	@echo -e '\nTesting AST...'
@@ -116,4 +112,5 @@ test:
 	@./gotest --format testname ./evaluator/
 
 clean:
-	go clean
+	rm -f $(APP_NAME)
+	rm -rf $(BUILD_DIR)
