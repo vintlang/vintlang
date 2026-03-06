@@ -178,3 +178,56 @@ func (es *EnumStatement) String() string {
 
 	return out.String()
 }
+
+// StructField represents a field declaration inside a struct
+type StructField struct {
+	Name    *Identifier // field name
+	Default Expression  // optional default value
+}
+
+// StructMethod represents a method defined inside a struct
+type StructMethod struct {
+	Name       *Identifier
+	Parameters []*Identifier
+	Defaults   map[string]Expression
+	Body       *BlockStatement
+}
+
+// StructStatement represents a struct declaration
+// Example: struct User { name: "default", age: 0, func greet() { return "hi" } }
+type StructStatement struct {
+	Token   token.Token    // The 'struct' token
+	Name    *Identifier    // Struct name (e.g., "User")
+	Fields  []StructField  // Struct fields with optional defaults
+	Methods []StructMethod // Struct methods
+}
+
+func (ss *StructStatement) statementNode()       {}
+func (ss *StructStatement) TokenLiteral() string { return ss.Token.Literal }
+func (ss *StructStatement) String() string {
+	var out bytes.Buffer
+
+	out.WriteString("struct ")
+	out.WriteString(ss.Name.String())
+	out.WriteString(" {\n")
+
+	for _, f := range ss.Fields {
+		out.WriteString("    " + f.Name.String())
+		if f.Default != nil {
+			out.WriteString(": " + f.Default.String())
+		}
+		out.WriteString("\n")
+	}
+
+	for _, m := range ss.Methods {
+		params := []string{}
+		for _, p := range m.Parameters {
+			params = append(params, p.String())
+		}
+		out.WriteString("    func " + m.Name.String() + "(" + strings.Join(params, ", ") + ") {...}\n")
+	}
+
+	out.WriteString("}")
+
+	return out.String()
+}
