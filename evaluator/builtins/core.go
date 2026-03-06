@@ -70,6 +70,16 @@ func registerCoreBuiltins() {
 				return newError("Function 'type' requires exactly 1 argument, got %d", len(args))
 			}
 
+			// Return the struct name for struct instances
+			if si, ok := args[0].(*object.StructInstance); ok {
+				return &object.String{Value: si.Struct.Name}
+			}
+
+			// Return "struct" for struct definitions
+			if s, ok := args[0].(*object.Struct); ok {
+				return &object.String{Value: "struct:" + s.Name}
+			}
+
 			return &object.String{Value: string(args[0].Type())}
 		},
 	})
