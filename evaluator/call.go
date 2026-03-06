@@ -70,6 +70,9 @@ func evalCall(node *ast.CallExpression, env *object.Environment) object.VintObje
 		}
 		// If 'init' is found, evaluate its arguments
 		args = evalArgsExpressions(node, obj.(*object.Function), env)
+	case *object.Struct:
+		// Struct instantiation: User(name = "Alice", age = 30) or User("Alice", 30)
+		return evalStructCall(node, fn, env)
 	default:
 		// If the function is of unknown type, evaluate the arguments in the default manner
 		args = evalExpressions(node.Arguments, env)

@@ -44,6 +44,17 @@ func evalPropertyExpression(node *ast.PropertyExpression, env *object.Environmen
 			return newError("Enum '%s' has no member '%s'", enum.Name, prop)
 		}
 		return member
+	case *object.StructInstance:
+		si := left.(*object.StructInstance)
+		prop := node.Property.(*ast.Identifier).Value
+		if val, ok := si.GetField(prop); ok {
+			return val
+		}
+		// Check if it's a method being referenced (not called)
+		if _, ok := si.GetMethod(prop); ok {
+			return newError("'%s' is a method of struct '%s', use %s.%s() to call it", prop, si.Struct.Name, node.Object.String(), prop)
+		}
+		return newError("Struct '%s' has no field '%s'", si.Struct.Name, prop)
 	}
 	return newError("Value %s is not valid for %s", node.Property.(*ast.Identifier).Value, left.Inspect())
 }
@@ -69,6 +80,13 @@ func evalPropertyAssignment(name *ast.PropertyExpression, val object.VintObject,
 		}
 
 		obj.Scope.SetScoped(prop, val)
+		return NULL
+	case *object.StructInstance:
+		si := left.(*object.StructInstance)
+		prop := name.Property.(*ast.Identifier).Value
+		if err := si.SetField(prop, val); err != nil {
+			return newError(err.Error())
+		}
 		return NULL
 	default:
 		return newError("Failed to set in package %s", left.Type())
