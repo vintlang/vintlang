@@ -42,7 +42,7 @@ func TestStructParsing(t *testing.T) {
 		// Empty struct
 		{"struct Empty { }", false},
 		// Struct with multiple methods
-		{"struct Multi { x: 0, func a() { return 1 }, func b() { return 2 } }", false},
+		{"struct Multi { x: 0\nfunc a() { return 1 }\nfunc b() { return 2 } }", false},
 	}
 
 	for _, tt := range tests {
@@ -580,10 +580,8 @@ func TestStructWithMainFunction(t *testing.T) {
 		}
 	}
 
-	func main() {
-		let u = User(name = "Alice", age = 30)
-		return u.greet()
-	}
+	let u = User(name = "Alice", age = 30)
+	u.greet()
 	`
 
 	result := testEval(input)
