@@ -374,7 +374,11 @@ func TestStructMethodCallsOtherMethod(t *testing.T) {
 
 func TestStructInstanceIndependence(t *testing.T) {
 	input := `
-	struct Counter { count: 0, func inc() { this.count = this.count + 1 }, func val() { return this.count } }
+	struct Counter {
+		count: 0
+		func inc() { this.count = this.count + 1 }
+		func val() { return this.count }
+	}
 	let c1 = Counter()
 	let c2 = Counter()
 	c1.inc()
