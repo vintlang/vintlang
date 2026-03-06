@@ -90,6 +90,9 @@ func Eval(node ast.Node, env *object.Environment) object.VintObject {
 	case *ast.EnumStatement:
 		return evalEnumStatement(node, env)
 
+	case *ast.StructStatement:
+		return evalStructStatement(node, env)
+
 	case *ast.Identifier:
 		return evalIdentifier(node, env)
 
@@ -581,6 +584,17 @@ func applyFunction(fn object.VintObject, args []object.VintObject, line int) obj
 		}
 
 		return customError
+
+	case *object.Struct:
+		// Struct instantiation via call syntax: User("Alice", 30)
+		// Arguments are matched to fields by position
+		fieldArgs := make(map[string]object.VintObject)
+		for i, field := range fn.Fields {
+			if i < len(args) {
+				fieldArgs[field.Name] = args[i]
+			}
+		}
+		return instantiateStruct(fn, fieldArgs, line)
 
 	default:
 		return newError("not a function: %s", fn.Type())
