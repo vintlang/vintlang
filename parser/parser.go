@@ -187,7 +187,6 @@ func New(l *lexer.Lexer) *Parser {
 	p.registerInfix(token.IN, p.parseInfixExpression)
 	p.registerInfix(token.DOT, p.parseMethod)
 	p.registerInfix(token.RANGE, p.parseRangeExpression)
-	p.registerInfix(token.LBRACE, p.parseStructLiteral)
 
 	p.postfixParseFns = make(map[token.TokenType]postfixParseFn)
 	p.registerPostfix(token.PLUS_PLUS, p.parsePostfixExpression)
