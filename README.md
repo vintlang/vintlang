@@ -98,12 +98,12 @@ my_package.doSomething()
 
 ```js
 // Read and write files
-let content = os.readFile("config.yaml")
-os.writeFile("output.json", json.encode(data))
+let content = os.readFile("config.yaml");
+os.writeFile("output.json", json.encode(data));
 
 // Check file existence
 if (os.fileExists("config.json")) {
-    // load config
+  // load config
 }
 ```
 
@@ -144,6 +144,7 @@ os.writeFile("summary.json", json.encode(summary))
 ```
 
 Run this example:
+
 ```bash
 vint examples/comprehensive_showcase.vint
 ```
@@ -154,98 +155,55 @@ vint examples/comprehensive_showcase.vint
 
 Follow the steps below to easily install **VintLang** on your Linux or macOS system.
 
-### For Linux
+### Quick Install (Linux / macOS)
 
-1. **Download the Binary:**
+Download and install the latest release automatically:
 
-   First, download the **VintLang** binary for Linux. You can do this using the `curl` command. This will download the `tar.gz` file containing the binary to your current directory.
+```bash
+# Linux (amd64)
+curl -sL https://github.com/vintlang/vintlang/releases/latest/download/vint-linux-amd64.tar.gz | sudo tar xz -C /usr/local/bin
 
-   ```bash
-   curl -O -L https://github.com/vintlang/vintlang/releases/download/v0.2.0/vintLang_linux_amd64.tar.gz
-   ```
+# Linux (arm64)
+curl -sL https://github.com/vintlang/vintlang/releases/latest/download/vint-linux-arm64.tar.gz | sudo tar xz -C /usr/local/bin
 
-2. **Extract the Binary to a Global Location:**
+# macOS Apple Silicon (M1/M2/M3/M4)
+curl -sL https://github.com/vintlang/vintlang/releases/latest/download/vint-darwin-arm64.tar.gz | sudo tar xz -C /usr/local/bin
 
-   After downloading the binary, you need to extract it into a directory that is globally accessible. `/usr/local/bin` is a commonly used directory for this purpose. The `tar` command will extract the contents of the `tar.gz` file and place them in `/usr/local/bin`.
+# macOS Intel
+curl -sL https://github.com/vintlang/vintlang/releases/latest/download/vint-darwin-amd64.tar.gz | sudo tar xz -C /usr/local/bin
+```
 
-   ```bash
-   sudo tar -C /usr/local/bin -xzvf vintLang_linux_amd64.tar.gz
-   ```
+### Windows
 
-   This step ensures that the **VintLang** command can be used from anywhere on your system.
+Download the latest `.zip` from the [releases page](https://github.com/vintlang/vintlang/releases/latest), extract it, and add the folder to your `PATH`.
 
-3. **Verify the Installation:**
+### Android (Termux)
 
-   Once the extraction is complete, confirm that **VintLang** was installed successfully by checking its version. If the installation was successful, it will display the installed version of **VintLang**.
+```bash
+curl -sL https://github.com/vintlang/vintlang/releases/latest/download/vint-android-arm64.tar.gz | tar xz -C $PREFIX/bin
+```
 
-   ```bash
-   vint -v
-   ```
+### Verify & Initialize
 
-4. **Initialize a vint project**
+```bash
+# Check version
+vint -v
 
-   Create a simple boilerplate vint project
+# Create a new project
+vint init <project-name>
+```
 
-   ```bash
-   vint <optional:project-name>
-   ```
-
----
-
-Note: Install the `vintlang` VSCode extension for language support (syntax highlighting, snippets, and tooling).
-
----
-
-## For macOS
-
-1. **Download the Binary:**
-
-   Begin by downloading the **VintLang** binary for macOS using the following `curl` command. This will download the `tar.gz` file for macOS to your current directory.
-
-   ```bash
-   curl -O -L https://github.com/vintlang/vintlang/releases/download/v0.2.0/vintLang_mac_amd64.tar.gz
-   ```
-
-2. **Extract the Binary to a Global Location:**
-
-   Next, extract the downloaded binary to a globally accessible location. As with Linux, the standard directory for this on macOS is `/usr/local/bin`. Use the following command to extract the binary:
-
-   ```bash
-   sudo tar -C /usr/local/bin -xzvf vintLang_mac_amd64.tar.gz
-   ```
-
-   This allows you to run **VintLang** from any terminal window.
-
-3. **Verify the Installation:**
-
-   To check that the installation was successful, run the following command. It will output the version of **VintLang** that was installed:
-
-   ```bash
-   vint -v
-   ```
-
-4. **Initialize a vint project**
-
-   Create a simple boilerplate vint project
-
-   ```bash
-   vint init <optional:project-name>
-   ```
-
----
-
-Note: Install the `vintlang` VSCode extension for language support (syntax highlighting, snippets, and tooling).
+> **Tip:** Install the `vintlang` VSCode extension for syntax highlighting, snippets, and tooling.
 
 ---
 
 ## Summary of Installation Steps
 
-1. **Download the Binary** using `curl` for your system (Linux or macOS).
-2. **Extract the Binary** to `/usr/local/bin` (or another globally accessible directory).
-3. **Verify the Installation** by checking the version with `vint -v`.
-4. **Initialize a vintlang project** by running `vint init <projectname>`.
-5. **Install the vintlang extension from vscode** install vintlang extension in vscode
-
+1. **Download the latest binary** for your platform from the [releases page](https://github.com/vintlang/vintlang/releases/latest).
+2. **Extract** to a directory on your `PATH` (e.g. `/usr/local/bin`).
+3. **Verify** by running `vint -v`.
+4. **Initialize a project** with `vint init <project-name>`.
+5. **Install the vintlang VSCode extension** for language support.
 
 ## Contributing
 
