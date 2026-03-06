@@ -227,6 +227,11 @@ func (p *Parser) parseStructStatement() *ast.StructStatement {
 				return nil
 			}
 			stmt.Methods = append(stmt.Methods, *method)
+
+			// Skip comma if present after method
+			if p.peekTokenIs(token.COMMA) {
+				p.nextToken()
+			}
 		} else if p.curTokenIs(token.IDENT) {
 			// It's a field
 			field := ast.StructField{}
