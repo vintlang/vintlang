@@ -86,6 +86,9 @@ func applyMethod(obj object.VintObject, method ast.Expression, args []object.Vin
 			fn.(*object.Function).Env.Del("@")
 			return ret
 		}
+	case *object.StructInstance:
+		methodName := method.(*ast.Identifier).Value
+		return callStructMethod(obj, methodName, args, defs, l)
 	}
 	return newError("Sorry, %s does not have a function '%s()'", obj.Inspect(), method.(*ast.Identifier).Value)
 }

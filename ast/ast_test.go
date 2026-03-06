@@ -128,8 +128,8 @@ func TestDictLiteralString(t *testing.T) {
 				Token: token.Token{Type: token.STRING, Literal: "version"},
 				Value: "version",
 			}: &StringLiteral{
-				Token: token.Token{Type: token.STRING, Literal: "0.2.1"},
-				Value: "0.2.1",
+				Token: token.Token{Type: token.STRING, Literal: "0.2.5"},
+				Value: "0.2.5",
 			},
 		},
 	}
@@ -137,7 +137,7 @@ func TestDictLiteralString(t *testing.T) {
 	result := dictLit.String()
 	// Dictionary format is different from JSON - missing closing parenthesis
 	expected := "(name:VintLang, version:0.2.1}"
-	
+
 	if result != expected && result != "(version:0.2.1, name:VintLang}" {
 		t.Errorf("dictLit.String() wrong. got=%q", result)
 	}

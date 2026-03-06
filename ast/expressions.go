@@ -586,3 +586,30 @@ func (sp *SpreadPattern) String() string {
 	}
 	return out.String()
 }
+
+// StructLiteral represents struct instantiation with brace syntax:
+// StructName{field1: value1, field2: value2}
+type StructLiteral struct {
+	Token  token.Token           // The '{' token
+	Name   Expression            // The struct name expression (usually an identifier)
+	Fields map[string]Expression // field name -> value expression
+}
+
+func (sl *StructLiteral) expressionNode()      {}
+func (sl *StructLiteral) TokenLiteral() string { return sl.Token.Literal }
+func (sl *StructLiteral) String() string {
+	var out bytes.Buffer
+
+	out.WriteString(sl.Name.String())
+	out.WriteString("{")
+
+	pairs := []string{}
+	for key, value := range sl.Fields {
+		pairs = append(pairs, key+": "+value.String())
+	}
+
+	out.WriteString(strings.Join(pairs, ", "))
+	out.WriteString("}")
+
+	return out.String()
+}

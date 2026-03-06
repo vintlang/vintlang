@@ -1,0 +1,165 @@
+// =============================================
+// VintLang Struct Feature Test
+// =============================================
+
+// Test 1: Basic struct declaration and instantiation
+struct Point {
+    x: 0
+    y: 0
+}
+
+let p = Point(x = 10, y = 20)
+print("Test 1 - Basic struct: " + string(p.x) + ", " + string(p.y))
+
+// Test 2: Positional arguments
+let p2 = Point(5, 15)
+print("Test 2 - Positional args: " + string(p2.x) + ", " + string(p2.y))
+
+// Test 3: Default values
+struct Config {
+    host: "localhost"
+    port: 8080
+    verbose: false
+}
+
+let cfg = Config()
+print("Test 3 - Defaults: " + cfg.host + ":" + string(cfg.port))
+
+// Test 4: Partial defaults
+let cfg2 = Config(host = "example.com")
+print("Test 4 - Partial defaults: " + cfg2.host + ":" + string(cfg2.port))
+
+// Test 5: Struct with methods
+struct User {
+    name: ""
+    age: 0
+
+    func greet() {
+        return "Hello, I'm " + this.name
+    }
+    
+    func isAdult() {
+        return this.age >= 18
+    }
+}
+
+let user = User(name = "Alice", age = 30)
+print("Test 5 - Method call: " + user.greet())
+print("Test 5 - isAdult: " + string(user.isAdult()))
+
+// Test 6: Method with parameters
+struct Calculator {
+    value: 0
+
+    func add(n) {
+        return this.value + n
+    }
+
+    func multiply(n) {
+        return this.value * n
+    }
+}
+
+let calc = Calculator(value = 10)
+print("Test 6 - Method with param: add(5) = " + string(calc.add(5)))
+print("Test 6 - Method with param: multiply(3) = " + string(calc.multiply(3)))
+
+// Test 7: Property access
+print("Test 7 - Property access: " + user.name)
+print("Test 7 - Property access: " + string(user.age))
+
+// Test 8: Property assignment
+user.name = "Bob"
+user.age = 25
+print("Test 8 - After assignment: " + user.name + ", " + string(user.age))
+print("Test 8 - Method after assignment: " + user.greet())
+
+// Test 9: Type checking
+print("Test 9 - type(user): " + type(user))
+print("Test 9 - type(User): " + type(User))
+
+// Test 10: Multiple instances are independent
+let user1 = User(name = "Alice", age = 30)
+let user2 = User(name = "Bob", age = 25)
+print("Test 10 - user1: " + user1.greet())
+print("Test 10 - user2: " + user2.greet())
+user1.name = "Charlie"
+print("Test 10 - After mutation user1: " + user1.greet())
+print("Test 10 - user2 unchanged: " + user2.greet())
+
+// Test 11: Struct with complex default values
+struct Person {
+    name: "Unknown"
+    age: 0
+    email: "no-email"
+
+    func details() {
+        return this.name + " (age: " + string(this.age) + ", email: " + this.email + ")"
+    }
+}
+
+let person = Person(name = "Alice", age = 30, email = "alice@example.com")
+print("Test 11 - Complex struct: " + person.details())
+
+// Test 12: Method with default parameter
+struct Greeter {
+    name: "World"
+
+    func greet(greeting = "Hello") {
+        return greeting + ", " + this.name + "!"
+    }
+}
+
+let g = Greeter(name = "VintLang")
+print("Test 12 - Default method param: " + g.greet())
+print("Test 12 - Custom method param: " + g.greet("Hi"))
+
+// Test 13: Nested field access with methods
+struct Rectangle {
+    width: 0
+    height: 0
+
+    func area() {
+        return this.width * this.height
+    }
+
+    func perimeter() {
+        return 2 * (this.width + this.height)
+    }
+
+    func describe() {
+        return "Rectangle(" + string(this.width) + "x" + string(this.height) + ") area=" + string(this.area()) + " perimeter=" + string(this.perimeter())
+    }
+}
+
+let rect = Rectangle(width = 10, height = 5)
+print("Test 13 - Rectangle: " + rect.describe())
+
+// Test 14: Struct with no methods
+struct Color {
+    r: 0
+    g: 0
+    b: 0
+}
+
+let red = Color(r = 255, g = 0, b = 0)
+print("Test 14 - Color: R=" + string(red.r) + " G=" + string(red.g) + " B=" + string(red.b))
+
+// Test 15: Struct with only methods
+struct MathHelper {
+    base: 0
+
+    func square() {
+        return this.base * this.base
+    }
+
+    func cube() {
+        return this.base * this.base * this.base
+    }
+}
+
+let m = MathHelper(base = 5)
+print("Test 15 - square(5): " + string(m.square()))
+print("Test 15 - cube(5): " + string(m.cube()))
+
+print("\n=== All struct tests passed! ===")

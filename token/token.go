@@ -99,6 +99,7 @@ const (
 	CRITICAL = "CRITICAL"
 	LOG      = "LOG"
 	ENUM     = "ENUM"
+	STRUCT   = "STRUCT"
 
 	// Async/Concurrency Keywords
 	ASYNC = "ASYNC"
@@ -165,6 +166,7 @@ var keywords = map[string]TokenType{
 	"critical": CRITICAL,
 	"log":      LOG,
 	"enum":     ENUM,
+	"struct":   STRUCT,
 	"async":    ASYNC,
 	"await":    AWAIT,
 	"go":       GO,

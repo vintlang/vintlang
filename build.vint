@@ -3,13 +3,15 @@
 // Example: vint vintfile.vint build
 // Example: vint vintfile.vint build_linux
 
-import make
-import os
-import cli
-import json
+
+const make = import("make")
+const os = import("os")
+const cli = import("cli")
+const json = import("json")
+const shell = import("shell")
 
 // Configuration
-const VERSION = "0.2.1"
+const VERSION = "0.2.5"
 const LDFLAGS = "-s -w"
 
 // Helper function to println colored messages
@@ -31,8 +33,8 @@ let tasks = {
 
     "build_linux": func() {
         echo("Building Linux binary...")
-        make.env("GOOS", "linux")
-        make.env("GOARCH", "amd64")
+        shell.run("GOOS", "linux")
+        shell.run("GOARCH", "amd64")
         let result = make.exec("go build -ldflags=\"" + LDFLAGS + "\" -o vint")
         echo("Zipping build...")
         make.exec("tar -zcvf binaries/vintLang_linux_amd64.tar.gz vint")
@@ -43,8 +45,8 @@ let tasks = {
 
     "build_windows": func() {
         echo("Building Windows executable...")
-        make.env("GOOS", "windows")
-        make.env("GOARCH", "amd64")
+        shell.run("GOOS", "windows")
+        shell.run("GOARCH", "amd64")
         let result = make.exec("go build -ldflags=\"" + LDFLAGS + "\" -o vint_windows_amd64.exe")
         echo("Zipping build...")
         make.exec("zip binaries/vintLang_windows_amd64.zip vint_windows_amd64.exe")
@@ -56,8 +58,8 @@ let tasks = {
 
     "build_mac": func() {
         echo("Building macOS binary...")
-        make.env("GOOS", "darwin")
-        make.env("GOARCH", "amd64")
+        shell.run("GOOS", "darwin")
+        shell.run("GOARCH", "amd64")
         let result = make.exec("go build -ldflags=\"" + LDFLAGS + "\" -o vint")
         println({"result":result})
             echo("Zipping build...")
@@ -70,8 +72,8 @@ let tasks = {
 
     "build_android": func() {
         echo("Building Android binary...")
-        make.env("GOOS", "android")
-        make.env("GOARCH", "arm64")
+        shell.run("GOOS", "android")
+        shell.run("GOARCH", "arm64")
         let result = make.exec("go build -ldflags=\"" + LDFLAGS + "\" -o vint")
         echo("Zipping build...")
         make.exec("tar -zcvf binaries/vintLang_android_arm64.tar.gz vint")
@@ -102,8 +104,8 @@ let tasks = {
 
     "build_linux_upx": func() {
         echo("Building Linux binary with UPX...")
-        make.env("GOOS", "linux")
-        make.env("GOARCH", "amd64")
+        shell.run("GOOS", "linux")
+        shell.run("GOARCH", "amd64")
         make.exec("go build -ldflags=\"" + LDFLAGS + "\" -o vint")
         echo("Compressing with UPX...")
         make.exec("upx --best vint")
@@ -116,8 +118,8 @@ let tasks = {
 
     "build_windows_upx": func() {
         echo("Building Windows executable with UPX...")
-        make.env("GOOS", "windows")
-        make.env("GOARCH", "amd64")
+        shell.run("GOOS", "windows")
+        shell.run("GOARCH", "amd64")
         make.exec("go build -ldflags=\"" + LDFLAGS + "\" -o vint_windows_amd64.exe")
         echo("Compressing with UPX...")
         make.exec("upx --best vint_windows_amd64.exe")
@@ -130,8 +132,8 @@ let tasks = {
 
     "build_mac_upx": func() {
         echo("Building macOS binary with UPX...")
-        make.env("GOOS", "darwin")
-        make.env("GOARCH", "amd64")
+        shell.run("GOOS", "darwin")
+        shell.run("GOARCH", "amd64")
         make.exec("go build -ldflags=\"" + LDFLAGS + "\" -o vint")
         echo("Compressing with UPX...")
         make.exec("upx --best vint")
@@ -144,8 +146,8 @@ let tasks = {
 
     "build_android_upx": func() {
         echo("Building Android binary with UPX...")
-        make.env("GOOS", "android")
-        make.env("GOARCH", "arm64")
+        shell.run("GOOS", "android")
+        shell.run("GOARCH", "arm64")
         make.exec("go build -ldflags=\"" + LDFLAGS + "\" -o vint")
         echo("Compressing with UPX...")
         make.exec("upx --best vint")
