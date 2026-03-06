@@ -21,7 +21,7 @@ print("Generated UUID: " + id)
 print("\n3. JSON Operations:")
 let data = {
     "name": "VintLang",
-    "version": "0.2.1",
+    "version": "0.2.5",
     "features": ["time", "json", "uuid", "os"]
 }
 let jsonStr = json.encode(data)

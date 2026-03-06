@@ -150,3 +150,28 @@ func evalStructCall(node *ast.CallExpression, structDef *object.Struct, env *obj
 
 	return instantiateStruct(structDef, fieldArgs, node.Token.Line)
 }
+
+// evalStructLiteral handles struct instantiation via brace syntax:
+// User{name: "Alice", age: 30}
+func evalStructLiteral(node *ast.StructLiteral, env *object.Environment) object.VintObject {
+	nameObj := Eval(node.Name, env)
+	if isError(nameObj) {
+		return nameObj
+	}
+
+	structDef, ok := nameObj.(*object.Struct)
+	if !ok {
+		return newError("'%s' is not a struct type", node.Name.String())
+	}
+
+	fieldArgs := make(map[string]object.VintObject)
+	for name, expr := range node.Fields {
+		val := Eval(expr, env)
+		if isError(val) {
+			return val
+		}
+		fieldArgs[name] = val
+	}
+
+	return instantiateStruct(structDef, fieldArgs, node.Token.Line)
+}
