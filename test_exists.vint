@@ -1,0 +1,19 @@
+let os = import("os")
+let path = "/Users/mac/.config/overseer/registry.json"
+
+let exists = os.fileExists(path)
+print("exists value: " + string(exists))
+print("exists type: " + type(exists))
+print("!exists: " + string(!exists))
+
+if (exists == false) {
+    print("MATCH: exists == false")
+} else {
+    print("NO MATCH: exists != false")
+}
+
+if (!exists) {
+    print("MATCH: !exists")
+} else {
+    print("NO MATCH: !exists NOT taken")
+}

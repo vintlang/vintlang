@@ -87,13 +87,14 @@ func evalInfixExpression(operator string, left, right object.VintObject, line in
 	case left.Type() == object.FLOAT_OBJ && right.Type() == object.INTEGER_OBJ:
 		return evalFloatIntegerInfixExpression(operator, left, right, line)
 
+	case left.Type() == object.BOOLEAN_OBJ && right.Type() == object.BOOLEAN_OBJ:
+		return evalBooleanInfixExpression(operator, left, right, line)
+
 	case operator == "==":
 		return nativeBoolToBooleanObject(left == right)
 
 	case operator == "!=":
 		return nativeBoolToBooleanObject(left != right)
-	case left.Type() == object.BOOLEAN_OBJ && right.Type() == object.BOOLEAN_OBJ:
-		return evalBooleanInfixExpression(operator, left, right, line)
 
 	case left.Type() != right.Type():
 		return newError("Line %d: Type mismatch: cannot use '%s' operator between %s and %s. Consider type conversion", line, operator, left.Type(), right.Type())
@@ -178,6 +179,10 @@ func evalBooleanInfixExpression(operator string, left, right object.VintObject, 
 		return nativeBoolToBooleanObject(leftVal && rightVal)
 	case "||":
 		return nativeBoolToBooleanObject(leftVal || rightVal)
+	case "==":
+		return nativeBoolToBooleanObject(leftVal == rightVal)
+	case "!=":
+		return nativeBoolToBooleanObject(leftVal != rightVal)
 	default:
 		return newError("Line %d: Unsupported boolean operation: '%s' operator cannot be used with boolean values", line, operator)
 	}

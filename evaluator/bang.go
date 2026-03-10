@@ -3,12 +3,13 @@ package evaluator
 import "github.com/vintlang/vintlang/object"
 
 func evalBangOperatorExpression(right object.VintObject) object.VintObject {
-	switch right {
-	case TRUE:
-		return FALSE
-	case FALSE:
+	switch obj := right.(type) {
+	case *object.Boolean:
+		if obj.Value {
+			return FALSE
+		}
 		return TRUE
-	case NULL:
+	case *object.Null:
 		return TRUE
 	default:
 		return FALSE
