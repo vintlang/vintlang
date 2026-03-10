@@ -3,11 +3,13 @@ package main
 import (
 	"fmt"
 	"os"
+	"path/filepath"
 	"strings"
 
 	"github.com/charmbracelet/lipgloss"
 	"github.com/vintlang/vintlang/bundler"
 	"github.com/vintlang/vintlang/config"
+	"github.com/vintlang/vintlang/evaluator"
 	"github.com/vintlang/vintlang/lexer"
 	"github.com/vintlang/vintlang/parser"
 	"github.com/vintlang/vintlang/repl"
@@ -138,6 +140,13 @@ func run(file string) {
 		if err != nil {
 			fmt.Println(styles.ErrorStyle.Render("Error: vint Failed to read the file: ", file))
 			os.Exit(1)
+		}
+
+		// Add the script's directory to the import search paths so that
+		// multi-file projects with packages can be run from any working directory.
+		scriptDir := filepath.Dir(file)
+		if absDir, err := filepath.Abs(scriptDir); err == nil {
+			evaluator.AddSearchPath(absDir)
 		}
 
 		// Passes the file contents to the REPL for execution
