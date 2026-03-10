@@ -9,15 +9,11 @@
 //   start <name>          - Start a service
 //   stop <name>           - Stop a service
 //   restart <name>        - Restart a service
-//   enable <name>         - Enable a service to start at login
-//   disable <name>        - Disable a service from starting at login
 //   status <name>         - Show the status of a service
 //   logs <name>           - View recent logs for a service
 //   list                  - List all managed services
 //   remove <name>         - Stop, disable and remove a service
-//   info                  - Show overseer configuration paths
 //   help                  - Show help information
-//   --version             - Show version
 
 import cli
 import overseer_display
@@ -47,24 +43,6 @@ let requireService = func(name) {
     }
 }
 
-let requireName = func(args, usage) {
-    if (len(args) < 2) {
-        overseer_display.printError("Usage: overseer " + usage)
-        let os = import("os")
-        os.exit(1)
-    }
-    return args[1]
-}
-
-let validateName = func(name) {
-    if (!overseer_config.isValidName(name)) {
-        overseer_display.printError("Invalid service name: '" + name + "'")
-        overseer_display.printInfo("Names must start with a letter or digit and contain only [a-zA-Z0-9_-]")
-        let os = import("os")
-        os.exit(1)
-    }
-}
-
 // --------------------------------------------------------------------------
 // Command: add
 // --------------------------------------------------------------------------
@@ -79,8 +57,6 @@ let cmdAdd = func(args) {
 
     let name    = args[0]
     let command = args[1]
-
-    validateName(name)
 
     if (overseer_config.isRegistered(name)) {
         overseer_display.printWarn("Service '" + name + "' is already managed by overseer.")
@@ -100,9 +76,9 @@ let cmdAdd = func(args) {
 
     overseer_config.registerService(name, command)
 
-    overseer_display.printSuccess("Service '" + name + "' installed.")
-    overseer_display.printDetail("Command:",   command)
-    overseer_display.printDetail("Unit file:", overseer_config.getSystemdFilePath(name))
+    overseer_display.printSuccess("Service '" + name + "' has been installed.")
+    overseer_display.println("  Command:   " + command)
+    overseer_display.println("  Unit file: " + overseer_config.getSystemdFilePath(name))
     overseer_display.println("")
     overseer_display.printInfo("Start it with: vint main.vint start " + name)
 }
@@ -113,7 +89,7 @@ let cmdAdd = func(args) {
 
 let cmdStart = func(name) {
     requireService(name)
-    overseer_display.printInfo("Starting '" + name + "'...")
+    overseer_display.printInfo("Starting service '" + name + "'...")
 
     let result = overseer_systemctl.start(name)
     if (result["ok"]) {
@@ -132,11 +108,11 @@ let cmdStart = func(name) {
 
 let cmdStop = func(name) {
     requireService(name)
-    overseer_display.printInfo("Stopping '" + name + "'...")
+    overseer_display.printInfo("Stopping service '" + name + "'...")
 
     let result = overseer_systemctl.stop(name)
     if (result["ok"]) {
-        overseer_display.printSuccess("Service '" + name + "' stopped.")
+        overseer_display.printSuccess("Service '" + name + "' has been stopped.")
     } else {
         overseer_display.printWarn("Service '" + name + "' status: " + result["status"])
         if (result["output"] != "") {
@@ -151,51 +127,13 @@ let cmdStop = func(name) {
 
 let cmdRestart = func(name) {
     requireService(name)
-    overseer_display.printInfo("Restarting '" + name + "'...")
+    overseer_display.printInfo("Restarting service '" + name + "'...")
 
     let result = overseer_systemctl.restart(name)
     if (result["ok"]) {
-        overseer_display.printSuccess("Service '" + name + "' restarted.")
+        overseer_display.printSuccess("Service '" + name + "' has been restarted.")
     } else {
         overseer_display.printWarn("Service '" + name + "' status: " + result["status"])
-        if (result["output"] != "") {
-            overseer_display.printOutput(result["output"])
-        }
-    }
-}
-
-// --------------------------------------------------------------------------
-// Command: enable
-// --------------------------------------------------------------------------
-
-let cmdEnable = func(name) {
-    requireService(name)
-    overseer_display.printInfo("Enabling '" + name + "' for auto-start...")
-
-    let result = overseer_systemctl.enable(name)
-    if (result["ok"]) {
-        overseer_display.printSuccess("Service '" + name + "' will start at login.")
-    } else {
-        overseer_display.printWarn("Enable state: " + result["state"])
-        if (result["output"] != "") {
-            overseer_display.printOutput(result["output"])
-        }
-    }
-}
-
-// --------------------------------------------------------------------------
-// Command: disable
-// --------------------------------------------------------------------------
-
-let cmdDisable = func(name) {
-    requireService(name)
-    overseer_display.printInfo("Disabling auto-start for '" + name + "'...")
-
-    let result = overseer_systemctl.disable(name)
-    if (result["ok"]) {
-        overseer_display.printSuccess("Service '" + name + "' will no longer start at login.")
-    } else {
-        overseer_display.printWarn("Disable state: " + result["state"])
         if (result["output"] != "") {
             overseer_display.printOutput(result["output"])
         }
@@ -213,10 +151,10 @@ let cmdStatus = func(name) {
     let result  = overseer_systemctl.status(name)
 
     overseer_display.println("")
-    overseer_display.printDetail("Service:",  name)
-    overseer_display.printDetail("Command:",  svcInfo["command"])
-    overseer_display.printDetail("Created:",  svcInfo["created_at"])
-    overseer_display.printDetail("Status:",   result["active"])
+    overseer_display.println("Service: " + name)
+    overseer_display.println("Command: " + svcInfo["command"])
+    overseer_display.println("Created: " + svcInfo["created_at"])
+    overseer_display.println("Status:  " + result["active"])
     overseer_display.println("")
 
     if (result["output"] != "") {
@@ -230,7 +168,7 @@ let cmdStatus = func(name) {
 
 let cmdLogs = func(name) {
     requireService(name)
-    overseer_display.printInfo("Logs for '" + name + "' (last 50 lines):")
+    overseer_display.printInfo("Logs for service '" + name + "' (last 50 lines):")
     overseer_display.println("")
 
     let logOutput = overseer_systemctl.logs(name, 50)
@@ -252,9 +190,9 @@ let cmdList = func() {
     overseer_display.println("")
 
     if (len(names) == 0) {
-        overseer_display.println("  No services managed by overseer.")
+        overseer_display.println("No services are managed by overseer.")
         overseer_display.println("")
-        overseer_display.printInfo("Add one: vint main.vint add <name> <command>")
+        overseer_display.printInfo("Add a service: vint main.vint add <name> <command>")
         return null
     }
 
@@ -270,21 +208,24 @@ let cmdList = func() {
 let cmdRemove = func(name) {
     requireService(name)
 
-    overseer_display.printInfo("Removing '" + name + "'...")
+    overseer_display.printInfo("Removing service '" + name + "'...")
 
+    // Stop and disable before removing files
     overseer_systemctl.stop(name)
     overseer_systemctl.disable(name)
 
+    // Remove service files and reload systemd
     overseer_service.removeServiceFiles(name, overseer_config)
     overseer_systemctl.daemonReload()
 
+    // Unregister from the overseer registry
     overseer_config.unregisterService(name)
 
-    overseer_display.printSuccess("Service '" + name + "' removed.")
+    overseer_display.printSuccess("Service '" + name + "' has been removed.")
 }
 
 // --------------------------------------------------------------------------
-// Main entry point
+// Main entry point - parse args and dispatch to command handler
 // --------------------------------------------------------------------------
 
 let args = cli.getArgs()
@@ -297,97 +238,82 @@ if (len(args) == 0) {
 
 let command = args[0]
 
-switch (command) {
-    case "help", "--help", "-h" {
-        overseer_display.showHelp()
-    }
+if (command == "help" || command == "--help" || command == "-h") {
+    overseer_display.showHelp()
 
-    case "--version", "-v" {
-        overseer_display.showVersion()
+} else if (command == "add") {
+    requireSystemd()
+    let addArgs = []
+    if (len(args) > 1) {
+        addArgs.push(args[1])
     }
-
-    case "info" {
-        overseer_display.showInfo()
+    if (len(args) > 2) {
+        addArgs.push(args[2])
     }
+    cmdAdd(addArgs)
 
-    case "add" {
-        requireSystemd()
-        let addArgs = []
-        if (len(args) > 1) {
-            addArgs.push(args[1])
-        }
-        if (len(args) > 2) {
-            addArgs.push(args[2])
-        }
-        cmdAdd(addArgs)
-    }
-
-    case "start" {
-        let name = requireName(args, "start <name>")
-        validateName(name)
-        requireSystemd()
-        cmdStart(name)
-    }
-
-    case "stop" {
-        let name = requireName(args, "stop <name>")
-        validateName(name)
-        requireSystemd()
-        cmdStop(name)
-    }
-
-    case "restart" {
-        let name = requireName(args, "restart <name>")
-        validateName(name)
-        requireSystemd()
-        cmdRestart(name)
-    }
-
-    case "enable" {
-        let name = requireName(args, "enable <name>")
-        validateName(name)
-        requireSystemd()
-        cmdEnable(name)
-    }
-
-    case "disable" {
-        let name = requireName(args, "disable <name>")
-        validateName(name)
-        requireSystemd()
-        cmdDisable(name)
-    }
-
-    case "status" {
-        let name = requireName(args, "status <name>")
-        validateName(name)
-        requireSystemd()
-        cmdStatus(name)
-    }
-
-    case "logs" {
-        let name = requireName(args, "logs <name>")
-        validateName(name)
-        requireSystemd()
-        cmdLogs(name)
-    }
-
-    case "list" {
-        overseer_display.header()
-        cmdList()
-    }
-
-    case "remove" {
-        let name = requireName(args, "remove <name>")
-        validateName(name)
-        requireSystemd()
-        cmdRemove(name)
-    }
-
-    default {
-        overseer_display.printError("Unknown command: '" + command + "'")
-        overseer_display.println("")
-        overseer_display.showHelp()
+} else if (command == "start") {
+    if (len(args) < 2) {
+        overseer_display.printError("Usage: overseer start <name>")
         let os = import("os")
         os.exit(1)
     }
+    requireSystemd()
+    cmdStart(args[1])
+
+} else if (command == "stop") {
+    if (len(args) < 2) {
+        overseer_display.printError("Usage: overseer stop <name>")
+        let os = import("os")
+        os.exit(1)
+    }
+    requireSystemd()
+    cmdStop(args[1])
+
+} else if (command == "restart") {
+    if (len(args) < 2) {
+        overseer_display.printError("Usage: overseer restart <name>")
+        let os = import("os")
+        os.exit(1)
+    }
+    requireSystemd()
+    cmdRestart(args[1])
+
+} else if (command == "status") {
+    if (len(args) < 2) {
+        overseer_display.printError("Usage: overseer status <name>")
+        let os = import("os")
+        os.exit(1)
+    }
+    requireSystemd()
+    cmdStatus(args[1])
+
+} else if (command == "logs") {
+    if (len(args) < 2) {
+        overseer_display.printError("Usage: overseer logs <name>")
+        let os = import("os")
+        os.exit(1)
+    }
+    requireSystemd()
+    cmdLogs(args[1])
+
+} else if (command == "list") {
+    overseer_display.header()
+    cmdList()
+
+} else if (command == "remove") {
+    if (len(args) < 2) {
+        overseer_display.printError("Usage: overseer remove <name>")
+        let os = import("os")
+        os.exit(1)
+    }
+    requireSystemd()
+    cmdRemove(args[1])
+
+} else {
+    overseer_display.printError("Unknown command: '" + command + "'")
+    overseer_display.println("")
+    overseer_display.showHelp()
+    let os = import("os")
+    os.exit(1)
 }

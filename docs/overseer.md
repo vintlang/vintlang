@@ -74,6 +74,7 @@ vint main.vint add nginx "nginx -g 'daemon off;'"
 ```
 
 This:
+
 1. Generates a systemd unit file at `~/.config/overseer/services/<name>.service`
 2. Copies it to `~/.config/systemd/user/<name>.service`
 3. Runs `systemctl --user daemon-reload`
@@ -142,6 +143,26 @@ vint main.vint list
 
 ---
 
+### `enable <name>`
+
+Enable a service to start automatically at login.
+
+```sh
+vint main.vint enable api
+```
+
+---
+
+### `disable <name>`
+
+Disable a service from starting at login.
+
+```sh
+vint main.vint disable api
+```
+
+---
+
 ### `remove <name>`
 
 Stop, disable, and completely remove a service from overseer and systemd.
@@ -151,11 +172,43 @@ vint main.vint remove api
 ```
 
 This:
+
 1. Stops the service
 2. Disables the service (removes from auto-start)
 3. Removes the unit files
 4. Reloads systemd
 5. Unregisters the service from the overseer registry
+
+---
+
+### `info`
+
+Show overseer configuration paths and system info.
+
+```sh
+vint main.vint info
+```
+
+---
+
+### `--version`
+
+Show the overseer version.
+
+```sh
+vint main.vint --version
+```
+
+---
+
+## Service Name Validation
+
+Service names must:
+
+- Start with a letter or digit
+- Contain only letters, digits, hyphens (`-`), and underscores (`_`)
+
+Invalid names (e.g., names containing spaces, slashes, or special characters) are rejected to prevent command injection and ensure compatibility with systemd.
 
 ---
 
@@ -172,21 +225,28 @@ examples/overseer/
 
 ### VintLang Features Used
 
-| Feature              | Where Used                                          |
-|----------------------|-----------------------------------------------------|
-| `package`            | All 4 sub-modules encapsulate their logic cleanly   |
-| `import` (built-in)  | `cli`, `os`, `shell`, `json`, `term`, `time`       |
-| `import` (user pkg)  | The 4 overseer packages imported by `main.vint`     |
-| `include` / init     | Package `init` functions auto-run on import         |
-| File I/O (`os`)      | Reading/writing service and registry files          |
-| Shell (`shell`)      | Running `systemctl` and `journalctl` commands       |
-| JSON (`json`)        | Persisting the service registry                     |
-| Terminal (`term`)    | Styled output, tables, banners, messages            |
-| CLI (`cli`)          | Argument parsing                                    |
-| Dicts & arrays       | Service registry, table rows, command routing       |
-| Functions / closures | Command handlers, package-private helpers           |
-| String methods       | `.trim()`, `.contains()`, `.split()`, `.length()`  |
-| Error handling       | `requireSystemd()`, `requireService()` guards       |
+| Feature              | Where Used                                                           |
+| -------------------- | -------------------------------------------------------------------- |
+| `package`            | All 4 sub-modules encapsulate their logic cleanly                    |
+| `const`              | Version, colors, config constants                                    |
+| `switch`             | Clean command dispatch in `main.vint`                                |
+| `import` (built-in)  | `cli`, `os`, `shell`, `json`, `term`, `time`, `path`, `regex`, `fmt` |
+| `import` (user pkg)  | The 4 overseer packages imported by `main.vint`                      |
+| Package `init`       | Auto-run on import to set up config paths                            |
+| Private members      | `_` prefix for internal-only package state                           |
+| `path.join()`        | Safe cross-platform path construction                                |
+| `regex.match()`      | Service name validation against injection                            |
+| `fmt.padRight()`     | Aligned key-value output in status display                           |
+| File I/O (`os`)      | Reading/writing service and registry files                           |
+| Shell (`shell`)      | Running `systemctl` and `journalctl` commands                        |
+| JSON (`json`)        | Persisting the service registry                                      |
+| Terminal (`term`)    | Styled output, tables, banners, messages                             |
+| CLI (`cli`)          | Argument parsing                                                     |
+| Dicts & arrays       | Service registry, table rows, command routing                        |
+| Dict methods         | `.has()`, `.keys()`, `.remove()` for registry ops                    |
+| Functions / closures | Command handlers, guards, validators                                 |
+| String methods       | `.trim()`, `.contains()`, `.split()`, `.substring()`                 |
+| Error handling       | Guard functions with early exit                                      |
 
 ---
 
@@ -210,12 +270,14 @@ StartLimitIntervalSec=60
 StartLimitBurst=3
 StandardOutput=journal
 StandardError=journal
+SyslogIdentifier=<name>
 
 [Install]
 WantedBy=default.target
 ```
 
 Service files are stored in:
+
 - **Overseer copy**: `~/.config/overseer/services/<name>.service`
 - **Systemd unit**: `~/.config/systemd/user/<name>.service`
 
@@ -262,8 +324,15 @@ vint main.vint logs api
 # Restart after a code update
 vint main.vint restart api
 
+# Control auto-start
+vint main.vint enable api
+vint main.vint disable api
+
 # List all services
 vint main.vint list
+
+# Show config paths
+vint main.vint info
 
 # Remove it
 vint main.vint remove api
