@@ -14,10 +14,10 @@ This allows you to write code in VintLang, bundle it into an executable, and run
 
 ## Why Use the Bundler?
 
-* Package and distribute VintLang scripts as self-contained executables
-* End-users don’t need to install Go or VintLang
-* Ideal for deploying scripts, shipping CLI tools, and automating workflows
-* Internally powered by the `vintlang/repl` package for code execution
+- Package and distribute VintLang scripts as self-contained executables
+- End-users don’t need to install Go or VintLang
+- Ideal for deploying scripts, shipping CLI tools, and automating workflows
+- Internally powered by the `vintlang/repl` package for code execution
 
 ---
 
@@ -58,19 +58,20 @@ This makes the `vint` CLI available, including the `bundle` command.
 
 ## Multi-File Package Support (NEW!)
 
-The VintLang Bundler now supports bundling multi-file packages with both imports and includes! 
+The VintLang Bundler now supports bundling multi-file packages with both imports and includes!
 
 ### Key Features
 
-* ✅ **Automatic Dependency Discovery**: Finds all imported and included `.vint` files recursively
-* ✅ **Package System Integration**: Handles `package` declarations and `import` statements
-* ✅ **Include Statement Support**: Handles `include` statements for direct file embedding
-* ✅ **Self-Contained Binaries**: No external `.vint` files needed at runtime
-* ✅ **Compatible with Built-ins**: Works with all VintLang built-in modules
+- ✅ **Automatic Dependency Discovery**: Finds all imported and included `.vint` files recursively
+- ✅ **Package System Integration**: Handles `package` declarations and `import` statements
+- ✅ **Include Statement Support**: Handles `include` statements for direct file embedding
+- ✅ **Self-Contained Binaries**: No external `.vint` files needed at runtime
+- ✅ **Compatible with Built-ins**: Works with all VintLang built-in modules
 
 ### Example Multi-File Project (Imports)
 
 **main.vint**:
+
 ```js
 import my_utils
 import os
@@ -81,6 +82,7 @@ print("Result:", result)
 ```
 
 **my_utils.vint**:
+
 ```js
 package my_utils {
     let process_data = func(input) {
@@ -90,6 +92,7 @@ package my_utils {
 ```
 
 Bundle the entire project:
+
 ```sh
 vint bundle main.vint
 ```
@@ -99,6 +102,7 @@ The bundler automatically discovers `my_utils.vint`, processes the package struc
 ### Example Multi-File Project (Includes)
 
 **main.vint**:
+
 ```js
 include "config.vint"
 include "helpers.vint"
@@ -108,12 +112,14 @@ print("Result:", processData("test"))
 ```
 
 **config.vint**:
+
 ```js
-let appName = "My VintLang App"
-let version = "1.0.0"
+let appName = "My VintLang App";
+let version = "1.0.0";
 ```
 
 **helpers.vint**:
+
 ```js
 let processData = func(input) {
     return "processed: " + input
@@ -121,6 +127,7 @@ let processData = func(input) {
 ```
 
 Bundle the entire project:
+
 ```sh
 vint bundle main.vint
 ```
@@ -129,9 +136,9 @@ The bundler automatically discovers all included files and embeds their content 
 
 ### Differences between Import and Include
 
-* **Import statements** (`import module_name`) work with the package system and wrap content in packages
-* **Include statements** (`include "file_path"`) directly embed file content without package wrapping
-* Both are automatically discovered and bundled into self-contained binaries
+- **Import statements** (`import module_name`) work with the package system and wrap content in packages
+- **Include statements** (`include "file_path"`) directly embed file content without package wrapping
+- Both are automatically discovered and bundled into self-contained binaries
 
 ---
 
@@ -158,7 +165,7 @@ To run the binary:
 Given a simple `hello.vint` file:
 
 ```js
-print("Hello, World!")
+print("Hello, World!");
 ```
 
 Run:
@@ -186,15 +193,17 @@ Hello, World!
 The VintLang bundler has evolved into a sophisticated multi-stage pipeline that handles complex multi-file projects with automatic dependency resolution. Here's how it works:
 
 ### 🔍 Phase 1: Dependency Analysis
+
 ```
 main.vint
     ↓ (parse AST)
     ├── import math_utils → finds math_utils.vint
-    ├── include "config.vint" → finds config.vint  
+    ├── include "config.vint" → finds config.vint
     └── import os → skips (built-in module)
 ```
 
 **What happens:**
+
 - Parses main file's AST to find `import` and `include` statements
 - Sets up search paths (main file directory, current directory, `./modules/`)
 - Recursively discovers all dependency files
@@ -202,6 +211,7 @@ main.vint
 - Skips built-in modules (like `os`, `http`, etc.)
 
 ### ⚙️ Phase 2: String Processing & Code Combination
+
 ```
 Files discovered:
 ├── main.vint (import math_utils; include "config.vint"; ...)
@@ -215,12 +225,14 @@ Processing:
 ```
 
 **What happens:**
+
 - **Import files**: Wrapped in package structure if not already packaged
-- **Include files**: Content embedded directly, imports/includes removed  
+- **Include files**: Content embedded directly, imports/includes removed
 - **Main file**: Import/include statements removed for bundled dependencies
 - All code combined into single VintLang program
 
 ### 🏗️ Phase 3: Go Code Generation
+
 ```
 Combined VintLang Code
     ↓ (escape for Go)
@@ -235,12 +247,14 @@ func main() {
 ```
 
 **What happens:**
+
 - Escapes VintLang code for safe embedding in Go string literals
 - Generates Go main.go file using template
 - Adds metadata (bundler version, build time)
 - Creates go.mod file for dependencies
 
 ### 🔨 Phase 4: Binary Compilation
+
 ```
 Temporary Directory
 ├── main.go (generated)
@@ -250,8 +264,9 @@ Binary Output (self-contained executable)
 ```
 
 **What happens:**
+
 - Creates temporary build directory
-- Runs `go mod tidy` to resolve Go dependencies  
+- Runs `go mod tidy` to resolve Go dependencies
 - Compiles with `go build -o binary_name`
 - Moves final binary to output location
 - Cleans up temporary files
@@ -259,7 +274,7 @@ Binary Output (self-contained executable)
 ### 🎯 Key Features of Current Implementation
 
 1. **Automatic Dependency Discovery**: Recursively finds all `.vint` files through AST parsing
-2. **Dual Processing Modes**: 
+2. **Dual Processing Modes**:
    - `import module_name` → wraps content in packages
    - `include "file.vint"` → directly embeds content
 3. **Smart Module Resolution**: Searches multiple paths, handles built-ins
@@ -339,13 +354,13 @@ The resulting binary is completely portable and self-contained - no VintLang int
 
 The bundler is built with several specialized components:
 
-| Component | File | Purpose |
-|-----------|------|---------|
-| **Bundle Controller** | `bundler.go` | Main entry point, coordinates the entire bundling process |
-| **Dependency Analyzer** | `dependencies.go` | Discovers and analyzes all imported/included files recursively |
-| **String Processor** | `string_processor.go` | Combines files and handles import/include statement processing |
-| **Bundled Evaluator** | `bundled_evaluator.go` | Generates the final Go code with embedded VintLang content |
-| **Package Processor** | `package_processor.go` | Handles package structure and wrapping for imported modules |
+| Component               | File                   | Purpose                                                        |
+| ----------------------- | ---------------------- | -------------------------------------------------------------- |
+| **Bundle Controller**   | `bundler.go`           | Main entry point, coordinates the entire bundling process      |
+| **Dependency Analyzer** | `dependencies.go`      | Discovers and analyzes all imported/included files recursively |
+| **String Processor**    | `string_processor.go`  | Combines files and handles import/include statement processing |
+| **Bundled Evaluator**   | `bundled_evaluator.go` | Generates the final Go code with embedded VintLang content     |
+| **Package Processor**   | `package_processor.go` | Handles package structure and wrapping for imported modules    |
 
 **Flow**: Bundle Controller → Dependency Analyzer → String Processor → Bundled Evaluator → Go Compiler
 
@@ -353,14 +368,14 @@ The bundler is built with several specialized components:
 
 The bundler has significantly evolved from the simple design originally described:
 
-| Original Design | Current Implementation |
-|----------------|----------------------|
-| ✅ Single file bundling | ✅ Multi-file project support with dependency resolution |
-| ✅ Simple string embedding | ✅ Advanced AST parsing and code processing |
-| ❌ No import support | ✅ Full import/include statement handling |
-| ❌ No package system | ✅ Package wrapping and module resolution |
-| ❌ Manual dependency management | ✅ Automatic recursive dependency discovery |
-| ✅ Basic Go template | ✅ Sophisticated string processing and escaping |
+| Original Design                 | Current Implementation                                   |
+| ------------------------------- | -------------------------------------------------------- |
+| ✅ Single file bundling         | ✅ Multi-file project support with dependency resolution |
+| ✅ Simple string embedding      | ✅ Advanced AST parsing and code processing              |
+| ❌ No import support            | ✅ Full import/include statement handling                |
+| ❌ No package system            | ✅ Package wrapping and module resolution                |
+| ❌ Manual dependency management | ✅ Automatic recursive dependency discovery              |
+| ✅ Basic Go template            | ✅ Sophisticated string processing and escaping          |
 
 The current implementation handles complex multi-file projects automatically while maintaining the same simple command-line interface.
 
@@ -369,6 +384,7 @@ The current implementation handles complex multi-file projects automatically whi
 Let's see exactly what happens when bundling a multi-file project:
 
 **Input Files:**
+
 ```js
 // main.vint
 import math_utils
@@ -376,7 +392,7 @@ include "config.vint"
 print("App:", appName)
 print("Result:", math_utils.add(5, 3))
 
-// math_utils.vint  
+// math_utils.vint
 package math_utils {
     let add = func(a, b) { return a + b }
 }
@@ -386,6 +402,7 @@ let appName = "Calculator"
 ```
 
 **After Dependency Analysis:**
+
 ```
 Found 3 files:
 ├── main.vint (main file)
@@ -394,6 +411,7 @@ Found 3 files:
 ```
 
 **After String Processing:**
+
 ```js
 // Combined VintLang code:
 package math_utils {
@@ -407,6 +425,7 @@ print("Result:", math_utils.add(5, 3))
 ```
 
 **After Go Code Generation:**
+
 ```go
 package main
 import "github.com/vintlang/vintlang/repl"
@@ -424,6 +443,7 @@ print("Result:", math_utils.add(5, 3))`
 ```
 
 **Final Result:** Self-contained binary that outputs:
+
 ```
 App: Calculator
 Result: 8
@@ -452,19 +472,19 @@ func main() {
 
 ## Use Cases
 
-* Distribute command-line tools built in VintLang
-* Deploy scripts on systems where VintLang is not installed
-* Share portable binaries for automation or education
-* Build lightweight tools using VintLang and Go’s compiler
+- Distribute command-line tools built in VintLang
+- Deploy scripts on systems where VintLang is not installed
+- Share portable binaries for automation or education
+- Build lightweight tools using VintLang and Go’s compiler
 
 ---
 
 ## Notes for Developers
 
-* Temporary build directories are automatically created and cleaned
-* Uses `text/template` for safe source code embedding
-* The Go module created during bundling is isolated from your current project
-* Spinner and CLI output are available for build feedback
+- Temporary build directories are automatically created and cleaned
+- Uses `text/template` for safe source code embedding
+- The Go module created during bundling is isolated from your current project
+- Spinner and CLI output are available for build feedback
 
 ---
 
@@ -478,44 +498,47 @@ The bundler supports cross-compilation via positional `GOOS` and `GOARCH` argume
 vint bundle <file.vint> [placeholder] [outputName] [outputDir] [GOOS] [GOARCH] [quiet] [keep]
 ```
 
-| Position | Argument | Description |
-|----------|----------|-------------|
-| 1 | `<file.vint>` | Main VintLang source file (required) |
-| 2 | *(placeholder)* | Reserved |
-| 3 | Output name | Binary name (default: filename without `.vint`) |
-| 4 | Output dir | Output directory (default: `.`) |
-| 5 | GOOS | Target OS: `linux`, `darwin`, `windows`, etc. |
-| 6 | GOARCH | Target architecture: `amd64`, `arm64`, etc. |
-| 7 | `quiet` | Suppress build output |
-| 8 | `keep` | Keep temporary build directory |
+| Position | Argument        | Description                                     |
+| -------- | --------------- | ----------------------------------------------- |
+| 1        | `<file.vint>`   | Main VintLang source file (required)            |
+| 2        | _(placeholder)_ | Reserved                                        |
+| 3        | Output name     | Binary name (default: filename without `.vint`) |
+| 4        | Output dir      | Output directory (default: `.`)                 |
+| 5        | GOOS            | Target OS: `linux`, `darwin`, `windows`, etc.   |
+| 6        | GOARCH          | Target architecture: `amd64`, `arm64`, etc.     |
+| 7        | `quiet`         | Suppress build output                           |
+| 8        | `keep`          | Keep temporary build directory                  |
 
 ### Examples
 
 Build for Linux on AMD64 (e.g., from macOS):
+
 ```sh
 vint bundle main.vint "" myapp . linux amd64
 ```
 
 Build for Windows on ARM64:
+
 ```sh
 vint bundle main.vint "" myapp . windows arm64
 ```
 
 Build for the current platform (default):
+
 ```sh
 vint bundle main.vint
 ```
 
 ### Common GOOS / GOARCH Combinations
 
-| Target | GOOS | GOARCH |
-|--------|------|--------|
-| Linux x86-64 | `linux` | `amd64` |
-| Linux ARM (Raspberry Pi, etc.) | `linux` | `arm64` |
-| macOS Apple Silicon | `darwin` | `arm64` |
-| macOS Intel | `darwin` | `amd64` |
-| Windows x86-64 | `windows` | `amd64` |
-| Windows ARM | `windows` | `arm64` |
+| Target                         | GOOS      | GOARCH  |
+| ------------------------------ | --------- | ------- |
+| Linux x86-64                   | `linux`   | `amd64` |
+| Linux ARM (Raspberry Pi, etc.) | `linux`   | `arm64` |
+| macOS Apple Silicon            | `darwin`  | `arm64` |
+| macOS Intel                    | `darwin`  | `amd64` |
+| Windows x86-64                 | `windows` | `amd64` |
+| Windows ARM                    | `windows` | `arm64` |
 
 > **Note**: Go must be installed on the build machine. The generated binary runs on the target platform without Go or VintLang.
 
@@ -523,9 +546,9 @@ vint bundle main.vint
 
 ## Important Details
 
-* Go is required only during **build time**
-* The resulting binary is portable and self-contained
-* Cross-compilation is fully supported via GOOS/GOARCH arguments
+- Go is required only during **build time**
+- The resulting binary is portable and self-contained
+- Cross-compilation is fully supported via GOOS/GOARCH arguments
 
 ---
 
@@ -538,4 +561,3 @@ vint bundle yourfile.vint
 ```
 
 Build once. Run anywhere. No dependencies. No interpreter. Just execution.
-

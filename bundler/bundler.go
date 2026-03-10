@@ -184,7 +184,6 @@ require github.com/vintlang/vintlang v0.2.4
 	printlnVerbose(verbose, "OK")
 	fmt.Printf("\n=> Successfully created binary with %d bundled files: %s\n", len(bundle.Files), outputPath)
 
-	
 	keepTemp := false
 	if len(args) >= 8 && args[7] == "keep" {
 		keepTemp = true
