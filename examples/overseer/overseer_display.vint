@@ -1,0 +1,150 @@
+// overseer_display.vint
+// Display and output utilities for the overseer process manager.
+// Provides styled terminal output using the term module.
+//
+// Note: VintLang reserves 'error', 'info', 'success', 'warn' as language keywords,
+// so those words are not used as identifiers or method names here.
+
+package overseer_display {
+
+    let VERSION = "1.0.0"
+
+    // ANSI-compatible color hex codes for styled output
+    let COLOR_OK   = "#00CC66"
+    let COLOR_ERR  = "#FF4444"
+    let COLOR_MSG  = "#4499FF"
+    let COLOR_WARN = "#FFAA33"
+    let COLOR_DIM  = "#888888"
+
+    // Print the application header banner
+    let header = func() {
+        let term = import("term")
+        let banner = term.banner("Overseer v" + VERSION)
+        term.println(banner)
+        term.println("  Developer-friendly process manager powered by systemd", COLOR_DIM)
+        term.println("")
+    }
+
+    // Print a success message (green)
+    let printSuccess = func(msg) {
+        let term = import("term")
+        term.println("  " + msg, COLOR_OK)
+    }
+
+    // Print an error message (red)
+    let printError = func(msg) {
+        let term = import("term")
+        term.println("  [ERROR] " + msg, COLOR_ERR)
+    }
+
+    // Print an informational message (blue)
+    let printInfo = func(msg) {
+        let term = import("term")
+        term.println("  " + msg, COLOR_MSG)
+    }
+
+    // Print a warning message (orange)
+    let printWarn = func(msg) {
+        let term = import("term")
+        term.println("  [WARN] " + msg, COLOR_WARN)
+    }
+
+    // Print plain text with a newline
+    let println = func(msg) {
+        let term = import("term")
+        term.println(msg)
+    }
+
+    // Print command output lines with a subtle indent
+    let printOutput = func(text) {
+        let term = import("term")
+        if (text == null || text == "") {
+            term.println("  (no output)", COLOR_DIM)
+        } else {
+            let lines = text.split("\n")
+            for line in lines {
+                if (line.trim() != "") {
+                    term.println("  " + line)
+                }
+            }
+        }
+    }
+
+    // Print a table of services.
+    // services is a dict: { name -> { name, command, created_at } }
+    let printServicesTable = func(services) {
+        let term  = import("term")
+        let shell = import("shell")
+
+        let rows = [["Name", "Command", "Status", "Created"]]
+
+        let names = services.keys()
+        if (len(names) == 0) {
+            term.println("  No services registered.", COLOR_DIM)
+            return null
+        }
+
+        for name in names {
+            let svc = services[name]
+            let statusOutput = shell.run("systemctl --user is-active " + name + " 2>&1 || true")
+            let st = statusOutput.trim()
+
+            let cmd = svc["command"]
+            if (cmd.length() > 40) {
+                cmd = cmd.substring(0, 37) + "..."
+            }
+
+            let created = svc["created_at"]
+            if (created == null) {
+                created = "unknown"
+            }
+
+            rows.push([name, cmd, st, created])
+        }
+
+        let table = term.table(rows)
+        term.println(table)
+    }
+
+    // Show the help message
+    let showHelp = func() {
+        let term = import("term")
+
+        header()
+
+        term.println("Usage:", "#FFFFFF")
+        term.println("  vint main.vint <command> [arguments]", "#AAAAAA")
+        term.println("")
+
+        let helpRows = [
+            ["Command", "Arguments", "Description"],
+            ["add",     "<name> <command>", "Add and install a new managed service"],
+            ["start",   "<name>",           "Start a service"],
+            ["stop",    "<name>",           "Stop a service"],
+            ["restart", "<name>",           "Restart a service"],
+            ["status",  "<name>",           "Show the status of a service"],
+            ["logs",    "<name>",           "View recent logs for a service"],
+            ["list",    "",                 "List all managed services"],
+            ["remove",  "<name>",           "Stop, disable and remove a service"],
+            ["help",    "",                 "Show this help message"]
+        ]
+
+        let table = term.table(helpRows)
+        term.println(table)
+
+        term.println("")
+        term.println("Examples:", "#FFFFFF")
+        term.println("  vint main.vint add api \"./api --port 8080\"", "#AAAAAA")
+        term.println("  vint main.vint start api", "#AAAAAA")
+        term.println("  vint main.vint logs api", "#AAAAAA")
+        term.println("  vint main.vint list", "#AAAAAA")
+        term.println("  vint main.vint remove api", "#AAAAAA")
+        term.println("")
+
+        term.println("Notes:", "#FFFFFF")
+        term.println("  - Services run as systemd user units (~/.config/systemd/user/)", COLOR_DIM)
+        term.println("  - Enable lingering to run services after logout:", COLOR_DIM)
+        term.println("    loginctl enable-linger $USER", COLOR_DIM)
+        term.println("")
+    }
+}

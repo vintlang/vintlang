@@ -1,0 +1,319 @@
+// overseer/main.vint
+// Overseer - A developer-friendly CLI process manager built on top of systemd.
+//
+// Usage:
+//   vint main.vint <command> [arguments]
+//
+// Commands:
+//   add <name> <command>  - Add and install a new managed service
+//   start <name>          - Start a service
+//   stop <name>           - Stop a service
+//   restart <name>        - Restart a service
+//   status <name>         - Show the status of a service
+//   logs <name>           - View recent logs for a service
+//   list                  - List all managed services
+//   remove <name>         - Stop, disable and remove a service
+//   help                  - Show help information
+
+import cli
+import overseer_display
+import overseer_config
+import overseer_service
+import overseer_systemctl
+
+// --------------------------------------------------------------------------
+// Guards
+// --------------------------------------------------------------------------
+
+let requireSystemd = func() {
+    let check = overseer_systemctl.checkSystemd()
+    if (!check["available"]) {
+        overseer_display.printError("systemd not available: " + check["message"])
+        let os = import("os")
+        os.exit(1)
+    }
+}
+
+let requireService = func(name) {
+    if (!overseer_config.isRegistered(name)) {
+        overseer_display.printError("Service '" + name + "' is not managed by overseer.")
+        overseer_display.printInfo("Run: vint main.vint list")
+        let os = import("os")
+        os.exit(1)
+    }
+}
+
+// --------------------------------------------------------------------------
+// Command: add
+// --------------------------------------------------------------------------
+
+let cmdAdd = func(args) {
+    if (len(args) < 2) {
+        overseer_display.printError("Usage: overseer add <name> <command>")
+        overseer_display.printInfo("Example: vint main.vint add api \"./api --port 8080\"")
+        let os = import("os")
+        os.exit(1)
+    }
+
+    let name    = args[0]
+    let command = args[1]
+
+    if (overseer_config.isRegistered(name)) {
+        overseer_display.printWarn("Service '" + name + "' is already managed by overseer.")
+        overseer_display.printInfo("Remove it first: vint main.vint remove " + name)
+        let os = import("os")
+        os.exit(1)
+    }
+
+    overseer_display.printInfo("Installing service '" + name + "'...")
+
+    let result = overseer_service.installService(name, command, overseer_config)
+    if (!result["ok"]) {
+        overseer_display.printError("Failed to install service: " + result["message"])
+        let os = import("os")
+        os.exit(1)
+    }
+
+    overseer_config.registerService(name, command)
+
+    overseer_display.printSuccess("Service '" + name + "' has been installed.")
+    overseer_display.println("  Command:   " + command)
+    overseer_display.println("  Unit file: " + overseer_config.getSystemdFilePath(name))
+    overseer_display.println("")
+    overseer_display.printInfo("Start it with: vint main.vint start " + name)
+}
+
+// --------------------------------------------------------------------------
+// Command: start
+// --------------------------------------------------------------------------
+
+let cmdStart = func(name) {
+    requireService(name)
+    overseer_display.printInfo("Starting service '" + name + "'...")
+
+    let result = overseer_systemctl.start(name)
+    if (result["ok"]) {
+        overseer_display.printSuccess("Service '" + name + "' is running.")
+    } else {
+        overseer_display.printWarn("Service '" + name + "' status: " + result["status"])
+        if (result["output"] != "") {
+            overseer_display.printOutput(result["output"])
+        }
+    }
+}
+
+// --------------------------------------------------------------------------
+// Command: stop
+// --------------------------------------------------------------------------
+
+let cmdStop = func(name) {
+    requireService(name)
+    overseer_display.printInfo("Stopping service '" + name + "'...")
+
+    let result = overseer_systemctl.stop(name)
+    if (result["ok"]) {
+        overseer_display.printSuccess("Service '" + name + "' has been stopped.")
+    } else {
+        overseer_display.printWarn("Service '" + name + "' status: " + result["status"])
+        if (result["output"] != "") {
+            overseer_display.printOutput(result["output"])
+        }
+    }
+}
+
+// --------------------------------------------------------------------------
+// Command: restart
+// --------------------------------------------------------------------------
+
+let cmdRestart = func(name) {
+    requireService(name)
+    overseer_display.printInfo("Restarting service '" + name + "'...")
+
+    let result = overseer_systemctl.restart(name)
+    if (result["ok"]) {
+        overseer_display.printSuccess("Service '" + name + "' has been restarted.")
+    } else {
+        overseer_display.printWarn("Service '" + name + "' status: " + result["status"])
+        if (result["output"] != "") {
+            overseer_display.printOutput(result["output"])
+        }
+    }
+}
+
+// --------------------------------------------------------------------------
+// Command: status
+// --------------------------------------------------------------------------
+
+let cmdStatus = func(name) {
+    requireService(name)
+
+    let svcInfo = overseer_config.getServiceInfo(name)
+    let result  = overseer_systemctl.status(name)
+
+    overseer_display.println("")
+    overseer_display.println("Service: " + name)
+    overseer_display.println("Command: " + svcInfo["command"])
+    overseer_display.println("Created: " + svcInfo["created_at"])
+    overseer_display.println("Status:  " + result["active"])
+    overseer_display.println("")
+
+    if (result["output"] != "") {
+        overseer_display.printOutput(result["output"])
+    }
+}
+
+// --------------------------------------------------------------------------
+// Command: logs
+// --------------------------------------------------------------------------
+
+let cmdLogs = func(name) {
+    requireService(name)
+    overseer_display.printInfo("Logs for service '" + name + "' (last 50 lines):")
+    overseer_display.println("")
+
+    let logOutput = overseer_systemctl.logs(name, 50)
+    if (logOutput == "" || logOutput == null) {
+        overseer_display.println("  No log entries found.")
+    } else {
+        overseer_display.printOutput(logOutput)
+    }
+}
+
+// --------------------------------------------------------------------------
+// Command: list
+// --------------------------------------------------------------------------
+
+let cmdList = func() {
+    let services = overseer_config.listServices()
+    let names    = services.keys()
+
+    overseer_display.println("")
+
+    if (len(names) == 0) {
+        overseer_display.println("No services are managed by overseer.")
+        overseer_display.println("")
+        overseer_display.printInfo("Add a service: vint main.vint add <name> <command>")
+        return null
+    }
+
+    overseer_display.printInfo(string(len(names)) + " managed service(s):")
+    overseer_display.println("")
+    overseer_display.printServicesTable(services)
+}
+
+// --------------------------------------------------------------------------
+// Command: remove
+// --------------------------------------------------------------------------
+
+let cmdRemove = func(name) {
+    requireService(name)
+
+    overseer_display.printInfo("Removing service '" + name + "'...")
+
+    // Stop and disable before removing files
+    overseer_systemctl.stop(name)
+    overseer_systemctl.disable(name)
+
+    // Remove service files and reload systemd
+    overseer_service.removeServiceFiles(name, overseer_config)
+    overseer_systemctl.daemonReload()
+
+    // Unregister from the overseer registry
+    overseer_config.unregisterService(name)
+
+    overseer_display.printSuccess("Service '" + name + "' has been removed.")
+}
+
+// --------------------------------------------------------------------------
+// Main entry point - parse args and dispatch to command handler
+// --------------------------------------------------------------------------
+
+let args = cli.getArgs()
+
+if (len(args) == 0) {
+    overseer_display.showHelp()
+    let os = import("os")
+    os.exit(0)
+}
+
+let command = args[0]
+
+if (command == "help" || command == "--help" || command == "-h") {
+    overseer_display.showHelp()
+
+} else if (command == "add") {
+    requireSystemd()
+    let addArgs = []
+    if (len(args) > 1) {
+        addArgs.push(args[1])
+    }
+    if (len(args) > 2) {
+        addArgs.push(args[2])
+    }
+    cmdAdd(addArgs)
+
+} else if (command == "start") {
+    if (len(args) < 2) {
+        overseer_display.printError("Usage: overseer start <name>")
+        let os = import("os")
+        os.exit(1)
+    }
+    requireSystemd()
+    cmdStart(args[1])
+
+} else if (command == "stop") {
+    if (len(args) < 2) {
+        overseer_display.printError("Usage: overseer stop <name>")
+        let os = import("os")
+        os.exit(1)
+    }
+    requireSystemd()
+    cmdStop(args[1])
+
+} else if (command == "restart") {
+    if (len(args) < 2) {
+        overseer_display.printError("Usage: overseer restart <name>")
+        let os = import("os")
+        os.exit(1)
+    }
+    requireSystemd()
+    cmdRestart(args[1])
+
+} else if (command == "status") {
+    if (len(args) < 2) {
+        overseer_display.printError("Usage: overseer status <name>")
+        let os = import("os")
+        os.exit(1)
+    }
+    requireSystemd()
+    cmdStatus(args[1])
+
+} else if (command == "logs") {
+    if (len(args) < 2) {
+        overseer_display.printError("Usage: overseer logs <name>")
+        let os = import("os")
+        os.exit(1)
+    }
+    requireSystemd()
+    cmdLogs(args[1])
+
+} else if (command == "list") {
+    overseer_display.header()
+    cmdList()
+
+} else if (command == "remove") {
+    if (len(args) < 2) {
+        overseer_display.printError("Usage: overseer remove <name>")
+        let os = import("os")
+        os.exit(1)
+    }
+    requireSystemd()
+    cmdRemove(args[1])
+
+} else {
+    overseer_display.printError("Unknown command: '" + command + "'")
+    overseer_display.println("")
+    overseer_display.showHelp()
+    let os = import("os")
+    os.exit(1)
+}
