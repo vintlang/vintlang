@@ -468,11 +468,64 @@ func main() {
 
 ---
 
+## Cross-Compilation
+
+The bundler supports cross-compilation via positional `GOOS` and `GOARCH` arguments.
+
+### Syntax
+
+```sh
+vint bundle <file.vint> [placeholder] [outputName] [outputDir] [GOOS] [GOARCH] [quiet] [keep]
+```
+
+| Position | Argument | Description |
+|----------|----------|-------------|
+| 1 | `<file.vint>` | Main VintLang source file (required) |
+| 2 | *(placeholder)* | Reserved |
+| 3 | Output name | Binary name (default: filename without `.vint`) |
+| 4 | Output dir | Output directory (default: `.`) |
+| 5 | GOOS | Target OS: `linux`, `darwin`, `windows`, etc. |
+| 6 | GOARCH | Target architecture: `amd64`, `arm64`, etc. |
+| 7 | `quiet` | Suppress build output |
+| 8 | `keep` | Keep temporary build directory |
+
+### Examples
+
+Build for Linux on AMD64 (e.g., from macOS):
+```sh
+vint bundle main.vint "" myapp . linux amd64
+```
+
+Build for Windows on ARM64:
+```sh
+vint bundle main.vint "" myapp . windows arm64
+```
+
+Build for the current platform (default):
+```sh
+vint bundle main.vint
+```
+
+### Common GOOS / GOARCH Combinations
+
+| Target | GOOS | GOARCH |
+|--------|------|--------|
+| Linux x86-64 | `linux` | `amd64` |
+| Linux ARM (Raspberry Pi, etc.) | `linux` | `arm64` |
+| macOS Apple Silicon | `darwin` | `arm64` |
+| macOS Intel | `darwin` | `amd64` |
+| Windows x86-64 | `windows` | `amd64` |
+| Windows ARM | `windows` | `arm64` |
+
+> **Note**: Go must be installed on the build machine. The generated binary runs on the target platform without Go or VintLang.
+
+---
+
 ## Important Details
 
 * Go is required only during **build time**
 * The resulting binary is portable and self-contained
-* Cross-compilation is not supported out-of-the-box; build on the target OS/arch
+* Cross-compilation is fully supported via GOOS/GOARCH arguments
 
 ---
 
