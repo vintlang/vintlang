@@ -4,45 +4,37 @@
 
 package overseer_systemctl {
 
-    // Execute a shell command and always return a string result (never propagate errors).
-    // Uses "2>&1 || true" to capture stderr and avoid non-zero exit propagation.
+    // Execute a shell command, capturing both stdout and stderr.
     let _run = func(cmd) {
         let shell = import("shell")
         return shell.run(cmd + " 2>&1 || true")
     }
 
     // Start a service.
-    // Returns { "ok": bool, "output": string }
     let start = func(name) {
         let output = _run("systemctl --user start " + name)
         let status = _run("systemctl --user is-active " + name)
         let active = status.trim()
-        let ok = (active == "active")
-        return {"ok": ok, "output": output.trim(), "status": active}
+        return {"ok": (active == "active"), "output": output.trim(), "status": active}
     }
 
     // Stop a service.
-    // Returns { "ok": bool, "output": string }
     let stop = func(name) {
         let output = _run("systemctl --user stop " + name)
         let status = _run("systemctl --user is-active " + name)
         let active = status.trim()
-        let ok = (active == "inactive" || active == "failed")
-        return {"ok": ok, "output": output.trim(), "status": active}
+        return {"ok": (active == "inactive" || active == "failed"), "output": output.trim(), "status": active}
     }
 
     // Restart a service.
-    // Returns { "ok": bool, "output": string }
     let restart = func(name) {
         let output = _run("systemctl --user restart " + name)
         let status = _run("systemctl --user is-active " + name)
         let active = status.trim()
-        let ok = (active == "active")
-        return {"ok": ok, "output": output.trim(), "status": active}
+        return {"ok": (active == "active"), "output": output.trim(), "status": active}
     }
 
     // Get the full status of a service.
-    // Returns { "active": string, "output": string }
     let status = func(name) {
         let output = _run("systemctl --user status " + name + " --no-pager")
         let active = _run("systemctl --user is-active " + name)
@@ -50,7 +42,6 @@ package overseer_systemctl {
     }
 
     // Fetch recent journal logs for a service.
-    // Returns the log output as a string.
     let logs = func(name, lines) {
         if (lines == null || lines == 0) {
             lines = 50
@@ -61,12 +52,18 @@ package overseer_systemctl {
 
     // Enable a service so it starts at login.
     let enable = func(name) {
-        return _run("systemctl --user enable " + name)
+        let output = _run("systemctl --user enable " + name)
+        let check  = _run("systemctl --user is-enabled " + name)
+        let state  = check.trim()
+        return {"ok": (state == "enabled"), "output": output.trim(), "state": state}
     }
 
     // Disable a service so it no longer starts at login.
     let disable = func(name) {
-        return _run("systemctl --user disable " + name)
+        let output = _run("systemctl --user disable " + name)
+        let check  = _run("systemctl --user is-enabled " + name)
+        let state  = check.trim()
+        return {"ok": (state == "disabled"), "output": output.trim(), "state": state}
     }
 
     // Reload the systemd user daemon to pick up new/changed unit files.
@@ -75,11 +72,10 @@ package overseer_systemctl {
     }
 
     // Check if systemd is available and the user session is active.
-    // Returns { "available": bool, "message": string }
     let checkSystemd = func() {
         let shell = import("shell")
-        let hasSysctl = shell.exists("systemctl")
-        if (!hasSysctl) {
+
+        if (!shell.exists("systemctl")) {
             return {
                 "available": false,
                 "message":   "systemctl not found. overseer requires systemd."
@@ -90,7 +86,7 @@ package overseer_systemctl {
         if (sessionCheck.contains("Failed to connect") || sessionCheck.contains("No such file")) {
             return {
                 "available": false,
-                "message":   "systemd user session is not available. Make sure you are running as a user with an active systemd session."
+                "message":   "systemd user session is not available. Make sure you have an active session."
             }
         }
 

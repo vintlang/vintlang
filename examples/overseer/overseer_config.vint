@@ -4,51 +4,66 @@
 
 package overseer_config {
 
-    let configDir    = ""
-    let servicesDir  = ""
-    let registryFile = ""
-    let systemdDir   = ""
+    const VERSION      = "1.0.0"
+    const APP_NAME     = "overseer"
+    const _DIR_MODE    = 493  // 0o755
 
-    // init is called automatically when the package is imported.
-    // It sets up directory paths based on the user's home directory.
+    let _configDir    = ""
+    let _servicesDir  = ""
+    let _registryFile = ""
+    let _systemdDir   = ""
+
+    // Runs automatically on import. Sets up directory paths.
     let init = func() {
-        let os = import("os")
+        let os   = import("os")
+        let path = import("path")
         let home = os.homedir()
-        configDir    = home + "/.config/overseer"
-        servicesDir  = configDir + "/services"
-        registryFile = configDir + "/registry.json"
-        systemdDir   = home + "/.config/systemd/user"
+
+        _configDir    = path.join(home, ".config", APP_NAME)
+        _servicesDir  = path.join(_configDir, "services")
+        _registryFile = path.join(_configDir, "registry.json")
+        _systemdDir   = path.join(home, ".config", "systemd", "user")
     }
 
     // Ensure all required directories exist.
     let ensureDirs = func() {
         let os = import("os")
-        os.mkdirAll(configDir, 493)
-        os.mkdirAll(servicesDir, 493)
-        os.mkdirAll(systemdDir, 493)
+        os.mkdirAll(_configDir, _DIR_MODE)
+        os.mkdirAll(_servicesDir, _DIR_MODE)
+        os.mkdirAll(_systemdDir, _DIR_MODE)
+    }
+
+    // Validate a service name: only alphanumeric, dash, underscore allowed.
+    let isValidName = func(name) {
+        if (name == null || name == "") {
+            return false
+        }
+        let regex = import("regex")
+        return regex.match("^[a-zA-Z0-9][a-zA-Z0-9_-]*$", name)
     }
 
     // Return the path to a service's overseer copy of the .service file.
     let getServiceFilePath = func(name) {
-        return servicesDir + "/" + name + ".service"
+        let path = import("path")
+        return path.join(_servicesDir, name + ".service")
     }
 
     // Return the path to a service's systemd unit file.
     let getSystemdFilePath = func(name) {
-        return systemdDir + "/" + name + ".service"
+        let path = import("path")
+        return path.join(_systemdDir, name + ".service")
     }
 
     // Load the service registry from disk.
-    // Returns { "services": { name -> { name, command, created_at } } }
-    let loadRegistry = func() {
+    let _loadRegistry = func() {
         let os   = import("os")
         let json = import("json")
 
-        if (!os.fileExists(registryFile)) {
+        if (!os.fileExists(_registryFile)) {
             return {"services": {}}
         }
 
-        let content = os.readFile(registryFile)
+        let content = os.readFile(_registryFile)
         if (content == null || content == "") {
             return {"services": {}}
         }
@@ -62,18 +77,19 @@ package overseer_config {
     }
 
     // Save the service registry to disk.
-    let saveRegistry = func(registry) {
+    let _saveRegistry = func(registry) {
         let json = import("json")
         ensureDirs()
-        let content = json.encode(registry, indent=2)
+        let raw = json.encode(registry)
+        let content = json.pretty(raw)
         let os = import("os")
-        os.writeFile(registryFile, content)
+        os.writeFile(_registryFile, content)
     }
 
     // Register a service in the registry.
     let registerService = func(name, command) {
         let time     = import("time")
-        let registry = loadRegistry()
+        let registry = _loadRegistry()
         let services = registry["services"]
         services[name] = {
             "name":       name,
@@ -81,32 +97,32 @@ package overseer_config {
             "created_at": time.format(time.now(), "2006-01-02 15:04:05")
         }
         registry["services"] = services
-        saveRegistry(registry)
+        _saveRegistry(registry)
     }
 
     // Unregister a service from the registry.
     let unregisterService = func(name) {
-        let registry = loadRegistry()
+        let registry = _loadRegistry()
         let services = registry["services"]
-        if (services.hasKey(name)) {
+        if (services.has(name)) {
             services.remove(name)
             registry["services"] = services
-            saveRegistry(registry)
+            _saveRegistry(registry)
         }
     }
 
     // Check if a service is registered.
     let isRegistered = func(name) {
-        let registry = loadRegistry()
+        let registry = _loadRegistry()
         let services = registry["services"]
-        return services.hasKey(name)
+        return services.has(name)
     }
 
     // Get info about a registered service.
     let getServiceInfo = func(name) {
-        let registry = loadRegistry()
+        let registry = _loadRegistry()
         let services = registry["services"]
-        if (services.hasKey(name)) {
+        if (services.has(name)) {
             return services[name]
         }
         return null
@@ -114,22 +130,13 @@ package overseer_config {
 
     // List all registered services.
     let listServices = func() {
-        let registry = loadRegistry()
+        let registry = _loadRegistry()
         return registry["services"]
     }
 
-    // Return the path to the config directory.
-    let getConfigDir = func() {
-        return configDir
-    }
-
-    // Return the path to the services directory.
-    let getServicesDir = func() {
-        return servicesDir
-    }
-
-    // Return the path to the systemd user directory.
-    let getSystemdDir = func() {
-        return systemdDir
-    }
+    // Accessors for path information.
+    let getConfigDir    = func() { return _configDir }
+    let getServicesDir  = func() { return _servicesDir }
+    let getSystemdDir   = func() { return _systemdDir }
+    let getRegistryPath = func() { return _registryFile }
 }

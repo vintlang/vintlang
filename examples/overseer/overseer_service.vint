@@ -4,46 +4,54 @@
 
 package overseer_service {
 
-    // Generate the content of a systemd .service file.
+    // Generate the content of a systemd .service unit file.
     let generateServiceFile = func(name, command, homeDir) {
-        let pathEnv = "/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:" + homeDir + "/.local/bin"
+        let path = import("path")
+        let localBin = path.join(homeDir, ".local", "bin")
+        let pathEnv  = "/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:" + localBin
 
-        let content = "[Unit]\n"
-        content = content + "Description=Overseer managed service: " + name + "\n"
-        content = content + "After=network.target\n"
-        content = content + "\n"
-        content = content + "[Service]\n"
-        content = content + "Type=simple\n"
-        content = content + "ExecStart=" + command + "\n"
-        content = content + "WorkingDirectory=" + homeDir + "\n"
-        content = content + "Environment=PATH=" + pathEnv + "\n"
-        content = content + "Restart=on-failure\n"
-        content = content + "RestartSec=5\n"
-        content = content + "StartLimitIntervalSec=60\n"
-        content = content + "StartLimitBurst=3\n"
-        content = content + "StandardOutput=journal\n"
-        content = content + "StandardError=journal\n"
-        content = content + "\n"
-        content = content + "[Install]\n"
-        content = content + "WantedBy=default.target\n"
+        let lines = [
+            "[Unit]",
+            "Description=Overseer managed service: " + name,
+            "After=network.target",
+            "",
+            "[Service]",
+            "Type=simple",
+            "ExecStart=" + command,
+            "WorkingDirectory=" + homeDir,
+            "Environment=PATH=" + pathEnv,
+            "Restart=on-failure",
+            "RestartSec=5",
+            "StartLimitIntervalSec=60",
+            "StartLimitBurst=3",
+            "StandardOutput=journal",
+            "StandardError=journal",
+            "SyslogIdentifier=" + name,
+            "",
+            "[Install]",
+            "WantedBy=default.target",
+            ""
+        ]
 
+        let content = ""
+        for line in lines {
+            content = content + line + "\n"
+        }
         return content
     }
 
-    // Install a service: write the service file and register it with systemd.
-    // Returns a dict: { "ok": bool, "message": string }
+    // Install a service: write the unit file and register it with systemd.
     let installService = func(name, command, config) {
         let os    = import("os")
         let shell = import("shell")
 
         let homeDir = os.homedir()
 
-        // Ensure required directories exist
         config.ensureDirs()
 
-        let serviceContent   = generateServiceFile(name, command, homeDir)
-        let serviceFilePath  = config.getServiceFilePath(name)
-        let systemdFilePath  = config.getSystemdFilePath(name)
+        let serviceContent  = generateServiceFile(name, command, homeDir)
+        let serviceFilePath = config.getServiceFilePath(name)
+        let systemdFilePath = config.getSystemdFilePath(name)
 
         // Write to overseer's own services directory
         os.writeFile(serviceFilePath, serviceContent)
@@ -57,28 +65,26 @@ package overseer_service {
         // Enable the service to start on login
         shell.run("systemctl --user enable " + name + " 2>&1 || true")
 
-        return {"ok": true, "message": "Service '" + name + "' installed successfully."}
+        return {"ok": true, "message": "Service installed successfully."}
     }
 
     // Remove a service's files from overseer and systemd directories.
     let removeServiceFiles = func(name, config) {
         let os = import("os")
 
-        let serviceFilePath = config.getServiceFilePath(name)
         let systemdFilePath = config.getSystemdFilePath(name)
+        let serviceFilePath = config.getServiceFilePath(name)
 
-        // Remove systemd unit file if it exists
         if (os.fileExists(systemdFilePath)) {
             os.remove(systemdFilePath)
         }
 
-        // Remove overseer's copy if it exists
         if (os.fileExists(serviceFilePath)) {
             os.remove(serviceFilePath)
         }
     }
 
-    // Read the service file content for a named service.
+    // Read the service file content for inspection.
     let readServiceFile = func(name, config) {
         let os              = import("os")
         let serviceFilePath = config.getServiceFilePath(name)
