@@ -113,7 +113,7 @@ require github.com/vintlang/vintlang v0.2.4
 	binaryName := strings.TrimSuffix(filepath.Base(vintFile), ".vint")
 
 	printlnVerbose(verbose, args)
-	if len(args) == 3 {
+	if len(args) >= 3 && args[2] != "" {
 		binaryName = args[2]
 	}
 	printlnVerbose(verbose, "=> Bundling binary '", binaryName, "'...")
@@ -152,7 +152,7 @@ require github.com/vintlang/vintlang v0.2.4
 	if goarch != "" {
 		buildEnv += fmt.Sprintf("GOARCH=%s ", goarch)
 	}
-	BundleCmd := fmt.Sprintf("cd %s && go mod tidy && %sgo build -o %s", tempDir, buildEnv, binaryName)
+	BundleCmd := fmt.Sprintf("cd %s && go mod tidy && CGO_ENABLED=0 %sgo build -o %s", tempDir, buildEnv, binaryName)
 	if err := utils.RunShell(BundleCmd); err != nil {
 		err = fmt.Errorf("bundle command failed: %w", err)
 		logError(err)
