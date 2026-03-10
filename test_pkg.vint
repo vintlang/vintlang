@@ -1,0 +1,32 @@
+package test_pkg {
+    const VERSION = "1.0.0"
+    const APP_NAME = "test"
+    const _DIR_MODE = 493
+
+    let _configDir = ""
+
+    let init = func() {
+        let os = import("os")
+        let path = import("path")
+        let home = os.homedir()
+        _configDir = path.join(home, ".config", APP_NAME)
+        print("Config dir: " + _configDir)
+    }
+
+    let ensureDirs = func() {
+        let os = import("os")
+        os.mkdirAll(_configDir, _DIR_MODE)
+    }
+
+    let isValidName = func(name) {
+        let regex = import("regex")
+        return regex.match("^[a-zA-Z0-9][a-zA-Z0-9_-]*$", name)
+    }
+
+    let getDir = func() { return _configDir }
+}
+
+let pkg = import("test_pkg")
+print("Dir: " + pkg.getDir())
+print("Valid: " + string(pkg.isValidName("hello")))
+print("Invalid: " + string(pkg.isValidName("@bad")))

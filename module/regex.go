@@ -8,6 +8,7 @@ import (
 
 var RegexFunctions = map[string]object.ModuleFunction{
 	"match":         match,
+	"test":          match, // alias: avoids conflict with 'match' keyword in parser
 	"replaceString": replaceString,
 	"splitString":   splitString,
 }

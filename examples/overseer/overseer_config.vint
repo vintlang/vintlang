@@ -39,7 +39,7 @@ package overseer_config {
             return false
         }
         let regex = import("regex")
-        return regex.match("^[a-zA-Z0-9][a-zA-Z0-9_-]*$", name)
+        return regex.test("^[a-zA-Z0-9][a-zA-Z0-9_-]*$", name)
     }
 
     // Return the path to a service's overseer copy of the .service file.
