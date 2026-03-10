@@ -1,0 +1,135 @@
+// overseer_config.vint
+// Configuration and service registry management for the overseer process manager.
+// Stores the registry of managed services as JSON in ~/.config/overseer/registry.json
+
+package overseer_config {
+
+    let configDir    = ""
+    let servicesDir  = ""
+    let registryFile = ""
+    let systemdDir   = ""
+
+    // init is called automatically when the package is imported.
+    // It sets up directory paths based on the user's home directory.
+    let init = func() {
+        let os = import("os")
+        let home = os.homedir()
+        configDir    = home + "/.config/overseer"
+        servicesDir  = configDir + "/services"
+        registryFile = configDir + "/registry.json"
+        systemdDir   = home + "/.config/systemd/user"
+    }
+
+    // Ensure all required directories exist.
+    let ensureDirs = func() {
+        let os = import("os")
+        os.mkdirAll(configDir, 493)
+        os.mkdirAll(servicesDir, 493)
+        os.mkdirAll(systemdDir, 493)
+    }
+
+    // Return the path to a service's overseer copy of the .service file.
+    let getServiceFilePath = func(name) {
+        return servicesDir + "/" + name + ".service"
+    }
+
+    // Return the path to a service's systemd unit file.
+    let getSystemdFilePath = func(name) {
+        return systemdDir + "/" + name + ".service"
+    }
+
+    // Load the service registry from disk.
+    // Returns { "services": { name -> { name, command, created_at } } }
+    let loadRegistry = func() {
+        let os   = import("os")
+        let json = import("json")
+
+        if (!os.fileExists(registryFile)) {
+            return {"services": {}}
+        }
+
+        let content = os.readFile(registryFile)
+        if (content == null || content == "") {
+            return {"services": {}}
+        }
+
+        let parsed = json.decode(content)
+        if (parsed == null) {
+            return {"services": {}}
+        }
+
+        return parsed
+    }
+
+    // Save the service registry to disk.
+    let saveRegistry = func(registry) {
+        let json = import("json")
+        ensureDirs()
+        let content = json.encode(registry, indent=2)
+        let os = import("os")
+        os.writeFile(registryFile, content)
+    }
+
+    // Register a service in the registry.
+    let registerService = func(name, command) {
+        let time     = import("time")
+        let registry = loadRegistry()
+        let services = registry["services"]
+        services[name] = {
+            "name":       name,
+            "command":    command,
+            "created_at": time.format(time.now(), "2006-01-02 15:04:05")
+        }
+        registry["services"] = services
+        saveRegistry(registry)
+    }
+
+    // Unregister a service from the registry.
+    let unregisterService = func(name) {
+        let registry = loadRegistry()
+        let services = registry["services"]
+        if (services.hasKey(name)) {
+            services.remove(name)
+            registry["services"] = services
+            saveRegistry(registry)
+        }
+    }
+
+    // Check if a service is registered.
+    let isRegistered = func(name) {
+        let registry = loadRegistry()
+        let services = registry["services"]
+        return services.hasKey(name)
+    }
+
+    // Get info about a registered service.
+    let getServiceInfo = func(name) {
+        let registry = loadRegistry()
+        let services = registry["services"]
+        if (services.hasKey(name)) {
+            return services[name]
+        }
+        return null
+    }
+
+    // List all registered services.
+    let listServices = func() {
+        let registry = loadRegistry()
+        return registry["services"]
+    }
+
+    // Return the path to the config directory.
+    let getConfigDir = func() {
+        return configDir
+    }
+
+    // Return the path to the services directory.
+    let getServicesDir = func() {
+        return servicesDir
+    }
+
+    // Return the path to the systemd user directory.
+    let getSystemdDir = func() {
+        return systemdDir
+    }
+}

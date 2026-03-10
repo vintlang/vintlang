@@ -16,6 +16,12 @@ import (
 
 var searchPaths []string
 
+// AddSearchPath adds a directory to the import search paths.
+// Call this before running a script to allow imports from a specific directory.
+func AddSearchPath(path string) {
+	addSearchPath(path)
+}
+
 // Error messages
 const (
 	ErrModuleNotFound     = "Module '%s' not found. Searched in:\n%s"
