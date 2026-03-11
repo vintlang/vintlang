@@ -193,3 +193,24 @@ func LookupIdent(ident string) TokenType {
 	}
 	return IDENT
 }
+
+// IsKeyword returns true if the given TokenType corresponds to a reserved keyword.
+func IsKeyword(t TokenType) bool {
+	for _, tok := range keywords {
+		if tok == t {
+			return true
+		}
+	}
+	return false
+}
+
+// KeywordLiteral returns the source-level keyword string for a token type,
+// e.g. INFO -> "info", FUNCTION -> "func". Returns "" if not a keyword.
+func KeywordLiteral(t TokenType) string {
+	for literal, tok := range keywords {
+		if tok == t {
+			return literal
+		}
+	}
+	return ""
+}
