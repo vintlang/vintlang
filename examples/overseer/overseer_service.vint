@@ -1,11 +1,12 @@
 // overseer_service.vint
 // Service file generation and installation for the overseer process manager.
-// Generates systemd unit files and installs them as systemd user services.
+// Generates systemd unit files (Linux) or launchd plist files (macOS).
 
 package overseer_service {
 
-    // Generate the content of a systemd .service unit file.
-    let generateServiceFile = func(name, command, homeDir) {
+    // ── systemd .service generation (Linux) ──────────────────────────────
+
+    let _generateSystemdFile = func(name, command, homeDir) {
         let path = import("path")
         let localBin = path.join(homeDir, ".local", "bin")
         let pathEnv  = "/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:" + localBin
@@ -40,43 +41,130 @@ package overseer_service {
         return content
     }
 
-    // Install a service: write the unit file and register it with systemd.
+    // ── launchd .plist generation (macOS) ─────────────────────────────────
+
+    let _generatePlistFile = func(name, command, homeDir, label) {
+        let xml = import("xml")
+        let path = import("path")
+        let localBin = path.join(homeDir, ".local", "bin")
+
+        // Split command into program + arguments for launchd
+        let parts = command.split(" ")
+        let program = parts[0]
+        let programArgs = ""
+        for part in parts {
+            programArgs = programArgs + "      <string>" + xml.escape(part) + "</string>\n"
+        }
+
+        // Build stdout/stderr log paths
+        let logDir = path.join(homeDir, ".config", "overseer", "logs")
+        let stdoutLog = path.join(logDir, name + ".out.log")
+        let stderrLog = path.join(logDir, name + ".err.log")
+
+        let plist = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
+        plist = plist + "<!DOCTYPE plist PUBLIC \"-//Apple//DTD PLIST 1.0//EN\" \"http://www.apple.com/DTDs/PropertyList-1.0.dtd\">\n"
+        plist = plist + "<plist version=\"1.0\">\n"
+        plist = plist + "<dict>\n"
+        plist = plist + "  <key>Label</key>\n"
+        plist = plist + "  <string>" + xml.escape(label) + "</string>\n"
+        plist = plist + "  <key>ProgramArguments</key>\n"
+        plist = plist + "  <array>\n"
+        plist = plist + programArgs
+        plist = plist + "  </array>\n"
+        plist = plist + "  <key>WorkingDirectory</key>\n"
+        plist = plist + "  <string>" + xml.escape(homeDir) + "</string>\n"
+        plist = plist + "  <key>EnvironmentVariables</key>\n"
+        plist = plist + "  <dict>\n"
+        plist = plist + "    <key>PATH</key>\n"
+        plist = plist + "    <string>/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:" + xml.escape(localBin) + "</string>\n"
+        plist = plist + "  </dict>\n"
+        plist = plist + "  <key>RunAtLoad</key>\n"
+        plist = plist + "  <true/>\n"
+        plist = plist + "  <key>KeepAlive</key>\n"
+        plist = plist + "  <dict>\n"
+        plist = plist + "    <key>SuccessfulExit</key>\n"
+        plist = plist + "    <false/>\n"
+        plist = plist + "  </dict>\n"
+        plist = plist + "  <key>StandardOutPath</key>\n"
+        plist = plist + "  <string>" + xml.escape(stdoutLog) + "</string>\n"
+        plist = plist + "  <key>StandardErrorPath</key>\n"
+        plist = plist + "  <string>" + xml.escape(stderrLog) + "</string>\n"
+        plist = plist + "  <key>ThrottleInterval</key>\n"
+        plist = plist + "  <integer>5</integer>\n"
+        plist = plist + "</dict>\n"
+        plist = plist + "</plist>\n"
+
+        return plist
+    }
+
+    // ── Public API: installService ────────────────────────────────────────
+
     let installService = func(name, command, config) {
         let os    = import("os")
         let shell = import("shell")
-
         let homeDir = os.homedir()
 
         config.ensureDirs()
 
-        let serviceContent  = generateServiceFile(name, command, homeDir)
+        let platform = config.getPlatform()
+
+        if (platform == "darwin") {
+            return _installDarwin(name, command, homeDir, config)
+        }
+        return _installLinux(name, command, homeDir, config)
+    }
+
+    // Install on Linux via systemd.
+    let _installLinux = func(name, command, homeDir, config) {
+        let os    = import("os")
+        let shell = import("shell")
+
+        let serviceContent  = _generateSystemdFile(name, command, homeDir)
         let serviceFilePath = config.getServiceFilePath(name)
         let systemdFilePath = config.getSystemdFilePath(name)
 
-        // Write to overseer's own services directory
         os.writeFile(serviceFilePath, serviceContent)
-
-        // Copy to the systemd user directory
         os.copy(serviceFilePath, systemdFilePath)
 
-        // Reload systemd so it sees the new unit
         shell.run("systemctl --user daemon-reload 2>&1 || true")
-
-        // Enable the service to start on login
         shell.run("systemctl --user enable " + name + " 2>&1 || true")
 
         return {"ok": true, "message": "Service installed successfully."}
     }
 
-    // Remove a service's files from overseer and systemd directories.
+    // Install on macOS via launchd.
+    let _installDarwin = func(name, command, homeDir, config) {
+        let os    = import("os")
+        let path  = import("path")
+
+        let label = config.getLaunchdLabel(name)
+
+        // Ensure log directory exists
+        let logDir = path.join(homeDir, ".config", "overseer", "logs")
+        os.mkdirAll(logDir, 493)
+
+        let plistContent    = _generatePlistFile(name, command, homeDir, label)
+        let serviceFilePath = config.getServiceFilePath(name)
+        let plistPath       = config.getSystemdFilePath(name)
+
+        // Write to overseer's services dir (backup copy)
+        os.writeFile(serviceFilePath, plistContent)
+        // Copy to ~/Library/LaunchAgents/
+        os.copy(serviceFilePath, plistPath)
+
+        return {"ok": true, "message": "Service installed successfully."}
+    }
+
+    // ── Public API: removeServiceFiles ────────────────────────────────────
+
     let removeServiceFiles = func(name, config) {
         let os = import("os")
 
-        let systemdFilePath = config.getSystemdFilePath(name)
-        let serviceFilePath = config.getServiceFilePath(name)
+        let platformFilePath = config.getSystemdFilePath(name)
+        let serviceFilePath  = config.getServiceFilePath(name)
 
-        if (os.fileExists(systemdFilePath)) {
-            os.remove(systemdFilePath)
+        if (os.fileExists(platformFilePath)) {
+            os.remove(platformFilePath)
         }
 
         if (os.fileExists(serviceFilePath)) {

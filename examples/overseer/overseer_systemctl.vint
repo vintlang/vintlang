@@ -1,8 +1,16 @@
 // overseer_systemctl.vint
-// systemctl and journalctl wrappers for the overseer process manager.
-// All commands target systemd user units (systemctl --user).
+// Service control backend for the overseer process manager.
+// Dispatches to systemctl (Linux) or launchctl (macOS) based on detected platform.
 
 package overseer_systemctl {
+
+    let _platform = ""
+
+    // Runs on package init. Detect platform once.
+    let init = func() {
+        let sysinfo = import("sysinfo")
+        _platform = sysinfo.os()
+    }
 
     // Execute a shell command, capturing both stdout and stderr.
     let _run = func(cmd) {
@@ -10,75 +18,133 @@ package overseer_systemctl {
         return shell.run(cmd + " 2>&1 || true")
     }
 
+    // ══════════════════════════════════════════════════════════════════════
+    //  Public API — dispatches to the correct backend
+    // ══════════════════════════════════════════════════════════════════════
+
     // Start a service.
     let start = func(name) {
+        if (_platform == "darwin") { return _darwinStart(name) }
+        return _linuxStart(name)
+    }
+
+    // Stop a service.
+    let stop = func(name) {
+        if (_platform == "darwin") { return _darwinStop(name) }
+        return _linuxStop(name)
+    }
+
+    // Restart a service.
+    let restart = func(name) {
+        if (_platform == "darwin") { return _darwinRestart(name) }
+        return _linuxRestart(name)
+    }
+
+    // Get the full status of a service.
+    let status = func(name) {
+        if (_platform == "darwin") { return _darwinStatus(name) }
+        return _linuxStatus(name)
+    }
+
+    // Fetch recent logs for a service.
+    let logs = func(name, lines) {
+        if (lines == null || lines == 0) { lines = 50 }
+        if (_platform == "darwin") { return _darwinLogs(name, lines) }
+        return _linuxLogs(name, lines)
+    }
+
+    // Enable a service to start at login.
+    let enable = func(name) {
+        if (_platform == "darwin") { return _darwinEnable(name) }
+        return _linuxEnable(name)
+    }
+
+    // Disable a service from starting at login.
+    let disable = func(name) {
+        if (_platform == "darwin") { return _darwinDisable(name) }
+        return _linuxDisable(name)
+    }
+
+    // Reload the service daemon.
+    let daemonReload = func() {
+        if (_platform == "darwin") { return "" }
+        return _run("systemctl --user daemon-reload")
+    }
+
+    // Check if the service backend is available.
+    let checkBackend = func() {
+        if (_platform == "darwin") { return _checkLaunchd() }
+        return _checkSystemd()
+    }
+
+    // Kept for backward compatibility.
+    let checkSystemd = func() {
+        return checkBackend()
+    }
+
+    // Return a human-friendly backend name.
+    let backendName = func() {
+        if (_platform == "darwin") { return "launchd" }
+        return "systemd"
+    }
+
+    // ══════════════════════════════════════════════════════════════════════
+    //  Linux / systemd backend
+    // ══════════════════════════════════════════════════════════════════════
+
+    let _linuxStart = func(name) {
         let output = _run("systemctl --user start " + name)
         let status = _run("systemctl --user is-active " + name)
         let active = status.trim()
         return {"ok": (active == "active"), "output": output.trim(), "status": active}
     }
 
-    // Stop a service.
-    let stop = func(name) {
+    let _linuxStop = func(name) {
         let output = _run("systemctl --user stop " + name)
         let status = _run("systemctl --user is-active " + name)
         let active = status.trim()
         return {"ok": (active == "inactive" || active == "failed"), "output": output.trim(), "status": active}
     }
 
-    // Restart a service.
-    let restart = func(name) {
+    let _linuxRestart = func(name) {
         let output = _run("systemctl --user restart " + name)
         let status = _run("systemctl --user is-active " + name)
         let active = status.trim()
         return {"ok": (active == "active"), "output": output.trim(), "status": active}
     }
 
-    // Get the full status of a service.
-    let status = func(name) {
+    let _linuxStatus = func(name) {
         let output = _run("systemctl --user status " + name + " --no-pager")
         let active = _run("systemctl --user is-active " + name)
         return {"active": active.trim(), "output": output.trim()}
     }
 
-    // Fetch recent journal logs for a service.
-    let logs = func(name, lines) {
-        if (lines == null || lines == 0) {
-            lines = 50
-        }
+    let _linuxLogs = func(name, lines) {
         let output = _run("journalctl --user -u " + name + " -n " + string(lines) + " --no-pager --output=short-iso")
         return output.trim()
     }
 
-    // Enable a service so it starts at login.
-    let enable = func(name) {
+    let _linuxEnable = func(name) {
         let output = _run("systemctl --user enable " + name)
         let check  = _run("systemctl --user is-enabled " + name)
         let state  = check.trim()
         return {"ok": (state == "enabled"), "output": output.trim(), "state": state}
     }
 
-    // Disable a service so it no longer starts at login.
-    let disable = func(name) {
+    let _linuxDisable = func(name) {
         let output = _run("systemctl --user disable " + name)
         let check  = _run("systemctl --user is-enabled " + name)
         let state  = check.trim()
         return {"ok": (state == "disabled"), "output": output.trim(), "state": state}
     }
 
-    // Reload the systemd user daemon to pick up new/changed unit files.
-    let daemonReload = func() {
-        return _run("systemctl --user daemon-reload")
-    }
-
-    // Check if systemd is available and the user session is active.
-    let checkSystemd = func() {
+    let _checkSystemd = func() {
         let shell = import("shell")
 
         if (!shell.exists("systemctl")) {
             return {
                 "available": false,
-                "message":   "systemctl not found. overseer requires systemd."
+                "message":   "systemctl not found. overseer requires systemd on Linux."
             }
         }
 
@@ -91,5 +157,153 @@ package overseer_systemctl {
         }
 
         return {"available": true, "message": "systemd is available."}
+    }
+
+    // ══════════════════════════════════════════════════════════════════════
+    //  macOS / launchd backend
+    // ══════════════════════════════════════════════════════════════════════
+
+    // Get the plist path for a service.
+    let _plistPath = func(name) {
+        let os   = import("os")
+        let path = import("path")
+        let home = os.homedir()
+        return path.join(home, "Library", "LaunchAgents", "com.overseer." + name + ".plist")
+    }
+
+    // Get the launchd label for a service.
+    let _label = func(name) {
+        return "com.overseer." + name
+    }
+
+    // Check if a launchd job is loaded/running.
+    let _darwinIsRunning = func(name) {
+        let label  = _label(name)
+        let output = _run("launchctl list | grep " + label)
+        let trimmed = output.trim()
+        if (trimmed == "" || trimmed.contains("Could not find")) {
+            return {"loaded": false, "pid": "", "status": "inactive"}
+        }
+        // launchctl list output: PID  Status  Label
+        let parts = trimmed.split("\t")
+        if (len(parts) >= 3) {
+            let pid = parts[0].trim()
+            let exitStatus = parts[1].trim()
+            if (pid != "-" && pid != "") {
+                return {"loaded": true, "pid": pid, "status": "active"}
+            }
+            return {"loaded": true, "pid": "", "status": "inactive"}
+        }
+        return {"loaded": true, "pid": "", "status": "unknown"}
+    }
+
+    let _darwinStart = func(name) {
+        let plist = _plistPath(name)
+        let label = _label(name)
+        // Bootstrap (load + start) the service
+        let output = _run("launchctl bootstrap gui/$(id -u) " + plist)
+        // If already bootstrapped, try kickstart
+        if (output.contains("already bootstrapped") || output.contains("service already loaded")) {
+            output = _run("launchctl kickstart gui/$(id -u)/" + label)
+        }
+        let info = _darwinIsRunning(name)
+        return {"ok": (info["status"] == "active"), "output": output.trim(), "status": info["status"]}
+    }
+
+    let _darwinStop = func(name) {
+        let label  = _label(name)
+        let plist  = _plistPath(name)
+        // Bootout (stop + unload) the service
+        let output = _run("launchctl bootout gui/$(id -u)/" + label)
+        let info   = _darwinIsRunning(name)
+        return {"ok": (info["status"] == "inactive"), "output": output.trim(), "status": info["status"]}
+    }
+
+    let _darwinRestart = func(name) {
+        let label  = _label(name)
+        let plist  = _plistPath(name)
+        // Try kickstart -k (kill + restart) first — cleanest approach
+        let output = _run("launchctl kickstart -k gui/$(id -u)/" + label)
+        if (output.contains("No such process") || output.contains("Could not find")) {
+            // Not loaded — bootstrap it fresh
+            output = _run("launchctl bootstrap gui/$(id -u) " + plist)
+        }
+        let info = _darwinIsRunning(name)
+        return {"ok": (info["status"] == "active"), "output": output.trim(), "status": info["status"]}
+    }
+
+    let _darwinStatus = func(name) {
+        let label = _label(name)
+        let info  = _darwinIsRunning(name)
+        let output = _run("launchctl print gui/$(id -u)/" + label)
+        return {"active": info["status"], "output": output.trim()}
+    }
+
+    let _darwinLogs = func(name, lines) {
+        let os   = import("os")
+        let path = import("path")
+        let home = os.homedir()
+
+        let logDir    = path.join(home, ".config", "overseer", "logs")
+        let stdoutLog = path.join(logDir, name + ".out.log")
+        let stderrLog = path.join(logDir, name + ".err.log")
+
+        let output = ""
+        if (os.fileExists(stdoutLog)) {
+            output = output + _run("tail -n " + string(lines) + " " + stdoutLog)
+        }
+        if (os.fileExists(stderrLog)) {
+            let errOutput = _run("tail -n " + string(lines) + " " + stderrLog)
+            if (errOutput.trim() != "") {
+                if (output != "") { output = output + "\n--- stderr ---\n" }
+                output = output + errOutput
+            }
+        }
+
+        if (output.trim() == "") {
+            // Fall back to unified log
+            output = _run("log show --predicate 'process == \"" + name + "\"' --last 5m --style compact 2>&1 | tail -n " + string(lines))
+        }
+
+        return output.trim()
+    }
+
+    let _darwinEnable = func(name) {
+        let plist = _plistPath(name)
+        let label = _label(name)
+        // Bootstrap loads and enables RunAtLoad
+        let output = _run("launchctl bootstrap gui/$(id -u) " + plist)
+        let info   = _darwinIsRunning(name)
+        return {"ok": info["loaded"], "output": output.trim(), "state": "enabled"}
+    }
+
+    let _darwinDisable = func(name) {
+        let label = _label(name)
+        // Bootout + disable prevents loading at login
+        let output = _run("launchctl bootout gui/$(id -u)/" + label)
+        output = output + "\n" + _run("launchctl disable gui/$(id -u)/" + label)
+        return {"ok": true, "output": output.trim(), "state": "disabled"}
+    }
+
+    let _checkLaunchd = func() {
+        let shell = import("shell")
+
+        if (!shell.exists("launchctl")) {
+            return {
+                "available": false,
+                "message":   "launchctl not found. overseer requires launchd on macOS."
+            }
+        }
+
+        // Verify we can talk to the user domain
+        let check = _run("launchctl print gui/$(id -u) 2>&1")
+        if (check.contains("Could not find domain")) {
+            return {
+                "available": false,
+                "message":   "launchd user domain is not available."
+            }
+        }
+
+        return {"available": true, "message": "launchd is available."}
     }
 }

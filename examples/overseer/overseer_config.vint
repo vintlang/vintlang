@@ -1,28 +1,38 @@
 // overseer_config.vint
 // Configuration and service registry management for the overseer process manager.
 // Stores the registry of managed services as JSON in ~/.config/overseer/registry.json
+// Supports Linux (systemd) and macOS (launchd) backends.
 
 package overseer_config {
 
-    const VERSION      = "1.0.0"
+    const VERSION      = "1.1.0"
     const APP_NAME     = "overseer"
     const _DIR_MODE    = 493  // 0o755
 
+    let _platform     = ""  // "linux" or "darwin"
     let _configDir    = ""
     let _servicesDir  = ""
     let _registryFile = ""
-    let _systemdDir   = ""
+    let _serviceDir   = ""  // systemd user dir or LaunchAgents dir
 
-    // Runs automatically on import. Sets up directory paths.
+    // Runs automatically on import. Detects OS and sets up directory paths.
     let init = func() {
-        let os   = import("os")
-        let path = import("path")
-        let home = os.homedir()
+        let os      = import("os")
+        let path    = import("path")
+        let sysinfo = import("sysinfo")
+        let home    = os.homedir()
+
+        _platform = sysinfo.os()
 
         _configDir    = path.join(home, ".config", APP_NAME)
         _servicesDir  = path.join(_configDir, "services")
         _registryFile = path.join(_configDir, "registry.json")
-        _systemdDir   = path.join(home, ".config", "systemd", "user")
+
+        if (_platform == "darwin") {
+            _serviceDir = path.join(home, "Library", "LaunchAgents")
+        } else {
+            _serviceDir = path.join(home, ".config", "systemd", "user")
+        }
     }
 
     // Ensure all required directories exist.
@@ -30,8 +40,11 @@ package overseer_config {
         let os = import("os")
         os.mkdirAll(_configDir, _DIR_MODE)
         os.mkdirAll(_servicesDir, _DIR_MODE)
-        os.mkdirAll(_systemdDir, _DIR_MODE)
+        os.mkdirAll(_serviceDir, _DIR_MODE)
     }
+
+    // Return the detected platform: "linux" or "darwin".
+    let getPlatform = func() { return _platform }
 
     // Validate a service name: only alphanumeric, dash, underscore allowed.
     let isValidName = func(name) {
@@ -42,16 +55,35 @@ package overseer_config {
         return regex.test("^[a-zA-Z0-9][a-zA-Z0-9_-]*$", name)
     }
 
-    // Return the path to a service's overseer copy of the .service file.
+    // Return the service file extension for the current platform.
+    let _serviceExt = func() {
+        if (_platform == "darwin") {
+            return ".plist"
+        }
+        return ".service"
+    }
+
+    // Return the path to a service's overseer copy of the service file.
     let getServiceFilePath = func(name) {
         let path = import("path")
+        if (_platform == "darwin") {
+            return path.join(_servicesDir, "com.overseer." + name + ".plist")
+        }
         return path.join(_servicesDir, name + ".service")
     }
 
-    // Return the path to a service's systemd unit file.
+    // Return the path to the platform service file (systemd unit or LaunchAgent plist).
     let getSystemdFilePath = func(name) {
         let path = import("path")
-        return path.join(_systemdDir, name + ".service")
+        if (_platform == "darwin") {
+            return path.join(_serviceDir, "com.overseer." + name + ".plist")
+        }
+        return path.join(_serviceDir, name + ".service")
+    }
+
+    // Return the launchd label for a service (macOS only).
+    let getLaunchdLabel = func(name) {
+        return "com.overseer." + name
     }
 
     // Load the service registry from disk.
@@ -94,6 +126,7 @@ package overseer_config {
         services[name] = {
             "name":       name,
             "command":    command,
+            "platform":   _platform,
             "created_at": time.format(time.now(), "2006-01-02 15:04:05")
         }
         registry["services"] = services
@@ -137,6 +170,7 @@ package overseer_config {
     // Accessors for path information.
     let getConfigDir    = func() { return _configDir }
     let getServicesDir  = func() { return _servicesDir }
-    let getSystemdDir   = func() { return _systemdDir }
+    let getSystemdDir   = func() { return _serviceDir }
     let getRegistryPath = func() { return _registryFile }
+    let getServiceDir   = func() { return _serviceDir }
 }
