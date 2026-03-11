@@ -98,6 +98,16 @@ func main() {
 				os.Exit(1)
 			}
 			fmt.Println(styles.HelpStyle.Render("Build successful!"))
+		case "bundle-multi":
+			if len(args) < 7 {
+				fmt.Println(styles.ErrorStyle.Render("Error: usage: vint bundle-multi <file> \"\" <name> <dir> <targets> [quiet]"))
+				os.Exit(1)
+			}
+			if err := bundler.BundleMulti(args[2:]); err != nil {
+				fmt.Println(styles.ErrorStyle.Render(fmt.Sprintf("Build failed: %v", err)))
+				os.Exit(1)
+			}
+			fmt.Println(styles.HelpStyle.Render("Build successful!"))
 		case "get":
 			if len(args) < 3 {
 				fmt.Println(styles.ErrorStyle.Render("Error: Please specify a package to install"))
