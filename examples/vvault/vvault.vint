@@ -1,0 +1,25 @@
+import random
+
+package vvault {
+    let generate = func(length) {
+        let chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
+        let charArray = chars.split("")
+        let result = ""
+        for i in range(length) {
+            result += random.choice(charArray)
+        }
+        return result
+    }
+
+    let password = func(length) {
+        return random.password(length)
+    }
+
+    let otp = func(length) {
+        return random.otp(length)
+    }
+
+    let token = func(length) {
+        return random.token(length)
+    }
+}
