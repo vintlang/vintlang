@@ -272,13 +272,13 @@ func (p *Parser) peekError(t token.TokenType) {
 	p.errors = append(p.errors, msg)
 }
 
-func (p *Parser) addErrorWithContext(msg string, line int) {
+func (p *Parser) AddErrorWithContext(msg string, line int) {
 	contextMsg := fmt.Sprintf("%s:%d: %s", p.l.GetFilename(), line, msg)
 	p.errors = append(p.errors, contextMsg)
 }
 
 // Synchronize parser after error - skip to next statement boundary
-func (p *Parser) synchronize() {
+func (p *Parser) Synchronize() {
 	p.nextToken()
 
 	for p.curToken.Type != token.EOF {
