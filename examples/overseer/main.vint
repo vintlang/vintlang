@@ -1,5 +1,6 @@
 // overseer/main.vint
-// Overseer - A developer-friendly CLI process manager built on top of systemd.
+// Overseer - A developer-friendly CLI process manager.
+// Uses systemd on Linux and launchd on macOS.
 //
 // Usage:
 //   vint main.vint <command> [arguments]
@@ -29,10 +30,10 @@ import overseer_systemctl
 // Guards
 // --------------------------------------------------------------------------
 
-let requireSystemd = func() {
-    let check = overseer_systemctl.checkSystemd()
+let requireBackend = func() {
+    let check = overseer_systemctl.checkBackend()
     if (!check["available"]) {
-        overseer_display.printError("systemd not available: " + check["message"])
+        overseer_display.printError(overseer_systemctl.backendName() + " not available: " + check["message"])
         let os = import("os")
         os.exit(1)
     }
@@ -102,7 +103,7 @@ let cmdAdd = func(args) {
 
     overseer_display.printSuccess("Service '" + name + "' installed.")
     overseer_display.printDetail("Command:",   command)
-    overseer_display.printDetail("Unit file:", overseer_config.getSystemdFilePath(name))
+    overseer_display.printDetail("Service:",  overseer_config.getSystemdFilePath(name))
     overseer_display.println("")
     overseer_display.printInfo("Start it with: vint main.vint start " + name)
 }
@@ -311,7 +312,7 @@ switch (command) {
     }
 
     case "add" {
-        requireSystemd()
+        requireBackend()
         let addArgs = []
         if (len(args) > 1) {
             addArgs.push(args[1])
@@ -325,49 +326,49 @@ switch (command) {
     case "start" {
         let name = requireName(args, "start <name>")
         validateName(name)
-        requireSystemd()
+        requireBackend()
         cmdStart(name)
     }
 
     case "stop" {
         let name = requireName(args, "stop <name>")
         validateName(name)
-        requireSystemd()
+        requireBackend()
         cmdStop(name)
     }
 
     case "restart" {
         let name = requireName(args, "restart <name>")
         validateName(name)
-        requireSystemd()
+        requireBackend()
         cmdRestart(name)
     }
 
     case "enable" {
         let name = requireName(args, "enable <name>")
         validateName(name)
-        requireSystemd()
+        requireBackend()
         cmdEnable(name)
     }
 
     case "disable" {
         let name = requireName(args, "disable <name>")
         validateName(name)
-        requireSystemd()
+        requireBackend()
         cmdDisable(name)
     }
 
     case "status" {
         let name = requireName(args, "status <name>")
         validateName(name)
-        requireSystemd()
+        requireBackend()
         cmdStatus(name)
     }
 
     case "logs" {
         let name = requireName(args, "logs <name>")
         validateName(name)
-        requireSystemd()
+        requireBackend()
         cmdLogs(name)
     }
 
@@ -379,7 +380,7 @@ switch (command) {
     case "remove" {
         let name = requireName(args, "remove <name>")
         validateName(name)
-        requireSystemd()
+        requireBackend()
         cmdRemove(name)
     }
 
