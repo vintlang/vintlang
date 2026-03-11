@@ -96,12 +96,20 @@ func Bundle(args []string) error {
 	printlnVerbose(verbose, "OK")
 
 	printVerbose(verbose, "=> Initializing modules... ")
-	goMod := `module vint-bundled
+
+	// Use the current vintlang version for the dependency
+	vintVersion := config.VINT_VERSION
+	if !strings.HasPrefix(vintVersion, "v") {
+		vintVersion = "v" + vintVersion
+	}
+
+	goMod := fmt.Sprintf(`module vint-bundled
 
 go 1.24
 
-require github.com/vintlang/vintlang v0.2.4
-`
+require github.com/vintlang/vintlang %s
+`, vintVersion)
+
 	if err := os.WriteFile(filepath.Join(tempDir, "go.mod"), []byte(goMod), 0644); err != nil {
 		err = fmt.Errorf("failed to create go.mod in temp dir '%s': %w", tempDir, err)
 		logError(err)
@@ -145,14 +153,16 @@ require github.com/vintlang/vintlang v0.2.4
 	}
 
 	// Build command with cross-compilation support
-	buildEnv := ""
+	// Skip 'go mod tidy' — go build with -mod=mod resolves modules directly,
+	// avoiding a separate slow network + verification pass.
+	buildEnv := "CGO_ENABLED=0 GONOSUMDB=* GOFLAGS=-mod=mod "
 	if goos != "" {
 		buildEnv += fmt.Sprintf("GOOS=%s ", goos)
 	}
 	if goarch != "" {
 		buildEnv += fmt.Sprintf("GOARCH=%s ", goarch)
 	}
-	BundleCmd := fmt.Sprintf("cd %s && go mod tidy && CGO_ENABLED=0 %sgo build -o %s", tempDir, buildEnv, binaryName)
+	BundleCmd := fmt.Sprintf("cd %s && %sgo build -trimpath -o %s", tempDir, buildEnv, binaryName)
 	if err := utils.RunShell(BundleCmd); err != nil {
 		err = fmt.Errorf("bundle command failed: %w", err)
 		logError(err)
