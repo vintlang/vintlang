@@ -2,6 +2,7 @@ package parser
 
 import (
 	"fmt"
+	"strings"
 	"testing"
 
 	"github.com/vintlang/vintlang/ast"
@@ -602,11 +603,13 @@ func TestParserErrors(t *testing.T) {
 		expectedErrors int
 	}{
 		{"let x 5;", 1},            // missing =
-		{"let = 5;", 2},            // missing identifier and invalid prefix
+		{"let = 5;", 1},            // missing identifier (cascade suppressed)
 		{"5 + ;", 1},               // incomplete expression
 		{"if x { }", 1},            // missing parentheses
 		{"func() { return ; }", 1}, // invalid return expression (semicolon)
 		{"let x = 5", 0},           // valid without semicolon
+		{"let info = 5", 1},        // reserved keyword as identifier
+		{"const match = 1", 1},     // reserved keyword as identifier
 	}
 
 	for _, tt := range tests {
@@ -616,8 +619,51 @@ func TestParserErrors(t *testing.T) {
 
 		errors := p.Errors()
 		if len(errors) != tt.expectedErrors {
-			t.Errorf("input %q: expected %d errors, got %d. Errors: %v", 
+			t.Errorf("input %q: expected %d errors, got %d. Errors: %v",
 				tt.input, tt.expectedErrors, len(errors), errors)
+		}
+	}
+}
+
+func TestReservedKeywordAsIdentifier(t *testing.T) {
+	tests := []struct {
+		input   string
+		keyword string
+	}{
+		{"let info = 5", "info"},
+		{"let debug = 5", "debug"},
+		{"let log = 5", "log"},
+		{"let match = 5", "match"},
+		{"let success = true", "success"},
+		{"const error = 1", "error"},
+		{"let warn = 1", "warn"},
+		{"let note = 1", "note"},
+		{"let todo = 1", "todo"},
+		{"let for = 1", "for"},
+		{"let if = 1", "if"},
+		{"let while = 1", "while"},
+	}
+
+	for _, tt := range tests {
+		l := lexer.New(tt.input)
+		p := New(l)
+		p.ParseProgram()
+
+		errors := p.Errors()
+		if len(errors) == 0 {
+			t.Errorf("input %q: expected error for reserved keyword %q, got none", tt.input, tt.keyword)
+			continue
+		}
+
+		found := false
+		for _, err := range errors {
+			if strings.Contains(err, "'"+tt.keyword+"' is a reserved keyword") {
+				found = true
+				break
+			}
+		}
+		if !found {
+			t.Errorf("input %q: expected reserved keyword error for %q, got: %v", tt.input, tt.keyword, errors)
 		}
 	}
 }

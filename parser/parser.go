@@ -258,6 +258,16 @@ func (p *Parser) Errors() []string {
 }
 
 func (p *Parser) peekError(t token.TokenType) {
+	if t == token.IDENT && token.IsKeyword(p.peekToken.Type) {
+		kw := token.KeywordLiteral(p.peekToken.Type)
+		if kw == "" {
+			kw = p.peekToken.Literal
+		}
+		msg := fmt.Sprintf("%s:%d: '%s' is a reserved keyword and cannot be used as an identifier. Try a different name, e.g. '%s_val' or 'my_%s'",
+			p.l.GetFilename(), p.peekToken.Line, kw, kw, kw)
+		p.errors = append(p.errors, msg)
+		return
+	}
 	msg := fmt.Sprintf("%s:%d: Expected next token to be %s, got %s instead", p.l.GetFilename(), p.peekToken.Line, t, p.peekToken.Type)
 	p.errors = append(p.errors, msg)
 }
@@ -287,8 +297,22 @@ func (p *Parser) synchronize() {
 	}
 }
 
-// parse expressions
+// skipToNextStatement advances tokens until peekToken is a statement-starting
+// token (or EOF). This is used inside statement parsers (let/const) so that
+// the main ParseProgram loop's nextToken() call will land correctly on the
+// start of the next statement.
+func (p *Parser) skipToNextStatement() {
+	for p.peekToken.Type != token.EOF {
+		p.nextToken()
+		switch p.peekToken.Type {
+		case token.LET, token.CONST, token.FUNCTION, token.IF, token.WHILE,
+			token.FOR, token.RETURN, token.SWITCH, token.PACKAGE, token.IMPORT, token.EOF:
+			return
+		}
+	}
+}
 
+// parse expressions
 func (p *Parser) parseExpressionStatement() *ast.ExpressionStatement {
 	stmt := &ast.ExpressionStatement{Token: p.curToken}
 
@@ -328,7 +352,6 @@ func (p *Parser) parseExpression(precedence int) ast.Expression {
 }
 
 // prefix expressions
-
 func (p *Parser) parsePrefixExpression() ast.Expression {
 	expression := &ast.PrefixExpression{
 		Token:    p.curToken,
@@ -343,6 +366,16 @@ func (p *Parser) parsePrefixExpression() ast.Expression {
 }
 
 func (p *Parser) noPrefixParseFnError(t token.TokenType) {
+	if token.IsKeyword(t) {
+		kw := token.KeywordLiteral(t)
+		if kw == "" {
+			kw = p.curToken.Literal
+		}
+		msg := fmt.Sprintf("%s:%d: '%s' is a reserved keyword and cannot be used as a value or identifier here",
+			p.l.GetFilename(), p.curToken.Line, kw)
+		p.errors = append(p.errors, msg)
+		return
+	}
 	msg := fmt.Sprintf("%s:%d: Unexpected token '%s' - this token cannot start an expression. Check for missing operands or invalid syntax", p.l.GetFilename(), p.curToken.Line, t)
 	p.errors = append(p.errors, msg)
 }
@@ -375,6 +408,16 @@ func (p *Parser) parseRangeExpression(left ast.Expression) ast.Expression {
 }
 
 func (p *Parser) noInfixParseFnError(t token.TokenType) {
+	if token.IsKeyword(t) {
+		kw := token.KeywordLiteral(t)
+		if kw == "" {
+			kw = p.curToken.Literal
+		}
+		msg := fmt.Sprintf("%s:%d: '%s' is a reserved keyword and cannot be used in this context. Check syntax for operators, expressions, or missing semicolon",
+			p.l.GetFilename(), p.curToken.Line, kw)
+		p.errors = append(p.errors, msg)
+		return
+	}
 	msg := fmt.Sprintf("%s:%d: Unexpected token '%s' - cannot be used in this context. Check syntax for operators, expressions, or missing semicolon", p.l.GetFilename(), p.curToken.Line, t)
 	p.errors = append(p.errors, msg)
 }
