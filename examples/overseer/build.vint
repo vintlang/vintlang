@@ -30,6 +30,11 @@ let bundle = func(goos, goarch, outputName) {
     make.exec("vint bundle " + ENTRY_FILE + " \"\" " + outputName + " " + BUILD_DIR + " " + goos + " " + goarch + " quiet")
 }
 
+// Bundle multiple targets at once (single codegen + parallel go build)
+let bundleMulti = func(targets) {
+    make.exec("vint bundle-multi " + ENTRY_FILE + " \"\" " + APP_NAME + " " + BUILD_DIR + " " + targets + " quiet")
+}
+
 // Package a tar.gz: archive contains a single binary named APP_NAME
 let packageTarGz = func(binaryPath, archiveName) {
     make.exec("cd " + BUILD_DIR + " && cp " + binaryPath + " " + APP_NAME + " && tar czf " + archiveName + " " + APP_NAME + " && rm " + APP_NAME)
@@ -72,27 +77,8 @@ let tasks = {
         echo("Building for all platforms (" + VERSION + ")...")
         make.exec("mkdir -p " + BUILD_DIR)
 
-        // macOS Apple Silicon
-        echo("  darwin/arm64")
-        bundle("darwin", "arm64", APP_NAME + "-darwin-arm64")
-        // macOS Intel
-        echo("  darwin/amd64")
-        bundle("darwin", "amd64", APP_NAME + "-darwin-amd64")
-        // Linux amd64
-        echo("  linux/amd64")
-        bundle("linux", "amd64", APP_NAME + "-linux-amd64")
-        // Linux arm64
-        echo("  linux/arm64")
-        bundle("linux", "arm64", APP_NAME + "-linux-arm64")
-        // Windows amd64
-        echo("  windows/amd64")
-        bundle("windows", "amd64", APP_NAME + "-windows-amd64.exe")
-        // Windows arm64
-        echo("  windows/arm64")
-        bundle("windows", "arm64", APP_NAME + "-windows-arm64.exe")
-        // Android arm64
-        echo("  android/arm64")
-        bundle("android", "arm64", APP_NAME + "-android-arm64")
+        // Single codegen + parallel go build for all 7 targets
+        bundleMulti("darwin/arm64,darwin/amd64,linux/amd64,linux/arm64,windows/amd64,windows/arm64,android/arm64")
 
         echo("Packaging archives...")
         packageTarGz(APP_NAME + "-darwin-arm64",      APP_NAME + "-darwin-arm64.tar.gz")
@@ -111,8 +97,7 @@ let tasks = {
         tasks["deps"]()
         echo("Building for macOS...")
         make.exec("mkdir -p " + BUILD_DIR)
-        bundle("darwin", "arm64", APP_NAME + "-darwin-arm64")
-        bundle("darwin", "amd64", APP_NAME + "-darwin-amd64")
+        bundleMulti("darwin/arm64,darwin/amd64")
         packageTarGz(APP_NAME + "-darwin-arm64", APP_NAME + "-darwin-arm64.tar.gz")
         packageTarGz(APP_NAME + "-darwin-amd64", APP_NAME + "-darwin-amd64.tar.gz")
         echo("✅ macOS builds complete!")
@@ -123,8 +108,7 @@ let tasks = {
         tasks["deps"]()
         echo("Building for Linux...")
         make.exec("mkdir -p " + BUILD_DIR)
-        bundle("linux", "amd64", APP_NAME + "-linux-amd64")
-        bundle("linux", "arm64", APP_NAME + "-linux-arm64")
+        bundleMulti("linux/amd64,linux/arm64")
         packageTarGz(APP_NAME + "-linux-amd64", APP_NAME + "-linux-amd64.tar.gz")
         packageTarGz(APP_NAME + "-linux-arm64", APP_NAME + "-linux-arm64.tar.gz")
         echo("✅ Linux builds complete!")
@@ -135,8 +119,7 @@ let tasks = {
         tasks["deps"]()
         echo("Building for Windows...")
         make.exec("mkdir -p " + BUILD_DIR)
-        bundle("windows", "amd64", APP_NAME + "-windows-amd64.exe")
-        bundle("windows", "arm64", APP_NAME + "-windows-arm64.exe")
+        bundleMulti("windows/amd64,windows/arm64")
         packageZip(APP_NAME + "-windows-amd64.exe", APP_NAME + "-windows-amd64.zip")
         packageZip(APP_NAME + "-windows-arm64.exe", APP_NAME + "-windows-arm64.zip")
         echo("✅ Windows builds complete!")
@@ -147,7 +130,7 @@ let tasks = {
         tasks["deps"]()
         echo("Building for Android...")
         make.exec("mkdir -p " + BUILD_DIR)
-        bundle("android", "arm64", APP_NAME + "-android-arm64")
+        bundleMulti("android/arm64")
         packageTarGz(APP_NAME + "-android-arm64", APP_NAME + "-android-arm64.tar.gz")
         echo("✅ Android build complete!")
     },
