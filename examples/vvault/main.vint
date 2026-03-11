@@ -1,0 +1,64 @@
+import cli, os
+import "vvault"
+
+let args = cli.getArgs()
+
+if (len(args) == 0) {
+    println("Usage: vint main.vint <command> [options]")
+    println("")
+    println("Commands:")
+    println("  generate <length>   Generate a random alphanumeric string")
+    println("  password <length>   Generate a strong password (min 4)")
+    println("  otp <length>        Generate a numeric OTP")
+    println("  token <length>      Generate a hex token (length = byte count)")
+    os.exit(0)
+}
+
+let command = args[0]
+
+if (command == "generate") {
+    if (len(args) < 2) {
+        println("Please provide the length.")
+        println("Usage: vint main.vint generate <length>")
+        os.exit(1)
+    }
+    let length = int(args[1])
+    let result = vvault.generate(length)
+    println("Generated: " + result)
+
+} else if (command == "password") {
+    if (len(args) < 2) {
+        println("Please provide the length (minimum 4).")
+        println("Usage: vint main.vint password <length>")
+        os.exit(1)
+    }
+    let length = int(args[1])
+    let result = vvault.password(length)
+    println("Password: " + result)
+
+} else if (command == "otp") {
+    if (len(args) < 2) {
+        println("Please provide the OTP length.")
+        println("Usage: vint main.vint otp <length>")
+        os.exit(1)
+    }
+    let length = int(args[1])
+    let result = vvault.otp(length)
+    println("OTP: " + result)
+
+} else if (command == "token") {
+    if (len(args) < 2) {
+        println("Please provide the byte length.")
+        println("Usage: vint main.vint token <length>")
+        os.exit(1)
+    }
+    let length = int(args[1])
+    let result = vvault.token(length)
+    println("Token: " + result)
+
+} else {
+    println("Unknown command: " + command)
+    println("Usage: vint main.vint <command> [options]")
+    println("Commands: generate, password, otp, token")
+    os.exit(1)
+}
