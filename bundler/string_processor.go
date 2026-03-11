@@ -5,13 +5,13 @@ import (
 	"path/filepath"
 	"regexp"
 	"strings"
-
 	// "github.com/vintlang/vintlang/module"
 )
 
 // StringProcessor handles string-based processing of VintLang files
 type StringProcessor struct {
-	bundle *FileBundle
+	bundle          *FileBundle
+	bundledPackages map[string]bool
 }
 
 // NewStringProcessor creates a new string processor
@@ -29,23 +29,37 @@ func (sp *StringProcessor) ProcessBundle() (string, error) {
 
 	var result strings.Builder
 
-	// First, process all dependency files
+	// Build the full set of bundled package names first so that
+	// cross-imports between dependencies can be stripped.
 	importedPackages := make(map[string]bool)
 	includedFiles := make(map[string]bool)
-	
-	for filename, content := range sp.bundle.Files {
+
+	for filename := range sp.bundle.Files {
 		if filename != sp.bundle.MainFile {
 			if sp.bundle.IncludeFiles[filename] {
+				includedFiles[filename] = true
+			} else {
+				packageName := strings.TrimSuffix(filepath.Base(filename), filepath.Ext(filename))
+				importedPackages[packageName] = true
+			}
+		}
+	}
+
+	// Store the bundled package set on the processor so helper methods can use it
+	sp.bundledPackages = importedPackages
+
+	// Process all dependency files
+	for filename, content := range sp.bundle.Files {
+		if filename != sp.bundle.MainFile {
+			if includedFiles[filename] {
 				// This is an included file - embed directly
 				processedContent := sp.processIncludedFile(content)
 				result.WriteString(processedContent)
 				result.WriteString("\n\n")
-				includedFiles[filename] = true
 			} else {
 				// This is an imported module - wrap in package
 				packageName := strings.TrimSuffix(filepath.Base(filename), filepath.Ext(filename))
-				importedPackages[packageName] = true
-				
+
 				processedContent := sp.processDependencyFile(content, packageName)
 				result.WriteString(processedContent)
 				result.WriteString("\n\n")
@@ -70,31 +84,33 @@ func (sp *StringProcessor) ProcessBundle() (string, error) {
 // processIncludedFile processes an included file by embedding it directly
 func (sp *StringProcessor) processIncludedFile(content string) string {
 	content = strings.TrimSpace(content)
-	
+
 	// Remove any import statements from included files since they should be handled at the main level
 	content = sp.removeImportStatements(content)
-	
+
 	// Remove any include statements from included files to avoid circular includes
 	content = sp.removeIncludeStatements(content)
-	
+
 	return content
 }
 
 // processDependencyFile processes a dependency file to ensure it has proper package structure
 func (sp *StringProcessor) processDependencyFile(content, packageName string) string {
 	content = strings.TrimSpace(content)
-	
+
 	// Check if the content already has a package declaration
 	packageRegex := regexp.MustCompile(`(?m)^package\s+` + regexp.QuoteMeta(packageName) + `\s*\{`)
 	if packageRegex.MatchString(content) {
-		// Already has package declaration, return as-is
+		// Already has package declaration — still need to strip imports for
+		// bundled packages that are already inlined in the combined code
+		content = sp.removeBundledImports(content)
 		return content
 	}
-	
+
 	// Remove any existing import statements from the dependency
 	// since they should be handled at the main level
 	content = sp.removeImportStatements(content)
-	
+
 	// If no package declaration, wrap the content in a package
 	return fmt.Sprintf("package %s {\n%s\n}", packageName, content)
 }
@@ -149,19 +165,19 @@ func (sp *StringProcessor) processMainFile(content string, bundledPackages map[s
 func (sp *StringProcessor) removeIncludeStatements(content string) string {
 	lines := strings.Split(content, "\n")
 	var result strings.Builder
-	
+
 	includeRegex := regexp.MustCompile(`^\s*include\s+`)
-	
+
 	for _, line := range lines {
 		// Skip include lines
 		if includeRegex.MatchString(line) {
 			continue
 		}
-		
+
 		result.WriteString(line)
 		result.WriteString("\n")
 	}
-	
+
 	return result.String()
 }
 
@@ -169,18 +185,52 @@ func (sp *StringProcessor) removeIncludeStatements(content string) string {
 func (sp *StringProcessor) removeImportStatements(content string) string {
 	lines := strings.Split(content, "\n")
 	var result strings.Builder
-	
+
 	importRegex := regexp.MustCompile(`^\s*import\s+`)
-	
+
 	for _, line := range lines {
 		// Skip import lines
 		if importRegex.MatchString(line) {
 			continue
 		}
-		
+
 		result.WriteString(line)
 		result.WriteString("\n")
 	}
-	
+
+	return result.String()
+}
+
+// removeBundledImports removes only import statements for packages that are
+// already bundled (inlined), leaving imports for built-in modules intact.
+func (sp *StringProcessor) removeBundledImports(content string) string {
+	lines := strings.Split(content, "\n")
+	var result strings.Builder
+
+	importRegex := regexp.MustCompile(`^\s*import\s+([\w, ]+)`)
+
+	for _, line := range lines {
+		importMatches := importRegex.FindStringSubmatch(line)
+		if len(importMatches) > 1 {
+			modules := strings.Split(importMatches[1], ",")
+			var modulesToKeep []string
+
+			for _, m := range modules {
+				mod := strings.TrimSpace(m)
+				if !sp.bundledPackages[mod] {
+					modulesToKeep = append(modulesToKeep, mod)
+				}
+			}
+
+			if len(modulesToKeep) > 0 {
+				fmt.Fprintf(&result, "import %s\n", strings.Join(modulesToKeep, ", "))
+			}
+			continue
+		}
+
+		result.WriteString(line)
+		result.WriteString("\n")
+	}
+
 	return result.String()
 }

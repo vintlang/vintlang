@@ -51,6 +51,9 @@ func Bundle(args []string) error {
 	if len(args) >= 7 && args[6] == "quiet" {
 		verbose = false
 	}
+
+	keepTemp := len(args) >= 8 && args[7] == "keep"
+
 	printlnVerbose(verbose, ">> Starting Enhanced Bundle for '", filepath.Base(vintFile), "'")
 
 	// Analyze dependencies
@@ -71,7 +74,9 @@ func Bundle(args []string) error {
 		logError(err)
 		return err
 	}
-	defer os.RemoveAll(tempDir)
+	if !keepTemp {
+		defer os.RemoveAll(tempDir)
+	}
 	printlnVerbose(verbose, "OK")
 
 	bundlerVersion := config.VINT_VERSION
@@ -194,14 +199,6 @@ require github.com/vintlang/vintlang %s
 	printlnVerbose(verbose, "OK")
 	fmt.Printf("\n=> Successfully created binary with %d bundled files: %s\n", len(bundle.Files), outputPath)
 
-	keepTemp := false
-	if len(args) >= 8 && args[7] == "keep" {
-		keepTemp = true
-	}
-
-	if !keepTemp {
-		defer os.RemoveAll(tempDir)
-	}
 	if keepTemp {
 		printlnVerbose(verbose, "Temp directory kept for debugging:", tempDir)
 	}
