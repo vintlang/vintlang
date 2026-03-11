@@ -16,9 +16,10 @@ package overseer_display {
     let header = func() {
         let term = import("term")
         import overseer_config
+        import overseer_systemctl
         let banner = term.banner("Overseer v" + overseer_config.VERSION)
         term.println(banner)
-        term.println("  Developer-friendly process manager powered by systemd", COLOR_DIM)
+        term.println("  Developer-friendly process manager powered by " + overseer_systemctl.backendName(), COLOR_DIM)
         term.println("")
     }
 
@@ -75,10 +76,10 @@ package overseer_display {
         term.println("  " + padded + value)
     }
 
-    // Print a table of services with live status from systemd.
+    // Print a table of services with live status.
     let printServicesTable = func(services) {
         let term  = import("term")
-        let shell = import("shell")
+        import overseer_systemctl
 
         let names = services.keys()
         if (len(names) == 0) {
@@ -91,8 +92,8 @@ package overseer_display {
         for name in names {
             let svc = services[name]
 
-            let statusOutput = shell.run("systemctl --user is-active " + string(name) + " 2>&1 || true")
-            let st = statusOutput.trim()
+            let result = overseer_systemctl.status(name)
+            let st = result["active"]
 
             let cmd = svc["command"]
             if (len(cmd) > 40) {
@@ -151,9 +152,15 @@ package overseer_display {
         term.println("")
 
         term.println("Notes:", COLOR_HEAD)
-        term.println("  Services run as systemd user units (~/.config/systemd/user/)", COLOR_DIM)
-        term.println("  Enable lingering to keep services after logout:", COLOR_DIM)
-        term.println("    loginctl enable-linger $USER", COLOR_DIM)
+        import overseer_config
+        if (overseer_config.getPlatform() == "darwin") {
+            term.println("  Services run as launchd user agents (~/Library/LaunchAgents/)", COLOR_DIM)
+            term.println("  Logs are stored in ~/.config/overseer/logs/", COLOR_DIM)
+        } else {
+            term.println("  Services run as systemd user units (~/.config/systemd/user/)", COLOR_DIM)
+            term.println("  Enable lingering to keep services after logout:", COLOR_DIM)
+            term.println("    loginctl enable-linger $USER", COLOR_DIM)
+        }
         term.println("")
     }
 
@@ -167,17 +174,25 @@ package overseer_display {
     // Show overseer configuration info.
     let showInfo = func() {
         import overseer_config
+        import overseer_systemctl
         let term = import("term")
         let os   = import("os")
 
         header()
 
+        let backendDir = "Service dir"
+        if (overseer_config.getPlatform() != "darwin") {
+            backendDir = "Systemd dir"
+        }
+
         let rows = [
             ["Key",             "Value"],
             ["Version",         overseer_config.VERSION],
+            ["Platform",        overseer_config.getPlatform()],
+            ["Backend",         overseer_systemctl.backendName()],
             ["Config dir",      overseer_config.getConfigDir()],
             ["Services dir",    overseer_config.getServicesDir()],
-            ["Systemd dir",     overseer_config.getSystemdDir()],
+            [backendDir,        overseer_config.getServiceDir()],
             ["Registry file",   overseer_config.getRegistryPath()],
             ["Home",            os.homedir()],
             ["Hostname",        os.hostname()]
