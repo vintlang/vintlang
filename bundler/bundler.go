@@ -111,7 +111,7 @@ func Bundle(args []string) error {
 
 	goMod := fmt.Sprintf(`module vint-bundled
 
-go 1.24
+go 1.25
 
 require github.com/vintlang/vintlang %s
 `, vintVersion)
@@ -276,7 +276,7 @@ func BundleMulti(args []string) error {
 	if !strings.HasPrefix(vintVersion, "v") {
 		vintVersion = "v" + vintVersion
 	}
-	goMod := fmt.Sprintf("module vint-bundled\n\ngo 1.24\n\nrequire github.com/vintlang/vintlang %s\n", vintVersion)
+	goMod := fmt.Sprintf("module vint-bundled\n\ngo 1.25\n\nrequire github.com/vintlang/vintlang %s\n", vintVersion)
 	if err := os.WriteFile(filepath.Join(tempDir, "go.mod"), []byte(goMod), 0644); err != nil {
 		return fmt.Errorf("failed to write go.mod: %w", err)
 	}
