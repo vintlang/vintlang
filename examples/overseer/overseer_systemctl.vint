@@ -206,8 +206,8 @@ package overseer_systemctl {
         if (output.contains("already bootstrapped") || output.contains("service already loaded")) {
             output = _run("launchctl kickstart gui/$(id -u)/" + label)
         }
-        let info = _darwinIsRunning(name)
-        return {"ok": (info["status"] == "active"), "output": output.trim(), "status": info["status"]}
+        let svcState = _darwinIsRunning(name)
+        return {"ok": (svcState["status"] == "active"), "output": output.trim(), "status": svcState["status"]}
     }
 
     let _darwinStop = func(name) {
@@ -215,8 +215,8 @@ package overseer_systemctl {
         let plist  = _plistPath(name)
         // Bootout (stop + unload) the service
         let output = _run("launchctl bootout gui/$(id -u)/" + label)
-        let info   = _darwinIsRunning(name)
-        return {"ok": (info["status"] == "inactive"), "output": output.trim(), "status": info["status"]}
+        let svcState = _darwinIsRunning(name)
+        return {"ok": (svcState["status"] == "inactive"), "output": output.trim(), "status": svcState["status"]}
     }
 
     let _darwinRestart = func(name) {
@@ -228,15 +228,15 @@ package overseer_systemctl {
             // Not loaded — bootstrap it fresh
             output = _run("launchctl bootstrap gui/$(id -u) " + plist)
         }
-        let info = _darwinIsRunning(name)
-        return {"ok": (info["status"] == "active"), "output": output.trim(), "status": info["status"]}
+        let svcState = _darwinIsRunning(name)
+        return {"ok": (svcState["status"] == "active"), "output": output.trim(), "status": svcState["status"]}
     }
 
     let _darwinStatus = func(name) {
         let label = _label(name)
-        let info  = _darwinIsRunning(name)
+        let svcState = _darwinIsRunning(name)
         let output = _run("launchctl print gui/$(id -u)/" + label)
-        return {"active": info["status"], "output": output.trim()}
+        return {"active": svcState["status"], "output": output.trim()}
     }
 
     let _darwinLogs = func(name, lines) {
@@ -273,8 +273,8 @@ package overseer_systemctl {
         let label = _label(name)
         // Bootstrap loads and enables RunAtLoad
         let output = _run("launchctl bootstrap gui/$(id -u) " + plist)
-        let info   = _darwinIsRunning(name)
-        return {"ok": info["loaded"], "output": output.trim(), "state": "enabled"}
+        let svcState = _darwinIsRunning(name)
+        return {"ok": svcState["loaded"], "output": output.trim(), "state": "enabled"}
     }
 
     let _darwinDisable = func(name) {

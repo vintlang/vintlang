@@ -2,6 +2,6 @@
     "chat.tools.terminal.autoApprove": {
         "go": true,
         "./vint": true,
-        "git add": true
+        "git":true,
     }
 }
