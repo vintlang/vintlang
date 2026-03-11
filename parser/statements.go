@@ -36,6 +36,7 @@ func (p *Parser) parseLetStatement() *ast.LetStatement {
 	stmt := &ast.LetStatement{Token: p.curToken}
 
 	if !p.expectPeek(token.IDENT) {
+		p.skipToNextStatement()
 		return nil
 	}
 
@@ -60,6 +61,7 @@ func (p *Parser) parseConstStatement() *ast.ConstStatement {
 	stmt := &ast.ConstStatement{Token: p.curToken}
 
 	if !p.expectPeek(token.IDENT) {
+		p.skipToNextStatement()
 		return nil
 	}
 
