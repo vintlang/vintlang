@@ -2,6 +2,7 @@
     "chat.tools.terminal.autoApprove": {
         "go": true,
         "./vint": true,
-        "git":true,
+        "git": true,
+        "gh": true
     }
 }
