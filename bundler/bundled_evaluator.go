@@ -41,6 +41,7 @@ import (
 	"fmt"
 
 	"github.com/vintlang/vintlang/repl"
+	"github.com/vintlang/vintlang/toolkit"
 )
 
 var BundlerVersion = "%s"
@@ -54,6 +55,9 @@ func main() {
 		fmt.Printf("[Bundler Version: %%s | Build Time: %%s]\n", BundlerVersion, BuildTime)
 		return
 	}
+
+	// Pass remaining CLI args so cli.getArgs() works in bundled code
+	toolkit.CLI_ARGS = flag.Args()
 	
 	// Processed code with embedded packages and modified imports
 	processedCode := `+"`%s`"+`
