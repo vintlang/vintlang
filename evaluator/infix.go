@@ -128,6 +128,9 @@ func evalFloatIntegerInfixExpression(operator string, left, right object.VintObj
 	case "/":
 		val = leftVal / rightVal
 	case "%":
+		if rightVal == 0 {
+			return newError("Line %d: Division by zero: cannot perform modulo operation with a zero divisor", line)
+		}
 		val = math.Mod(leftVal, rightVal)
 	case "<":
 		return nativeBoolToBooleanObject(leftVal < rightVal)
@@ -242,6 +245,9 @@ func evalIntegerInfixExpression(operator string, left, right object.VintObject, 
 			return &object.Float{Value: x}
 		}
 	case "%":
+		if rightVal == 0 {
+			return newError("Line %d: Division by zero: cannot perform modulo operation (%d %% 0) — the right operand must be non-zero", line, leftVal)
+		}
 		return &object.Integer{Value: leftVal % rightVal}
 	case "<":
 		return nativeBoolToBooleanObject(leftVal < rightVal)
