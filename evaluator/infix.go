@@ -68,11 +68,17 @@ func evalInfixExpression(operator string, left, right object.VintObject, line in
 	case operator == "*" && left.Type() == object.STRING_OBJ && right.Type() == object.INTEGER_OBJ:
 		leftVal := left.(*object.String).Value
 		rightVal := right.(*object.Integer).Value
+		if rightVal < 0 {
+			return newError("Line %d: Cannot repeat string a negative number of times (%d)", line, rightVal)
+		}
 		return &object.String{Value: strings.Repeat(leftVal, int(rightVal))}
 
 	case operator == "*" && left.Type() == object.INTEGER_OBJ && right.Type() == object.STRING_OBJ:
 		leftVal := left.(*object.Integer).Value
 		rightVal := right.(*object.String).Value
+		if leftVal < 0 {
+			return newError("Line %d: Cannot repeat string a negative number of times (%d)", line, leftVal)
+		}
 		return &object.String{Value: strings.Repeat(rightVal, int(leftVal))}
 
 	case left.Type() == object.INTEGER_OBJ && right.Type() == object.INTEGER_OBJ:
