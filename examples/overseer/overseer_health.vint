@@ -1,0 +1,146 @@
+// overseer_health.vint
+// Health check monitoring for the overseer process manager.
+// Provides HTTP-based health probes and service status aggregation.
+
+package overseer_health {
+
+    // ── Health check result struct ───────────────────────────────────────
+
+    struct HealthResult {
+        service_name: ""
+        endpoint:     ""
+        healthy:      false
+        status_code:  0
+        latency_ms:   0
+        message:      ""
+        checked_at:   ""
+
+        func summary() {
+            let icon = "❌"
+            if (this.healthy) {
+                icon = "✅"
+            }
+            return icon + " " + this.service_name + " (" + string(this.latency_ms) + "ms)"
+        }
+    }
+
+    // ── Public API ───────────────────────────────────────────────────────
+
+    // Check the health of a single service by hitting its health endpoint.
+    let checkService = func(serviceName, endpoint) {
+        let time = import("time")
+
+        let checkedAt = time.format(time.now(), "2006-01-02 15:04:05")
+
+        if (endpoint == "" || endpoint == null) {
+            return HealthResult(
+                service_name = serviceName,
+                endpoint     = "",
+                healthy      = false,
+                status_code  = 0,
+                latency_ms   = 0,
+                message      = "No health endpoint configured",
+                checked_at   = checkedAt
+            )
+        }
+
+        let shell  = import("shell")
+        let regex  = import("regex")
+        let startT = time.now()
+
+        // Sanitise the endpoint — only allow safe URL characters
+        let safeEndpoint = endpoint
+        if (!regex.test("^https?://[a-zA-Z0-9._:/-]+$", endpoint)) {
+            return HealthResult(
+                service_name = serviceName,
+                endpoint     = endpoint,
+                healthy      = false,
+                status_code  = 0,
+                latency_ms   = 0,
+                message      = "Invalid endpoint URL",
+                checked_at   = checkedAt
+            )
+        }
+
+        // Use curl with a 5-second timeout to hit the health endpoint
+        let output = shell.run(
+            "curl -s -o /dev/null -w '%{http_code}' --max-time 5 '" + safeEndpoint + "' 2>&1 || echo 000"
+        )
+
+        let endT    = time.now()
+        let elapsed = endT - startT
+
+        let code    = output.trim()
+        let codeInt = 0
+        let ok      = false
+        let msg     = ""
+
+        if (code == "200") {
+            ok      = true
+            codeInt = 200
+            msg     = "OK"
+        } else if (code == "201") {
+            ok      = true
+            codeInt = 201
+            msg     = "Created"
+        } else if (code == "204") {
+            ok      = true
+            codeInt = 204
+            msg     = "No Content"
+        } else if (code == "000") {
+            codeInt = 0
+            msg     = "Connection refused or timeout"
+        } else {
+            msg     = "HTTP " + code
+        }
+
+        return HealthResult(
+            service_name = serviceName,
+            endpoint     = endpoint,
+            healthy      = ok,
+            status_code  = codeInt,
+            latency_ms   = elapsed,
+            message      = msg,
+            checked_at   = checkedAt
+        )
+    }
+
+    // Check health of all services that have a health endpoint.
+    let checkAll = func(services, config) {
+        let results = []
+        let names   = services.keys()
+
+        for name in names {
+            let endpoint = config.getServiceHealth(name)
+            let result   = checkService(name, endpoint)
+            results.push(result)
+        }
+
+        return results
+    }
+
+    // Return a summary dict with counts.
+    let summarise = func(results) {
+        let total   = len(results)
+        let healthy = 0
+        let unhealthy = 0
+        let noEndpoint = 0
+
+        for r in results {
+            if (r.endpoint == "" || r.endpoint == null) {
+                noEndpoint = noEndpoint + 1
+            } else if (r.healthy) {
+                healthy = healthy + 1
+            } else {
+                unhealthy = unhealthy + 1
+            }
+        }
+
+        return {
+            "total":       total,
+            "healthy":     healthy,
+            "unhealthy":   unhealthy,
+            "no_endpoint": noEndpoint
+        }
+    }
+}

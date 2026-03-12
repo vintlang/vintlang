@@ -2,18 +2,67 @@
 // Configuration and service registry management for the overseer process manager.
 // Stores the registry of managed services as JSON in ~/.config/overseer/registry.json
 // Supports Linux (systemd) and macOS (launchd) backends.
+//
+// v2.0.0 — Added ServiceEntry struct, Platform/RestartPolicy enums, tag-based
+//           discovery, environment variable management, health checks, and
+//           full JSON import/export support.
 
 package overseer_config {
 
-    const VERSION      = "1.1.0"
-    const APP_NAME     = "overseer"
-    const _DIR_MODE    = 493  // 0o755
+    const VERSION   = "2.0.0"
+    const APP_NAME  = "overseer"
+    const _DIR_MODE = 493  // 0o755
 
-    let _platform     = ""  // "linux" or "darwin"
+    let _platform     = ""
     let _configDir    = ""
     let _servicesDir  = ""
     let _registryFile = ""
-    let _serviceDir   = ""  // systemd user dir or LaunchAgents dir
+    let _serviceDir   = ""
+
+    // ── Enums ────────────────────────────────────────────────────────────
+
+    enum Platform {
+        LINUX  = "linux",
+        DARWIN = "darwin"
+    }
+
+    enum RestartPolicy {
+        ALWAYS     = "always",
+        ON_FAILURE = "on-failure",
+        NEVER      = "never"
+    }
+
+    // ── Service entry struct ─────────────────────────────────────────────
+
+    struct ServiceEntry {
+        name:            ""
+        command:         ""
+        platform:        ""
+        created_at:      ""
+        tags:            []
+        env:             {}
+        health_endpoint: ""
+        restart_policy:  "always"
+        max_retries:     3
+        description:     ""
+
+        func toDict() {
+            return {
+                "name":            this.name,
+                "command":         this.command,
+                "platform":        this.platform,
+                "created_at":      this.created_at,
+                "tags":            this.tags,
+                "env":             this.env,
+                "health_endpoint": this.health_endpoint,
+                "restart_policy":  this.restart_policy,
+                "max_retries":     this.max_retries,
+                "description":     this.description
+            }
+        }
+    }
+
+    // ── Initialisation ───────────────────────────────────────────────────
 
     // Runs automatically on import. Detects OS and sets up directory paths.
     let init = func() {
@@ -28,7 +77,7 @@ package overseer_config {
         _servicesDir  = path.join(_configDir, "services")
         _registryFile = path.join(_configDir, "registry.json")
 
-        if (_platform == "darwin") {
+        if (_platform == Platform.DARWIN) {
             _serviceDir = path.join(home, "Library", "LaunchAgents")
         } else {
             _serviceDir = path.join(home, ".config", "systemd", "user")
@@ -42,6 +91,8 @@ package overseer_config {
         os.mkdirAll(_servicesDir, _DIR_MODE)
         os.mkdirAll(_serviceDir, _DIR_MODE)
     }
+
+    // ── Platform helpers ─────────────────────────────────────────────────
 
     // Return the detected platform: "linux" or "darwin".
     let getPlatform = func() { return _platform }
@@ -57,16 +108,18 @@ package overseer_config {
 
     // Return the service file extension for the current platform.
     let _serviceExt = func() {
-        if (_platform == "darwin") {
+        if (_platform == Platform.DARWIN) {
             return ".plist"
         }
         return ".service"
     }
 
+    // ── Path accessors ───────────────────────────────────────────────────
+
     // Return the path to a service's overseer copy of the service file.
     let getServiceFilePath = func(name) {
         let path = import("path")
-        if (_platform == "darwin") {
+        if (_platform == Platform.DARWIN) {
             return path.join(_servicesDir, "com.overseer." + name + ".plist")
         }
         return path.join(_servicesDir, name + ".service")
@@ -75,7 +128,7 @@ package overseer_config {
     // Return the path to the platform service file (systemd unit or LaunchAgent plist).
     let getSystemdFilePath = func(name) {
         let path = import("path")
-        if (_platform == "darwin") {
+        if (_platform == Platform.DARWIN) {
             return path.join(_serviceDir, "com.overseer." + name + ".plist")
         }
         return path.join(_serviceDir, name + ".service")
@@ -85,6 +138,14 @@ package overseer_config {
     let getLaunchdLabel = func(name) {
         return "com.overseer." + name
     }
+
+    let getConfigDir    = func() { return _configDir }
+    let getServicesDir  = func() { return _servicesDir }
+    let getSystemdDir   = func() { return _serviceDir }
+    let getRegistryPath = func() { return _registryFile }
+    let getServiceDir   = func() { return _serviceDir }
+
+    // ── Registry persistence ─────────────────────────────────────────────
 
     // Load the service registry from disk.
     let _loadRegistry = func() {
@@ -118,17 +179,70 @@ package overseer_config {
         os.writeFile(_registryFile, content)
     }
 
+    // ── Internal helpers ─────────────────────────────────────────────────
+
+    // Build a service entry dict from core fields and an options dict.
+    let _buildServiceEntry = func(name, command, options) {
+        let time = import("time")
+
+        let tags = []
+        if (options.has("tags")) {
+            tags = options["tags"]
+        }
+
+        let env = {}
+        if (options.has("env")) {
+            env = options["env"]
+        }
+
+        let healthEndpoint = ""
+        if (options.has("health_endpoint")) {
+            healthEndpoint = options["health_endpoint"]
+        }
+
+        let restartPolicy = RestartPolicy.ALWAYS
+        if (options.has("restart_policy")) {
+            let rp = options["restart_policy"]
+            if (rp == RestartPolicy.ALWAYS || rp == RestartPolicy.ON_FAILURE || rp == RestartPolicy.NEVER) {
+                restartPolicy = rp
+            }
+        }
+
+        let maxRetries = 3
+        if (options.has("max_retries")) {
+            maxRetries = options["max_retries"]
+        }
+
+        let description = ""
+        if (options.has("description")) {
+            description = options["description"]
+        }
+
+        let entry = ServiceEntry(
+            name            = name,
+            command         = command,
+            platform        = _platform,
+            created_at      = time.format(time.now(), "2006-01-02 15:04:05"),
+            tags            = tags,
+            env             = env,
+            health_endpoint = healthEndpoint,
+            restart_policy  = restartPolicy,
+            max_retries     = maxRetries,
+            description     = description
+        )
+
+        return entry.toDict()
+    }
+
+    // ── Core CRUD operations ─────────────────────────────────────────────
+
     // Register a service in the registry.
-    let registerService = func(name, command) {
-        let time     = import("time")
+    // Accepts an optional third parameter (dict) with extra options:
+    //   tags, env, description, health_endpoint, restart_policy, max_retries
+    let registerService = func(name, command, options = {}) {
         let registry = _loadRegistry()
         let services = registry["services"]
-        services[name] = {
-            "name":       name,
-            "command":    command,
-            "platform":   _platform,
-            "created_at": time.format(time.now(), "2006-01-02 15:04:05")
-        }
+        services[name] = _buildServiceEntry(name, command, options)
         registry["services"] = services
         _saveRegistry(registry)
     }
@@ -167,10 +281,119 @@ package overseer_config {
         return registry["services"]
     }
 
-    // Accessors for path information.
-    let getConfigDir    = func() { return _configDir }
-    let getServicesDir  = func() { return _servicesDir }
-    let getSystemdDir   = func() { return _serviceDir }
-    let getRegistryPath = func() { return _registryFile }
-    let getServiceDir   = func() { return _serviceDir }
+    // Update service metadata. The updates parameter is a dict of keys to update.
+    let updateService = func(name, updates) {
+        let registry = _loadRegistry()
+        let services = registry["services"]
+        if (!services.has(name)) {
+            return false
+        }
+        let entry = services[name]
+        for key, val in updates {
+            entry[key] = val
+        }
+        services[name] = entry
+        registry["services"] = services
+        _saveRegistry(registry)
+        return true
+    }
+
+    // ── Tag management ───────────────────────────────────────────────────
+
+    // Get tags for a service.
+    let getServiceTags = func(name) {
+        let svcData = getServiceInfo(name)
+        if (svcData == null) {
+            return []
+        }
+        if (svcData.has("tags")) {
+            return svcData["tags"]
+        }
+        return []
+    }
+
+    // Set tags for a service.
+    let setServiceTags = func(name, tags) {
+        return updateService(name, {"tags": tags})
+    }
+
+    // Find all services matching a given tag.
+    let findServicesByTag = func(tag) {
+        let results  = []
+        let services = listServices()
+        for svcName, svc in services {
+            if (svc.has("tags")) {
+                let tags  = svc["tags"]
+                let found = false
+                for t in tags {
+                    if (t == tag) {
+                        found = true
+                    }
+                }
+                if (found) {
+                    results.push(svc)
+                }
+            }
+        }
+        return results
+    }
+
+    // ── Environment variable management ──────────────────────────────────
+
+    // Get environment variables for a service.
+    let getServiceEnv = func(name) {
+        let svcData = getServiceInfo(name)
+        if (svcData == null) {
+            return {}
+        }
+        if (svcData.has("env")) {
+            return svcData["env"]
+        }
+        return {}
+    }
+
+    // Set environment variables for a service.
+    let setServiceEnv = func(name, envVars) {
+        return updateService(name, {"env": envVars})
+    }
+
+    // ── Health check management ──────────────────────────────────────────
+
+    // Get the health endpoint for a service.
+    let getServiceHealth = func(name) {
+        let svcData = getServiceInfo(name)
+        if (svcData == null) {
+            return ""
+        }
+        if (svcData.has("health_endpoint")) {
+            return svcData["health_endpoint"]
+        }
+        return ""
+    }
+
+    // Set the health endpoint for a service.
+    let setServiceHealth = func(name, endpoint) {
+        return updateService(name, {"health_endpoint": endpoint})
+    }
+
+    // ── Import / Export ──────────────────────────────────────────────────
+
+    // Export the entire registry as a JSON string.
+    let exportConfig = func() {
+        let json     = import("json")
+        let registry = _loadRegistry()
+        let raw      = json.encode(registry)
+        return json.pretty(raw)
+    }
+
+    // Import registry from a JSON string, replacing the current registry.
+    let importConfig = func(jsonStr) {
+        let json   = import("json")
+        let parsed = json.decode(jsonStr)
+        if (parsed == null) {
+            return false
+        }
+        _saveRegistry(parsed)
+        return true
+    }
 }
