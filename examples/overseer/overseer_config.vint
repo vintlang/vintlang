@@ -202,7 +202,10 @@ package overseer_config {
 
         let restartPolicy = RestartPolicy.ALWAYS
         if (options.has("restart_policy")) {
-            restartPolicy = options["restart_policy"]
+            let rp = options["restart_policy"]
+            if (rp == RestartPolicy.ALWAYS || rp == RestartPolicy.ON_FAILURE || rp == RestartPolicy.NEVER) {
+                restartPolicy = rp
+            }
         }
 
         let maxRetries = 3

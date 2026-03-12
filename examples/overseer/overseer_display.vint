@@ -335,6 +335,7 @@ package overseer_display {
 
         term.println("Usage:", COLOR_HEAD)
         term.println("  overseer <command> [arguments]", COLOR_CODE)
+        term.println("  vint main.vint <command> [arguments]  (from source)", COLOR_DIM)
         term.println("")
 
         term.println("Service Management:", COLOR_HEAD)
