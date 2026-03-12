@@ -1,34 +1,49 @@
 // overseer/main.vint
-// Overseer - A developer-friendly CLI process manager.
+// Overseer v2 — A developer-friendly CLI process manager.
 // Uses systemd on Linux and launchd on macOS.
 //
 // Usage:
-//   vint main.vint <command> [arguments]
+//   overseer <command> [arguments]
 //
-// Commands:
-//   add <name> <command>  - Add and install a new managed service
-//   start <name>          - Start a service
-//   stop <name>           - Stop a service
-//   restart <name>        - Restart a service
-//   enable <name>         - Enable a service to start at login
-//   disable <name>        - Disable a service from starting at login
-//   status <name>         - Show the status of a service
-//   logs <name>           - View recent logs for a service
-//   list                  - List all managed services
-//   remove <name>         - Stop, disable and remove a service
-//   info                  - Show overseer configuration paths
-//   help                  - Show help information
-//   --version             - Show version
+// Service Management:
+//   add <name> <command>      - Add and install a new managed service
+//   start <name>              - Start a service
+//   stop <name>               - Stop a service
+//   restart <name>            - Restart a service
+//   enable <name>             - Enable a service to start at login
+//   disable <name>            - Disable a service from starting at login
+//   status <name>             - Show the status of a service
+//   logs <name>               - View recent logs for a service
+//   list                      - List all managed services
+//   remove <name>             - Stop, disable and remove a service
+//
+// Monitoring & Environment:
+//   dashboard                 - Show service overview dashboard
+//   health [name]             - Run health checks (all or one service)
+//   env list <name>           - List environment variables
+//   env set <name> <K> <V>    - Set an environment variable
+//   env rm <name> <KEY>       - Remove an environment variable
+//   tag add <name> <tag>      - Add a tag to a service
+//   tag rm <name> <tag>       - Remove a tag from a service
+//   tag find <tag>            - Find services by tag
+//
+// Configuration:
+//   describe <name> [text]    - Set or show service description
+//   export [file]             - Export configuration to JSON
+//   import <file>             - Import configuration from JSON
+//   info                      - Show overseer configuration paths
+//   help                      - Show help information
+//   --version                 - Show version
 
 import cli
 import overseer_display
 import overseer_config
 import overseer_service
 import overseer_systemctl
+import overseer_health
+import overseer_env
 
-// --------------------------------------------------------------------------
-// Guards
-// --------------------------------------------------------------------------
+// ── Guards ───────────────────────────────────────────────────────────────
 
 let requireBackend = func() {
     let check = overseer_systemctl.checkBackend()
@@ -42,7 +57,7 @@ let requireBackend = func() {
 let requireService = func(name) {
     if (!overseer_config.isRegistered(name)) {
         overseer_display.printError("Service '" + name + "' is not managed by overseer.")
-        overseer_display.printInfo("Run: vint main.vint list")
+        overseer_display.printInfo("Run: overseer list")
         let os = import("os")
         os.exit(1)
     }
@@ -66,14 +81,23 @@ let validateName = func(name) {
     }
 }
 
-// --------------------------------------------------------------------------
-// Command: add
-// --------------------------------------------------------------------------
+// Slice args from startIdx to end, returning a new array.
+let sliceArgs = func(args, startIdx) {
+    let result = []
+    let idx = startIdx
+    while (idx < len(args)) {
+        result.push(args[idx])
+        idx = idx + 1
+    }
+    return result
+}
+
+// ── Command: add ─────────────────────────────────────────────────────────
 
 let cmdAdd = func(args) {
     if (len(args) < 2) {
         overseer_display.printError("Usage: overseer add <name> <command>")
-        overseer_display.printInfo("Example: vint main.vint add api \"./api --port 8080\"")
+        overseer_display.printInfo("Example: overseer add api \"./api --port 8080\"")
         let os = import("os")
         os.exit(1)
     }
@@ -85,7 +109,7 @@ let cmdAdd = func(args) {
 
     if (overseer_config.isRegistered(name)) {
         overseer_display.printWarn("Service '" + name + "' is already managed by overseer.")
-        overseer_display.printInfo("Remove it first: vint main.vint remove " + name)
+        overseer_display.printInfo("Remove it first: overseer remove " + name)
         let os = import("os")
         os.exit(1)
     }
@@ -102,15 +126,13 @@ let cmdAdd = func(args) {
     overseer_config.registerService(name, command)
 
     overseer_display.printSuccess("Service '" + name + "' installed.")
-    overseer_display.printDetail("Command:",   command)
+    overseer_display.printDetail("Command:",  command)
     overseer_display.printDetail("Service:",  overseer_config.getSystemdFilePath(name))
     overseer_display.println("")
-    overseer_display.printInfo("Start it with: vint main.vint start " + name)
+    overseer_display.printInfo("Start it with: overseer start " + name)
 }
 
-// --------------------------------------------------------------------------
-// Command: start
-// --------------------------------------------------------------------------
+// ── Command: start ───────────────────────────────────────────────────────
 
 let cmdStart = func(name) {
     requireService(name)
@@ -127,9 +149,7 @@ let cmdStart = func(name) {
     }
 }
 
-// --------------------------------------------------------------------------
-// Command: stop
-// --------------------------------------------------------------------------
+// ── Command: stop ────────────────────────────────────────────────────────
 
 let cmdStop = func(name) {
     requireService(name)
@@ -146,9 +166,7 @@ let cmdStop = func(name) {
     }
 }
 
-// --------------------------------------------------------------------------
-// Command: restart
-// --------------------------------------------------------------------------
+// ── Command: restart ─────────────────────────────────────────────────────
 
 let cmdRestart = func(name) {
     requireService(name)
@@ -165,9 +183,7 @@ let cmdRestart = func(name) {
     }
 }
 
-// --------------------------------------------------------------------------
-// Command: enable
-// --------------------------------------------------------------------------
+// ── Command: enable ──────────────────────────────────────────────────────
 
 let cmdEnable = func(name) {
     requireService(name)
@@ -184,9 +200,7 @@ let cmdEnable = func(name) {
     }
 }
 
-// --------------------------------------------------------------------------
-// Command: disable
-// --------------------------------------------------------------------------
+// ── Command: disable ─────────────────────────────────────────────────────
 
 let cmdDisable = func(name) {
     requireService(name)
@@ -203,21 +217,53 @@ let cmdDisable = func(name) {
     }
 }
 
-// --------------------------------------------------------------------------
-// Command: status
-// --------------------------------------------------------------------------
+// ── Command: status ──────────────────────────────────────────────────────
 
 let cmdStatus = func(name) {
     requireService(name)
 
-    let svcInfo = overseer_config.getServiceInfo(name)
+    let svcData = overseer_config.getServiceInfo(name)
     let result  = overseer_systemctl.status(name)
 
     overseer_display.println("")
-    overseer_display.printDetail("Service:",  name)
-    overseer_display.printDetail("Command:",  svcInfo["command"])
-    overseer_display.printDetail("Created:",  svcInfo["created_at"])
-    overseer_display.printDetail("Status:",   result["active"])
+    overseer_display.printDetail("Service:",     name)
+    overseer_display.printDetail("Command:",     svcData["command"])
+    overseer_display.printDetail("Created:",     svcData["created_at"])
+    overseer_display.printDetail("Status:",      result["active"])
+
+    // Show optional fields
+    if (svcData.has("description")) {
+        let desc = svcData["description"]
+        if (desc != "" && desc != null) {
+            overseer_display.printDetail("Description:", desc)
+        }
+    }
+
+    if (svcData.has("tags")) {
+        let tags = svcData["tags"]
+        if (len(tags) > 0) {
+            let tagStr = ""
+            for t in tags {
+                if (tagStr != "") {
+                    tagStr = tagStr + ", "
+                }
+                tagStr = tagStr + t
+            }
+            overseer_display.printDetail("Tags:", tagStr)
+        }
+    }
+
+    if (svcData.has("restart_policy")) {
+        overseer_display.printDetail("Restart:", svcData["restart_policy"])
+    }
+
+    if (svcData.has("health_endpoint")) {
+        let ep = svcData["health_endpoint"]
+        if (ep != "" && ep != null) {
+            overseer_display.printDetail("Health:", ep)
+        }
+    }
+
     overseer_display.println("")
 
     if (result["output"] != "") {
@@ -225,9 +271,7 @@ let cmdStatus = func(name) {
     }
 }
 
-// --------------------------------------------------------------------------
-// Command: logs
-// --------------------------------------------------------------------------
+// ── Command: logs ────────────────────────────────────────────────────────
 
 let cmdLogs = func(name) {
     requireService(name)
@@ -242,9 +286,7 @@ let cmdLogs = func(name) {
     }
 }
 
-// --------------------------------------------------------------------------
-// Command: list
-// --------------------------------------------------------------------------
+// ── Command: list ────────────────────────────────────────────────────────
 
 let cmdList = func() {
     let services = overseer_config.listServices()
@@ -255,7 +297,7 @@ let cmdList = func() {
     if (len(names) == 0) {
         overseer_display.println("  No services managed by overseer.")
         overseer_display.println("")
-        overseer_display.printInfo("Add one: vint main.vint add <name> <command>")
+        overseer_display.printInfo("Add one: overseer add <name> <command>")
         return null
     }
 
@@ -264,9 +306,7 @@ let cmdList = func() {
     overseer_display.printServicesTable(services)
 }
 
-// --------------------------------------------------------------------------
-// Command: remove
-// --------------------------------------------------------------------------
+// ── Command: remove ──────────────────────────────────────────────────────
 
 let cmdRemove = func(name) {
     requireService(name)
@@ -284,9 +324,255 @@ let cmdRemove = func(name) {
     overseer_display.printSuccess("Service '" + name + "' removed.")
 }
 
-// --------------------------------------------------------------------------
-// Main entry point
-// --------------------------------------------------------------------------
+// ── Command: dashboard ───────────────────────────────────────────────────
+
+let cmdDashboard = func() {
+    let services = overseer_config.listServices()
+    let names    = services.keys()
+
+    // Gather statuses
+    let statusResults = {}
+    for name in names {
+        let result = overseer_systemctl.status(name)
+        statusResults[string(name)] = result["active"]
+    }
+
+    overseer_display.showDashboard(services, statusResults)
+}
+
+// ── Command: health ──────────────────────────────────────────────────────
+
+let cmdHealth = func(name) {
+    if (name != null && name != "") {
+        requireService(name)
+        let endpoint = overseer_config.getServiceHealth(name)
+        let result   = overseer_health.checkService(name, endpoint)
+
+        let results  = [result]
+        let summary  = overseer_health.summarise(results)
+        overseer_display.printHealthResults(results, summary)
+    } else {
+        let services = overseer_config.listServices()
+        let results  = overseer_health.checkAll(services, overseer_config)
+        let summary  = overseer_health.summarise(results)
+        overseer_display.printHealthResults(results, summary)
+    }
+}
+
+// ── Command: env ─────────────────────────────────────────────────────────
+
+let cmdEnv = func(args) {
+    if (len(args) < 2) {
+        overseer_display.printError("Usage: overseer env <list|set|rm> <name> [KEY] [VALUE]")
+        let os = import("os")
+        os.exit(1)
+    }
+
+    let subCmd = args[0]
+    let name   = args[1]
+
+    validateName(name)
+    requireService(name)
+
+    switch (subCmd) {
+        case "list" {
+            let envVars = overseer_env.listVars(name, overseer_config)
+            overseer_display.printEnvVars(name, envVars)
+        }
+
+        case "set" {
+            if (len(args) < 4) {
+                overseer_display.printError("Usage: overseer env set <name> <KEY> <VALUE>")
+                let os = import("os")
+                os.exit(1)
+            }
+            let key   = args[2]
+            let value = args[3]
+            overseer_env.setVar(name, key, value, overseer_config)
+            overseer_display.printSuccess("Set " + key + "=" + value + " for '" + name + "'")
+        }
+
+        case "rm" {
+            if (len(args) < 3) {
+                overseer_display.printError("Usage: overseer env rm <name> <KEY>")
+                let os = import("os")
+                os.exit(1)
+            }
+            let key = args[2]
+            let removed = overseer_env.removeVar(name, key, overseer_config)
+            if (removed) {
+                overseer_display.printSuccess("Removed " + key + " from '" + name + "'")
+            } else {
+                overseer_display.printWarn("Variable " + key + " not found for '" + name + "'")
+            }
+        }
+
+        default {
+            overseer_display.printError("Unknown env sub-command: '" + subCmd + "'")
+            overseer_display.printInfo("Available: list, set, rm")
+        }
+    }
+}
+
+// ── Command: tag ─────────────────────────────────────────────────────────
+
+let cmdTag = func(args) {
+    if (len(args) < 2) {
+        overseer_display.printError("Usage: overseer tag <add|rm|find> <name|tag> [tag]")
+        let os = import("os")
+        os.exit(1)
+    }
+
+    let subCmd = args[0]
+
+    switch (subCmd) {
+        case "add" {
+            if (len(args) < 3) {
+                overseer_display.printError("Usage: overseer tag add <name> <tag>")
+                let os = import("os")
+                os.exit(1)
+            }
+            let name = args[1]
+            let tag  = args[2]
+            validateName(name)
+            requireService(name)
+
+            let tags = overseer_config.getServiceTags(name)
+            // Check if tag already exists
+            let exists = false
+            for t in tags {
+                if (t == tag) {
+                    exists = true
+                }
+            }
+            if (!exists) {
+                tags.push(tag)
+                overseer_config.setServiceTags(name, tags)
+            }
+            overseer_display.printSuccess("Tag '" + tag + "' added to '" + name + "'")
+        }
+
+        case "rm" {
+            if (len(args) < 3) {
+                overseer_display.printError("Usage: overseer tag rm <name> <tag>")
+                let os = import("os")
+                os.exit(1)
+            }
+            let name = args[1]
+            let tag  = args[2]
+            validateName(name)
+            requireService(name)
+
+            let tags    = overseer_config.getServiceTags(name)
+            let newTags = []
+            for t in tags {
+                if (t != tag) {
+                    newTags.push(t)
+                }
+            }
+            overseer_config.setServiceTags(name, newTags)
+            overseer_display.printSuccess("Tag '" + tag + "' removed from '" + name + "'")
+        }
+
+        case "find" {
+            let tag      = args[1]
+            let found    = overseer_config.findServicesByTag(tag)
+            let foundLen = len(found)
+
+            if (foundLen == 0) {
+                overseer_display.printInfo("No services found with tag '" + tag + "'")
+            } else {
+                overseer_display.printInfo(string(foundLen) + " service(s) with tag '" + tag + "':")
+                for svc in found {
+                    overseer_display.println("  • " + svc["name"] + " — " + svc["command"])
+                }
+            }
+        }
+
+        default {
+            overseer_display.printError("Unknown tag sub-command: '" + subCmd + "'")
+            overseer_display.printInfo("Available: add, rm, find")
+        }
+    }
+}
+
+// ── Command: describe ────────────────────────────────────────────────────
+
+let cmdDescribe = func(args) {
+    if (len(args) < 1) {
+        overseer_display.printError("Usage: overseer describe <name> [description]")
+        let os = import("os")
+        os.exit(1)
+    }
+
+    let name = args[0]
+    validateName(name)
+    requireService(name)
+
+    if (len(args) > 1) {
+        // Set description
+        let desc = args[1]
+        overseer_config.updateService(name, {"description": desc})
+        overseer_display.printSuccess("Description for '" + name + "' updated.")
+    } else {
+        // Show description
+        let svcData = overseer_config.getServiceInfo(name)
+        if (svcData.has("description")) {
+            let desc = svcData["description"]
+            if (desc != "" && desc != null) {
+                overseer_display.printDetail("Description:", desc)
+            } else {
+                overseer_display.printInfo("No description set for '" + name + "'")
+            }
+        } else {
+            overseer_display.printInfo("No description set for '" + name + "'")
+        }
+    }
+}
+
+// ── Command: export ──────────────────────────────────────────────────────
+
+let cmdExport = func(args) {
+    let os       = import("os")
+    let jsonData = overseer_config.exportConfig()
+
+    if (len(args) > 0) {
+        let filePath = args[0]
+        os.writeFile(filePath, jsonData)
+        overseer_display.printSuccess("Configuration exported to " + filePath)
+    } else {
+        overseer_display.println(jsonData)
+    }
+}
+
+// ── Command: import ──────────────────────────────────────────────────────
+
+let cmdImport = func(args) {
+    if (len(args) < 1) {
+        overseer_display.printError("Usage: overseer import <file>")
+        let os = import("os")
+        os.exit(1)
+    }
+
+    let osmod    = import("os")
+    let filePath = args[0]
+
+    if (!osmod.fileExists(filePath)) {
+        overseer_display.printError("File not found: " + filePath)
+        osmod.exit(1)
+    }
+
+    let content = osmod.readFile(filePath)
+    let ok      = overseer_config.importConfig(content)
+
+    if (ok) {
+        overseer_display.printSuccess("Configuration imported from " + filePath)
+    } else {
+        overseer_display.printError("Failed to parse configuration file.")
+    }
+}
+
+// ── Main entry point ─────────────────────────────────────────────────────
 
 let args = cli.getArgs()
 
@@ -382,6 +668,49 @@ switch (command) {
         validateName(name)
         requireBackend()
         cmdRemove(name)
+    }
+
+    case "dashboard" {
+        cmdDashboard()
+    }
+
+    case "health" {
+        let healthName = ""
+        if (len(args) > 1) {
+            healthName = args[1]
+        }
+        cmdHealth(healthName)
+    }
+
+    case "env" {
+        let envArgs = sliceArgs(args, 1)
+        cmdEnv(envArgs)
+    }
+
+    case "tag" {
+        let tagArgs = sliceArgs(args, 1)
+        cmdTag(tagArgs)
+    }
+
+    case "describe" {
+        let descArgs = sliceArgs(args, 1)
+        cmdDescribe(descArgs)
+    }
+
+    case "export" {
+        let exportArgs = []
+        if (len(args) > 1) {
+            exportArgs.push(args[1])
+        }
+        cmdExport(exportArgs)
+    }
+
+    case "import" {
+        let importArgs = []
+        if (len(args) > 1) {
+            importArgs.push(args[1])
+        }
+        cmdImport(importArgs)
     }
 
     default {

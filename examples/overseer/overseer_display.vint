@@ -1,6 +1,9 @@
 // overseer_display.vint
 // Display and output utilities for the overseer process manager.
 // Provides styled terminal output using the term module.
+//
+// v2.0.0 — Enhanced with dashboard view, health display, environment
+//           variable display, tag display, and richer formatting.
 
 package overseer_display {
 
@@ -11,6 +14,9 @@ package overseer_display {
     const COLOR_DIM  = "#888888"
     const COLOR_HEAD = "#FFFFFF"
     const COLOR_CODE = "#AAAAAA"
+    const COLOR_TAG  = "#BB88FF"
+
+    // ── Basic output helpers ─────────────────────────────────────────────
 
     // Print the application header banner.
     let header = func() {
@@ -26,25 +32,25 @@ package overseer_display {
     // Print a success message.
     let printSuccess = func(msg) {
         let term = import("term")
-        term.println("  [OK] " + msg, COLOR_OK)
+        term.println("  ✅ " + msg, COLOR_OK)
     }
 
     // Print an error message.
     let printError = func(msg) {
         let term = import("term")
-        term.println("  [ERROR] " + msg, COLOR_ERR)
+        term.println("  ❌ " + msg, COLOR_ERR)
     }
 
     // Print an informational message.
     let printInfo = func(msg) {
         let term = import("term")
-        term.println("  " + msg, COLOR_MSG)
+        term.println("  ℹ️  " + msg, COLOR_MSG)
     }
 
     // Print a warning message.
     let printWarn = func(msg) {
         let term = import("term")
-        term.println("  [WARN] " + msg, COLOR_WARN)
+        term.println("  ⚠️  " + msg, COLOR_WARN)
     }
 
     // Print plain text with a newline.
@@ -72,13 +78,15 @@ package overseer_display {
     let printDetail = func(label, value) {
         let term = import("term")
         let fmt  = import("fmt")
-        let padded = fmt.padRight(label, 12)
+        let padded = fmt.padRight(label, 16)
         term.println("  " + padded + value)
     }
 
-    // Print a table of services with live status.
+    // ── Service table ────────────────────────────────────────────────────
+
+    // Print a table of services with live status, tags, and description.
     let printServicesTable = func(services) {
-        let term  = import("term")
+        let term = import("term")
         import overseer_systemctl
 
         let names = services.keys()
@@ -87,7 +95,7 @@ package overseer_display {
             return null
         }
 
-        let rows = [["Name", "Command", "Status", "Created"]]
+        let rows = [["Name", "Command", "Status", "Tags", "Created"]]
 
         for name in names {
             let svc = services[name]
@@ -96,8 +104,8 @@ package overseer_display {
             let st = result["active"]
 
             let cmd = svc["command"]
-            if (len(cmd) > 40) {
-                cmd = cmd.substring(0, 37) + "..."
+            if (len(cmd) > 35) {
+                cmd = cmd.substring(0, 32) + "..."
             }
 
             let created = svc["created_at"]
@@ -105,12 +113,219 @@ package overseer_display {
                 created = "-"
             }
 
-            rows.push([string(name), cmd, st, created])
+            let tagStr = "-"
+            if (svc.has("tags")) {
+                let tags = svc["tags"]
+                if (len(tags) > 0) {
+                    tagStr = ""
+                    for t in tags {
+                        if (tagStr != "") {
+                            tagStr = tagStr + ", "
+                        }
+                        tagStr = tagStr + t
+                    }
+                }
+            }
+
+            rows.push([string(name), cmd, st, tagStr, created])
         }
 
         let table = term.table(rows)
         term.println(table)
     }
+
+    // ── Dashboard view ───────────────────────────────────────────────────
+
+    // Show a comprehensive dashboard with service overview.
+    let showDashboard = func(services, statusResults) {
+        let term = import("term")
+        import overseer_config
+
+        header()
+
+        let names = services.keys()
+        let total = len(names)
+
+        if (total == 0) {
+            term.println("  No services managed by overseer.", COLOR_DIM)
+            term.println("")
+            printInfo("Add one: overseer add <name> <command>")
+            return null
+        }
+
+        // Count statuses
+        let running = 0
+        let stopped = 0
+        let failed  = 0
+
+        for name in names {
+            let st = "unknown"
+            if (statusResults.has(name)) {
+                st = statusResults[name]
+            }
+
+            switch (st) {
+                case "active" {
+                    running = running + 1
+                }
+                case "inactive" {
+                    stopped = stopped + 1
+                }
+                case "failed" {
+                    failed = failed + 1
+                }
+                default {
+                    stopped = stopped + 1
+                }
+            }
+        }
+
+        // Summary line
+        term.println("  📊 Dashboard Overview", COLOR_HEAD)
+        term.println("  " + string(total) + " service(s) managed", COLOR_DIM)
+        term.println("")
+
+        let summaryRows = [
+            ["Metric",  "Count"],
+            ["Running", string(running)],
+            ["Stopped", string(stopped)],
+            ["Failed",  string(failed)],
+            ["Total",   string(total)]
+        ]
+        let summaryTable = term.table(summaryRows)
+        term.println(summaryTable)
+        term.println("")
+
+        // Per-service detail
+        term.println("  📋 Service Details", COLOR_HEAD)
+        term.println("")
+
+        for name in names {
+            let svc = services[name]
+            let st  = "unknown"
+            if (statusResults.has(name)) {
+                st = statusResults[name]
+            }
+
+            let icon = "⚪"
+            let clr  = COLOR_DIM
+            switch (st) {
+                case "active" {
+                    icon = "🟢"
+                    clr  = COLOR_OK
+                }
+                case "failed" {
+                    icon = "🔴"
+                    clr  = COLOR_ERR
+                }
+                case "inactive" {
+                    icon = "⚫"
+                    clr  = COLOR_DIM
+                }
+            }
+
+            term.println("  " + icon + " " + string(name), clr)
+
+            let cmd = svc["command"]
+            if (len(cmd) > 50) {
+                cmd = cmd.substring(0, 47) + "..."
+            }
+            term.println("    Command: " + cmd, COLOR_DIM)
+
+            if (svc.has("description")) {
+                let desc = svc["description"]
+                if (desc != "" && desc != null) {
+                    term.println("    Desc:    " + desc, COLOR_DIM)
+                }
+            }
+
+            if (svc.has("tags")) {
+                let tags = svc["tags"]
+                if (len(tags) > 0) {
+                    let tagStr = ""
+                    for t in tags {
+                        if (tagStr != "") {
+                            tagStr = tagStr + ", "
+                        }
+                        tagStr = tagStr + t
+                    }
+                    term.println("    Tags:    " + tagStr, COLOR_TAG)
+                }
+            }
+
+            if (svc.has("health_endpoint")) {
+                let ep = svc["health_endpoint"]
+                if (ep != "" && ep != null) {
+                    term.println("    Health:  " + ep, COLOR_DIM)
+                }
+            }
+
+            term.println("")
+        }
+    }
+
+    // ── Health display ───────────────────────────────────────────────────
+
+    // Print health check results.
+    let printHealthResults = func(results, summary) {
+        let term = import("term")
+
+        term.println("")
+        term.println("  🏥 Health Check Results", COLOR_HEAD)
+        term.println("")
+
+        for r in results {
+            let icon = "❌"
+            let clr  = COLOR_ERR
+            if (r.endpoint == "" || r.endpoint == null) {
+                icon = "⚪"
+                clr  = COLOR_DIM
+            } else if (r.healthy) {
+                icon = "✅"
+                clr  = COLOR_OK
+            }
+
+            term.println("  " + icon + " " + r.service_name, clr)
+            if (r.endpoint != "" && r.endpoint != null) {
+                term.println("    Endpoint: " + r.endpoint, COLOR_DIM)
+                term.println("    Status:   " + r.message + " (" + string(r.latency_ms) + "ms)", COLOR_DIM)
+            } else {
+                term.println("    No health endpoint configured", COLOR_DIM)
+            }
+        }
+
+        term.println("")
+        term.println("  Summary: " + string(summary["healthy"]) + " healthy, " + string(summary["unhealthy"]) + " unhealthy, " + string(summary["no_endpoint"]) + " unconfigured", COLOR_DIM)
+        term.println("")
+    }
+
+    // ── Environment variable display ─────────────────────────────────────
+
+    // Print environment variables for a service.
+    let printEnvVars = func(serviceName, envVars) {
+        let term = import("term")
+
+        term.println("")
+        term.println("  🔑 Environment: " + serviceName, COLOR_HEAD)
+        term.println("")
+
+        if (len(envVars) == 0) {
+            term.println("  No environment variables set.", COLOR_DIM)
+            term.println("")
+            return null
+        }
+
+        let rows = [["Key", "Value"]]
+        for ev in envVars {
+            rows.push([ev.key, ev.value])
+        }
+
+        let table = term.table(rows)
+        term.println(table)
+        term.println("")
+    }
+
+    // ── Enhanced help ────────────────────────────────────────────────────
 
     // Show the full help message.
     let showHelp = func() {
@@ -119,10 +334,12 @@ package overseer_display {
         header()
 
         term.println("Usage:", COLOR_HEAD)
-        term.println("  vint main.vint <command> [arguments]", COLOR_CODE)
+        term.println("  overseer <command> [arguments]", COLOR_CODE)
+        term.println("  vint main.vint <command> [arguments]  (from source)", COLOR_DIM)
         term.println("")
 
-        let helpRows = [
+        term.println("Service Management:", COLOR_HEAD)
+        let svcRows = [
             ["Command",  "Arguments",       "Description"],
             ["add",      "<name> <command>", "Add and install a new managed service"],
             ["start",    "<name>",           "Start a service"],
@@ -133,22 +350,50 @@ package overseer_display {
             ["status",   "<name>",           "Show the status of a service"],
             ["logs",     "<name>",           "View recent logs for a service"],
             ["list",     "",                 "List all managed services"],
-            ["remove",   "<name>",           "Stop, disable and remove a service"],
-            ["info",     "",                 "Show overseer configuration paths"],
-            ["help",     "",                 "Show this help message"],
-            ["--version","",                 "Show version information"]
+            ["remove",   "<name>",           "Stop, disable and remove a service"]
         ]
-
-        let table = term.table(helpRows)
-        term.println(table)
-
+        let svcTable = term.table(svcRows)
+        term.println(svcTable)
         term.println("")
+
+        term.println("Monitoring & Environment:", COLOR_HEAD)
+        let monRows = [
+            ["Command",  "Arguments",              "Description"],
+            ["dashboard","",                        "Show service overview dashboard"],
+            ["health",   "[name]",                  "Run health checks (all or one service)"],
+            ["env list", "<name>",                  "List environment variables"],
+            ["env set",  "<name> <KEY> <VALUE>",    "Set an environment variable"],
+            ["env rm",   "<name> <KEY>",            "Remove an environment variable"],
+            ["tag add",  "<name> <tag>",            "Add a tag to a service"],
+            ["tag rm",   "<name> <tag>",            "Remove a tag from a service"],
+            ["tag find", "<tag>",                   "Find services by tag"]
+        ]
+        let monTable = term.table(monRows)
+        term.println(monTable)
+        term.println("")
+
+        term.println("Configuration:", COLOR_HEAD)
+        let cfgRows = [
+            ["Command",   "Arguments",  "Description"],
+            ["describe",  "<name>",     "Set or show service description"],
+            ["export",    "[file]",     "Export configuration to JSON"],
+            ["import",    "<file>",     "Import configuration from JSON"],
+            ["info",      "",           "Show overseer configuration paths"],
+            ["help",      "",           "Show this help message"],
+            ["--version", "",           "Show version information"]
+        ]
+        let cfgTable = term.table(cfgRows)
+        term.println(cfgTable)
+        term.println("")
+
         term.println("Examples:", COLOR_HEAD)
-        term.println("  vint main.vint add api \"./api --port 8080\"", COLOR_CODE)
-        term.println("  vint main.vint start api", COLOR_CODE)
-        term.println("  vint main.vint logs api", COLOR_CODE)
-        term.println("  vint main.vint list", COLOR_CODE)
-        term.println("  vint main.vint remove api", COLOR_CODE)
+        term.println("  overseer add api \"./api --port 8080\"", COLOR_CODE)
+        term.println("  overseer start api", COLOR_CODE)
+        term.println("  overseer env set api PORT 8080", COLOR_CODE)
+        term.println("  overseer tag add api backend", COLOR_CODE)
+        term.println("  overseer dashboard", COLOR_CODE)
+        term.println("  overseer health", COLOR_CODE)
+        term.println("  overseer export backup.json", COLOR_CODE)
         term.println("")
 
         term.println("Notes:", COLOR_HEAD)
