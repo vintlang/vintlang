@@ -51,6 +51,9 @@ overseer/
 
 ## Quick Start
 
+> **Note:** Use `vint main.vint` when running from source.
+> After building with `vint build.vint build`, use the `overseer` binary directly.
+
 ```bash
 # Show help
 vint main.vint help

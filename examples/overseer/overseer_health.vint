@@ -45,11 +45,26 @@ package overseer_health {
         }
 
         let shell  = import("shell")
+        let regex  = import("regex")
         let startT = time.now()
+
+        // Sanitise the endpoint — only allow safe URL characters
+        let safeEndpoint = endpoint
+        if (!regex.test("^https?://[a-zA-Z0-9._:/-]+$", endpoint)) {
+            return HealthResult(
+                service_name = serviceName,
+                endpoint     = endpoint,
+                healthy      = false,
+                status_code  = 0,
+                latency_ms   = 0,
+                message      = "Invalid endpoint URL",
+                checked_at   = checkedAt
+            )
+        }
 
         // Use curl with a 5-second timeout to hit the health endpoint
         let output = shell.run(
-            "curl -s -o /dev/null -w '%{http_code}' --max-time 5 " + endpoint + " 2>&1 || echo 000"
+            "curl -s -o /dev/null -w '%{http_code}' --max-time 5 '" + safeEndpoint + "' 2>&1 || echo 000"
         )
 
         let endT    = time.now()
@@ -60,10 +75,18 @@ package overseer_health {
         let ok      = false
         let msg     = ""
 
-        if (code == "200" || code == "201" || code == "204") {
+        if (code == "200") {
             ok      = true
             codeInt = 200
             msg     = "OK"
+        } else if (code == "201") {
+            ok      = true
+            codeInt = 201
+            msg     = "Created"
+        } else if (code == "204") {
+            ok      = true
+            codeInt = 204
+            msg     = "No Content"
         } else if (code == "000") {
             codeInt = 0
             msg     = "Connection refused or timeout"

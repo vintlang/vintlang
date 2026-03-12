@@ -81,6 +81,17 @@ let validateName = func(name) {
     }
 }
 
+// Slice args from startIdx to end, returning a new array.
+let sliceArgs = func(args, startIdx) {
+    let result = []
+    let idx = startIdx
+    while (idx < len(args)) {
+        result.push(args[idx])
+        idx = idx + 1
+    }
+    return result
+}
+
 // ── Command: add ─────────────────────────────────────────────────────────
 
 let cmdAdd = func(args) {
@@ -672,32 +683,17 @@ switch (command) {
     }
 
     case "env" {
-        let envArgs = []
-        let idx = 1
-        while (idx < len(args)) {
-            envArgs.push(args[idx])
-            idx = idx + 1
-        }
+        let envArgs = sliceArgs(args, 1)
         cmdEnv(envArgs)
     }
 
     case "tag" {
-        let tagArgs = []
-        let idx = 1
-        while (idx < len(args)) {
-            tagArgs.push(args[idx])
-            idx = idx + 1
-        }
+        let tagArgs = sliceArgs(args, 1)
         cmdTag(tagArgs)
     }
 
     case "describe" {
-        let descArgs = []
-        let idx = 1
-        while (idx < len(args)) {
-            descArgs.push(args[idx])
-            idx = idx + 1
-        }
+        let descArgs = sliceArgs(args, 1)
         cmdDescribe(descArgs)
     }
 
