@@ -299,12 +299,12 @@ package overseer_config {
 
     // Get tags for a service.
     let getServiceTags = func(name) {
-        let info = getServiceInfo(name)
-        if (info == null) {
+        let svcData = getServiceInfo(name)
+        if (svcData == null) {
             return []
         }
-        if (info.has("tags")) {
-            return info["tags"]
+        if (svcData.has("tags")) {
+            return svcData["tags"]
         }
         return []
     }
@@ -339,12 +339,12 @@ package overseer_config {
 
     // Get environment variables for a service.
     let getServiceEnv = func(name) {
-        let info = getServiceInfo(name)
-        if (info == null) {
+        let svcData = getServiceInfo(name)
+        if (svcData == null) {
             return {}
         }
-        if (info.has("env")) {
-            return info["env"]
+        if (svcData.has("env")) {
+            return svcData["env"]
         }
         return {}
     }
@@ -358,12 +358,12 @@ package overseer_config {
 
     // Get the health endpoint for a service.
     let getServiceHealth = func(name) {
-        let info = getServiceInfo(name)
-        if (info == null) {
+        let svcData = getServiceInfo(name)
+        if (svcData == null) {
             return ""
         }
-        if (info.has("health_endpoint")) {
-            return info["health_endpoint"]
+        if (svcData.has("health_endpoint")) {
+            return svcData["health_endpoint"]
         }
         return ""
     }
