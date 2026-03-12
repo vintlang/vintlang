@@ -1,0 +1,85 @@
+// overseer_env.vint
+// Per-service environment variable management for the overseer process manager.
+// Allows setting, getting, listing, and removing environment variables that
+// are injected into a service's runtime environment.
+
+package overseer_env {
+
+    // ── Env entry struct ─────────────────────────────────────────────────
+
+    struct EnvVar {
+        key:   ""
+        value: ""
+
+        func display() {
+            return this.key + "=" + this.value
+        }
+    }
+
+    // ── Public API ───────────────────────────────────────────────────────
+
+    // Set an environment variable for a service.
+    let setVar = func(serviceName, key, value, config) {
+        let envVars = config.getServiceEnv(serviceName)
+        if (envVars == null) {
+            envVars = {}
+        }
+        envVars[key] = value
+        config.setServiceEnv(serviceName, envVars)
+        return true
+    }
+
+    // Get an environment variable value for a service.
+    let getVar = func(serviceName, key, config) {
+        let envVars = config.getServiceEnv(serviceName)
+        if (envVars == null) {
+            return null
+        }
+        if (envVars.has(key)) {
+            return envVars[key]
+        }
+        return null
+    }
+
+    // Remove an environment variable from a service.
+    let removeVar = func(serviceName, key, config) {
+        let envVars = config.getServiceEnv(serviceName)
+        if (envVars == null) {
+            return false
+        }
+        if (envVars.has(key)) {
+            envVars.remove(key)
+            config.setServiceEnv(serviceName, envVars)
+            return true
+        }
+        return false
+    }
+
+    // List all environment variables for a service as an array of EnvVar structs.
+    let listVars = func(serviceName, config) {
+        let envVars = config.getServiceEnv(serviceName)
+        if (envVars == null) {
+            return []
+        }
+        let result = []
+        for key, val in envVars {
+            result.push(EnvVar(key = key, value = val))
+        }
+        return result
+    }
+
+    // Clear all environment variables for a service.
+    let clearVars = func(serviceName, config) {
+        config.setServiceEnv(serviceName, {})
+        return true
+    }
+
+    // Count the number of environment variables for a service.
+    let countVars = func(serviceName, config) {
+        let envVars = config.getServiceEnv(serviceName)
+        if (envVars == null) {
+            return 0
+        }
+        return len(envVars.keys())
+    }
+}
