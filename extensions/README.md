@@ -6,12 +6,12 @@ vint syntax highlighting on VSCode
 
 ## [VIM](./vim)
 
-The file contained herein has a basic syntax highlight for vim.
+The file contained herein provides syntax highlighting for vim.
 The file should be saved in `$HOME/.vim/syntax/vint.vim`.
 You should add the following line to your `.vimrc` or the appropriate location:
 
 ```vim
-au BufRead,BufNewFile *.nr set filetype=vint
+au BufRead,BufNewFile *.vint set filetype=vint
 ```
 
-Only basic syntax highlighting is provided by the script.
+This provides highlighting for all VintLang keywords, builtins, standard library modules, operators, strings, numbers, and comments.
