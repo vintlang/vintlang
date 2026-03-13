@@ -498,10 +498,12 @@ func isTruthy(obj object.VintObject) bool {
 	}
 }
 
+// Helper function to create error objects with formatted messages
 func newError(format string, a ...any) *object.Error {
 	return &object.Error{Message: fmt.Sprintf(format, a...)}
 }
 
+// Helper function to check if an object is an error
 func isError(obj object.VintObject) bool {
 	if obj != nil {
 		return obj.Type() == object.ERROR_OBJ
