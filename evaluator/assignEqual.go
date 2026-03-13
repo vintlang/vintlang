@@ -143,9 +143,15 @@ func evalAssignEqual(node *ast.AssignEqual, env *object.Environment) object.Vint
 		case *object.Integer:
 			switch val := value.(type) {
 			case *object.Integer:
+				if val.Value == 0 {
+					return newError("Line %d: Division by zero: cannot divide by zero", node.Token.Line)
+				}
 				v := arg.Value / val.Value
 				return assign(&object.Integer{Value: v})
 			case *object.Float:
+				if val.Value == 0 {
+					return newError("Line %d: Division by zero: cannot divide by zero", node.Token.Line)
+				}
 				v := float64(arg.Value) / val.Value
 				return assign(&object.Float{Value: v})
 			default:
@@ -155,9 +161,15 @@ func evalAssignEqual(node *ast.AssignEqual, env *object.Environment) object.Vint
 		case *object.Float:
 			switch val := value.(type) {
 			case *object.Integer:
+				if val.Value == 0 {
+					return newError("Line %d: Division by zero: cannot divide by zero", node.Token.Line)
+				}
 				v := arg.Value / float64(val.Value)
 				return assign(&object.Float{Value: v})
 			case *object.Float:
+				if val.Value == 0 {
+					return newError("Line %d: Division by zero: cannot divide by zero", node.Token.Line)
+				}
 				v := arg.Value / val.Value
 				return assign(&object.Float{Value: v})
 			default:

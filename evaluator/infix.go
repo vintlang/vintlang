@@ -132,6 +132,9 @@ func evalFloatIntegerInfixExpression(operator string, left, right object.VintObj
 	case "**":
 		val = math.Pow(float64(leftVal), float64(rightVal))
 	case "/":
+		if rightVal == 0 {
+			return newError("Line %d: Division by zero: cannot divide by zero", line)
+		}
 		val = leftVal / rightVal
 	case "%":
 		if rightVal == 0 {
@@ -211,6 +214,9 @@ func evalFloatInfixExpression(operator string, left, right object.VintObject, li
 	case "**":
 		return &object.Float{Value: math.Pow(float64(leftVal), float64(rightVal))}
 	case "/":
+		if rightVal == 0 {
+			return newError("Line %d: Division by zero: cannot divide by zero", line)
+		}
 		return &object.Float{Value: leftVal / rightVal}
 	case "<":
 		return nativeBoolToBooleanObject(leftVal < rightVal)
@@ -244,6 +250,9 @@ func evalIntegerInfixExpression(operator string, left, right object.VintObject, 
 	case "**":
 		return &object.Float{Value: float64(math.Pow(float64(leftVal), float64(rightVal)))}
 	case "/":
+		if rightVal == 0 {
+			return newError("Line %d: Division by zero: cannot divide by zero", line)
+		}
 		x := float64(leftVal) / float64(rightVal)
 		if math.Mod(x, 1) == 0 {
 			return &object.Integer{Value: int64(x)}
