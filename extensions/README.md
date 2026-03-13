@@ -1,9 +1,3 @@
-# vint Extensions For Various Editors
-
-## [VSCODE](./vscode/)
-
-vint syntax highlighting on VSCode
-
 ## [VIM](./vim)
 
 The file contained herein provides syntax highlighting for vim.
