@@ -568,9 +568,13 @@ func applyFunction(fn object.VintObject, args []object.VintObject, line int) obj
 		if !ok {
 			return newError("Line %d: The package does not have an 'init' function", line)
 		}
-		node.(*object.Function).Env.Define("@", obj)
-		applyFunction(node, args, fn.Name.Token.Line)
-		node.(*object.Function).Env.Del("@")
+		initFn, ok := node.(*object.Function)
+		if !ok {
+			return newError("Line %d: Package 'init' must be a function, got %s", line, node.Type())
+		}
+		initFn.Env.Define("@", obj)
+		applyFunction(initFn, args, fn.Name.Token.Line)
+		initFn.Env.Del("@")
 		return obj
 
 	case *object.ErrorType:
