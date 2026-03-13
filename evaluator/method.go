@@ -64,6 +64,20 @@ func applyMethod(obj object.VintObject, method ast.Expression, args []object.Vin
 				return TRUE
 			}
 			return FALSE
+		case "filter":
+			return dictFilter(obj, args)
+		case "map":
+			return dictMap(obj, args)
+		case "reduce":
+			return dictReduce(obj, args)
+		case "forEach":
+			return dictForEach(obj, args)
+		case "find":
+			return dictFind(obj, args)
+		case "some":
+			return dictSome(obj, args)
+		case "every":
+			return dictEvery(obj, args)
 		default:
 			return obj.Method(method.(*ast.Identifier).Value, args)
 		}
@@ -206,4 +220,176 @@ func sortBy(a *object.Array, args []object.VintObject) object.VintObject {
 
 	a.Elements = elements
 	return a
+}
+
+// evalDictCallback evaluates a dict callback function with the given arguments,
+// binding them to the function's parameter names.
+func evalDictCallback(fn *object.Function, args []object.VintObject) object.VintObject {
+	env := object.NewEnclosedEnvironment(fn.Env)
+	for i, param := range fn.Parameters {
+		if i < len(args) {
+			env.Define(param.Value, args[i])
+		}
+	}
+	result := Eval(fn.Body, env)
+	if rv, ok := result.(*object.ReturnValue); ok {
+		return rv.Value
+	}
+	return result
+}
+
+func dictFilter(d *object.Dict, args []object.VintObject) object.VintObject {
+	if len(args) != 1 {
+		return newError("filter() expects 1 argument (function), got %d", len(args))
+	}
+	fn, ok := args[0].(*object.Function)
+	if !ok {
+		return newError("filter() argument must be a function")
+	}
+
+	newPairs := make(map[object.HashKey]object.DictPair)
+	for _, pair := range d.Pairs {
+		result := evalDictCallback(fn, []object.VintObject{pair.Key, pair.Value})
+		if isError(result) {
+			return result
+		}
+		if isTruthy(result) {
+			newPairs[pair.Key.(object.Hashable).HashKey()] = pair
+		}
+	}
+	return &object.Dict{Pairs: newPairs}
+}
+
+func dictMap(d *object.Dict, args []object.VintObject) object.VintObject {
+	if len(args) != 1 {
+		return newError("map() expects 1 argument (function), got %d", len(args))
+	}
+	fn, ok := args[0].(*object.Function)
+	if !ok {
+		return newError("map() argument must be a function")
+	}
+
+	newPairs := make(map[object.HashKey]object.DictPair)
+	for _, pair := range d.Pairs {
+		result := evalDictCallback(fn, []object.VintObject{pair.Key, pair.Value})
+		if isError(result) {
+			return result
+		}
+		newPair := object.DictPair{Key: pair.Key, Value: result}
+		newPairs[pair.Key.(object.Hashable).HashKey()] = newPair
+	}
+	return &object.Dict{Pairs: newPairs}
+}
+
+func dictReduce(d *object.Dict, args []object.VintObject) object.VintObject {
+	if len(args) < 1 || len(args) > 2 {
+		return newError("reduce() expects 1 or 2 arguments (function, initial), got %d", len(args))
+	}
+	fn, ok := args[0].(*object.Function)
+	if !ok {
+		return newError("reduce() first argument must be a function")
+	}
+
+	var accumulator object.VintObject
+	if len(args) == 2 {
+		accumulator = args[1]
+	} else {
+		if len(d.Pairs) == 0 {
+			return newError("Cannot reduce empty dictionary without initial value")
+		}
+		for _, pair := range d.Pairs {
+			accumulator = pair.Value
+			break
+		}
+	}
+
+	for _, pair := range d.Pairs {
+		result := evalDictCallback(fn, []object.VintObject{accumulator, pair.Key, pair.Value})
+		if isError(result) {
+			return result
+		}
+		accumulator = result
+	}
+	return accumulator
+}
+
+func dictForEach(d *object.Dict, args []object.VintObject) object.VintObject {
+	if len(args) != 1 {
+		return newError("forEach() expects 1 argument (function), got %d", len(args))
+	}
+	fn, ok := args[0].(*object.Function)
+	if !ok {
+		return newError("forEach() argument must be a function")
+	}
+
+	for _, pair := range d.Pairs {
+		result := evalDictCallback(fn, []object.VintObject{pair.Key, pair.Value})
+		if isError(result) {
+			return result
+		}
+	}
+	return NULL
+}
+
+func dictFind(d *object.Dict, args []object.VintObject) object.VintObject {
+	if len(args) != 1 {
+		return newError("find() expects 1 argument (function), got %d", len(args))
+	}
+	fn, ok := args[0].(*object.Function)
+	if !ok {
+		return newError("find() argument must be a function")
+	}
+
+	for _, pair := range d.Pairs {
+		result := evalDictCallback(fn, []object.VintObject{pair.Key, pair.Value})
+		if isError(result) {
+			return result
+		}
+		if isTruthy(result) {
+			return &object.Array{Elements: []object.VintObject{pair.Key, pair.Value}}
+		}
+	}
+	return NULL
+}
+
+func dictSome(d *object.Dict, args []object.VintObject) object.VintObject {
+	if len(args) != 1 {
+		return newError("some() expects 1 argument (function), got %d", len(args))
+	}
+	fn, ok := args[0].(*object.Function)
+	if !ok {
+		return newError("some() argument must be a function")
+	}
+
+	for _, pair := range d.Pairs {
+		result := evalDictCallback(fn, []object.VintObject{pair.Key, pair.Value})
+		if isError(result) {
+			return result
+		}
+		if isTruthy(result) {
+			return TRUE
+		}
+	}
+	return FALSE
+}
+
+func dictEvery(d *object.Dict, args []object.VintObject) object.VintObject {
+	if len(args) != 1 {
+		return newError("every() expects 1 argument (function), got %d", len(args))
+	}
+	fn, ok := args[0].(*object.Function)
+	if !ok {
+		return newError("every() argument must be a function")
+	}
+
+	for _, pair := range d.Pairs {
+		result := evalDictCallback(fn, []object.VintObject{pair.Key, pair.Value})
+		if isError(result) {
+			return result
+		}
+		if !isTruthy(result) {
+			return FALSE
+		}
+	}
+	return TRUE
 }
