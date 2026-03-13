@@ -68,8 +68,12 @@ func evalCall(node *ast.CallExpression, env *object.Environment) object.VintObje
 		if !ok {
 			return newError("Package does not have 'init'") // Return an error if 'init' is not found in the package
 		}
+		initFn, ok := obj.(*object.Function)
+		if !ok {
+			return newError("Package 'init' must be a function, got %s", obj.Type())
+		}
 		// If 'init' is found, evaluate its arguments
-		args = evalArgsExpressions(node, obj.(*object.Function), env)
+		args = evalArgsExpressions(node, initFn, env)
 	case *object.Struct:
 		// Struct instantiation: User(name = "Alice", age = 30) or User("Alice", 30)
 		return evalStructCall(node, fn, env)
