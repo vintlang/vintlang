@@ -1,5 +1,5 @@
 import cli, os
-import "vvault"
+import vvault
 
 let args = cli.getArgs()
 
