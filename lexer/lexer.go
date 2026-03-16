@@ -206,6 +206,8 @@ func (l *Lexer) NextToken() token.Token {
 			ch := l.ch
 			l.readChar()
 			tok = token.Token{Type: token.OR, Literal: string(ch) + string(l.ch), Line: l.line}
+		} else {
+			tok = newToken(token.PIPE, l.line, l.ch)
 		}
 	case rune('%'):
 		if l.peekChar() == rune('=') {
