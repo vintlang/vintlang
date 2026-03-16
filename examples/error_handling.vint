@@ -1,0 +1,145 @@
+// VintLang Error Handling & Logging Example
+// Demonstrates error handling patterns, logging levels, and defensive programming
+
+// ============================================================
+// 1. Logging and status messages
+// ============================================================
+println("=== Logging Levels ===")
+info "Application starting up"
+debug "Loading configuration..."
+note "Remember to set API_KEY in your .env file"
+success "Configuration loaded successfully"
+warn "Running in development mode"
+
+// ============================================================
+// 2. Checking for null values (defensive programming)
+// ============================================================
+println("\n=== Null Checks ===")
+
+let safeDivide = func(a, b) {
+    if (b == 0) {
+        warn "Division by zero attempted"
+        return null
+    }
+    return a / b
+}
+
+let r1 = safeDivide(10, 2)
+let r2 = safeDivide(10, 0)
+
+if (r1 != null) {
+    println("10 / 2 =", r1)
+} else {
+    println("10 / 2 failed")
+}
+
+if (r2 != null) {
+    println("10 / 0 =", r2)
+} else {
+    println("10 / 0 returned null (division by zero)")
+}
+
+// ============================================================
+// 3. Returning error information from functions
+// ============================================================
+println("\n=== Returning Errors ===")
+
+let parseAge = func(input) {
+    let age = int(input)
+    if (age == null || age < 0) {
+        return {"ok": false, "error": "Age must be a non-negative number"}
+    }
+    if (age > 150) {
+        return {"ok": false, "error": "Age seems unrealistically large"}
+    }
+    return {"ok": true, "value": age}
+}
+
+let tests = ["25", "200", "-5", "42"]
+for t in tests {
+    let result = parseAge(t)
+    if (result["ok"]) {
+        println("Input '" + t + "' -> valid age:", result["value"])
+    } else {
+        println("Input '" + t + "' -> error:", result["error"])
+    }
+}
+
+// ============================================================
+// 4. Validating user input
+// ============================================================
+println("\n=== Input Validation ===")
+
+let strmod = import("string")
+
+let validateEmail = func(email) {
+    if (email == null || email == "") {
+        return "Email cannot be empty"
+    }
+    if (!strmod.contains(email, "@")) {
+        return "Email must contain @"
+    }
+    if (!strmod.contains(email, ".")) {
+        return "Email must contain a domain"
+    }
+    return null  // null means no error
+}
+
+let emails = ["alice@example.com", "notanemail", "", "bob@test.org"]
+for email in emails {
+    let err = validateEmail(email)
+    if (err == null) {
+        success "Valid email: " + email
+    } else {
+        warn "Invalid email '" + email + "': " + err
+    }
+}
+
+// ============================================================
+// 5. Graceful handling with defaults
+// ============================================================
+println("\n=== Default Values ===")
+
+let getConfig = func(key, defaultValue) {
+    let config = {
+        "host": "localhost",
+        "port": 8080,
+        "debug": false
+    }
+    let val = config[key]
+    if (val == null) {
+        return defaultValue
+    }
+    return val
+}
+
+println("host:", getConfig("host", "127.0.0.1"))
+println("port:", getConfig("port", 3000))
+println("timeout:", getConfig("timeout", 30))   // uses default
+println("debug:", getConfig("debug", true))
+
+// ============================================================
+// 6. Retry pattern
+// ============================================================
+println("\n=== Retry Pattern ===")
+
+let attempt = 0
+let maxAttempts = 3
+let succeeded = false
+
+while (attempt < maxAttempts && !succeeded) {
+    attempt = attempt + 1
+    debug "Attempt " + string(attempt) + " of " + string(maxAttempts)
+
+    // Simulate success on the 3rd try
+    if (attempt == 3) {
+        succeeded = true
+        success "Operation succeeded on attempt " + string(attempt)
+    } else {
+        warn "Attempt " + string(attempt) + " failed, retrying..."
+    }
+}
+
+if (!succeeded) {
+    println("All", maxAttempts, "attempts failed")
+}

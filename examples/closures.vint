@@ -1,0 +1,149 @@
+// VintLang Closures & Higher-Order Functions Example
+// Demonstrates closures, function factories, and higher-order patterns
+
+// ============================================================
+// 1. Basic closure: a function that captures its environment
+// ============================================================
+let makeCounter = func() {
+    let count = 0
+    return func() {
+        count = count + 1
+        return count
+    }
+}
+
+let counter = makeCounter()
+println("Counter:", counter())  // 1
+println("Counter:", counter())  // 2
+println("Counter:", counter())  // 3
+
+// Each call to makeCounter() creates an independent counter
+let counter2 = makeCounter()
+println("Counter2:", counter2())  // 1 (independent)
+
+// ============================================================
+// 2. Function factory: functions that generate other functions
+// ============================================================
+let makeMultiplier = func(factor) {
+    return func(x) {
+        return x * factor
+    }
+}
+
+let double = makeMultiplier(2)
+let triple = makeMultiplier(3)
+let tenX   = makeMultiplier(10)
+
+println("\nDouble 7:", double(7))   // 14
+println("Triple 7:", triple(7))    // 21
+println("10x 7:", tenX(7))         // 70
+
+// ============================================================
+// 3. Higher-order function: map (apply function to each element)
+// ============================================================
+let map = func(arr, f) {
+    let result = []
+    for item in arr {
+        result.push(f(item))
+    }
+    return result
+}
+
+let numbers = [1, 2, 3, 4, 5]
+let squared = map(numbers, func(x) { return x * x })
+let doubled = map(numbers, double)
+
+println("\nNumbers:", numbers)
+println("Squared:", squared)
+println("Doubled:", doubled)
+
+// ============================================================
+// 4. Higher-order function: filter
+// ============================================================
+let filter = func(arr, predicate) {
+    let result = []
+    for item in arr {
+        if (predicate(item)) {
+            result.push(item)
+        }
+    }
+    return result
+}
+
+let isEven = func(x) { return x % 2 == 0 }
+let isPositive = func(x) { return x > 0 }
+
+let mixed = [-3, -1, 0, 2, 4, 7, 9]
+println("\nMixed:", mixed)
+println("Even:", filter(mixed, isEven))
+println("Positive:", filter(mixed, isPositive))
+
+// ============================================================
+// 5. Higher-order function: reduce (fold)
+// ============================================================
+let reduce = func(arr, f, initial) {
+    let acc = initial
+    for item in arr {
+        acc = f(acc, item)
+    }
+    return acc
+}
+
+let sum   = reduce(numbers, func(a, b) { return a + b }, 0)
+let product = reduce(numbers, func(a, b) { return a * b }, 1)
+let maxVal  = reduce(numbers, func(a, b) { if (a > b) { return a } return b }, numbers[0])
+
+println("\nNumbers:", numbers)
+println("Sum:", sum)
+println("Product:", product)
+println("Max:", maxVal)
+
+// ============================================================
+// 6. Composing functions
+// ============================================================
+let compose = func(f, g) {
+    return func(x) {
+        return f(g(x))
+    }
+}
+
+let addOne  = func(x) { return x + 1 }
+let square  = func(x) { return x * x }
+
+let squareThenAdd = compose(addOne, square)
+let addThenSquare = compose(square, addOne)
+
+println("\nCompose examples:")
+println("squareThenAdd(4):", squareThenAdd(4))  // (4^2)+1 = 17
+println("addThenSquare(4):", addThenSquare(4))  // (4+1)^2 = 25
+
+// ============================================================
+// 7. Memoization (caching results with closures)
+// ============================================================
+let memoize = func(f) {
+    let cache = {}
+    return func(n) {
+        let key = string(n)
+        let cached = cache[key]
+        if (cached != null) {
+            return cached
+        }
+        let result = f(n)
+        cache[key] = result
+        return result
+    }
+}
+
+let factorial = memoize(func(n) {
+    if (n <= 1) { return 1 }
+    let result = 1
+    for i in range(2, n + 1) {
+        result = result * i
+    }
+    return result
+})
+
+println("\nFactorials (memoized):")
+println("5! =", factorial(5))   // 120
+println("6! =", factorial(6))   // 720
+println("10! =", factorial(10)) // 3628800

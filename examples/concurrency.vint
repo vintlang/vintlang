@@ -1,0 +1,122 @@
+// VintLang Concurrency Example
+// Demonstrates async/await, goroutines, and channels for concurrent programming
+
+// ============================================================
+// 1. Async functions and await
+// ============================================================
+println("=== Async / Await ===")
+
+let fetchUser = async func(id) {
+    return {"id": id, "name": "User" + string(id), "active": true}
+}
+
+let fetchScore = async func(userId) {
+    return userId * 100
+}
+
+// Run async operations sequentially with await
+let user = await fetchUser(42)
+let score = await fetchScore(user["id"])
+println("User:", user["name"], "| Score:", score)
+
+// ============================================================
+// 2. Multiple async calls
+// ============================================================
+println("\n=== Multiple Async Calls ===")
+
+let p1 = fetchUser(1)
+let p2 = fetchUser(2)
+let p3 = fetchUser(3)
+
+let u1 = await p1
+let u2 = await p2
+let u3 = await p3
+
+println("Fetched users:", u1["name"], u2["name"], u3["name"])
+
+// ============================================================
+// 3. Goroutines - fire-and-forget concurrent tasks
+// ============================================================
+println("\n=== Goroutines ===")
+
+go println("Goroutine 1: Hello from goroutine!")
+go println("Goroutine 2: Running concurrently!")
+go println("Goroutine 3: Concurrent execution!")
+
+println("Main: goroutines launched")
+
+// ============================================================
+// 4. Channels for goroutine communication
+// ============================================================
+println("\n=== Channels ===")
+
+// Create a buffered channel with capacity 3
+let results = chan(3)
+
+// Producer goroutine: sends values into channel
+go func() {
+    send(results, "task-1 complete")
+    send(results, "task-2 complete")
+    send(results, "task-3 complete")
+    close(results)
+}()
+
+// Consumer: receive values from channel
+let r1 = receive(results)
+let r2 = receive(results)
+let r3 = receive(results)
+println("Received:", r1)
+println("Received:", r2)
+println("Received:", r3)
+
+// ============================================================
+// 5. Async with channel pipeline
+// ============================================================
+println("\n=== Async + Channel Pipeline ===")
+
+let processAsync = async func(input) {
+    let out = chan
+    go func() {
+        let processed = "processed:" + input
+        send(out, processed)
+    }()
+    return receive(out)
+}
+
+let result1 = await processAsync("data-A")
+let result2 = await processAsync("data-B")
+println(result1)
+println(result2)
+
+// ============================================================
+// 6. Worker pool pattern
+// ============================================================
+println("\n=== Worker Pool ===")
+
+let jobs = chan(5)
+let done = chan(3)
+
+// Worker function
+let worker = func(id) {
+    go func() {
+        let job = receive(jobs)
+        println("Worker", id, "processed:", job)
+        send(done, "worker-" + string(id) + "-done")
+    }()
+}
+
+// Dispatch workers
+worker(1)
+worker(2)
+worker(3)
+
+// Send jobs
+send(jobs, "job-A")
+send(jobs, "job-B")
+send(jobs, "job-C")
+
+// Collect results
+receive(done)
+receive(done)
+receive(done)
+println("All workers finished")

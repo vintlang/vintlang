@@ -1,0 +1,90 @@
+// VintLang Arrays Example
+// Demonstrates array creation, access, mutation, slicing, and built-in methods
+
+// ============================================================
+// 1. Creating and accessing arrays
+// ============================================================
+let colors = ["red", "green", "blue", "yellow"]
+println("Colors:", colors)
+println("First:", colors[0])
+println("Last:", colors[len(colors) - 1])
+
+// ============================================================
+// 2. Modifying arrays (push / pop / append)
+// ============================================================
+colors.push("purple")
+println("\nAfter push:", colors)
+
+let removed = pop(colors)
+println("Popped:", removed)
+println("After pop:", colors)
+
+let more = append(colors, "orange", "pink")
+println("After append:", more)
+
+// ============================================================
+// 3. Array slicing (Python-like syntax)
+// ============================================================
+let nums = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+println("\nFull array:", nums)
+println("nums[2:5]  =", nums[2:5])    // [3, 4, 5]
+println("nums[:4]   =", nums[:4])     // [1, 2, 3, 4]
+println("nums[7:]   =", nums[7:])     // [8, 9, 10]
+println("nums[-3:]  =", nums[-3:])    // [8, 9, 10]
+println("nums[:-3]  =", nums[:-3])    // [1, 2, 3, 4, 5, 6, 7]
+
+// ============================================================
+// 4. Iterating over an array
+// ============================================================
+let scores = [85, 92, 78, 95, 88]
+let total = 0
+for score in scores {
+    total = total + score
+}
+let avg = total / len(scores)
+println("\nScores:", scores)
+println("Average:", avg)
+
+// ============================================================
+// 5. Sorting and reversing
+// ============================================================
+let words = ["banana", "apple", "cherry", "date"]
+println("\nOriginal:", words)
+println("Sorted:", words.sort())
+println("Reversed:", words.reverse())
+
+// ============================================================
+// 6. Searching
+// ============================================================
+let animals = ["cat", "dog", "bird", "fish"]
+println("\nAnimals:", animals)
+println("Index of 'bird':", indexOf(animals, "bird"))
+println("Index of 'lion':", indexOf(animals, "lion"))  // -1 means not found
+
+// ============================================================
+// 7. Range
+// ============================================================
+println("\nRange examples:")
+println("range(5):", range(5))
+println("range(2,7):", range(2, 7))
+
+// ============================================================
+// 8. Nested arrays (2D)
+// ============================================================
+let matrix = [
+    [1, 2, 3],
+    [4, 5, 6],
+    [7, 8, 9]
+]
+println("\n2D Matrix:")
+for row in matrix {
+    println(" ", row)
+}
+println("Element [1][2]:", matrix[1][2])
+
+// ============================================================
+// 9. Unique elements
+// ============================================================
+let dupes = [1, 2, 2, 3, 3, 3, 4]
+println("\nWith duplicates:", dupes)
+println("Unique:", unique(dupes))

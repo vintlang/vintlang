@@ -1,40 +1,58 @@
-// VintLang Regex Module Example (CURRENTLY NOT WORKING)
-// NOTE: This example demonstrates planned regex functionality
-// The regex module is not yet fully implemented and has syntax parsing issues
+// VintLang Regex Module Example
+// Demonstrates pattern matching, text replacement, and string splitting using regular expressions
+//
+// Use regex.test() to check if a pattern matches (avoids conflict with match keyword)
+// Use regex.replaceString(pattern, replacement, text) to replace occurrences
+// Use regex.splitString(pattern, text) to split a string
 
-// TODO: Fix regex module implementation to support these operations:
-// - Pattern matching
-// - String replacement with regex
-// - String splitting with regex patterns
+import regex
 
-// import regex
+println("=== Pattern Matching ===")
 
-// Example 1: Using match to check if a string matches a pattern
-// let result = regex.match("^Hello", "Hello World")
-// print(result)  // Expected output: true
+// Check if a string contains digits
+println("Contains digits:", regex.test("\\d+", "hello123"))         // true
+println("Contains digits:", regex.test("\\d+", "helloworld"))       // false
 
-// Example 2: Using match to check if a string does not match a pattern
-// result = regex.match("^World", "Hello World")
-// print(result)  // Expected output: false
+// Validate an email address
+let email = "user@example.com"
+let emailPattern = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$"
+println("Valid email:", regex.test(emailPattern, email))             // true
+println("Valid email:", regex.test(emailPattern, "notanemail"))      // false
 
-// Example 3: Using replaceString to replace part of a string with a new value
-// let newString = regex.replaceString("World", "VintLang", "Hello World")
-// print(newString)  // Expected output: "Hello VintLang"
+// Match a URL
+let url = "https://vintlang.org/docs"
+println("Is URL:", regex.test("^https?://", url))                   // true
 
-// Example 4: Using splitString to split a string by a regex pattern
-// let words = regex.splitString("\\s+", "Hello World VintLang")
-// print(words)  // Expected output: ["Hello", "World", "VintLang"]
+println("\n=== Text Replacement ===")
 
-// Example 5: Using splitString to split a string by a comma
-// let csv = regex.splitString(",", "apple,banana,orange")
-// print(csv)  // Expected output: ["apple", "banana", "orange"]
+// Mask digits with *
+let phone = "Call me at 123-456-7890 or 555-0000"
+let masked = regex.replaceString("\\d", "*", phone)
+println("Masked:", masked)
 
-// Example 6: Using match with a more complex regex pattern
-// let emailMatch = regex.match("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$", "test@example.com")
-// print(emailMatch)  // Expected output: true
+// Remove extra whitespace
+let messy = "hello    world   from   vint"
+let clean = regex.replaceString("\\s+", " ", messy)
+println("Cleaned:", clean)
 
-// Example 7: Using replaceString with a regex pattern to replace digits in a string
-// let maskedString = regex.replaceString("\\d", "*", "My phone number is 123456789")
-// print(maskedString)  // Expected output: "My phone number is *********"
+// Replace URLs with [link]
+let text = "Visit https://vintlang.org and http://example.com today"
+let replaced = regex.replaceString("https?://[^\\s]+", "[link]", text)
+println("Replaced URLs:", replaced)
 
-println("Regex module is not yet implemented. This example is for future reference.")
+println("\n=== String Splitting ===")
+
+// Split by comma (CSV-like)
+let csv = "alice,bob,charlie,diana"
+let names = regex.splitString(",", csv)
+println("CSV split:", names)
+
+// Split by whitespace
+let sentence = "The quick   brown  fox"
+let words = regex.splitString("\\s+", sentence)
+println("Word split:", words)
+
+// Split by punctuation
+let code = "if(x>0){return x}"
+let tokens = regex.splitString("[(){}]", code)
+println("Code tokens:", tokens)

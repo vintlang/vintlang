@@ -1,0 +1,98 @@
+// VintLang Pattern Matching Example
+// Demonstrates match and switch statements for expressive control flow
+
+// ============================================================
+// 1. Basic switch statement
+// ============================================================
+let day = 3
+switch (day) {
+    case 1 { println("Monday") }
+    case 2 { println("Tuesday") }
+    case 3 { println("Wednesday") }
+    case 4 { println("Thursday") }
+    case 5 { println("Friday") }
+    default { println("Weekend") }
+}
+
+// ============================================================
+// 2. Switch with guard conditions
+// ============================================================
+let score = 78
+let grade = ""
+switch (score) {
+    case x if x >= 90 { grade = "A" }
+    case x if x >= 80 { grade = "B" }
+    case x if x >= 70 { grade = "C" }
+    case x if x >= 60 { grade = "D" }
+    default { grade = "F" }
+}
+println("\nScore:", score, "-> Grade:", grade)
+
+// ============================================================
+// 3. Dictionary pattern matching with match
+// ============================================================
+let user = {"role": "admin", "active": true}
+println("\nUser access check:")
+match user {
+    {"role": "admin", "active": true}  => println("Full access granted")
+    {"role": "admin", "active": false} => println("Admin account suspended")
+    {"role": "user",  "active": true}  => println("User access granted")
+    {"role": "user",  "active": false} => println("User account disabled")
+    _ => println("Unknown user type")
+}
+
+// ============================================================
+// 4. Match with guard conditions
+// ============================================================
+let player = {"name": "Alice", "score": 2500, "level": 8}
+println("\nPlayer rank:")
+match player {
+    {"score": s} if s >= 3000 => println("Diamond rank")
+    {"score": s} if s >= 2000 => println("Gold rank")
+    {"score": s} if s >= 1000 => println("Silver rank")
+    _ => println("Bronze rank")
+}
+
+// ============================================================
+// 5. Pattern matching on a list of records
+// ============================================================
+let orders = [
+    {"status": "shipped",   "id": 101},
+    {"status": "pending",   "id": 102},
+    {"status": "delivered", "id": 103},
+    {"status": "cancelled", "id": 104}
+]
+
+println("\nOrder status report:")
+for order in orders {
+    match order {
+        {"status": "shipped"}   => println("Order", order["id"], "- In transit")
+        {"status": "pending"}   => println("Order", order["id"], "- Awaiting processing")
+        {"status": "delivered"} => println("Order", order["id"], "- Successfully delivered")
+        {"status": "cancelled"} => println("Order", order["id"], "- Cancelled")
+        _ => println("Order", order["id"], "- Status unknown")
+    }
+}
+
+// ============================================================
+// 6. Switch matching on string type
+// ============================================================
+let classify = func(value) {
+    switch (type(value)) {
+        case "INTEGER" { return "integer number" }
+        case "FLOAT"   { return "floating point number" }
+        case "STRING"  { return "text string" }
+        case "BOOLEAN" { return "boolean value" }
+        case "ARRAY"   { return "array with " + string(len(value)) + " elements" }
+        case "DICT"    { return "dictionary" }
+        default        { return "unknown type" }
+    }
+}
+
+println("\nType classification:")
+println(42, "->", classify(42))
+println(3.14, "->", classify(3.14))
+println("hello", "->", classify("hello"))
+println(true, "->", classify(true))
+println([1, 2, 3], "->", classify([1, 2, 3]))
+println({"a": 1}, "->", classify({"a": 1}))
