@@ -229,6 +229,7 @@ func Eval(node ast.Node, env *object.Environment) object.VintObject {
 						return newError("Line %d: Array index %d out of bounds. Array length is %d", node.Token.Line, idx.Value, len(array.Elements))
 					}
 					array.Elements[idx.Value] = value
+					return value
 				} else {
 					return newError("Line %d: Array index must be an integer, got %s", node.Token.Line, index.Type())
 				}
@@ -240,6 +241,7 @@ func Eval(node ast.Node, env *object.Environment) object.VintObject {
 				if hashKey, ok := key.(object.Hashable); ok {
 					hashed := hashKey.HashKey()
 					hash.Pairs[hashed] = object.DictPair{Key: key, Value: value}
+					return value
 				} else {
 					return newError("Cannot perform this operation with %T", key)
 				}
