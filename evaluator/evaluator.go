@@ -442,7 +442,7 @@ func Eval(node ast.Node, env *object.Environment) object.VintObject {
 		return evalThrowStatement(node, env)
 	}
 
-	return nil
+	return newError("Unhandled AST node type: %T", node)
 }
 
 func evalProgram(program *ast.Program, env *object.Environment) object.VintObject {
