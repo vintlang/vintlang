@@ -83,3 +83,17 @@ include_test
 test_builtin
 
 build/*
+
+# Generated files from examples
+data/
+output/
+vint_data/
+*.xlsx
+web_response_*.json
+user_agent_response.json
+performance_test.json
+savegame.json
+scores.csv
+bar_chart.png
+pie_chart.png
+line_graph.png

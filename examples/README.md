@@ -1,185 +1,188 @@
 # VintLang Examples
 
-Welcome to the VintLang examples directory! This collection contains 100 example files demonstrating various features and capabilities of the VintLang programming language.
+Welcome to the VintLang examples directory! This collection demonstrates the features and capabilities of the VintLang programming language.
 
-## 📚 What's Inside
-
-This directory contains comprehensive examples covering:
-
-- **Core Language Features**: Variables, control flow, loops, functions
-- **Data Structures**: Arrays, dictionaries, strings
-- **Modules & Imports**: File organization, package system
-- **Built-in Functions**: String manipulation, type conversion, utilities
-- **File I/O**: Reading/writing files, directory operations
-- **Databases**: SQLite, MySQL, PostgreSQL integration
-- **Networking**: HTTP servers, API requests
-- **Security**: Encryption, hashing, encoding
-- **System Operations**: Shell commands, environment variables
-- **Advanced Features**: Pointers, reflection, pattern matching, async operations
-
-## 🚀 Getting Started
-
-### Running Examples
-
-To run any example, use the VintLang interpreter:
+## 🚀 Running Examples
 
 ```bash
-vint examples/example_name.vint
+vint examples/<filename>.vint
 ```
 
-### Example Categories
+---
 
-#### Beginner-Friendly Examples
-- `builtins.vint` - Built-in functions
-- `functions.vint` - Function definitions and usage
-- `switch.vint` - Switch-case statements
-- `if_expression.vint` - If statements and expressions
-- `test-for.vint` - For loops
-- `repeat-keyword.vint` - Repeat loops
+## 📚 Examples by Category
 
-#### String & Data Manipulation
-- `strings.vint` - String module functions
-- `nativeStrings.vint` - Native string methods
-- `json.vint` - JSON operations
-- `csv.vint` - CSV file handling
-- `encoding.vint` - Base64 encoding/decoding
+### Core Language
 
-#### File & System Operations
-- `os.vint` - Operating system operations
-- `path.vint` - Path manipulation
-- `shell.vint` - Shell command execution
+| File | Description |
+|------|-------------|
+| `builtins.vint` | Built-in functions: type checking, conversion, collections, math |
+| `functions.vint` | Function definitions, IIFE, higher-order functions |
+| `closures.vint` | Closures, function factories, map/filter/reduce, memoization |
+| `overloading.vint` | Function overloading by arity (number of arguments) |
+| `if_expression.vint` | if as statement and as expression |
+| `switch.vint` | Switch-case control flow |
+| `for_loops.vint` | for, while, repeat loops; break and continue |
+| `repeat-keyword.vint` | The repeat loop |
+| `logicals.vint` | Logical operators: and, or, not |
+| `pointers.vint` | Pointer operations with & and * |
+| `defer.vint` | Defer statement — deferred execution (LIFO) |
 
-#### Database Examples
-- `sqlite.vint` - SQLite database
-- `mysql.vint` - MySQL database
-- `postgres.vint` - PostgreSQL database
+### Data Types & Structures
 
-#### Networking & HTTP
-- `http.vint` - HTTP file server
-- `http_test.vint` - HTTP module testing
-- `github-profile.vint` - HTTP requests
+| File | Description |
+|------|-------------|
+| `arrays.vint` | Array creation, slicing, sorting, searching, iteration |
+| `dictionaries.vint` | Dict creation, access, iteration, has_key, nested dicts |
+| `strings.vint` | String module: trim, split, join, replace, etc. |
+| `nativeStrings.vint` | Native string methods: .upper(), .split(), .replace(), etc. |
+| `json.vint` | JSON encode, decode, pretty-print, merge |
+| `enum_demo.vint` | Enum types with integer and string values |
+| `structs.vint` | Struct definitions with fields and methods |
 
-#### Advanced Features
-- `pointers.vint` - Pointer operations
-- `reflect.vint` - Runtime type inspection
-- `defer_test.vint` - Defer statement
-- `overloading_test.vint` - Function overloading
-- `async_simple.vint` - Asynchronous operations
+### Pattern Matching
 
-#### Security & Crypto
-- `crypto.vint` - Hashing and encryption
-- `dotenv.vint` - Environment variables from .env
+| File | Description |
+|------|-------------|
+| `pattern_matching.vint` | switch guards, match on dicts, type-based matching |
+| `user_access_control.vint` | Dict pattern matching for access control logic |
 
-#### AI/ML Integration
-- `llm_openai.vint` - OpenAI GPT integration
+### Modules & Standard Library
 
-## 📖 Documentation
+| File | Description |
+|------|-------------|
+| `math_extensions.vint` | Statistics, complex numbers, linear algebra, GCD/LCM |
+| `random.vint` | Random integers, floats, strings, choices |
+| `time.vint` | Current time, formatting, arithmetic, sleep |
+| `encoding.vint` | Base64 encode and decode |
+| `uuid.vint` | UUID generation |
+| `regex.vint` | Pattern matching, text replacement, splitting |
+| `colors.vint` | RGB to hex color conversion |
+| `reflect.vint` | Runtime type inspection |
+| `fmt_demo.vint` | String formatting, padding, alignment, tables |
 
-All examples include comprehensive comments explaining:
-- What the code does
-- How VintLang features work
-- Expected output
-- Usage patterns
+### Concurrency
 
-For a detailed analysis of all examples, see [TEST_RESULTS.md](TEST_RESULTS.md).
+| File | Description |
+|------|-------------|
+| `concurrency.vint` | async/await, goroutines, channels, worker pool |
 
-## ✅ Quality Assurance
+### System & File Operations
 
-All examples have been:
-- ✅ Tested with VintLang v0.2.2
-- ✅ Fixed for syntax errors
-- ✅ Documented with explanatory comments
-- ✅ Verified to compile successfully
+| File | Description |
+|------|-------------|
+| `os.vint` | File I/O, directory listing, environment variables |
+| `path.vint` | File path manipulation: join, basename, dirname, ext |
+| `shell.vint` | Run shell commands from VintLang |
+| `sysinfo.vint` | OS, CPU, memory, disk, network information |
+| `make_example.vint` | Build automation with the make module |
+| `dotenv.vint` | Load environment variables from a .env file |
 
-## 🔧 Testing Examples
+### Error Handling & Debugging
 
-### Running Tests
+| File | Description |
+|------|-------------|
+| `error_handling.vint` | Null checks, error returns, validation, retry pattern |
 
-Many examples include the word "test" in their names and demonstrate specific features:
+### Data Formats
 
-```bash
-# Test built-in functions
-vint examples/builtins_test.vint
+| File | Description |
+|------|-------------|
+| `csv.vint` | Write and read CSV files |
+| `excel_demo.vint` | Create Excel workbooks with sheets and formulas |
 
-# Test array slicing
-vint examples/array_slicing_test.vint
+### Security & Auth
 
-# Test function features
-vint examples/function_test.vint
-```
+| File | Description |
+|------|-------------|
+| `crypto.vint` | MD5 hashing, AES encryption/decryption |
+| `jwt.vint` | Create, decode, and verify JWT tokens |
 
-### Test Categories
+### Databases
 
-- **builtins_test.vint** - Built-in function testing
-- **declaratives_test.vint** - Declarative statements (info, debug, etc.)
-- **function_test.vint** - Function default parameters
-- **array_slicing_test.vint** - Array slicing operations
-- **has_key_test.vint** - Dictionary key checking
-- **overloading_test.vint** - Function overloading
+| File | Description |
+|------|-------------|
+| `sqlite.vint` | SQLite: create, insert, fetch, update |
+| `mysql.vint` | MySQL database operations *(requires MySQL server)* |
+| `postgres.vint` | PostgreSQL database operations *(requires PostgreSQL server)* |
+| `redis.vint` | Redis key-value operations *(requires Redis server)* |
+
+### Networking & HTTP
+
+| File | Description |
+|------|-------------|
+| `http.vint` | HTTP file server setup |
+| `backend_demo.vint` | HTTP backend with routes, middleware, interceptors |
+| `complete_backend_app.vint` | Full REST API backend definition |
+| `express_like_server.vint` | Express-like HTTP server with routes |
+| `web_fetcher.vint` | HTTP GET requests and JSON parsing *(requires network)* |
+| `github-profile.vint` | Profile view counter via HTTP *(requires network)* |
+| `vintSocket.vint` | WebSocket server and client |
+
+### Visualization
+
+| File | Description |
+|------|-------------|
+| `vintChart.vint` | Bar chart, pie chart, line graph generation |
+
+### Modules & Packages
+
+| File | Description |
+|------|-------------|
+| `greetings_module.vint` | Package definition with functions |
+
+### CLI Applications
+
+| File | Description |
+|------|-------------|
+| `cli-todo.vint` | Todo list CLI with add/list commands |
+| `cli.vint` | CLI argument parsing with the cli module |
+
+### Terminal UI
+
+| File | Description |
+|------|-------------|
+| `term.vint` | Terminal banners, menus, and prompts |
+
+### AI / LLM
+
+| File | Description |
+|------|-------------|
+| `llm_openai.vint` | OpenAI GPT integration *(requires API key)* |
+
+### Interactive Games
+
+| File | Description |
+|------|-------------|
+| `guessingGame.vint` | Number guessing game *(interactive)* |
+| `simplegame.vint` | Text adventure with save/load *(interactive)* |
+
+---
 
 ## 📝 Notes
 
 ### External Dependencies
 
-Some examples require external resources:
-- **Database examples**: Need running database servers
-- **dotenv.vint**: Needs a .env file
-- **llm_openai.vint**: Requires OpenAI API key
-- **Networking examples**: May require internet connectivity
+Some examples require external resources and will not run without them:
+- **Database examples** (`mysql`, `postgres`, `redis`): Need running servers
+- **dotenv**: Needs a `.env` file
+- **llm_openai**: Requires `OPENAI_API_KEY` environment variable
+- **web_fetcher**, **github-profile**: Require internet connectivity
+- **Interactive examples** (`guessingGame`, `simplegame`, `cli-todo`, `cli`): Need user input
 
-These examples will fail expectedly without the required resources but demonstrate correct VintLang syntax.
-
-### Module Availability
-
-Some modules shown in examples may require additional setup or may be in development:
-- **desktop** - Desktop GUI module (in development)
-- **regex** - Regular expressions (in development)
-- **package system** - Advanced package features (in development)
-
-## 🤝 Contributing
-
-When adding new examples:
-1. Follow the naming convention (descriptive_name.vint)
-2. Add comprehensive comments explaining the code
-3. Test the example to ensure it works
-4. Update this README if adding a new category
-5. Add a description in TEST_RESULTS.md
-
-## 📚 Learning Path
-
-For beginners, we recommend following this learning path:
-
-1. **Basics**: Start with `builtins.vint`, `functions.vint`, `switch.vint`
-2. **Control Flow**: Try `if_expression.vint`, `test-for.vint`, `repeat-keyword.vint`
-3. **Data Structures**: Explore `strings.vint`, `json.vint`, `array_slicing_test.vint`
-4. **File Operations**: Learn from `os.vint`, `path.vint`
-5. **Advanced**: Move to `pointers.vint`, `reflect.vint`, `overloading_test.vint`
-6. **Modules**: Study various module examples for specific use cases
-
-## 🎯 Quick Reference
-
-| Category | Example Files | Count |
-|----------|--------------|-------|
-| Total Examples | All *.vint files | 100 |
-| Test Files | *test*.vint | 29 |
-| Showcase Files | *showcase*.vint | 5 |
-| Database Files | sqlite, mysql, postgres | 3 |
-| HTTP Files | http*.vint | 4 |
-
-## 💡 Tips
-
-- All examples use proper VintLang syntax as of v0.2.2
-- Comments explain not just what code does, but why
-- Most examples can be run independently
-- Check example output to understand expected behavior
-- Modify examples to experiment and learn
-
-## 🔗 Resources
-
-- [VintLang Documentation](https://vintlang.ekilie.com/docs)
-- [VintLang GitHub Repository](https://github.com/vintlang/vintlang)
-- [TEST_RESULTS.md](TEST_RESULTS.md) - Detailed test results and fixes
+### All other examples run without external dependencies.
 
 ---
 
-Happy coding with VintLang! 🎉
+## 🎯 Learning Path
+
+1. **Start here**: `builtins.vint`, `functions.vint`, `if_expression.vint`
+2. **Control flow**: `for_loops.vint`, `switch.vint`, `repeat-keyword.vint`
+3. **Data structures**: `arrays.vint`, `dictionaries.vint`, `strings.vint`
+4. **Functions**: `closures.vint`, `overloading.vint`
+5. **Pattern matching**: `pattern_matching.vint`
+6. **OOP-style**: `structs.vint`, `enum_demo.vint`
+7. **Modules**: `math_extensions.vint`, `time.vint`, `regex.vint`
+8. **System**: `os.vint`, `shell.vint`, `sysinfo.vint`
+9. **Concurrency**: `concurrency.vint`
+10. **Real-world**: `sqlite.vint`, `http.vint`, `json.vint`

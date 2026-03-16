@@ -1,7 +1,20 @@
+// VintLang Chart Module Example
+// Demonstrates generating bar, pie, and line charts as PNG images
+
 import vintChart
 
-labels = ["A", "B", "C", "D"]
-values = [10, 20, 30, 40]
+// Data for the charts
+let labels = ["Q1", "Q2", "Q3", "Q4"]
+let values = [120, 85, 150, 200]
+
+// Generate a bar chart
 vintChart.barChart(labels, values, "bar_chart.png")
+println("Bar chart saved to bar_chart.png")
+
+// Generate a pie chart
 vintChart.pieChart(labels, values, "pie_chart.png")
+println("Pie chart saved to pie_chart.png")
+
+// Generate a line graph
 vintChart.lineGraph(labels, values, "line_graph.png")
+println("Line graph saved to line_graph.png")

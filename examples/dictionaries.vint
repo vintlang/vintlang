@@ -1,0 +1,101 @@
+// VintLang Dictionaries Example
+// Demonstrates dictionary creation, access, mutation, and iteration
+
+// ============================================================
+// 1. Creating dictionaries
+// ============================================================
+let user = {
+    "name": "Alice",
+    "age": 30,
+    "city": "Nairobi",
+    "active": true
+}
+println("User:", user)
+
+// ============================================================
+// 2. Accessing values
+// ============================================================
+println("\nName:", user["name"])
+println("Age:", user["age"])
+
+// Dot notation also works for string keys
+println("City:", user["city"])
+
+// ============================================================
+// 3. Updating and adding keys
+// ============================================================
+user["age"] = 31
+user["email"] = "alice@example.com"
+println("\nUpdated user:", user)
+
+// ============================================================
+// 4. Checking for keys (has_key)
+// ============================================================
+println("\nhas 'email'?", has_key(user, "email"))
+println("has 'phone'?", has_key(user, "phone"))
+
+// Method syntax also works
+println("has 'name'?", user.has_key("name"))
+
+// ============================================================
+// 5. Iterating over a dictionary
+// ============================================================
+println("\nAll user fields:")
+for key, value in user {
+    println(" ", key, "=", value)
+}
+
+// ============================================================
+// 6. Nested dictionaries
+// ============================================================
+let company = {
+    "name": "VintCorp",
+    "address": {
+        "street": "123 Main St",
+        "city": "Nairobi",
+        "country": "Kenya"
+    },
+    "employees": 42
+}
+println("\nCompany:", company["name"])
+println("City:", company["address"]["city"])
+println("Country:", company["address"]["country"])
+
+// ============================================================
+// 7. Dictionary with array values
+// ============================================================
+let student = {
+    "name": "Bob",
+    "grades": [85, 92, 78, 95, 88],
+    "subjects": ["Math", "Science", "English"]
+}
+println("\nStudent:", student["name"])
+println("Subjects:", student["subjects"])
+println("First grade:", student["grades"][0])
+
+// ============================================================
+// 8. Building a dictionary dynamically
+// ============================================================
+let inventory = {}
+let items = ["apple", "banana", "cherry"]
+let prices = [1.5, 0.75, 2.0]
+
+for i in range(len(items)) {
+    inventory[items[i]] = prices[i]
+}
+println("\nInventory:", inventory)
+
+// ============================================================
+// 9. Counting occurrences (frequency map)
+// ============================================================
+let words = ["cat", "dog", "cat", "bird", "dog", "cat"]
+let freq = {}
+for word in words {
+    let count = freq[word]
+    if (count == null) {
+        freq[word] = 1
+    } else {
+        freq[word] = count + 1
+    }
+}
+println("\nWord frequencies:", freq)

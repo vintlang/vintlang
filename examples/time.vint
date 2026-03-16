@@ -1,0 +1,80 @@
+// VintLang Time Module Example
+// Demonstrates date and time operations: getting current time, formatting, arithmetic
+
+import time
+
+// ============================================================
+// 1. Getting the current time
+// ============================================================
+let now = time.now()
+println("Current time:", now)
+
+// ============================================================
+// 2. Formatting dates
+// ============================================================
+println("\nFormatted dates:")
+println("Default:   ", time.format(now, "02-01-2006 15:04:05"))
+println("Date only: ", time.format(now, "January 02, 2006"))
+println("Time only: ", time.format(now, "15:04:05"))
+println("ISO 8601:  ", time.format(now, "2006-01-02T15:04:05"))
+
+// ============================================================
+// 3. Leap year check
+// ============================================================
+println("\nLeap year checks:")
+for year in [2000, 2023, 2024, 2100] {
+    println(" ", year, "->", time.isLeapYear(year))
+}
+
+// ============================================================
+// 4. Time arithmetic (add / subtract durations)
+// ============================================================
+println("\nTime arithmetic:")
+println("Now:           ", time.format(now, "2006-01-02 15:04:05"))
+println("+ 1 hour:      ", time.format(time.add(now, "1h"), "2006-01-02 15:04:05"))
+println("+ 2.5 hours:   ", time.format(time.add(now, "2h30m"), "2006-01-02 15:04:05"))
+println("- 24 hours:    ", time.format(time.subtract(now, "24h"), "2006-01-02 15:04:05"))
+println("+ 30 seconds:  ", time.format(time.add(now, "30s"), "2006-01-02 15:04:05"))
+
+// ============================================================
+// 5. Measuring elapsed time with time.since
+// ============================================================
+println("\nMeasuring elapsed time:")
+let start = time.now()
+
+// Simulate some work
+let total = 0
+for i in range(100000) {
+    total = total + i
+}
+
+let elapsed = time.since(start)
+println("Computed sum:", total)
+println("Elapsed time:", elapsed, "ms")
+
+// ============================================================
+// 6. Building a simple timer utility
+// ============================================================
+let makeTimer = func() {
+    let startTime = time.now()
+    return func(label) {
+        let ms = time.since(startTime)
+        println("[timer]", label, "->", ms, "ms elapsed")
+    }
+}
+
+let timer = makeTimer()
+let count = 0
+for i in range(50000) {
+    count = count + 1
+}
+timer("loop done")
+
+// ============================================================
+// 7. sleep (pause execution)
+// ============================================================
+println("\nSleeping for 1 second...")
+let before = time.now()
+time.sleep(1)
+let after = time.now()
+println("Done! Elapsed:", time.since(before), "ms")
