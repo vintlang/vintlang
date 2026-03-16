@@ -149,7 +149,11 @@ func (a *Array) join(args []VintObject) VintObject {
 	if len(a.Elements) > 0 {
 		glue := ""
 		if len(args) == 1 {
-			glue = args[0].(*String).Value
+			s, ok := args[0].(*String)
+			if !ok {
+				return newError("join(%s) separator must be a string, got %s", args[0].Inspect(), args[0].Type())
+			}
+			glue = s.Value
 		}
 		length := len(a.Elements)
 		newElements := make([]string, length)
