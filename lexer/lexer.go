@@ -420,7 +420,6 @@ func (l *Lexer) skipMultiLineComment() {
 		}
 
 		l.readChar()
-		l.skipWhitespace()
 	}
 
 }
