@@ -1,9 +1,63 @@
-// VintLang Builtins Example
-// This example demonstrates the use of built-in functions in VintLang
+// VintLang Built-in Functions Example
+// Demonstrates core built-in functions available without importing any module
 
-// eq() - Check if two values are equal (returns true/false)
-print(eq(2,""))  // Prints false - comparing number 2 with empty string
+println("=== Type Checking ===")
+println("type(42):", type(42))
+println("type(3.14):", type(3.14))
+println("type('hi'):", type("hi"))
+println("type(true):", type(true))
+println("type([1,2]):", type([1, 2]))
+println("type({}):", type({}))
+println("type(null):", type(null))
 
-// Functions can be assigned to variables
-let a = print
-a("yeee")  // Call the print function through variable 'a'
+println("\n=== Type Conversion ===")
+println("int('42'):", int("42"))
+println("int(3.9):", int(3.9))
+println("parseFloat('3.14'):", parseFloat("3.14"))
+println("parseInt('100'):", parseInt("100"))
+println("string(123):", string(123))
+println("string(true):", string(true))
+
+println("\n=== String Predicates ===")
+println("startsWith('VintLang', 'Vint'):", startsWith("VintLang", "Vint"))
+println("endsWith('VintLang', 'Lang'):", endsWith("VintLang", "Lang"))
+
+println("\n=== Collection Builtins ===")
+let arr = [3, 1, 4, 1, 5, 9, 2, 6]
+println("Array:", arr)
+println("len:", len(arr))
+println("unique:", unique(arr))
+println("sorted:", arr.sort())
+println("reversed:", arr.reverse())
+println("indexOf(arr, 9):", indexOf(arr, 9))
+
+let dict = {"a": 1, "b": 2, "c": 3}
+println("\nDict:", dict)
+println("keys:", keys(dict))
+println("values:", values(dict))
+println("has_key:", has_key(dict, "b"))
+
+println("\n=== Array Operations ===")
+let nums = [1, 2, 3]
+nums = append(nums, 4, 5)
+println("append:", nums)
+let last = pop(nums)
+println("pop:", last, "| remaining:", nums)
+
+println("\n=== Logical Builtins ===")
+println("not(true):", not(true))
+println("not(false):", not(false))
+println("and(true, false):", and(true, false))
+println("and(true, true):", and(true, true))
+println("or(false, true):", or(false, true))
+println("or(false, false):", or(false, false))
+
+println("\n=== chr / ord ===")
+println("ord('A'):", ord("A"))
+println("chr(65):", chr(65))
+println("ord('z'):", ord("z"))
+println("chr(122):", chr(122))
+
+println("\n=== range ===")
+println("range(5):", range(5))
+println("range(2,6):", range(2, 6))

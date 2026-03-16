@@ -1,0 +1,72 @@
+// VintLang Defer Statement Example
+// Demonstrates the defer keyword which schedules code to run when the function exits
+// Deferred statements execute in LIFO (last-in, first-out) order
+
+// ============================================================
+// 1. Basic defer - runs after the function body
+// ============================================================
+let basicExample = func() {
+    defer println("3. Deferred: cleanup done")
+    println("1. Function body starts")
+    println("2. Function body ends")
+}
+
+println("=== Basic Defer ===")
+basicExample()
+println("4. Back in main")
+
+// ============================================================
+// 2. Multiple defers - execute in reverse order (LIFO)
+// ============================================================
+let multipleDefers = func() {
+    defer println("Deferred 1 (runs last)")
+    defer println("Deferred 2 (runs second)")
+    defer println("Deferred 3 (runs first)")
+    println("Function body")
+}
+
+println("\n=== Multiple Defers (LIFO order) ===")
+multipleDefers()
+
+// ============================================================
+// 3. Practical use: resource cleanup
+// ============================================================
+let processData = func(data) {
+    println("\nOpening resource...")
+    defer println("Resource closed (always runs)")
+
+    if (len(data) == 0) {
+        warn "Empty data, aborting early"
+        return null  // defer still runs!
+    }
+
+    let total = 0
+    for item in data {
+        total = total + item
+    }
+    println("Processed", len(data), "items, sum =", total)
+}
+
+println("\n=== Defer with Early Return ===")
+processData([1, 2, 3, 4, 5])
+processData([])
+
+// ============================================================
+// 4. Defer with logging (wrap a section with open/close logs)
+// ============================================================
+let runTask = func(name) {
+    println("\n--- Task:", name, "---")
+    defer println("--- End:", name, "---")
+
+    if (name == "task2") {
+        println("  Doing task2 work...")
+        return null
+    }
+    println("  Doing", name, "work...")
+    println("  Finishing", name, "...")
+}
+
+println("\n=== Defer for Structured Logging ===")
+runTask("task1")
+runTask("task2")
+runTask("task3")
