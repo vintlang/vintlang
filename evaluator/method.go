@@ -86,18 +86,26 @@ func applyMethod(obj object.VintObject, method ast.Expression, args []object.Vin
 			return fn(args, defs)
 		}
 	case *object.Instance:
-		if fn, ok := obj.Package.Scope.Get(method.(*ast.Identifier).Value); ok {
-			fn.(*object.Function).Env.Define("@", obj)
+		if val, ok := obj.Package.Scope.Get(method.(*ast.Identifier).Value); ok {
+			fn, ok := val.(*object.Function)
+			if !ok {
+				return newError("'%s' is not a function", method.(*ast.Identifier).Value)
+			}
+			fn.Env.Define("@", obj)
 			ret := applyFunction(fn, args, l)
-			fn.(*object.Function).Env.Del("@")
+			fn.Env.Del("@")
 			return ret
 		}
 	case *object.Package:
 		// Here We Use GetPublic to enforce private member access control
-		if fn, ok := obj.GetPublic(method.(*ast.Identifier).Value); ok {
-			fn.(*object.Function).Env.Define("@", obj)
+		if val, ok := obj.GetPublic(method.(*ast.Identifier).Value); ok {
+			fn, ok := val.(*object.Function)
+			if !ok {
+				return newError("'%s' is not a function", method.(*ast.Identifier).Value)
+			}
+			fn.Env.Define("@", obj)
 			ret := applyFunction(fn, args, l)
-			fn.(*object.Function).Env.Del("@")
+			fn.Env.Del("@")
 			return ret
 		}
 	case *object.StructInstance:
