@@ -900,7 +900,12 @@ func (a *Array) standardDeviation(args []VintObject) VintObject {
 		return varianceResult
 	}
 
-	variance := varianceResult.(*Float).Value
+	varianceFloat, ok := varianceResult.(*Float)
+	if !ok {
+		return newError("standardDeviation() internal error: variance did not return a float")
+	}
+
+	variance := varianceFloat.Value
 	stdDev := math.Sqrt(variance)
 	return &Float{Value: stdDev}
 }
