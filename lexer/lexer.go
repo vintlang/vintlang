@@ -332,9 +332,6 @@ func isLetter(ch rune) bool {
 
 func (l *Lexer) skipWhitespace() {
 	for l.ch == ' ' || l.ch == '\t' || l.ch == '\n' || l.ch == '\r' {
-		if l.ch == '\n' {
-			l.line++
-		}
 		l.readChar()
 	}
 }
