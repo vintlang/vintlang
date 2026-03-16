@@ -229,6 +229,8 @@ func (l *Lexer) NextToken() token.Token {
 		if l.peekChar() == rune('!') && l.line == 1 {
 			l.skipSingleLineComment()
 			return l.NextToken()
+		} else {
+			tok = l.createIllegalToken(l.ch, "- '#' is not a valid token")
 		}
 	case 0:
 		tok.Literal = ""
