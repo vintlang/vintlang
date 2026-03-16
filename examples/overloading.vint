@@ -1,0 +1,80 @@
+// VintLang Function Overloading Example
+// VintLang supports overloading functions by arity (number of parameters).
+// The interpreter automatically selects the correct version based on the
+// number of arguments passed.
+
+// ============================================================
+// 1. Basic overloading by arity
+// ============================================================
+let greet = func() {
+    println("Hello, World!")
+}
+
+let greet = func(name) {
+    println("Hello,", name + "!")
+}
+
+let greet = func(name, title) {
+    println("Hello,", title, name + "!")
+}
+
+println("=== Greeting overloads ===")
+greet()                   // calls 0-arg version
+greet("Alice")            // calls 1-arg version
+greet("Smith", "Dr.")     // calls 2-arg version
+
+// ============================================================
+// 2. Math operations overloaded by arity
+// ============================================================
+let add = func(a, b) {
+    return a + b
+}
+
+let add = func(a, b, c) {
+    return a + b + c
+}
+
+let add = func(a, b, c, d) {
+    return a + b + c + d
+}
+
+println("\n=== Add overloads ===")
+println("add(2, 3)       =", add(2, 3))
+println("add(1, 2, 3)    =", add(1, 2, 3))
+println("add(1, 2, 3, 4) =", add(1, 2, 3, 4))
+
+// ============================================================
+// 3. Default parameter values (another way to handle arity)
+// ============================================================
+let connect = func(host = "localhost") {
+    println("Connecting to", host, "on port 8080")
+}
+
+let connect = func(host, port) {
+    println("Connecting to", host, "on port", port)
+}
+
+println("\n=== Connect overloads ===")
+connect()                    // uses default host
+connect("example.com")       // explicit host, default port via default param
+connect("example.com", 3306) // explicit host and port
+
+// ============================================================
+// 4. Logging function with multiple signatures
+// ============================================================
+let logMsg = func(message) {
+    println("[LOG]", message)
+}
+
+let logMsg = func(level, message) {
+    println("[" + level + "]", message)
+}
+
+let logMsg = func(level, message, data) {
+    println("[" + level + "] " + message + " | data: " + string(data))
+}
+
+println("\n=== logMsg overloads ===")
+logMsg("Something happened")
+logMsg("ERROR", "Connection refused")
+logMsg("DEBUG", "User fetched", "id=42")

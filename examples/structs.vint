@@ -1,0 +1,128 @@
+// VintLang Structs Example
+// Demonstrates defining structs with fields and methods
+
+// ============================================================
+// 1. Basic struct definition
+// ============================================================
+struct Point {
+    x: 0
+    y: 0
+
+    func toString() {
+        return "Point(" + string(this.x) + ", " + string(this.y) + ")"
+    }
+
+    func distanceTo(other) {
+        let dx = this.x - other.x
+        let dy = this.y - other.y
+        return (dx * dx + dy * dy)
+    }
+}
+
+let p1 = Point(x = 3, y = 4)
+let p2 = Point(x = 0, y = 0)
+println("Point p1:", p1.toString())
+println("Point p2:", p2.toString())
+println("Distance squared:", p1.distanceTo(p2))
+
+// ============================================================
+// 2. Struct with default values and methods
+// ============================================================
+struct BankAccount {
+    owner: "Unknown"
+    balance: 0.0
+
+    func deposit(amount) {
+        this.balance = this.balance + amount
+        println("Deposited $" + string(amount) + " | Balance: $" + string(this.balance))
+    }
+
+    func withdraw(amount) {
+        if (amount > this.balance) {
+            println("Insufficient funds! Balance: $" + string(this.balance))
+            return null
+        }
+        this.balance = this.balance - amount
+        println("Withdrew $" + string(amount) + " | Balance: $" + string(this.balance))
+    }
+
+    func getBalance() {
+        return this.balance
+    }
+}
+
+println("\n=== Bank Account ===")
+let account = BankAccount(owner = "Alice", balance = 100.0)
+println("Account owner:", account.owner)
+account.deposit(50.0)
+account.withdraw(30.0)
+account.withdraw(200.0)
+println("Final balance: $" + string(account.getBalance()))
+
+// ============================================================
+// 3. Struct as a data container
+// ============================================================
+struct Student {
+    name: ""
+    grade: 0
+
+    func isPassing() {
+        return this.grade >= 50
+    }
+
+    func status() {
+        if (this.isPassing()) {
+            return this.name + " - PASS (" + string(this.grade) + ")"
+        }
+        return this.name + " - FAIL (" + string(this.grade) + ")"
+    }
+}
+
+println("\n=== Student Records ===")
+let students = [
+    Student(name = "Alice", grade = 85),
+    Student(name = "Bob",   grade = 42),
+    Student(name = "Carol", grade = 91),
+    Student(name = "Dave",  grade = 55)
+]
+
+for s in students {
+    println(" ", s.status())
+}
+
+// Count passing
+let passing = 0
+for s in students {
+    if (s.isPassing()) {
+        passing = passing + 1
+    }
+}
+println("Passing:", passing, "/", len(students))
+
+// ============================================================
+// 4. Structs with nested data
+// ============================================================
+struct Config {
+    host: "localhost"
+    port: 8080
+    isDebug: false
+
+    func address() {
+        return this.host + ":" + string(this.port)
+    }
+
+    func describe() {
+        let mode = "production"
+        if (this.isDebug) {
+            mode = "debug"
+        }
+        return "Server at " + this.address() + " [" + mode + "]"
+    }
+}
+
+println("\n=== Configuration ===")
+let devConfig  = Config(host = "localhost", port = 3000, isDebug = true)
+let prodConfig = Config(host = "api.example.com", port = 443, isDebug = false)
+
+println(devConfig.describe())
+println(prodConfig.describe())
