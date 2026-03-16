@@ -149,7 +149,11 @@ func (a *Array) join(args []VintObject) VintObject {
 	if len(a.Elements) > 0 {
 		glue := ""
 		if len(args) == 1 {
-			glue = args[0].(*String).Value
+			s, ok := args[0].(*String)
+			if !ok {
+				return newError("join(%s) separator must be a string, got %s", args[0].Inspect(), args[0].Type())
+			}
+			glue = s.Value
 		}
 		length := len(a.Elements)
 		newElements := make([]string, length)
@@ -896,7 +900,12 @@ func (a *Array) standardDeviation(args []VintObject) VintObject {
 		return varianceResult
 	}
 
-	variance := varianceResult.(*Float).Value
+	varianceFloat, ok := varianceResult.(*Float)
+	if !ok {
+		return newError("standardDeviation() internal error: variance did not return a float")
+	}
+
+	variance := varianceFloat.Value
 	stdDev := math.Sqrt(variance)
 	return &Float{Value: stdDev}
 }
