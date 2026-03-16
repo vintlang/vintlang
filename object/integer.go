@@ -183,7 +183,11 @@ func (i *Integer) lcm(args []VintObject) VintObject {
 
 	// LCM(a, b) = |a * b| / GCD(a, b)
 	gcdResult := i.gcd(args)
-	gcdValue := gcdResult.(*Integer).Value
+	gcdInt, ok2 := gcdResult.(*Integer)
+	if !ok2 {
+		return newError("lcm() internal error: gcd did not return an integer")
+	}
+	gcdValue := gcdInt.Value
 
 	a, b := i.Value, other.Value
 	if a < 0 {
