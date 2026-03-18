@@ -63,6 +63,9 @@ config.json
 dist/
 .idea./vintlang
 
+# Trace output files
+vint_trace.txt
+
 # Generated showcase files (temporary output)
 *_report_*.json
 *_report_*.txt

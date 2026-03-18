@@ -5,15 +5,18 @@ import (
 	"os"
 	"path/filepath"
 	"strings"
+	"time"
 
 	"github.com/charmbracelet/lipgloss"
 	"github.com/vintlang/vintlang/bundler"
 	"github.com/vintlang/vintlang/config"
 	"github.com/vintlang/vintlang/evaluator"
 	"github.com/vintlang/vintlang/lexer"
+	"github.com/vintlang/vintlang/object"
 	"github.com/vintlang/vintlang/parser"
 	"github.com/vintlang/vintlang/repl"
 	"github.com/vintlang/vintlang/styles"
+	"github.com/vintlang/vintlang/token"
 	"github.com/vintlang/vintlang/toolkit"
 )
 
@@ -48,6 +51,7 @@ var (
     %s: Run tests in current directory
     %s: Format vint code
     %s: Open interactive documentation
+    %s: Trace pipeline stages to a txt file
     %s: Show vint version
     %s: Show this help message
 `,
@@ -59,6 +63,7 @@ var (
 		styles.HelpStyle.Bold(true).Render("vint test"),
 		styles.HelpStyle.Bold(true).Render("vint fmt filename.vint"),
 		styles.HelpStyle.Bold(true).Render("vint docs"),
+		styles.HelpStyle.Bold(true).Render("vint --trace filename.vint"),
 		styles.HelpStyle.Bold(true).Render("vint version"),
 		styles.HelpStyle.Bold(true).Render("vint help")))
 )
@@ -124,6 +129,12 @@ func main() {
 				os.Exit(1)
 			}
 			formatFile(args[2])
+		case "trace", "-trace", "--trace":
+			if len(args) < 3 {
+				fmt.Println(styles.ErrorStyle.Render("Error: Please specify a Vint file to trace"))
+				os.Exit(1)
+			}
+			runWithTrace(args[2])
 		case ".":
 			run("main.vint")
 		default:
@@ -203,4 +214,130 @@ func formatFile(file string) {
 	}
 
 	fmt.Println(styles.HelpStyle.Render("Formatted", file))
+}
+
+// runWithTrace executes a Vint file and writes the output of every pipeline
+// stage (source → lexer → parser → evaluator) into a trace txt file.
+func runWithTrace(file string) {
+	if !strings.HasSuffix(file, ".vint") {
+		fmt.Println(styles.ErrorStyle.Render("'" + file + "' is not a correct file type. Use '.vint'"))
+		os.Exit(1)
+	}
+
+	contents, err := os.ReadFile(file)
+	if err != nil {
+		fmt.Println(styles.ErrorStyle.Render("Error: vint Failed to read the file: ", file))
+		os.Exit(1)
+	}
+
+	source := string(contents)
+	var trace strings.Builder
+
+	// Header
+	trace.WriteString("=== VINT TRACE OUTPUT ===\n")
+	trace.WriteString(fmt.Sprintf("File: %s\n", file))
+	trace.WriteString(fmt.Sprintf("Date: %s\n", time.Now().Format(time.RFC3339)))
+	trace.WriteString("\n")
+
+	// Stage 1: Source Code
+	trace.WriteString("=== STAGE 1: SOURCE CODE ===\n")
+	trace.WriteString(source)
+	if !strings.HasSuffix(source, "\n") {
+		trace.WriteString("\n")
+	}
+	trace.WriteString("\n")
+
+	// Stage 2: Lexer (Tokenization)
+	trace.WriteString("=== STAGE 2: LEXER (Tokenization) ===\n")
+	l := lexer.NewWithFilename(source, file)
+	var tokens []token.Token
+	for i := 1; ; i++ {
+		tok := l.NextToken()
+		tokens = append(tokens, tok)
+		trace.WriteString(fmt.Sprintf("  Token[%d]: Type=%-14s Literal=%-20q Line=%d Col=%d\n",
+			i, tok.Type, tok.Literal, tok.Line, tok.Column))
+		if tok.Type == token.EOF {
+			break
+		}
+	}
+
+	lexerErrors := l.Errors()
+	if len(lexerErrors) > 0 {
+		trace.WriteString(fmt.Sprintf("\nLexer Errors (%d):\n", len(lexerErrors)))
+		for _, msg := range lexerErrors {
+			trace.WriteString(fmt.Sprintf("  - %s\n", msg))
+		}
+	} else {
+		trace.WriteString(fmt.Sprintf("\nTokens: %d (including EOF)\n", len(tokens)))
+		trace.WriteString("Lexer Errors: None\n")
+	}
+	trace.WriteString("\n")
+
+	// Stage 3: Parser (AST)
+	trace.WriteString("=== STAGE 3: PARSER (Abstract Syntax Tree) ===\n")
+	l2 := lexer.NewWithFilename(source, file)
+	p := parser.New(l2)
+	program := p.ParseProgram()
+
+	parserErrors := p.Errors()
+	if len(parserErrors) > 0 {
+		trace.WriteString(fmt.Sprintf("Parser Errors (%d):\n", len(parserErrors)))
+		for _, msg := range parserErrors {
+			trace.WriteString(fmt.Sprintf("  - %s\n", msg))
+		}
+	} else {
+		trace.WriteString("Parser Errors: None\n")
+	}
+
+	trace.WriteString(fmt.Sprintf("Statements: %d\n", len(program.Statements)))
+	trace.WriteString("\nAST:\n")
+	trace.WriteString(program.String())
+	if astStr := program.String(); !strings.HasSuffix(astStr, "\n") {
+		trace.WriteString("\n")
+	}
+	trace.WriteString("\n")
+
+	// Stage 4: Evaluation
+	trace.WriteString("=== STAGE 4: EVALUATION ===\n")
+
+	if len(parserErrors) > 0 {
+		trace.WriteString("Skipped: Parser errors prevent evaluation.\n")
+	} else {
+		scriptDir := filepath.Dir(file)
+		if absDir, err := filepath.Abs(scriptDir); err == nil {
+			evaluator.AddSearchPath(absDir)
+		}
+
+		env := object.NewEnvironment()
+		evaluated := evaluator.Eval(program, env)
+
+		if evaluated != nil {
+			trace.WriteString(fmt.Sprintf("Result Type: %s\n", evaluated.Type()))
+			if errObj, ok := evaluated.(*object.Error); ok {
+				trace.WriteString(fmt.Sprintf("Error: %s\n", errObj.Message))
+			} else if evaluated.Type() != object.NULL_OBJ {
+				trace.WriteString(fmt.Sprintf("Result Value: %s\n", evaluated.Inspect()))
+			} else {
+				trace.WriteString("Result Value: null\n")
+			}
+		} else {
+			trace.WriteString("Result: <nil>\n")
+		}
+	}
+
+	trace.WriteString("\n=== END OF TRACE ===\n")
+
+	// Determine output file name
+	outputFile := "vint_trace.txt"
+	if len(os.Args) > 3 {
+		outputFile = os.Args[3]
+	}
+
+	err = os.WriteFile(outputFile, []byte(trace.String()), 0644)
+	if err != nil {
+		fmt.Println(styles.ErrorStyle.Render("Error: Failed to write trace file: " + err.Error()))
+		os.Exit(1)
+	}
+
+	fmt.Println(styles.HelpStyle.Render("Trace written to " + outputFile))
 }
