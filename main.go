@@ -134,7 +134,11 @@ func main() {
 				fmt.Println(styles.ErrorStyle.Render("Error: Please specify a Vint file to trace"))
 				os.Exit(1)
 			}
-			runWithTrace(args[2])
+			outputFile := "vint_trace.txt"
+			if len(args) > 3 {
+				outputFile = args[3]
+			}
+			runWithTrace(args[2], outputFile)
 		case ".":
 			run("main.vint")
 		default:
@@ -218,7 +222,7 @@ func formatFile(file string) {
 
 // runWithTrace executes a Vint file and writes the output of every pipeline
 // stage (source → lexer → parser → evaluator) into a trace txt file.
-func runWithTrace(file string) {
+func runWithTrace(file string, outputFile string) {
 	if !strings.HasSuffix(file, ".vint") {
 		fmt.Println(styles.ErrorStyle.Render("'" + file + "' is not a correct file type. Use '.vint'"))
 		os.Exit(1)
@@ -291,8 +295,9 @@ func runWithTrace(file string) {
 
 	trace.WriteString(fmt.Sprintf("Statements: %d\n", len(program.Statements)))
 	trace.WriteString("\nAST:\n")
-	trace.WriteString(program.String())
-	if astStr := program.String(); !strings.HasSuffix(astStr, "\n") {
+	astStr := program.String()
+	trace.WriteString(astStr)
+	if !strings.HasSuffix(astStr, "\n") {
 		trace.WriteString("\n")
 	}
 	trace.WriteString("\n")
@@ -326,12 +331,6 @@ func runWithTrace(file string) {
 	}
 
 	trace.WriteString("\n=== END OF TRACE ===\n")
-
-	// Determine output file name
-	outputFile := "vint_trace.txt"
-	if len(os.Args) > 3 {
-		outputFile = os.Args[3]
-	}
 
 	err = os.WriteFile(outputFile, []byte(trace.String()), 0644)
 	if err != nil {
