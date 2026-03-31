@@ -16,8 +16,6 @@ var (
 	FALSE    = &object.Boolean{Value: false}
 	BREAK    = &object.Break{}
 	CONTINUE = &object.Continue{}
-
-	deferredCalls []*object.DeferredCall
 )
 
 func Eval(node ast.Node, env *object.Environment) object.VintObject {
@@ -292,7 +290,7 @@ func Eval(node ast.Node, env *object.Environment) object.VintObject {
 		}
 
 		deferredCall := &object.DeferredCall{Fn: fn, Args: args}
-		deferredCalls = append(deferredCalls, deferredCall)
+		env.AddDefer(deferredCall)
 
 		return NULL
 	case *ast.InfoStatement:
@@ -532,22 +530,16 @@ func evalExpressions(exps []ast.Expression, env *object.Environment) []object.Vi
 func applyFunction(fn object.VintObject, args []object.VintObject, line int) object.VintObject {
 	switch fn := fn.(type) {
 	case *object.Function:
-		prevDefersCount := len(deferredCalls)
-		defer func() {
-			if len(deferredCalls) > prevDefersCount {
-				callsToExecute := deferredCalls[prevDefersCount:]
-				for i := len(callsToExecute) - 1; i >= 0; i-- {
-					dc := callsToExecute[i]
-					applyFunction(dc.Fn, dc.Args, 0)
-				}
-				deferredCalls = deferredCalls[:prevDefersCount]
-			}
-		}()
-
 		if fn.Name != "" {
 			fn.Env.Define(fn.Name, fn)
 		}
 		extendedEnv := extendedFunctionEnv(fn, args)
+		extendedEnv.MarkAsFuncScope()
+		defer func() {
+			for _, dc := range extendedEnv.PopDefers() {
+				applyFunction(dc.Fn, dc.Args, 0)
+			}
+		}()
 		evaluated := Eval(fn.Body, extendedEnv)
 		return unwrapReturnValue(evaluated)
 	case *object.AsyncFunction:
