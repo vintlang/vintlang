@@ -1,5 +1,7 @@
 package object
 
+import "sync"
+
 // Environment represents a variable/function scope in VintLang.
 // Now supports function overloading: multiple functions with the same name but different signatures.
 type Environment struct {
@@ -7,6 +9,10 @@ type Environment struct {
 	funcs     map[string][]*Function // For overloaded functions
 	constants map[string]bool
 	outer     *Environment
+
+	isFuncScope   bool            // true for environments created by function calls
+	deferredCalls []*DeferredCall // deferred calls scoped to this function
+	deferMu       sync.Mutex      // protects deferredCalls
 }
 
 // NewEnvironment creates a new environment with support for function overloading.
@@ -105,4 +111,43 @@ func (e *Environment) Del(name string) bool {
 		delete(e.funcs, name)
 	}
 	return true
+}
+
+// MarkAsFuncScope marks this environment as a function-level scope.
+func (e *Environment) MarkAsFuncScope() {
+	e.isFuncScope = true
+}
+
+// AddDefer walks up the environment chain to the nearest function scope
+// and appends the deferred call there. This is goroutine-safe.
+func (e *Environment) AddDefer(dc *DeferredCall) {
+	target := e.nearestFuncScope()
+	target.deferMu.Lock()
+	target.deferredCalls = append(target.deferredCalls, dc)
+	target.deferMu.Unlock()
+}
+
+// PopDefers returns all deferred calls for this environment in reverse order
+// and clears the list. This is goroutine-safe.
+func (e *Environment) PopDefers() []*DeferredCall {
+	e.deferMu.Lock()
+	defers := e.deferredCalls
+	e.deferredCalls = nil
+	e.deferMu.Unlock()
+	// Reverse so last-deferred executes first
+	for i, j := 0, len(defers)-1; i < j; i, j = i+1, j-1 {
+		defers[i], defers[j] = defers[j], defers[i]
+	}
+	return defers
+}
+
+// nearestFuncScope walks up the environment chain to find the nearest
+// function-scoped environment. Falls back to the current env if none found.
+func (e *Environment) nearestFuncScope() *Environment {
+	for cur := e; cur != nil; cur = cur.outer {
+		if cur.isFuncScope {
+			return cur
+		}
+	}
+	return e
 }
