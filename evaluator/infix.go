@@ -44,14 +44,16 @@ func evalInfixExpression(operator string, left, right object.VintObject, line in
 	case operator == "+" && left.Type() == object.ARRAY_OBJ && right.Type() == object.ARRAY_OBJ:
 		leftVal := left.(*object.Array).Elements
 		rightVal := right.(*object.Array).Elements
-		elements := append(leftVal, rightVal...)
+		elements := make([]object.VintObject, len(leftVal), len(leftVal)+len(rightVal))
+		copy(elements, leftVal)
+		elements = append(elements, rightVal...)
 		return &object.Array{Elements: elements}
 
 	case operator == "*" && left.Type() == object.ARRAY_OBJ && right.Type() == object.INTEGER_OBJ:
 		leftVal := left.(*object.Array).Elements
 		rightVal := int(right.(*object.Integer).Value)
-		elements := leftVal
-		for i := rightVal; i > 1; i-- {
+		elements := make([]object.VintObject, 0, len(leftVal)*rightVal)
+		for i := 0; i < rightVal; i++ {
 			elements = append(elements, leftVal...)
 		}
 		return &object.Array{Elements: elements}
@@ -59,8 +61,8 @@ func evalInfixExpression(operator string, left, right object.VintObject, line in
 	case operator == "*" && left.Type() == object.INTEGER_OBJ && right.Type() == object.ARRAY_OBJ:
 		leftVal := int(left.(*object.Integer).Value)
 		rightVal := right.(*object.Array).Elements
-		elements := rightVal
-		for i := leftVal; i > 1; i-- {
+		elements := make([]object.VintObject, 0, len(rightVal)*leftVal)
+		for i := 0; i < leftVal; i++ {
 			elements = append(elements, rightVal...)
 		}
 		return &object.Array{Elements: elements}
