@@ -64,8 +64,9 @@ func (t *Time) Method(method string, args []VintObject, defs map[string]VintObje
 		return t.truncate(args, defs)
 	case "round":
 		return t.round(args, defs)
+	default:
+		return newError("Method '%s' is not supported on Time", method)
 	}
-	return nil
 }
 
 func (t *Time) add(args []VintObject, defs map[string]VintObject) VintObject {

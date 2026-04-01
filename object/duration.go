@@ -33,8 +33,9 @@ func (d *Duration) Method(method string, args []VintObject, defs map[string]Vint
 		return d.multiply(args, defs)
 	case "divide":
 		return d.divide(args, defs)
+	default:
+		return newError("Method '%s' is not supported on Time", method)
 	}
-	return nil
 }
 
 func (d *Duration) hours(args []VintObject, defs map[string]VintObject) VintObject {
