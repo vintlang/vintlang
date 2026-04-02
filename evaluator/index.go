@@ -79,9 +79,14 @@ func evalSliceExpression(left, start, end object.VintObject, line int) object.Vi
 func evalArrayIndexExpression(array, index object.VintObject) object.VintObject {
 	arrayObject := array.(*object.Array)
 	idx := index.(*object.Integer).Value
-	max := int64(len(arrayObject.Elements) - 1)
+	arrayLen := int64(len(arrayObject.Elements))
 
-	if idx < 0 || idx > max {
+	// Support Python-style negative indexing
+	if idx < 0 {
+		idx = arrayLen + idx
+	}
+
+	if idx < 0 || idx >= arrayLen {
 		return NULL
 	}
 
