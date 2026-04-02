@@ -90,7 +90,10 @@ func registerArrayBuiltins() {
 				return newError("cannot pop from an empty array")
 			}
 			popped := arr.Elements[length-1]
-			arr.Elements = arr.Elements[:length-1]
+			// Return new array without the last element (immutable)
+			newElements := make([]object.VintObject, length-1)
+			copy(newElements, arr.Elements[:length-1])
+			arr.Elements = newElements
 			return popped
 		},
 	})
