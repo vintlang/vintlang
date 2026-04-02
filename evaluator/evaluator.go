@@ -223,10 +223,16 @@ func Eval(node ast.Node, env *object.Environment) object.VintObject {
 					return index
 				}
 				if idx, ok := index.(*object.Integer); ok {
-					if int(idx.Value) >= len(array.Elements) {
-						return newError("Line %d: Array index %d out of bounds. Array length is %d", node.Token.Line, idx.Value, len(array.Elements))
+					arrayLen := int64(len(array.Elements))
+					actualIdx := idx.Value
+					// Support Python-style negative indexing
+					if actualIdx < 0 {
+						actualIdx = arrayLen + actualIdx
 					}
-					array.Elements[idx.Value] = value
+					if actualIdx < 0 || actualIdx >= arrayLen {
+						return newError("Line %d: Array index %d out of bounds. Array length is %d", node.Token.Line, idx.Value, arrayLen)
+					}
+					array.Elements[actualIdx] = value
 					return value
 				} else {
 					return newError("Line %d: Array index must be an integer, got %s", node.Token.Line, index.Type())
