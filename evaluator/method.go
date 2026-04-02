@@ -129,7 +129,7 @@ func maap(a *object.Array, args []object.VintObject) object.VintObject {
 	}
 	newArr := object.Array{Elements: []object.VintObject{}}
 	for _, obj := range a.Elements {
-		env := object.NewEnvironment()
+		env := object.NewEnclosedEnvironment(fn.Env)
 		env.Define(fn.Parameters[0].Value, obj)
 		r := Eval(fn.Body, env)
 		if o, ok := r.(*object.ReturnValue); ok {
@@ -151,7 +151,7 @@ func filter(a *object.Array, args []object.VintObject) object.VintObject {
 	}
 	newArr := object.Array{Elements: []object.VintObject{}}
 	for _, obj := range a.Elements {
-		env := object.NewEnvironment()
+		env := object.NewEnclosedEnvironment(fn.Env)
 		env.Define(fn.Parameters[0].Value, obj)
 		cond := Eval(fn.Body, env)
 		if cond.Inspect() == "true" {
@@ -182,7 +182,7 @@ func sortBy(a *object.Array, args []object.VintObject) object.VintObject {
 	for i := 0; i < len(elements)-1; i++ {
 		for j := 0; j < len(elements)-i-1; j++ {
 			// Call comparison function with two elements
-			env := object.NewEnvironment()
+			env := object.NewEnclosedEnvironment(fn.Env)
 			env.Define(fn.Parameters[0].Value, elements[j])
 			if len(fn.Parameters) > 1 {
 				env.Define(fn.Parameters[1].Value, elements[j+1])
@@ -193,7 +193,7 @@ func sortBy(a *object.Array, args []object.VintObject) object.VintObject {
 				result1 = o.Value
 			}
 
-			env2 := object.NewEnvironment()
+			env2 := object.NewEnclosedEnvironment(fn.Env)
 			env2.Define(fn.Parameters[0].Value, elements[j+1])
 			if len(fn.Parameters) > 1 {
 				env2.Define(fn.Parameters[1].Value, elements[j])
