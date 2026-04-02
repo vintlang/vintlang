@@ -9,14 +9,9 @@ const EXAMPLES_OUTPUT = "merged-examples.md"
 
 // Collect files matching an extension from a directory
 let collectFiles = func(dir, ext) {
-    let files = os.listFiles(dir)
-    let result = []
-    for f in files {
-        if (f.endsWith(ext)) {
-            result = append(result, f)
-        }
-    }
-    return result
+    return os.listFiles(dir).filter(func(f) { 
+        return f.endsWith(ext) 
+    })
 }
 
 // Build merged content from a list of files
