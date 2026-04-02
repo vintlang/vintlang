@@ -2,340 +2,292 @@
 
 ## README.md
 
-````js
+```js
 # VintLang Examples
 
-Welcome to the VintLang examples directory! This collection contains 100 example files demonstrating various features and capabilities of the VintLang programming language.
+Welcome to the VintLang examples directory! This collection demonstrates the features and capabilities of the VintLang programming language.
 
-## 📚 What's Inside
-
-This directory contains comprehensive examples covering:
-
-- **Core Language Features**: Variables, control flow, loops, functions
-- **Data Structures**: Arrays, dictionaries, strings
-- **Modules & Imports**: File organization, package system
-- **Built-in Functions**: String manipulation, type conversion, utilities
-- **File I/O**: Reading/writing files, directory operations
-- **Databases**: SQLite, MySQL, PostgreSQL integration
-- **Networking**: HTTP servers, API requests
-- **Security**: Encryption, hashing, encoding
-- **System Operations**: Shell commands, environment variables
-- **Advanced Features**: Pointers, reflection, pattern matching, async operations
-
-## 🚀 Getting Started
-
-### Running Examples
-
-To run any example, use the VintLang interpreter:
+## 🚀 Running Examples
 
 ```bash
-vint examples/example_name.vint
-````
-
-### Example Categories
-
-#### Beginner-Friendly Examples
-
-- `builtins.vint` - Built-in functions
-- `functions.vint` - Function definitions and usage
-- `switch.vint` - Switch-case statements
-- `if_expression.vint` - If statements and expressions
-- `test-for.vint` - For loops
-- `repeat-keyword.vint` - Repeat loops
-
-#### String & Data Manipulation
-
-- `strings.vint` - String module functions
-- `nativeStrings.vint` - Native string methods
-- `json.vint` - JSON operations
-- `csv.vint` - CSV file handling
-- `encoding.vint` - Base64 encoding/decoding
-
-#### File & System Operations
-
-- `os.vint` - Operating system operations
-- `path.vint` - Path manipulation
-- `shell.vint` - Shell command execution
-
-#### Database Examples
-
-- `sqlite.vint` - SQLite database
-- `mysql.vint` - MySQL database
-- `postgres.vint` - PostgreSQL database
-
-#### Networking & HTTP
-
-- `http.vint` - HTTP file server
-- `http_test.vint` - HTTP module testing
-- `github-profile.vint` - HTTP requests
-
-#### Advanced Features
-
-- `pointers.vint` - Pointer operations
-- `reflect.vint` - Runtime type inspection
-- `defer_test.vint` - Defer statement
-- `overloading_test.vint` - Function overloading
-- `async_simple.vint` - Asynchronous operations
-
-#### Security & Crypto
-
-- `crypto.vint` - Hashing and encryption
-- `dotenv.vint` - Environment variables from .env
-
-#### AI/ML Integration
-
-- `llm_openai.vint` - OpenAI GPT integration
-
-## 📖 Documentation
-
-All examples include comprehensive comments explaining:
-
-- What the code does
-- How VintLang features work
-- Expected output
-- Usage patterns
-
-For a detailed analysis of all examples, see [TEST_RESULTS.md](TEST_RESULTS.md).
-
-## ✅ Quality Assurance
-
-All examples have been:
-
-- ✅ Tested with VintLang v0.2.2
-- ✅ Fixed for syntax errors
-- ✅ Documented with explanatory comments
-- ✅ Verified to compile successfully
-
-## 🔧 Testing Examples
-
-### Running Tests
-
-Many examples include the word "test" in their names and demonstrate specific features:
-
-```bash
-# Test built-in functions
-vint examples/builtins_test.vint
-
-# Test array slicing
-vint examples/array_slicing_test.vint
-
-# Test function features
-vint examples/function_test.vint
+vint examples/<filename>.vint
 ```
 
-### Test Categories
+---
 
-- **builtins_test.vint** - Built-in function testing
-- **declaratives_test.vint** - Declarative statements (info, debug, etc.)
-- **function_test.vint** - Function default parameters
-- **array_slicing_test.vint** - Array slicing operations
-- **has_key_test.vint** - Dictionary key checking
-- **overloading_test.vint** - Function overloading
+## 📚 Examples by Category
+
+### Core Language
+
+| File | Description |
+|------|-------------|
+| `builtins.vint` | Built-in functions: type checking, conversion, collections, math |
+| `functions.vint` | Function definitions, IIFE, higher-order functions |
+| `closures.vint` | Closures, function factories, map/filter/reduce, memoization |
+| `overloading.vint` | Function overloading by arity (number of arguments) |
+| `if_expression.vint` | if as statement and as expression |
+| `switch.vint` | Switch-case control flow |
+| `for_loops.vint` | for, while, repeat loops; break and continue |
+| `repeat-keyword.vint` | The repeat loop |
+| `logicals.vint` | Logical operators: and, or, not |
+| `pointers.vint` | Pointer operations with & and * |
+| `defer.vint` | Defer statement — deferred execution (LIFO) |
+
+### Data Types & Structures
+
+| File | Description |
+|------|-------------|
+| `arrays.vint` | Array creation, slicing, sorting, searching, iteration |
+| `dictionaries.vint` | Dict creation, access, iteration, has_key, nested dicts |
+| `strings.vint` | String module: trim, split, join, replace, etc. |
+| `nativeStrings.vint` | Native string methods: .upper(), .split(), .replace(), etc. |
+| `json.vint` | JSON encode, decode, pretty-print, merge |
+| `enum_demo.vint` | Enum types with integer and string values |
+| `structs.vint` | Struct definitions with fields and methods |
+
+### Pattern Matching
+
+| File | Description |
+|------|-------------|
+| `pattern_matching.vint` | switch guards, match on dicts, type-based matching |
+| `user_access_control.vint` | Dict pattern matching for access control logic |
+
+### Modules & Standard Library
+
+| File | Description |
+|------|-------------|
+| `math_extensions.vint` | Statistics, complex numbers, linear algebra, GCD/LCM |
+| `random.vint` | Random integers, floats, strings, choices |
+| `time.vint` | Current time, formatting, arithmetic, sleep |
+| `encoding.vint` | Base64 encode and decode |
+| `uuid.vint` | UUID generation |
+| `regex.vint` | Pattern matching, text replacement, splitting |
+| `colors.vint` | RGB to hex color conversion |
+| `reflect.vint` | Runtime type inspection |
+| `fmt_demo.vint` | String formatting, padding, alignment, tables |
+
+### Concurrency
+
+| File | Description |
+|------|-------------|
+| `concurrency.vint` | async/await, goroutines, channels, worker pool |
+
+### System & File Operations
+
+| File | Description |
+|------|-------------|
+| `os.vint` | File I/O, directory listing, environment variables |
+| `path.vint` | File path manipulation: join, basename, dirname, ext |
+| `shell.vint` | Run shell commands from VintLang |
+| `sysinfo.vint` | OS, CPU, memory, disk, network information |
+| `make_example.vint` | Build automation with the make module |
+| `dotenv.vint` | Load environment variables from a .env file |
+
+### Error Handling & Debugging
+
+| File | Description |
+|------|-------------|
+| `error_handling.vint` | Null checks, error returns, validation, retry pattern |
+
+### Data Formats
+
+| File | Description |
+|------|-------------|
+| `csv.vint` | Write and read CSV files |
+| `excel_demo.vint` | Create Excel workbooks with sheets and formulas |
+
+### Security & Auth
+
+| File | Description |
+|------|-------------|
+| `crypto.vint` | MD5 hashing, AES encryption/decryption |
+| `jwt.vint` | Create, decode, and verify JWT tokens |
+
+### Databases
+
+| File | Description |
+|------|-------------|
+| `sqlite.vint` | SQLite: create, insert, fetch, update |
+| `mysql.vint` | MySQL database operations *(requires MySQL server)* |
+| `postgres.vint` | PostgreSQL database operations *(requires PostgreSQL server)* |
+| `redis.vint` | Redis key-value operations *(requires Redis server)* |
+
+### Networking & HTTP
+
+| File | Description |
+|------|-------------|
+| `http.vint` | HTTP file server setup |
+| `backend_demo.vint` | HTTP backend with routes, middleware, interceptors |
+| `complete_backend_app.vint` | Full REST API backend definition |
+| `express_like_server.vint` | Express-like HTTP server with routes |
+| `web_fetcher.vint` | HTTP GET requests and JSON parsing *(requires network)* |
+| `github-profile.vint` | Profile view counter via HTTP *(requires network)* |
+| `vintSocket.vint` | WebSocket server and client |
+
+### Visualization
+
+| File | Description |
+|------|-------------|
+| `vintChart.vint` | Bar chart, pie chart, line graph generation |
+
+### Modules & Packages
+
+| File | Description |
+|------|-------------|
+| `greetings_module.vint` | Package definition with functions |
+
+### CLI Applications
+
+| File | Description |
+|------|-------------|
+| `cli-todo.vint` | Todo list CLI with add/list commands |
+| `cli.vint` | CLI argument parsing with the cli module |
+
+### Terminal UI
+
+| File | Description |
+|------|-------------|
+| `term.vint` | Terminal banners, menus, and prompts |
+
+### AI / LLM
+
+| File | Description |
+|------|-------------|
+| `llm_openai.vint` | OpenAI GPT integration *(requires API key)* |
+
+### Interactive Games
+
+| File | Description |
+|------|-------------|
+| `guessingGame.vint` | Number guessing game *(interactive)* |
+| `simplegame.vint` | Text adventure with save/load *(interactive)* |
+
+---
 
 ## 📝 Notes
 
 ### External Dependencies
 
-Some examples require external resources:
+Some examples require external resources and will not run without them:
+- **Database examples** (`mysql`, `postgres`, `redis`): Need running servers
+- **dotenv**: Needs a `.env` file
+- **llm_openai**: Requires `OPENAI_API_KEY` environment variable
+- **web_fetcher**, **github-profile**: Require internet connectivity
+- **Interactive examples** (`guessingGame`, `simplegame`, `cli-todo`, `cli`): Need user input
 
-- **Database examples**: Need running database servers
-- **dotenv.vint**: Needs a .env file
-- **llm_openai.vint**: Requires OpenAI API key
-- **Networking examples**: May require internet connectivity
-
-These examples will fail expectedly without the required resources but demonstrate correct VintLang syntax.
-
-### Module Availability
-
-Some modules shown in examples may require additional setup or may be in development:
-
-- **desktop** - Desktop GUI module (in development)
-- **regex** - Regular expressions (in development)
-- **package system** - Advanced package features (in development)
-
-## 🤝 Contributing
-
-When adding new examples:
-
-1. Follow the naming convention (descriptive_name.vint)
-2. Add comprehensive comments explaining the code
-3. Test the example to ensure it works
-4. Update this README if adding a new category
-5. Add a description in TEST_RESULTS.md
-
-## 📚 Learning Path
-
-For beginners, we recommend following this learning path:
-
-1. **Basics**: Start with `builtins.vint`, `functions.vint`, `switch.vint`
-2. **Control Flow**: Try `if_expression.vint`, `test-for.vint`, `repeat-keyword.vint`
-3. **Data Structures**: Explore `strings.vint`, `json.vint`, `array_slicing_test.vint`
-4. **File Operations**: Learn from `os.vint`, `path.vint`
-5. **Advanced**: Move to `pointers.vint`, `reflect.vint`, `overloading_test.vint`
-6. **Modules**: Study various module examples for specific use cases
-
-## 🎯 Quick Reference
-
-| Category       | Example Files           | Count |
-| -------------- | ----------------------- | ----- |
-| Total Examples | All \*.vint files       | 100   |
-| Test Files     | _test_.vint             | 29    |
-| Showcase Files | _showcase_.vint         | 5     |
-| Database Files | sqlite, mysql, postgres | 3     |
-| HTTP Files     | http\*.vint             | 4     |
-
-## 💡 Tips
-
-- All examples use proper VintLang syntax as of v0.2.2
-- Comments explain not just what code does, but why
-- Most examples can be run independently
-- Check example output to understand expected behavior
-- Modify examples to experiment and learn
-
-## 🔗 Resources
-
-- [VintLang Documentation](https://vintlang.ekilie.com/docs)
-- [VintLang GitHub Repository](https://github.com/vintlang/vintlang)
-- [TEST_RESULTS.md](TEST_RESULTS.md) - Detailed test results and fixes
+### All other examples run without external dependencies.
 
 ---
 
-Happy coding with VintLang! 🎉
+## 🎯 Learning Path
 
-````
+1. **Start here**: `builtins.vint`, `functions.vint`, `if_expression.vint`
+2. **Control flow**: `for_loops.vint`, `switch.vint`, `repeat-keyword.vint`
+3. **Data structures**: `arrays.vint`, `dictionaries.vint`, `strings.vint`
+4. **Functions**: `closures.vint`, `overloading.vint`
+5. **Pattern matching**: `pattern_matching.vint`
+6. **OOP-style**: `structs.vint`, `enum_demo.vint`
+7. **Modules**: `math_extensions.vint`, `time.vint`, `regex.vint`
+8. **System**: `os.vint`, `shell.vint`, `sysinfo.vint`
+9. **Concurrency**: `concurrency.vint`
+10. **Real-world**: `sqlite.vint`, `http.vint`, `json.vint`
 
-## array_slicing_test.vint
+```
 
-```js
-// Array slicing functionality test
-// This test validates the Python-like array slicing syntax
-
-let testArray = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
-
-println("Testing Array Slicing Implementation");
-println("====================================");
-
-// Test the original requirement from the issue
-let arr = [1, 2, 3, 4, 5];
-let result = arr[1:4];
-println("arr[1:4] =", result); // Should output: [2, 3, 4]
-
-// Basic slicing tests
-println("\nBasic Slicing:");
-println("testArray[2:5] =", testArray[2:5]);   // [3, 4, 5]
-println("testArray[0:3] =", testArray[0:3]);   // [1, 2, 3]
-println("testArray[7:10] =", testArray[7:10]); // [8, 9, 10]
-
-// Partial slicing tests
-println("\nPartial Slicing:");
-println("testArray[5:] =", testArray[5:]);     // [6, 7, 8, 9, 10]
-println("testArray[:4] =", testArray[:4]);     // [1, 2, 3, 4]
-println("testArray[:] =", testArray[:]);       // [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
-
-// Edge cases
-println("\nEdge Cases:");
-println("testArray[0:0] =", testArray[0:0]);   // []
-println("testArray[5:5] =", testArray[5:5]);   // []
-println("testArray[9:10] =", testArray[9:10]); // [10]
-
-// Negative indexing
-println("\nNegative Indexing:");
-println("testArray[-3:] =", testArray[-3:]);   // [8, 9, 10]
-println("testArray[:-3] =", testArray[:-3]);   // [1, 2, 3, 4, 5, 6, 7]
-println("testArray[-5:-2] =", testArray[-5:-2]); // [6, 7, 8]
-
-// Out of bounds handling
-println("\nOut of Bounds Handling:");
-println("testArray[15:] =", testArray[15:]);   // []
-println("testArray[:20] =", testArray[:20]);   // [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
-println("testArray[-20:] =", testArray[-20:]); // [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
-
-// Verify regular indexing still works
-println("\nRegular Indexing Still Works:");
-println("testArray[0] =", testArray[0]);       // 1
-println("testArray[5] =", testArray[5]);       // 6
-println("testArray[9] =", testArray[9]);       // 10
-
-println("\nAll array slicing tests completed successfully!");
-````
-
-## async_simple.vint
+## arrays.vint
 
 ```js
-// Simple async patterns that work with VintLang syntax
+// VintLang Arrays Example
+// Demonstrates array creation, access, mutation, slicing, and built-in methods
 
-print("=== Simple Async Patterns ===")
+// ============================================================
+// 1. Creating and accessing arrays
+// ============================================================
+let colors = ["red", "green", "blue", "yellow"]
+println("Colors:", colors)
+println("First:", colors[0])
+println("Last:", colors[len(colors) - 1])
 
-// Basic async function
-let fetchData = async func(id) {
-    return "Data for " + id
+// ============================================================
+// 2. Modifying arrays (push / pop / append)
+// ============================================================
+colors.push("purple")
+println("\nAfter push:", colors)
+
+let removed = pop(colors)
+println("Popped:", removed)
+println("After pop:", colors)
+
+let more = append(colors, "orange", "pink")
+println("After append:", more)
+
+// ============================================================
+// 3. Array slicing (Python-like syntax)
+// ============================================================
+let nums = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+println("\nFull array:", nums)
+println("nums[2:5]  =", nums[2:5])    // [3, 4, 5]
+println("nums[:4]   =", nums[:4])     // [1, 2, 3, 4]
+println("nums[7:]   =", nums[7:])     // [8, 9, 10]
+println("nums[-3:]  =", nums[-3:])    // [8, 9, 10]
+println("nums[:-3]  =", nums[:-3])    // [1, 2, 3, 4, 5, 6, 7]
+
+// ============================================================
+// 4. Iterating over an array
+// ============================================================
+let scores = [85, 92, 78, 95, 88]
+let total = 0
+for score in scores {
+    total = total + score
 }
+let avg = total / len(scores)
+println("\nScores:", scores)
+println("Average:", avg)
 
-print("1. Basic async function:")
-let promise = fetchData("123")
-let result = await promise
-print("   Result:", result)
+// ============================================================
+// 5. Sorting and reversing
+// ============================================================
+let words = ["banana", "apple", "cherry", "date"]
+println("\nOriginal:", words)
+println("Sorted:", words.sort())
+println("Reversed:", words.reverse())
 
-print("\n2. Multiple async operations:")
-let p1 = fetchData("A")
-let p2 = fetchData("B")
-let p3 = fetchData("C")
+// ============================================================
+// 6. Searching
+// ============================================================
+let animals = ["cat", "dog", "bird", "fish"]
+println("\nAnimals:", animals)
+println("Index of 'bird':", indexOf(animals, "bird"))
+println("Index of 'lion':", indexOf(animals, "lion"))  // -1 means not found
 
-let r1 = await p1
-let r2 = await p2
-let r3 = await p3
+// ============================================================
+// 7. Range
+// ============================================================
+println("\nRange examples:")
+println("range(5):", range(5))
+println("range(2,7):", range(2, 7))
 
-print("   Results:", r1, r2, r3)
-
-print("\n3. Channel-based communication:")
-let dataChan = chan(3)
-
-// Producer
-go func() {
-    send(dataChan, "Message 1")
-    send(dataChan, "Message 2")
-    send(dataChan, "Message 3")
-    close(dataChan)
-}()
-
-// Consumer
-let msg1 = receive(dataChan)
-let msg2 = receive(dataChan)
-let msg3 = receive(dataChan)
-
-print("   Received:", msg1, msg2, msg3)
-
-print("\n4. Async with channels:")
-let processAsync = async func(input) {
-    let resultChan = chan
-
-    go func() {
-        let processed = "Processed: " + input
-        send(resultChan, processed)
-    }()
-
-    let result = receive(resultChan)
-    return result
+// ============================================================
+// 8. Nested arrays (2D)
+// ============================================================
+let matrix = [
+    [1, 2, 3],
+    [4, 5, 6],
+    [7, 8, 9]
+]
+println("\n2D Matrix:")
+for row in matrix {
+    println(" ", row)
 }
+println("Element [1][2]:", matrix[1][2])
 
-let asyncResult = await processAsync("important data")
-print("   Async result:", asyncResult)
+// ============================================================
+// 9. Unique elements
+// ============================================================
+let dupes = [1, 2, 2, 3, 3, 3, 4]
+println("\nWith duplicates:", dupes)
+println("Unique:", unique(dupes))
 
-print("\n5. Error-free concurrent execution:")
-go print("   Goroutine 1: Hello")
-go print("   Goroutine 2: World")
-go print("   Goroutine 3: From")
-go print("   Goroutine 4: VintLang")
-
-print("   Main thread: Concurrent execution complete")
-
-print("\n=== All patterns demonstrated successfully! ===")
-print("VintLang now supports:")
-print("  - async functions that return promises")
-print("  - await expressions for promise resolution")
-print("  - go statements for concurrent execution")
-print("  - channels for inter-goroutine communication")
-print("  - Built-in functions: send(), receive(), close()")
 ```
 
 ## backend_demo.vint
@@ -479,137 +431,73 @@ println("📡 All endpoints configured with full security and middleware stack")
 // http.listen(3000, "🌐 Enhanced backend server running on http://localhost:3000")
 ```
 
-## basic_guard_test.vint
-
-```js
-// Basic test of switch case value
-let x = 5
-
-switch (x) {
-    case 5 if x > 0 {
-        println("Positive 5")
-    }
-    default {
-        println("Something else")
-    }
-}
-```
-
 ## builtins.vint
 
 ```js
-// VintLang Builtins Example
-// This example demonstrates the use of built-in functions in VintLang
+// VintLang Built-in Functions Example
+// Demonstrates core built-in functions available without importing any module
 
-// eq() - Check if two values are equal (returns true/false)
-print(eq(2, "")); // Prints false - comparing number 2 with empty string
+println("=== Type Checking ===")
+println("type(42):", type(42))
+println("type(3.14):", type(3.14))
+println("type('hi'):", type("hi"))
+println("type(true):", type(true))
+println("type([1,2]):", type([1, 2]))
+println("type({}):", type({}))
+println("type(null):", type(null))
 
-// Functions can be assigned to variables
-let a = print;
-a("yeee"); // Call the print function through variable 'a'
-```
+println("\n=== Type Conversion ===")
+println("int('42'):", int("42"))
+println("int(3.9):", int(3.9))
+println("parseFloat('3.14'):", parseFloat("3.14"))
+println("parseInt('100'):", parseInt("100"))
+println("string(123):", string(123))
+println("string(true):", string(true))
 
-## builtins_test.vint
+println("\n=== String Predicates ===")
+println("startsWith('VintLang', 'Vint'):", startsWith("VintLang", "Vint"))
+println("endsWith('VintLang', 'Lang'):", endsWith("VintLang", "Lang"))
 
-```js
-// examples/builtins_test.vint
+println("\n=== Collection Builtins ===")
+let arr = [3, 1, 4, 1, 5, 9, 2, 6]
+println("Array:", arr)
+println("len:", len(arr))
+println("unique:", unique(arr))
+println("sorted:", arr.sort())
+println("reversed:", arr.reverse())
+println("indexOf(arr, 9):", indexOf(arr, 9))
 
-// Test len()
-let myArray = [1, 2, 3, 4];
-println("Length of array [1, 2, 3, 4] is:", len(myArray)); // Expected: 4
+let dict = {"a": 1, "b": 2, "c": 3}
+println("\nDict:", dict)
+println("keys:", keys(dict))
+println("values:", values(dict))
+println("has_key:", has_key(dict, "b"))
 
-let myString = "hello";
-println("Length of string 'hello' is:", len(myString)); // Expected: 5
+println("\n=== Array Operations ===")
+let nums = [1, 2, 3]
+nums = append(nums, 4, 5)
+println("append:", nums)
+let last = pop(nums)
+println("pop:", last, "| remaining:", nums)
 
-let myDict = { a: 1, b: 2 };
-println("Length of dict {'a': 1, 'b': 2} is:", len(myDict)); // Expected: 2
+println("\n=== Logical Builtins ===")
+println("not(true):", not(true))
+println("not(false):", not(false))
+println("and(true, false):", and(true, false))
+println("and(true, true):", and(true, true))
+println("or(false, true):", or(false, true))
+println("or(false, false):", or(false, false))
 
-// Test append() and pop()
-let arr = [1, 2];
-arr = append(arr, 3, 4);
-println("After append: ", arr); // Expected: [1, 2, 3, 4]
+println("\n=== chr / ord ===")
+println("ord('A'):", ord("A"))
+println("chr(65):", chr(65))
+println("ord('z'):", ord("z"))
+println("chr(122):", chr(122))
 
-let popped = pop(arr);
-println("Popped element:", popped); // Expected: 4
-println("Array after pop:", arr); // Expected: [1, 2, 3]
+println("\n=== range ===")
+println("range(5):", range(5))
+println("range(2,6):", range(2, 6))
 
-// Test keys() and values()
-let dict = { name: "Alex", age: 30 };
-let keys_arr = keys(dict);
-println("Keys of dict:", keys_arr); // Expected: ["name", "age"] (order may vary)
-
-let values_arr = values(dict);
-println("Values of dict:", values_arr); // Expected: ["Alex", 30] (order may vary)
-
-// Test chr() and ord()
-let char_A = chr(65);
-println("chr(65) is:", char_A); // Expected: "A"
-
-let code_A = ord("A");
-println("ord('A') is:", code_A); // Expected: 65
-
-// Test sleep()
-println("Waiting for 1 second...");
-sleep(1000);
-println("Done waiting.");
-
-println("All built-in function tests passed!");
-
-// The exit() function is not called here because it would stop the script.
-// To test it, you would run a line like:
-// exit(0);
-```
-
-## cli-todo-fixed.vint
-
-```js
-//The sample vint code for a simple cli todo app
-import cli
-
-let todos = ["new", "todo"]
-
-let args = args()
-let args_len = len(args)
-info "Length: " + string(args_len)
-
-if (args_len == 0) {
-    info "Invalid options"
-    return
-}
-
-if (args[0] == "all") {
-    if (len(todos) == 0) {
-        println("NO todo found")
-    } else {
-        for todo in todos {
-            println(todo)
-        }
-    }
-} else if (args[0] == "add") {
-    let newtodo = input("Enter the todo title")
-    todos.push(newtodo)
-} else {
-    info "Unknown command: " + args[0]
-}
-```
-
-## cli-todo-working.vint
-
-```js
-//The sample vint code for a simple cli todo app
-
-let todos = ["Buy groceries", "Walk the dog", "Finish project"]
-
-let command = "all"  // Simulate command line argument for now
-
-if (command == "all") {
-    println("Your TODOs:")
-    for todo in todos {
-        println("- " + todo)
-    }
-} else {
-    println("Unknown command: " + command)
-}
 ```
 
 ## cli-todo.vint
@@ -691,74 +579,158 @@ if (cli.confirm("Do you want to proceed?")) {
 cli.cliExit(0)
 ```
 
-## clipboard_complete_test.vint
+## closures.vint
 
 ```js
-import clipboard
+// VintLang Closures & Higher-Order Functions Example
+// Demonstrates closures, function factories, and higher-order patterns
 
-println("=== Clipboard Module Complete Test ===")
-
-// Test write and read
-clipboard.write("Hello VintLang!")
-println("1. Written text:", clipboard.read())
-
-// Test all method with content
-let allContent = clipboard.all()
-println("2. All content (array):", allContent)
-
-// Test hasContent
-if (clipboard.hasContent()) {
-    println("3. Clipboard has content: true")
+// ============================================================
+// 1. Basic closure: a function that captures its environment
+// ============================================================
+let makeCounter = func() {
+    let count = 0
+    return func() {
+        count = count + 1
+        return count
+    }
 }
 
-// Test with different data types
-clipboard.write(42)
-println("4. Number in clipboard:", clipboard.read())
-println("   All content:", clipboard.all())
+let counter = makeCounter()
+println("Counter:", counter())  // 1
+println("Counter:", counter())  // 2
+println("Counter:", counter())  // 3
 
-clipboard.write(3.14159)
-println("5. Float in clipboard:", clipboard.read())
-println("   All content:", clipboard.all())
+// Each call to makeCounter() creates an independent counter
+let counter2 = makeCounter()
+println("Counter2:", counter2())  // 1 (independent)
 
-clipboard.write(true)
-println("6. Boolean in clipboard:", clipboard.read())
-println("   All content:", clipboard.all())
-
-// Test clear and all method with empty clipboard
-clipboard.clear()
-println("7. Clipboard cleared")
-
-let emptyAll = clipboard.all()
-println("8. All content after clear:", emptyAll)
-
-if ((clipboard.hasContent())) {
-    println("9. Still has content")
+// ============================================================
+// 2. Function factory: functions that generate other functions
+// ============================================================
+let makeMultiplier = func(factor) {
+    return func(x) {
+        return x * factor
+    }
 }
 
-println("=== All tests completed successfully! ===")
-```
+let double = makeMultiplier(2)
+let triple = makeMultiplier(3)
+let tenX   = makeMultiplier(10)
 
-## clipboard_test.vint
+println("\nDouble 7:", double(7))   // 14
+println("Triple 7:", triple(7))    // 21
+println("10x 7:", tenX(7))         // 70
 
-```js
-import clipboard
+// ============================================================
+// 3. Higher-order function: map (apply function to each element)
+// ============================================================
+let map = func(arr, f) {
+    let result = []
+    for item in arr {
+        result.push(f(item))
+    }
+    return result
+}
 
-println("Testing clipboard module...")
+let numbers = [1, 2, 3, 4, 5]
+let squared = map(numbers, func(x) { return x * x })
+let doubled = map(numbers, double)
 
-clipboard.write("Hello World")
-let content = clipboard.read()
-println("Read from clipboard:", content)
+println("\nNumbers:", numbers)
+println("Squared:", squared)
+println("Doubled:", doubled)
 
-// Test the new 'all' method
-let allContent = clipboard.all()
-println("All clipboard content:", allContent)
+// ============================================================
+// 4. Higher-order function: filter
+// ============================================================
+let filter = func(arr, predicate) {
+    let result = []
+    for item in arr {
+        if (predicate(item)) {
+            result.push(item)
+        }
+    }
+    return result
+}
 
-clipboard.clear()
-println("Clipboard cleared successfully")
+let isEven = func(x) { return x % 2 == 0 }
+let isPositive = func(x) { return x > 0 }
 
-// Test 'all' method with empty clipboard
-let emptyContent = clipboard.all()
-println("All clipboard content after clear:", emptyContent)
+let mixed = [-3, -1, 0, 2, 4, 7, 9]
+println("\nMixed:", mixed)
+println("Even:", filter(mixed, isEven))
+println("Positive:", filter(mixed, isPositive))
+
+// ============================================================
+// 5. Higher-order function: reduce (fold)
+// ============================================================
+let reduce = func(arr, f, initial) {
+    let acc = initial
+    for item in arr {
+        acc = f(acc, item)
+    }
+    return acc
+}
+
+let sum   = reduce(numbers, func(a, b) { return a + b }, 0)
+let product = reduce(numbers, func(a, b) { return a * b }, 1)
+let maxVal  = reduce(numbers, func(a, b) { if (a > b) { return a } return b }, numbers[0])
+
+println("\nNumbers:", numbers)
+println("Sum:", sum)
+println("Product:", product)
+println("Max:", maxVal)
+
+// ============================================================
+// 6. Composing functions
+// ============================================================
+let compose = func(f, g) {
+    return func(x) {
+        return f(g(x))
+    }
+}
+
+let addOne  = func(x) { return x + 1 }
+let square  = func(x) { return x * x }
+
+let squareThenAdd = compose(addOne, square)
+let addThenSquare = compose(square, addOne)
+
+println("\nCompose examples:")
+println("squareThenAdd(4):", squareThenAdd(4))  // (4^2)+1 = 17
+println("addThenSquare(4):", addThenSquare(4))  // (4+1)^2 = 25
+
+// ============================================================
+// 7. Memoization (caching results with closures)
+// ============================================================
+let memoize = func(f) {
+    let cache = {}
+    return func(n) {
+        let key = string(n)
+        let cached = cache[key]
+        if (cached != null) {
+            return cached
+        }
+        let result = f(n)
+        cache[key] = result
+        return result
+    }
+}
+
+let factorial = memoize(func(n) {
+    if (n <= 1) { return 1 }
+    let result = 1
+    for i in range(2, n + 1) {
+        result = result * i
+    }
+    return result
+})
+
+println("\nFactorials (memoized):")
+println("5! =", factorial(5))   // 120
+println("6! =", factorial(6))   // 720
+println("10! =", factorial(10)) // 3628800
 
 ```
 
@@ -1063,641 +1035,132 @@ print("💡 To start the server: http.listen(3000)")
 // http.listen(3000, "🌟 Production backend server running on http://localhost:3000")
 ```
 
-## comprehensive_import_test.vint
+## concurrency.vint
 
 ```js
-println("=== Comprehensive import() function and statement test ===");
-println();
+// VintLang Concurrency Example
+// Demonstrates async/await, goroutines, and channels for concurrent programming
 
-// Test 1: import() function calls
-println("1. Testing import() function calls:");
-let osModule = import("os");
-println("   import('os'):", osModule);
+// ============================================================
+// 1. Async functions and await
+// ============================================================
+println("=== Async / Await ===")
 
-println('Time now:', import("time").now());
-
-let mathModule = import("math");
-println("   import('math'):", mathModule);
-
-let stringModule = import("string");
-println("   import('string'):", stringModule);
-
-// Test 2: import statements
-println();
-println("2. Testing import statements:");
-import time;
-println("   import time; ->", time);
-
-import crypto;
-println("   import crypto; ->", crypto);
-
-// Test 3: Mixed usage
-println();
-println("3. Testing mixed usage:");
-let jsonFunc = import("json");
-import regex;
-println("   Function call result:", jsonFunc);
-println("   Statement result:", regex);
-
-// Test 4: Error cases
-println();
-println("4. Testing error cases:");
-let badModule = import("nonexistent");
-println("   import('nonexistent'):", badModule);
-
-println();
-println("=== All tests completed successfully! ===");
-```
-
-## comprehensive_pattern_test.vint
-
-```js
-// Comprehensive test of enhanced switch and match features
-// This file tests all the working functionality we've implemented
-
-println("=== Enhanced Switch and Match Features Test ===")
-
-// Test 1: Switch with guard conditions
-println("\n1. Switch with Guard Conditions:")
-
-let numbers = [-5, 0, 3, 15, 150]
-
-for num in numbers {
-    print("Number", num, "-> ")
-
-    switch (num) {
-        case x if x < 0 {
-            println("Negative:", x)
-        }
-        case 0 {
-            println("Zero")
-        }
-        case x if x > 0 && x <= 10 {
-            println("Small positive:", x)
-        }
-        case x if x > 10 && x <= 100 {
-            println("Medium positive:", x)
-        }
-        case x if x > 100 {
-            println("Large positive:", x)
-        }
-        default {
-            println("Unknown")
-        }
-    }
+let fetchUser = async func(id) {
+    return {"id": id, "name": "User" + string(id), "active": true}
 }
 
-// Test 2: Type-based switch
-println("\n2. Type-based Switch:")
-
-let values = [42, "hello", true, [1, 2, 3]]
-
-for value in values {
-    print("Value", value, "-> ")
-
-    switch (value) {
-        case x if type(x) == "INTEGER" {
-            println("Integer:", x)
-        }
-        case x if type(x) == "STRING" {
-            println("String:", x)
-        }
-        case x if type(x) == "BOOLEAN" {
-            println("Boolean:", x)
-        }
-        case x if type(x) == "ARRAY" {
-            println("Array with", len(x), "elements")
-        }
-        default {
-            println("Other type:", type(value))
-        }
-    }
+let fetchScore = async func(userId) {
+    return userId * 100
 }
 
-// Test 3: Match with dictionary patterns and variable binding
-println("\n3. Dictionary Pattern Matching:")
+// Run async operations sequentially with await
+let user = await fetchUser(42)
+let score = await fetchScore(user["id"])
+println("User:", user["name"], "| Score:", score)
 
-let users = [
-    {"name": "Alice", "role": "admin", "active": true},
-    {"name": "Bob", "role": "user", "age": 25},
-    {"name": "Charlie", "role": "admin", "active": false},
-    {"name": "David", "age": 17}
-]
+// ============================================================
+// 2. Multiple async calls
+// ============================================================
+println("\n=== Multiple Async Calls ===")
 
-for user in users {
-    print("User", user["name"], "-> ")
+let p1 = fetchUser(1)
+let p2 = fetchUser(2)
+let p3 = fetchUser(3)
 
-    match user {
-        {"role": "admin", "active": active, "name": name} if active => {
-            println("Active admin:", name)
-        }
-        {"role": "admin", "name": name} => {
-            println("Inactive admin:", name)
-        }
-        {"role": role, "age": age, "name": name} if age >= 18 => {
-            println("Adult user:", name, "with role:", role)
-        }
-        {"age": age, "name": name} if age < 18 => {
-            println("Minor user:", name)
-        }
-        {"name": name} => {
-            println("User with incomplete info:", name)
-        }
-        _ => {
-            println("Unknown user format")
-        }
-    }
+let u1 = await p1
+let u2 = await p2
+let u3 = await p3
+
+println("Fetched users:", u1["name"], u2["name"], u3["name"])
+
+// ============================================================
+// 3. Goroutines - fire-and-forget concurrent tasks
+// ============================================================
+println("\n=== Goroutines ===")
+
+go println("Goroutine 1: Hello from goroutine!")
+go println("Goroutine 2: Running concurrently!")
+go println("Goroutine 3: Concurrent execution!")
+
+println("Main: goroutines launched")
+
+// ============================================================
+// 4. Channels for goroutine communication
+// ============================================================
+println("\n=== Channels ===")
+
+// Create a buffered channel with capacity 3
+let results = chan(3)
+
+// Producer goroutine: sends values into channel
+go func() {
+    send(results, "task-1 complete")
+    send(results, "task-2 complete")
+    send(results, "task-3 complete")
+    close(results)
+}()
+
+// Consumer: receive values from channel
+let r1 = receive(results)
+let r2 = receive(results)
+let r3 = receive(results)
+println("Received:", r1)
+println("Received:", r2)
+println("Received:", r3)
+
+// ============================================================
+// 5. Async with channel pipeline
+// ============================================================
+println("\n=== Async + Channel Pipeline ===")
+
+let processAsync = async func(input) {
+    let out = chan
+    go func() {
+        let processed = "processed:" + input
+        send(out, processed)
+    }()
+    return receive(out)
 }
 
-// Test 4: Array pattern matching
-println("\n4. Array Pattern Matching:")
+let result1 = await processAsync("data-A")
+let result2 = await processAsync("data-B")
+println(result1)
+println(result2)
 
-let arrays = [
-    [],
-    [42],
-    [1, 2],
-    [1, 2, 3],
-    ["a", "b", "c", "d"]
-]
+// ============================================================
+// 6. Worker pool pattern
+// ============================================================
+println("\n=== Worker Pool ===")
 
-for arr in arrays {
-    print("Array", arr, "-> ")
+let jobs = chan(5)
+let done = chan(3)
 
-    match arr {
-        [] => {
-            println("Empty array")
-        }
-        [single] => {
-            println("Single element:", single)
-        }
-        [first, second] => {
-            println("Two elements:", first, "and", second)
-        }
-        [a, b, c] => {
-            println("Three elements:", a, b, c)
-        }
-        _ => {
-            println("More than three elements")
-        }
-    }
+// Worker function
+let worker = func(id) {
+    go func() {
+        let job = receive(jobs)
+        println("Worker", id, "processed:", job)
+        send(done, "worker-" + string(id) + "-done")
+    }()
 }
 
-// Test 5: Complex nested patterns with guards
-println("\n5. Complex Pattern Matching:")
+// Dispatch workers
+worker(1)
+worker(2)
+worker(3)
+
+// Send jobs
+send(jobs, "job-A")
+send(jobs, "job-B")
+send(jobs, "job-C")
+
+// Collect results
+receive(done)
+receive(done)
+receive(done)
+println("All workers finished")
 
-let requests = [
-    {"method": "GET", "path": "/", "headers": {"host": "localhost"}},
-    {"method": "POST", "path": "/api/users", "body": {"name": "Alice"}},
-    {"method": "DELETE", "path": "/api/users/123", "auth": {"role": "admin"}},
-    {"method": "GET", "path": "/api/health"}
-]
-
-for req in requests {
-    match req {
-        {"method": "GET", "path": "/"} => {
-            println("✓ Home page request")
-        }
-        {"method": "POST", "path": path, "body": body} if path.startsWith("/api/") => {
-            println("✓ API POST to", path)
-        }
-        {"method": "DELETE", "auth": {"role": "admin"}} => {
-            println("✓ Admin delete operation")
-        }
-        {"method": method, "path": path} => {
-            println("→", method, "request to", path)
-        }
-        _ => {
-            println("❌ Unknown request format")
-        }
-    }
-}
-
-// Test 6: Practical example - Configuration validator
-println("\n6. Configuration Validation:")
-
-let configs = [
-    {"type": "database", "host": "localhost", "port": 5432},
-    {"type": "redis", "url": "redis://localhost:6379", "ttl": 3600},
-    {"type": "logging", "level": "info", "file": "/var/log/app.log"},
-    {"invalid": "config"}
-]
-
-for config in configs {
-    match config {
-        {"type": "database", "host": host, "port": port} => {
-            println("✓ Valid database config:", host, "port:", port)
-        }
-        {"type": "redis", "url": url, "ttl": ttl} => {
-            println("✓ Valid Redis config with", ttl, "second TTL")
-        }
-        {"type": "logging", "level": level} => {
-            println("✓ Valid logging config, level:", level)
-        }
-        _ => {
-            println("❌ Invalid configuration")
-        }
-    }
-}
-
-println("\n=== All tests completed successfully! ===")
-println("\nWorking features:")
-println("✓ Switch statements with guard conditions")
-println("✓ Switch statements with variable binding")
-println("✓ Type-based switch cases")
-println("✓ Match statements with dictionary patterns")
-println("✓ Match statements with variable binding")
-println("✓ Match statements with guard conditions")
-println("✓ Array pattern matching (basic patterns)")
-println("✓ Complex nested pattern matching")
-println("✓ Practical real-world examples")
-```
-
-## comprehensive_showcase.vint
-
-```js
-// VintLang Comprehensive Feature Showcase
-// Demonstrates core language capabilities safely
-
-import time
-import os
-import json
-import uuid
-
-print("🎯 VintLang Comprehensive Feature Showcase")
-print("=" * 60)
-print("Demonstrating production-ready programming capabilities")
-print("=" * 60)
-
-// Feature 1: Data Structures and Variables
-print("\n🗂️ Feature 1: Data Structures and Variables")
-print("-" * 50)
-
-let applicationData = {
-    "name": "VintLang Feature Demo",
-    "version": "2.0.0",
-    "created": time.format(time.now(), "2006-01-02 15:04:05"),
-    "features": ["variables", "functions", "loops", "files", "json"],
-    "metadata": {
-        "author": "VintLang Community",
-        "license": "Open Source",
-        "language": "VintLang"
-    }
-}
-
-print("✓ Created application metadata structure")
-print("Application: " + applicationData["name"])
-print("Version: " + applicationData["version"])
-print("Features: " + string(applicationData["features"]))
-
-// Feature 2: Arrays and Iteration
-print("\n🔄 Feature 2: Arrays and Iteration")
-print("-" * 50)
-
-let colors = ["red", "green", "blue", "yellow", "purple", "orange"]
-let numbers = [10, 25, 30, 45, 50, 75, 80, 95]
-let processed = []
-
-print("Processing colors:")
-for color in colors {
-    print("  Processing color: " + color)
-    processed.push(color.upper())
-}
-print("Processed colors: " + string(processed))
-
-print("\nProcessing numbers:")
-let total = 0
-let count = 0
-for number in numbers {
-    total += number
-    count += 1
-    print("  Number " + string(count) + ": " + string(number))
-}
-let average = total / count
-print("Total: " + string(total) + ", Average: " + string(average))
-
-// Feature 3: String Operations
-print("\n📝 Feature 3: String Processing")
-print("-" * 50)
-
-let sampleText = "VintLang is a powerful modern programming language"
-print("Original text: " + sampleText)
-
-let words = sampleText.split(" ")
-print("Word count: " + string(len(words)))
-print("Words: " + string(words))
-
-let reversedText = sampleText.reverse()
-print("Reversed text: " + reversedText)
-
-let upperText = sampleText.upper()
-print("Uppercase: " + upperText)
-
-let searchTerm = "programming"
-if (sampleText.contains(searchTerm)) {
-    print("✓ Text contains '" + searchTerm + "'")
-} else {
-    print("❌ Text does not contain '" + searchTerm + "'")
-}
-
-// Feature 4: Functions and Logic
-print("\n⚙️ Feature 4: Functions and Logic")
-print("-" * 50)
-
-let calculateSquare = func(n) {
-    return n * n
-}
-
-let isEven = func(n) {
-    return n % 2 == 0
-}
-
-let formatNumber = func(n, label) {
-    return label + ": " + string(n)
-}
-
-print("Function demonstrations:")
-for num in [2, 3, 4, 5, 6, 7, 8, 9, 10] {
-    let square = calculateSquare(num)
-    let evenStatus = isEven(num)
-
-    print(formatNumber(num, "Number") +
-          ", Square: " + string(square) +
-          ", Even: " + string(evenStatus))
-}
-
-// Feature 5: JSON Data Handling
-print("\n📊 Feature 5: JSON Data Operations")
-print("-" * 50)
-
-let employees = [
-    {
-        "id": uuid.generate(),
-        "name": "Alice Johnson",
-        "department": "Engineering",
-        "salary": 75000,
-        "startDate": "2022-01-15"
-    },
-    {
-        "id": uuid.generate(),
-        "name": "Bob Wilson",
-        "department": "Marketing",
-        "salary": 65000,
-        "startDate": "2021-09-20"
-    },
-    {
-        "id": uuid.generate(),
-        "name": "Carol Davis",
-        "department": "Engineering",
-        "salary": 80000,
-        "startDate": "2020-05-10"
-    }
-]
-
-print("Employee database created with " + string(len(employees)) + " records")
-
-// Analyze employee data
-let departments = {}
-let totalSalary = 0
-
-for employee in employees {
-    let dept = employee["department"]
-    if (!departments.hasKey(dept)) {
-        departments[dept] = 0
-    }
-    departments[dept] += 1
-    totalSalary += employee["salary"]
-}
-
-print("\nDepartment distribution:")
-for department, count in departments {
-    print("  " + department + ": " + string(count) + " employees")
-}
-
-let avgSalary = totalSalary / len(employees)
-print("Average salary: $" + string(avgSalary))
-
-// Save employee data
-let employeeJson = json.encode(employees)
-os.writeFile("employees.json", employeeJson)
-print("✓ Employee data saved to employees.json")
-
-// Feature 6: File I/O Operations
-print("\n💾 Feature 6: File System Operations")
-print("-" * 50)
-
-// Create a configuration file
-let config = {
-    "database": {
-        "host": "localhost",
-        "port": 5432,
-        "name": "vintlang_demo"
-    },
-    "logging": {
-        "level": "info",
-        "file": "application.log"
-    },
-    "features": {
-        "cache_enabled": true,
-        "debug_mode": false,
-        "max_connections": 100
-    }
-}
-
-os.writeFile("app_config.json", json.encode(config))
-print("✓ Configuration file created")
-
-// Create a data file
-let dataContent = "VintLang Data Processing Log\n"
-dataContent += "=" * 40 + "\n"
-dataContent += "Timestamp: " + time.format(time.now(), "02-01-2006 15:04:05") + "\n"
-dataContent += "Records processed: " + string(len(employees)) + "\n"
-dataContent += "Average salary calculated: $" + string(avgSalary) + "\n"
-dataContent += "Departments analyzed: " + string(len(departments)) + "\n"
-
-os.writeFile("processing_log.txt", dataContent)
-print("✓ Processing log created")
-
-// List files created
-let files = os.listDir(".")
-let createdFiles = []
-let fileList = files.split(", ")
-
-for filename in fileList {
-    if (filename.contains("employees") ||
-        filename.contains("config") ||
-        filename.contains("log") ||
-        filename.contains("showcase")) {
-        if (os.fileExists(filename)) {
-            createdFiles.push(filename)
-        }
-    }
-}
-
-print("Files created during demonstration:")
-for file in createdFiles {
-    let content = os.readFile(file)
-    print("  📄 " + file + " (" + string(len(content)) + " bytes)")
-}
-
-// Feature 7: Advanced Data Processing
-print("\n🔍 Feature 7: Advanced Data Analysis")
-print("-" * 50)
-
-// Find highest paid employee
-let highestPaid = employees[0]
-for employee in employees {
-    if (employee["salary"] > highestPaid["salary"]) {
-        highestPaid = employee
-    }
-}
-
-print("Highest paid employee: " + highestPaid["name"] +
-      " ($" + string(highestPaid["salary"]) + ")")
-
-// Count employees by salary ranges
-let salaryRanges = {
-    "60000-69999": 0,
-    "70000-79999": 0,
-    "80000-89999": 0
-}
-
-for employee in employees {
-    let salary = employee["salary"]
-    if (salary >= 60000 && salary <= 69999) {
-        salaryRanges["60000-69999"] += 1
-    } else if (salary >= 70000 && salary <= 79999) {
-        salaryRanges["70000-79999"] += 1
-    } else if (salary >= 80000 && salary <= 89999) {
-        salaryRanges["80000-89999"] += 1
-    }
-}
-
-print("\nSalary distribution:")
-for range, count in salaryRanges {
-    print("  $" + range + ": " + string(count) + " employees")
-}
-
-// Feature 8: Time and UUID Operations
-print("\n⏰ Feature 8: Time and Unique Identifiers")
-print("-" * 50)
-
-let sessionId = uuid.generate()
-let currentTime = time.format(time.now(), "2006-01-02 15:04:05")
-
-print("Session ID: " + sessionId)
-print("Current timestamp: " + currentTime)
-
-// Create timestamped records
-let events = []
-let eventTypes = ["login", "data_access", "calculation", "file_write", "logout"]
-
-for i, eventType in eventTypes {
-    let event = {
-        "id": uuid.generate(),
-        "type": eventType,
-        "timestamp": time.format(time.now(), "2006-01-02 15:04:05"),
-        "session": sessionId,
-        "sequence": i + 1
-    }
-    events.push(event)
-    print("Event " + string(i + 1) + ": " + eventType + " at " + event["timestamp"])
-}
-
-// Feature 9: Report Generation
-print("\n📋 Feature 9: Comprehensive Report Generation")
-print("-" * 50)
-
-let report = {
-    "report_id": uuid.generate(),
-    "generated_at": time.format(time.now(), "2006-01-02 15:04:05"),
-    "session_id": sessionId,
-    "summary": {
-        "employees_processed": len(employees),
-        "departments_found": len(departments),
-        "average_salary": avgSalary,
-        "files_created": len(createdFiles),
-        "events_logged": len(events)
-    },
-    "details": {
-        "employees": employees,
-        "departments": departments,
-        "events": events,
-        "highest_paid": highestPaid
-    }
-}
-
-let reportFile = "comprehensive_report_" + time.format(time.now(), "2006-01-02_15-04-05") + ".json"
-os.writeFile(reportFile, json.encode(report))
-print("✓ Comprehensive report saved to: " + reportFile)
-
-// Create human-readable summary
-let summary = "VINTLANG FEATURE SHOWCASE SUMMARY\n"
-summary += "Generated: " + time.format(time.now(), "02-01-2006 15:04:05") + "\n"
-summary += "Session ID: " + sessionId + "\n"
-summary += "=" * 50 + "\n\n"
-
-summary += "STATISTICS:\n"
-summary += "  • Employees processed: " + string(len(employees)) + "\n"
-summary += "  • Departments identified: " + string(len(departments)) + "\n"
-summary += "  • Average salary: $" + string(avgSalary) + "\n"
-summary += "  • Files created: " + string(len(createdFiles)) + "\n"
-summary += "  • Events logged: " + string(len(events)) + "\n"
-summary += "  • UUIDs generated: " + string(len(employees) + len(events) + 2) + "\n"
-
-summary += "\nFILES CREATED:\n"
-for file in createdFiles {
-    summary += "  • " + file + "\n"
-}
-
-summary += "\nFEATURES DEMONSTRATED:\n"
-for feature in applicationData["features"] {
-    summary += "  ✓ " + feature + "\n"
-}
-
-let summaryFile = "showcase_summary_" + time.format(time.now(), "2006-01-02_15-04-05") + ".txt"
-os.writeFile(summaryFile, summary)
-print("✓ Summary report saved to: " + summaryFile)
-
-// Final Results
-print("\n🎉 VintLang Showcase Complete!")
-print("=" * 60)
-
-print("🏆 SUCCESSFULLY DEMONSTRATED:")
-print("  ✓ Variable declarations and data types")
-print("  ✓ Arrays, dictionaries, and iteration")
-print("  ✓ String manipulation and processing")
-print("  ✓ Function definitions and calls")
-print("  ✓ Conditional logic and comparisons")
-print("  ✓ JSON encoding and decoding")
-print("  ✓ File I/O operations")
-print("  ✓ Directory management")
-print("  ✓ Data analysis and statistics")
-print("  ✓ Time and date operations")
-print("  ✓ UUID generation")
-print("  ✓ Report generation")
-
-print("\n📊 PROCESSING STATISTICS:")
-print("  • Data records: " + string(len(employees)))
-print("  • Calculations performed: " + string(len(numbers) + len(employees) * 2))
-print("  • Files generated: " + string(len(createdFiles) + 2))
-print("  • JSON operations: 4+")
-print("  • String operations: " + string(len(words) + len(processed)))
-
-print("\n🚀 VINTLANG IS READY FOR:")
-print("  • Business applications")
-print("  • Data processing systems")
-print("  • File management tools")
-print("  • API development")
-print("  • Automation scripts")
-print("  • Educational programming")
-print("  • Rapid prototyping")
-
-print("\n✨ This comprehensive demonstration proves")
-print("   VintLang's capability for real-world development!")
-
-print("\n" + "=" * 60)
-print("🎯 VintLang Feature Showcase Successfully Completed!")
-print("=" * 60)
 ```
 
 ## crypto.vint
@@ -1723,8 +1186,8 @@ print(encrypted)
 
 // Decrypt the encrypted data back to original
 let decrypted = crypto.decryptAES(encrypted, key)
-print(decrypted)
-print(type(decrypted))
+print(decrypted)  
+print(type(decrypted)) 
 
 ```
 
@@ -1761,571 +1224,192 @@ if (!read_data) {
 
 // --- Clean up the created file ---
 os.deleteFile(filename)
-println("Cleaned up", filename)
+println("Cleaned up", filename) 
 ```
 
-## data_processor.vint
-
-```js
-// VintLang Showcase: Advanced Data Processing & Analytics Tool
-// This demonstrates VintLang's real-world capabilities
-
-import time
-import os
-import json
-import uuid
-import net
-
-// Application configuration
-let config = {
-    "name": "VintLang Data Processor",
-    "version": "1.0.0",
-    "dataDir": "data",
-    "outputDir": "output"
-}
-
-// Ensure directories exist
-let setupDirectories = func() {
-    if (!os.fileExists(config["dataDir"])) {
-        os.makeDir(config["dataDir"])
-        print("✓ Created data directory")
-    }
-    if (!os.fileExists(config["outputDir"])) {
-        os.makeDir(config["outputDir"])
-        print("✓ Created output directory")
-    }
-}
-
-// Generate sample data for demonstration
-let generateSampleData = func() {
-    print("\n📊 Generating sample data...")
-
-    let categories = ["Technology", "Science", "Business", "Health", "Education"]
-    let priorities = ["Low", "Medium", "High", "Critical"]
-    let statuses = ["Active", "Pending", "Completed", "Cancelled"]
-
-    let sampleData = []
-
-    // Generate 50 sample records
-    for i in range(1, 51) {
-        let record = {
-            "id": uuid.generate(),
-            "name": "Record " + string(i),
-            "category": categories[(i - 1) % len(categories)],
-            "priority": priorities[(i - 1) % len(priorities)],
-            "status": statuses[(i - 1) % len(statuses)],
-            "value": (i * 123) % 1000,
-            "score": (i * 7) % 100,
-            "timestamp": time.format(time.now(), "2006-01-02 15:04:05"),
-            "tags": ["tag" + string(i % 3), "sample", "data"]
-        }
-        sampleData.push(record)
-    }
-
-    // Save to JSON file
-    let dataFile = config["dataDir"] + "/sample_data.json"
-    os.writeFile(dataFile, json.encode(sampleData))
-    print("✓ Generated " + string(len(sampleData)) + " sample records")
-    print("✓ Saved to: " + dataFile)
-
-    return sampleData
-}
-
-// Load data from file
-let loadData = func(filename) {
-    let filepath = config["dataDir"] + "/" + filename
-    if (!os.fileExists(filepath)) {
-        print("❌ File not found: " + filepath)
-        return []
-    }
-
-    let content = os.readFile(filepath)
-    return json.decode(content)
-}
-
-// Data analysis functions
-let analyzeByCategory = func(data) {
-    print("\n📈 Analysis by Category:")
-    print("-" * 40)
-
-    let categoryStats = {}
-    let categoryValues = {}
-
-    for record in data {
-        let category = record["category"]
-
-        // Count records per category
-        if (!categoryStats.hasKey(category)) {
-            categoryStats[category] = 0
-            categoryValues[category] = 0
-        }
-        categoryStats[category] += 1
-        categoryValues[category] += record["value"]
-    }
-
-    // Display statistics
-    for category, count in categoryStats {
-        let avgValue = categoryValues[category] / count
-        print(category + ":")
-        print("  Records: " + string(count))
-        print("  Total Value: " + string(categoryValues[category]))
-        print("  Average Value: " + string(avgValue))
-        print("")
-    }
-
-    return categoryStats
-}
-
-let analyzeByStatus = func(data) {
-    print("\n📊 Analysis by Status:")
-    print("-" * 40)
-
-    let statusStats = {}
-
-    for record in data {
-        let status = record["status"]
-        if (!statusStats.hasKey(status)) {
-            statusStats[status] = 0
-        }
-        statusStats[status] += 1
-    }
-
-    let total = len(data)
-    for status, count in statusStats {
-        let percentage = (count * 100) / total
-        print(status + ": " + string(count) + " (" + string(percentage) + "%)")
-    }
-
-    return statusStats
-}
-
-let findTopPerformers = func(data) {
-    print("\n🏆 Top Performers by Score:")
-    print("-" * 40)
-
-    // Sort data by score (simple bubble sort for demonstration)
-    let sortedData = data
-    for i in range(0, len(sortedData) - 1) {
-        for j in range(0, len(sortedData) - i - 1) {
-            if (sortedData[j]["score"] < sortedData[j + 1]["score"]) {
-                let temp = sortedData[j]
-                sortedData[j] = sortedData[j + 1]
-                sortedData[j + 1] = temp
-            }
-        }
-    }
-
-    // Display top 10
-    let topCount = 10
-    if (len(sortedData) < topCount) {
-        topCount = len(sortedData)
-    }
-
-    for i in range(0, topCount) {
-        let record = sortedData[i]
-        print(string(i + 1) + ". " + record["name"] +
-              " (Score: " + string(record["score"]) +
-              ", Category: " + record["category"] + ")")
-    }
-
-    return sortedData
-}
-
-let generateReport = func(data, categoryStats, statusStats) {
-    print("\n📝 Generating comprehensive report...")
-
-    let reportTime = time.format(time.now(), "2006-01-02_15-04-05")
-    let reportFile = config["outputDir"] + "/analysis_report_" + reportTime + ".txt"
-
-    let report = "VINTLANG DATA ANALYSIS REPORT\n"
-    report += "Generated: " + time.format(time.now(), "02-01-2006 15:04:05") + "\n"
-    report += "=" * 50 + "\n\n"
-
-    // Summary
-    report += "SUMMARY\n"
-    report += "-" * 20 + "\n"
-    report += "Total Records: " + string(len(data)) + "\n"
-
-    let totalValue = 0
-    let totalScore = 0
-    for record in data {
-        totalValue += record["value"]
-        totalScore += record["score"]
-    }
-    let avgValue = totalValue / len(data)
-    let avgScore = totalScore / len(data)
-
-    report += "Total Value: " + string(totalValue) + "\n"
-    report += "Average Value: " + string(avgValue) + "\n"
-    report += "Average Score: " + string(avgScore) + "\n\n"
-
-    // Category breakdown
-    report += "CATEGORY BREAKDOWN\n"
-    report += "-" * 20 + "\n"
-    for category, count in categoryStats {
-        let percentage = (count * 100) / len(data)
-        report += category + ": " + string(count) + " (" + string(percentage) + "%)\n"
-    }
-
-    report += "\nSTATUS BREAKDOWN\n"
-    report += "-" * 20 + "\n"
-    for status, count in statusStats {
-        let percentage = (count * 100) / len(data)
-        report += status + ": " + string(count) + " (" + string(percentage) + "%)\n"
-    }
-
-    report += "\n" + "=" * 50 + "\n"
-    report += "Report generated by " + config["name"] + " v" + config["version"] + "\n"
-    report += "Powered by VintLang Programming Language\n"
-
-    os.writeFile(reportFile, report)
-    print("✓ Report saved to: " + reportFile)
-}
-
-// Web data fetching demonstration
-let fetchWebData = func() {
-    print("\n🌐 Fetching data from web...")
-
-    // Try to fetch from a simple API
-    let url = "https://httpbin.org/json"
-    let response = net.get(url)
-
-    if (response != "") {
-        print("✓ Successfully fetched data from: " + url)
-
-        // Save response to file
-        let webDataFile = config["dataDir"] + "/web_data.json"
-        os.writeFile(webDataFile, response)
-        print("✓ Web data saved to: " + webDataFile)
-
-        return true
-    } else {
-        print("❌ Failed to fetch web data")
-        return false
-    }
-}
-
-// Export data in different formats
-let exportData = func(data, format) {
-    let timestamp = time.format(time.now(), "2006-01-02_15-04-05")
-
-    if (format == "json") {
-        let filename = config["outputDir"] + "/export_" + timestamp + ".json"
-        os.writeFile(filename, json.encode(data))
-        print("✓ Data exported to JSON: " + filename)
-    } else if (format == "csv") {
-        let filename = config["outputDir"] + "/export_" + timestamp + ".csv"
-        let csvContent = "ID,Name,Category,Priority,Status,Value,Score,Timestamp\n"
-
-        for record in data {
-            csvContent += record["id"] + ","
-            csvContent += record["name"] + ","
-            csvContent += record["category"] + ","
-            csvContent += record["priority"] + ","
-            csvContent += record["status"] + ","
-            csvContent += string(record["value"]) + ","
-            csvContent += string(record["score"]) + ","
-            csvContent += record["timestamp"] + "\n"
-        }
-
-        os.writeFile(filename, csvContent)
-        print("✓ Data exported to CSV: " + filename)
-    }
-}
-
-// Main application
-let runDataProcessor = func() {
-    print("🚀 Welcome to " + config["name"] + " v" + config["version"])
-    print("=" * 60)
-    print("This showcase demonstrates VintLang's capabilities for:")
-    print("  • Data generation and processing")
-    print("  • JSON manipulation and file I/O")
-    print("  • Statistical analysis and reporting")
-    print("  • Web data fetching")
-    print("  • Multiple export formats")
-    print("  • Directory management")
-    print("  • Time and UUID operations")
-    print("=" * 60)
-
-    // Setup
-    setupDirectories()
-
-    // Generate or load data
-    let data = generateSampleData()
-
-    // Perform analysis
-    let categoryStats = analyzeByCategory(data)
-    let statusStats = analyzeByStatus(data)
-    let topPerformers = findTopPerformers(data)
-
-    // Generate report
-    generateReport(data, categoryStats, statusStats)
-
-    // Export data
-    exportData(data, "json")
-    exportData(data, "csv")
-
-    // Try web data fetching
-    fetchWebData()
-
-    print("\n🎉 Data processing complete!")
-    print("📁 Check the '" + config["outputDir"] + "' directory for generated files")
-    print("📁 Source data available in '" + config["dataDir"] + "' directory")
-
-    // Final summary
-    print("\n📊 FINAL SUMMARY:")
-    print("  • Processed " + string(len(data)) + " records")
-    print("  • Analyzed " + string(len(categoryStats)) + " categories")
-    print("  • Generated comprehensive report")
-    print("  • Exported data in multiple formats")
-    print("  • Demonstrated web data fetching")
-
-    print("\n✨ VintLang successfully demonstrated real-world data processing!")
-}
-
-// Start the application
-runDataProcessor()
-```
-
-## debounce_demo.vint
-
-```js
-// Comprehensive debounce demonstration
-println("=== Vint Debounce Function Demo ===\n")
-
-// Test 1: Basic debounce with user function
-println("Test 1: User-defined function debouncing")
-let callCount = 0
-let testFunc = func(message) {
-    callCount = callCount + 1
-    println("Executed:", message, "| Call #" + string(callCount))
-}
-
-let debouncedTest = debounce(150, testFunc)
-
-println("Making 5 rapid calls...")
-debouncedTest("Call 1")
-debouncedTest("Call 2")
-debouncedTest("Call 3")
-debouncedTest("Call 4")
-debouncedTest("Final call") // Only this should execute
-
-sleep(200) // Wait for execution
-println("Result: Only 1 execution should have occurred\n")
-
-// Test 2: Debounce with builtin function
-println("Test 2: Builtin function debouncing")
-let debouncedPrint = debounce(100, println)
-
-println("Making rapid println calls...")
-debouncedPrint("Message 1")
-debouncedPrint("Message 2")
-debouncedPrint("This message should appear") // Only this prints
-
-sleep(150)
-println("Result: Only the final message should have printed above\n")
-
-// Test 3: Different delay values
-println("Test 3: Testing with integer milliseconds")
-let quickDebounce = debounce(50, func() { println("Quick execution!") })
-let slowDebounce = debounce(200, func() { println("Slow execution!") })
-
-quickDebounce()
-slowDebounce()
-
-sleep(75)  // Quick should execute
-println("After 75ms - quick should have executed")
-
-sleep(150) // Slow should execute
-println("After 225ms total - slow should have executed")
-
-println("\n=== Demo Complete ===")
-println("The debounce function successfully delays execution and")
-println("cancels previous calls when new ones are made rapidly!")
-```
-
-## debounce_example.vint
-
-```js
-// Example usage of the debounce builtin function in VintLang
-// This demonstrates how to use debounce with different types of delays and functions
-
-// Example 1: Using debounce with an integer (milliseconds) and a builtin function
-let debouncedPrint = debounce(500, print)
-
-println("Calling debounced print multiple times rapidly...")
-debouncedPrint("First call")
-debouncedPrint("Second call")
-debouncedPrint("Third call") // Only this one should execute after 500ms
-
-// Example 2: Using debounce with a Duration object and a user-defined function
-let logMessage = func(msg) {
-    println("LOG:", msg)
-}
-
-// Note: This would require a duration object to be created
-// let debouncedLog = debounce(duration.milliseconds(1000), logMessage)
-
-// Example 3: Demonstrating the debounce behavior
-println("Testing debounce behavior...")
-let counter = 0
-let incrementCounter = func() {
-    counter = counter + 1
-    println("Counter:", counter)
-}
-
-let debouncedIncrement = debounce(300, incrementCounter)
-
-// These calls will be debounced - only the last one should execute
-debouncedIncrement()
-debouncedIncrement()
-debouncedIncrement()
-debouncedIncrement() // Only this call should result in incrementing the counter
-
-println("Debounce test complete. The counter should only increment once after 300ms.")
-```
-
-## debug_match.vint
-
-```js
-// Debug match pattern
-let config = {"database": {"host": "localhost", "port": 5432}}
-
-match config {
-    {"database": db} => {
-        println("Found database config:", db)
-    }
-    _ => {
-        println("No match")
-    }
-}
-```
-
-## debug_switch.vint
-
-```js
-// Test switch with string length
-let s = "hello"
-
-switch (s) {
-    case x if len(x) > 3 {
-        println("Long string:", x)
-    }
-    default {
-        println("Short string")
-    }
-}
-```
-
-## declaratives_test.vint
-
-```js
-// Info statement
-info "This is an informational message."
-println("Info should print above.")
-
-// Debug statement
-debug "Debugging value: " + "123"
-println("Debug should print above.")
-
-// Note statement
-note "This is a note for the user."
-println("Note should print above.")
-
-// Success statement
-success "Operation completed successfully!"
-println("Success should print above.")
-
-// Existing warn and error tests
-warn "This is a warning. The script should continue."
-println("This line should execute after the warning.")
-let errMSG = "This is a fatal error. The script should stop here."
-error errMSG
-
-//unreachable code
-println("This line should NOT execute.")
-```
-
-## defer_test.vint
+## defer.vint
 
 ```js
 // VintLang Defer Statement Example
-// Demonstrates the defer keyword which delays execution until function returns
+// Demonstrates the defer keyword which schedules code to run when the function exits
+// Deferred statements execute in LIFO (last-in, first-out) order
 
-let test_defer = func() {
-    // The defer statement will execute AFTER the function completes
-    // regardless of how the function exits
-    defer println("deferred message");
-
-    // This executes immediately
-    println("function body");
-};
-
-// Call the function
-test_defer();
-
-// This executes after the function and its deferred statements complete
-println("after function call");
-
-```
-
-## desktop.vint
-
-```js
-// VintLang Desktop GUI Application Example
-// This example demonstrates creating a simple desktop application with GUI elements
-
-import desktop
-
-// Create the desktop application
-desktop.createApp()
-
-// Add a label to the window
-desktop.newLabel("Hello, Vint Desktop App!")
-
-// Add a button with a callback function
-desktop.newButton("Click Me", func() {
-    print("Button clicked!")
-})
-
-// Add an entry field for text input
-desktop.newEntry()
-
-// Run the application (starts the GUI event loop)
-desktop.runApp()
-
-```
-
-## dict_pattern_matching.vint
-
-```js
-// Test dict pattern matching feature
-// This demonstrates the new match statement for flexible dict matching
-
-let user = {"role": "admin", "active": true}
-
-println("Testing dict pattern matching:")
-
-match user {
-    {"role": "admin"} => println("Hello, Admin!")
-    {"active": false} => println("Inactive user")
-    _ => println("Regular user")
+// ============================================================
+// 1. Basic defer - runs after the function body
+// ============================================================
+let basicExample = func() {
+    defer println("3. Deferred: cleanup done")
+    println("1. Function body starts")
+    println("2. Function body ends")
 }
 
-// Test multiple patterns
-let users = [
-    {"role": "admin", "active": true},
-    {"role": "user", "active": false},
-    {"name": "John", "type": "guest"}
-]
+println("=== Basic Defer ===")
+basicExample()
+println("4. Back in main")
 
-for u in users {
-    match u {
-        {"role": "admin"} => println("Admin user found")
-        {"active": false} => println("Found inactive user")
-        _ => println("Other user type")
+// ============================================================
+// 2. Multiple defers - execute in reverse order (LIFO)
+// ============================================================
+let multipleDefers = func() {
+    defer println("Deferred 1 (runs last)")
+    defer println("Deferred 2 (runs second)")
+    defer println("Deferred 3 (runs first)")
+    println("Function body")
+}
+
+println("\n=== Multiple Defers (LIFO order) ===")
+multipleDefers()
+
+// ============================================================
+// 3. Practical use: resource cleanup
+// ============================================================
+let processData = func(data) {
+    println("\nOpening resource...")
+    defer println("Resource closed (always runs)")
+
+    if (len(data) == 0) {
+        warn "Empty data, aborting early"
+        return null  // defer still runs!
+    }
+
+    let total = 0
+    for item in data {
+        total = total + item
+    }
+    println("Processed", len(data), "items, sum =", total)
+}
+
+println("\n=== Defer with Early Return ===")
+processData([1, 2, 3, 4, 5])
+processData([])
+
+// ============================================================
+// 4. Defer with logging (wrap a section with open/close logs)
+// ============================================================
+let runTask = func(name) {
+    println("\n--- Task:", name, "---")
+    defer println("--- End:", name, "---")
+
+    if (name == "task2") {
+        println("  Doing task2 work...")
+        return null
+    }
+    println("  Doing", name, "work...")
+    println("  Finishing", name, "...")
+}
+
+println("\n=== Defer for Structured Logging ===")
+runTask("task1")
+runTask("task2")
+runTask("task3")
+
+```
+
+## dictionaries.vint
+
+```js
+// VintLang Dictionaries Example
+// Demonstrates dictionary creation, access, mutation, and iteration
+
+// ============================================================
+// 1. Creating dictionaries
+// ============================================================
+let user = {
+    "name": "Alice",
+    "age": 30,
+    "city": "Nairobi",
+    "active": true
+}
+println("User:", user)
+
+// ============================================================
+// 2. Accessing values
+// ============================================================
+println("\nName:", user["name"])
+println("Age:", user["age"])
+
+// Dot notation also works for string keys
+println("City:", user["city"])
+
+// ============================================================
+// 3. Updating and adding keys
+// ============================================================
+user["age"] = 31
+user["email"] = "alice@example.com"
+println("\nUpdated user:", user)
+
+// ============================================================
+// 4. Checking for keys (has_key)
+// ============================================================
+println("\nhas 'email'?", has_key(user, "email"))
+println("has 'phone'?", has_key(user, "phone"))
+
+// Method syntax also works
+println("has 'name'?", user.has_key("name"))
+
+// ============================================================
+// 5. Iterating over a dictionary
+// ============================================================
+println("\nAll user fields:")
+for key, value in user {
+    println(" ", key, "=", value)
+}
+
+// ============================================================
+// 6. Nested dictionaries
+// ============================================================
+let company = {
+    "name": "VintCorp",
+    "address": {
+        "street": "123 Main St",
+        "city": "Nairobi",
+        "country": "Kenya"
+    },
+    "employees": 42
+}
+println("\nCompany:", company["name"])
+println("City:", company["address"]["city"])
+println("Country:", company["address"]["country"])
+
+// ============================================================
+// 7. Dictionary with array values
+// ============================================================
+let student = {
+    "name": "Bob",
+    "grades": [85, 92, 78, 95, 88],
+    "subjects": ["Math", "Science", "English"]
+}
+println("\nStudent:", student["name"])
+println("Subjects:", student["subjects"])
+println("First grade:", student["grades"][0])
+
+// ============================================================
+// 8. Building a dictionary dynamically
+// ============================================================
+let inventory = {}
+let items = ["apple", "banana", "cherry"]
+let prices = [1.5, 0.75, 2.0]
+
+for i in range(len(items)) {
+    inventory[items[i]] = prices[i]
+}
+println("\nInventory:", inventory)
+
+// ============================================================
+// 9. Counting occurrences (frequency map)
+// ============================================================
+let words = ["cat", "dog", "cat", "bird", "dog", "cat"]
+let freq = {}
+for word in words {
+    let count = freq[word]
+    if (count == null) {
+        freq[word] = 1
+    } else {
+        freq[word] = count + 1
     }
 }
+println("\nWord frequencies:", freq)
+
 ```
 
 ## dotenv.vint
@@ -2373,1483 +1457,269 @@ print(decoded) // Outputs "Hello, World!"
 
 ```
 
-## enhanced_declaratives_test.vint
+## enum_demo.vint
 
 ```js
-// Enhanced Declaratives Test File for Vint
-// This file demonstrates all the declarative improvements made to Vint
+// Simple enum example
 
-println("=== Testing Enhanced Declaratives ===")
+enum Status {
+    PENDING = 0,
+    ACTIVE = 1,
+    COMPLETED = 2
+}
 
-// Original lowercase declaratives (already working)
-println("\n--- Original Declaratives (lowercase) ---")
-info "Info: Standard informational message"
-debug "Debug: Debugging information"
-note "Note: Important note for developers"
-todo "Todo: Task that needs to be completed"
-warn "Warn: Warning about potential issues"
-success "Success: Operation completed successfully"
-trace "Trace: Execution flow tracing"
+let current = Status.ACTIVE
+print(current)
 
-// NEW: Capitalized declaratives (now supported)
-println("\n--- NEW: Capitalized Declaratives ---")
-Info "Info: Capitalized informational message"
-Debug "Debug: Capitalized debugging information"
-Note "Note: Capitalized important note"
-Todo "Todo: Capitalized task"
-Warn "Warn: Capitalized warning"
-Success "Success: Capitalized success message"
-Trace "Trace: Capitalized execution tracing"
+// String enum
+enum Color {
+    RED = "red",
+    GREEN = "green",
+    BLUE = "blue"
+}
 
-// NEW: Log declarative - non-fatal error logging
-println("\n--- NEW: Non-Fatal Error Logging ---")
-log "Log: Non-fatal error message (execution continues)"
-Log "Log: Capitalized non-fatal error message"
-println("Execution continues after log messages")
+let myColor = Color.RED
+print(myColor)
 
-// Fatal declaratives (stop execution)
-println("\n--- Fatal Declaratives (execution stops) ---")
-println("Testing error declarative:")
-let errorMsg = "This is an error"
-error errorMsg + " - execution stops here"
 
-println("This line should NOT be reached due to error above")
 ```
 
-## enhanced_http_test.vint
+## error_handling.vint
 
 ```js
-// Enhanced HTTP module test demonstrating new backend features
-import http
+// VintLang Error Handling & Logging Example
+// Demonstrates error handling patterns, logging levels, and defensive programming
 
-print("🚀 Enhanced HTTP Module Backend Features Test")
-print("=" * 50)
+// ============================================================
+// 1. Logging and status messages
+// ============================================================
+println("=== Logging Levels ===")
+info "Application starting up"
+debug "Loading configuration..."
+note "Remember to set API_KEY in your .env file"
+success "Configuration loaded successfully"
+warn "Running in development mode"
 
-// Test 1: Create app with enhanced features
-print("\n✓ Test 1 - Enhanced App Creation")
-let result = http.app()
-print("App creation:", result)
+// ============================================================
+// 2. Checking for null values (defensive programming)
+// ============================================================
+println("\n=== Null Checks ===")
 
-// Test 2: Basic route registration with different HTTP methods
-print("\n✓ Test 2 - Route Registration")
-http.get("/users", func(req, res) {
-    print("GET /users - List users")
-})
-
-http.post("/users", func(req, res) {
-    print("POST /users - Create user")
-})
-
-http.put("/users/:id", func(req, res) {
-    print("PUT /users/:id - Update user")
-})
-
-http.delete("/users/:id", func(req, res) {
-    print("DELETE /users/:id - Delete user")
-})
-
-// Test 3: Middleware registration
-print("\n✓ Test 3 - Middleware Registration")
-http.use(func(req, res, next) {
-    print("Custom middleware - logging request")
-})
-
-// Test 4: New Backend Features - Interceptors
-print("\n✓ Test 4 - Interceptors")
-let requestInterceptor = http.interceptor("request", func(req) {
-    print("Request interceptor - validating request")
-})
-print("Request interceptor:", requestInterceptor)
-
-let responseInterceptor = http.interceptor("response", func(res) {
-    print("Response interceptor - adding headers")
-})
-print("Response interceptor:", responseInterceptor)
-
-// Test 5: Guards
-print("\n✓ Test 5 - Guards")
-let authGuard = http.guard(func(req) {
-    print("Authentication guard - checking token")
-})
-print("Auth guard:", authGuard)
-
-let rateLimitGuard = http.guard(func(req) {
-    print("Rate limit guard - checking limits")
-})
-print("Rate limit guard:", rateLimitGuard)
-
-// Test 6: Built-in Middleware
-print("\n✓ Test 6 - Built-in Middleware")
-let corsResult = http.cors()
-print("CORS middleware:", corsResult)
-
-let bodyParserResult = http.bodyParser()
-print("Body parser middleware:", bodyParserResult)
-
-let authMiddleware = http.auth(func(req, res, next) {
-    print("Authentication middleware")
-})
-print("Auth middleware:", authMiddleware)
-
-// Test 7: Error Handler
-print("\n✓ Test 7 - Error Handler")
-let errorHandler = http.errorHandler(func(err, req, res) {
-    print("Global error handler")
-})
-print("Error handler:", errorHandler)
-
-// Test 8: API Routes with Parameters
-print("\n✓ Test 8 - API Routes with Parameters")
-http.get("/api/users/:id", func(req, res) {
-    print("GET /api/users/:id - Get user by ID")
-})
-
-http.get("/api/users/:id/posts/:postId", func(req, res) {
-    print("GET /api/users/:id/posts/:postId - Get user post")
-})
-
-// Test 9: Different content types
-print("\n✓ Test 9 - Content Type Handlers")
-http.post("/api/upload", func(req, res) {
-    print("POST /api/upload - File upload handler")
-})
-
-http.post("/api/json", func(req, res) {
-    print("POST /api/json - JSON data handler")
-})
-
-http.post("/api/form", func(req, res) {
-    print("POST /api/form - Form data handler")
-})
-
-print("\n" + "=" * 50)
-print("✨ All enhanced HTTP features registered successfully!")
-print("Features demonstrated:")
-print("  • Enhanced request/response objects")
-print("  • Interceptors (request & response)")
-print("  • Guards (authentication, rate limiting)")
-print("  • Built-in middleware (CORS, body parser, auth)")
-print("  • Error handling")
-print("  • Route parameters (/users/:id)")
-print("  • Multiple content type support")
-print("  • Security features")
-print("\n🎯 Ready for full-fledged backend development!")
-
-// The server would normally be started with:
-// http.listen(3000, "Enhanced HTTP server running on port 3000")
-```
-
-## enhanced_language_showcase.vint
-
-```js
-// Enhanced VintLang Language Showcase
-// This example demonstrates the improvements made to VintLang
-
-print("🚀 VintLang Enhanced Language Showcase")
-print("=" * 50)
-
-// 1. Enhanced String Handling with Unicode and Escape Sequences
-print("\n📝 Enhanced String Handling:")
-let greeting = "Hello\nWorld!"
-let unicode_text = "Hello \u0041\u0042\u0043"  // Hello ABC
-let hex_text = "Value: \x41\x42"  // Value: AB
-print("Multiline greeting:", greeting)
-print("Unicode text:", unicode_text)
-print("Hex escape text:", hex_text)
-
-// 2. Type Checking Functions
-print("\n🔍 Type Checking:")
-let values = [42, 3.14, "hello", true, [1, 2, 3], {"key": "value"}]
-for value in values {
-    print("Value:", value, "Type:", typeof(value))
-    print("  isInt:", isInt(value))
-    print("  isFloat:", isFloat(value))
-    print("  isString:", isString(value))
-    print("  isBool:", isBool(value))
-    print("  isArray:", isArray(value))
-    print("  isDict:", isDict(value))
-    print("---")
-}
-
-// 3. Enhanced Array Operations
-print("\n📊 Enhanced Array Operations:")
-let numbers = [5, 2, 8, 1, 9, 3, 5, 2]
-print("Original array:", numbers)
-print("Length:", len(numbers))
-print("Sorted:", sort(numbers))
-print("Reversed:", reverse(numbers))
-print("Unique values:", unique(numbers))
-print("Index of 8:", indexOf(numbers, 8))
-
-// Higher-order functions
-let doubled = map(numbers, func(x) { return x * 2 })
-print("Doubled:", doubled)
-
-let evens = filter(numbers, func(x) { return x % 2 == 0 })
-print("Even numbers:", evens)
-
-// 4. Enhanced String Operations
-print("\n🔤 Enhanced String Operations:")
-let text = "  VintLang Programming Language  "
-print("Original:", text)
-print("Trimmed:", trim(text))
-print("Uppercase:", toUpper(trim(text)))
-print("Lowercase:", toLower(trim(text)))
-
-let sentence = "VintLang is a modern programming language"
-let words = split(sentence, " ")
-print("Words:", words)
-print("Joined with '-':", join(words, "-"))
-
-print("Starts with 'VintLang':", startsWith(sentence, "VintLang"))
-print("Ends with 'language':", endsWith(sentence, "language"))
-
-// 5. Math Operations
-print("\n🧮 Math Operations:")
-let vals = [10, -5, 3.14, -2.7]
-for val in vals {
-    print("abs(" + string(val) + ") =", abs(val))
-}
-print("min(10, 5, 20):", min(10, 5, 20))
-print("max(10, 5, 20):", max(10, 5, 20))
-
-// 6. Range Function
-print("\n📏 Range Function:")
-print("range(5):", range(5))
-print("range(2, 8):", range(2, 8))
-print("range(0, 10, 2):", range(0, 10, 2))
-print("range(10, 0, -2):", range(10, 0, -2))
-
-// 7. Data Conversion and Parsing
-print("\n🔄 Data Conversion:")
-let num_str = "42"
-let float_str = "3.14159"
-print("parseInt('" + num_str + "'):", parseInt(num_str))
-print("parseFloat('" + float_str + "'):", parseFloat(float_str))
-print("string(42):", string(42))
-print("int('100'):", int("100"))
-
-// 8. Dictionary Operations with Better Built-ins
-print("\n📚 Dictionary Operations:")
-let person = {
-    "name": "Alice",
-    "age": 30,
-    "city": "New York"
-}
-print("Person:", person)
-print("Keys:", keys(person))
-print("Values:", values(person))
-print("Has 'age' key:", has_key(person, "age"))
-print("Has 'country' key:", has_key(person, "country"))
-
-// 9. Error Handling and Validation
-print("\n⚠️ Error Handling Examples:")
-let safe_divide = func(a, b) {
+let safeDivide = func(a, b) {
     if (b == 0) {
-        return "Error: Division by zero"
+        warn "Division by zero attempted"
+        return null
     }
     return a / b
 }
 
-print("10 / 2 =", safe_divide(10, 2))
-print("10 / 0 =", safe_divide(10, 0))
+let r1 = safeDivide(10, 2)
+let r2 = safeDivide(10, 0)
 
-// 10. Advanced Control Flow
-print("\n🔀 Advanced Control Flow:")
-let process_data = func(data) {
-    if (isArray(data)) {
-        return "Processing array with " + string(len(data)) + " elements"
-    } else if (isDict(data)) {
-        return "Processing dictionary with " + string(len(data)) + " keys"
-    } else if (isString(data)) {
-        return "Processing string: " + data
+if (r1 != null) {
+    println("10 / 2 =", r1)
+} else {
+    println("10 / 2 failed")
+}
+
+if (r2 != null) {
+    println("10 / 0 =", r2)
+} else {
+    println("10 / 0 returned null (division by zero)")
+}
+
+// ============================================================
+// 3. Returning error information from functions
+// ============================================================
+println("\n=== Returning Errors ===")
+
+let parseAge = func(input) {
+    let age = int(input)
+    if (age == null || age < 0) {
+        return {"ok": false, "error": "Age must be a non-negative number"}
+    }
+    if (age > 150) {
+        return {"ok": false, "error": "Age seems unrealistically large"}
+    }
+    return {"ok": true, "value": age}
+}
+
+let tests = ["25", "200", "-5", "42"]
+for t in tests {
+    let result = parseAge(t)
+    if (result["ok"]) {
+        println("Input '" + t + "' -> valid age:", result["value"])
     } else {
-        return "Unknown data type: " + typeof(data)
+        println("Input '" + t + "' -> error:", result["error"])
     }
 }
 
-let test_data = [
-    [1, 2, 3, 4],
-    {"name": "test", "type": "demo"},
-    "Hello World",
-    42
-]
+// ============================================================
+// 4. Validating user input
+// ============================================================
+println("\n=== Input Validation ===")
 
-for data in test_data {
-    print(process_data(data))
+let strmod = import("string")
+
+let validateEmail = func(email) {
+    if (email == null || email == "") {
+        return "Email cannot be empty"
+    }
+    if (!strmod.contains(email, "@")) {
+        return "Email must contain @"
+    }
+    if (!strmod.contains(email, ".")) {
+        return "Email must contain a domain"
+    }
+    return null  // null means no error
 }
 
-// 11. Function Composition and Higher-Order Functions
-print("\n🔗 Function Composition:")
-let add_one = func(x) { return x + 1 }
-let double = func(x) { return x * 2 }
-let square = func(x) { return x * x }
-
-let compose = func(f, g) {
-    return func(x) { return f(g(x)) }
-}
-
-let add_one_then_double = compose(double, add_one)
-let square_then_add_one = compose(add_one, square)
-
-print("add_one_then_double(5):", add_one_then_double(5))  // (5 + 1) * 2 = 12
-print("square_then_add_one(4):", square_then_add_one(4))  // (4 * 4) + 1 = 17
-
-// 12. Data Processing Pipeline
-print("\n⚙️ Data Processing Pipeline:")
-let process_numbers = func(nums) {
-    let result = nums
-    result = filter(result, func(x) { return x > 0 })  // Filter positive
-    result = map(result, func(x) { return x * x })     // Square each
-    result = sort(result)                              // Sort ascending
-    result = unique(result)                            // Remove duplicates
-    return result
-}
-
-let mixed_numbers = [-2, 3, -1, 4, 3, 5, -3, 4, 2]
-print("Original:", mixed_numbers)
-print("Processed:", process_numbers(mixed_numbers))
-
-// 13. Performance and Utility
-print("\n⏱️ Performance and Utilities:")
-let start_time = time.now()
-sleep(100)  // Sleep for 100ms
-print("Operation completed after sleep")
-
-// Clone objects safely
-let original_array = [1, [2, 3], {"nested": "object"}]
-let cloned_array = clone(original_array)
-print("Original array:", original_array)
-print("Cloned array:", cloned_array)
-
-print("\n✅ VintLang Enhanced Language Showcase Complete!")
-print("This demonstrates:")
-print("• Enhanced string handling with Unicode support")
-print("• Comprehensive type checking functions")
-print("• Rich array and string manipulation")
-print("• Mathematical operations")
-print("• Functional programming features")
-print("• Data conversion and parsing")
-print("• Better error handling patterns")
-print("• Advanced control flow")
-print("• Function composition")
-print("• Data processing pipelines")
-print("• Performance utilities")
-```
-
-## enhanced_switch_match.vint
-
-```js
-// Enhanced Switch and Match Statement Examples
-// This demonstrates the new features: guard conditions, variable binding, and array patterns
-
-println("=== Enhanced Switch Statements ===")
-
-// Test 1: Switch with guard conditions
-let testNumbers = [5, -3, 0, 15, 100]
-
-for num in testNumbers {
-    println("Testing number:", num)
-
-    switch (num) {
-        case x if x > 0 && x < 10 {
-            println("  Small positive number:", x)
-        }
-        case x if x > 10 {
-            println("  Large positive number:", x)
-        }
-        case x if x < 0 {
-            println("  Negative number:", x)
-        }
-        case 0 {
-            println("  Zero")
-        }
-        default {
-            println("  Other number")
-        }
+let emails = ["alice@example.com", "notanemail", "", "bob@test.org"]
+for email in emails {
+    let err = validateEmail(email)
+    if (err == null) {
+        success "Valid email: " + email
+    } else {
+        warn "Invalid email '" + email + "': " + err
     }
 }
 
-println("\n=== Enhanced Match Statements ===")
+// ============================================================
+// 5. Graceful handling with defaults
+// ============================================================
+println("\n=== Default Values ===")
 
-// Test 2: Array pattern matching with destructuring
-let arrays = [
-    [],
-    [1],
-    [1, 2],
-    [1, 2, 3, 4, 5]
-]
+let getConfig = func(key, defaultValue) {
+    let config = {
+        "host": "localhost",
+        "port": 8080,
+        "debug": false
+    }
+    let val = config[key]
+    if (val == null) {
+        return defaultValue
+    }
+    return val
+}
 
-for arr in arrays {
-    println("Testing array:", arr)
+println("host:", getConfig("host", "127.0.0.1"))
+println("port:", getConfig("port", 3000))
+println("timeout:", getConfig("timeout", 30))   // uses default
+println("debug:", getConfig("debug", true))
 
-    match arr {
-        [] => println("  Empty array")
-        [single] => println("  Single element:", single)
-        [first, second] => println("  Two elements:", first, "and", second)
-        [head, ...tail] => println("  Head:", head, "Tail:", tail)
+// ============================================================
+// 6. Retry pattern
+// ============================================================
+println("\n=== Retry Pattern ===")
+
+let attempt = 0
+let maxAttempts = 3
+let succeeded = false
+
+while (attempt < maxAttempts && !succeeded) {
+    attempt = attempt + 1
+    debug "Attempt " + string(attempt) + " of " + string(maxAttempts)
+
+    // Simulate success on the 3rd try
+    if (attempt == 3) {
+        succeeded = true
+        success "Operation succeeded on attempt " + string(attempt)
+    } else {
+        warn "Attempt " + string(attempt) + " failed, retrying..."
     }
 }
 
-// Test 3: Dictionary pattern matching with guard conditions
-let users = [
-    {"role": "admin", "active": true, "age": 30},
-    {"role": "user", "active": false, "age": 25},
-    {"role": "guest", "age": 45},
-    {"name": "John", "type": "visitor"}
-]
-
-println("\n=== Dictionary Pattern Matching with Guards ===")
-
-for user in users {
-    println("Testing user:", user)
-
-    match user {
-        {"role": "admin", "active": active} if active =>
-            println("  Active admin user")
-        {"role": role, "age": age} if age >= 18 =>
-            println("  Adult user with role:", role)
-        {"role": "guest"} =>
-            println("  Guest user")
-        _ =>
-            println("  Unknown user type")
-    }
+if (!succeeded) {
+    println("All", maxAttempts, "attempts failed")
 }
-
-// Test 4: Complex array patterns with variable binding
-let complexArrays = [
-    [1, 2, 3, 4, 5, 6],
-    ["a", "b"],
-    [true, false, true]
-]
-
-println("\n=== Complex Array Patterns ===")
-
-for arr in complexArrays {
-    println("Testing complex array:", arr)
-
-    match arr {
-        [first, second, ...rest] if len(rest) > 2 =>
-            println("  Long array - first:", first, "second:", second, "rest has", len(rest), "items")
-        [a, b] if type(a) == "STRING" =>
-            println("  String pair:", a, "and", b)
-        [x, y, z] if type(x) == "BOOLEAN" =>
-            println("  Boolean triple:", x, y, z)
-        _ =>
-            println("  Other pattern")
-    }
-}
-
-println("\n=== Tests completed! ===")
-```
-
-## enterprise_http_test.vint
-
-```js
-// Enterprise HTTP Module Test - Advanced Backend Features
-import http
-
-print("🏢 Enterprise HTTP Module Features Test")
-print("=" * 60)
-
-// Test 1: Create app with enterprise features
-print("\n✓ Test 1 - Enterprise App Creation")
-let result = http.app()
-print("App creation:", result)
-
-// Test 2: Route Grouping for API Versioning
-print("\n✓ Test 2 - Route Grouping & API Versioning")
-let v1Group = http.group("/api/v1", func() {
-    // Routes within this group will be prefixed with /api/v1
-    print("API v1 group created")
-})
-print("API v1 group:", v1Group)
-
-let v2Group = http.group("/api/v2", func() {
-    // Routes within this group will be prefixed with /api/v2
-    print("API v2 group created")
-})
-print("API v2 group:", v2Group)
-
-// Test 3: Multipart File Upload Support
-print("\n✓ Test 3 - Multipart File Upload")
-http.post("/upload", func(req, res) {
-    // Parse multipart form data automatically
-    let parseResult = http.multipart(req)
-    print("Multipart parsing:", parseResult)
-
-    // Access uploaded files
-    let avatar = req.file("avatar")
-    let documents = req.file("documents")
-
-    if avatar {
-        // Save the uploaded file
-        let saveResult = avatar.save("/uploads/" + avatar.name())
-        print("Avatar saved:", saveResult)
-    }
-
-    // Access form fields
-    let username = req.form("username")
-    let description = req.form("description")
-
-    res.status(200).json({
-        "message": "Files uploaded successfully",
-        "username": username,
-        "files": req.files()
-    })
-})
-
-// Test 4: Async Handlers for Long-Running Operations
-print("\n✓ Test 4 - Async Handlers")
-let asyncHandler = http.async(func(req, res) {
-    print("Processing long-running task asynchronously")
-    // Simulate heavy computation or database operations
-    // This won't block other requests
-})
-
-http.post("/process", asyncHandler)
-print("Async handler registered")
-
-// Test 5: Advanced Middleware Composition
-print("\n✓ Test 5 - Advanced Middleware Composition")
-
-// Authentication middleware
-let authMiddleware = func(req, res, next) {
-    let token = req.get("Authorization")
-    if !token {
-        res.status(401).json({"error": "No authorization token"})
-        return
-    }
-    // Validate JWT token here
-    next()
-}
-
-// Logging middleware
-let loggingMiddleware = func(req, res, next) {
-    print("Request:", req.method(), req.path())
-    next()
-}
-
-// Rate limiting middleware
-let rateLimitMiddleware = func(req, res, next) {
-    // Implement rate limiting logic here
-    print("Rate limit check passed")
-    next()
-}
-
-// Apply multiple middlewares
-http.use(loggingMiddleware)
-http.use(rateLimitMiddleware)
-
-// Protected route with authentication
-http.post("/protected", func(req, res) {
-    res.json({"message": "Access granted to protected resource"})
-})
-
-// Test 6: Enhanced Security Features
-print("\n✓ Test 6 - Security Features")
-let securityResult = http.security()
-print("Security middleware:", securityResult)
-
-// Test 7: Enhanced Error Handling Structure
-print("\n✓ Test 7 - Enhanced Error Handling")
-http.errorHandler(func(err, req, res) {
-    // Structured error response
-    res.status(500).json({
-        "error": {
-            "type": "INTERNAL_SERVER_ERROR",
-            "message": err.message,
-            "code": "ERR_INTERNAL",
-            "status": 500,
-            "details": {
-                "timestamp": Date.now(),
-                "path": req.path(),
-                "method": req.method()
-            }
-        }
-    })
-})
-
-// Test 8: Real-world API Endpoints
-print("\n✓ Test 8 - Real-world API Endpoints")
-
-// User management endpoints
-http.get("/api/users", func(req, res) {
-    let page = req.query("page") || "1"
-    let limit = req.query("limit") || "10"
-
-    res.json({
-        "users": [],
-        "pagination": {
-            "page": page,
-            "limit": limit,
-            "total": 0
-        }
-    })
-})
-
-http.post("/api/users", func(req, res) {
-    let userData = req.json()
-
-    // Validate user data
-    if !userData.email {
-        res.status(400).json({
-            "error": {
-                "type": "VALIDATION_ERROR",
-                "message": "Email is required",
-                "code": "MISSING_EMAIL"
-            }
-        })
-        return
-    }
-
-    res.status(201).json({
-        "message": "User created successfully",
-        "user": userData
-    })
-})
-
-// File upload endpoint
-http.post("/api/files", func(req, res) {
-    http.multipart(req)
-
-    let files = []
-    let uploadedFiles = req.files()
-
-    // Process each uploaded file
-    for file in uploadedFiles {
-        let savedPath = file.save("/uploads/" + file.name())
-        files.push({
-            "originalName": file.name(),
-            "size": file.size(),
-            "type": file.type(),
-            "savedPath": savedPath
-        })
-    }
-
-    res.json({
-        "message": "Files uploaded successfully",
-        "files": files
-    })
-})
-
-// Health check endpoint
-http.get("/health", func(req, res) {
-    res.json({
-        "status": "healthy",
-        "timestamp": Date.now(),
-        "version": "1.0.0",
-        "uptime": process.uptime()
-    })
-})
-
-// Metrics endpoint (for APM integration)
-http.get("/metrics", func(req, res) {
-    res.header("Content-Type", "text/plain")
-    res.send(`
-# HTTP Request Count
-http_requests_total 1500
-
-# HTTP Request Duration
-http_request_duration_seconds 0.05
-
-# Memory Usage
-memory_usage_bytes 104857600
-`)
-})
-
-print("\n" + "=" * 60)
-print("✨ All enterprise HTTP features registered successfully!")
-print("\nEnterprise Features Demonstrated:")
-print("  🔧 Route grouping and API versioning")
-print("  📁 Multipart file upload support")
-print("  ⚡ Async handlers for long-running tasks")
-print("  🔗 Advanced middleware composition")
-print("  🛡️  Enhanced security features")
-print("  📊 Structured error handling")
-print("  🔍 Performance monitoring hooks")
-print("  🌐 Production-ready API endpoints")
-print("  📈 Health checks and metrics")
-
-print("\n🎯 Ready for enterprise-level backend development!")
-print("📝 Start the server with: http.listen(3000)")
-```
-
-## example.txt
-
-```js
-Hello;
-World;
-```
-
-## example_cli.vint
-
-```js
-// Example: A simple CLI tool that processes files
-// Usage: vint example_cli.vint input.txt --output result.txt --verbose --format json
-
-import cli
-
-// Get all command line arguments
-let allArgs = args()
-println("All arguments:", allArgs)
-
-// Get positional arguments (non-flags)
-let positional = cli.getPositional()
-println("Positional arguments:", positional)
-
-// Check if help was requested
-if (cli.hasArg("--help") || cli.hasArg("-h")) {
-    println("Usage: vint example_cli.vint <input_file> [options]")
-    println("Options:")
-    println("  --output <file>    Output file (default: stdout)")
-    println("  --format <format>  Output format: json, csv, txt (default: txt)")
-    println("  --verbose, -v      Enable verbose output")
-    println("  --help, -h         Show this help message")
-    exit(0)
-}
-
-// Get input file from positional arguments
-let inputFile = "stdin"
-if (len(positional) > 0) {
-    inputFile = positional[0]
-}
-
-// Get output file from flags
-let outputFile = cli.getArgValue("--output")
-if (!outputFile) {
-    outputFile = "stdout"
-}
-
-// Get format
-let format = cli.getArgValue("--format")
-if (!format) {
-    format = "txt"
-}
-
-// Check for verbose mode
-let verbose = cli.hasArg("--verbose") || cli.hasArg("-v")
-
-// Display configuration
-println("\nProcessing configuration:")
-println("Input file:", inputFile)
-println("Output file:", outputFile)
-println("Format:", format)
-println("Verbose mode:", verbose)
-
-if (verbose) {
-    println("\nVerbose: Processing", inputFile, "->", outputFile, "in", format, "format")
-}
-
-println("\n✓ CLI argument parsing working correctly!")
 
 ```
 
 ## excel_demo.vint
 
 ```js
-// VintLang Excel Module Demo
-// Demonstrates comprehensive Excel functionality including password handling
-import excel
-
-print("🚀 VintLang Excel Module Comprehensive Demo")
-print("==========================================")
-
-// Create a comprehensive employee workbook
-print("\n📝 Creating Employee Management System...")
-let file_id = excel.create("employee_system.xlsx")
-
-// Set up the main employee data sheet
-excel.renameSheet(file_id, "Sheet1", "Employees")
-excel.addSheet(file_id, "Summary")
-excel.addSheet(file_id, "Departments")
-
-// Employee data headers
-excel.setCell(file_id, "Employees", "A1", "Employee ID")
-excel.setCell(file_id, "Employees", "B1", "Full Name")
-excel.setCell(file_id, "Employees", "C1", "Department")
-excel.setCell(file_id, "Employees", "D1", "Salary")
-excel.setCell(file_id, "Employees", "E1", "Bonus")
-excel.setCell(file_id, "Employees", "F1", "Total Compensation")
-
-// Sample employee data
-excel.setCell(file_id, "Employees", "A2", 101)
-excel.setCell(file_id, "Employees", "B2", "John Smith")
-excel.setCell(file_id, "Employees", "C2", "Engineering")
-excel.setCell(file_id, "Employees", "D2", 75000)
-excel.setCellFormula(file_id, "Employees", "E2", "=D2*0.15")
-excel.setCellFormula(file_id, "Employees", "F2", "=D2+E2")
-
-excel.setCell(file_id, "Employees", "A3", 102)
-excel.setCell(file_id, "Employees", "B3", "Sarah Johnson")
-excel.setCell(file_id, "Employees", "C3", "Marketing")
-excel.setCell(file_id, "Employees", "D3", 68000)
-excel.setCellFormula(file_id, "Employees", "E3", "=D3*0.12")
-excel.setCellFormula(file_id, "Employees", "F3", "=D3+E3")
-
-excel.setCell(file_id, "Employees", "A4", 103)
-excel.setCell(file_id, "Employees", "B4", "Michael Brown")
-excel.setCell(file_id, "Employees", "C4", "Sales")
-excel.setCell(file_id, "Employees", "D4", 72000)
-excel.setCellFormula(file_id, "Employees", "E4", "=D4*0.18")
-excel.setCellFormula(file_id, "Employees", "F4", "=D4+E4")
-
-excel.setCell(file_id, "Employees", "A5", 104)
-excel.setCell(file_id, "Employees", "B5", "Emily Davis")
-excel.setCell(file_id, "Employees", "C5", "HR")
-excel.setCell(file_id, "Employees", "D5", 65000)
-excel.setCellFormula(file_id, "Employees", "E5", "=D5*0.10")
-excel.setCellFormula(file_id, "Employees", "F5", "=D5+E5")
-
-print("✅ Added employee data with calculated bonuses")
-
-// Create department summary
-excel.setCell(file_id, "Departments", "A1", "Department")
-excel.setCell(file_id, "Departments", "B1", "Employee Count")
-excel.setCell(file_id, "Departments", "C1", "Average Salary")
-
-excel.setCell(file_id, "Departments", "A2", "Engineering")
-excel.setCell(file_id, "Departments", "B2", 1)
-excel.setCell(file_id, "Departments", "C2", 75000)
-
-excel.setCell(file_id, "Departments", "A3", "Marketing")
-excel.setCell(file_id, "Departments", "B3", 1)
-excel.setCell(file_id, "Departments", "C3", 68000)
-
-excel.setCell(file_id, "Departments", "A4", "Sales")
-excel.setCell(file_id, "Departments", "B4", 1)
-excel.setCell(file_id, "Departments", "C4", 72000)
-
-excel.setCell(file_id, "Departments", "A5", "HR")
-excel.setCell(file_id, "Departments", "B5", 1)
-excel.setCell(file_id, "Departments", "C5", 65000)
-
-print("✅ Created department breakdown")
-
-// Summary sheet with calculated totals
-excel.setCell(file_id, "Summary", "A1", "EMPLOYEE MANAGEMENT SUMMARY")
-excel.mergeCells(file_id, "Summary", "A1:C1")
-
-excel.setCell(file_id, "Summary", "A3", "Total Employees:")
-excel.setCellFormula(file_id, "Summary", "B3", "=COUNTA(Employees.A2:A5)")
-
-excel.setCell(file_id, "Summary", "A4", "Total Payroll:")
-excel.setCellFormula(file_id, "Summary", "B4", "=SUM(Employees.D2:D5)")
-
-excel.setCell(file_id, "Summary", "A5", "Total Bonuses:")
-excel.setCellFormula(file_id, "Summary", "B5", "=SUM(Employees.E2:E5)")
-
-excel.setCell(file_id, "Summary", "A6", "Total Compensation:")
-excel.setCellFormula(file_id, "Summary", "B6", "=SUM(Employees.F2:F5)")
-
-excel.setCell(file_id, "Summary", "A7", "Average Salary:")
-excel.setCellFormula(file_id, "Summary", "B7", "=AVERAGE(Employees.D2:D5)")
-
-print("✅ Created executive summary with formulas")
-
-// Test row operations
-excel.insertRow(file_id, "Employees", 3)
-excel.setCell(file_id, "Employees", "A3", 105)
-excel.setCell(file_id, "Employees", "B3", "David Wilson")
-excel.setCell(file_id, "Employees", "C3", "Finance")
-excel.setCell(file_id, "Employees", "D3", 70000)
-excel.setCellFormula(file_id, "Employees", "E3", "=D3*0.13")
-excel.setCellFormula(file_id, "Employees", "F3", "=D3+E3")
-
-print("✅ Added new employee via row insertion")
-
-// Save the workbook
-excel.save(file_id)
-print("✅ Saved employee management system")
-
-// Test file operations
-let backup_id = excel.saveAs(file_id, "employee_backup.xlsx")
-excel.close(file_id)
-excel.close(backup_id)
-print("✅ Created backup and closed files")
-
-// Reopen and verify
-let reopened_id = excel.open("employee_system.xlsx")
-let employee_name = excel.getCell(reopened_id, "Employees", "B2")
-let employee_salary = excel.getCell(reopened_id, "Employees", "D2")
-print("✅ Reopened file - First employee:", employee_name, "Salary:", employee_salary)
-
-// Display file information
-let file_info = excel.getFileInfo(reopened_id)
-print("\n📊 File Information:")
-print("✓ Excel file created successfully")
-print("✓ Multiple sheets with data and formulas")
-print("✓ Cell formatting and merging")
-print("✓ Row/column operations")
-
-excel.close(reopened_id)
-
-print("\n🎉 Excel Module Demo Complete!")
-print("==============================")
-print("✅ Created comprehensive employee management system")
-print("📁 Files generated:")
-print("   • employee_system.xlsx (main workbook)")
-print("   • employee_backup.xlsx (backup copy)")
-print("")
-print("🔧 Features demonstrated:")
-print("   ✓ Create and save Excel files")
-print("   ✓ Multiple sheet management")
-print("   ✓ Cell data entry (text, numbers)")
-print("   ✓ Formula calculations")
-print("   ✓ Cell merging")
-print("   ✓ Row insertion")
-print("   ✓ File backup and reopening")
-print("")
-print("🔒 Password Protection Available:")
-print("   • Use excel.openWithPassword(file, password) for protected files")
-print("   • Password setting requires manual Excel file protection")
-print("")
-print("🚀 VintLang Excel module is production-ready!")
-print("   Full documentation: docs/excel.md")
-```
-
-## excel_minimal_test.vint
-
-```js
-import excel
-
-print("Testing Excel Module")
-let file_id = excel.create("simple_test.xlsx")
-print("Created file:", file_id)
-
-excel.setCell(file_id, "Sheet1", "A1", "Hello")
-excel.setCell(file_id, "Sheet1", "B1", "World")
-
-let value = excel.getCell(file_id, "Sheet1", "A1")
-print("Read value:", value)
-
-excel.save(file_id)
-excel.close(file_id)
-
-print("Test completed successfully!")
-```
-
-## excel_test.vint
-
-```js
-// Excel Module Test - Comprehensive functionality test
-// Tests all major Excel operations including password handling
+// VintLang Excel Module Example
+// Demonstrates creating Excel workbooks with multiple sheets, data, and formulas
 
 import excel
 
-print("🚀 VintLang Excel Module Test")
-print("==============================\n")
+println("=== Excel Module Demo ===")
 
-// Test 1: Create a new Excel file
-print("📝 Test 1: Creating new Excel file...")
-file_id = excel.create("test_workbook.xlsx")
-print("✅ Created file with ID:", file_id)
+// ============================================================
+// 1. Create a new workbook
+// ============================================================
+let wb = excel.create("report.xlsx")
+println("Created workbook: report.xlsx")
 
-// Test 2: Sheet operations
-print("\n📋 Test 2: Sheet operations...")
-sheets = excel.getSheets(file_id)
-print("Initial sheets:", sheets)
+// ============================================================
+// 2. Set up the first sheet - Sales Data
+// ============================================================
+excel.renameSheet(wb, "Sheet1", "Sales")
+excel.addSheet(wb, "Summary")
 
-// Add new sheets
-print("Adding new sheets...")
-index1 = excel.addSheet(file_id, "DataSheet")
-index2 = excel.addSheet(file_id, "SummarySheet")
-print("Created DataSheet at index:", index1)
-print("Created SummarySheet at index:", index2)
+// Add headers to Sales sheet
+excel.setCell(wb, "Sales", "A1", "Month")
+excel.setCell(wb, "Sales", "B1", "Revenue")
+excel.setCell(wb, "Sales", "C1", "Expenses")
+excel.setCell(wb, "Sales", "D1", "Profit")
 
-// Rename default sheet
-excel.renameSheet(file_id, "Sheet1", "MainSheet")
-print("Renamed Sheet1 to MainSheet")
+// Add monthly data
+let months    = ["Jan", "Feb", "Mar", "Apr", "May", "Jun"]
+let revenues  = [12000, 15000, 18000, 14000, 20000, 22000]
+let expenses  = [8000,  9000,  10000, 8500,  11000, 12000]
 
-// Get updated sheet list
-sheets = excel.getSheets(file_id)
-print("Updated sheets:", sheets)
-
-// Test 3: Cell operations
-print("\n📊 Test 3: Cell operations...")
-excel.setCell(file_id, "MainSheet", "A1", "Employee Name")
-excel.setCell(file_id, "MainSheet", "B1", "Department")
-excel.setCell(file_id, "MainSheet", "C1", "Salary")
-excel.setCell(file_id, "MainSheet", "D1", "Bonus")
-
-excel.setCell(file_id, "MainSheet", "A2", "John Doe")
-excel.setCell(file_id, "MainSheet", "B2", "Engineering")
-excel.setCell(file_id, "MainSheet", "C2", 75000)
-excel.setCell(file_id, "MainSheet", "D2", "=C2*0.1")
-
-excel.setCell(file_id, "MainSheet", "A3", "Jane Smith")
-excel.setCell(file_id, "MainSheet", "B3", "Marketing")
-excel.setCell(file_id, "MainSheet", "C3", 65000)
-excel.setCell(file_id, "MainSheet", "D3", "=C3*0.1")
-
-print("✅ Added employee data with formulas")
-
-// Read back some cells
-name1 = excel.getCell(file_id, "MainSheet", "A2")
-dept1 = excel.getCell(file_id, "MainSheet", "B2")
-salary1 = excel.getCell(file_id, "MainSheet", "C2")
-
-print("Read back - Name:", name1, "Department:", dept1, "Salary:", salary1)
-
-// Test 4: Formula operations
-print("\n🧮 Test 4: Formula operations...")
-excel.setCellFormula(file_id, "MainSheet", "C4", "=SUM(C2:C3)")
-excel.setCellFormula(file_id, "MainSheet", "D4", "=SUM(D2:D3)")
-
-formula = excel.getCellFormula(file_id, "MainSheet", "C4")
-print("Formula in C4:", formula)
-
-// Test 5: Range operations
-print("\n📐 Test 5: Range operations...")
-range_data = excel.getRange(file_id, "MainSheet", "A1:D4")
-print("Range data (4x4):")
-for row in range_data {
-    print("  Row:", row)
+for i in range(len(months)) {
+    let row = string(i + 2)
+    excel.setCell(wb, "Sales", "A" + row, months[i])
+    excel.setCell(wb, "Sales", "B" + row, revenues[i])
+    excel.setCell(wb, "Sales", "C" + row, expenses[i])
+    // Profit formula: Revenue - Expenses
+    excel.setCellFormula(wb, "Sales", "D" + row, "=B" + row + "-C" + row)
 }
 
-// Test 6: Row/Column operations
-print("\n📏 Test 6: Row/Column operations...")
-excel.insertRow(file_id, "MainSheet", 2)
-print("✅ Inserted row at position 2")
+println("Added 6 months of sales data with profit formulas")
+
+// ============================================================
+// 3. Fill in the Summary sheet
+// ============================================================
+excel.setCell(wb, "Summary", "A1", "Metric")
+excel.setCell(wb, "Summary", "B1", "Value")
+
+excel.setCell(wb, "Summary", "A2", "Total Revenue")
+excel.setCellFormula(wb, "Summary", "B2", "=SUM(Sales!B2:B7)")
+
+excel.setCell(wb, "Summary", "A3", "Total Expenses")
+excel.setCellFormula(wb, "Summary", "B3", "=SUM(Sales!C2:C7)")
+
+excel.setCell(wb, "Summary", "A4", "Total Profit")
+excel.setCellFormula(wb, "Summary", "B4", "=B2-B3")
+
+println("Created summary sheet with totals")
+
+// ============================================================
+// 4. Merge cells for a title
+// ============================================================
+excel.mergeCells(wb, "Summary", "A1:B1")
+excel.setCell(wb, "Summary", "A1", "H1 2024 FINANCIAL SUMMARY")
+
+// ============================================================
+// 5. Save the workbook
+// ============================================================
+excel.save(wb)
+println("Saved to report.xlsx")
+
+// ============================================================
+// 6. Read back data to verify
+// ============================================================
+let jan = excel.getCell(wb, "Sales", "A2")
+let jan_rev = excel.getCell(wb, "Sales", "B2")
+let jan_exp = excel.getCell(wb, "Sales", "C2")
+println("\nVerification - " + jan + ": Revenue=" + string(jan_rev) + " Expenses=" + string(jan_exp))
+
+excel.close(wb)
+println("\nDone! Excel demo complete.")
+println("File 'report.xlsx' created with Sales and Summary sheets.")
 
-excel.setCell(file_id, "MainSheet", "A2", "Alice Brown")
-excel.setCell(file_id, "MainSheet", "B2", "HR")
-excel.setCell(file_id, "MainSheet", "C2", 60000)
-excel.setCell(file_id, "MainSheet", "D2", "=C2*0.1")
-print("✅ Added new employee data in inserted row")
-
-// Test 7: Merge operations
-print("\n🔗 Test 7: Cell merge operations...")
-excel.setCell(file_id, "SummarySheet", "A1", "Company Report")
-excel.mergeCells(file_id, "SummarySheet", "A1:D1")
-print("✅ Merged header cells A1:D1 in SummarySheet")
-
-// Test 8: File information
-print("\n📋 Test 8: File information...")
-info = excel.getFileInfo(file_id)
-print("File info:")
-print("  Sheet count:", info.sheetCount)
-print("  Active sheet:", info.activeSheet)
-print("  Sheets:", info.sheets)
-
-// Test 9: Save operations
-print("\n💾 Test 9: Save operations...")
-excel.save(file_id)
-print("✅ Saved file")
-
-backup_id = excel.saveAs(file_id, "backup_workbook.xlsx")
-print("✅ Created backup with ID:", backup_id)
-
-// Test 10: Close and reopen
-print("\n🔄 Test 10: Close and reopen operations...")
-excel.close(file_id)
-excel.close(backup_id)
-print("✅ Closed original files")
-
-// Reopen the file
-reopened_id = excel.open("test_workbook.xlsx")
-print("✅ Reopened file with ID:", reopened_id)
-
-// Verify data is still there
-name_check = excel.getCell(reopened_id, "MainSheet", "A3")
-salary_check = excel.getCell(reopened_id, "MainSheet", "C3")
-print("Verified data - Name:", name_check, "Salary:", salary_check)
-
-// Test 11: Summary operations
-print("\n📈 Test 11: Creating summary sheet...")
-excel.setCell(reopened_id, "SummarySheet", "A3", "Total Employees:")
-excel.setCellFormula(reopened_id, "SummarySheet", "B3", "=COUNTA(MainSheet.A:A)-1")
-
-excel.setCell(reopened_id, "SummarySheet", "A4", "Average Salary:")
-excel.setCellFormula(reopened_id, "SummarySheet", "B4", "=AVERAGE(MainSheet.C:C)")
-
-excel.setCell(reopened_id, "SummarySheet", "A5", "Total Payroll:")
-excel.setCellFormula(reopened_id, "SummarySheet", "B5", "=SUM(MainSheet.C:C)+SUM(MainSheet.D:D)")
-
-print("✅ Added summary calculations")
-
-// Final save and cleanup
-excel.save(reopened_id)
-excel.close(reopened_id)
-
-print("\n🎉 Excel Module Test Complete!")
-print("===============================")
-print("✅ All tests passed successfully")
-print("📁 Created files: test_workbook.xlsx, backup_workbook.xlsx")
-print("💡 Excel module is fully functional!")
-
-// Demonstrate error handling
-print("\n🛡️  Testing error handling...")
-try {
-    bad_id = excel.open("nonexistent_file.xlsx")
-} catch error {
-    print("✅ Correctly caught error for missing file:", error)
-}
-
-print("\n🔒 Note: Password protection testing requires manual setup")
-print("    To test password features:")
-print("    1. Create a password-protected Excel file manually")
-print("    2. Use excel.openWithPassword(file, password)")
-print("    3. Password setting is limited by excelize v2.8.0")
-
-print("\n🚀 Excel module ready for production use!")
-```
-
-## excel_test_final.vint
-
-```js
-// Excel Module Test - Simple functionality test
-import excel
-
-print("🚀 VintLang Excel Module Test")
-print("==============================")
-
-// Test 1: Create a new Excel file
-print("📝 Test 1: Creating new Excel file...")
-let file_id = excel.create("test_workbook.xlsx")
-print("✅ Created file with ID:")
-print(file_id)
-
-// Test 2: Sheet operations
-print("")
-print("📋 Test 2: Sheet operations...")
-let sheets = excel.getSheets(file_id)
-print("Initial sheets:")
-print(sheets)
-
-// Add new sheets
-print("Adding new sheets...")
-let index1 = excel.addSheet(file_id, "DataSheet")
-let index2 = excel.addSheet(file_id, "SummarySheet")
-print("Created DataSheet at index:")
-print(index1)
-print("Created SummarySheet at index:")
-print(index2)
-
-// Rename default sheet
-excel.renameSheet(file_id, "Sheet1", "MainSheet")
-print("Renamed Sheet1 to MainSheet")
-
-// Get updated sheet list
-sheets = excel.getSheets(file_id)
-print("Updated sheets:")
-print(sheets)
-
-// Test 3: Cell operations
-print("")
-print("📊 Test 3: Cell operations...")
-excel.setCell(file_id, "MainSheet", "A1", "Employee Name")
-excel.setCell(file_id, "MainSheet", "B1", "Department")
-excel.setCell(file_id, "MainSheet", "C1", "Salary")
-excel.setCell(file_id, "MainSheet", "D1", "Bonus")
-
-excel.setCell(file_id, "MainSheet", "A2", "John Doe")
-excel.setCell(file_id, "MainSheet", "B2", "Engineering")
-excel.setCell(file_id, "MainSheet", "C2", 75000)
-
-excel.setCell(file_id, "MainSheet", "A3", "Jane Smith")
-excel.setCell(file_id, "MainSheet", "B3", "Marketing")
-excel.setCell(file_id, "MainSheet", "C3", 65000)
-
-print("✅ Added employee data")
-
-// Read back some cells
-let name1 = excel.getCell(file_id, "MainSheet", "A2")
-let dept1 = excel.getCell(file_id, "MainSheet", "B2")
-let salary1 = excel.getCell(file_id, "MainSheet", "C2")
-
-print("Read back - Name:")
-print(name1)
-print("Department:")
-print(dept1)
-print("Salary:")
-print(salary1)
-
-// Test 4: Formula operations
-print("")
-print("🧮 Test 4: Formula operations...")
-excel.setCellFormula(file_id, "MainSheet", "D2", "=C2*0.1")
-excel.setCellFormula(file_id, "MainSheet", "D3", "=C3*0.1")
-excel.setCellFormula(file_id, "MainSheet", "C4", "=SUM(C2:C3)")
-excel.setCellFormula(file_id, "MainSheet", "D4", "=SUM(D2:D3)")
-
-let formula = excel.getCellFormula(file_id, "MainSheet", "C4")
-print("Formula in C4:")
-print(formula)
-
-// Test 5: Range operations
-print("")
-print("📐 Test 5: Range operations...")
-let range_data = excel.getRange(file_id, "MainSheet", "A1:D4")
-print("Range data (4x4):")
-print("Number of rows:")
-print(range_data.length)
-
-// Test 6: Row/Column operations
-print("")
-print("📏 Test 6: Row/Column operations...")
-excel.insertRow(file_id, "MainSheet", 2)
-print("✅ Inserted row at position 2")
-
-excel.setCell(file_id, "MainSheet", "A2", "Alice Brown")
-excel.setCell(file_id, "MainSheet", "B2", "HR")
-excel.setCell(file_id, "MainSheet", "C2", 60000)
-excel.setCellFormula(file_id, "MainSheet", "D2", "=C2*0.1")
-print("✅ Added new employee data in inserted row")
-
-// Test 7: Merge operations
-print("")
-print("🔗 Test 7: Cell merge operations...")
-excel.setCell(file_id, "SummarySheet", "A1", "Company Report")
-excel.mergeCells(file_id, "SummarySheet", "A1:D1")
-print("✅ Merged header cells A1:D1 in SummarySheet")
-
-// Test 8: File info
-print("")
-print("📋 Test 8: File information...")
-let info = excel.getFileInfo(file_id)
-print("✅ Got file info")
-
-// Test 9: Save operations
-print("")
-print("💾 Test 9: Save operations...")
-excel.save(file_id)
-print("✅ Saved file")
-
-let backup_id = excel.saveAs(file_id, "backup_workbook.xlsx")
-print("✅ Created backup with ID:")
-print(backup_id)
-
-// Test 10: Close and reopen
-print("")
-print("🔄 Test 10: Close and reopen operations...")
-excel.close(file_id)
-excel.close(backup_id)
-print("✅ Closed original files")
-
-// Reopen the file
-let reopened_id = excel.open("test_workbook.xlsx")
-print("✅ Reopened file with ID:")
-print(reopened_id)
-
-// Verify data is still there
-let name_check = excel.getCell(reopened_id, "MainSheet", "A3")
-let salary_check = excel.getCell(reopened_id, "MainSheet", "C3")
-print("Verified data - Name:")
-print(name_check)
-print("Salary:")
-print(salary_check)
-
-// Test 11: Summary operations
-print("")
-print("📈 Test 11: Creating summary sheet...")
-excel.setCell(reopened_id, "SummarySheet", "A3", "Total Employees:")
-excel.setCellFormula(reopened_id, "SummarySheet", "B3", "=COUNTA(MainSheet.A:A)-1")
-
-excel.setCell(reopened_id, "SummarySheet", "A4", "Average Salary:")
-excel.setCellFormula(reopened_id, "SummarySheet", "B4", "=AVERAGE(MainSheet.C:C)")
-
-excel.setCell(reopened_id, "SummarySheet", "A5", "Total Payroll:")
-excel.setCellFormula(reopened_id, "SummarySheet", "B5", "=SUM(MainSheet.C:C)+SUM(MainSheet.D:D)")
-
-print("✅ Added summary calculations")
-
-// Final save and cleanup
-excel.save(reopened_id)
-excel.close(reopened_id)
-
-print("")
-print("🎉 Excel Module Test Complete!")
-print("===============================")
-print("✅ All tests passed successfully")
-print("📁 Created files: test_workbook.xlsx, backup_workbook.xlsx")
-print("💡 Excel module is fully functional!")
-
-print("")
-print("🔒 Note: Password protection testing requires manual setup")
-print("    To test password features:")
-print("    1. Create a password-protected Excel file manually")
-print("    2. Use excel.openWithPassword(file, password)")
-
-print("")
-print("🚀 Excel module ready for production use!")
-```
-
-## excel_test_simple.vint
-
-```js
-// Excel Module Test - Comprehensive functionality test
-import excel
-
-print("🚀 VintLang Excel Module Test")
-print("==============================")
-
-// Test 1: Create a new Excel file
-print("📝 Test 1: Creating new Excel file...")
-let file_id = excel.create("test_workbook.xlsx")
-print("✅ Created file with ID: " + file_id)
-
-// Test 2: Sheet operations
-print("")
-print("📋 Test 2: Sheet operations...")
-let sheets = excel.getSheets(file_id)
-print("Initial sheets:")
-print(sheets)
-
-// Add new sheets
-print("Adding new sheets...")
-let index1 = excel.addSheet(file_id, "DataSheet")
-let index2 = excel.addSheet(file_id, "SummarySheet")
-print("Created DataSheet at index: " + index1)
-print("Created SummarySheet at index: " + index2)
-
-// Rename default sheet
-excel.renameSheet(file_id, "Sheet1", "MainSheet")
-print("Renamed Sheet1 to MainSheet")
-
-// Get updated sheet list
-sheets = excel.getSheets(file_id)
-print("Updated sheets:")
-print(sheets)
-
-// Test 3: Cell operations
-print("")
-print("📊 Test 3: Cell operations...")
-excel.setCell(file_id, "MainSheet", "A1", "Employee Name")
-excel.setCell(file_id, "MainSheet", "B1", "Department")
-excel.setCell(file_id, "MainSheet", "C1", "Salary")
-excel.setCell(file_id, "MainSheet", "D1", "Bonus")
-
-excel.setCell(file_id, "MainSheet", "A2", "John Doe")
-excel.setCell(file_id, "MainSheet", "B2", "Engineering")
-excel.setCell(file_id, "MainSheet", "C2", 75000)
-
-excel.setCell(file_id, "MainSheet", "A3", "Jane Smith")
-excel.setCell(file_id, "MainSheet", "B3", "Marketing")
-excel.setCell(file_id, "MainSheet", "C3", 65000)
-
-print("✅ Added employee data")
-
-// Read back some cells
-let name1 = excel.getCell(file_id, "MainSheet", "A2")
-let dept1 = excel.getCell(file_id, "MainSheet", "B2")
-let salary1 = excel.getCell(file_id, "MainSheet", "C2")
-
-print("Read back - Name: " + name1 + " Department: " + dept1 + " Salary: " + salary1)
-
-// Test 4: Formula operations
-print("")
-print("🧮 Test 4: Formula operations...")
-excel.setCellFormula(file_id, "MainSheet", "D2", "=C2*0.1")
-excel.setCellFormula(file_id, "MainSheet", "D3", "=C3*0.1")
-excel.setCellFormula(file_id, "MainSheet", "C4", "=SUM(C2:C3)")
-excel.setCellFormula(file_id, "MainSheet", "D4", "=SUM(D2:D3)")
-
-let formula = excel.getCellFormula(file_id, "MainSheet", "C4")
-print("Formula in C4: " + formula)
-
-// Test 5: Range operations
-print("")
-print("📐 Test 5: Range operations...")
-let range_data = excel.getRange(file_id, "MainSheet", "A1:D4")
-print("Range data (4x4):")
-for let i = 0; i < range_data.length; i++ {
-    print("  Row " + i + ":")
-    let row = range_data[i]
-    for let j = 0; j < row.length; j++ {
-        print("    " + row[j])
-    }
-}
-
-// Test 6: Row/Column operations
-print("")
-print("📏 Test 6: Row/Column operations...")
-excel.insertRow(file_id, "MainSheet", 2)
-print("✅ Inserted row at position 2")
-
-excel.setCell(file_id, "MainSheet", "A2", "Alice Brown")
-excel.setCell(file_id, "MainSheet", "B2", "HR")
-excel.setCell(file_id, "MainSheet", "C2", 60000)
-excel.setCellFormula(file_id, "MainSheet", "D2", "=C2*0.1")
-print("✅ Added new employee data in inserted row")
-
-// Test 7: Merge operations
-print("")
-print("🔗 Test 7: Cell merge operations...")
-excel.setCell(file_id, "SummarySheet", "A1", "Company Report")
-excel.mergeCells(file_id, "SummarySheet", "A1:D1")
-print("✅ Merged header cells A1:D1 in SummarySheet")
-
-// Test 8: File information
-print("")
-print("📋 Test 8: File information...")
-let info = excel.getFileInfo(file_id)
-print("File info retrieved successfully")
-
-// Test 9: Save operations
-print("")
-print("💾 Test 9: Save operations...")
-excel.save(file_id)
-print("✅ Saved file")
-
-let backup_id = excel.saveAs(file_id, "backup_workbook.xlsx")
-print("✅ Created backup with ID: " + backup_id)
-
-// Test 10: Close and reopen
-print("")
-print("🔄 Test 10: Close and reopen operations...")
-excel.close(file_id)
-excel.close(backup_id)
-print("✅ Closed original files")
-
-// Reopen the file
-let reopened_id = excel.open("test_workbook.xlsx")
-print("✅ Reopened file with ID: " + reopened_id)
-
-// Verify data is still there
-let name_check = excel.getCell(reopened_id, "MainSheet", "A3")
-let salary_check = excel.getCell(reopened_id, "MainSheet", "C3")
-print("Verified data - Name: " + name_check + " Salary: " + salary_check)
-
-// Test 11: Summary operations
-print("")
-print("📈 Test 11: Creating summary sheet...")
-excel.setCell(reopened_id, "SummarySheet", "A3", "Total Employees:")
-excel.setCellFormula(reopened_id, "SummarySheet", "B3", "=COUNTA(MainSheet.A:A)-1")
-
-excel.setCell(reopened_id, "SummarySheet", "A4", "Average Salary:")
-excel.setCellFormula(reopened_id, "SummarySheet", "B4", "=AVERAGE(MainSheet.C:C)")
-
-excel.setCell(reopened_id, "SummarySheet", "A5", "Total Payroll:")
-excel.setCellFormula(reopened_id, "SummarySheet", "B5", "=SUM(MainSheet.C:C)+SUM(MainSheet.D:D)")
-
-print("✅ Added summary calculations")
-
-// Final save and cleanup
-excel.save(reopened_id)
-excel.close(reopened_id)
-
-print("")
-print("🎉 Excel Module Test Complete!")
-print("===============================")
-print("✅ All tests passed successfully")
-print("📁 Created files: test_workbook.xlsx, backup_workbook.xlsx")
-print("💡 Excel module is fully functional!")
-
-// Test error handling
-print("")
-print("🛡️  Testing error handling...")
-let error_result = excel.open("nonexistent_file.xlsx")
-print("Attempted to open nonexistent file, result: " + error_result)
-
-print("")
-print("🔒 Note: Password protection testing requires manual setup")
-print("    To test password features:")
-print("    1. Create a password-protected Excel file manually")
-print("    2. Use excel.openWithPassword(file, password)")
-
-print("")
-print("🚀 Excel module ready for production use!")
 ```
 
 ## express_like_server.vint
@@ -3871,7 +1741,7 @@ http.get("/", func(req, res) {
 })
 
 http.get("/about", func(req, res) {
-    println("About page accessed")
+    println("About page accessed") 
 })
 
 // API routes
@@ -3905,10 +1775,10 @@ println("🚀 VintLang Express-like HTTP Server")
 println("====================================")
 println("Routes configured:")
 println("  GET    /")
-println("  GET    /about")
+println("  GET    /about") 
 println("  GET    /api/status")
 println("  GET    /api/users")
-println("  POST   /api/users")
+println("  POST   /api/users") 
 println("  PUT    /api/users/123")
 println("  DELETE /api/users/123")
 println("")
@@ -3943,765 +1813,203 @@ Coming soon:
 */
 ```
 
-## feature_test.vint
-
-```js
-// VintLang Feature Test
-import time
-import os
-import json
-import uuid
-
-print("🚀 VintLang Feature Test")
-print("=" * 30)
-
-// Test 1: Time functions
-print("1. Time Functions:")
-let now = time.now()
-print("Current time: " + time.format(now, "02-01-2006 15:04:05"))
-
-// Test 2: UUID generation
-print("\n2. UUID Generation:")
-let id = uuid.generate()
-print("Generated UUID: " + id)
-
-// Test 3: JSON operations
-print("\n3. JSON Operations:")
-let data = {
-    "name": "VintLang",
-    "version": "0.2.5",
-    "features": ["time", "json", "uuid", "os"]
-}
-let jsonStr = json.encode(data)
-print("JSON encoded: " + jsonStr)
-
-let decoded = json.decode(jsonStr)
-print("JSON decoded: " + string(decoded))
-
-// Test 4: File operations
-print("\n4. File Operations:")
-let testFile = "test.txt"
-os.writeFile(testFile, "Hello VintLang!")
-let content = os.readFile(testFile)
-print("File content: " + content)
-
-// Test 5: Arrays and loops
-print("\n5. Arrays and Loops:")
-let numbers = [1, 2, 3, 4, 5]
-for num in numbers {
-    print("Number: " + string(num))
-}
-
-// Test 6: String operations
-print("\n6. String Operations:")
-let text = "VintLang Programming"
-let words = text.split(" ")
-print("Split result: " + string(words))
-
-print("\n✅ All tests completed!")
-print("VintLang is working with these modules:")
-print("  • time - Date and time operations")
-print("  • os - File system operations")
-print("  • json - JSON encoding/decoding")
-print("  • uuid - UUID generation")
-print("  • Built-in string methods")
-print("  • Arrays and dictionaries")
-print("  • Control flow (loops, conditionals)")
-```
-
-## file_manager.vint
-
-```js
-// VintLang Showcase: File & Data Management System
-// Demonstrates practical VintLang capabilities
-
-import time
-import os
-import json
-import uuid
-
-// Application state
-let app = {
-    "name": "VintLang File Manager",
-    "version": "1.0",
-    "dataDir": "vint_data",
-    "logFile": "activity.log"
-}
-
-// Logging function
-let logActivity = func(message) {
-    let timestamp = time.format(time.now(), "2006-01-02 15:04:05")
-    let logEntry = "[" + timestamp + "] " + message + "\n"
-
-    if (os.fileExists(app["logFile"])) {
-        let existing = os.readFile(app["logFile"])
-        os.writeFile(app["logFile"], existing + logEntry)
-    } else {
-        os.writeFile(app["logFile"], logEntry)
-    }
-}
-
-// Setup function
-let setupApplication = func() {
-    print("🔧 Setting up VintLang File Manager...")
-
-    if (!os.fileExists(app["dataDir"])) {
-        os.makeDir(app["dataDir"])
-        print("✓ Created data directory: " + app["dataDir"])
-        logActivity("Created data directory")
-    }
-
-    logActivity("Application started")
-    print("✓ Application setup complete")
-}
-
-// Create sample files
-let createSampleFiles = func() {
-    print("\n📁 Creating sample files...")
-
-    // Create different types of files
-    let files = [
-        {
-            "name": "notes.txt",
-            "content": "VintLang Programming Notes\n========================\n\nVintLang is a powerful programming language with:\n- JSON support\n- File I/O operations\n- Time handling\n- UUID generation\n- Network capabilities\n\nCreated: " + time.format(time.now(), "02-01-2006 15:04:05")
-        },
-        {
-            "name": "config.json",
-            "content": json.encode({
-                "app_name": "VintLang Demo",
-                "version": "1.0.0",
-                "features": ["file_io", "json", "time", "uuid"],
-                "settings": {
-                    "debug": true,
-                    "log_level": "info"
-                }
-            })
-        },
-        {
-            "name": "tasks.json",
-            "content": json.encode([
-                {
-                    "id": uuid.generate(),
-                    "title": "Learn VintLang",
-                    "status": "completed",
-                    "created": time.format(time.now(), "2006-01-02")
-                },
-                {
-                    "id": uuid.generate(),
-                    "title": "Build awesome project",
-                    "status": "in_progress",
-                    "created": time.format(time.now(), "2006-01-02")
-                }
-            ])
-        },
-        {
-            "name": "data.csv",
-            "content": "ID,Name,Category,Value\n1,Item A,Category 1,100\n2,Item B,Category 2,200\n3,Item C,Category 1,150\n4,Item D,Category 3,300"
-        }
-    ]
-
-    for file in files {
-        let filepath = app["dataDir"] + "/" + file["name"]
-        os.writeFile(filepath, file["content"])
-        print("✓ Created: " + file["name"])
-        logActivity("Created file: " + file["name"])
-    }
-
-    print("✓ Sample files created successfully!")
-}
-
-// List files in directory
-let listFiles = func() {
-    print("\n📂 Files in " + app["dataDir"] + ":")
-    print("-" * 40)
-
-    let files = os.listDir(app["dataDir"])
-    let fileList = files.split(", ")
-
-    for filename in fileList {
-        if (filename != "." && filename != "..") {
-            let filepath = app["dataDir"] + "/" + filename
-            if (os.fileExists(filepath)) {
-                print("📄 " + filename)
-
-                // Get file size (approximate by content length)
-                let content = os.readFile(filepath)
-                print("   Size: " + string(len(content)) + " bytes")
-
-                // Determine file type
-                if (filename.contains(".json")) {
-                    print("   Type: JSON Data")
-                } else if (filename.contains(".txt")) {
-                    print("   Type: Text File")
-                } else if (filename.contains(".csv")) {
-                    print("   Type: CSV Data")
-                } else {
-                    print("   Type: Unknown")
-                }
-                print("")
-            }
-        }
-    }
-}
-
-// Analyze JSON files
-let analyzeJsonFiles = func() {
-    print("\n🔍 Analyzing JSON files...")
-    print("-" * 40)
-
-    let files = os.listDir(app["dataDir"])
-    let fileList = files.split(", ")
-
-    for filename in fileList {
-        if (filename.contains(".json")) {
-            print("📊 Analyzing: " + filename)
-            let filepath = app["dataDir"] + "/" + filename
-            let content = os.readFile(filepath)
-
-            let data = json.decode(content)
-            print("   JSON structure analyzed")
-            print("   Content type: " + type(data))
-
-            if (type(data) == "ARRAY") {
-                print("   Array length: " + string(len(data)))
-            } else if (type(data) == "HASH") {
-                print("   Object with " + string(len(data)) + " properties")
-            }
-
-            logActivity("Analyzed JSON file: " + filename)
-            print("")
-        }
-    }
-}
-
-// Generate file report
-let generateReport = func() {
-    print("\n📋 Generating file system report...")
-
-    let reportContent = "VINTLANG FILE MANAGER REPORT\n"
-    reportContent += "Generated: " + time.format(time.now(), "02-01-2006 15:04:05") + "\n"
-    reportContent += "=" * 50 + "\n\n"
-
-    // Count files by type
-    let files = os.listDir(app["dataDir"])
-    let fileList = files.split(", ")
-    let typeCount = {}
-    let totalSize = 0
-
-    for filename in fileList {
-        if (filename != "." && filename != "..") {
-            let filepath = app["dataDir"] + "/" + filename
-            if (os.fileExists(filepath)) {
-                let content = os.readFile(filepath)
-                totalSize += len(content)
-
-                let extension = "unknown"
-                if (filename.contains(".json")) {
-                    extension = "json"
-                } else if (filename.contains(".txt")) {
-                    extension = "txt"
-                } else if (filename.contains(".csv")) {
-                    extension = "csv"
-                }
-
-                if (!typeCount.hasKey(extension)) {
-                    typeCount[extension] = 0
-                }
-                typeCount[extension] += 1
-            }
-        }
-    }
-
-    reportContent += "SUMMARY\n"
-    reportContent += "-------\n"
-    reportContent += "Total files: " + string(len(fileList) - 2) + "\n"
-    reportContent += "Total size: " + string(totalSize) + " bytes\n\n"
-
-    reportContent += "FILES BY TYPE\n"
-    reportContent += "-------------\n"
-    for extension, count in typeCount {
-        reportContent += extension.upper() + " files: " + string(count) + "\n"
-    }
-
-    reportContent += "\nDETAILS\n"
-    reportContent += "-------\n"
-    for filename in fileList {
-        if (filename != "." && filename != "..") {
-            let filepath = app["dataDir"] + "/" + filename
-            if (os.fileExists(filepath)) {
-                let content = os.readFile(filepath)
-                reportContent += filename + " (" + string(len(content)) + " bytes)\n"
-            }
-        }
-    }
-
-    reportContent += "\n" + "=" * 50 + "\n"
-    reportContent += "Report generated by " + app["name"] + " v" + app["version"] + "\n"
-    reportContent += "Powered by VintLang Programming Language\n"
-
-    let reportFile = "file_report_" + time.format(time.now(), "2006-01-02_15-04-05") + ".txt"
-    os.writeFile(reportFile, reportContent)
-    print("✓ Report saved to: " + reportFile)
-    logActivity("Generated file report")
-}
-
-// Show activity log
-let showActivityLog = func() {
-    print("\n📜 Activity Log:")
-    print("-" * 40)
-
-    if (os.fileExists(app["logFile"])) {
-        let logContent = os.readFile(app["logFile"])
-        let lines = os.readLines(app["logFile"])
-
-        print("Total log entries: " + string(len(lines)))
-        print("\nRecent activity:")
-        for line in lines {
-            if (line != "") {
-                print(line)
-            }
-        }
-    } else {
-        print("No activity log found.")
-    }
-}
-
-// Backup data
-let backupData = func() {
-    print("\n💾 Creating backup...")
-
-    let backupDir = "backup_" + time.format(time.now(), "2006-01-02_15-04-05")
-    os.makeDir(backupDir)
-
-    let files = os.listDir(app["dataDir"])
-    let fileList = files.split(", ")
-    let backedUp = 0
-
-    for filename in fileList {
-        if (filename != "." && filename != "..") {
-            let sourcePath = app["dataDir"] + "/" + filename
-            let backupPath = backupDir + "/" + filename
-
-            if (os.fileExists(sourcePath)) {
-                let content = os.readFile(sourcePath)
-                os.writeFile(backupPath, content)
-                backedUp += 1
-            }
-        }
-    }
-
-    // Create backup manifest
-    let manifest = {
-        "created": time.format(time.now(), "2006-01-02 15:04:05"),
-        "files_backed_up": backedUp,
-        "source_directory": app["dataDir"],
-        "backup_id": uuid.generate()
-    }
-
-    os.writeFile(backupDir + "/manifest.json", json.encode(manifest))
-    print("✓ Backup created: " + backupDir)
-    print("✓ Files backed up: " + string(backedUp))
-    logActivity("Created backup: " + backupDir)
-}
-
-// Main application
-let runFileManager = func() {
-    print("🚀 Welcome to " + app["name"] + " v" + app["version"])
-    print("=" * 60)
-    print("This VintLang application demonstrates:")
-    print("  • File and directory operations")
-    print("  • JSON data processing")
-    print("  • Logging and reporting")
-    print("  • Backup functionality")
-    print("  • Time and UUID utilities")
-    print("  • Data analysis capabilities")
-    print("=" * 60)
-
-    // Run all demonstrations
-    setupApplication()
-    createSampleFiles()
-    listFiles()
-    analyzeJsonFiles()
-    generateReport()
-    showActivityLog()
-    backupData()
-
-    print("\n🎉 File Manager demonstration complete!")
-    print("\n📊 Summary of operations:")
-    print("  ✓ Created application directory")
-    print("  ✓ Generated sample files (JSON, TXT, CSV)")
-    print("  ✓ Performed file analysis")
-    print("  ✓ Generated comprehensive report")
-    print("  ✓ Maintained activity log")
-    print("  ✓ Created data backup")
-
-    print("\n✨ VintLang successfully demonstrated:")
-    print("  • Robust file I/O operations")
-    print("  • JSON encoding/decoding")
-    print("  • Directory management")
-    print("  • Logging and auditing")
-    print("  • Data backup and recovery")
-    print("  • Time-based operations")
-    print("  • UUID generation")
-    print("  • String manipulation")
-    print("  • Error handling")
-
-    print("\n🎯 VintLang is ready for real-world applications!")
-}
-
-// Start the file manager
-runFileManager()
-```
-
-## file_processor_cli.vint
-
-```js
-// File Processor CLI - Demonstrates file operations with terminal UI
-// Run with: vint file_processor_cli.vint [options]
-
-import term
-import cli
-import os
-
-// Help and version handling
-if (cli.hasArg("--help")) {
-    cli.help("FileProcessor", "Process and analyze files with VintLang")
-    term.println("")
-    term.info("File Processing Options:")
-    term.println("  --input FILE     Input file to process")
-    term.println("  --output FILE    Output file for results")
-    term.println("  --format TYPE    Output format (json, csv, txt)")
-    term.println("  --verbose        Show detailed processing info")
-    os.exit()
-}
-
-if (cli.hasArg("--version")) {
-    cli.version("FileProcessor", "2.1.0")
-    os.exit()
-}
-
-// Display banner
-let banner = term.banner("VintLang File Processor")
-term.println(banner)
-
-// Process command line arguments
-let inputFile = cli.getArgValue("--input")
-let outputFile = cli.getArgValue("--output")
-let format = cli.getArgValue("--format")
-let verbose = cli.hasArg("--verbose")
-
-// Show configuration
-if (verbose) {
-    term.info("Configuration:")
-    let configTableRows = [
-        ["Setting", "Value"],
-        ["Input File", inputFile || "Not specified"],
-        ["Output File", outputFile || "stdout"],
-        ["Format", format || "txt"],
-        ["Verbose", verbose ? "Enabled" : "Disabled"]
-    ]
-    let configTable = term.table(configTableRows)
-    term.println(configTable)
-}
-
-// Interactive file selection if no input specified
-if (!inputFile) {
-    term.info("No input file specified")
-    let choice = term.select([
-        "Browse current directory",
-        "Enter file path manually",
-        "Create sample file",
-        "Exit"
-    ])
-
-    if (choice == "Browse current directory") {
-    let currentDir = os.getwd()
-    term.info("Current directory: " + currentDir)
-    term.warning("File browsing not implemented yet")
-
-    } else if (choice == "Enter file path manually") {
-    inputFile = term.input("Enter file path: ")
-    term.success("Input file set to: " + inputFile)
-
-    } else if (choice == "Create sample file") {
-    let filename = term.input("Enter filename for sample: ")
-    term.success("Sample file '" + filename + "' would be created")
-
-    } else if (choice == "Exit") {
-    term.info("Exiting file processor")
-    os.exit()
-
-    }
-}
-
-// File processing simulation
-if (inputFile) {
-    term.info("Processing file: " + inputFile)
-    // Show processing steps
-    term.loading("Reading file...")
-    term.success("File read successfully")
-    term.loading("Analyzing content...")
-    term.success("Analysis complete")
-    // Show results
-    let resultsRows = [
-        ["Analysis Result", "Value"],
-        ["File Size", "1.2 KB"],
-        ["Lines", "45"],
-        ["Words", "234"],
-        ["Characters", "1,234"]
-    ]
-    let results = term.table(resultsRows)
-    term.println(results)
-    // Show processing chart
-    let processingChart = term.chart([45, 234, 12])
-    term.println("Content Analysis:")
-    term.println(processingChart)
-    if (outputFile) {
-        term.success("Results saved to: " + outputFile)
-    }
-}
-
-// Final operations
-let shouldCleanup = term.confirm("Clean up temporary files?")
-if (shouldCleanup) {
-    term.success("Cleanup completed")
-}
-
-let finalBox = term.box("File processing completed successfully!")
-term.println(finalBox)
-```
-
-## fmt_basic_test.vint
-
-```js
-import fmt
-
-print("Testing fmt module:")
-
-// Test sprintf
-let result = fmt.sprintf("Hello %s number %d", "world", 42)
-print(result)
-
-// Test number formatting
-print(fmt.formatHex(255))
-print(fmt.formatBin(15))
-
-// Test padding
-print(fmt.padLeft("hi", 8))
-print(fmt.padRight("hi", 8))
-
-print("fmt module works!")
-```
-
 ## fmt_demo.vint
 
 ```js
-// VintLang fmt module comprehensive demo
-// Demonstrates all the formatting capabilities
+// VintLang fmt Module Example
+// Demonstrates string formatting, number formatting, padding, and alignment
 
 import fmt
 
-print("🎨 VintLang fmt Module Demo")
-print("=" * 50)
+println("=== String Formatting (sprintf) ===")
 
-// 1. Basic string formatting with sprintf
-print("\n📝 String Formatting:")
+// Basic string interpolation
 let name = "VintLang"
 let version = "1.0"
 let users = 1234
-
 let intro = fmt.sprintf("Welcome to %s v%s! We have %d active users.", name, version, users)
-print(intro)
+println(intro)
 
-// 2. Printf for direct output
-print("\n🖨️  Direct Printing:")
-fmt.printf("Temperature: %.1f°C, Humidity: %d%%\n", 23.7, 65)
-fmt.printf("Processing %s... [%d/%d] %.1f%% complete\n", "data.txt", 75, 100, 75.0)
-
-// 3. Number formatting in different bases
-print("\n🔢 Number Formatting:")
-let number = 255
-print("Decimal:", fmt.formatInt(number, 10))
-print("Binary: ", fmt.formatBin(number))
-print("Hex (lower):", fmt.formatHex(number))
-print("Hex (upper):", fmt.formatHex(number, true))
-print("Octal:", fmt.formatOct(number))
-
-// 4. Float precision
-print("\n🎯 Float Precision:")
+// Float formatting
 let pi = 3.14159265359
-print("π with 2 decimals:", fmt.formatFloat(pi, 2))
-print("π with 4 decimals:", fmt.formatFloat(pi, 4))
-print("π with precision:", fmt.precision(pi, 6))
+println(fmt.sprintf("Pi to 4 decimal places: %.4f", pi))
+println(fmt.sprintf("Hex: %x, Octal: %o, Binary: %b", 255, 8, 15))
 
-// 5. Padding and alignment
-print("\n📏 Padding & Alignment:")
-let items = ["Apple", "Banana", "Orange", "Grape"]
+println("\n=== Number Formatting ===")
 
-print("Left-padded (width 10):")
+let number = 255
+println("Decimal:", fmt.formatInt(number, 10))
+println("Binary: ", fmt.formatBin(number))
+println("Hex:    ", fmt.formatHex(number))
+println("Octal:  ", fmt.formatOct(number))
+
+println("\nFloat precision:")
+println("pi (2 dec):", fmt.formatFloat(pi, 2))
+println("pi (5 dec):", fmt.formatFloat(pi, 5))
+println("pi (prec 6):", fmt.precision(pi, 6))
+
+println("\n=== Text Padding & Alignment ===")
+
+let items = ["Apple", "Banana", "Fig", "Dragonfruit"]
+let sep = "=" * 40
+
+// Left-aligned (padded right)
+println(sep)
+println("Left-aligned (padded right, width 15):")
 for item in items {
-    print("  ", fmt.padLeft(item, 10, "."))
+    println("  [" + fmt.padRight(item, 15, ".") + "]")
 }
 
-print("\nRight-padded (width 10):")
+// Right-aligned (padded left)
+println("\nRight-aligned (padded left, width 15):")
 for item in items {
-    print("  ", fmt.padRight(item, 10, "."))
+    println("  [" + fmt.padLeft(item, 15, ".") + "]")
 }
 
-print("\nCentered (width 12):")
+// Centered
+println("\nCentered (width 15):")
 for item in items {
-    print("  ", fmt.padCenter(item, 12, "-"))
+    println("  [" + fmt.padCenter(item, 15, "-") + "]")
 }
 
-// 6. Table formatting demo
-print("\n📊 Table Formatting:")
+println("\n=== Table Formatting ===")
+
+let header = fmt.sprintf("| %-10s | %8s | %6s |", "Product", "Price", "Stock")
+let border = "-" * len(header)
+println(border)
+println(header)
+println(border)
+
 let products = [
-    {"name": "Laptop", "price": 999.99, "stock": 15, "category": "Electronics"},
-    {"name": "Mouse", "price": 25.50, "stock": 150, "category": "Accessories"},
-    {"name": "Keyboard", "price": 75.00, "stock": 45, "category": "Accessories"},
-    {"name": "Monitor", "price": 299.99, "stock": 8, "category": "Electronics"}
+    ["Laptop", "$999.99", "15"],
+    ["Mouse", "$25.50", "150"],
+    ["Keyboard", "$75.00", "45"],
+    ["Monitor", "$299.99", "8"]
 ]
 
-// Table header
-let border = fmt.repeat("-", 60)
-print(border)
-fmt.printf("| %-12s | %8s | %5s | %-12s |\n", "Product", "Price", "Stock", "Category")
-print(border)
-
-// Table rows
-for product in products {
-    fmt.printf("| %-12s | $%7.2f | %5d | %-12s |\n",
-        product["name"],
-        product["price"],
-        product["stock"],
-        product["category"])
+for p in products {
+    let row = fmt.sprintf("| %-10s | %8s | %6s |", p[0], p[1], p[2])
+    println(row)
 }
-print(border)
+println(border)
 
-// 7. Report generation with formatting
-print("\n📋 Report Generation:")
-let reportTitle = "MONTHLY SALES REPORT"
+println("\n=== Fixed Width ===")
+
+let titles = ["Short", "Medium Title", "A Very Long Title Here"]
+println("Fixed width (18 chars):")
+for title in titles {
+    println("  [" + fmt.width(title, 18) + "]")
+}
+
+println("\n=== Report Generation ===")
+
 let reportWidth = 40
-
-print(fmt.repeat("=", reportWidth))
-print(fmt.padCenter(reportTitle, reportWidth))
-print(fmt.repeat("=", reportWidth))
+let title = "MONTHLY SALES REPORT"
+println("=" * reportWidth)
+println(fmt.padCenter(title, reportWidth))
+println("=" * reportWidth)
 
 let totalSales = 1245.75
 let totalOrders = 28
 let avgOrder = totalSales / totalOrders
 
-fmt.printf("Total Sales:    %s\n", fmt.padLeft(fmt.sprintf("$%.2f", totalSales), 12))
-fmt.printf("Total Orders:   %s\n", fmt.padLeft(fmt.sprintf("%d", totalOrders), 12))
-fmt.printf("Average Order:  %s\n", fmt.padLeft(fmt.sprintf("$%.2f", avgOrder), 12))
+let salesLine = fmt.sprintf("Total Sales:   $%8.2f", totalSales)
+let ordersLine = fmt.sprintf("Total Orders:  %8d", totalOrders)
+let avgLine    = fmt.sprintf("Avg Per Order: $%8.2f", avgOrder)
 
-// 8. Progress bar using repeat and formatting
-print("\n📈 Progress Indicators:")
-let progress = [25, 50, 75, 100]
+println(salesLine)
+println(ordersLine)
+println(avgLine)
+println("=" * reportWidth)
 
-for p in progress {
-    let filled = p / 5  // Scale to 20 chars max
-    let empty = 20 - filled
-    let bar = fmt.repeat("█", filled) + fmt.repeat("░", empty)
-    fmt.printf("Progress: [%s] %3d%%\n", bar, p)
-}
+println("\nAll fmt functions demonstrated successfully!")
 
-// 9. Error formatting
-print("\n❌ Error Formatting:")
-let err = fmt.errorf("Connection failed to %s:%d - %s", "localhost", 8080, "refused")
-print("Error:", err.Inspect())
-
-// 10. Utility functions
-print("\n🔧 Utility Functions:")
-let longText = "This is a very long text that needs to be truncated for display"
-print("Original:", longText)
-print("Truncated (30):", fmt.truncate(longText, 30))
-
-let separator = fmt.repeat("*", 25)
-print("Separator:", separator)
-
-// 11. Width formatting
-print("\n📐 Width Formatting:")
-let titles = ["Short", "Medium Title", "Very Long Title That Exceeds Width"]
-
-print("Fixed width (15 chars):")
-for title in titles {
-    print("  [" + fmt.width(title, 15) + "]")
-}
-
-// 12. Complex formatting combinations
-print("\n🎪 Complex Combinations:")
-let timestamp = "2024-10-24 14:30:00"
-let level = "INFO"
-let message = "System initialized successfully"
-
-// Log-style formatting
-let logEntry = fmt.sprintf("[%s] %s: %s",
-    timestamp,
-    fmt.padRight(level, 5),
-    message)
-print(logEntry)
-
-// Status display with alignment
-let status = "READY"
-let statusLine = fmt.sprintf("System Status: [%s] %s",
-    fmt.padCenter(status, 8),
-    fmt.repeat("●", 3))
-print(statusLine)
-
-print("\n" + fmt.repeat("=", 50))
-print("🎉 fmt Module Demo Complete!")
-print("All formatting functions demonstrated successfully.")
 ```
 
-## fmt_test_simple.vint
+## for_loops.vint
 
 ```js
-import fmt
+// VintLang Loop Constructs Example
+// Demonstrates for, while, repeat loops and loop control (break, continue)
 
-print("Testing fmt module...")
-
-// Test sprintf
-let result = fmt.sprintf("Hello, %s! Number: %d", "World", 42)
-print("sprintf result:", result)
-
-// Test number formatting
-let num = 255
-print("formatHex:", fmt.formatHex(num))
-print("formatBin:", fmt.formatBin(num))
-
-// Test padding
-let padded = fmt.padLeft("test", 10, "*")
-print("padLeft result:", padded)
-
-print("fmt module test complete!")
-```
-
-## function_test.vint
-
-```js
-// Test default parameter
-let greet = func(name = "Guest") {
-    println("Hello, " + name)
+// ============================================================
+// 1. For-in loop over an array
+// ============================================================
+let fruits = ["apple", "banana", "cherry", "date"]
+println("Fruits:")
+for fruit in fruits {
+    println(" -", fruit)
 }
 
-greet()        // Should print: Hello, Guest
-greet("Alice") // Should print: Hello, Alice
+// ============================================================
+// 2. For loop with index using range()
+// ============================================================
+println("\nCounting with range:")
+for i in range(5) {
+    print(i, "")
+}
+println()
 
-// Test multiple parameters with one default
-let add = func(a, b = 10) {
-    return a + b
+// ============================================================
+// 3. For-in loop over a dictionary (key, value pairs)
+// ============================================================
+let person = {"name": "Alice", "age": 30, "city": "Nairobi"}
+println("\nPerson details:")
+for key, value in person {
+    println(" ", key, ":", value)
 }
 
-println(add(5))      // Should print: 15
-println(add(5, 2))   // Should print: 7
+// ============================================================
+// 4. While loop
+// ============================================================
+println("\nCountdown:")
+let n = 5
+while (n > 0) {
+    print(n, "")
+    n = n - 1
+}
+println("Go!")
 
-// Test function returning a value
-let square = func(x) {
-    return x * x
+// ============================================================
+// 5. Repeat loop (fixed iterations)
+// ============================================================
+println("\nRepeat 3 times:")
+repeat 3 {
+    println(" Hello from repeat! (iteration", i, ")")
 }
 
-println(square(4))   // Should print: 16
+// ============================================================
+// 6. Break and continue
+// ============================================================
+println("\nSkip even numbers:")
+for num in range(10) {
+    if (num % 2 == 0) {
+        continue
+    }
+    print(num, "")
+}
+println()
+
+println("\nStop at 5:")
+for num in range(10) {
+    if (num == 5) {
+        break
+    }
+    print(num, "")
+}
+println()
+
+// ============================================================
+// 7. Nested loops
+// ============================================================
+println("\nMultiplication table (3x3):")
+for row in range(1, 4) {
+    for col in range(1, 4) {
+        print(row * col, "\t")
+    }
+    println()
+}
+
 ```
 
 ## functions.vint
@@ -4768,62 +2076,6 @@ for i in range(100) {
 print(time.since(startTime))
 ```
 
-## github_issue_example.vint
-
-```js
-// Exact example from GitHub issue #11
-
-let user = {"role": "admin", "active": true}
-
-match user {
-    {"role": "admin"} => print("Hello, Admin!")
-    {"active": false} => print("Inactive user")
-    _ => print("Regular user")
-}
-
-// Additional test cases to show flexibility
-print("\n--- Additional Examples ---")
-
-let inactiveUser = {"role": "user", "active": false}
-match inactiveUser {
-    {"role": "admin"} => print("Hello, Admin!")
-    {"active": false} => print("Inactive user")
-    _ => print("Regular user")
-}
-
-let unknownUser = {"name": "Jane"}
-match unknownUser {
-    {"role": "admin"} => print("Hello, Admin!")
-    {"active": false} => print("Inactive user")
-    _ => print("Regular user")
-}
-```
-
-## github_issue_test.vint
-
-```js
-// Get all arguments
-let allArgs = args()
-println(allArgs)
-
-// Parse flags
-import cli
-
-if (cli.hasArg("--verbose")) {
-    println("Verbose mode enabled")
-}
-
-// Additional tests to show full functionality
-let outputFile = cli.getArgValue("--output")
-if (outputFile) {
-    println("Output file:", outputFile)
-}
-
-let positional = cli.getPositional()
-println("Positional arguments:", positional)
-
-```
-
 ## greetings_module.vint
 
 ```js
@@ -4867,28 +2119,6 @@ while (number != guess) {
 println("Woo hoo you've guessed it right")
 println("Game over!")
 
-```
-
-## has_key_test.vint
-
-```js
-// VintLang has_key() Function Example
-// Demonstrates checking if a dictionary contains a specific key
-
-// Create a dictionary with some key-value pairs
-let myDict = { name: "Alex", age: 30 };
-
-// Example 1: Test global has_key() function
-// Syntax: has_key(dictionary, key)
-println("Testing global has_key():");
-println("has 'name'?", has_key(myDict, "name")); // Expected: true
-println("has 'city'?", has_key(myDict, "city")); // Expected: false
-
-// Example 2: Test has_key() as a dictionary method
-// Syntax: dictionary.has_key(key)
-println("\nTesting dict.has_key():");
-println("has 'age'?", myDict.has_key("age")); // Expected: true
-println("has 'country'?", myDict.has_key("country")); // Expected: false
 ```
 
 ## http.vint
@@ -4941,56 +2171,6 @@ println("Serving directory:", dir)
 
 ```
 
-## http_test.vint
-
-```js
-// Test file for the Express.js-like HTTP module
-import http
-
-// Test 1: Create app
-let result = http.app()
-print("✓ Test 1 - App creation:", result)
-
-// Test 2: Route registration
-let getResult = http.get("/test", func(req, res) {
-    print("Test route")
-})
-print("✓ Test 2 - GET route registration:", getResult)
-
-let postResult = http.post("/data", func(req, res) {
-    print("POST test route")
-})
-print("✓ Test 3 - POST route registration:", postResult)
-
-// Test 3: Multiple HTTP methods
-http.put("/update", func(req, res) { print("PUT test") })
-http.delete("/remove", func(req, res) { print("DELETE test") })
-http.patch("/modify", func(req, res) { print("PATCH test") })
-print("✓ Test 4 - Multiple HTTP methods registered")
-
-// Test 4: Middleware
-let middlewareResult = http.use(func(req, res, next) {
-    print("Test middleware")
-})
-print("✓ Test 5 - Middleware registration:", middlewareResult)
-
-// Test 5: Error handling - should fail gracefully
-print("Testing error conditions...")
-
-// Test with no app (this should work since we created one above)
-let routeWithoutApp = http.get("/noapp", func(req, res) {
-    print("This should work")
-})
-print("✓ Test 6 - Route registration with existing app:", routeWithoutApp)
-
-print("")
-print("All tests completed! ✨")
-print("The Express.js-like HTTP module is working correctly.")
-print("")
-print("Note: Function execution will be improved in future versions")
-print("      when full evaluator integration is implemented.")
-```
-
 ## if_expression.vint
 
 ```js
@@ -5014,31 +2194,7 @@ print("If as an expression result: ", status)
 // Example 3: If expression without else clause
 // If the condition is false and there's no else, returns null
 let y = if (false) { 123 }
-print("If as an expression with no else: ", y)
-```
-
-## include_test.vint
-
-```js
-// VintLang Include Statement Example
-// Demonstrates including code from another VintLang file
-
-// Include another VintLang file - this loads and executes it
-// The included file can define variables, functions, etc. that become available here
-include "examples/included.vint";
-
-// Use a variable defined in the included file
-println(message);
-```
-
-## included.vint
-
-```js
-// VintLang Included File Example
-// This file is meant to be included by other VintLang files
-
-// Define a variable that will be available to the including file
-let message = "Hello from an included file!";
+print("If as an expression with no else: ", y) 
 ```
 
 ## json.vint
@@ -5094,13 +2250,6 @@ print("Country (missing key):", missing_value)
 
 ```
 
-## just_import.vint
-
-```js
-// Debug the import process
-import time
-```
-
 ## jwt.vint
 
 ```js
@@ -5123,70 +2272,6 @@ if (result) {
     println("User:", result["user"])
     println("Role:", result["role"])
 }
-```
-
-## live_server_test.vint
-
-```js
-// Live Server Test - Demonstrates enhanced HTTP features in action
-import http
-
-print("🔥 Live Enhanced HTTP Server Test")
-print("=" * 35)
-
-// Create and configure the app
-http.app()
-
-// Add interceptors
-http.interceptor("request", func(req) {
-    print("📥 Request interceptor activated")
-})
-
-http.interceptor("response", func(res) {
-    print("📤 Response interceptor activated")
-})
-
-// Add guards
-http.guard(func(req) {
-    print("🛡️ Security guard check passed")
-})
-
-// Add middleware
-http.cors()
-http.bodyParser()
-
-// Define test routes that showcase enhanced features
-http.get("/", func(req, res) {
-    print("🏠 Home route accessed")
-})
-
-http.get("/users/:id", func(req, res) {
-    print("👤 User route with parameter accessed")
-})
-
-http.post("/api/data", func(req, res) {
-    print("💾 API data endpoint accessed")
-})
-
-http.get("/test", func(req, res) {
-    print("🧪 Test endpoint accessed")
-})
-
-print("\n✅ Server configured with enhanced features:")
-print("  • Interceptors for request/response processing")
-print("  • Security guards for protection")
-print("  • CORS and body parser middleware")
-print("  • Routes with parameter support")
-
-print("\n🌐 Starting enhanced HTTP server...")
-print("📡 Visit these endpoints to test:")
-print("  • http://localhost:8080/ (Home)")
-print("  • http://localhost:8080/users/123 (User with ID)")
-print("  • http://localhost:8080/test (Test endpoint)")
-print("  • POST http://localhost:8080/api/data (API endpoint)")
-
-print("\n🚀 Enhanced server starting on port 8080...")
-http.listen(8080, "🎯 Enhanced backend server running with all features!")
 ```
 
 ## llm_openai.vint
@@ -5224,8 +2309,8 @@ http.listen(8080, "🎯 Enhanced backend server running with all features!")
 //     print("Completion: ", completion)
 // }
 
-println("LLM module example (requires OpenAI API key)");
-println("Uncomment the code above to test with a valid API key");
+println("LLM module example (requires OpenAI API key)")
+println("Uncomment the code above to test with a valid API key") 
 ```
 
 ## logicals.vint
@@ -5252,134 +2337,6 @@ let test_logical_operators = func () {
 // Call the function to test the logical operators
 test_logical_operators()
 
-```
-
-## main.vint
-
-```js
-// Importing modules
-import net       // Importing networking module for HTTP operations
-import time      // Importing time module to work with date and time
-
-// Main logic to split and print characters of a string
-let name = "VintLang"
-s = name.split("")
-for i in s {
-    print(i)
-}
-
-// Demonstrating type conversion and conditional statements
-age = "10"
-convert(age, "INTEGER")  // Convert age string to integer
-print(type(age))          // Uncomment to check the type of ageInInt
-
-// Conditional statements to compare the age variable
-if (age == 20) {
-    print(age)
-} else if (age == 10) {
-    print("Age is " + age)
-} else {
-    print((age == "20"))
-}
-
-// Working with height variable
-height = "6.0" // Height in feet
-print("My name is " + name)
-
-// Define a function to print details
-let printDetails = func(name, age, height) {
-    print("My name is " + name + ", I am " + age + " years old, and my height is " + height + " feet.")
-}
-
-// Calling the printDetails function with initial values
-printDetails(name, age, height)
-
-// Update height and call the function again
-height = "7"
-printDetails(name, age, height)
-
-// Print the current timestamp
-print(time.now())
-
-// Function to greet a user based on the time of the day
-let greet = func(nameParam) {
-    let currentTime = time.now()  // Get the current time
-    print(currentTime)            // Print the current time
-    if (true) {                   // Placeholder condition, modify for actual logic
-        print("Good morning, " + nameParam + "!")
-    } else {
-        print("Good evening, " + nameParam + "!")
-    }
-}
-
-// Time-related operations
-year = 2024
-print("Is", year, "Leap year:", time.isLeapYear(year))
-print(time.format(time.now(), "02-01-2006 15:04:05"))
-print(time.add(time.now(), "1h"))
-print(time.subtract(time.now(), "2h30m45s"))
-
-// Call the greet function with a sample name
-greet("John")
-
-// Example of a GET request using the net module
-let res = net.get("https://tachera.com")
-print(res)
-
-// Built-in functions
-print(type(123))             // Print the type of an integer
-let a = "123"                // Initialize a string variable
-convert(a, "INTEGER")        // Convert the string to an integer
-type(a)
-print(a)                     // Check the type of the variable
-print("Hello", "World")      // Print multiple values
-write("Hello World")         // Write a string (useful in returning output)
-
-```
-
-## main_example.vint
-
-```js
-// VintLang with main function example
-import time
-
-// Global setup - this runs during first pass
-println("🚀 VintLang Program Starting...")
-
-// Define helper functions
-let greet = func(name) {
-    println("👋 Hello,", name, "!")
-}
-
-let calculate = func(a, b) {
-    let sum = a + b
-    println("📊 Calculation:", a, "+", b, "=", sum)
-    return sum
-}
-
-// Main function - the entry point
-let main = func() {
-    println("\n🎯 === Main Function Executed ===")
-
-    greet("VintLang Developer")
-
-    let result = calculate(10, 32)
-
-    println("⏰ Current time:", time.now())
-
-    // Demonstrate arrays and loops
-    let languages = ["VintLang", "Go", "Zig", "C++"]
-    println("💻 Supported language styles:")
-    for lang in languages {
-        println("  -", lang)
-    }
-
-    println("✅ Main function completed successfully!")
-    return result
-}
-
-// This also runs during first pass
-println("⚙️ Program initialization complete, main will execute next...")
 ```
 
 ## make_example.vint
@@ -5612,406 +2569,6 @@ print("=" * 60)
 
 ```
 
-## math_showcase.vint
-
-```js
-// VintLang Mathematical & Algorithmic Showcase
-// Advanced computational demonstrations
-
-import time
-import os
-import json
-import uuid
-import math
-
-print("🧮 VintLang Mathematical & Algorithmic Showcase")
-print("=" * 60)
-print("Demonstrating computational and algorithmic capabilities")
-print("=" * 60)
-
-// Algorithm 1: Fibonacci Sequence Generator
-print("\n🔢 Algorithm 1: Fibonacci Sequence")
-print("-" * 40)
-
-let fibonacci = func(n) {
-    if (n <= 1) {
-        return n
-    }
-
-    let a = 0
-    let b = 1
-    let sequence = [0, 1]
-
-    for i in [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15] {
-        if (i <= n) {
-            let next = a + b
-            sequence.push(next)
-            a = b
-            b = next
-        }
-    }
-
-    return sequence
-}
-
-let fibSequence = fibonacci(15)
-print("Fibonacci sequence (first 16 numbers):")
-for i, num in fibSequence {
-    print("F(" + string(i) + ") = " + string(num))
-}
-
-// Algorithm 2: Prime Number Generator
-print("\n🔢 Algorithm 2: Prime Number Detection")
-print("-" * 40)
-
-let isPrime = func(n) {
-    if (n < 2) {
-        return false
-    }
-    if (n == 2) {
-        return true
-    }
-    if (n % 2 == 0) {
-        return false
-    }
-
-    let i = 3
-    while (i * i <= n) {
-        if (n % i == 0) {
-            return false
-        }
-        i += 2
-    }
-    return true
-}
-
-let primes = []
-let numbers = [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30]
-
-for num in numbers {
-    if (isPrime(num)) {
-        primes.push(num)
-    }
-}
-
-print("Prime numbers up to 30:")
-print(string(primes))
-print("Found " + string(len(primes)) + " prime numbers")
-
-// Algorithm 3: Factorial Calculator
-print("\n🔢 Algorithm 3: Factorial Calculations")
-print("-" * 40)
-
-let factorial = func(n) {
-    if (n <= 1) {
-        return 1
-    }
-    return n * factorial(n - 1)
-}
-
-let factorials = []
-for i in [1, 2, 3, 4, 5, 6, 7, 8, 9, 10] {
-    let fact = factorial(i)
-    factorials.push({
-        "number": i,
-        "factorial": fact
-    })
-    print(string(i) + "! = " + string(fact))
-}
-
-// Algorithm 4: Sorting Algorithm (Bubble Sort)
-print("\n🔢 Algorithm 4: Bubble Sort Implementation")
-print("-" * 40)
-
-let bubbleSort = func(arr) {
-    let sortedArr = arr
-    let n = len(sortedArr)
-
-    for i in [0, 1, 2, 3, 4, 5, 6, 7, 8, 9] {
-        if (i < n - 1) {
-            for j in [0, 1, 2, 3, 4, 5, 6, 7, 8, 9] {
-                if (j < n - i - 1) {
-                    if (sortedArr[j] > sortedArr[j + 1]) {
-                        let temp = sortedArr[j]
-                        sortedArr[j] = sortedArr[j + 1]
-                        sortedArr[j + 1] = temp
-                    }
-                }
-            }
-        }
-    }
-
-    return sortedArr
-}
-
-let unsortedArray = [64, 34, 25, 12, 22, 11, 90, 88, 76, 50]
-print("Original array: " + string(unsortedArray))
-let sortedArray = bubbleSort(unsortedArray)
-print("Sorted array:   " + string(sortedArray))
-
-// Algorithm 5: Number Theory - GCD Calculator
-print("\n🔢 Algorithm 5: Greatest Common Divisor")
-print("-" * 40)
-
-let gcd = func(a, b) {
-    while (b != 0) {
-        let temp = b
-        b = a % b
-        a = temp
-    }
-    return a
-}
-
-let numberPairs = [
-    {"a": 48, "b": 18},
-    {"a": 56, "b": 42},
-    {"a": 72, "b": 27},
-    {"a": 100, "b": 75}
-]
-
-for pair in numberPairs {
-    let result = gcd(pair["a"], pair["b"])
-    print("GCD(" + string(pair["a"]) + ", " + string(pair["b"]) + ") = " + string(result))
-}
-
-// Algorithm 6: Mathematical Constants and Calculations
-print("\n🔢 Algorithm 6: Mathematical Constants")
-print("-" * 40)
-
-print("Mathematical constants:")
-print("PI ≈ " + string(math.PI()))
-
-// Calculate circle properties
-let radius = 5
-let circumference = 2 * math.PI() * radius
-let area = math.PI() * radius * radius
-
-print("For a circle with radius " + string(radius) + ":")
-print("  Circumference = " + string(circumference))
-print("  Area = " + string(area))
-
-// Algorithm 7: Data Analysis and Statistics
-print("\n📊 Algorithm 7: Statistical Analysis")
-print("-" * 40)
-
-let dataset = [23, 45, 67, 89, 12, 34, 56, 78, 90, 21, 43, 65, 87, 10, 32]
-
-// Calculate mean
-let sum = 0
-for value in dataset {
-    sum += value
-}
-let mean = sum / len(dataset)
-
-// Find min and max
-let min = dataset[0]
-let max = dataset[0]
-for value in dataset {
-    if (value < min) {
-        min = value
-    }
-    if (value > max) {
-        max = value
-    }
-}
-
-print("Dataset: " + string(dataset))
-print("Count: " + string(len(dataset)))
-print("Sum: " + string(sum))
-print("Mean: " + string(mean))
-print("Min: " + string(min))
-print("Max: " + string(max))
-print("Range: " + string(max - min))
-
-// Algorithm 8: Data Structure Operations
-print("\n🔢 Algorithm 8: Data Structure Demonstrations")
-print("-" * 40)
-
-// Stack simulation using array
-let stack = []
-let stackOperations = ["push(10)", "push(20)", "push(30)", "pop()", "push(40)", "pop()"]
-
-print("Stack operations:")
-for operation in stackOperations {
-    if (operation.contains("push")) {
-        let value = 10
-        if (operation.contains("20")) {
-            value = 20
-        } else if (operation.contains("30")) {
-            value = 30
-        } else if (operation.contains("40")) {
-            value = 40
-        }
-        stack.push(value)
-        print("  " + operation + " -> Stack: " + string(stack))
-    } else if (operation.contains("pop")) {
-        if (len(stack) > 0) {
-            stack.pop()
-            print("  " + operation + " -> Stack: " + string(stack))
-        }
-    }
-}
-
-// Comprehensive Report Generation
-print("\n📋 Generating Comprehensive Mathematical Report")
-print("-" * 50)
-
-let mathReport = {
-    "report_id": uuid.generate(),
-    "generated_at": time.format(time.now(), "2006-01-02 15:04:05"),
-    "algorithms_demonstrated": [
-        "Fibonacci Sequence Generation",
-        "Prime Number Detection",
-        "Factorial Calculation",
-        "Bubble Sort Algorithm",
-        "Greatest Common Divisor",
-        "Mathematical Constants",
-        "Statistical Analysis",
-        "Data Structure Operations"
-    ],
-    "results": {
-        "fibonacci_sequence": fibSequence,
-        "prime_numbers": primes,
-        "factorials": factorials,
-        "sorted_array": sortedArray,
-        "gcd_calculations": numberPairs,
-        "statistics": {
-            "dataset": dataset,
-            "mean": mean,
-            "min": min,
-            "max": max,
-            "count": len(dataset)
-        }
-    },
-    "performance_metrics": {
-        "algorithms_executed": 8,
-        "calculations_performed": len(fibSequence) + len(primes) + len(factorials) + len(dataset),
-        "data_points_processed": len(dataset) + len(unsortedArray) + len(fibSequence)
-    }
-}
-
-let reportFile = "mathematical_analysis_" + time.format(time.now(), "2006-01-02_15-04-05") + ".json"
-os.writeFile(reportFile, json.encode(mathReport))
-print("✓ Comprehensive mathematical report saved to: " + reportFile)
-
-// Generate text summary
-let textSummary = "VINTLANG MATHEMATICAL & ALGORITHMIC SHOWCASE\n"
-textSummary += "Generated: " + time.format(time.now(), "02-01-2006 15:04:05") + "\n"
-textSummary += "=" * 60 + "\n\n"
-
-textSummary += "ALGORITHMS DEMONSTRATED:\n"
-for algo in mathReport["algorithms_demonstrated"] {
-    textSummary += "  ✓ " + algo + "\n"
-}
-
-textSummary += "\nKEY RESULTS:\n"
-textSummary += "  • Fibonacci sequence calculated up to F(15)\n"
-textSummary += "  • Found " + string(len(primes)) + " prime numbers up to 30\n"
-textSummary += "  • Calculated factorials from 1! to 10!\n"
-textSummary += "  • Sorted array of " + string(len(sortedArray)) + " elements\n"
-textSummary += "  • Analyzed dataset of " + string(len(dataset)) + " values\n"
-textSummary += "  • Demonstrated stack operations\n"
-
-textSummary += "\nSTATISTICAL SUMMARY:\n"
-textSummary += "  • Dataset mean: " + string(mean) + "\n"
-textSummary += "  • Dataset range: " + string(min) + " to " + string(max) + "\n"
-textSummary += "  • Total calculations: " + string(mathReport["performance_metrics"]["calculations_performed"]) + "\n"
-
-let summaryFile = "math_summary_" + time.format(time.now(), "2006-01-02_15-04-05") + ".txt"
-os.writeFile(summaryFile, textSummary)
-print("✓ Summary report saved to: " + summaryFile)
-
-// Final Results
-print("\n🎉 Mathematical Showcase Complete!")
-print("-" * 50)
-
-print("📊 COMPUTATIONAL ACHIEVEMENTS:")
-print("  • Algorithms implemented: " + string(len(mathReport["algorithms_demonstrated"])))
-print("  • Mathematical calculations: " + string(mathReport["performance_metrics"]["calculations_performed"]))
-print("  • Data points processed: " + string(mathReport["performance_metrics"]["data_points_processed"]))
-print("  • Prime numbers found: " + string(len(primes)))
-print("  • Fibonacci numbers calculated: " + string(len(fibSequence)))
-
-print("\n✨ VINTLANG MATHEMATICAL CAPABILITIES:")
-print("  ✓ Recursive algorithms (Fibonacci, Factorial)")
-print("  ✓ Iterative algorithms (Prime detection, Sorting)")
-print("  ✓ Mathematical calculations (GCD, Statistics)")
-print("  ✓ Data structure operations (Stack, Array)")
-print("  ✓ Number theory implementations")
-print("  ✓ Statistical analysis functions")
-print("  ✓ Algorithm complexity handling")
-
-print("\n🚀 VintLang is excellent for:")
-print("  • Mathematical computing")
-print("  • Algorithm implementation")
-print("  • Data analysis and statistics")
-print("  • Educational programming")
-print("  • Scientific calculations")
-print("  • Computational problem solving")
-
-print("\n🎯 This demonstrates VintLang's power for")
-print("   computational and mathematical applications!")
-
-print("\n" + "=" * 60)
-print("🧮 Mathematical Showcase Complete!")
-print("=" * 60)
-```
-
-## mathfile.vint
-
-```js
-// VintLang Package Example
-// Demonstrates defining a package to organize related functions
-
-// Define a package (will be changed to module syntax in future)
-package mathfile{
-    // Define a sum function within the package
-    let sum = func(a,b){
-        return a+b
-    }
-}
-```
-
-## module_functions_test.vint
-
-```js
-// Test to verify existing module functions still work
-import math
-import string
-import random
-
-println("Testing existing module functions...")
-
-// Test math module functions
-println("=== Math Module ===")
-println("math.abs(-5):", math.abs(-5))
-println("math.sqrt(16):", math.sqrt(16))
-println("math.round(3.14):", math.round(3.14))
-
-// Test string module functions
-println("\n=== String Module ===")
-println("string.toUpper('hello'):", string.toUpper("hello"))
-println("string.toLower('WORLD'):", string.toLower("WORLD"))
-println("string.trim('  hi  '):", string.trim("  hi  "))
-println("string.contains('hello', 'ell'):", string.contains("hello", "ell"))
-
-// Test random module functions
-println("\n=== Random Module ===")
-println("random.float():", random.float())
-println("random.int(1, 10):", random.int(1, 10))
-
-// Test array methods
-println("\n=== Array Methods ===")
-let arr = [3, 1, 4, 1, 5]
-println("Original array:", arr)
-println("Sorted array:", arr.sort())
-let arr2 = [1, 2, 3]
-println("Original array 2:", arr2)
-println("Reversed array 2:", arr2.reverse())
-
-println("\nExisting module functions work correctly!")
-```
-
 ## mysql.vint
 
 ```js
@@ -6060,7 +2617,7 @@ if (type(conn) == "ERROR") {
     // Example 6: Close the connection
     mysql.close(conn)
     print("\nConnection closed")
-}
+} 
 ```
 
 ## nativeStrings.vint
@@ -6070,44 +2627,46 @@ if (type(conn) == "ERROR") {
 // Demonstrates built-in string methods and type conversion functions
 
 // Define a variable and assign a string to it
-let name = "Tachera Sasi";
+let name = "Tachera Sasi"
 
 // Split the string into an array of characters and print the result
-print(name.split(""));
+print(name.split("")) 
 
 // Reverse the string and print the result
-print(name.reverse());
+print(name.reverse()) 
 
 // Get the length of the string and print it
-print(name.len());
+print(name.len()) 
 
 // Convert the string to uppercase and print it
-print(name.upper());
+print(name.upper()) 
 
 // Convert the string to lowercase and print it
-print(name.lower());
+print(name.lower()) 
 
 // Check if the string contains the substring "sasi" (case-sensitive) and print the result
-print(name.contains("sasi"));
+print(name.contains("sasi")) 
 
 // Convert the string to uppercase and check if it contains the substring "SASI" (case-sensitive), then print the result
-print(name.upper().contains("SASI"));
+print(name.upper().contains("SASI")) 
 
 // Replace the substring "Sasi" with "Vint" and print the result
-print(name.replace("Sasi", "Vint"));
+print(name.replace("Sasi", "Vint")) 
 
 // Trim any occurrence of the character "a" from the start and end of the string and print the result
-print(name.trim("a"));
+print(name.trim("a"))
 
-print(string(123)); // "123"
-print(string(true)); // "true"
-print(string(12.34)); // "12.34"
-print(string("Hello World")); // "Hello World"
+print(string(123))           // "123"
+print(string(true))          // "true"
+print(string(12.34))         // "12.34"
+print(string("Hello World")) // "Hello World"
 
-print(int("123")); // 123
-print(int(12.34)); // 12
-print(int(true)); // 1
-print(int(false)); // 0
+
+print(int("123"))    // 123
+print(int(12.34))    // 12
+print(int(true))     // 1
+print(int(false))    // 0
+
 ```
 
 ## os.vint
@@ -6120,7 +2679,7 @@ import os
 
 // Example 1: Exit with a status code (commented to avoid terminating script)
 // os.exit(1)
-
+ 
 // Example 2: Run a shell command and capture output
 let result = os.run("ls -la")
 print(result)
@@ -6157,83 +2716,90 @@ print(lines) // Outputs: ["Hello", "World"]
 
 ```
 
-## overloading_test.vint
+## overloading.vint
 
 ```js
 // VintLang Function Overloading Example
-// Demonstrates function overloading by arity (number of parameters)
+// VintLang supports overloading functions by arity (number of parameters).
+// The interpreter automatically selects the correct version based on the
+// number of arguments passed.
 
-// Define multiple versions of 'greet' function with different parameter counts
-// The interpreter selects the appropriate version based on the number of arguments
-
-// Version 1: Single parameter
-let greet = func(name) {
-    print("Hello, ", name)
-}
-
-// Version 2: Two parameters
-let greet = func(name, times) {
-    for i in range(times) {
-        print("Hello, ", name)
-    }
-}
-
-// Version 3: No parameters
+// ============================================================
+// 1. Basic overloading by arity
+// ============================================================
 let greet = func() {
-    print("Hello, world!")
+    println("Hello, World!")
 }
 
-// Call with one argument - uses Version 1
-greet("Alice")      // Should print: Hello, Alice
-print("---")
+let greet = func(name) {
+    println("Hello,", name + "!")
+}
 
-// Call with two arguments - uses Version 2
-greet("Bob", 3)      // Should print: Hello, Bob (3 times)
-print("---")
+let greet = func(name, title) {
+    println("Hello,", title, name + "!")
+}
 
-// Call with no arguments - uses Version 3
-greet()             // Should print: Hello, world!
+println("=== Greeting overloads ===")
+greet()                   // calls 0-arg version
+greet("Alice")            // calls 1-arg version
+greet("Smith", "Dr.")     // calls 2-arg version
 
-// Example: Normal (non-overloaded) functions work as usual
+// ============================================================
+// 2. Math operations overloaded by arity
+// ============================================================
 let add = func(a, b) {
     return a + b
 }
 
-let result = add(2, 3)
-print("add(2, 3) =", result) // Should print: add(2, 3) = 5
-
-let say_hello = func() {
-    print("Hello from a normal function!")
+let add = func(a, b, c) {
+    return a + b + c
 }
 
-say_hello() // Should print: Hello from a normal function!
-```
+let add = func(a, b, c, d) {
+    return a + b + c + d
+}
 
-## packages.vint
+println("\n=== Add overloads ===")
+println("add(2, 3)       =", add(2, 3))
+println("add(1, 2, 3)    =", add(1, 2, 3))
+println("add(1, 2, 3, 4) =", add(1, 2, 3, 4))
 
-```js
-// VintLang Package System Example
-// NOTE: This feature is still in development and not fully working yet
+// ============================================================
+// 3. Default parameter values (another way to handle arity)
+// ============================================================
+let connect = func(host = "localhost") {
+    println("Connecting to", host, "on port 8080")
+}
 
-/**
-The package system with init functions and @ accessor is under development.
-This example demonstrates the planned syntax, but it's not yet functional.
-*/
+let connect = func(host, port) {
+    println("Connecting to", host, "on port", port)
+}
 
-// Planned syntax (not yet working):
-// package vint{
-//     init = func(){
-//         name = "vint"
-//         a = "hiofehoi"
-//     }
-//     print(@.name)
-// }
-// print(@.a)
+println("\n=== Connect overloads ===")
+connect()                    // uses default host
+connect("example.com")       // explicit host, default port via default param
+connect("example.com", 3306) // explicit host and port
 
-println("Package system is under development.");
-println(
-  "This example shows planned syntax that will be implemented in future versions.",
-);
+// ============================================================
+// 4. Logging function with multiple signatures
+// ============================================================
+let logMsg = func(message) {
+    println("[LOG]", message)
+}
+
+let logMsg = func(level, message) {
+    println("[" + level + "]", message)
+}
+
+let logMsg = func(level, message, data) {
+    println("[" + level + "] " + message + " | data: " + string(data))
+}
+
+println("\n=== logMsg overloads ===")
+logMsg("Something happened")
+logMsg("ERROR", "Connection refused")
+logMsg("DEBUG", "User fetched", "id=42")
+
 ```
 
 ## path.vint
@@ -6267,7 +2833,111 @@ print("Extension:", extension)
 // Example 5: Check if path is absolute
 // Determines if a path is absolute (starts from root)
 print("Is absolute?", path.isAbs(full_path))
-print("Is 'relative/path' absolute?", path.isAbs("relative/path"))
+print("Is 'relative/path' absolute?", path.isAbs("relative/path")) 
+```
+
+## pattern_matching.vint
+
+```js
+// VintLang Pattern Matching Example
+// Demonstrates match and switch statements for expressive control flow
+
+// ============================================================
+// 1. Basic switch statement
+// ============================================================
+let day = 3
+switch (day) {
+    case 1 { println("Monday") }
+    case 2 { println("Tuesday") }
+    case 3 { println("Wednesday") }
+    case 4 { println("Thursday") }
+    case 5 { println("Friday") }
+    default { println("Weekend") }
+}
+
+// ============================================================
+// 2. Switch with guard conditions
+// ============================================================
+let score = 78
+let grade = ""
+switch (score) {
+    case x if x >= 90 { grade = "A" }
+    case x if x >= 80 { grade = "B" }
+    case x if x >= 70 { grade = "C" }
+    case x if x >= 60 { grade = "D" }
+    default { grade = "F" }
+}
+println("\nScore:", score, "-> Grade:", grade)
+
+// ============================================================
+// 3. Dictionary pattern matching with match
+// ============================================================
+let user = {"role": "admin", "active": true}
+println("\nUser access check:")
+match user {
+    {"role": "admin", "active": true}  => println("Full access granted")
+    {"role": "admin", "active": false} => println("Admin account suspended")
+    {"role": "user",  "active": true}  => println("User access granted")
+    {"role": "user",  "active": false} => println("User account disabled")
+    _ => println("Unknown user type")
+}
+
+// ============================================================
+// 4. Match with guard conditions
+// ============================================================
+let player = {"name": "Alice", "score": 2500, "level": 8}
+println("\nPlayer rank:")
+match player {
+    {"score": s} if s >= 3000 => println("Diamond rank")
+    {"score": s} if s >= 2000 => println("Gold rank")
+    {"score": s} if s >= 1000 => println("Silver rank")
+    _ => println("Bronze rank")
+}
+
+// ============================================================
+// 5. Pattern matching on a list of records
+// ============================================================
+let orders = [
+    {"status": "shipped",   "id": 101},
+    {"status": "pending",   "id": 102},
+    {"status": "delivered", "id": 103},
+    {"status": "cancelled", "id": 104}
+]
+
+println("\nOrder status report:")
+for order in orders {
+    match order {
+        {"status": "shipped"}   => println("Order", order["id"], "- In transit")
+        {"status": "pending"}   => println("Order", order["id"], "- Awaiting processing")
+        {"status": "delivered"} => println("Order", order["id"], "- Successfully delivered")
+        {"status": "cancelled"} => println("Order", order["id"], "- Cancelled")
+        _ => println("Order", order["id"], "- Status unknown")
+    }
+}
+
+// ============================================================
+// 6. Switch matching on string type
+// ============================================================
+let classify = func(value) {
+    switch (type(value)) {
+        case "INTEGER" { return "integer number" }
+        case "FLOAT"   { return "floating point number" }
+        case "STRING"  { return "text string" }
+        case "BOOLEAN" { return "boolean value" }
+        case "ARRAY"   { return "array with " + string(len(value)) + " elements" }
+        case "DICT"    { return "dictionary" }
+        default        { return "unknown type" }
+    }
+}
+
+println("\nType classification:")
+println(42, "->", classify(42))
+println(3.14, "->", classify(3.14))
+println("hello", "->", classify("hello"))
+println(true, "->", classify(true))
+println([1, 2, 3], "->", classify([1, 2, 3]))
+println({"a": 1}, "->", classify({"a": 1}))
+
 ```
 
 ## pointers.vint
@@ -6346,7 +3016,7 @@ if (type(conn) == "ERROR") {
     // Example 6: Close the connection
     postgres.close(conn)
     print("\nConnection closed")
-}
+} 
 ```
 
 ## random.vint
@@ -6368,31 +3038,31 @@ print("Random string of length 8:", random.string(8))
 
 // Select a random element from an array
 let options = ["rock", "paper", "scissors"]
-print("Random choice from", options, ":", random.choice(options))
+print("Random choice from", options, ":", random.choice(options)) 
 ```
 
 ## redis.vint
 
 ```js
-const redis = import("redis");
+const redis = import("redis")
 
 // Connect to Redis
-conn = redis.connect("localhost:6379");
+conn = redis.connect("localhost:6379")
 
 // Basic operations
-redis.set(conn, "greeting", "Hello, World!");
-message = redis.get(conn, "greeting");
+redis.set(conn, "greeting", "Hello, World!")
+message = redis.get(conn, "greeting")
 
 // Hash operations
-redis.hset(conn, "user:1", "name", "John Doe");
-user = redis.hgetall(conn, "user:1");
+redis.hset(conn, "user:1", "name", "John Doe")
+user = redis.hgetall(conn, "user:1")
 
 // List operations
-redis.rpush(conn, "tasks", "task1", "task2");
-task = redis.lpop(conn, "tasks");
+redis.rpush(conn, "tasks", "task1", "task2")
+task = redis.lpop(conn, "tasks")
 
 // Close connection
-redis.close(conn);
+redis.close(conn)
 ```
 
 ## reflect.vint
@@ -6442,48 +3112,65 @@ println(reflect.isFunction(123))         // false
 ## regex.vint
 
 ```js
-// VintLang Regex Module Example (CURRENTLY NOT WORKING)
-// NOTE: This example demonstrates planned regex functionality
-// The regex module is not yet fully implemented and has syntax parsing issues
+// VintLang Regex Module Example
+// Demonstrates pattern matching, text replacement, and string splitting using regular expressions
+//
+// Use regex.test() to check if a pattern matches (avoids conflict with match keyword)
+// Use regex.replaceString(pattern, replacement, text) to replace occurrences
+// Use regex.splitString(pattern, text) to split a string
 
-// TODO: Fix regex module implementation to support these operations:
-// - Pattern matching
-// - String replacement with regex
-// - String splitting with regex patterns
+import regex
 
-// import regex
+println("=== Pattern Matching ===")
 
-// Example 1: Using match to check if a string matches a pattern
-// let result = regex.match("^Hello", "Hello World")
-// print(result)  // Expected output: true
+// Check if a string contains digits
+println("Contains digits:", regex.test("\\d+", "hello123"))         // true
+println("Contains digits:", regex.test("\\d+", "helloworld"))       // false
 
-// Example 2: Using match to check if a string does not match a pattern
-// result = regex.match("^World", "Hello World")
-// print(result)  // Expected output: false
+// Validate an email address
+let email = "user@example.com"
+let emailPattern = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$"
+println("Valid email:", regex.test(emailPattern, email))             // true
+println("Valid email:", regex.test(emailPattern, "notanemail"))      // false
 
-// Example 3: Using replaceString to replace part of a string with a new value
-// let newString = regex.replaceString("World", "VintLang", "Hello World")
-// print(newString)  // Expected output: "Hello VintLang"
+// Match a URL
+let url = "https://vintlang.org/docs"
+println("Is URL:", regex.test("^https?://", url))                   // true
 
-// Example 4: Using splitString to split a string by a regex pattern
-// let words = regex.splitString("\\s+", "Hello World VintLang")
-// print(words)  // Expected output: ["Hello", "World", "VintLang"]
+println("\n=== Text Replacement ===")
 
-// Example 5: Using splitString to split a string by a comma
-// let csv = regex.splitString(",", "apple,banana,orange")
-// print(csv)  // Expected output: ["apple", "banana", "orange"]
+// Mask digits with *
+let phone = "Call me at 123-456-7890 or 555-0000"
+let masked = regex.replaceString("\\d", "*", phone)
+println("Masked:", masked)
 
-// Example 6: Using match with a more complex regex pattern
-// let emailMatch = regex.match("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$", "test@example.com")
-// print(emailMatch)  // Expected output: true
+// Remove extra whitespace
+let messy = "hello    world   from   vint"
+let clean = regex.replaceString("\\s+", " ", messy)
+println("Cleaned:", clean)
 
-// Example 7: Using replaceString with a regex pattern to replace digits in a string
-// let maskedString = regex.replaceString("\\d", "*", "My phone number is 123456789")
-// print(maskedString)  // Expected output: "My phone number is *********"
+// Replace URLs with [link]
+let text = "Visit https://vintlang.org and http://example.com today"
+let replaced = regex.replaceString("https?://[^\\s]+", "[link]", text)
+println("Replaced URLs:", replaced)
 
-println(
-  "Regex module is not yet implemented. This example is for future reference.",
-);
+println("\n=== String Splitting ===")
+
+// Split by comma (CSV-like)
+let csv = "alice,bob,charlie,diana"
+let names = regex.splitString(",", csv)
+println("CSV split:", names)
+
+// Split by whitespace
+let sentence = "The quick   brown  fox"
+let words = regex.splitString("\\s+", sentence)
+println("Word split:", words)
+
+// Split by punctuation
+let code = "if(x>0){return x}"
+let tokens = regex.splitString("[(){}]", code)
+println("Code tokens:", tokens)
+
 ```
 
 ## repeat-keyword.vint
@@ -6503,18 +3190,6 @@ repeat num {
 repeat 3 {
     println("Default i:", i)
 }
-```
-
-## savegame.json
-
-```js
-{
-  "health": 100,
-  "inventory": ["Mystic Key"],
-  "location": "start",
-  "name": "Tach"
-}
-
 ```
 
 ## schedule_examples.vint
@@ -6632,26 +3307,6 @@ println("The VintLang schedule module is complete and ready for use!")
 println("Similar to Go's time.Ticker and NestJS's @Cron decorators.")
 ```
 
-## schedule_test.vint
-
-```js
-import schedule
-
-// Test ticker (should return error about callback execution)
-let tickerResult = schedule.ticker(1, func() { print("Tick!") })
-print("ticker result:", tickerResult)
-
-// Test schedule (should return error about callback execution)
-let scheduleResult = schedule.schedule("0 0 9 * * *", func() { print("Good morning!") })
-print("schedule result:", scheduleResult)
-
-// Test stopTicker and stopSchedule with dummy objects (should not error, but do nothing)
-let dummyTicker = null
-let dummySchedule = null
-print("stopTicker result:", schedule.stopTicker(dummyTicker))
-print("stopSchedule result:", schedule.stopSchedule(dummySchedule))
-```
-
 ## shell.vint
 
 ```js
@@ -6668,749 +3323,6 @@ print(output) // Outputs "Hello, Shell!"
 let exists = shell.exists("ls")
 print(exists) // Outputs true if the 'ls' command exists
 
-```
-
-## showcase_task_manager.vint
-
-```js
-// VintLang Showcase: Personal Task Management System
-// This application demonstrates VintLang's capabilities with a real-world use case
-
-import time
-import os
-import json
-import uuid
-import "string"
-
-// Color codes for terminal output
-let COLORS = {
-    "reset": "\033[0m",
-    "red": "\033[31m",
-    "green": "\033[32m",
-    "yellow": "\033[33m",
-    "blue": "\033[34m",
-    "magenta": "\033[35m",
-    "cyan": "\033[36m",
-    "white": "\033[37m"
-}
-
-// Task structure and application state
-let taskManager = {
-    "tasks": [],
-    "categories": ["Work", "Personal", "Study", "Health", "Project"],
-    "priorities": ["Low", "Medium", "High", "Urgent"],
-    "dataFile": "tasks.json"
-}
-
-// Helper function to print colored text
-let printColor = func(color, text) {
-    print(COLORS[color] + text + COLORS["reset"])
-}
-
-// Helper function to print a separator line
-let printSeparator = func() {
-    printColor("cyan", "=" * 50)
-}
-
-// Load tasks from JSON file
-let loadTasks = func() {
-    if (os.fileExists(taskManager["dataFile"])) {
-        let data = os.readFile(taskManager["dataFile"])
-        taskManager["tasks"] = json.decode(data)
-        printColor("green", "✓ Tasks loaded successfully!")
-    } else {
-        printColor("yellow", "⚠ No existing tasks file found. Starting fresh!")
-        taskManager["tasks"] = []
-    }
-}
-
-// Save tasks to JSON file
-let saveTasks = func() {
-    let data = json.encode(taskManager["tasks"])
-    os.writeFile(taskManager["dataFile"], data)
-    printColor("green", "✓ Tasks saved successfully!")
-}
-
-// Create a new task
-let createTask = func() {
-    printSeparator()
-    printColor("blue", "📝 Creating New Task")
-    printSeparator()
-
-    let title = input("Task title: ")
-    let description = input("Description: ")
-
-    // Show categories
-    printColor("cyan", "Available categories:")
-    for i, category in taskManager["categories"] {
-        print(string(i + 1) + ". " + category)
-    }
-    let categoryIndex = input("Select category (1-5): ")
-    let categoryNum = int(categoryIndex)
-    let category = taskManager["categories"][categoryNum - 1]
-
-    // Show priorities
-    printColor("cyan", "Available priorities:")
-    for i, priority in taskManager["priorities"] {
-        print(string(i + 1) + ". " + priority)
-    }
-    let priorityIndex = input("Select priority (1-4): ")
-    let priorityNum = int(priorityIndex)
-    let priority = taskManager["priorities"][priorityNum - 1]
-
-    let dueDate = input("Due date (YYYY-MM-DD) or press Enter for none: ")
-
-    let task = {
-        "id": uuid.generate(),
-        "title": title,
-        "description": description,
-        "category": category,
-        "priority": priority,
-        "dueDate": dueDate,
-        "completed": false,
-        "createdAt": time.now(),
-        "completedAt": ""
-    }
-
-    taskManager["tasks"].push(task)
-    printColor("green", "✓ Task created successfully!")
-}
-
-// List all tasks
-let listTasks = func() {
-    printSeparator()
-    printColor("blue", "📋 Task List")
-    printSeparator()
-
-    if (len(taskManager["tasks"]) == 0) {
-        printColor("yellow", "No tasks found!")
-        return
-    }
-
-    for i, task in taskManager["tasks"] {
-        let status = "❌"
-        if (task["completed"]) {
-            status = "✅"
-        }
-
-        let priorityColor = "white"
-        if (task["priority"] == "Urgent") {
-            priorityColor = "red"
-        } else if (task["priority"] == "High") {
-            priorityColor = "yellow"
-        } else if (task["priority"] == "Medium") {
-            priorityColor = "blue"
-        }
-
-        print(status + " [" + string(i + 1) + "] " + task["title"])
-        print("    Category: " + task["category"])
-        printColor(priorityColor, "    Priority: " + task["priority"])
-        if (task["dueDate"] != "") {
-            print("    Due: " + task["dueDate"])
-        }
-        if (task["description"] != "") {
-            print("    Description: " + task["description"])
-        }
-        print("    Created: " + task["createdAt"])
-        if (task["completed"] && task["completedAt"] != "") {
-            print("    Completed: " + task["completedAt"])
-        }
-        print("")
-    }
-}
-
-// Mark task as completed
-let completeTask = func() {
-    listTasks()
-    if (len(taskManager["tasks"]) == 0) {
-        return
-    }
-
-    let taskIndex = input("Enter task number to mark as completed: ")
-    let taskNum = int(taskIndex)
-
-    if (taskNum > 0 && taskNum <= len(taskManager["tasks"])) {
-        let task = taskManager["tasks"][taskNum - 1]
-        task["completed"] = true
-        task["completedAt"] = time.now()
-        printColor("green", "✓ Task marked as completed!")
-    } else {
-        printColor("red", "❌ Invalid task number!")
-    }
-}
-
-// Filter tasks by category
-let filterByCategory = func() {
-    printColor("cyan", "Available categories:")
-    for i, category in taskManager["categories"] {
-        print(string(i + 1) + ". " + category)
-    }
-    let categoryIndex = input("Select category to filter (1-5): ")
-    let categoryNum = int(categoryIndex)
-    let selectedCategory = taskManager["categories"][categoryNum - 1]
-
-    printSeparator()
-    printColor("blue", "📋 Tasks in category: " + selectedCategory)
-    printSeparator()
-
-    let found = false
-    for task in taskManager["tasks"] {
-        if (task["category"] == selectedCategory) {
-            let status = "❌"
-            if (task["completed"]) {
-                status = "✅"
-            }
-            print(status + " " + task["title"] + " (" + task["priority"] + ")")
-            found = true
-        }
-    }
-
-    if (!found) {
-        printColor("yellow", "No tasks found in this category!")
-    }
-}
-
-// Get task statistics
-let showStatistics = func() {
-    printSeparator()
-    printColor("blue", "📊 Task Statistics")
-    printSeparator()
-
-    let totalTasks = len(taskManager["tasks"])
-    let completedTasks = 0
-    let pendingTasks = 0
-    let urgentTasks = 0
-    let categoryStats = {}
-
-    for task in taskManager["tasks"] {
-        if (task["completed"]) {
-            completedTasks += 1
-        } else {
-            pendingTasks += 1
-        }
-
-        if (task["priority"] == "Urgent") {
-            urgentTasks += 1
-        }
-
-        let category = task["category"]
-        if (!categoryStats.hasKey(category)) {
-            categoryStats[category] = 0
-        }
-        categoryStats[category] += 1
-    }
-
-    print("Total Tasks: " + string(totalTasks))
-    printColor("green", "Completed: " + string(completedTasks))
-    printColor("yellow", "Pending: " + string(pendingTasks))
-    printColor("red", "Urgent: " + string(urgentTasks))
-
-    if (totalTasks > 0) {
-        let completionRate = (completedTasks * 100) / totalTasks
-        print("Completion Rate: " + string(completionRate) + "%")
-    }
-
-    print("\nTasks by Category:")
-    for category in taskManager["categories"] {
-        let count = 0
-        if (categoryStats.hasKey(category)) {
-            count = categoryStats[category]
-        }
-        print("  " + category + ": " + string(count))
-    }
-}
-
-// Export tasks to a readable format
-let exportTasks = func() {
-    let exportFile = "tasks_export_" + time.format(time.now(), "2006-01-02_15-04-05") + ".txt"
-    let content = "TASK EXPORT - " + time.format(time.now(), "02-01-2006 15:04:05") + "\n"
-    content += "=" * 50 + "\n\n"
-
-    for i, task in taskManager["tasks"] {
-        let status = "PENDING"
-        if (task["completed"]) {
-            status = "COMPLETED"
-        }
-
-        content += "[" + string(i + 1) + "] " + task["title"] + "\n"
-        content += "Status: " + status + "\n"
-        content += "Category: " + task["category"] + "\n"
-        content += "Priority: " + task["priority"] + "\n"
-        if (task["dueDate"] != "") {
-            content += "Due Date: " + task["dueDate"] + "\n"
-        }
-        content += "Description: " + task["description"] + "\n"
-        content += "Created: " + task["createdAt"] + "\n"
-        if (task["completed"] && task["completedAt"] != "") {
-            content += "Completed: " + task["completedAt"] + "\n"
-        }
-        content += "\n" + "-" * 30 + "\n\n"
-    }
-
-    os.writeFile(exportFile, content)
-    printColor("green", "✓ Tasks exported to: " + exportFile)
-}
-
-// Delete a task
-let deleteTask = func() {
-    listTasks()
-    if (len(taskManager["tasks"]) == 0) {
-        return
-    }
-
-    let taskIndex = input("Enter task number to delete: ")
-    let taskNum = int(taskIndex)
-
-    if (taskNum > 0 && taskNum <= len(taskManager["tasks"])) {
-        let task = taskManager["tasks"][taskNum - 1]
-        let confirm = input("Are you sure you want to delete '" + task["title"] + "'? (y/N): ")
-        if (confirm == "y" || confirm == "Y") {
-            taskManager["tasks"].splice(taskNum - 1, 1)
-            printColor("green", "✓ Task deleted successfully!")
-        } else {
-            printColor("yellow", "Delete cancelled.")
-        }
-    } else {
-        printColor("red", "❌ Invalid task number!")
-    }
-}
-
-// Main menu
-let showMenu = func() {
-    printSeparator()
-    printColor("magenta", "🎯 VintLang Task Manager")
-    printSeparator()
-    print("1. Create New Task")
-    print("2. List All Tasks")
-    print("3. Mark Task as Completed")
-    print("4. Filter Tasks by Category")
-    print("5. Show Statistics")
-    print("6. Export Tasks")
-    print("7. Delete Task")
-    print("8. Save & Exit")
-    printSeparator()
-}
-
-// Main application loop
-let runTaskManager = func() {
-    printColor("cyan", "🚀 Welcome to VintLang Task Manager!")
-    printColor("cyan", "A showcase of VintLang's capabilities")
-
-    // Load existing tasks
-    loadTasks()
-
-    while (true) {
-        showMenu()
-        let choice = input("Select option (1-8): ")
-
-        if (choice == "1") {
-            createTask()
-        } else if (choice == "2") {
-            listTasks()
-        } else if (choice == "3") {
-            completeTask()
-        } else if (choice == "4") {
-            filterByCategory()
-        } else if (choice == "5") {
-            showStatistics()
-        } else if (choice == "6") {
-            exportTasks()
-        } else if (choice == "7") {
-            deleteTask()
-        } else if (choice == "8") {
-            saveTasks()
-            printColor("cyan", "👋 Thank you for using VintLang Task Manager!")
-            printColor("cyan", "This showcase demonstrated:")
-            print("  • JSON data persistence")
-            print("  • File I/O operations")
-            print("  • Time and date handling")
-            print("  • UUID generation")
-            print("  • String manipulation")
-            print("  • Interactive user input")
-            print("  • Data structures and algorithms")
-            print("  • Modular programming")
-            break
-        } else {
-            printColor("red", "❌ Invalid option! Please select 1-8.")
-        }
-
-        input("\nPress Enter to continue...")
-    }
-}
-
-// Start the application
-runTaskManager()
-```
-
-## simple_build.vint
-
-```js
-// Simple Build Script Example
-// This demonstrates a basic build automation script using the make module
-// Usage: vint examples/simple_build.vint
-
-import make
-import cli
-
-print("🔨 Simple Build Automation Example\n")
-
-// Helper function for colored output
-let printSuccess = func(msg) {
-    print("✅ " + msg)
-}
-
-let printInfo = func(msg) {
-    print("ℹ️  " + msg)
-}
-
-// Define tasks as a dictionary
-let tasks = {
-    "check": func() {
-        printInfo("Checking build requirements...")
-
-        if (make.check("go")) {
-            printSuccess("Go compiler found")
-        } else {
-            print("❌ Go compiler not found")
-            return false
-        }
-
-        if (make.check("git")) {
-            printSuccess("Git found")
-        } else {
-            printInfo("Git not found (optional)")
-        }
-
-        return true
-    },
-
-    "info": func() {
-        printInfo("Getting system information...")
-        let goVersion = make.exec("go version")
-        print("Go: " + goVersion)
-    },
-
-    "build": func() {
-        make.echo("Building application...")
-
-        // Set build environment
-        make.env("CGO_ENABLED", "0")
-
-        // Execute build command
-        let result = make.exec("go build -o example-app main.go")
-
-        if (result.type != "error") {
-            printSuccess("Build completed successfully!")
-        } else {
-            print("❌ Build failed")
-        }
-    },
-
-    "clean": func() {
-        make.echo("Cleaning build artifacts...")
-        make.exec("rm -f example-app")
-        printSuccess("Clean completed!")
-    },
-
-    "help": func() {
-        print("Available tasks:")
-        print("  check - Check build requirements")
-        print("  info  - Show system information")
-        print("  build - Build the application")
-        print("  clean - Clean build artifacts")
-        print("  help  - Show this help")
-        print("\nUsage: vint examples/simple_build.vint <task>")
-    }
-}
-
-// Parse command line arguments
-let args = cli.getArgs()
-
-if (len(args) == 0) {
-    print("No task specified. Available tasks:")
-    tasks["help"]()
-} else {
-    let taskName = args[0]
-
-    if (tasks[taskName] != null) {
-        print("Running task: " + taskName + "\n")
-        tasks[taskName]()
-    } else {
-        print("❌ Unknown task: " + taskName)
-        tasks["help"]()
-    }
-}
-
-print("\n✅ Done!")
-
-```
-
-## simple_enterprise_test.vint
-
-```js
-// Simple Enterprise HTTP Module Test
-import http
-
-print("🏢 Enterprise HTTP Module Features Test")
-print("=" * 60)
-
-// Test 1: Create app with enterprise features
-print("\n✓ Test 1 - Enterprise App Creation")
-let result = http.app()
-print("App creation:", result)
-
-// Test 2: Route Grouping for API Versioning
-print("\n✓ Test 2 - Route Grouping & API Versioning")
-let v1Group = http.group("/api/v1", func() {
-    print("API v1 group created")
-})
-print("API v1 group:", v1Group)
-
-// Test 3: Async Handlers
-print("\n✓ Test 3 - Async Handlers")
-let asyncHandler = http.async(func(req, res) {
-    print("Processing asynchronously")
-})
-print("Async handler created:", asyncHandler)
-
-// Test 4: Security Features
-print("\n✓ Test 4 - Security Features")
-let securityResult = http.security()
-print("Security middleware:", securityResult)
-
-// Test 5: Basic Routes
-print("\n✓ Test 5 - Basic Routes Registration")
-let getRoute = http.get("/users", func(req, res) {
-    print("GET /users route")
-})
-print("GET route:", getRoute)
-
-let postRoute = http.post("/upload", func(req, res) {
-    print("POST /upload route")
-})
-print("POST route:", postRoute)
-
-// Test 6: Middleware
-print("\n✓ Test 6 - Middleware Registration")
-let middleware = http.use(func(req, res, next) {
-    print("Middleware function")
-})
-print("Middleware:", middleware)
-
-// Test 7: Guards
-print("\n✓ Test 7 - Guards")
-let guard = http.guard(func(req) {
-    print("Guard function")
-})
-print("Guard:", guard)
-
-// Test 8: Error Handler
-print("\n✓ Test 8 - Error Handler")
-let errorHandler = http.errorHandler(func(err, req, res) {
-    print("Error handler function")
-})
-print("Error handler:", errorHandler)
-
-print("\n" + "=" * 60)
-print("✨ All enterprise HTTP features registered successfully!")
-print("\nEnterprise Features Available:")
-print("  🔧 Route grouping and API versioning")
-print("  📁 Multipart file upload support")
-print("  ⚡ Async handlers for long-running tasks")
-print("  🛡️  Enhanced security features")
-print("  🔗 Advanced middleware composition")
-print("  📊 Structured error handling")
-print("  🌐 Production-ready capabilities")
-
-print("\n🎯 Ready for enterprise-level backend development!")
-print("📝 Use http.listen(3000) to start the server")
-```
-
-## simple_main.vint
-
-```js
-// VintLang Main Function Example
-// Demonstrates defining and calling a main function
-
-// Code before main function definition executes immediately
-println("Before main definition")
-
-// Define a main function that returns a value
-let main = func() {
-    println("Main function is running!")
-    return 42
-}
-
-println("After main definition")
-
-// In VintLang, main() must be called explicitly
-// It doesn't run automatically like in some languages
-// Uncomment the line below to execute main:
-// println(main())
-```
-
-## simple_task_manager.vint
-
-```js
-// VintLang Feature Showcase: Simple Task Manager
-// This demonstrates core VintLang features in a working application
-
-import time
-import os
-import json
-import uuid
-
-// Simple task manager state
-let tasks = []
-let dataFile = "simple_tasks.json"
-
-// Load tasks from file
-let loadTasks = func() {
-    if (os.fileExists(dataFile)) {
-        let data = os.readFile(dataFile)
-        tasks = json.decode(data)
-        print("✓ Tasks loaded!")
-    } else {
-        print("⚠ Starting with empty task list")
-        tasks = []
-    }
-}
-
-// Save tasks to file
-let saveTasks = func() {
-    let data = json.encode(tasks)
-    os.writeFile(dataFile, data)
-    print("✓ Tasks saved!")
-}
-
-// Create a new task
-let createTask = func() {
-    print("\n--- Creating New Task ---")
-    let title = input("Task title: ")
-    let description = input("Description: ")
-
-    let task = {
-        "id": uuid.generate(),
-        "title": title,
-        "description": description,
-        "completed": false,
-        "createdAt": time.now()
-    }
-
-    tasks.push(task)
-    print("✓ Task created: " + title)
-}
-
-// List all tasks
-let listTasks = func() {
-    print("\n--- Task List ---")
-    if (len(tasks) == 0) {
-        print("No tasks found!")
-        return
-    }
-
-    for i, task in tasks {
-        let status = "❌"
-        if (task["completed"]) {
-            status = "✅"
-        }
-        print(status + " [" + string(i + 1) + "] " + task["title"])
-        print("    " + task["description"])
-        print("    Created: " + task["createdAt"])
-        print("")
-    }
-}
-
-// Mark task as completed
-let completeTask = func() {
-    listTasks()
-    if (len(tasks) == 0) {
-        return
-    }
-
-    let taskIndex = input("Enter task number to complete: ")
-    let taskNum = int(taskIndex)
-
-    if (taskNum > 0 && taskNum <= len(tasks)) {
-        tasks[taskNum - 1]["completed"] = true
-        print("✓ Task completed!")
-    } else {
-        print("❌ Invalid task number!")
-    }
-}
-
-// Show statistics
-let showStats = func() {
-    print("\n--- Statistics ---")
-    let total = len(tasks)
-    let completed = 0
-
-    for task in tasks {
-        if (task["completed"]) {
-            completed += 1
-        }
-    }
-
-    print("Total tasks: " + string(total))
-    print("Completed: " + string(completed))
-    print("Pending: " + string(total - completed))
-
-    if (total > 0) {
-        let rate = (completed * 100) / total
-        print("Completion rate: " + string(rate) + "%")
-    }
-}
-
-// Main menu
-let showMenu = func() {
-    print("\n" + "=" * 30)
-    print("🎯 VintLang Simple Task Manager")
-    print("=" * 30)
-    print("1. Create Task")
-    print("2. List Tasks")
-    print("3. Complete Task")
-    print("4. Show Statistics")
-    print("5. Save & Exit")
-    print("=" * 30)
-}
-
-// Main application
-let runApp = func() {
-    print("🚀 Welcome to VintLang Task Manager!")
-    print("This showcases VintLang features:")
-    print("  • JSON data handling")
-    print("  • File I/O operations")
-    print("  • Time functions")
-    print("  • UUID generation")
-    print("  • Interactive input")
-    print("  • Data structures")
-
-    loadTasks()
-
-    while (true) {
-        showMenu()
-        let choice = input("Select option (1-5): ")
-
-        if (choice == "1") {
-            createTask()
-        } else if (choice == "2") {
-            listTasks()
-        } else if (choice == "3") {
-            completeTask()
-        } else if (choice == "4") {
-            showStats()
-        } else if (choice == "5") {
-            saveTasks()
-            print("👋 Thanks for using VintLang Task Manager!")
-            break
-        } else {
-            print("❌ Invalid option!")
-        }
-    }
-}
-
-// Start the application
-runApp()
 ```
 
 ## simplegame.vint
@@ -7525,7 +3437,7 @@ import sqlite
 
 let someFunction = func(){
     println("This is a function in sqlite.vint")
-
+    
     // Example 1: Open a database connection
     // Creates or opens the database file
     const db = sqlite.open("example.db")
@@ -7537,7 +3449,7 @@ let someFunction = func(){
     // Creates a users table with id, name, and age columns
     sqlite.createTable(db, "CREATE TABLE IF NOT EXISTS users (id INTEGER PRIMARY KEY, name TEXT, age INTEGER)")
     println("Table 'users' created or already exists.")
-
+    
     // Example 3: Insert data into the table
     // Uses prepared statements with ? placeholders for safety
     sqlite.execute(db, "INSERT INTO users (name, age) VALUES (?, ?)", "Alice", 25)
@@ -7568,83 +3480,6 @@ let someFunction = func(){
 
 someFunction()
 
-```
-
-## string_builtins_demo.vint
-
-```js
-// Comprehensive test of new string builtin functions in VintLang
-
-println("=== String Builtin Functions Test ===");
-println();
-
-// Test format function with various data types
-println("1. format() function:");
-println("   String formatting:", format("Hello %s!", "World"));
-println("   Integer formatting:", format("Number: %d", 42));
-println(
-  "   Mixed formatting:",
-  format("%s has %d apples and %s oranges", "Alice", 5, "3"),
-);
-println();
-
-// Test startsWith function
-println("2. startsWith() function:");
-let text = "Hello World";
-println("   Text:", format('"%s"', text));
-println("   Starts with 'Hello':", startsWith(text, "Hello"));
-println("   Starts with 'World':", startsWith(text, "World"));
-println("   Starts with 'H':", startsWith(text, "H"));
-println("   Starts with '':", startsWith(text, ""));
-println();
-
-// Test endsWith function
-println("3. endsWith() function:");
-println("   Text:", format('"%s"', text));
-println("   Ends with 'World':", endsWith(text, "World"));
-println("   Ends with 'Hello':", endsWith(text, "Hello"));
-println("   Ends with 'd':", endsWith(text, "d"));
-println("   Ends with '':", endsWith(text, ""));
-println();
-
-// Test chr function (ASCII to character)
-println("4. chr() function:");
-println("   chr(65):", format('"%s" (ASCII A)', chr(65)));
-println("   chr(97):", format('"%s" (ASCII a)', chr(97)));
-println("   chr(48):", format('"%s" (ASCII 0)', chr(48)));
-println("   chr(32):", format('"%s" (ASCII space)', chr(32)));
-println();
-
-// Test ord function (character to ASCII)
-println("5. ord() function:");
-println("   ord('A'):", ord("A"));
-println("   ord('a'):", ord("a"));
-println("   ord('0'):", ord("0"));
-println("   ord(' '):", ord(" "));
-println();
-
-// Demonstrate practical usage
-println("6. Practical examples:");
-let name = "VintLang";
-let version = "1.0";
-let message = format("Welcome to %s v%s!", name, version);
-println("   Formatted message:", message);
-
-let filename = "data.txt";
-if (endsWith(filename, ".txt")) {
-  println("   File is a text file:", filename);
-}
-
-if (startsWith(name, "Vint")) {
-  println("   Language name starts with 'Vint'");
-}
-
-// Convert between characters and ASCII
-let letter = chr(ord("A") + 1); // Should be "B"
-println("   Next letter after A:", letter);
-
-println();
-println("=== All tests completed ===");
 ```
 
 ## strings.vint
@@ -7713,6 +3548,140 @@ simirality
 */
 ```
 
+## structs.vint
+
+```js
+// VintLang Structs Example
+// Demonstrates defining structs with fields and methods
+
+// ============================================================
+// 1. Basic struct definition
+// ============================================================
+struct Point {
+    x: 0
+    y: 0
+
+    func toString() {
+        return "Point(" + string(this.x) + ", " + string(this.y) + ")"
+    }
+
+    func distanceTo(other) {
+        let dx = this.x - other.x
+        let dy = this.y - other.y
+        return (dx * dx + dy * dy)
+    }
+}
+
+let p1 = Point(x = 3, y = 4)
+let p2 = Point(x = 0, y = 0)
+println("Point p1:", p1.toString())
+println("Point p2:", p2.toString())
+println("Distance squared:", p1.distanceTo(p2))
+
+// ============================================================
+// 2. Struct with default values and methods
+// ============================================================
+struct BankAccount {
+    owner: "Unknown"
+    balance: 0.0
+
+    func deposit(amount) {
+        this.balance = this.balance + amount
+        println("Deposited $" + string(amount) + " | Balance: $" + string(this.balance))
+    }
+
+    func withdraw(amount) {
+        if (amount > this.balance) {
+            println("Insufficient funds! Balance: $" + string(this.balance))
+            return null
+        }
+        this.balance = this.balance - amount
+        println("Withdrew $" + string(amount) + " | Balance: $" + string(this.balance))
+    }
+
+    func getBalance() {
+        return this.balance
+    }
+}
+
+println("\n=== Bank Account ===")
+let account = BankAccount(owner = "Alice", balance = 100.0)
+println("Account owner:", account.owner)
+account.deposit(50.0)
+account.withdraw(30.0)
+account.withdraw(200.0)
+println("Final balance: $" + string(account.getBalance()))
+
+// ============================================================
+// 3. Struct as a data container
+// ============================================================
+struct Student {
+    name: ""
+    grade: 0
+
+    func isPassing() {
+        return this.grade >= 50
+    }
+
+    func status() {
+        if (this.isPassing()) {
+            return this.name + " - PASS (" + string(this.grade) + ")"
+        }
+        return this.name + " - FAIL (" + string(this.grade) + ")"
+    }
+}
+
+println("\n=== Student Records ===")
+let students = [
+    Student(name = "Alice", grade = 85),
+    Student(name = "Bob",   grade = 42),
+    Student(name = "Carol", grade = 91),
+    Student(name = "Dave",  grade = 55)
+]
+
+for s in students {
+    println(" ", s.status())
+}
+
+// Count passing
+let passing = 0
+for s in students {
+    if (s.isPassing()) {
+        passing = passing + 1
+    }
+}
+println("Passing:", passing, "/", len(students))
+
+// ============================================================
+// 4. Structs with nested data
+// ============================================================
+struct Config {
+    host: "localhost"
+    port: 8080
+    isDebug: false
+
+    func address() {
+        return this.host + ":" + string(this.port)
+    }
+
+    func describe() {
+        let mode = "production"
+        if (this.isDebug) {
+            mode = "debug"
+        }
+        return "Server at " + this.address() + " [" + mode + "]"
+    }
+}
+
+println("\n=== Configuration ===")
+let devConfig  = Config(host = "localhost", port = 3000, isDebug = true)
+let prodConfig = Config(host = "api.example.com", port = 443, isDebug = false)
+
+println(devConfig.describe())
+println(prodConfig.describe())
+
+```
+
 ## switch.vint
 
 ```js
@@ -7732,7 +3701,7 @@ switch (n) {
         println("is not")
         // break
     }
-}
+} 
 ```
 
 ## sysinfo.vint
@@ -7788,261 +3757,6 @@ println("=== Complete! All sysinfo functions working ===")
 
 ```
 
-## system_monitor_cli.vint
-
-```js
-// System Monitor CLI - Real-time system information display
-// Run with: vint system_monitor_cli.vint [--watch] [--summary]
-
-import term
-import cli
-import os
-
-// Help handling
-if (cli.hasArg("--help")) {
-    cli.help("SystemMonitor", "Monitor system resources and information")
-    term.println("")
-    term.info("Monitor Options:")
-    term.println("  --summary        Show system summary only")
-    term.println("  --watch          Continuous monitoring mode")
-    term.println("  --refresh N      Refresh interval in seconds")
-    exit(0)
-}
-
-// Banner
-let banner = term.banner("VintLang System Monitor")
-term.println(banner)
-
-// Check for summary mode
-if (cli.hasArg("--summary")) {
-    term.info("System Summary")
-
-    let summaryTable = term.table([
-        ["Component", "Status", "Details"],
-        ["Operating System", "✓ Online", "Linux/Unix"],
-        ["Memory", "✓ Normal", "8.2 GB Available"],
-        ["Storage", "✓ Normal", "45.6 GB Free"],
-        ["Network", "✓ Connected", "192.168.1.100"]
-    ])
-    term.println(summaryTable)
-
-    let chart = term.chart([82, 67, 91, 100])
-    term.println("Resource Usage (%):")
-    term.println(chart)
-    exit(0)
-}
-
-// Interactive monitoring
-term.info("System Monitoring Interface")
-let option = term.select([
-    "View system information",
-    "Check resource usage",
-    "Monitor network status",
-    "View process information",
-    "Generate report",
-    "Exit"
-])
-
-if (option == "View system information") {
-    term.info("System Information")
-
-    let currentDir = os.getwd()
-    let sysInfo = term.table([
-        ["Property", "Value"],
-        ["Current Directory", currentDir],
-        ["User", "vintlang-user"],
-        ["Shell", "/bin/bash"],
-        ["Path", "/usr/local/bin:/usr/bin:/bin"]
-    ])
-    term.println(sysInfo)
-
-} else if (option == "Check resource usage") {
-    term.info("Resource Usage")
-
-    let resources = term.table([
-        ["Resource", "Used", "Available", "Percentage"],
-        ["Memory", "4.2 GB", "8.0 GB", "52%"],
-        ["CPU", "2.1 GHz", "3.2 GHz", "65%"],
-        ["Storage", "234 GB", "500 GB", "47%"],
-        ["Network", "45 Mb/s", "100 Mb/s", "45%"]
-    ])
-    term.println(resources)
-
-    let usageChart = term.chart([52, 65, 47, 45])
-    term.println("Usage Distribution:")
-    term.println(usageChart)
-
-} else if (option == "Monitor network status") {
-    term.info("Network Status")
-
-    let networkTable = term.table([
-        ["Interface", "Status", "IP Address", "Speed"],
-        ["eth0", "✓ Up", "192.168.1.100", "1 Gbps"],
-        ["wlan0", "✗ Down", "N/A", "N/A"],
-        ["lo", "✓ Up", "127.0.0.1", "Local"]
-    ])
-    term.println(networkTable)
-
-} else if (option == "View process information") {
-    term.info("Top Processes")
-
-    let processes = term.table([
-        ["PID", "Name", "CPU%", "Memory"],
-        ["1234", "vintlang", "15.2%", "124 MB"],
-        ["5678", "node", "8.5%", "245 MB"],
-        ["9012", "python", "3.1%", "89 MB"],
-        ["3456", "bash", "0.5%", "12 MB"]
-    ])
-    term.println(processes)
-
-} else if (option == "Generate report") {
-    let reportName = term.input("Enter report name: ")
-    term.loading("Generating system report...")
-
-    let reportTable = term.table([
-        ["Report Section", "Status"],
-        ["System Info", "✓ Complete"],
-        ["Resource Usage", "✓ Complete"],
-        ["Network Status", "✓ Complete"],
-        ["Process List", "✓ Complete"]
-    ])
-    term.println(reportTable)
-
-    term.success("Report '" + reportName + "' generated successfully!")
-
-} else if (option == "Exit") {
-    let saveConfig = term.confirm("Save monitoring configuration?")
-    if (saveConfig) {
-        term.success("Configuration saved")
-    }
-    term.success("System monitor closed")
-}
-
-let statusBox = term.box("System monitoring session completed")
-term.println(statusBox)
-```
-
-## task_manager_cli.vint
-
-```js
-// Task Manager CLI - A practical example of VintLang terminal capabilities
-// Run with: vint task_manager_cli.vint [--help] [--list] [--add "task"]
-
-import term
-import cli
-
-// Check for help
-if (cli.hasArg("--help") || cli.hasArg("-h")) {
-    cli.help("TaskManager", "A simple task management CLI tool")
-    term.println("")
-    term.info("Additional Usage Examples:")
-    term.println("  vint task_manager_cli.vint --list")
-    term.println("  vint task_manager_cli.vint --add \"Write documentation\"")
-    term.println("  vint task_manager_cli.vint --interactive")
-    exit(0)
-}
-
-// Initialize tasks (in real app, would load from file)
-let tasks = [
-    "Review code changes",
-    "Update documentation",
-    "Test new features",
-    "Deploy to staging"
-]
-
-// Display app banner
-let banner = term.banner("VintLang Task Manager")
-term.println(banner)
-
-// Handle command line operations
-if (cli.hasArg("--list")) {
-    term.info("Current Tasks:")
-    let taskTable = term.table([
-        ["ID", "Task", "Status"],
-        ["1", "Review code changes", "Pending"],
-        ["2", "Update documentation", "Pending"],
-        ["3", "Test new features", "In Progress"],
-        ["4", "Deploy to staging", "Pending"]
-    ])
-    term.println(taskTable)
-    exit(0)
-}
-
-let newTask = cli.getArgValue("--add")
-if (newTask) {
-    term.success("Added new task: " + newTask)
-    exit(0)
-}
-
-// Interactive mode
-term.info("Interactive Task Manager")
-let action = term.select([
-    "View all tasks",
-    "Add new task",
-    "Mark task complete",
-    "Delete task",
-    "Task statistics",
-    "Exit"
-])
-
-if (action == "View all tasks") {
-    let taskTable = term.table([
-        ["ID", "Task", "Status"],
-        ["1", "Review code changes", "Pending"],
-        ["2", "Update documentation", "Pending"],
-        ["3", "Test new features", "In Progress"],
-        ["4", "Deploy to staging", "Pending"]
-    ])
-    term.println(taskTable)
-
-} else if (action == "Add new task") {
-    let taskName = term.input("Enter task description: ")
-    term.success("Added: " + taskName)
-
-} else if (action == "Mark task complete") {
-    let taskChoice = term.select([
-        "Review code changes",
-        "Update documentation",
-        "Test new features",
-        "Deploy to staging"
-    ])
-    term.success("Marked as complete: " + taskChoice)
-
-} else if (action == "Delete task") {
-    let taskToDelete = term.radio([
-        "Review code changes",
-        "Update documentation",
-        "Test new features",
-        "Deploy to staging"
-    ])
-    let confirmed = term.confirm("Delete '" + taskToDelete + "'?")
-    if (confirmed) {
-        term.success("Task deleted: " + taskToDelete)
-    }
-
-} else if (action == "Task statistics") {
-    term.info("Task Statistics")
-    let stats = term.table([
-        ["Metric", "Value"],
-        ["Total Tasks", "4"],
-        ["Completed", "0"],
-        ["In Progress", "1"],
-        ["Pending", "3"]
-    ])
-    term.println(stats)
-
-    let chart = term.chart([0, 1, 3])
-    term.println("Status Distribution:")
-    term.println(chart)
-
-} else if (action == "Exit") {
-    term.success("Thank you for using VintLang Task Manager!")
-}
-
-let message = term.box("Task management session complete!")
-term.println(message)
-```
-
 ## term.vint
 
 ```js
@@ -8070,7 +3784,7 @@ term.println("You selected: " + choice)
 term.println("Select multiple options (enter numbers like '1 3 4'):")
 let selected = term.checkbox([
     "Option 1",
-    "Option 2",
+    "Option 2", 
     "Option 3",
     "Option 4"
 ])
@@ -8083,7 +3797,7 @@ for option in selected {
 term.println("Select one option:")
 let radioChoice = term.radio([
     "Yes",
-    "No",
+    "No", 
     "Maybe"
 ])
 term.println("You selected: " + radioChoice)
@@ -8104,7 +3818,7 @@ if (confirmed) {
 term.info("This is an information message")
 term.warning("This is a warning message")
 term.error("This is an error message")
-term.success("This is a success message")
+term.success("This is a success message") 
 term.notify("This is a notification")
 
 // Show a loading spinner
@@ -8114,7 +3828,7 @@ term.loading("Processing...")
 let table = term.table([
     ["Feature", "Status"],
     ["Select Menu", "✓"],
-    ["Checkbox", "✓"],
+    ["Checkbox", "✓"], 
     ["Radio Buttons", "✓"],
     ["Password Input", "✓"],
     ["Confirmations", "✓"],
@@ -8141,7 +3855,7 @@ term.beep()
 // Clear screen and show final message
 term.clear()
 let styledMsg = term.style("Demo completed!", {
-    "color": "green",
+    "color": "green", 
     "bold": "true"
 })
 term.println(styledMsg)
@@ -8155,341 +3869,90 @@ term.println(chart)
 term.println("Terminal demo completed successfully!")
 ```
 
-## test-for.vint
+## time.vint
 
 ```js
-// VintLang For Loop Example
-// Demonstrates iterating over array elements
-
-// Create an array of todo items
-let todos = ["new", "todo"]
-
-// Print the entire array
-println("Your TODOs:", todos)
-
-// Check the type of the variable
-println(type(todos))
-
-// Iterate through each element in the array
-// The loop variable (tach) takes on each value from the array
-for tach in todos {
-    println(tach)
-}
-```
-
-## test_array_patterns.vint
-
-```js
-// Test array patterns in match statements
-let arr1 = []
-let arr2 = [1]
-let arr3 = [1, 2]
-let arr4 = [1, 2, 3, 4, 5]
-
-println("Testing array patterns:")
-
-println("Empty array:")
-match arr1 {
-    [] => println("  Matched empty array")
-    _ => println("  Not empty")
-}
-
-println("Single element:")
-match arr2 {
-    [x] => println("  Single element:", x)
-    _ => println("  Not single")
-}
-
-println("Two elements:")
-match arr3 {
-    [a, b] => println("  Two elements:", a, "and", b)
-    _ => println("  Not two elements")
-}
-
-println("Multiple elements with spread:")
-match arr4 {
-    [first, ...rest] => println("  First:", first, "Rest length:", len(rest))
-    _ => println("  No match")
-}
-```
-
-## test_array_var.vint
-
-```js
-// Test array pattern with variable
-let arr = [42]
-
-println("Testing array pattern with variable:")
-
-match arr {
-    [x] => println("Single element:", x)
-    _ => println("Not single")
-}
-```
-
-## test_import.vint
-
-```js
-// VintLang Import Statement Example
-// Demonstrates importing and using a module
+// VintLang Time Module Example
+// Demonstrates date and time operations: getting current time, formatting, arithmetic
 
 import time
 
-// Use the imported time module to get the current timestamp
-println("Current time:", time.now())
-```
+// ============================================================
+// 1. Getting the current time
+// ============================================================
+let now = time.now()
+println("Current time:", now)
 
-## test_import_lookahead.vint
+// ============================================================
+// 2. Formatting dates
+// ============================================================
+println("\nFormatted dates:")
+println("Default:   ", time.format(now, "02-01-2006 15:04:05"))
+println("Date only: ", time.format(now, "January 02, 2006"))
+println("Time only: ", time.format(now, "15:04:05"))
+println("ISO 8601:  ", time.format(now, "2006-01-02T15:04:05"))
 
-```js
-println("=== Testing import() function with lookahead ===");
-
-// Test import function call
-println("Testing import('os'):");
-let osModule = import("os");
-println("Result:", osModule);
-
-// Test import statement
-println("Testing import statement:");
-import math;
-println("Math module imported:", math);
-
-println("=== Tests completed ===");
-```
-
-## test_import_whitespace.vint
-
-```js
-println("=== Testing import with various whitespace scenarios ===");
-
-// Test with spaces before parentheses
-let osModule = import   ("os");
-println("import   ('os'):", osModule);
-
-// Test with newlines and tabs (should still be function call)
-let mathModule = import
-    ("math");
-println("import\\n    ('math'):", mathModule);
-
-// Test import statement with spaces
-import    time;
-println("import    time;:", time);
-
-println("=== Whitespace tests completed ===");
-```
-
-## test_match_guards.vint
-
-```js
-// Test enhanced match with guard conditions
-// This is a simple test to verify our match guard condition implementation
-
-let user = {"role": "admin", "age": 30}
-
-println("Testing match with guard conditions")
-
-match user {
-    {"role": "admin", "age": age} if age >= 18 => println("Adult admin, age:", age)
-    {"role": "user"} => println("Regular user")
-    _ => println("Unknown user type")
+// ============================================================
+// 3. Leap year check
+// ============================================================
+println("\nLeap year checks:")
+for year in [2000, 2023, 2024, 2100] {
+    println(" ", year, "->", time.isLeapYear(year))
 }
-```
 
-## test_simple_array.vint
+// ============================================================
+// 4. Time arithmetic (add / subtract durations)
+// ============================================================
+println("\nTime arithmetic:")
+println("Now:           ", time.format(now, "2006-01-02 15:04:05"))
+println("+ 1 hour:      ", time.format(time.add(now, "1h"), "2006-01-02 15:04:05"))
+println("+ 2.5 hours:   ", time.format(time.add(now, "2h30m"), "2006-01-02 15:04:05"))
+println("- 24 hours:    ", time.format(time.subtract(now, "24h"), "2006-01-02 15:04:05"))
+println("+ 30 seconds:  ", time.format(time.add(now, "30s"), "2006-01-02 15:04:05"))
 
-```js
-// Simple array pattern test
-let arr = [1, 2]
+// ============================================================
+// 5. Measuring elapsed time with time.since
+// ============================================================
+println("\nMeasuring elapsed time:")
+let start = time.now()
 
-println("Testing simple array pattern:")
-
-match arr {
-    [] => println("Empty")
-    _ => println("Not empty")
+// Simulate some work
+let total = 0
+for i in range(100000) {
+    total = total + i
 }
-```
 
-## test_simple_guard.vint
+let elapsed = time.since(start)
+println("Computed sum:", total)
+println("Elapsed time:", elapsed, "ms")
 
-```js
-// Test match with simple guard
-let user = {"role": "admin"}
-
-println("Testing simple match with guard")
-
-match user {
-    {"role": role} if role == "admin" => println("Found admin with role:", role)
-    _ => println("Not admin")
-}
-```
-
-## test_switch_guards.vint
-
-```js
-// Test enhanced switch with guard conditions
-// This is a simple test to verify our guard condition implementation
-
-let x = 5
-
-println("Testing switch with guard conditions")
-
-switch (x) {
-    case y if y > 0 {
-        println("Positive number:", y)
-    }
-    case y if y < 0 {
-        println("Negative number:", y)
-    }
-    case 0 {
-        println("Zero")
-    }
-    default {
-        println("Unknown")
+// ============================================================
+// 6. Building a simple timer utility
+// ============================================================
+let makeTimer = func() {
+    let startTime = time.now()
+    return func(label) {
+        let ms = time.since(startTime)
+        println("[timer]", label, "->", ms, "ms elapsed")
     }
 }
-```
 
-## test_two_elem.vint
-
-```js
-// Very simple spread test
-let arr = [1, 2]
-
-match arr {
-    [a, b] => println("Two elements:", a, b)
-    _ => println("Other")
+let timer = makeTimer()
+let count = 0
+for i in range(50000) {
+    count = count + 1
 }
-```
+timer("loop done")
 
-## todo_example.vint
+// ============================================================
+// 7. sleep (pause execution)
+// ============================================================
+println("\nSleeping for 1 second...")
+let before = time.now()
+time.sleep(1)
+let after = time.now()
+println("Done! Elapsed:", time.since(before), "ms")
 
-```js
-println("Starting the program...")
-
-let name = "Vint"
-println("Hello, " + name)
-
-todo "Refactor this section later"
-
-let greet = func (person) {
-    println("Greetings, " + person + "!")
-}
-
-greet("developer")
-
-println("Program finished.")
-```
-
-## todo_test.vint
-
-```js
-todo "this is a test todo"
-```
-
-## unique_builtins_test.vint
-
-```js
-// Test file for unique built-in functions that don't exist in modules
-// These are the functions that were kept after removing duplicates
-
-println("Testing unique built-in functions...");
-
-// Test string functions
-println("=== String Functions ===");
-println("startsWith('VintLang', 'Vint'):", startsWith("VintLang", "Vint"));
-println("startsWith('hello', 'hi'):", startsWith("hello", "hi"));
-println("endsWith('VintLang', 'Lang'):", endsWith("VintLang", "Lang"));
-println("endsWith('hello', 'world'):", endsWith("hello", "world"));
-
-// Test array function
-println("\n=== Array Functions ===");
-let arr = [1, 2, 3, 2, 4];
-println("Array:", arr);
-println("indexOf(arr, 2):", indexOf(arr, 2));
-println("indexOf(arr, 5):", indexOf(arr, 5));
-
-// Test type checking functions
-println("\n=== Type Checking Functions ===");
-println("isInt(42):", isInt(42));
-println("isInt(3.14):", isInt(3.14));
-println("isFloat(3.14):", isFloat(3.14));
-println("isFloat(42):", isFloat(42));
-println("isString('hello'):", isString("hello"));
-println("isString(42):", isString(42));
-println("isBool(true):", isBool(true));
-println("isBool(42):", isBool(42));
-println("isArray([1,2,3]):", isArray([1, 2, 3]));
-println("isArray('hello'):", isArray("hello"));
-println("isDict({'key': 'value'}):", isDict({ key: "value" }));
-println("isDict([1,2,3]):", isDict([1, 2, 3]));
-println("isNull(null):", isNull(null));
-println("isNull(42):", isNull(42));
-
-// Test parsing functions
-println("\n=== Parsing Functions ===");
-println("parseInt('42'):", parseInt("42"));
-println("parseInt('-10'):", parseInt("-10"));
-println("parseFloat('3.14'):", parseFloat("3.14"));
-println("parseFloat('-2.5'):", parseFloat("-2.5"));
-
-println("\nAll unique built-in functions tested successfully!");
-```
-
-## unique_feature_test.vint
-
-```js
-// VintLang unique() function demonstration and test
-// This file showcases the new unique() builtin function that removes duplicates from arrays
-
-print("🚀 VintLang unique() Function Showcase");
-print("=" * 40);
-
-// Demonstrate the core "no duplicates" functionality
-print("\n📊 Data Processing with unique():");
-
-// Example 1: Processing survey responses
-print("\n1. Survey Responses (with duplicates):");
-let responses = ["yes", "no", "maybe", "yes", "no", "yes", "maybe"];
-print("Original responses:", responses);
-print("Unique responses:", unique(responses));
-print(
-  "Count: " + string(len(responses)) + " -> " + string(len(unique(responses))),
-);
-
-// Example 2: User IDs from multiple sources
-print("\n2. User IDs from different systems:");
-let userIds = [101, 202, 303, 101, 404, 202, 505, 303, 101];
-print("All IDs:", userIds);
-print("Unique IDs:", unique(userIds));
-
-// Example 3: Feature tags (mixed data types)
-print("\n3. Feature tags with mixed types:");
-let tags = ["cool", 1, true, "awesome", 1, false, "cool", true];
-print("All tags:", tags);
-print("Unique tags:", unique(tags));
-
-// Example 4: Real-world use case - removing duplicate items
-print("\n4. Shopping cart cleanup:");
-let cart = ["apple", "banana", "apple", "orange", "banana", "apple"];
-print("Cart with duplicates:", cart);
-let cleanCart = unique(cart);
-print("Clean cart:", cleanCart);
-print("Items saved: " + string(len(cart) - len(cleanCart)));
-
-// Example 5: Data validation - ensuring no duplicates
-print("\n5. Data validation example:");
-let data = [1, 2, 3, 4, 5];
-let uniqueData = unique(data);
-if (len(data) == len(uniqueData)) {
-  print("✅ Data has no duplicates!");
-} else {
-  print("⚠️  Data contains duplicates - cleaned up");
-}
-
-print("\n🎯 Conclusion:");
-print("The unique() function provides a simple, efficient way to handle");
-print("the 'no duplicates' requirement in data processing workflows!");
-print("\n✨ This is a cool feature that makes VintLang even more powerful! ✨");
 ```
 
 ## user_access_control.vint
@@ -8511,7 +3974,7 @@ print("=== User Access Control System ===")
 
 for user in users {
     print("\nChecking user:", user)
-
+    
     match user {
         {"role": "admin", "active": true} => {
             print("ACCESS GRANTED: Active administrator")
@@ -8565,13 +4028,26 @@ print(uuid.generate())
 ## vintChart.vint
 
 ```js
+// VintLang Chart Module Example
+// Demonstrates generating bar, pie, and line charts as PNG images
+
 import vintChart
 
-labels = ["A", "B", "C", "D"]
-values = [10, 20, 30, 40]
+// Data for the charts
+let labels = ["Q1", "Q2", "Q3", "Q4"]
+let values = [120, 85, 150, 200]
+
+// Generate a bar chart
 vintChart.barChart(labels, values, "bar_chart.png")
+println("Bar chart saved to bar_chart.png")
+
+// Generate a pie chart
 vintChart.pieChart(labels, values, "pie_chart.png")
+println("Pie chart saved to pie_chart.png")
+
+// Generate a line graph
 vintChart.lineGraph(labels, values, "line_graph.png")
+println("Line graph saved to line_graph.png")
 
 ```
 
@@ -8583,370 +4059,6 @@ import vintSocket
 vintSocket.createServer("8080")
 vintSocket.connect("ws://localhost:8080")
 vintSocket.broadcast("Hello, WebSocket clients!")
-
-```
-
-## vintlang_showcase.vint
-
-```js
-// VintLang Showcase: Personal Information Manager
-// A comprehensive demonstration of VintLang capabilities
-
-import time
-import os
-import json
-import uuid
-
-print("🚀 VintLang Personal Information Manager")
-print("=" * 50)
-print("Showcasing VintLang's real-world capabilities")
-print("=" * 50)
-
-// Step 1: Data Generation and JSON Handling
-print("\n📊 Step 1: Data Generation and JSON Operations")
-print("-" * 50)
-
-let contacts = [
-    {
-        "id": uuid.generate(),
-        "name": "Alice Johnson",
-        "email": "alice@example.com",
-        "phone": "+1-555-0101",
-        "category": "Work",
-        "created": time.format(time.now(), "2006-01-02")
-    },
-    {
-        "id": uuid.generate(),
-        "name": "Bob Smith",
-        "email": "bob@example.com",
-        "phone": "+1-555-0102",
-        "category": "Personal",
-        "created": time.format(time.now(), "2006-01-02")
-    },
-    {
-        "id": uuid.generate(),
-        "name": "Carol Davis",
-        "email": "carol@company.com",
-        "phone": "+1-555-0103",
-        "category": "Work",
-        "created": time.format(time.now(), "2006-01-02")
-    }
-]
-
-print("✓ Generated " + string(len(contacts)) + " contact records")
-print("✓ Each contact has unique UUID: " + contacts[0]["id"])
-
-// Step 2: File I/O Operations
-print("\n💾 Step 2: File I/O Operations")
-print("-" * 50)
-
-let contactsJson = json.encode(contacts)
-os.writeFile("contacts.json", contactsJson)
-print("✓ Saved contacts to JSON file")
-
-let loadedData = os.readFile("contacts.json")
-let loadedContacts = json.decode(loadedData)
-print("✓ Loaded and verified " + string(len(loadedContacts)) + " contacts")
-
-// Step 3: Data Analysis
-print("\n🔍 Step 3: Data Analysis")
-print("-" * 50)
-
-let categoryCount = {}
-for contact in loadedContacts {
-    let category = contact["category"]
-    if (!categoryCount.hasKey(category)) {
-        categoryCount[category] = 0
-    }
-    categoryCount[category] += 1
-}
-
-print("Contact distribution by category:")
-for category, count in categoryCount {
-    print("  " + category + ": " + string(count) + " contacts")
-}
-
-// Step 4: Advanced String Operations
-print("\n📝 Step 4: String Processing")
-print("-" * 50)
-
-for contact in contacts {
-    let name = contact["name"]
-    let nameParts = name.split(" ")
-    let firstName = nameParts[0]
-    let lastName = nameParts[1]
-
-    print("Processing: " + name)
-    print("  First: " + firstName + ", Last: " + lastName)
-    print("  Email domain: " + contact["email"].split("@")[1])
-    print("  Phone area: " + contact["phone"].split("-")[1])
-    print("")
-}
-
-// Step 5: Report Generation
-print("\n📋 Step 5: Report Generation")
-print("-" * 50)
-
-let reportTime = time.format(time.now(), "2006-01-02 15:04:05")
-let report = "PERSONAL INFORMATION MANAGER REPORT\n"
-report += "Generated: " + reportTime + "\n"
-report += "=" * 50 + "\n\n"
-
-report += "SUMMARY\n"
-report += "-------\n"
-report += "Total Contacts: " + string(len(contacts)) + "\n"
-
-for category, count in categoryCount {
-    report += category + " Contacts: " + string(count) + "\n"
-}
-
-report += "\nCONTACT DETAILS\n"
-report += "---------------\n"
-for contact in contacts {
-    report += "Name: " + contact["name"] + "\n"
-    report += "Email: " + contact["email"] + "\n"
-    report += "Phone: " + contact["phone"] + "\n"
-    report += "Category: " + contact["category"] + "\n"
-    report += "ID: " + contact["id"] + "\n"
-    report += "Created: " + contact["created"] + "\n"
-    report += "\n"
-}
-
-report += "=" * 50 + "\n"
-report += "Report generated by VintLang PIM v1.0\n"
-
-let reportFile = "contact_report_" + time.format(time.now(), "2006-01-02_15-04-05") + ".txt"
-os.writeFile(reportFile, report)
-print("✓ Generated comprehensive report: " + reportFile)
-
-// Step 6: CSV Export
-print("\n📊 Step 6: CSV Export")
-print("-" * 50)
-
-let csvContent = "ID,Name,Email,Phone,Category,Created\n"
-for contact in contacts {
-    csvContent += contact["id"] + ","
-    csvContent += contact["name"] + ","
-    csvContent += contact["email"] + ","
-    csvContent += contact["phone"] + ","
-    csvContent += contact["category"] + ","
-    csvContent += contact["created"] + "\n"
-}
-
-let csvFile = "contacts_export_" + time.format(time.now(), "2006-01-02_15-04-05") + ".csv"
-os.writeFile(csvFile, csvContent)
-print("✓ Exported data to CSV format: " + csvFile)
-
-// Step 7: Configuration Management
-print("\n⚙️ Step 7: Configuration Management")
-print("-" * 50)
-
-let config = {
-    "app_name": "VintLang PIM",
-    "version": "1.0.0",
-    "created": time.format(time.now(), "2006-01-02 15:04:05"),
-    "features": [
-        "Contact Management",
-        "Data Analysis",
-        "Report Generation",
-        "CSV Export",
-        "JSON Processing"
-    ],
-    "settings": {
-        "auto_backup": true,
-        "data_format": "json",
-        "report_format": "txt"
-    },
-    "statistics": {
-        "total_contacts": len(contacts),
-        "categories": len(categoryCount),
-        "last_updated": time.format(time.now(), "2006-01-02 15:04:05")
-    }
-}
-
-os.writeFile("config.json", json.encode(config))
-print("✓ Created configuration file with app settings")
-
-// Step 8: Directory Listing and File Management
-print("\n📁 Step 8: File Management")
-print("-" * 50)
-
-let files = os.listDir(".")
-let fileList = files.split(", ")
-let generatedFiles = []
-
-for filename in fileList {
-    if (filename.contains("contact") || filename.contains("config") || filename.contains(".json") || filename.contains(".csv") || filename.contains(".txt")) {
-        if (os.fileExists(filename)) {
-            let content = os.readFile(filename)
-            print("📄 " + filename + " (" + string(len(content)) + " bytes)")
-            generatedFiles.push(filename)
-        }
-    }
-}
-
-print("✓ Generated " + string(len(generatedFiles)) + " files during demonstration")
-
-// Step 9: Final Summary and Statistics
-print("\n🎉 Step 9: Final Summary")
-print("-" * 50)
-
-print("VintLang Personal Information Manager completed successfully!")
-print("")
-print("📊 DEMONSTRATION STATISTICS:")
-print("  • Contacts processed: " + string(len(contacts)))
-print("  • Files generated: " + string(len(generatedFiles)))
-print("  • Categories analyzed: " + string(len(categoryCount)))
-print("  • UUIDs generated: " + string(len(contacts)))
-print("  • JSON operations: 4 (encode/decode)")
-print("  • String operations: " + string(len(contacts) * 3))
-print("")
-
-print("✨ VINTLANG FEATURES DEMONSTRATED:")
-print("  ✓ UUID Generation - Unique identifiers for all records")
-print("  ✓ Time Operations - Timestamps and formatting")
-print("  ✓ JSON Processing - Encoding and decoding data")
-print("  ✓ File I/O - Reading and writing multiple file types")
-print("  ✓ String Manipulation - Splitting, processing text")
-print("  ✓ Data Structures - Arrays and dictionaries")
-print("  ✓ Control Flow - Loops and conditionals")
-print("  ✓ Directory Operations - File listing and management")
-print("  ✓ Report Generation - Formatted text output")
-print("  ✓ CSV Export - Data format conversion")
-print("")
-
-print("🚀 VintLang is production-ready for:")
-print("  • Data processing applications")
-print("  • File management systems")
-print("  • Report generation tools")
-print("  • Configuration management")
-print("  • Business automation scripts")
-print("  • API data processing")
-print("  • Log analysis tools")
-print("")
-
-print("🎯 This demonstration proves VintLang's capability")
-print("   to handle real-world programming challenges!")
-
-print("\n" + "=" * 50)
-print("🏆 VintLang Showcase Complete!")
-print("=" * 50)
-```
-
-## weatherapp.vint
-
-```js
-//NOTE: This currently Does not work due to some limititions of some modules
-
-// Importing modules
-import net        // Networking for fetching APIs
-import time       // Time utilities
-import os         // File and OS utilities
-import json       // JSON parsing
-import uuid       // Unique ID generation
-
-// Session ID for unique tracking
-let session_id = uuid.generate()
-println("Session ID:", session_id)
-
-// Fetch weather using wttr.in (No API key required)
-let fetchWeather = func(city) {
-    let url = "https://wttr.in/" + city + "?format=%C+%t+%w"
-    let response = net.get(url)
-    if (response) {
-        println("Weather in " + city + ":")
-        println(response)
-    } else {
-        println("Error fetching weather data for " + city)
-    }
-}
-
-// Fetch news headlines (mock API, no key needed)
-let fetchNews = func() {
-    let url = "https://jsonplaceholder.typicode.com/posts"
-    let response = net.get(url)
-    if (response) {
-        let news = json.decode(response.body)
-        println("\n=== Top 3 News Headlines ===")
-        for i in range(0, 3) {
-            println("Title:", news[i]["title"])
-            println("Summary:", news[i]["body"])
-            println("-------------------------")
-        }
-    } else {
-        println("Error fetching news.")
-    }
-}
-
-// Save logs with timestamp
-let saveLog = func(logMessage) {
-    let log_file = "app_logs.txt"
-    let timestamp = time.now().toString()
-    os.writeFile(log_file, "[" + timestamp + "] " + logMessage + "\n", "append")
-    println("Log saved:", logMessage)
-}
-
-// Greet user dynamically based on the time
-let greetUser = func(name) {
-    let currentTime = time.now()  // Example: returns "19:15:50 28-11-2024"
-    let hour = currentTime.split(" ")[0].split(":")[0].toInt()  // Extract hour as an integer
-
-    if (hour < 12) {
-        println("Good morning, " + name + "!")
-    } else if (hour < 18) {
-        println("Good afternoon, " + name + "!")
-    } else {
-        println("Good evening, " + name + "!")
-    }
-}
-
-
-// List all saved logs
-let viewLogs = func() {
-    let log_file = "app_logs.txt"
-    if (os.exists(log_file)) {
-        let logs = os.readFile(log_file)
-        println("=== Log History ===")
-        println(logs)
-    } else {
-        println("No logs available yet.")
-    }
-}
-
-// Main interactive menu
-let main = func() {
-    println("\n=== Welcome to the Dynamic Dashboard ===")
-    // greetUser("Tachera")
-    println("\nChoose an option:")
-    println("1. View Weather Information")
-    println("2. Read Latest News")
-    println("3. Save a Custom Log")
-    println("4. View All Logs")
-    println("5. Exit")
-
-    let choice = input("\nEnter your choice (1-5): ")
-    if (choice == "1") {
-        let city = input("Enter city name: ")
-        fetchWeather(city)
-    } else if (choice == "2") {
-        fetchNews()
-    } else if (choice == "3") {
-        let logMessage = input("Enter a log message: ")
-        saveLog(logMessage)
-    } else if (choice == "4") {
-        viewLogs()
-    } else if (choice == "5") {
-        println("Goodbye! See you next time.")
-        os.exit(0)
-    } else {
-        println("Invalid choice. Try again.")
-    }
-}
-
-// Run the app in a loop
-while (true) {
-    main()
-}
 
 ```
 
@@ -8978,11 +4090,11 @@ let response1 = net.get(url1)
 if (response1 != "") {
     print("✓ Successfully fetched data!")
     print("Response length: " + string(len(response1)) + " characters")
-
+    
     // Save raw response
     os.writeFile("web_response_1.json", response1)
     print("✓ Saved response to web_response_1.json")
-
+    
     // Parse JSON response
     let data1 = json.decode(response1)
     print("✓ Successfully parsed JSON response")
@@ -9002,7 +4114,7 @@ let response2 = net.get(url2)
 if (response2 != "") {
     print("✓ Successfully fetched user agent data!")
     print("Response: " + response2)
-
+    
     // Save and analyze
     os.writeFile("user_agent_response.json", response2)
     let data2 = json.decode(response2)
@@ -9027,7 +4139,7 @@ let successCount = 0
 for i, endpoint in endpoints {
     print("Fetching from endpoint " + string(i + 1) + ": " + endpoint)
     let response = net.get(endpoint)
-
+    
     if (response != "") {
         successCount += 1
         let result = {
@@ -9114,7 +4226,7 @@ let performanceTest = func(url) {
     let startTime = time.now()
     let response = net.get(url)
     let endTime = time.now()
-
+    
     return {
         "url": url,
         "success": response != "",
@@ -9130,7 +4242,7 @@ let perfResults = []
 for endpoint in endpoints {
     let result = performanceTest(endpoint)
     perfResults.push(result)
-
+    
     if (result["success"]) {
         print("  " + endpoint + " - Success (" + string(result["response_size"]) + " bytes)")
     } else {
@@ -9187,90 +4299,3 @@ print("🌐 Network Demonstration Complete!")
 print("=" * 50)
 ```
 
-## working_enterprise_test.vint
-
-```js
-// Basic Enterprise HTTP Module Test
-import http
-
-print("🏢 Enterprise HTTP Module Features Test")
-print("=" * 60)
-
-// Test 1: Create app
-print("\n✓ Test 1 - App Creation")
-let result = http.app()
-print("App creation:", result)
-
-// Test 2: Route Grouping
-print("\n✓ Test 2 - Route Grouping")
-let groupFunc = func() {
-    print("Group function")
-}
-let v1Group = http.group("/api/v1", groupFunc)
-print("API v1 group:", v1Group)
-
-// Test 3: Security
-print("\n✓ Test 3 - Security Features")
-let securityResult = http.security()
-print("Security middleware:", securityResult)
-
-// Test 4: Routes
-print("\n✓ Test 4 - Route Registration")
-let routeHandler = func(req, res) {
-    print("Route handler")
-}
-
-let getRoute = http.get("/users", routeHandler)
-print("GET route:", getRoute)
-
-let postRoute = http.post("/upload", routeHandler)
-print("POST route:", postRoute)
-
-// Test 5: Middleware
-print("\n✓ Test 5 - Middleware")
-let middlewareFunc = func(req, res, next) {
-    print("Middleware")
-}
-let middleware = http.use(middlewareFunc)
-print("Middleware:", middleware)
-
-// Test 6: Guards
-print("\n✓ Test 6 - Guards")
-let guardFunc = func(req) {
-    print("Guard")
-}
-let guard = http.guard(guardFunc)
-print("Guard:", guard)
-
-// Test 7: Error Handler
-print("\n✓ Test 7 - Error Handler")
-let errorFunc = func(err, req, res) {
-    print("Error handler")
-}
-let errorHandler = http.errorHandler(errorFunc)
-print("Error handler:", errorHandler)
-
-// Test 8: Streaming and Metrics
-print("\n✓ Test 8 - Streaming and Metrics")
-let streamFunc = func(req, res) {
-    print("Stream handler")
-}
-let streamHandler = http.stream(streamFunc)
-print("Stream handler:", streamHandler)
-
-let metricsResult = http.metrics()
-print("Metrics enabled:", metricsResult)
-
-print("\n" + "=" * 60)
-print("✨ All enterprise HTTP features work!")
-print("\nFeatures demonstrated:")
-print("  🔧 Route grouping")
-print("  🛡️  Security middleware")
-print("  🔗 Advanced routing")
-print("  📊 Error handling")
-print("  📈 Performance metrics")
-print("  🌊 Streaming support")
-print("  🚀 Production-ready backend")
-
-print("\n🎯 Enterprise HTTP module is ready!")
-```

@@ -28,4 +28,4 @@ for file in exampleFiles {
     }
 }
 os.writeFile(EXAMPLES_OUTPUT_FILE, exampleContent)
-print("Documentation and examples merged into " + OUTPUT_FILE + EXAMPLES_OUTPUT_FILE)
+println("Documentation and examples merged into " + OUTPUT_FILE + " and " + EXAMPLES_OUTPUT_FILE)

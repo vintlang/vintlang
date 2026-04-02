@@ -1747,10 +1747,10 @@ This allows you to write code in VintLang, bundle it into an executable, and run
 
 ## Why Use the Bundler?
 
-* Package and distribute VintLang scripts as self-contained executables
-* End-users don’t need to install Go or VintLang
-* Ideal for deploying scripts, shipping CLI tools, and automating workflows
-* Internally powered by the `vintlang/repl` package for code execution
+- Package and distribute VintLang scripts as self-contained executables
+- End-users don’t need to install Go or VintLang
+- Ideal for deploying scripts, shipping CLI tools, and automating workflows
+- Internally powered by the `vintlang/repl` package for code execution
 
 ---
 
@@ -1791,19 +1791,20 @@ This makes the `vint` CLI available, including the `bundle` command.
 
 ## Multi-File Package Support (NEW!)
 
-The VintLang Bundler now supports bundling multi-file packages with both imports and includes! 
+The VintLang Bundler now supports bundling multi-file packages with both imports and includes!
 
 ### Key Features
 
-* ✅ **Automatic Dependency Discovery**: Finds all imported and included `.vint` files recursively
-* ✅ **Package System Integration**: Handles `package` declarations and `import` statements
-* ✅ **Include Statement Support**: Handles `include` statements for direct file embedding
-* ✅ **Self-Contained Binaries**: No external `.vint` files needed at runtime
-* ✅ **Compatible with Built-ins**: Works with all VintLang built-in modules
+- ✅ **Automatic Dependency Discovery**: Finds all imported and included `.vint` files recursively
+- ✅ **Package System Integration**: Handles `package` declarations and `import` statements
+- ✅ **Include Statement Support**: Handles `include` statements for direct file embedding
+- ✅ **Self-Contained Binaries**: No external `.vint` files needed at runtime
+- ✅ **Compatible with Built-ins**: Works with all VintLang built-in modules
 
 ### Example Multi-File Project (Imports)
 
 **main.vint**:
+
 ```js
 import my_utils
 import os
@@ -1814,6 +1815,7 @@ print("Result:", result)
 ```
 
 **my_utils.vint**:
+
 ```js
 package my_utils {
     let process_data = func(input) {
@@ -1823,6 +1825,7 @@ package my_utils {
 ```
 
 Bundle the entire project:
+
 ```sh
 vint bundle main.vint
 ```
@@ -1832,6 +1835,7 @@ The bundler automatically discovers `my_utils.vint`, processes the package struc
 ### Example Multi-File Project (Includes)
 
 **main.vint**:
+
 ```js
 include "config.vint"
 include "helpers.vint"
@@ -1841,12 +1845,14 @@ print("Result:", processData("test"))
 ```
 
 **config.vint**:
+
 ```js
-let appName = "My VintLang App"
-let version = "1.0.0"
+let appName = "My VintLang App";
+let version = "1.0.0";
 ```
 
 **helpers.vint**:
+
 ```js
 let processData = func(input) {
     return "processed: " + input
@@ -1854,6 +1860,7 @@ let processData = func(input) {
 ```
 
 Bundle the entire project:
+
 ```sh
 vint bundle main.vint
 ```
@@ -1862,9 +1869,9 @@ The bundler automatically discovers all included files and embeds their content 
 
 ### Differences between Import and Include
 
-* **Import statements** (`import module_name`) work with the package system and wrap content in packages
-* **Include statements** (`include "file_path"`) directly embed file content without package wrapping
-* Both are automatically discovered and bundled into self-contained binaries
+- **Import statements** (`import module_name`) work with the package system and wrap content in packages
+- **Include statements** (`include "file_path"`) directly embed file content without package wrapping
+- Both are automatically discovered and bundled into self-contained binaries
 
 ---
 
@@ -1891,7 +1898,7 @@ To run the binary:
 Given a simple `hello.vint` file:
 
 ```js
-print("Hello, World!")
+print("Hello, World!");
 ```
 
 Run:
@@ -1919,15 +1926,17 @@ Hello, World!
 The VintLang bundler has evolved into a sophisticated multi-stage pipeline that handles complex multi-file projects with automatic dependency resolution. Here's how it works:
 
 ### 🔍 Phase 1: Dependency Analysis
+
 ```
 main.vint
     ↓ (parse AST)
     ├── import math_utils → finds math_utils.vint
-    ├── include "config.vint" → finds config.vint  
+    ├── include "config.vint" → finds config.vint
     └── import os → skips (built-in module)
 ```
 
 **What happens:**
+
 - Parses main file's AST to find `import` and `include` statements
 - Sets up search paths (main file directory, current directory, `./modules/`)
 - Recursively discovers all dependency files
@@ -1935,6 +1944,7 @@ main.vint
 - Skips built-in modules (like `os`, `http`, etc.)
 
 ### ⚙️ Phase 2: String Processing & Code Combination
+
 ```
 Files discovered:
 ├── main.vint (import math_utils; include "config.vint"; ...)
@@ -1948,12 +1958,14 @@ Processing:
 ```
 
 **What happens:**
+
 - **Import files**: Wrapped in package structure if not already packaged
-- **Include files**: Content embedded directly, imports/includes removed  
+- **Include files**: Content embedded directly, imports/includes removed
 - **Main file**: Import/include statements removed for bundled dependencies
 - All code combined into single VintLang program
 
 ### 🏗️ Phase 3: Go Code Generation
+
 ```
 Combined VintLang Code
     ↓ (escape for Go)
@@ -1968,12 +1980,14 @@ func main() {
 ```
 
 **What happens:**
+
 - Escapes VintLang code for safe embedding in Go string literals
 - Generates Go main.go file using template
 - Adds metadata (bundler version, build time)
 - Creates go.mod file for dependencies
 
 ### 🔨 Phase 4: Binary Compilation
+
 ```
 Temporary Directory
 ├── main.go (generated)
@@ -1983,8 +1997,9 @@ Binary Output (self-contained executable)
 ```
 
 **What happens:**
+
 - Creates temporary build directory
-- Runs `go mod tidy` to resolve Go dependencies  
+- Runs `go mod tidy` to resolve Go dependencies
 - Compiles with `go build -o binary_name`
 - Moves final binary to output location
 - Cleans up temporary files
@@ -1992,7 +2007,7 @@ Binary Output (self-contained executable)
 ### 🎯 Key Features of Current Implementation
 
 1. **Automatic Dependency Discovery**: Recursively finds all `.vint` files through AST parsing
-2. **Dual Processing Modes**: 
+2. **Dual Processing Modes**:
    - `import module_name` → wraps content in packages
    - `include "file.vint"` → directly embeds content
 3. **Smart Module Resolution**: Searches multiple paths, handles built-ins
@@ -2072,13 +2087,13 @@ The resulting binary is completely portable and self-contained - no VintLang int
 
 The bundler is built with several specialized components:
 
-| Component | File | Purpose |
-|-----------|------|---------|
-| **Bundle Controller** | `bundler.go` | Main entry point, coordinates the entire bundling process |
-| **Dependency Analyzer** | `dependencies.go` | Discovers and analyzes all imported/included files recursively |
-| **String Processor** | `string_processor.go` | Combines files and handles import/include statement processing |
-| **Bundled Evaluator** | `bundled_evaluator.go` | Generates the final Go code with embedded VintLang content |
-| **Package Processor** | `package_processor.go` | Handles package structure and wrapping for imported modules |
+| Component               | File                   | Purpose                                                        |
+| ----------------------- | ---------------------- | -------------------------------------------------------------- |
+| **Bundle Controller**   | `bundler.go`           | Main entry point, coordinates the entire bundling process      |
+| **Dependency Analyzer** | `dependencies.go`      | Discovers and analyzes all imported/included files recursively |
+| **String Processor**    | `string_processor.go`  | Combines files and handles import/include statement processing |
+| **Bundled Evaluator**   | `bundled_evaluator.go` | Generates the final Go code with embedded VintLang content     |
+| **Package Processor**   | `package_processor.go` | Handles package structure and wrapping for imported modules    |
 
 **Flow**: Bundle Controller → Dependency Analyzer → String Processor → Bundled Evaluator → Go Compiler
 
@@ -2086,14 +2101,14 @@ The bundler is built with several specialized components:
 
 The bundler has significantly evolved from the simple design originally described:
 
-| Original Design | Current Implementation |
-|----------------|----------------------|
-| ✅ Single file bundling | ✅ Multi-file project support with dependency resolution |
-| ✅ Simple string embedding | ✅ Advanced AST parsing and code processing |
-| ❌ No import support | ✅ Full import/include statement handling |
-| ❌ No package system | ✅ Package wrapping and module resolution |
-| ❌ Manual dependency management | ✅ Automatic recursive dependency discovery |
-| ✅ Basic Go template | ✅ Sophisticated string processing and escaping |
+| Original Design                 | Current Implementation                                   |
+| ------------------------------- | -------------------------------------------------------- |
+| ✅ Single file bundling         | ✅ Multi-file project support with dependency resolution |
+| ✅ Simple string embedding      | ✅ Advanced AST parsing and code processing              |
+| ❌ No import support            | ✅ Full import/include statement handling                |
+| ❌ No package system            | ✅ Package wrapping and module resolution                |
+| ❌ Manual dependency management | ✅ Automatic recursive dependency discovery              |
+| ✅ Basic Go template            | ✅ Sophisticated string processing and escaping          |
 
 The current implementation handles complex multi-file projects automatically while maintaining the same simple command-line interface.
 
@@ -2102,6 +2117,7 @@ The current implementation handles complex multi-file projects automatically whi
 Let's see exactly what happens when bundling a multi-file project:
 
 **Input Files:**
+
 ```js
 // main.vint
 import math_utils
@@ -2109,7 +2125,7 @@ include "config.vint"
 print("App:", appName)
 print("Result:", math_utils.add(5, 3))
 
-// math_utils.vint  
+// math_utils.vint
 package math_utils {
     let add = func(a, b) { return a + b }
 }
@@ -2119,6 +2135,7 @@ let appName = "Calculator"
 ```
 
 **After Dependency Analysis:**
+
 ```
 Found 3 files:
 ├── main.vint (main file)
@@ -2127,6 +2144,7 @@ Found 3 files:
 ```
 
 **After String Processing:**
+
 ```js
 // Combined VintLang code:
 package math_utils {
@@ -2140,6 +2158,7 @@ print("Result:", math_utils.add(5, 3))
 ```
 
 **After Go Code Generation:**
+
 ```go
 package main
 import "github.com/vintlang/vintlang/repl"
@@ -2157,6 +2176,7 @@ print("Result:", math_utils.add(5, 3))`
 ```
 
 **Final Result:** Self-contained binary that outputs:
+
 ```
 App: Calculator
 Result: 8
@@ -2185,27 +2205,83 @@ func main() {
 
 ## Use Cases
 
-* Distribute command-line tools built in VintLang
-* Deploy scripts on systems where VintLang is not installed
-* Share portable binaries for automation or education
-* Build lightweight tools using VintLang and Go’s compiler
+- Distribute command-line tools built in VintLang
+- Deploy scripts on systems where VintLang is not installed
+- Share portable binaries for automation or education
+- Build lightweight tools using VintLang and Go’s compiler
 
 ---
 
 ## Notes for Developers
 
-* Temporary build directories are automatically created and cleaned
-* Uses `text/template` for safe source code embedding
-* The Go module created during bundling is isolated from your current project
-* Spinner and CLI output are available for build feedback
+- Temporary build directories are automatically created and cleaned
+- Uses `text/template` for safe source code embedding
+- The Go module created during bundling is isolated from your current project
+- Spinner and CLI output are available for build feedback
+
+---
+
+## Cross-Compilation
+
+The bundler supports cross-compilation via positional `GOOS` and `GOARCH` arguments.
+
+### Syntax
+
+```sh
+vint bundle <file.vint> [placeholder] [outputName] [outputDir] [GOOS] [GOARCH] [quiet] [keep]
+```
+
+| Position | Argument        | Description                                     |
+| -------- | --------------- | ----------------------------------------------- |
+| 1        | `<file.vint>`   | Main VintLang source file (required)            |
+| 2        | _(placeholder)_ | Reserved                                        |
+| 3        | Output name     | Binary name (default: filename without `.vint`) |
+| 4        | Output dir      | Output directory (default: `.`)                 |
+| 5        | GOOS            | Target OS: `linux`, `darwin`, `windows`, etc.   |
+| 6        | GOARCH          | Target architecture: `amd64`, `arm64`, etc.     |
+| 7        | `quiet`         | Suppress build output                           |
+| 8        | `keep`          | Keep temporary build directory                  |
+
+### Examples
+
+Build for Linux on AMD64 (e.g., from macOS):
+
+```sh
+vint bundle main.vint "" myapp . linux amd64
+```
+
+Build for Windows on ARM64:
+
+```sh
+vint bundle main.vint "" myapp . windows arm64
+```
+
+Build for the current platform (default):
+
+```sh
+vint bundle main.vint
+```
+
+### Common GOOS / GOARCH Combinations
+
+| Target                         | GOOS      | GOARCH  |
+| ------------------------------ | --------- | ------- |
+| Linux x86-64                   | `linux`   | `amd64` |
+| Linux ARM (Raspberry Pi, etc.) | `linux`   | `arm64` |
+| macOS Apple Silicon            | `darwin`  | `arm64` |
+| macOS Intel                    | `darwin`  | `amd64` |
+| Windows x86-64                 | `windows` | `amd64` |
+| Windows ARM                    | `windows` | `arm64` |
+
+> **Note**: Go must be installed on the build machine. The generated binary runs on the target platform without Go or VintLang.
 
 ---
 
 ## Important Details
 
-* Go is required only during **build time**
-* The resulting binary is portable and self-contained
-* Cross-compilation is not supported out-of-the-box; build on the target OS/arch
+- Go is required only during **build time**
+- The resulting binary is portable and self-contained
+- Cross-compilation is fully supported via GOOS/GOARCH arguments
 
 ---
 
@@ -2218,7 +2294,6 @@ vint bundle yourfile.vint
 ```
 
 Build once. Run anywhere. No dependencies. No interpreter. Just execution.
-
 
 ```
 
@@ -5171,6 +5246,527 @@ The ErrorMessage system enables future improvements:
 5. **Interactive Help**: Links to relevant documentation sections
 
 This enhanced error system represents a significant improvement in Vint's developer experience, making the language more approachable and professional.
+
+```
+
+## enum.md
+
+```markdown
+# Enums in Vint
+
+Enums (enumerations) provide a way to define a type that has a fixed set of named constant values. They make code more readable, maintainable, and type-safe by representing a group of related constants with meaningful names.
+
+## Why Use Enums?
+
+Enums are useful for:
+- **State management**: Representing states like `PENDING`, `ACTIVE`, `COMPLETED`
+- **Configuration**: Defining fixed sets of options or modes
+- **Type safety**: Preventing invalid values by restricting choices to predefined constants
+- **Readability**: Using descriptive names instead of magic numbers or strings
+
+## Basic Syntax
+
+```vint
+enum EnumName {
+    MEMBER1 = value1,
+    MEMBER2 = value2,
+    MEMBER3 = value3
+}
+```
+
+### Example: Integer Enum
+
+```vint
+enum Status {
+    PENDING = 0,
+    ACTIVE = 1,
+    COMPLETED = 2,
+    FAILED = 3
+}
+
+let currentStatus = Status.ACTIVE
+print(currentStatus)  // Output: 1
+```
+
+## Enum Types
+
+### Integer Enums
+
+Integer enums are useful for numeric codes, states, or priority levels:
+
+```vint
+enum Priority {
+    LOW = 0,
+    MEDIUM = 1,
+    HIGH = 2,
+    CRITICAL = 3
+}
+
+let taskPriority = Priority.HIGH
+print("Priority level: " + taskPriority)  // Output: Priority level: 2
+```
+
+### String Enums
+
+String enums are ideal for configuration values, roles, or descriptive constants:
+
+```vint
+enum Environment {
+    DEV = "development",
+    STAGING = "staging",
+    PROD = "production"
+}
+
+let currentEnv = Environment.PROD
+print("Running in: " + currentEnv)  // Output: Running in: production
+```
+
+### HTTP Status Codes
+
+```vint
+enum HttpStatus {
+    OK = 200,
+    CREATED = 201,
+    NOTFOUND = 404,
+    UNAUTHORIZED = 401,
+    SERVERERROR = 500
+}
+
+let statusCode = HttpStatus.OK
+if statusCode == HttpStatus.OK {
+    print("Request successful!")
+}
+```
+
+## Accessing Enum Members
+
+Enum members are accessed using dot notation:
+
+```vint
+enum Color {
+    RED = "red",
+    GREEN = "green",
+    BLUE = "blue"
+}
+
+let myColor = Color.RED
+let anotherColor = Color.BLUE
+```
+
+## Using Enums in Expressions
+
+### Comparisons
+
+Enums can be compared using standard comparison operators:
+
+```vint
+enum OrderStatus {
+    PENDING = 0,
+    CONFIRMED = 1,
+    SHIPPED = 2,
+    DELIVERED = 3
+}
+
+let order = OrderStatus.CONFIRMED
+
+if order == OrderStatus.CONFIRMED {
+    print("Order has been confirmed")
+}
+
+if order >= OrderStatus.CONFIRMED {
+    print("Order is confirmed or further along")
+}
+```
+
+### Arithmetic Operations
+
+Integer enum values can be used in arithmetic:
+
+```vint
+enum Level {
+    BEGINNER = 1,
+    INTERMEDIATE = 2,
+    ADVANCED = 3,
+    EXPERT = 4
+}
+
+let currentLevel = Level.INTERMEDIATE
+let nextLevel = currentLevel + 1
+print("Next level: " + nextLevel)  // Output: Next level: 3
+```
+
+### String Concatenation
+
+String enum values can be concatenated:
+
+```vint
+enum Greeting {
+    HELLO = "Hello",
+    GOODBYE = "Goodbye",
+    WELCOME = "Welcome"
+}
+
+let message = Greeting.HELLO + ", World!"
+print(message)  // Output: Hello, World!
+```
+
+## Immutability
+
+Enums are declared as constants and cannot be reassigned:
+
+```vint
+enum Status {
+    ACTIVE = 1,
+    INACTIVE = 0
+}
+
+// This will cause an error:
+// Status = 5
+// Error: Cannot assign to constant 'Status'
+```
+
+Enum members also cannot be modified:
+
+```vint
+enum Config {
+    MAX_USERS = 100,
+    TIMEOUT = 30
+}
+
+let maxUsers = Config.MAX_USERS  // ✅ Allowed
+// Config.MAX_USERS = 200         // ❌ Not allowed
+```
+
+## Common Use Cases
+
+### 1. Application States
+
+```vint
+enum AppState {
+    INITIALIZING = 0,
+    READY = 1,
+    LOADING = 2,
+    ERROR = 3
+}
+
+let state = AppState.INITIALIZING
+
+if state == AppState.ERROR {
+    print("Application encountered an error")
+}
+```
+
+### 2. User Roles
+
+```vint
+enum Role {
+    ADMIN = "admin",
+    MODERATOR = "moderator",
+    USER = "user",
+    GUEST = "guest"
+}
+
+let userRole = Role.ADMIN
+
+if userRole == Role.ADMIN {
+    print("Admin access granted")
+}
+```
+
+### 3. Log Levels
+
+```vint
+enum LogLevel {
+    DEBUG = 0,
+    INFO = 1,
+    WARN = 2,
+    ERROR = 3,
+    FATAL = 4
+}
+
+let currentLogLevel = LogLevel.INFO
+
+if currentLogLevel >= LogLevel.WARN {
+    print("Warning or higher level message")
+}
+```
+
+### 4. Direction or Orientation
+
+```vint
+enum Direction {
+    NORTH = 0,
+    EAST = 1,
+    SOUTH = 2,
+    WEST = 3
+}
+
+let facing = Direction.NORTH
+```
+
+### 5. API Response Codes
+
+```vint
+enum ResponseCode {
+    SUCCESS = 200,
+    CREATED = 201,
+    ACCEPTED = 202,
+    BADREQUEST = 400,
+    UNAUTHORIZED = 401,
+    FORBIDDEN = 403,
+    NOTFOUND = 404,
+    SERVERERROR = 500
+}
+
+let response = ResponseCode.SUCCESS
+
+if response == ResponseCode.SUCCESS {
+    print("Operation completed successfully")
+}
+```
+
+## Working with Functions
+
+Enums can be passed to and returned from functions:
+
+```vint
+enum Status {
+    PENDING = 0,
+    ACTIVE = 1,
+    COMPLETED = 2
+}
+
+let checkStatus = func(status) {
+    if status == Status.COMPLETED {
+        return "Done!"
+    } else if status == Status.ACTIVE {
+        return "In progress..."
+    } else {
+        return "Waiting..."
+    }
+}
+
+let result = checkStatus(Status.ACTIVE)
+print(result)  // Output: In progress...
+```
+
+## Error Handling
+
+Attempting to access a non-existent enum member will result in an error:
+
+```vint
+enum Status {
+    PENDING = 0,
+    ACTIVE = 1
+}
+
+// This will cause an error:
+// let invalid = Status.INVALID
+// Error: Enum 'Status' has no member 'INVALID'
+```
+
+## Best Practices
+
+### 1. Use Descriptive Names
+
+Choose clear, descriptive names for both the enum and its members:
+
+```vint
+// ✅ Good
+enum OrderStatus {
+    PENDING = 0,
+    CONFIRMED = 1,
+    SHIPPED = 2
+}
+
+// ❌ Avoid
+enum Status {
+    S1 = 0,
+    S2 = 1,
+    S3 = 2
+}
+```
+
+### 2. Use UPPERCASE for Members
+
+Follow the convention of using `UPPERCASE` for enum member names:
+
+```vint
+// ✅ Good
+enum Priority {
+    LOW = 1,
+    MEDIUM = 2,
+    HIGH = 3
+}
+
+// ❌ Avoid
+enum Priority {
+    low = 1,
+    medium = 2,
+    high = 3
+}
+```
+
+### 3. Group Related Constants
+
+Use enums to group related constants together:
+
+```vint
+// ✅ Good
+enum FilePermission {
+    READ = 4,
+    WRITE = 2,
+    EXECUTE = 1
+}
+
+// ❌ Avoid spreading them as separate constants
+const READ = 4
+const WRITE = 2
+const EXECUTE = 1
+```
+
+### 4. Choose Appropriate Values
+
+Use values that make sense for your use case:
+
+```vint
+// For states/flags: use 0, 1, 2...
+enum State {
+    IDLE = 0,
+    RUNNING = 1,
+    STOPPED = 2
+}
+
+// For HTTP codes: use actual HTTP status codes
+enum HttpStatus {
+    OK = 200,
+    NOTFOUND = 404
+}
+
+// For descriptive values: use strings
+enum Mode {
+    LIGHT = "light",
+    DARK = "dark"
+}
+```
+
+### 5. Document Complex Enums
+
+Add comments to explain enum purposes and member meanings:
+
+```vint
+// User permission levels for access control
+enum Permission {
+    NONE = 0,      // No access
+    READ = 1,      // Read-only access
+    WRITE = 2,     // Read and write access
+    ADMIN = 3      // Full administrative access
+}
+```
+
+## Comparison with Constants
+
+While you can use `const` for individual constants, enums are better for related groups:
+
+```vint
+// Using const (verbose)
+const STATUS_PENDING = 0
+const STATUS_ACTIVE = 1
+const STATUS_COMPLETED = 2
+
+// Using enum (cleaner and grouped)
+enum Status {
+    PENDING = 0,
+    ACTIVE = 1,
+    COMPLETED = 2
+}
+
+// Access is clearer with enums
+let status = Status.ACTIVE  // Clear namespace
+```
+
+## Advanced Examples
+
+### Switch Statements with Enums
+
+```vint
+enum TaskStatus {
+    TODO = 0,
+    INPROGRESS = 1,
+    REVIEW = 2,
+    DONE = 3
+}
+
+let status = TaskStatus.INPROGRESS
+
+switch status {
+    case TaskStatus.TODO {
+        print("Task not started")
+    }
+    case TaskStatus.INPROGRESS {
+        print("Task in progress")
+    }
+    case TaskStatus.REVIEW {
+        print("Task under review")
+    }
+    case TaskStatus.DONE {
+        print("Task completed")
+    }
+}
+```
+
+### Using Enums in Loops
+
+```vint
+enum Status {
+    PENDING = 0,
+    ACTIVE = 1,
+    COMPLETED = 2
+}
+
+let statuses = [Status.PENDING, Status.ACTIVE, Status.COMPLETED]
+
+for status in statuses {
+    print("Processing status: " + status)
+}
+```
+
+### Enums in Dictionaries
+
+```vint
+enum Status {
+    PENDING = 0,
+    ACTIVE = 1,
+    COMPLETED = 2
+}
+
+let statusMessages = {
+    Status.PENDING: "Waiting to start",
+    Status.ACTIVE: "Currently processing",
+    Status.COMPLETED: "All done!"
+}
+
+print(statusMessages[Status.ACTIVE])  // Output: Currently processing
+```
+
+## Limitations
+
+1. **No Auto-increment**: Each member must have an explicit value
+2. **No Reverse Mapping**: You cannot get member name from value directly
+3. **No Methods**: Enums cannot have associated methods
+
+## Summary
+
+Enums in Vint provide:
+- ✅ Named constants for fixed sets of values
+- ✅ Support for both integer and string values
+- ✅ Type safety through immutability
+- ✅ Clear, readable code
+- ✅ Easy namespace management
+- ✅ Integration with all Vint language features
+
+Use enums whenever you have a fixed set of related constants to make your code more maintainable and self-documenting!
+
 
 ```
 
@@ -12287,42 +12883,116 @@ if conn.type() == "ERROR" {
 ```markdown
 # Random Module in VintLang
 
-The `random` module provides functions for generating random numbers and data.
+The `random` module provides functions for generating random numbers, strings, OTPs, tokens, passwords, and more.
 
 ## Functions
 
 ### `random.int(min, max)`
+
 Returns a random integer in the range `[min, max]`, inclusive.
 
 ```js
-num = random.int(1, 100)
-print(num) // Outputs a random number between 1 and 100
+num = random.int(1, 100);
+print(num); // Outputs a random number between 1 and 100
 ```
 
 ### `random.float()`
+
 Returns a random float in the range `[0.0, 1.0)`.
 
 ```js
-f = random.float()
-print(f)
+f = random.float();
+print(f);
 ```
 
 ### `random.string(length)`
-Returns a random string of a given length.
+
+Returns a random alphabetic string of a given length.
 
 ```js
-s = random.string(12)
-print(s) // Outputs a random 12-character string
+s = random.string(12);
+print(s); // Outputs a random 12-character string
 ```
 
 ### `random.choice(array)`
+
 Returns a random element from an array.
 
 ```js
-items = ["apple", "banana", "cherry"]
-item = random.choice(items)
-print(item) // Outputs one of the fruits
-``` 
+items = ["apple", "banana", "cherry"];
+item = random.choice(items);
+print(item); // Outputs one of the fruits
+```
+
+### `random.otp(length)`
+
+Generates a cryptographically secure numeric OTP (One-Time Password) of the given length.
+
+```js
+code = random.otp(6);
+print(code); // e.g. "482031"
+```
+
+### `random.token(byteLength)`
+
+Generates a cryptographically secure hex token. The resulting string is twice the byte length (since each byte becomes 2 hex characters).
+
+```js
+tok = random.token(16);
+print(tok); // e.g. "a3f1b2c4d5e6f7089012abcd3456ef78" (32 hex chars)
+
+apiKey = random.token(32);
+print(apiKey); // 64 hex chars, suitable for API keys
+```
+
+### `random.password(length)`
+
+Generates a strong random password containing lowercase, uppercase, digits, and special characters. Minimum length is 4 to guarantee at least one of each type. Uses cryptographically secure randomness.
+
+```js
+pw = random.password(16);
+print(pw); // e.g. "aB3!xK9@mP2#nQ5&"
+```
+
+### `random.shuffle(array)`
+
+Returns a new shuffled copy of the array (does not modify the original).
+
+```js
+arr = [1, 2, 3, 4, 5];
+shuffled = random.shuffle(arr);
+print(shuffled); // e.g. [3, 1, 5, 2, 4]
+print(arr); // [1, 2, 3, 4, 5] (unchanged)
+```
+
+### `random.sample(array, count)`
+
+Returns `count` unique random elements from an array (sampling without replacement).
+
+```js
+nums = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+picked = random.sample(nums, 3);
+print(picked); // e.g. [7, 2, 9]
+```
+
+### `random.bool()`
+
+Returns a random boolean value (`true` or `false`).
+
+```js
+val = random.bool();
+print(val); // true or false
+```
+
+### `random.range(min, max, count)`
+
+Returns an array of `count` random integers, each in the range `[min, max]`.
+
+```js
+nums = random.range(1, 100, 5);
+print(nums); // e.g. [42, 17, 88, 3, 56]
+```
+
 ```
 
 ## range.md
@@ -12839,136 +13509,167 @@ import regex
 ## Functions and Examples
 
 ### 1. Matching a Pattern with `match`
+
 The `match` function checks if a string matches a specified pattern. It returns `true` if the string matches the pattern and `false` if it does not.
 
 **Syntax**:
+
 ```js
-match(pattern, string)
+match(pattern, string);
 ```
+
 - `pattern`: The regular expression pattern.
 - `string`: The string to match against the pattern.
 
 **Example**:
+
 ```js
 import regex
 
 result = regex.match("^Hello", "Hello World")
 print(result)  // Expected output: true
 ```
+
 In this case, the string starts with `"Hello"`, so it matches the pattern.
 
 ---
 
 ### 2. Using `match` to Check Non-Matches
-You can use `match` to check if a string does *not* match a given pattern. If the pattern is not found at the beginning of the string, it will return `false`.
+
+You can use `match` to check if a string does _not_ match a given pattern. If the pattern is not found at the beginning of the string, it will return `false`.
 
 **Example**:
+
 ```js
 import regex
 
 result = regex.match("^World", "Hello World")
 print(result)  // Expected output: false
 ```
+
 Since the string does not start with `"World"`, the result is `false`.
 
 ---
 
 ### 3. Replacing Part of a String with `replaceString`
+
 The `replaceString` function replaces parts of a string that match a pattern with a new value.
 
 **Syntax**:
+
 ```js
-replaceString(pattern, replacement, string)
+replaceString(pattern, replacement, string);
 ```
+
 - `pattern`: The regular expression pattern.
 - `replacement`: The string to replace the matched part with.
 - `string`: The input string.
 
 **Example**:
+
 ```js
 import regex
 
 newString = regex.replaceString("World", "VintLang", "Hello World")
 print(newString)  // Expected output: "Hello VintLang"
 ```
+
 In this case, `"World"` is replaced by `"VintLang"`, resulting in `"Hello VintLang"`.
 
 ---
 
 ### 4. Splitting a String with `splitString`
+
 The `splitString` function splits a string into a list of substrings based on a regular expression pattern.
 
 **Syntax**:
+
 ```js
-splitString(pattern, string)
+splitString(pattern, string);
 ```
+
 - `pattern`: The regular expression pattern used as a delimiter.
 - `string`: The string to be split.
 
 **Example**:
+
 ```js
 import regex
 
 words = regex.splitString("\\s+", "Hello World VintLang")
 print(words)  // Expected output: ["Hello", "World", "VintLang"]
 ```
+
 Here, `\\s+` matches one or more whitespace characters, so the string is split into words.
 
 ---
 
 ### 5. Splitting a String by a Comma
+
 You can also split a string by a specific delimiter, such as a comma, using `splitString`.
 
 **Example**:
+
 ```js
 import regex
 
 csv = regex.splitString(",", "apple,banana,orange")
 print(csv)  // Expected output: ["apple", "banana", "orange"]
 ```
+
 The string `"apple,banana,orange"` is split at each comma.
 
 ---
 
 ### 6. Matching a Complex Pattern
+
 You can match more complex patterns, such as an email address, using `match` with a regex pattern.
 
 **Example**:
+
 ```js
 import regex
 
 emailMatch = regex.match("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$", "test@example.com")
 print(emailMatch)  // Expected output: true
 ```
+
 This pattern matches valid email addresses, so `"test@example.com"` matches successfully.
 
 ---
 
 ### 7. Replacing Digits in a String
+
 You can use `replaceString` to replace parts of a string that match a pattern, such as replacing digits with asterisks.
 
 **Example**:
+
 ```js
 import regex
 
 maskedString = regex.replaceString("\\d", "*", "My phone number is 123456789")
 print(maskedString)  // Expected output: "My phone number is *********"
 ```
+
 Here, `\\d` matches any digit, so the digits in the phone number are replaced with asterisks.
 
 ---
 
 ## Summary of Functions
 
-| Function           | Description                                             | Example Output                             |
-|--------------------|---------------------------------------------------------|--------------------------------------------|
-| `match(pattern, string)`  | Checks if the string matches the given pattern.         | `true` or `false`                          |
-| `replaceString(pattern, replacement, string)`  | Replaces parts of a string matching a pattern with a new value.  | A modified string                          |
-| `splitString(pattern, string)` | Splits a string into a list of substrings based on the pattern.   | List of substrings                         |
+| Function                                      | Description                                                       | Example Output     |
+| --------------------------------------------- | ----------------------------------------------------------------- | ------------------ |
+| `match(pattern, string)`                      | Checks if the string matches the given pattern.                   | `true` or `false`  |
+| `test(pattern, string)`                       | Alias for `match`. Use inside packages to avoid keyword conflict. | `true` or `false`  |
+| `replaceString(pattern, replacement, string)` | Replaces parts of a string matching a pattern with a new value.   | A modified string  |
+| `splitString(pattern, string)`                | Splits a string into a list of substrings based on the pattern.   | List of substrings |
+
+> **Note**: Inside `package` blocks, use `regex.test()` instead of `regex.match()` because `match` is a reserved keyword for pattern matching.
 
 ---
 
 The `regex` module is extremely useful for text manipulation, pattern matching, and string processing tasks in Vint. Whether you need to validate input, split strings, or replace parts of a string, the regex module provides powerful tools to handle these tasks efficiently.
+
 ```
 
 ## schedule.md
@@ -13835,6 +14536,862 @@ print(trimmedName)  // Output: "achera Sasi"
 ```
 
 Understanding how to manipulate and work with strings in Vint allows you to efficiently handle text data in your programs.
+```
+
+## structs.md
+
+```markdown
+# Structs in Vint
+
+Structs provide a way to define custom data types with named fields and methods. They let you model real-world entities, group related data together, and attach behavior — making your code more organized, readable, and reusable.
+
+## Why Use Structs?
+
+Structs are useful for:
+
+- **Data modeling**: Representing entities like users, products, or configurations
+- **Encapsulation**: Grouping related data and behavior together
+- **Reusability**: Creating multiple instances from a single blueprint
+- **Readability**: Using descriptive field names instead of array indices or dictionary keys
+- **Methods**: Attaching functions directly to your data types
+
+## Basic Syntax
+
+```vint
+struct StructName {
+    field1: defaultValue1
+    field2: defaultValue2
+
+    func methodName(params) {
+        // method body — use 'this' to access fields
+    }
+}
+```
+
+### Example: Simple Point
+
+```vint
+struct Point {
+    x: 0
+    y: 0
+}
+
+let p = Point(x = 10, y = 20)
+print(p.x)  // Output: 10
+print(p.y)  // Output: 20
+```
+
+---
+
+## Defining Structs
+
+### Fields with Default Values
+
+Every field in a struct must have a default value. This serves as the fallback when no value is provided during instantiation:
+
+```vint
+struct Config {
+    host: "localhost"
+    port: 8080
+    verbose: false
+}
+
+let cfg = Config()  // All defaults used
+print(cfg.host)     // Output: localhost
+print(cfg.port)     // Output: 8080
+```
+
+### Fields with Methods
+
+Structs can contain both fields and methods. Methods are defined inline using the `func` keyword and can access the struct's fields through the `this` keyword:
+
+```vint
+struct User {
+    name: ""
+    age: 0
+
+    func greet() {
+        return "Hello, I'm " + this.name
+    }
+
+    func isAdult() {
+        return this.age >= 18
+    }
+}
+
+let user = User(name = "Alice", age = 30)
+print(user.greet())    // Output: Hello, I'm Alice
+print(user.isAdult())  // Output: true
+```
+
+### Fields Only (No Methods)
+
+Structs don't need methods — they work perfectly as simple data containers:
+
+```vint
+struct Color {
+    r: 0
+    g: 0
+    b: 0
+}
+
+let red = Color(r = 255, g = 0, b = 0)
+print("R=" + string(red.r) + " G=" + string(red.g) + " B=" + string(red.b))
+// Output: R=255 G=0 B=0
+```
+
+---
+
+## Creating Instances
+
+### Named Arguments
+
+The clearest way to create an instance — specify field names explicitly:
+
+```vint
+struct User {
+    name: ""
+    age: 0
+}
+
+let user = User(name = "Alice", age = 30)
+```
+
+### Positional Arguments
+
+Arguments are matched to fields in declaration order:
+
+```vint
+struct Point {
+    x: 0
+    y: 0
+}
+
+let p = Point(5, 15)  // x = 5, y = 15
+print(p.x)  // Output: 5
+print(p.y)  // Output: 15
+```
+
+### Using Default Values
+
+Omit arguments to use the default values:
+
+```vint
+struct Config {
+    host: "localhost"
+    port: 8080
+    verbose: false
+}
+
+// All defaults
+let cfg1 = Config()
+
+// Override some, keep rest as defaults
+let cfg2 = Config(host = "example.com")
+print(cfg2.host)  // Output: example.com
+print(cfg2.port)  // Output: 8080
+```
+
+### Partial Overrides
+
+You can override only the fields you care about:
+
+```vint
+struct Server {
+    host: "localhost"
+    port: 8080
+    protocol: "http"
+}
+
+let prod = Server(host = "api.example.com", port = 443, protocol = "https")
+let dev = Server(port = 3000)
+
+print(dev.host)      // Output: localhost
+print(dev.port)      // Output: 3000
+print(dev.protocol)  // Output: http
+```
+
+---
+
+## The `this` Keyword
+
+Inside methods, `this` refers to the current struct instance. Use it to:
+
+- **Read fields**: `this.fieldName`
+- **Write fields**: `this.fieldName = newValue`
+- **Call other methods**: `this.methodName()`
+
+```vint
+struct Counter {
+    count: 0
+
+    func increment() {
+        this.count = this.count + 1
+    }
+
+    func decrement() {
+        this.count = this.count - 1
+    }
+
+    func value() {
+        return this.count
+    }
+}
+
+let c = Counter()
+c.increment()
+c.increment()
+c.increment()
+c.decrement()
+print(c.value())  // Output: 2
+```
+
+---
+
+## Property Access and Assignment
+
+### Reading Fields
+
+Use dot notation to access a struct instance's fields:
+
+```vint
+struct Person {
+    name: "Unknown"
+    age: 0
+}
+
+let p = Person(name = "Alice", age = 25)
+print(p.name)  // Output: Alice
+print(p.age)   // Output: 25
+```
+
+### Mutating Fields
+
+Fields can be reassigned after instantiation:
+
+```vint
+let user = User(name = "Alice", age = 30)
+print(user.name)  // Output: Alice
+
+user.name = "Bob"
+user.age = 25
+print(user.name)  // Output: Bob
+print(user.age)   // Output: 25
+```
+
+### Field Validation
+
+Assigning to a field that doesn't exist on the struct produces an error:
+
+```vint
+struct Point {
+    x: 0
+    y: 0
+}
+
+let p = Point(x = 1, y = 2)
+// p.z = 3  // ❌ Error: Struct 'Point' has no field 'z'
+```
+
+---
+
+## Methods
+
+### Basic Methods
+
+Methods are defined inside the struct body with the `func` keyword:
+
+```vint
+struct Rectangle {
+    width: 0
+    height: 0
+
+    func area() {
+        return this.width * this.height
+    }
+
+    func perimeter() {
+        return 2 * (this.width + this.height)
+    }
+}
+
+let rect = Rectangle(width = 10, height = 5)
+print(rect.area())       // Output: 50
+print(rect.perimeter())  // Output: 30
+```
+
+### Methods with Parameters
+
+Methods can accept parameters just like regular functions:
+
+```vint
+struct Calculator {
+    value: 0
+
+    func add(n) {
+        return this.value + n
+    }
+
+    func multiply(n) {
+        return this.value * n
+    }
+}
+
+let calc = Calculator(value = 10)
+print(calc.add(5))       // Output: 15
+print(calc.multiply(3))  // Output: 30
+```
+
+### Methods with Default Parameters
+
+Method parameters can have default values:
+
+```vint
+struct Greeter {
+    name: "World"
+
+    func greet(greeting = "Hello") {
+        return greeting + ", " + this.name + "!"
+    }
+}
+
+let g = Greeter(name = "VintLang")
+print(g.greet())       // Output: Hello, VintLang!
+print(g.greet("Hi"))   // Output: Hi, VintLang!
+```
+
+### Methods That Mutate State
+
+Methods can modify the instance's fields through `this`:
+
+```vint
+struct Account {
+    owner: ""
+    balance: 0
+
+    func deposit(amount) {
+        this.balance = this.balance + amount
+        return this.balance
+    }
+
+    func withdraw(amount) {
+        if (amount > this.balance) {
+            return "Insufficient funds"
+        }
+        this.balance = this.balance - amount
+        return this.balance
+    }
+
+    func summary() {
+        return this.owner + ": $" + string(this.balance)
+    }
+}
+
+let acc = Account(owner = "Alice", balance = 100)
+print(acc.summary())    // Output: Alice: $100
+
+acc.deposit(50)
+print(acc.summary())    // Output: Alice: $150
+
+acc.withdraw(30)
+print(acc.summary())    // Output: Alice: $120
+```
+
+### Methods Calling Other Methods
+
+Methods can call other methods on the same instance using `this`:
+
+```vint
+struct Rectangle {
+    width: 0
+    height: 0
+
+    func area() {
+        return this.width * this.height
+    }
+
+    func perimeter() {
+        return 2 * (this.width + this.height)
+    }
+
+    func describe() {
+        return "Rectangle(" + string(this.width) + "x" + string(this.height) +
+               ") area=" + string(this.area()) +
+               " perimeter=" + string(this.perimeter())
+    }
+}
+
+let rect = Rectangle(width = 10, height = 5)
+print(rect.describe())
+// Output: Rectangle(10x5) area=50 perimeter=30
+```
+
+---
+
+## Instance Independence
+
+Each instance has its own copy of fields. Mutating one instance does not affect others:
+
+```vint
+struct User {
+    name: ""
+    age: 0
+
+    func greet() {
+        return "Hello, I'm " + this.name
+    }
+}
+
+let alice = User(name = "Alice", age = 30)
+let bob = User(name = "Bob", age = 25)
+
+print(alice.greet())  // Output: Hello, I'm Alice
+print(bob.greet())    // Output: Hello, I'm Bob
+
+alice.name = "Charlie"
+print(alice.greet())  // Output: Hello, I'm Charlie
+print(bob.greet())    // Output: Hello, I'm Bob (unchanged)
+```
+
+---
+
+## Type Checking
+
+Use the built-in `type()` function to inspect struct types:
+
+```vint
+struct User {
+    name: ""
+    age: 0
+}
+
+let u = User(name = "Alice", age = 30)
+
+print(type(u))     // Output: User
+print(type(User))  // Output: struct:User
+```
+
+- `type(instance)` returns the struct's name (e.g., `"User"`)
+- `type(StructDefinition)` returns `"struct:Name"` (e.g., `"struct:User"`)
+
+---
+
+## Methods Returning New Instances
+
+Methods can create and return new struct instances. This is useful for immutable-style operations:
+
+```vint
+struct Vector {
+    x: 0
+    y: 0
+
+    func scale(factor) {
+        return Vector(x = this.x * factor, y = this.y * factor)
+    }
+
+    func display() {
+        return "Vector(" + string(this.x) + ", " + string(this.y) + ")"
+    }
+}
+
+let v1 = Vector(x = 3, y = 4)
+let v2 = v1.scale(2)
+
+print(v1.display())  // Output: Vector(3, 4) — original unchanged
+print(v2.display())  // Output: Vector(6, 8)
+```
+
+---
+
+## Common Use Cases
+
+### 1. Data Models
+
+```vint
+struct Product {
+    name: ""
+    price: 0
+    quantity: 0
+
+    func total() {
+        return this.price * this.quantity
+    }
+
+    func display() {
+        return this.name + " - $" + string(this.price) + " x " + string(this.quantity) + " = $" + string(this.total())
+    }
+}
+
+let item = Product(name = "Widget", price = 25, quantity = 4)
+print(item.display())  // Output: Widget - $25 x 4 = $100
+```
+
+### 2. State Management
+
+```vint
+struct Counter {
+    count: 0
+
+    func increment() {
+        this.count = this.count + 1
+    }
+
+    func decrement() {
+        this.count = this.count - 1
+    }
+
+    func reset() {
+        this.count = 0
+    }
+
+    func value() {
+        return this.count
+    }
+}
+
+let c = Counter()
+c.increment()
+c.increment()
+c.increment()
+c.decrement()
+print(c.value())  // Output: 2
+c.reset()
+print(c.value())  // Output: 0
+```
+
+### 3. Configuration Objects
+
+```vint
+struct DatabaseConfig {
+    host: "localhost"
+    port: 5432
+    name: "app_db"
+    user: "admin"
+    password: ""
+
+    func connectionString() {
+        return this.user + "@" + this.host + ":" + string(this.port) + "/" + this.name
+    }
+}
+
+let devDB = DatabaseConfig()
+print(devDB.connectionString())
+// Output: admin@localhost:5432/app_db
+
+let prodDB = DatabaseConfig(
+    host = "db.production.com",
+    port = 5433,
+    name = "prod_db",
+    user = "prod_admin",
+    password = "secret"
+)
+print(prodDB.connectionString())
+// Output: prod_admin@db.production.com:5433/prod_db
+```
+
+### 4. Builder Pattern
+
+```vint
+struct HTMLBuilder {
+    tag: "div"
+    content: ""
+
+    func render() {
+        return "<" + this.tag + ">" + this.content + "</" + this.tag + ">"
+    }
+}
+
+let heading = HTMLBuilder(tag = "h1", content = "Welcome to VintLang")
+let paragraph = HTMLBuilder(tag = "p", content = "Structs are powerful!")
+
+print(heading.render())    // Output: <h1>Welcome to VintLang</h1>
+print(paragraph.render())  // Output: <p>Structs are powerful!</p>
+```
+
+### 5. Todo List
+
+```vint
+struct TodoItem {
+    title: ""
+    completed: false
+
+    func status() {
+        if (this.completed) {
+            return "[x] " + this.title
+        } else {
+            return "[ ] " + this.title
+        }
+    }
+}
+
+let todos = [
+    TodoItem(title = "Buy groceries"),
+    TodoItem(title = "Write code", completed = true),
+    TodoItem(title = "Read docs")
+]
+
+for item in todos {
+    print(item.status())
+}
+// Output:
+// [ ] Buy groceries
+// [x] Write code
+// [ ] Read docs
+```
+
+### 6. Geometry
+
+```vint
+struct Circle {
+    cx: 0
+    cy: 0
+    radius: 1
+
+    func containsPoint(px, py) {
+        let dx = this.cx - px
+        let dy = this.cy - py
+        return (dx * dx + dy * dy) <= (this.radius * this.radius)
+    }
+}
+
+let c = Circle(cx = 0, cy = 0, radius = 5)
+print(c.containsPoint(3, 4))  // Output: true
+print(c.containsPoint(6, 0))  // Output: false
+```
+
+---
+
+## Structs in Collections
+
+### In Arrays
+
+```vint
+struct Student {
+    name: ""
+    grade: 0
+}
+
+let students = [
+    Student(name = "Alice", grade = 95),
+    Student(name = "Bob", grade = 82),
+    Student(name = "Charlie", grade = 91)
+]
+
+for s in students {
+    print(s.name + ": " + string(s.grade))
+}
+```
+
+### In Dictionaries
+
+```vint
+struct Student {
+    name: ""
+    grade: 0
+
+    func passing() {
+        return this.grade >= 60
+    }
+}
+
+let roster = {
+    "s1": Student(name = "Alice", grade = 95),
+    "s2": Student(name = "Bob", grade = 55),
+    "s3": Student(name = "Charlie", grade = 72)
+}
+
+for key, val in roster {
+    let status = "PASS"
+    if (!val.passing()) {
+        status = "FAIL"
+    }
+    print(val.name + ": " + string(val.grade) + " - " + status)
+}
+```
+
+---
+
+## Error Handling
+
+VintLang provides clear error messages for common struct mistakes:
+
+### Unknown Field in Constructor
+
+```vint
+struct Point {
+    x: 0
+    y: 0
+}
+
+// let p = Point(x = 1, z = 3)
+// ❌ Error: Struct 'Point' has no field 'z'
+```
+
+### Too Many Positional Arguments
+
+```vint
+struct Point {
+    x: 0
+    y: 0
+}
+
+// let p = Point(1, 2, 3)
+// ❌ Error: Too many arguments for struct 'Point'
+```
+
+### Assigning to a Non-Existent Field
+
+```vint
+struct Point {
+    x: 0
+    y: 0
+}
+
+let p = Point(x = 1, y = 2)
+// p.z = 3
+// ❌ Error: Struct 'Point' has no field 'z'
+```
+
+### Calling a Non-Existent Method
+
+```vint
+struct Point {
+    x: 0
+    y: 0
+}
+
+let p = Point(x = 1, y = 2)
+// p.move()
+// ❌ Error: Struct 'Point' has no method 'move'
+```
+
+---
+
+## Structs vs Packages
+
+Both structs and packages group data and behavior, but they serve different purposes:
+
+| Feature             | Struct                                 | Package                             |
+| ------------------- | -------------------------------------- | ----------------------------------- |
+| Multiple instances  | ✅ Yes — create as many as you need    | ❌ No — singleton                   |
+| Fields per instance | ✅ Each instance has own fields        | N/A — shared state                  |
+| Self-reference      | `this`                                 | `@`                                 |
+| Constructor         | `StructName(args)`                     | N/A                                 |
+| Use case            | Data modeling, entities, value objects | Organizing code, utilities, modules |
+
+**Use structs** when you need multiple instances with their own state (users, products, shapes).
+
+**Use packages** when you need a single namespace for utility functions, constants, or shared state.
+
+---
+
+## Best Practices
+
+### 1. Use Descriptive Names
+
+Choose clear, descriptive names for structs and their fields:
+
+```vint
+// ✅ Good
+struct HttpRequest {
+    method: "GET"
+    url: ""
+    headers: {}
+}
+
+// ❌ Avoid
+struct Req {
+    m: ""
+    u: ""
+    h: {}
+}
+```
+
+### 2. Always Provide Defaults
+
+Every field should have a sensible default value so that partial construction works:
+
+```vint
+struct Config {
+    host: "localhost"
+    port: 8080
+    timeout: 30
+    retries: 3
+}
+
+// Works — only override what you need
+let cfg = Config(host = "production.com")
+```
+
+### 3. Keep Methods Focused
+
+Each method should do one thing well:
+
+```vint
+// ✅ Good — single responsibility
+struct User {
+    name: ""
+    email: ""
+
+    func displayName() {
+        return this.name
+    }
+
+    func contactInfo() {
+        return this.name + " <" + this.email + ">"
+    }
+}
+```
+
+### 4. Use Named Arguments for Clarity
+
+Prefer named arguments over positional when creating instances:
+
+```vint
+// ✅ Clear intent
+let user = User(name = "Alice", age = 30)
+
+// ❌ Less readable
+let user = User("Alice", 30)
+```
+
+### 5. Avoid Reserved Words as Field Names
+
+VintLang has reserved keywords (like `error`, `debug`, `info`, `break`, `return`) that cannot be used as field names. Use descriptive alternatives:
+
+```vint
+// ✅ Good
+struct LogEntry {
+    message: ""
+    level: "info"
+    verbose: false
+}
+
+// ❌ Won't work — 'error' and 'debug' are reserved keywords
+// struct LogEntry {
+//     error: ""
+//     debug: false
+// }
+```
+
+---
+
+## Summary
+
+Structs in Vint provide:
+
+- ✅ Custom data types with named fields and default values
+- ✅ Methods with `this` binding for accessing and mutating fields
+- ✅ Named and positional argument constructors
+- ✅ Instance independence — each instance owns its data
+- ✅ Method parameters with default values
+- ✅ Methods calling other methods via `this`
+- ✅ Type checking with `type()`
+- ✅ Clear error messages for invalid operations
+- ✅ Full compatibility with arrays, dictionaries, and other Vint features
+
+Use structs whenever you need to model entities with data and behavior — they're the foundation for building well-structured VintLang applications!
+
 ```
 
 ## success.md
