@@ -1,31 +1,45 @@
-const os = import("os")
+import os
+import path
+import fmt
+
 const DOCS_DIR = "../docs"
-const OUTPUT_FILE = "merged-doc.md"
 const EXAMPLE_DIR = "../examples"
-// let files = os.listDir(DOCS_DIR).split(",") // listDir returns a comma-separated string of filenames
-let docFiles = os.listFiles(DOCS_DIR) // listFiles returns an array of filenames
-let mergedContent = "# Merged Documentation\n\n"
-for file in docFiles {
-    if (file.endsWith(".md")) {
-        let content = os.readFile(DOCS_DIR + "/" + file)
-        mergedContent = mergedContent + "## " + file + "\n\n"
-        mergedContent = mergedContent + "```markdown\n" + content + "\n```\n\n"
+const DOCS_OUTPUT = "merged-doc.md"
+const EXAMPLES_OUTPUT = "merged-examples.md"
+
+// Collect files matching an extension from a directory
+let collectFiles = func(dir, ext) {
+    let files = os.listFiles(dir)
+    let result = []
+    for f in files {
+        if (f.endsWith(ext)) {
+            result = append(result, f)
+        }
     }
+    return result
 }
 
-os.writeFile(OUTPUT_FILE, mergedContent)
-
-let exampleFiles = os.listFiles(EXAMPLE_DIR)
-let EXAMPLES_OUTPUT_FILE = "merged-examples.md"
-let exampleContent = "# Example Code Snippets\n\n"
-for file in exampleFiles {
-    let isCorrectFile = file.endsWith(".vint")
-    // println(isCorrectFile)
-    if (isCorrectFile) {
-        let content = os.readFile(EXAMPLE_DIR + "/" + file)
-        exampleContent = exampleContent + "## " + file + "\n\n"
-        exampleContent = exampleContent + "```js\n" + content + "\n```\n\n"
+// Build merged content from a list of files
+let mergeFiles = func(dir, files, title, codeBlock) {
+    let content = "# " + title + "\n\n"
+    for file in files {
+        let filePath = path.join(dir, file)
+        let fileContent = os.readFile(filePath)
+        content = content + "## " + file + "\n\n"
+        content = content + "```" + codeBlock + "\n" + fileContent + "\n```\n\n"
     }
+    return content
 }
-os.writeFile(EXAMPLES_OUTPUT_FILE, exampleContent)
-println("Documentation and examples merged into " + OUTPUT_FILE + " and " + EXAMPLES_OUTPUT_FILE)
+
+// Merge documentation
+let docFiles = collectFiles(DOCS_DIR, ".md")
+let mergedDocs = mergeFiles(DOCS_DIR, docFiles, "Merged Documentation", "markdown")
+os.writeFile(DOCS_OUTPUT, mergedDocs)
+
+// Merge examples
+let exampleFiles = collectFiles(EXAMPLE_DIR, ".vint")
+let mergedExamples = mergeFiles(EXAMPLE_DIR, exampleFiles, "Example Code Snippets", "js")
+os.writeFile(EXAMPLES_OUTPUT, mergedExamples)
+
+println(fmt.sprintf("Merged %d docs into %s and %d examples into %s",
+    len(docFiles), DOCS_OUTPUT, len(exampleFiles), EXAMPLES_OUTPUT))
