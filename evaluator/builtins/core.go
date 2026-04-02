@@ -176,8 +176,8 @@ func registerCoreBuiltins() {
 				return newError("argument to `chr` must be INTEGER, got %T", args[0])
 			}
 
-			if num.Value < 0 || num.Value > 127 {
-				return newError("chr() arg not in range(128)")
+			if num.Value < 0 || num.Value > 0x10FFFF {
+				return newError("chr() arg not in valid Unicode range (0-0x10FFFF)")
 			}
 
 			return &object.String{Value: string(rune(num.Value))}
@@ -195,11 +195,12 @@ func registerCoreBuiltins() {
 				return newError("argument to `ord` must be STRING, got %T", args[0])
 			}
 
-			if len(str.Value) != 1 {
-				return newError("ord() expected a character, but string of length %d found", len(str.Value))
+			runes := []rune(str.Value)
+			if len(runes) != 1 {
+				return newError("ord() expected a character, but string of length %d found", len(runes))
 			}
 
-			return &object.Integer{Value: int64(str.Value[0])}
+			return &object.Integer{Value: int64(runes[0])}
 		},
 	})
 
