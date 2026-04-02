@@ -18,12 +18,20 @@ func registerLogicBuiltins() {
 				return newError("First argument must be a boolean")
 			}
 
+			// Short-circuit: if first is false, return false immediately
+			if !bool1 {
+				return FALSE
+			}
+
 			bool2, err := getBooleanValue(args[1])
 			if err != nil {
 				return newError("Second argument must be a boolean")
 			}
 
-			return &object.Boolean{Value: bool1 && bool2}
+			if bool2 {
+				return TRUE
+			}
+			return FALSE
 		},
 	})
 
@@ -38,12 +46,20 @@ func registerLogicBuiltins() {
 				return newError("First argument must be a boolean")
 			}
 
+			// Short-circuit: if first is true, return true immediately
+			if bool1 {
+				return TRUE
+			}
+
 			bool2, err := getBooleanValue(args[1])
 			if err != nil {
 				return newError("Second argument must be a boolean")
 			}
 
-			return &object.Boolean{Value: bool1 || bool2}
+			if bool2 {
+				return TRUE
+			}
+			return FALSE
 		},
 	})
 
@@ -131,10 +147,45 @@ func registerLogicBuiltins() {
 			a := args[0]
 			b := args[1]
 
-			if a == b {
-				return &object.Boolean{Value: true}
+			// Compare by type first, then by value
+			if a.Type() != b.Type() {
+				return FALSE
 			}
-			return &object.Boolean{Value: false}
+
+			switch aVal := a.(type) {
+			case *object.Integer:
+				bVal := b.(*object.Integer)
+				if aVal.Value == bVal.Value {
+					return TRUE
+				}
+				return FALSE
+			case *object.Float:
+				bVal := b.(*object.Float)
+				if aVal.Value == bVal.Value {
+					return TRUE
+				}
+				return FALSE
+			case *object.String:
+				bVal := b.(*object.String)
+				if aVal.Value == bVal.Value {
+					return TRUE
+				}
+				return FALSE
+			case *object.Boolean:
+				bVal := b.(*object.Boolean)
+				if aVal.Value == bVal.Value {
+					return TRUE
+				}
+				return FALSE
+			case *object.Null:
+				return TRUE
+			default:
+				// Fallback: compare string representations
+				if a.Inspect() == b.Inspect() {
+					return TRUE
+				}
+				return FALSE
+			}
 		},
 	})
 }
