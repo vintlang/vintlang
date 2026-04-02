@@ -30,8 +30,9 @@ func (s *String) HashKey() HashKey {
 
 // Next implements an iterator for the String, returning the next character and its index.
 func (s *String) Next() (VintObject, VintObject) {
-	if s.offset < len(s.Value) {
-		char := string(s.Value[s.offset])
+	runes := []rune(s.Value)
+	if s.offset < len(runes) {
+		char := string(runes[s.offset])
 		index := &Integer{Value: int64(s.offset)}
 		s.offset++
 		return index, &String{Value: char}
