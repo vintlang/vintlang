@@ -40,27 +40,33 @@ var importedModules = make(map[string]bool)
 
 func evalImport(node *ast.Import, env *object.Environment) object.VintObject {
 	for alias, modName := range node.Identifiers {
-		// Validates module name
-		if !isValidModuleName(modName.Value) {
-			return newError(ErrInvalidModule, modName.Value)
+		if result := importSingleModule(alias, modName, env); isError(result) {
+			return result
 		}
+	}
+	return NULL
+}
 
-		// Checks for circular imports
-		if importedModules[modName.Value] {
-			return newError(ErrCircularImport, modName.Value)
-		}
-		importedModules[modName.Value] = true
+func importSingleModule(alias string, modName *ast.Identifier, env *object.Environment) object.VintObject {
+	// Validates module name
+	if !isValidModuleName(modName.Value) {
+		return newError(ErrInvalidModule, modName.Value)
+	}
 
-		if mod, exists := module.Mapper[modName.Value]; exists {
-			env.Define(alias, mod)
-		} else {
-			result := evalImportFile(alias, modName, env)
-			if isError(result) {
-				delete(importedModules, modName.Value)
-				return result
-			}
+	// Checks for circular imports
+	if importedModules[modName.Value] {
+		return newError(ErrCircularImport, modName.Value)
+	}
+	importedModules[modName.Value] = true
+	defer delete(importedModules, modName.Value)
+
+	if mod, exists := module.Mapper[modName.Value]; exists {
+		env.Define(alias, mod)
+	} else {
+		result := evalImportFile(alias, modName, env)
+		if isError(result) {
+			return result
 		}
-		delete(importedModules, modName.Value)
 	}
 	return NULL
 }
