@@ -39,9 +39,6 @@ const (
 var importedModules = make(map[string]bool)
 
 func evalImport(node *ast.Import, env *object.Environment) object.VintObject {
-	// Resets imported modules for new import chain
-	importedModules = make(map[string]bool)
-
 	for alias, modName := range node.Identifiers {
 		// Validates module name
 		if !isValidModuleName(modName.Value) {
@@ -59,9 +56,11 @@ func evalImport(node *ast.Import, env *object.Environment) object.VintObject {
 		} else {
 			result := evalImportFile(alias, modName, env)
 			if isError(result) {
+				delete(importedModules, modName.Value)
 				return result
 			}
 		}
+		delete(importedModules, modName.Value)
 	}
 	return NULL
 }
