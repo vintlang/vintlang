@@ -321,6 +321,7 @@ func (d *Dict) reduce(args []VintObject) VintObject {
 	}
 
 	var accumulator VintObject
+	var skipKey *HashKey
 	if len(args) == 2 {
 		accumulator = args[1]
 	} else {
@@ -328,13 +329,18 @@ func (d *Dict) reduce(args []VintObject) VintObject {
 		if len(d.Pairs) == 0 {
 			return newError("Cannot reduce empty dictionary without initial value")
 		}
-		for _, pair := range d.Pairs {
+		for k, pair := range d.Pairs {
 			accumulator = pair.Value
+			hk := k
+			skipKey = &hk
 			break
 		}
 	}
 
-	for _, pair := range d.Pairs {
+	for k, pair := range d.Pairs {
+		if skipKey != nil && k == *skipKey {
+			continue
+		}
 		args := []VintObject{accumulator, pair.Key, pair.Value}
 		accumulator = callFunction(fn, args)
 	}

@@ -474,3 +474,37 @@ func TestArrayIndexAssignmentNotNil(t *testing.T) {
 	}
 	testIntegerObject(t, result, 5)
 }
+
+func TestDictReduceNoDoubleCount(t *testing.T) {
+	// Issue #221: reduce without initial value double-counts the first element
+	tests := []struct {
+		name     string
+		input    string
+		expected int64
+	}{
+		{
+			"reduce with initial value",
+			`let d = {"a": 1, "b": 2, "c": 3}; d.reduce(func(acc, k, v) { return acc + v }, 0)`,
+			6,
+		},
+		{
+			"reduce without initial value",
+			// With only one extra pair beyond the initial, sum should equal
+			// value_of_first + value_of_second (not 2*first + second)
+			`let d = {"x": 10, "y": 20}; d.reduce(func(acc, k, v) { return acc + v }, 0)`,
+			30,
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			l := lexer.New(tt.input)
+			p := parser.New(l)
+			program := p.ParseProgram()
+			env := object.NewEnvironment()
+			result := Eval(program, env)
+
+			testIntegerObject(t, result, tt.expected)
+		})
+	}
+}
