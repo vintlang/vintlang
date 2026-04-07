@@ -334,18 +334,18 @@ func TestControlFlowReturnValues(t *testing.T) {
 		{"if (true) { 42 }", 42},
 		{"if (false) { 10 } else { 20 }", 20},
 		{"if (1 < 2) { \"yes\" } else { \"no\" }", "yes"},
-		
+
 		// If expression last statement
 		{"if (true) { let a = 1; let b = 2; a + b }", 3},
-		
+
 		// Switch expression with value
 		{"switch (1) { case 1 { \"one\" } case 2 { \"two\" } }", "one"},
 		{"switch (2) { case 1 { 10 } default { 99 } }", 99},
-		
+
 		// Match expression with value
 		{"match 1 { 1 => { \"matched\" } _ => { \"default\" } }", "matched"},
 		{"match 3 { 1 => { 10 } 2 => { 20 } _ => { 30 } }", 30},
-		
+
 		// For-in should return NULL
 		{"for i in [1, 2, 3] { i }", nil},
 	}
@@ -379,17 +379,17 @@ func TestNestedControlFlow(t *testing.T) {
 		// Nested if
 		{"if (true) { if (true) { 42 } }", 42},
 		{"if (true) { if (false) { 10 } else { 20 } }", 20},
-		
+
 		// If inside while - x starts at 0, loops while x < 3
 		// Iteration 1: x=0, x<3 true, x != 2, x becomes 1
 		// Iteration 2: x=1, x<3 true, x != 2, x becomes 2
 		// Iteration 3: x=2, x<3 true, x == 2, x becomes 10, then 11
 		// Iteration 4: x=11, x<3 false, loop exits
 		{"let x = 0; while (x < 3) { if (x == 2) { x = 10 }; x = x + 1 }; x", 11},
-		
+
 		// Switch inside if
 		{"if (true) { switch (1) { case 1 { \"yes\" } } }", "yes"},
-		
+
 		// Match inside for-in - last iteration (i=3) matches the _ pattern
 		{"let result = \"\"; for i in [1, 2, 3] { result = match i { 2 => { \"two\" } _ => { \"other\" } } }; result", "other"},
 	}
@@ -408,4 +408,69 @@ func TestNestedControlFlow(t *testing.T) {
 			testStringObject(t, result, expected)
 		}
 	}
+}
+
+func TestArrayIndexAssignmentReturn(t *testing.T) {
+	tests := []struct {
+		name     string
+		input    string
+		expected int64
+	}{
+		{
+			"simple assignment returns value",
+			`let arr = [1, 2, 3]; arr[0] = 5; arr[0]`,
+			5,
+		},
+		{
+			"assignment propagates to variable",
+			`let arr = [10, 20, 30]; arr[1] = 99; arr[1]`,
+			99,
+		},
+		{
+			"negative index assignment",
+			`let arr = [1, 2, 3]; arr[-1] = 42; arr[2]`,
+			42,
+		},
+		{
+			"compound += assignment",
+			`let arr = [10, 20, 30]; arr[0] += 5; arr[0]`,
+			15,
+		},
+		{
+			"compound -= assignment",
+			`let arr = [0, 100, 0]; arr[1] -= 25; arr[1]`,
+			75,
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			l := lexer.New(tt.input)
+			p := parser.New(l)
+			program := p.ParseProgram()
+			env := object.NewEnvironment()
+			result := Eval(program, env)
+
+			testIntegerObject(t, result, tt.expected)
+		})
+	}
+}
+
+func TestArrayIndexAssignmentNotNil(t *testing.T) {
+	// This specifically tests the bug from issue #219:
+	// array index assignment was missing return, causing nil propagation
+	input := `let arr = [1, 2, 3]; arr[0] = 5`
+	l := lexer.New(input)
+	p := parser.New(l)
+	program := p.ParseProgram()
+	env := object.NewEnvironment()
+	result := Eval(program, env)
+
+	if result == nil {
+		t.Fatal("array index assignment returned nil (nil propagation bug)")
+	}
+	if result == NULL {
+		t.Fatal("array index assignment returned NULL instead of the assigned value")
+	}
+	testIntegerObject(t, result, 5)
 }
