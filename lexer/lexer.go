@@ -242,7 +242,7 @@ func (l *Lexer) NextToken() token.Token {
 			// Special handling for import() - check if followed by (
 			if tok.Literal == "import" {
 				// We look ahead to see if this is import( function call
-				if l.peekNextNonWhitespace() == '(' {
+				if l.ch == '(' || l.peekNextNonWhitespace() == '(' {
 					tok.Type = token.IDENT // We Treat as identifier for function call
 				} else {
 					tok.Type = token.IMPORT // We Treat as import statement keyword
@@ -341,28 +341,17 @@ func (l *Lexer) skipWhitespace() {
 }
 
 func (l *Lexer) peekNextNonWhitespace() rune {
-	// Save current position
-	savedPosition := l.position
-	savedReadPosition := l.readPosition
-	savedCh := l.ch
-	savedLine := l.line
-	savedColumn := l.column
-
-	// Skip whitespace and look for next non-whitespace character
-	for l.ch == ' ' || l.ch == '\t' || l.ch == '\n' || l.ch == '\r' {
-		l.readChar()
+	// Scan forward from readPosition (past current l.ch) to find the
+	// next non-whitespace character without mutating lexer state.
+	pos := l.readPosition
+	for pos < len(l.input) {
+		ch := l.input[pos]
+		if ch != ' ' && ch != '\t' && ch != '\n' && ch != '\r' {
+			return ch
+		}
+		pos++
 	}
-
-	result := l.ch
-
-	// Restore position
-	l.position = savedPosition
-	l.readPosition = savedReadPosition
-	l.ch = savedCh
-	l.line = savedLine
-	l.column = savedColumn
-
-	return result
+	return 0
 }
 
 func isDigit(ch rune) bool {
