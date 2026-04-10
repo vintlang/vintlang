@@ -159,9 +159,11 @@ func evalArgsExpressions(node *ast.CallExpression, fn *object.Function, env *obj
 
 	// Check if any extra keyword arguments are provided that don't match function parameters
 	for _, pair := range argsHash.Pairs {
-		if _, ok := params[pair.Key.(*object.String).Value]; ok {
+		kwName := pair.Key.(*object.String).Value
+		if _, ok := params[kwName]; ok {
 			return []object.VintObject{&object.Error{Message: "Multiple arguments for a single parameter"}} // Return error if multiple values are given for a parameter
 		}
+		return []object.VintObject{&object.Error{Message: "Unknown keyword argument: " + kwName}}
 	}
 
 	// Return the list of evaluated arguments
