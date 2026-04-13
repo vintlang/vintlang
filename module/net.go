@@ -391,121 +391,121 @@ func putRequest(args []object.VintObject, defs map[string]object.VintObject) obj
 // It supports string body (not just dict), making it suitable for proxying requests.
 // Usage: net.fetch(method="GET", url="https://example.com", headers={...}, body="raw string or dict")
 func fetchRequest(args []object.VintObject, defs map[string]object.VintObject) object.VintObject {
-var urlStr string
-var method string
-var headers *object.Dict
-var bodyStr string
-var hasBody bool
+	var urlStr string
+	var method string
+	var headers *object.Dict
+	var bodyStr string
+	var hasBody bool
 
-for k, v := range defs {
-switch k {
-case "url":
-strVal, ok := v.(*object.String)
-if !ok {
-return &object.Error{Message: "net.fetch(): 'url' must be a string"}
-}
-urlStr = strVal.Value
-case "method":
-strVal, ok := v.(*object.String)
-if !ok {
-return &object.Error{Message: "net.fetch(): 'method' must be a string"}
-}
-method = strings.ToUpper(strVal.Value)
-case "headers":
-dictVal, ok := v.(*object.Dict)
-if !ok {
-return &object.Error{Message: "net.fetch(): 'headers' must be a dictionary"}
-}
-headers = dictVal
-case "body":
-hasBody = true
-switch bv := v.(type) {
-case *object.String:
-bodyStr = bv.Value
-case *object.Dict:
-bodyContent := convertObjectToWhatever(bv)
-jsonBody, err := json.Marshal(bodyContent)
-if err != nil {
-return &object.Error{Message: fmt.Sprintf("net.fetch(): failed to serialize body: %v", err)}
-}
-bodyStr = string(jsonBody)
-default:
-bodyStr = v.Inspect()
-}
-default:
-return &object.Error{
-Message: fmt.Sprintf("net.fetch(): unknown parameter '%s'. Valid: 'method', 'url', 'headers', 'body'", k),
-}
-}
-}
+	for k, v := range defs {
+		switch k {
+		case "url":
+			strVal, ok := v.(*object.String)
+			if !ok {
+				return &object.Error{Message: "net.fetch(): 'url' must be a string"}
+			}
+			urlStr = strVal.Value
+		case "method":
+			strVal, ok := v.(*object.String)
+			if !ok {
+				return &object.Error{Message: "net.fetch(): 'method' must be a string"}
+			}
+			method = strings.ToUpper(strVal.Value)
+		case "headers":
+			dictVal, ok := v.(*object.Dict)
+			if !ok {
+				return &object.Error{Message: "net.fetch(): 'headers' must be a dictionary"}
+			}
+			headers = dictVal
+		case "body":
+			hasBody = true
+			switch bv := v.(type) {
+			case *object.String:
+				bodyStr = bv.Value
+			case *object.Dict:
+				bodyContent := convertObjectToWhatever(bv)
+				jsonBody, err := json.Marshal(bodyContent)
+				if err != nil {
+					return &object.Error{Message: fmt.Sprintf("net.fetch(): failed to serialize body: %v", err)}
+				}
+				bodyStr = string(jsonBody)
+			default:
+				bodyStr = v.Inspect()
+			}
+		default:
+			return &object.Error{
+				Message: fmt.Sprintf("net.fetch(): unknown parameter '%s'. Valid: 'method', 'url', 'headers', 'body'", k),
+			}
+		}
+	}
 
-if urlStr == "" {
-return &object.Error{Message: "net.fetch(): 'url' parameter is required"}
-}
-if method == "" {
-method = "GET"
-}
+	if urlStr == "" {
+		return &object.Error{Message: "net.fetch(): 'url' parameter is required"}
+	}
+	if method == "" {
+		method = "GET"
+	}
 
-var reqBody *bytes.Buffer
-if hasBody {
-reqBody = bytes.NewBufferString(bodyStr)
-}
+	var reqBody *bytes.Buffer
+	if hasBody {
+		reqBody = bytes.NewBufferString(bodyStr)
+	}
 
-var req *http.Request
-var err error
-if reqBody != nil {
-req, err = http.NewRequest(method, urlStr, reqBody)
-} else {
-req, err = http.NewRequest(method, urlStr, nil)
-}
-if err != nil {
-return &object.Error{Message: fmt.Sprintf("net.fetch(): failed to create request: %v", err)}
-}
+	var req *http.Request
+	var err error
+	if reqBody != nil {
+		req, err = http.NewRequest(method, urlStr, reqBody)
+	} else {
+		req, err = http.NewRequest(method, urlStr, nil)
+	}
+	if err != nil {
+		return &object.Error{Message: fmt.Sprintf("net.fetch(): failed to create request: %v", err)}
+	}
 
-if headers != nil {
-for _, val := range headers.Pairs {
-req.Header.Set(val.Key.Inspect(), val.Value.Inspect())
-}
-}
+	if headers != nil {
+		for _, val := range headers.Pairs {
+			req.Header.Set(val.Key.Inspect(), val.Value.Inspect())
+		}
+	}
 
-client := &http.Client{Timeout: 30 * time.Second}
-resp, err := client.Do(req)
-if err != nil {
-return &object.Error{Message: fmt.Sprintf("net.fetch(): request failed: %v", err)}
-}
-defer resp.Body.Close()
+	client := &http.Client{Timeout: 30 * time.Second}
+	resp, err := client.Do(req)
+	if err != nil {
+		return &object.Error{Message: fmt.Sprintf("net.fetch(): request failed: %v", err)}
+	}
+	defer resp.Body.Close()
 
-respBody, err := ioutil.ReadAll(resp.Body)
-if err != nil {
-return &object.Error{Message: fmt.Sprintf("net.fetch(): failed to read response: %v", err)}
-}
+	respBody, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		return &object.Error{Message: fmt.Sprintf("net.fetch(): failed to read response: %v", err)}
+	}
 
-// Build response headers dict
-respHeaderPairs := make(map[object.HashKey]object.DictPair)
-for key, vals := range resp.Header {
-k := &object.String{Value: key}
-v := &object.String{Value: strings.Join(vals, ", ")}
-respHeaderPairs[k.HashKey()] = object.DictPair{Key: k, Value: v}
-}
+	// Build response headers dict
+	respHeaderPairs := make(map[object.HashKey]object.DictPair)
+	for key, vals := range resp.Header {
+		k := &object.String{Value: key}
+		v := &object.String{Value: strings.Join(vals, ", ")}
+		respHeaderPairs[k.HashKey()] = object.DictPair{Key: k, Value: v}
+	}
 
-// Build result dict with status, headers, body
-statusKey := &object.String{Value: "status"}
-headersKey := &object.String{Value: "headers"}
-bodyKey := &object.String{Value: "body"}
+	// Build result dict with status, headers, body
+	statusKey := &object.String{Value: "status"}
+	headersKey := &object.String{Value: "headers"}
+	bodyKey := &object.String{Value: "body"}
 
-resultPairs := make(map[object.HashKey]object.DictPair)
-resultPairs[statusKey.HashKey()] = object.DictPair{
-Key:   statusKey,
-Value: &object.Integer{Value: int64(resp.StatusCode)},
-}
-resultPairs[headersKey.HashKey()] = object.DictPair{
-Key:   headersKey,
-Value: &object.Dict{Pairs: respHeaderPairs},
-}
-resultPairs[bodyKey.HashKey()] = object.DictPair{
-Key:   bodyKey,
-Value: &object.String{Value: string(respBody)},
-}
+	resultPairs := make(map[object.HashKey]object.DictPair)
+	resultPairs[statusKey.HashKey()] = object.DictPair{
+		Key:   statusKey,
+		Value: &object.Integer{Value: int64(resp.StatusCode)},
+	}
+	resultPairs[headersKey.HashKey()] = object.DictPair{
+		Key:   headersKey,
+		Value: &object.Dict{Pairs: respHeaderPairs},
+	}
+	resultPairs[bodyKey.HashKey()] = object.DictPair{
+		Key:   bodyKey,
+		Value: &object.String{Value: string(respBody)},
+	}
 
-return &object.Dict{Pairs: resultPairs}
+	return &object.Dict{Pairs: resultPairs}
 }

@@ -490,26 +490,26 @@ func verifyRSA(args []object.VintObject, defs map[string]object.VintObject) obje
 // Returns true if the strings are equal, false otherwise.
 // This is safe against timing attacks.
 func constantTimeCompare(args []object.VintObject, defs map[string]object.VintObject) object.VintObject {
-if len(args) != 2 {
-return ErrorMessage(
-"crypto", "constantTimeCompare",
-"2 string arguments",
-fmt.Sprintf("%d arguments", len(args)),
-`crypto.constantTimeCompare("secret1", "secret2") -> true/false`,
-)
-}
+	if len(args) != 2 {
+		return ErrorMessage(
+			"crypto", "constantTimeCompare",
+			"2 string arguments",
+			fmt.Sprintf("%d arguments", len(args)),
+			`crypto.constantTimeCompare("secret1", "secret2") -> true/false`,
+		)
+	}
 
-str1, ok1 := args[0].(*object.String)
-str2, ok2 := args[1].(*object.String)
-if !ok1 || !ok2 {
-return ErrorMessage(
-"crypto", "constantTimeCompare",
-"2 string arguments",
-fmt.Sprintf("%s and %s", args[0].Type(), args[1].Type()),
-`crypto.constantTimeCompare("secret1", "secret2") -> true/false`,
-)
-}
+	str1, ok1 := args[0].(*object.String)
+	str2, ok2 := args[1].(*object.String)
+	if !ok1 || !ok2 {
+		return ErrorMessage(
+			"crypto", "constantTimeCompare",
+			"2 string arguments",
+			fmt.Sprintf("%s and %s", args[0].Type(), args[1].Type()),
+			`crypto.constantTimeCompare("secret1", "secret2") -> true/false`,
+		)
+	}
 
-result := subtle.ConstantTimeCompare([]byte(str1.Value), []byte(str2.Value))
-return &object.Boolean{Value: result == 1}
+	result := subtle.ConstantTimeCompare([]byte(str1.Value), []byte(str2.Value))
+	return &object.Boolean{Value: result == 1}
 }
