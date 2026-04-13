@@ -1,0 +1,108 @@
+import http
+import net
+import os
+import crypto
+import logger
+
+// ── Configuration from environment ──────────────────────────────
+let secret = os.getEnv("PROXY_SECRET")
+if (secret == "" || secret == null) {
+    logger.fatal("PROXY_SECRET is required")
+}
+
+let port = os.getEnv("PROXY_PORT")
+if (port == "" || port == null) {
+    port = "8089"
+}
+
+let selcomBase = os.getEnv("SELCOM_BASE_URL")
+if (selcomBase == "" || selcomBase == null) {
+    selcomBase = "https://apigw.selcommobile.com"
+}
+// strip trailing slash
+if (selcomBase.endsWith("/")) {
+    selcomBase = selcomBase.slice(0, selcomBase.length() - 1)
+}
+
+let allowedIPsRaw = os.getEnv("ALLOWED_IPS")
+let allowedIPs = []
+if (allowedIPsRaw != "" && allowedIPsRaw != null) {
+    let parts = allowedIPsRaw.split(",")
+    for part in parts {
+        let trimmed = part.trim()
+        if (trimmed != "") {
+            allowedIPs.push(trimmed)
+        }
+    }
+}
+
+let logRequests = os.getEnv("LOG_REQUESTS") != "false"
+
+// ── Server ──────────────────────────────────────────────────────
+http.app()
+
+// Health check
+http.get("/health", func(req, res) {
+    res.status(200)
+    res.send("ok")
+})
+
+// Proxy all other requests
+http.all("/", func(req, res) {
+    // ── IP whitelist ────────────────────────────────────────────
+    if (allowedIPs.length() > 0) {
+        let clientIP = req.ip()
+        if (!allowedIPs.includes(clientIP)) {
+            res.status(403)
+            res.send("forbidden")
+            return
+        }
+    }
+
+    // ── Proxy secret (constant-time comparison) ─────────────────
+    let proxySecret = req.get("X-Proxy-Secret")
+    if (!crypto.constantTimeCompare(proxySecret, secret)) {
+        res.status(401)
+        res.send("unauthorized")
+        return
+    }
+
+    // ── Build upstream URL ──────────────────────────────────────
+    let upstream = selcomBase + req.path()
+
+    // ── Collect forwarding headers (skip hop-by-hop + secret) ───
+    let reqHeaders = req.headers()
+    let forwardHeaders = {}
+    for key, val in reqHeaders {
+        let k = key.toLowerCase()
+        if (k != "x-proxy-secret" && k != "host" && k != "connection") {
+            forwardHeaders[key] = val
+        }
+    }
+
+    if (logRequests) {
+        logger.info("[proxy] " + req.method() + " " + req.path() + " -> " + upstream)
+    }
+
+    // ── Forward to Selcom ───────────────────────────────────────
+    let resp = net.fetch(
+        method: req.method(),
+        url: upstream,
+        headers: forwardHeaders,
+        body: req.body()
+    )
+
+    // ── Relay upstream response ─────────────────────────────────
+    let respHeaders = resp["headers"]
+    if (respHeaders != null) {
+        for hk, hv in respHeaders {
+            res.header(hk, hv)
+        }
+    }
+
+    res.status(resp["status"])
+    res.send(resp["body"])
+})
+
+logger.info("[selcom-proxy] listening on :" + port + " (upstream: " + selcomBase + ")")
+http.listen(port, "[selcom-proxy] ready on :" + port)
