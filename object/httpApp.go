@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"io"
 	"log"
+	"net"
 	"net/http"
 	"net/url"
 	"os"
@@ -135,6 +136,7 @@ type HTTPRequest struct {
 	FormData   map[string]string
 	JSON       map[string]any
 	RawRequest *http.Request
+	RemoteAddr string
 	// Enterprise features
 	Files   map[string]*UploadedFile
 	IsAsync bool
@@ -259,6 +261,24 @@ func (req *HTTPRequest) Method(name string, args []VintObject) VintObject {
 			result[k] = v
 		}
 		return &String{Value: fmt.Sprintf("Files: %d uploaded", len(req.Files))}
+	case "ip":
+		// Extract IP from RemoteAddr (strip port if present)
+		ip := req.RemoteAddr
+		if host, _, err := net.SplitHostPort(ip); err == nil {
+			ip = host
+		}
+		return &String{Value: ip}
+	case "remoteAddr":
+		return &String{Value: req.RemoteAddr}
+	case "headers":
+		// Return all headers as a Dict
+		pairs := make(map[HashKey]DictPair)
+		for k, v := range req.Headers {
+			key := &String{Value: k}
+			val := &String{Value: v}
+			pairs[key.HashKey()] = DictPair{Key: key, Value: val}
+		}
+		return &Dict{Pairs: pairs}
 	default:
 		return &Error{Message: fmt.Sprintf("Unknown request method: %s", name)}
 	}
@@ -471,6 +491,7 @@ func NewHTTPRequest(r *http.Request) *HTTPRequest {
 		FormData:   formData,
 		JSON:       jsonData,
 		RawRequest: r,
+		RemoteAddr: r.RemoteAddr,
 		Files:      make(map[string]*UploadedFile),
 		IsAsync:    false,
 	}

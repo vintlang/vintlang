@@ -111,6 +111,12 @@ func applyMethod(obj object.VintObject, method ast.Expression, args []object.Vin
 	case *object.StructInstance:
 		methodName := method.(*ast.Identifier).Value
 		return callStructMethod(obj, methodName, args, defs, l)
+	case *object.HTTPRequest:
+		return obj.Method(method.(*ast.Identifier).Value, args)
+	case *object.HTTPResponse:
+		return obj.Method(method.(*ast.Identifier).Value, args)
+	case *object.UploadedFile:
+		return obj.Method(method.(*ast.Identifier).Value, args)
 	}
 	return newError("Sorry, %s does not have a function '%s()'", obj.Inspect(), method.(*ast.Identifier).Value)
 }

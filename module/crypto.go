@@ -7,6 +7,7 @@ import (
 	"crypto/rand"
 	"crypto/rsa"
 	"crypto/sha256"
+	"crypto/subtle"
 	"crypto/x509"
 	"encoding/hex"
 	"encoding/pem"
@@ -18,15 +19,16 @@ import (
 
 // CryptoFunctions is a map that holds the available functions in the Crypto module.
 var CryptoFunctions = map[string]object.ModuleFunction{
-	"hashMD5":     hashMD5,
-	"hashSHA256":  hashSHA256,
-	"encryptAES":  encryptAES,
-	"decryptAES":  decryptAES,
-	"generateRSA": generateRSAKeyPair,
-	"encryptRSA":  encryptRSA,
-	"decryptRSA":  decryptRSA,
-	"signRSA":     signRSA,
-	"verifyRSA":   verifyRSA,
+	"hashMD5":             hashMD5,
+	"hashSHA256":          hashSHA256,
+	"encryptAES":          encryptAES,
+	"decryptAES":          decryptAES,
+	"generateRSA":         generateRSAKeyPair,
+	"encryptRSA":          encryptRSA,
+	"decryptRSA":          decryptRSA,
+	"signRSA":             signRSA,
+	"verifyRSA":           verifyRSA,
+	"constantTimeCompare": constantTimeCompare,
 }
 
 // hashMD5 takes a string as input and returns the MD5 hash of that string.
@@ -482,4 +484,32 @@ func verifyRSA(args []object.VintObject, defs map[string]object.VintObject) obje
 	}
 
 	return &object.Boolean{Value: true}
+}
+
+// constantTimeCompare performs a constant-time comparison of two strings.
+// Returns true if the strings are equal, false otherwise.
+// This is safe against timing attacks.
+func constantTimeCompare(args []object.VintObject, defs map[string]object.VintObject) object.VintObject {
+	if len(args) != 2 {
+		return ErrorMessage(
+			"crypto", "constantTimeCompare",
+			"2 string arguments",
+			fmt.Sprintf("%d arguments", len(args)),
+			`crypto.constantTimeCompare("secret1", "secret2") -> true/false`,
+		)
+	}
+
+	str1, ok1 := args[0].(*object.String)
+	str2, ok2 := args[1].(*object.String)
+	if !ok1 || !ok2 {
+		return ErrorMessage(
+			"crypto", "constantTimeCompare",
+			"2 string arguments",
+			fmt.Sprintf("%s and %s", args[0].Type(), args[1].Type()),
+			`crypto.constantTimeCompare("secret1", "secret2") -> true/false`,
+		)
+	}
+
+	result := subtle.ConstantTimeCompare([]byte(str1.Value), []byte(str2.Value))
+	return &object.Boolean{Value: result == 1}
 }

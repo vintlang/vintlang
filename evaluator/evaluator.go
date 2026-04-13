@@ -18,6 +18,14 @@ var (
 	CONTINUE = &object.Continue{}
 )
 
+func init() {
+	// Register the function caller callback so modules (e.g., HTTP handlers)
+	// can invoke Vint functions from Go code.
+	object.RegisterFuncCaller(func(fn *object.Function, args []object.VintObject) object.VintObject {
+		return applyFunction(fn, args, 0)
+	})
+}
+
 func Eval(node ast.Node, env *object.Environment) object.VintObject {
 	switch node := node.(type) {
 	case *ast.Program:
