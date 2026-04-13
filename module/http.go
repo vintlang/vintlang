@@ -33,6 +33,7 @@ func init() {
 	HttpFunctions["put"] = createRouteWrapper("PUT")
 	HttpFunctions["delete"] = createRouteWrapper("DELETE")
 	HttpFunctions["patch"] = createRouteWrapper("PATCH")
+	HttpFunctions["all"] = createAllRouteHandler
 	HttpFunctions["use"] = useMiddleware
 	HttpFunctions["listen"] = listenServer
 	// New backend features
@@ -178,6 +179,36 @@ func createRouteWrapper(method string) object.ModuleFunction {
 
 		return &object.String{Value: fmt.Sprintf("Route %s %s registered", method, path.Value)}
 	}
+}
+
+// createAllRouteHandler registers a handler for all HTTP methods on a path
+func createAllRouteHandler(args []object.VintObject, defs map[string]object.VintObject) object.VintObject {
+	if currentApp == nil {
+		return &object.Error{Message: "No app instance found. Call http.app() first."}
+	}
+
+	if len(args) != 2 {
+		return &object.Error{Message: "http.all() requires exactly 2 arguments: path and handler function"}
+	}
+
+	path, ok := args[0].(*object.String)
+	if !ok {
+		return &object.Error{Message: "First argument (path) must be a string"}
+	}
+
+	handler, ok := args[1].(*object.Function)
+	if !ok {
+		return &object.Error{Message: "Second argument (handler) must be a function"}
+	}
+
+	// Register the handler for all HTTP methods
+	methods := []string{"GET", "POST", "PUT", "DELETE", "PATCH", "HEAD", "OPTIONS"}
+	for _, method := range methods {
+		routeKey := method + ":" + path.Value
+		currentApp.Routes[routeKey] = handler
+	}
+
+	return &object.String{Value: fmt.Sprintf("Route ALL %s registered", path.Value)}
 }
 
 // useMiddleware creates a middleware handler
@@ -410,65 +441,52 @@ func createHTTPHandler(app *object.HTTPApp) http.HandlerFunc {
 
 		// Run middleware
 		for _, middleware := range app.Middleware {
-			log.Printf("Running middleware: %s", middleware.Inspect())
-		}
-
-		// Execute the route handler
-		response := fmt.Sprintf("✓ Enhanced route handler executed for %s %s\n", r.Method, r.URL.Path)
-		response += fmt.Sprintf("Function: %s\n", handler.Inspect())
-		response += fmt.Sprintf("Handler has %d parameters\n", len(handler.Parameters))
-
-		// Add enhanced request information
-		response += "\nEnhanced Request Info:\n"
-		response += fmt.Sprintf("- Method: %s\n", r.Method)
-		response += fmt.Sprintf("- Path: %s\n", r.URL.Path)
-		response += fmt.Sprintf("- Headers: %d\n", len(r.Header))
-		response += fmt.Sprintf("- Query params: %d\n", len(r.URL.Query()))
-		response += fmt.Sprintf("- Cookies: %d\n", len(req.Cookies))
-		response += fmt.Sprintf("- Content-Type: %s\n", r.Header.Get("Content-Type"))
-
-		if len(req.FormData) > 0 {
-			response += fmt.Sprintf("- Form data fields: %d\n", len(req.FormData))
-		}
-		if req.JSON != nil {
-			response += "- JSON body parsed\n"
-		}
-		if len(req.Params) > 0 {
-			response += fmt.Sprintf("- Path params: %v\n", req.Params)
-		}
-		if len(req.Files) > 0 {
-			response += fmt.Sprintf("- Uploaded files: %d\n", len(req.Files))
-			for name, file := range req.Files {
-				response += fmt.Sprintf("  • %s: %s (%d bytes)\n", name, file.Name, file.Size)
+			if middleware.Body != nil {
+				res := object.NewHTTPResponse(w, req)
+				object.CallFunction(middleware, []object.VintObject{req, res})
+				if res.Sent {
+					return
+				}
 			}
 		}
 
-		// Add handler type indicators
-		if handler.IsAsync {
-			response += "- Handler: Async (non-blocking)\n"
-		}
-		if handler.IsStreaming {
-			response += "- Handler: Streaming (real-time)\n"
-		}
+		// Execute the route handler by calling the Vint function
+		res := object.NewHTTPResponse(w, req)
+		result := object.CallFunction(handler, []object.VintObject{req, res})
 
 		// Add performance metrics if enabled
 		if app.Performance != nil && app.Performance.RequestTiming {
 			duration := time.Since(startTime)
-			response += fmt.Sprintf("- Request duration: %v\n", duration)
 			w.Header().Set("X-Response-Time", duration.String())
 		}
 
 		// Run response interceptors
 		if interceptors, exists := app.Interceptors["response"]; exists {
 			for _, interceptor := range interceptors {
-				log.Printf("Running response interceptor: %s", interceptor.Inspect())
+				if interceptor.Body != nil {
+					object.CallFunction(interceptor, []object.VintObject{req, res})
+				}
 			}
 		}
 
-		// Set content type and send response
-		w.Header().Set("Content-Type", "text/plain")
-		w.WriteHeader(200)
-		w.Write([]byte(response))
+		// If handler returned something and response not yet sent, send it
+		if !res.Sent {
+			if result != nil {
+				if errObj, ok := result.(*object.Error); ok {
+					w.WriteHeader(500)
+					w.Write([]byte(errObj.Message))
+				} else {
+					w.Header().Set("Content-Type", "text/plain")
+					for key, value := range res.Headers {
+						w.Header().Set(key, value)
+					}
+					w.WriteHeader(res.StatusCode)
+					w.Write([]byte(result.Inspect()))
+				}
+			} else {
+				w.WriteHeader(res.StatusCode)
+			}
+		}
 	}
 }
 
