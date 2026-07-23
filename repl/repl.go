@@ -72,7 +72,7 @@ type dummy struct {
 }
 
 func (d *dummy) executor(in string) {
-	if strings.TrimSpace(in) == "exit()" {
+	if strings.TrimSpace(in) == "exit()" || strings.TrimSpace(in) == "exit" {
 		style := lipgloss.NewStyle().
 			Foreground(lipgloss.Color("#FFD700")). // Gold text
 			Background(lipgloss.Color("#282C34")). // Dark background
