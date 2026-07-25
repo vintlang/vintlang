@@ -1,0 +1,97 @@
+// VintLang Typed Channels
+// Demonstrates typed channel operations (Go-style)
+
+// ============================================================
+// 1. Typed channel declaration
+// ============================================================
+
+let intChan: chan int = chan(int)
+let strChan: chan string = chan(string, capacity: 10)
+
+println("channels created")
+
+// ============================================================
+// 2. Send and receive on typed channels
+// ============================================================
+
+go func() {
+    send(intChan, 42)
+    send(intChan, 100)
+    send(intChan, 200)
+}()
+
+let v1: int = receive(intChan)
+let v2: int = receive(intChan)
+let v3: int = receive(intChan)
+println("received:", v1, v2, v3)
+
+// ============================================================
+// 3. Channel types in function signatures
+// ============================================================
+
+func producer(out: chan int, count: int) {
+    for i in range(count) {
+        send(out, i * i)
+    }
+    close(out)
+}
+
+func consumer(in: chan int) {
+    for {
+        let val, ok := receive(in)
+        if !ok {
+            break
+        }
+        println("consumed:", val)
+    }
+}
+
+let ch: chan int = chan(int)
+go producer(ch, 5)
+go consumer(ch)
+
+// ============================================================
+// 4. Channel with struct type
+// ============================================================
+
+struct Task {
+    id: int
+    payload: string
+}
+
+let taskChan: chan Task = chan(Task, capacity: 100)
+
+go func() {
+    for i in range(10) {
+        send(taskChan, Task{id: i, payload: "task-" + string(i)})
+    }
+    close(taskChan)
+}()
+
+for task in taskChan {
+    println("processed task:", task.id, task.payload)
+}
+
+// ============================================================
+// 5. Select on typed channels
+// ============================================================
+
+let ch1: chan string = chan(string)
+let ch2: chan string = chan(string)
+
+go func() {
+    send(ch1, "message from ch1")
+}()
+
+go func() {
+    send(ch2, "message from ch2")
+}()
+
+select {
+    case msg := <-ch1:
+        println("ch1:", msg)
+    case msg := <-ch2:
+        println("ch2:", msg)
+    case <-time.After(1 * time.Second):
+        println("timeout")
+}

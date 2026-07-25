@@ -1,0 +1,104 @@
+// VintLang Typed Error Unions
+// Demonstrates Zig-inspired !T error union type: returns T or error
+
+// ============================================================
+// 1. Error union return type: !T means (T or error)
+// ============================================================
+
+func divide(a: int, b: int): !int {
+    if b == 0 {
+        return error("division by zero")
+    }
+    return a / b
+}
+
+// Unwrap with ! (panics on error)
+let result: int = divide(10, 2)!
+println("10 / 2 =", result)
+
+// Safe unwrap with catch
+let result2: int = divide(10, 0) catch 0
+println("10 / 0 =", result2)
+
+// Checking with if
+let result3: !int = divide(10, 3)
+if result3 != error {
+    println("10 / 3 =", result3!)
+}
+
+// ============================================================
+// 2. Propagating errors with !
+// ============================================================
+
+func readUserConfig(userId: int): !Config {
+    let path: string = "/etc/users/" + string(userId) + ".yaml"
+    let data: string = os.readFile(path)!  // propagates error
+    return Config{host: data, port: 8080}
+}
+
+// ============================================================
+// 3. Error union with specific error types
+// ============================================================
+
+error NotFound { resource: string }
+error PermissionDenied { action: string }
+
+type ReadError = NotFound | PermissionDenied | error
+
+func openFile(path: string): ReadError!string {
+    if !os.fileExists(path) {
+        return NotFound{resource: path}
+    }
+    if !os.hasPermission(path, "read") {
+        return PermissionDenied{action: "read " + path}
+    }
+    return os.readFile(path)
+}
+
+// ============================================================
+// 4. Catching different error types
+// ============================================================
+
+let content: ReadError!string = openFile("/etc/config.yaml")
+match content {
+    NotFound n => {
+        println("not found:", n.resource)
+    }
+    PermissionDenied p => {
+        println("permission denied:", p.action)
+    }
+    string s => {
+        println("content:", s)
+    }
+    error e => {
+        println("unknown error:", e.message())
+    }
+}
+
+// ============================================================
+// 5. Error union in collections
+// ============================================================
+
+func batchProcess(ids: []int): []!string {
+    let results: []!string
+    for id in ids {
+        let data: !string = fetchData(id)
+        results = append(results, data)
+    }
+    return results
+}
+
+func fetchData(id: int): !string {
+    if id < 0 {
+        return error("invalid id: " + string(id))
+    }
+    return "data-for-" + string(id)
+}
+
+let processed: []!string = batchProcess([1, 2, -3, 4])
+for item in processed {
+    match item {
+        string s => println("ok:", s)
+        error e => println("err:", e.message())
+    }
+}

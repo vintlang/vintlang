@@ -1,0 +1,111 @@
+// VintLang Type Aliases
+// Demonstrates the 'type' keyword for creating type aliases
+
+// ============================================================
+// 1. Basic type aliases
+// ============================================================
+
+type UserID = int
+type Username = string
+type Score = float64
+
+let uid: UserID = 42
+let uname: Username = "Alice"
+let sc: Score = 95.5
+
+println("uid:", uid, "name:", uname, "score:", sc)
+
+// ============================================================
+// 2. Type alias for function signatures
+// ============================================================
+
+type Handler = func(Request): Response
+type Middleware = func(Handler): Handler
+type Predicate = func(T): bool
+
+struct Request {
+    method: string
+    path: string
+    body: string
+}
+
+struct Response {
+    status: int
+    body: string
+}
+
+func notFoundHandler(req: Request): Response {
+    return Response{status: 404, body: "not found"}
+}
+
+let router: Handler = notFoundHandler
+println("handler works")
+
+// ============================================================
+// 3. Type alias for complex types
+// ============================================================
+
+type JSON = {string: any}
+type ScoreBoard = {string: []int}
+type Coordinate = [3]float64
+
+let data: JSON = {"key": "value", "count": 42}
+let scores: ScoreBoard = {"Alice": [95, 88, 92], "Bob": [70, 85]}
+let pos: Coordinate = [1.0, 2.0, 3.0]
+
+println("JSON:", data)
+println("scores:", scores)
+println("pos:", pos)
+
+// ============================================================
+// 4. Type alias for enums
+// ============================================================
+
+enum HttpCode: int {
+    OK = 200
+    NotFound = 404
+    ServerError = 500
+}
+
+type StatusCode = HttpCode
+
+func describeStatus(code: StatusCode): string {
+    match code {
+        StatusCode.OK => return "success"
+        StatusCode.NotFound => return "not found"
+        _ => return "error"
+    }
+}
+
+println(describeStatus(StatusCode.OK))
+
+// ============================================================
+// 5. Type aliases for abstraction
+// ============================================================
+
+type Logger = func(level: string, message: string)
+
+func createLogger(prefix: string): Logger {
+    return func(level: string, message: string) {
+        println("[" + level + "][" + prefix + "]", message)
+    }
+}
+
+let log: Logger = createLogger("app")
+log("info", "application started")
+log("error", "something went wrong")
+
+// ============================================================
+// 6. Using aliases in structs
+// ============================================================
+
+type Email = string
+type Phone = string
+
+struct Contact {
+    email: Email
+    phone: ?Phone
+}
+
+let c: Contact = Contact{email: "alice@test.com", phone: "+1-555-0000"}
+println("contact:", c.email, c.phone)

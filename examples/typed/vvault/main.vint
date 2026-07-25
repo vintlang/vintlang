@@ -1,0 +1,343 @@
+// VintLang Typed Vault - Main Application
+// CLI password manager with typed interfaces
+
+import cli
+import os
+import json
+import time
+import vault_core
+
+// ============================================================
+// Constants
+// ============================================================
+
+const APP_NAME: string = "vvault"
+const VERSION: string = "2.0.0"
+const CONFIG_DIR: string = os.homeDir() + "/.vvault"
+const VAULT_FILE: string = CONFIG_DIR + "/vault.json"
+const CONFIG_FILE: string = CONFIG_DIR + "/config.json"
+const MAX_HISTORY: int = 100
+
+// ============================================================
+// Application state types
+// ============================================================
+
+struct AppConfig {
+    defaultLength: int = 16
+    requireSymbols: bool = false
+    defaultStrength: string = "medium"
+    theme: string = "dark"
+    autoClear: bool = true
+    autoClearSeconds: int = 30
+}
+
+type CommandHandler = func(args: []string): !string
+
+struct Command {
+    name: string
+    description: string
+    handler: CommandHandler
+    usage: string
+}
+
+// ============================================================
+// Application state
+// ============================================================
+
+let config: AppConfig
+let vault: []VaultEntry
+let history: []string
+
+func loadConfig(): !AppConfig {
+    if !os.fileExists(CONFIG_FILE) {
+        return AppConfig{}
+    }
+
+    let data: string = os.readFile(CONFIG_FILE)!
+    return json.decode(data) as AppConfig
+}
+
+func saveConfig(cfg: AppConfig) ! {
+    if !os.dirExists(CONFIG_DIR) {
+        os.mkdirAll(CONFIG_DIR)
+    }
+
+    let data: string = json.encode(cfg)
+    os.writeFile(CONFIG_FILE, data)
+}
+
+func loadVault(): ![]VaultEntry {
+    if !os.fileExists(VAULT_FILE) {
+        return []
+    }
+
+    let data: string = os.readFile(VAULT_FILE)!
+    let raw: string = crypto.decrypt(data, getMasterKey()!)!
+    return json.decode(raw) as []VaultEntry
+}
+
+func saveVault(entries: []VaultEntry) ! {
+    let data: string = json.encode(entries)
+    let encrypted: string = crypto.encrypt(data, getMasterKey()!)!
+    os.writeFile(VAULT_FILE, encrypted)
+}
+
+func getMasterKey(): !string {
+    let keyFile: string = CONFIG_DIR + "/.master.key"
+    if !os.fileExists(keyFile) {
+        return error("master key not initialized. run 'vvault init'")
+    }
+    return os.readFile(keyFile).trim()
+}
+
+// ============================================================
+// Command handlers
+// ============================================================
+
+func handleInit(args: []string): !string {
+    if os.fileExists(CONFIG_DIR) {
+        return error("vault already initialized in " + CONFIG_DIR)
+    }
+
+    os.mkdirAll(CONFIG_DIR)
+    let masterKey: string = vault_core.generateToken(GeneratorConfig{length: 32})!
+    os.writeFile(CONFIG_DIR + "/.master.key", masterKey)
+
+    config = AppConfig{}
+    saveConfig(config)!
+    vault = []
+    saveVault(vault)!
+
+    return "vault initialized successfully"
+}
+
+func handleGenerate(args: []string): !string {
+    let length: int = int(args[0]) catch 16
+    let policy: PasswordPolicy = PasswordPolicy{
+        minLength: length,
+        requireSymbols: config.requireSymbols
+    }
+
+    let pwd: GeneratedPassword = vault_core.generatePassword(policy)!
+    history = append(history, pwd.value)
+
+    if len(history) > MAX_HISTORY {
+        history = history[1:]
+    }
+
+    let result: string = "Generated: " + pwd.value + "\n"
+    result += "Strength: " + string(pwd.strength) + "\n"
+    result += "Entropy: " + string(pwd.entropy) + " bits\n"
+    result += "Meets policy: " + string(pwd.meetsPolicy)
+
+    return result
+}
+
+func handleAdd(args: []string): !string {
+    if len(args) < 2 {
+        return error("usage: vvault add <name> <username> [password]")
+    }
+
+    let name: string = args[0]
+    let username: string = args[1]
+    let password: string = args[2] catch vault_core.generatePassword(PasswordPolicy{})!.value
+
+    let entry: VaultEntry = VaultEntry{
+        id: vault_core.generateID(),
+        name: name,
+        username: username,
+        password: password,
+        url: nil,
+        notes: nil,
+        createdAt: time.now().unix(),
+        updatedAt: time.now().unix()
+    }
+
+    vault = append(vault, entry)
+    saveVault(vault)!
+
+    return "added entry: " + name
+}
+
+func handleList(args: []string): !string {
+    if len(vault) == 0 {
+        return "vault is empty"
+    }
+
+    let result: string = ""
+    for i, entry in vault {
+        result += string(i) + ". " + entry.name
+        result += " (" + entry.username + ")\n"
+    }
+
+    return result
+}
+
+func handleGet(args: []string): !string {
+    if len(args) < 1 {
+        return error("usage: vvault get <id|name>")
+    }
+
+    let query: string = args[0]
+    let id: int = int(query) catch -1
+
+    for entry in vault {
+        if entry.id == query || entry.name == query || id >= 0 {
+            let result: string = "Name:     " + entry.name + "\n"
+            result += "Username: " + entry.username + "\n"
+            result += "Password: " + entry.password + "\n"
+
+            if entry.url != nil {
+                result += "URL:      " + entry.url! + "\n"
+            }
+
+            result += "Created:  " + time.format(entry.createdAt) + "\n"
+            return result
+        }
+    }
+
+    return error("entry not found: " + query)
+}
+
+func handleDelete(args: []string): !string {
+    if len(args) < 1 {
+        return error("usage: vvault delete <id|name>")
+    }
+
+    let query: string = args[0]
+    let initialLen: int = len(vault)
+
+    vault = filter(vault, func(e: VaultEntry): bool {
+        return e.id != query && e.name != query
+    })
+
+    if len(vault) == initialLen {
+        return error("entry not found: " + query)
+    }
+
+    saveVault(vault)!
+    return "deleted: " + query
+}
+
+func handleExport(args: []string): !string {
+    let format: string = args[0] catch "json"
+
+    let data: string
+    match format {
+        "json" => data = json.encode(vault)
+        "csv" => {
+            data = "name,username,password,url\n"
+            for entry in vault {
+                data += entry.name + ","
+                data += entry.username + ","
+                data += entry.password + ","
+                data += entry.url ?? "" + "\n"
+            }
+        }
+        _ => return error("unsupported format: " + format)
+    }
+
+    let filename: string = "vvault_export." + format
+    os.writeFile(filename, data)
+    return "exported to " + filename
+}
+
+// ============================================================
+// Command registry
+// ============================================================
+
+let commands: []Command = [
+    Command{
+        name: "init",
+        description: "Initialize a new vault",
+        handler: handleInit,
+        usage: "vvault init"
+    },
+    Command{
+        name: "generate",
+        description: "Generate a strong password",
+        handler: handleGenerate,
+        usage: "vvault generate [length]"
+    },
+    Command{
+        name: "add",
+        description: "Add an entry to the vault",
+        handler: handleAdd,
+        usage: "vvault add <name> <username> [password]"
+    },
+    Command{
+        name: "list",
+        description: "List all vault entries",
+        handler: handleList,
+        usage: "vvault list"
+    },
+    Command{
+        name: "get",
+        description: "Get a vault entry",
+        handler: handleGet,
+        usage: "vvault get <id|name>"
+    },
+    Command{
+        name: "delete",
+        description: "Delete a vault entry",
+        handler: handleDelete,
+        usage: "vvault delete <id|name>"
+    },
+    Command{
+        name: "export",
+        description: "Export vault entries",
+        handler: handleExport,
+        usage: "vvault export [json|csv]"
+    }
+]
+
+// ============================================================
+// Main
+// ============================================================
+
+func printUsage() {
+    println("vvault " + VERSION + " - Secure Password Manager")
+    println("")
+    println("Usage: vvault <command> [options]")
+    println("")
+    println("Commands:")
+    for cmd in commands {
+        println("  " + cmd.name + "    " + cmd.description)
+    }
+}
+
+func main() {
+    let args: []string = cli.getArgs()
+
+    if len(args) == 0 {
+        printUsage()
+        return
+    }
+
+    let commandName: string = args[0]
+    let cmdArgs: []string = args[1:]
+
+    // Load state
+    config = loadConfig() catch AppConfig{}
+    vault = loadVault() catch []
+
+    // Find and execute command
+    for cmd in commands {
+        if cmd.name == commandName {
+            let result: !string = cmd.handler(cmdArgs)
+            match result {
+                string s => println(s)
+                error e => {
+                    println("error:", e.message())
+                    println("usage:", cmd.usage)
+                    os.exit(1)
+                }
+            }
+            return
+        }
+    }
+
+    println("unknown command:", commandName)
+    printUsage()
+    os.exit(1)
+}
