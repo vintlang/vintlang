@@ -1,0 +1,195 @@
+// VintLang Typed Vault Core
+// Core cryptographic and generation library with typed interfaces
+
+import random
+import crypto
+import encoding
+
+// ============================================================
+// Types
+// ============================================================
+
+type PasswordStrength: int
+
+const Weak: PasswordStrength = 0
+const Medium: PasswordStrength = 1
+const Strong: PasswordStrength = 2
+
+type EncodingType: string
+
+const Base64: EncodingType = "base64"
+const Hex: EncodingType = "hex"
+const Base58: EncodingType = "base58"
+
+struct GeneratorConfig {
+    length: int = 16
+    includeDigits: bool = true
+    includeSymbols: bool = false
+    includeUppercase: bool = true
+    encoding: EncodingType = Base64
+}
+
+struct PasswordPolicy {
+    minLength: int = 8
+    maxLength: int = 128
+    requireUpper: bool = true
+    requireLower: bool = true
+    requireDigit: bool = true
+    requireSymbol: bool = false
+    minStrength: PasswordStrength = Medium
+}
+
+struct GeneratedPassword {
+    value: string
+    strength: PasswordStrength
+    entropy: float64
+    length: int
+    meetsPolicy: bool
+}
+
+struct VaultEntry {
+    id: string
+    name: string
+    username: string
+    password: string
+    url: ?string
+    notes: ?string
+    createdAt: int64
+    updatedAt: int64
+}
+
+// ============================================================
+// Generator functions
+// ============================================================
+
+func generateID(): string {
+    return uuid.New()
+}
+
+func generateRandomBytes(length: int): []byte {
+    let bytes: []byte
+    for i in range(length) {
+        bytes = append(bytes, random.byte())
+    }
+    return bytes
+}
+
+func generateToken(config: GeneratorConfig): !string {
+    if config.length <= 0 {
+        return error("length must be positive")
+    }
+    if config.length > 1024 {
+        return error("length exceeds maximum of 1024")
+    }
+
+    let bytes: []byte = generateRandomBytes(config.length)
+    let result: string
+
+    match config.encoding {
+        Base64 => result = encoding.base64.encode(bytes)
+        Hex => result = encoding.hex.encode(bytes)
+        Base58 => result = encoding.base58.encode(bytes)
+        _ => return error("unsupported encoding: " + config.encoding)
+    }
+
+    return result
+}
+
+func estimateEntropy(password: string): float64 {
+    let charset: int = 0
+
+    if password.matches("[a-z]") { charset += 26 }
+    if password.matches("[A-Z]") { charset += 26 }
+    if password.matches("[0-9]") { charset += 10 }
+    if password.matches("[^a-zA-Z0-9]") { charset += 32 }
+
+    if charset == 0 {
+        return 0.0
+    }
+
+    return float64(len(password)) * (math.log2(charset) as float64)
+}
+
+func evaluateStrength(password: string): PasswordStrength {
+    let entropy: float64 = estimateEntropy(password)
+
+    if entropy >= 80.0 { return Strong }
+    if entropy >= 50.0 { return Medium }
+    return Weak
+}
+
+func validatePolicy(password: string, policy: PasswordPolicy): bool {
+    if len(password) < policy.minLength { return false }
+    if len(password) > policy.maxLength { return false }
+    if policy.requireUpper && !password.matches("[A-Z]") { return false }
+    if policy.requireLower && !password.matches("[a-z]") { return false }
+    if policy.requireDigit && !password.matches("[0-9]") { return false }
+    if policy.requireSymbol && !password.matches("[^a-zA-Z0-9]") { return false }
+    return true
+}
+
+func generatePassword(policy: PasswordPolicy): !GeneratedPassword {
+    let config: GeneratorConfig = GeneratorConfig{
+        length: policy.minLength + 4,
+        includeDigits: policy.requireDigit,
+        includeSymbols: policy.requireSymbol
+    }
+
+    let raw: string = generateToken(config)!
+    let strength: PasswordStrength = evaluateStrength(raw)
+    let entropy: float64 = estimateEntropy(raw)
+    let valid: bool = validatePolicy(raw, policy)
+
+    if !valid {
+        // Retry with adjusted parameters
+        config.length = config.length + 8
+        config.includeSymbols = true
+        raw = generateToken(config)!
+        strength = evaluateStrength(raw)
+        entropy = estimateEntropy(raw)
+        valid = validatePolicy(raw, policy)
+    }
+
+    if !valid {
+        return error("unable to generate password meeting policy requirements")
+    }
+
+    return GeneratedPassword{
+        value: raw,
+        strength: strength,
+        entropy: entropy,
+        length: len(raw),
+        meetsPolicy: valid
+    }
+}
+
+// ============================================================
+// Encryption helpers
+// ============================================================
+
+func encryptEntry(entry: VaultEntry, masterKey: string): !{string: any} {
+    let plaintext: string = json.encode(entry)
+    let encrypted: string = crypto.encrypt(plaintext, masterKey)
+    let checksum: string = crypto.sha256(plaintext)
+
+    return {
+        "data": encrypted,
+        "checksum": checksum,
+        "algorithm": "aes-256-gcm",
+        "version": 1
+    }
+}
+
+func decryptEntry(cipherData: {string: any}, masterKey: string): !VaultEntry {
+    let encrypted: string = cipherData["data"] as string
+    let checksum: string = cipherData["checksum"] as string
+
+    let decrypted: string = crypto.decrypt(encrypted, masterKey)!
+    let computed: string = crypto.sha256(decrypted)
+
+    if computed != checksum {
+        return error("checksum mismatch: data may be corrupted")
+    }
+
+    return json.decode(decrypted) as VaultEntry
+}

@@ -1,0 +1,390 @@
+// VintLang Typed HTTP Server
+// Demonstrates real-world typed web server with all type features
+
+import http
+import json
+import time
+import crypto
+
+// ============================================================
+// Types
+// ============================================================
+
+type UserID = int
+type Timestamp = int64
+type JSON = {string: any}
+type Middleware = func(ctx: Context): !Context
+
+enum HttpMethod: string {
+    GET = "GET"
+    POST = "POST"
+    PUT = "PUT"
+    DELETE = "DELETE"
+    PATCH = "PATCH"
+}
+
+enum ContentType: string {
+    JSON = "application/json"
+    HTML = "text/html"
+    Text = "text/plain"
+}
+
+struct User {
+    id: UserID
+    name: string
+    email: string
+    role: string
+    createdAt: Timestamp
+    active: bool
+}
+
+struct CreateUserRequest {
+    name: string
+    email: string
+    password: string
+    role: ?string
+}
+
+struct UpdateUserRequest {
+    name: ?string
+    email: ?string
+    password: ?string
+    role: ?string
+}
+
+struct UserResponse {
+    id: UserID
+    name: string
+    email: string
+    role: string
+    createdAt: Timestamp
+}
+
+struct ErrorResponse {
+    code: int
+    message: string
+    details: ?string
+}
+
+struct PaginatedResponse {
+    data: []User
+    page: int
+    perPage: int
+    total: int
+    totalPages: int
+}
+
+struct Context {
+    method: HttpMethod
+    path: string
+    params: {string: string}
+    query: {string: string}
+    headers: {string: string}
+    body: ?any
+    user: ?User
+    status: int
+    response: ?any
+}
+
+// ============================================================
+// Application state
+// ============================================================
+
+let users: []User = []
+let nextID: int = 1
+
+// ============================================================
+// Middleware
+// ============================================================
+
+func loggingMiddleware(ctx: Context): !Context {
+    let start: Timestamp = time.now().unix()
+    println("[" + string(ctx.method) + "]", ctx.path)
+    ctx = ctx.execute()!
+    let duration: int = int(time.now().unix() - start)
+    println("  ->", ctx.status, "in", string(duration) + "ms")
+    return ctx
+}
+
+func authMiddleware(ctx: Context): !Context {
+    let token: ?string = ctx.headers["Authorization"]
+    if token == nil {
+        return error("unauthorized: no token provided")
+    }
+
+    let userID: UserID = validateToken(token!)
+    if userID < 0 {
+        return error("unauthorized: invalid token")
+    }
+
+    for u in users {
+        if u.id == userID {
+            ctx.user = u
+            return ctx
+        }
+    }
+
+    return error("unauthorized: user not found")
+}
+
+func corsMiddleware(ctx: Context): !Context {
+    ctx.headers["Access-Control-Allow-Origin"] = "*"
+    ctx.headers["Access-Control-Allow-Methods"] = "GET, POST, PUT, DELETE"
+    ctx.headers["Access-Control-Allow-Headers"] = "Content-Type, Authorization"
+    return ctx
+}
+
+func validateToken(token: string): UserID {
+    let parts: []string = token.split(" ")
+    if len(parts) != 2 || parts[0] != "Bearer" {
+        return -1
+    }
+    let payload: string = crypto.decodeJWT(parts[1])
+    let data: JSON = json.decode(payload) as JSON
+    return data["user_id"] as UserID
+}
+
+// ============================================================
+// Handlers
+// ============================================================
+
+func handleCreateUser(ctx: Context): !Context {
+    let body: JSON = ctx.body as JSON
+    let req: CreateUserRequest = json.decode(json.encode(body)) as CreateUserRequest
+
+    // Validation
+    if len(req.name) < 2 {
+        return ctx.json(400, ErrorResponse{
+            code: 400,
+            message: "name must be at least 2 characters"
+        })
+    }
+
+    if !req.email.matches("^[^@]+@[^@]+$") {
+        return ctx.json(400, ErrorResponse{
+            code: 400,
+            message: "invalid email format"
+        })
+    }
+
+    if len(req.password) < 8 {
+        return ctx.json(400, ErrorResponse{
+            code: 400,
+            message: "password must be at least 8 characters"
+        })
+    }
+
+    let user: User = User{
+        id: nextID,
+        name: req.name,
+        email: req.email,
+        role: req.role ?? "user",
+        createdAt: time.now().unix(),
+        active: true
+    }
+    nextID = nextID + 1
+    users = append(users, user)
+
+    let resp: UserResponse = UserResponse{
+        id: user.id,
+        name: user.name,
+        email: user.email,
+        role: user.role,
+        createdAt: user.createdAt
+    }
+
+    return ctx.json(201, resp)
+}
+
+func handleGetUser(ctx: Context): !Context {
+    let idStr: string = ctx.params["id"]
+    let id: UserID = int(idStr) catch -1
+
+    if id < 0 {
+        return ctx.json(400, ErrorResponse{
+            code: 400,
+            message: "invalid user id: " + idStr
+        })
+    }
+
+    for u in users {
+        if u.id == id {
+            let resp: UserResponse = UserResponse{
+                id: u.id,
+                name: u.name,
+                email: u.email,
+                role: u.role,
+                createdAt: u.createdAt
+            }
+            return ctx.json(200, resp)
+        }
+    }
+
+    return ctx.json(404, ErrorResponse{
+        code: 404,
+        message: "user not found"
+    })
+}
+
+func handleListUsers(ctx: Context): !Context {
+    let page: int = int(ctx.query["page"] ?? "1") catch 1
+    let perPage: int = int(ctx.query["per_page"] ?? "20") catch 20
+
+    if page < 1 { page = 1 }
+    if perPage < 1 { perPage = 20 }
+    if perPage > 100 { perPage = 100 }
+
+    let start: int = (page - 1) * perPage
+    let end: int = start + perPage
+    let total: int = len(users)
+
+    if start >= total {
+        return ctx.json(200, PaginatedResponse{
+            page: page,
+            perPage: perPage,
+            total: total,
+            totalPages: 0,
+            data: []
+        })
+    }
+
+    let pageUsers: []User
+    for i in range(start, min(end, total)) {
+        pageUsers = append(pageUsers, users[i])
+    }
+
+    let totalPages: int = (total + perPage - 1) / perPage
+
+    return ctx.json(200, PaginatedResponse{
+        page: page,
+        perPage: perPage,
+        total: total,
+        totalPages: totalPages,
+        data: pageUsers
+    })
+}
+
+func handleUpdateUser(ctx: Context): !Context {
+    let idStr: string = ctx.params["id"]
+    let id: UserID = int(idStr) catch -1
+
+    if id < 0 {
+        return ctx.json(400, ErrorResponse{code: 400, message: "invalid user id"})
+    }
+
+    let body: JSON = ctx.body as JSON
+    let req: UpdateUserRequest = json.decode(json.encode(body)) as UpdateUserRequest
+
+    for i, u in users {
+        if u.id == id {
+            if req.name != nil { users[i].name = req.name! }
+            if req.email != nil { users[i].email = req.email! }
+            if req.role != nil { users[i].role = req.role! }
+
+            return ctx.json(200, UserResponse{
+                id: users[i].id,
+                name: users[i].name,
+                email: users[i].email,
+                role: users[i].role,
+                createdAt: users[i].createdAt
+            })
+        }
+    }
+
+    return ctx.json(404, ErrorResponse{code: 404, message: "user not found"})
+}
+
+func handleDeleteUser(ctx: Context): !Context {
+    let idStr: string = ctx.params["id"]
+    let id: UserID = int(idStr) catch -1
+
+    if id < 0 {
+        return ctx.json(400, ErrorResponse{code: 400, message: "invalid user id"})
+    }
+
+    let initialLen: int = len(users)
+    users = filter(users, func(u: User): bool { return u.id != id })
+
+    if len(users) == initialLen {
+        return ctx.json(404, ErrorResponse{code: 404, message: "user not found"})
+    }
+
+    return ctx.json(200, {"deleted": true})
+}
+
+func handleHealth(ctx: Context): !Context {
+    return ctx.json(200, {
+        "status": "healthy",
+        "users_count": len(users),
+        "uptime": time.now().unix() - startTime
+    })
+}
+
+// ============================================================
+// Router and server
+// ============================================================
+
+let routes: {string: {HttpMethod: func(Context): !Context}} = {
+    "/api/users": {
+        HttpMethod.GET: handleListUsers,
+        HttpMethod.POST: handleCreateUser
+    },
+    "/api/users/:id": {
+        HttpMethod.GET: handleGetUser,
+        HttpMethod.PUT: handleUpdateUser,
+        HttpMethod.DELETE: handleDeleteUser
+    },
+    "/api/health": {
+        HttpMethod.GET: handleHealth
+    }
+}
+
+let startTime: int64 = time.now().unix()
+
+func router(ctx: Context): !Context {
+    let route: ?{HttpMethod: func(Context): !Context} = routes[ctx.path]
+
+    if route == nil {
+        return ctx.json(404, ErrorResponse{
+            code: 404,
+            message: "route not found: " + ctx.path
+        })
+    }
+
+    let handler: ?func(Context): !Context = route[ctx.method]
+    if handler == nil {
+        return ctx.json(405, ErrorResponse{
+            code: 405,
+            message: "method not allowed: " + string(ctx.method)
+        })
+    }
+
+    return handler!(ctx)
+}
+
+// Middleware chain
+let middlewareChain: []Middleware = [
+    loggingMiddleware,
+    corsMiddleware,
+    authMiddleware
+]
+
+func handleRequest(ctx: Context): !Context {
+    for mw in middlewareChain {
+        ctx = mw(ctx)!
+    }
+    return router(ctx)
+}
+
+// ============================================================
+// Main
+// ============================================================
+
+func main() {
+    let port: int = 8080
+    println("Starting server on port", port)
+
+    let server: HttpApp = http.createServer(handleRequest)
+    server.listen(port)
+    println("Server stopped")
+}

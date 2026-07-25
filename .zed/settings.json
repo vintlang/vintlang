@@ -1,0 +1,9 @@
+// Temporary: treat .vint files as TypeScript for syntax highlighting
+// until VintLang gets its own Zed extension
+{
+  "languages": {
+    "TypeScript": {
+      "file_types": ["*.vint"]
+    }
+  }
+}

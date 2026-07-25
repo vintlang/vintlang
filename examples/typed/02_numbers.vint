@@ -1,0 +1,55 @@
+// VintLang Typed Numbers
+// Demonstrates all numeric types (Go-compatible)
+
+// Signed integers
+let a: int = 42          // platform-sized (64-bit)
+let b: int8 = -128
+let c: int16 = -32768
+let d: int32 = -2147483648
+let e: int64 = -9223372036854775808
+
+// Unsigned integers
+let ua: uint = 42
+let ub: uint8 = 255
+let uc: uint16 = 65535
+let ud: uint32 = 4294967295
+let ue: uint64 = 18446744073709551615
+
+// Floating point
+let f32: float32 = 3.14159
+let f64: float64 = 2.71828
+
+// Byte (alias for uint8)
+let byteVal: byte = 0xFF
+
+// Arithmetic with different types (compile-time checked)
+func addInts(x: int, y: int): int {
+    return x + y
+}
+
+func mixFloats(a: float32, b: float64): float64 {
+    return float64(a) + b  // explicit cast required
+}
+
+let sum: int = addInts(10, 20)
+let mixed: float64 = mixFloats(1.5, 2.5)
+
+println("int operations:")
+println("  10 + 20 =", sum)
+println("  10 * 20 =", 10 * 20)
+println("  20 / 3  =", 20 / 3)
+println("  20 % 3  =", 20 % 3)
+
+println("float operations:")
+println("  mixed:", mixed)
+println("  3.14 * 2 =", 3.14 * 2)
+
+// Overflow protection (checked or wrapping)
+let big: uint64 = 18446744073709551615
+// big + 1  // compile-time error: overflow
+
+// Numeric constants are untyped until used
+let x: int = 100
+let y: float64 = 100  // int constant auto-converts to float64
+
+println("x:", x, "y:", y)

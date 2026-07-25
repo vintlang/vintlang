@@ -1,0 +1,40 @@
+// VintLang Typed Basics
+// Demonstrates basic type annotations on variables
+
+// Explicit typed declarations
+let active: bool = true
+let name: string = "VintLang"
+let count: int = 42
+let pi: float64 = 3.14159
+let data: byte = 255
+let nothing: any = nil
+
+// Zero-value declarations (no initializer = zero value)
+let zeroBool: bool
+let zeroInt: int
+let zeroFloat: float64
+let zeroString: string
+let zeroSlice: []int
+
+println("active:", active)
+println("name:", name)
+println("count:", count)
+println("pi:", pi)
+println("data:", data)
+println("nothing:", nothing)
+println("zero bool:", zeroBool)
+println("zero int:", zeroInt)
+println("zero float:", zeroFloat)
+println("zero string:", zeroString)
+println("zero slice:", zeroSlice)
+
+// Mutability: let is immutable, mut is mutable
+mut counter: int = 0
+counter = counter + 1
+counter += 10
+println("counter:", counter)
+
+// Constants
+const APP_NAME: string = "VintLang-Typed"
+const MAX_USERS: int = 1000
+println(APP_NAME, "max users:", MAX_USERS)

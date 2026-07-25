@@ -1,0 +1,70 @@
+// VintLang Typed Constants
+// Demonstrates typed constant declarations
+
+// ============================================================
+// 1. Typed constants
+// ============================================================
+
+const APP_NAME: string = "VintLang-Typed"
+const VERSION: int = 7
+const PI: float64 = 3.14159265359
+const DEBUG: bool = true
+const MAX_CONNECTIONS: int = 1000
+
+println(APP_NAME, VERSION)
+println("PI:", PI)
+
+// ============================================================
+// 2. Untyped constants (work like literals)
+// ============================================================
+
+const TIMEOUT = 30          // untyped int
+const RATE = 0.05           // untyped float
+const PREFIX = "vint_"      // untyped string
+
+// Untyped constants auto-convert when used
+let timeoutDuration: int = TIMEOUT
+let interestRate: float64 = RATE
+let prefixed: string = PREFIX + "types"
+
+println(timeoutDuration, interestRate, prefixed)
+
+// ============================================================
+// 3. Constant expressions
+// ============================================================
+
+const HOURS_PER_DAY: int = 24
+const MINUTES_PER_HOUR: int = 60
+const MINUTES_PER_DAY: int = HOURS_PER_DAY * MINUTES_PER_HOUR
+const SECONDS_PER_DAY: int = MINUTES_PER_DAY * 60
+
+println("minutes in a day:", MINUTES_PER_DAY)
+println("seconds in a day:", SECONDS_PER_DAY)
+
+// ============================================================
+// 4. Constants in math
+// ============================================================
+
+const GRAVITY: float64 = 9.81
+const SPEED_OF_LIGHT: int = 299792458
+
+func energy(mass: float64): float64 {
+    return mass * (SPEED_OF_LIGHT as float64) * (SPEED_OF_LIGHT as float64)
+}
+
+println("E = mc^2:", energy(1.0))
+
+// ============================================================
+// 5. Constants with enums
+// ============================================================
+
+enum LogLevel: int {
+    Debug = 0
+    Info = 1
+    Warn = 2
+    Error = 3
+}
+
+const DEFAULT_LOG_LEVEL: LogLevel = LogLevel.Info
+const LOG_PREFIX: string = "[" + string(DEFAULT_LOG_LEVEL) + "]"
+println("log prefix:", LOG_PREFIX)
