@@ -64,6 +64,6 @@ func main() {
 	repl.Read(processedCode)
 }
 `, bundlerVersion, buildTime, escapedProcessedContent)
-
+	// println(escapedProcessedContent)
 	return goTemplate, nil
 }
