@@ -29,7 +29,7 @@ println("zero string:", zeroString)
 println("zero slice:", zeroSlice)
 
 // Mutability: let is immutable, mut is mutable
-mut counter: int = 0
+let counter: int = 0
 counter = counter + 1
 counter += 10
 println("counter:", counter)

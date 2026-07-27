@@ -39,7 +39,7 @@ let elem: *int = &arr[1]
 println("arr after pointer mutation:", arr)
 
 // Function with pointer param
-func increment(n: *int) {
+let increment = func(n: *int) {
     *n = *n + 1
 }
 

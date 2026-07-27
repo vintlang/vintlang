@@ -5,15 +5,15 @@
 // 1. Basic typed functions
 // ============================================================
 
-func add(a: int, b: int): int {
+let add = func(a: int, b: int): int {
     return a + b
 }
 
-func greet(name: string): string {
+let greet = func(name: string): string {
     return "Hello, " + name + "!"
 }
 
-func isEven(n: int): bool {
+let isEven = func(n: int): bool {
     return n % 2 == 0
 }
 
@@ -25,7 +25,7 @@ println(isEven(7))
 // 2. Functions with no return value
 // ============================================================
 
-func logMessage(msg: string) {
+let logMessage = func(msg: string) {
     println("[LOG]", msg)
 }
 
@@ -35,7 +35,7 @@ logMessage("system initialized")
 // 3. Functions with multiple params, same type
 // ============================================================
 
-func multiply(a, b: int): int {
+let multiply = func(a, b: int): int {
     return a * b
 }
 
@@ -52,7 +52,7 @@ println("via func var:", op(10, 20))
 // 5. Higher-order functions
 // ============================================================
 
-func apply(arr: []int, fn: func(int): int): []int {
+let apply = func(arr: []int, fn: func(int): int): []int {
     let result: []int
     for v in arr {
         result = append(result, fn(v))
@@ -60,7 +60,7 @@ func apply(arr: []int, fn: func(int): int): []int {
     return result
 }
 
-func double(n: int): int {
+let double = func(n: int): int {
     return n * 2
 }
 
@@ -72,7 +72,7 @@ println("doubled:", doubled)
 // 6. Anonymous functions / closures
 // ============================================================
 
-func makeCounter(start: int): func(): int {
+let makeCounter = func(start: int): func(): int {
     let count: int = start
     return func(): int {
         count = count + 1
@@ -89,7 +89,7 @@ println(counter())
 // 7. Variadic functions
 // ============================================================
 
-func sum(values: ...int): int {
+let sum = func(values: ...int): int {
     let total: int = 0
     for v in values {
         total = total + v
@@ -104,7 +104,7 @@ println("sum:", sum(10, 20))
 // 8. Named return values
 // ============================================================
 
-func divide(dividend, divisor: int): (quotient: int, remainder: int) {
+let divide = func(dividend, divisor: int): (quotient: int, remainder: int) {
     quotient = dividend / divisor
     remainder = dividend % divisor
     return
