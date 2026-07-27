@@ -212,11 +212,13 @@ func (p *Parser) ParseProgram() *ast.Program {
 		}
 
 		// Zero-value TypedLetStatement may have a trailing semicolon that
-		// wasn't consumed by the statement itself. Consume it now.
+		// wasn't consumed by the statement itself. Consume it now and
+		// skip advancement (we already moved to the next token).
 		if tls, ok := stmt.(*ast.TypedLetStatement); ok && tls.Value == nil {
 			if p.curTokenIs(token.SEMICOLON) {
 				p.nextToken()
 			}
+			continue
 		}
 
 		// For parse failures, always advance to avoid infinite loops
@@ -236,9 +238,8 @@ func (p *Parser) ParseProgram() *ast.Program {
 			continue
 		}
 
-		// For all other statement types, advance unless we're already at a
-		// keyword that starts the next statement.
-		if !p.curTokenIs(token.EOF) && !p.isKeywordStatementStart() {
+		// For all other statement types, always advance.
+		if !p.curTokenIs(token.EOF) {
 			p.nextToken()
 		}
 	}
