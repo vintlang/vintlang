@@ -28,58 +28,157 @@ func (p *Parser) parseStatement() ast.Statement {
 	case token.GO:
 		return p.parseGoStatement()
 	default:
+		// Contextual keyword: 'type' at statement start is a type alias
+		// but only if the next token is an identifier (not '(' which means function call).
+		if p.curTokenIs(token.IDENT) && p.curToken.Literal == "type" &&
+			p.peekTokenIs(token.IDENT) {
+			return p.parseTypeAliasStatement()
+		}
 		return p.parseExpressionStatement()
 	}
 }
 
-func (p *Parser) parseLetStatement() *ast.LetStatement {
-	stmt := &ast.LetStatement{Token: p.curToken}
+func (p *Parser) parseLetStatement() ast.Statement {
+	tok := p.curToken
 
 	if !p.expectPeek(token.IDENT) {
 		p.skipToNextStatement()
 		return nil
 	}
 
-	stmt.Name = &ast.Identifier{Token: p.curToken, Value: p.curToken.Literal}
+	name := &ast.Identifier{Token: p.curToken, Value: p.curToken.Literal}
 
-	if !p.expectPeek(token.ASSIGN) {
-		return nil
-	}
-
-	p.nextToken()
-
-	stmt.Value = p.parseExpression(LOWEST)
-
-	if p.peekTokenIs(token.SEMICOLON) {
+	// Check for type annotation: let x: type
+	if p.peekTokenIs(token.COLON) {
+		p.nextToken() // consume ':'
 		p.nextToken()
+		declaredType := p.parseType()
+		if declaredType == nil {
+			p.skipToNextStatement()
+			return nil
+		}
+
+		// After parseType, curToken is the token after the type.
+		// If it's '=', parse the initializer.
+		if p.curTokenIs(token.ASSIGN) {
+			p.nextToken()
+			value := p.parseExpression(LOWEST)
+			if p.peekTokenIs(token.SEMICOLON) {
+				p.nextToken()
+			}
+			return &ast.TypedLetStatement{
+				Token: tok,
+				Name:  name,
+				TypeAnnotation: &ast.TypeAnnotation{
+					Token: tok,
+					Type:  declaredType,
+				},
+				Value: value,
+			}
+		}
+
+		// let x: type (zero value) — no '='
+		if p.peekTokenIs(token.SEMICOLON) {
+			p.nextToken()
+		}
+		return &ast.TypedLetStatement{
+			Token: tok,
+			Name:  name,
+			TypeAnnotation: &ast.TypeAnnotation{
+				Token: tok,
+				Type:  declaredType,
+			},
+		}
 	}
 
-	return stmt
+	// No type annotation: let x = value (inferred) or error
+	if p.peekTokenIs(token.ASSIGN) {
+		p.nextToken()
+		p.nextToken()
+		stmt := &ast.LetStatement{Token: tok, Name: name}
+		stmt.Value = p.parseExpression(LOWEST)
+		if p.peekTokenIs(token.SEMICOLON) {
+			p.nextToken()
+		}
+		return stmt
+	}
+
+	// let x with no type, no value — error in strict mode
+	p.addError(p.l.GetFilename() + ":" + itoa(p.curToken.Line) +
+		": variable '" + name.Value + "' must have either a type annotation or an initializer")
+	p.skipToNextStatement()
+	return nil
 }
 
-func (p *Parser) parseConstStatement() *ast.ConstStatement {
-	stmt := &ast.ConstStatement{Token: p.curToken}
+func (p *Parser) parseConstStatement() ast.Statement {
+	tok := p.curToken
 
 	if !p.expectPeek(token.IDENT) {
 		p.skipToNextStatement()
 		return nil
 	}
 
-	stmt.Name = &ast.Identifier{Token: p.curToken, Value: p.curToken.Literal}
+	name := &ast.Identifier{Token: p.curToken, Value: p.curToken.Literal}
 
-	if !p.expectPeek(token.ASSIGN) {
-		return nil
-	}
-
-	p.nextToken()
-
-	stmt.Value = p.parseExpression(LOWEST)
-
-	if p.peekTokenIs(token.SEMICOLON) {
+	// Check for type annotation: const x: type
+	if p.peekTokenIs(token.COLON) {
+		p.nextToken() // consume ':'
 		p.nextToken()
+		declaredType := p.parseType()
+		if declaredType == nil {
+			p.skipToNextStatement()
+			return nil
+		}
+
+		// After parseType, curToken is the token after the type.
+		// If it's '=', parse the initializer.
+		if p.curTokenIs(token.ASSIGN) {
+			p.nextToken()
+			value := p.parseExpression(LOWEST)
+			if p.peekTokenIs(token.SEMICOLON) {
+				p.nextToken()
+			}
+			return &ast.TypedLetStatement{
+				Token: tok,
+				Name:  name,
+				TypeAnnotation: &ast.TypeAnnotation{
+					Token: tok,
+					Type:  declaredType,
+				},
+				Value: value,
+			}
+		}
+
+		// const x: type (zero value) — allowed for consistency
+		if p.peekTokenIs(token.SEMICOLON) {
+			p.nextToken()
+		}
+		return &ast.TypedLetStatement{
+			Token: tok,
+			Name:  name,
+			TypeAnnotation: &ast.TypeAnnotation{
+				Token: tok,
+				Type:  declaredType,
+			},
+		}
 	}
 
-	return stmt
+	// No type annotation: const x = value (inferred) or error
+	if p.peekTokenIs(token.ASSIGN) {
+		p.nextToken()
+		p.nextToken()
+		stmt := &ast.ConstStatement{Token: tok, Name: name}
+		stmt.Value = p.parseExpression(LOWEST)
+		if p.peekTokenIs(token.SEMICOLON) {
+			p.nextToken()
+		}
+		return stmt
+	}
+
+	p.addError(p.l.GetFilename() + ":" + itoa(p.curToken.Line) +
+		": constant '" + name.Value + "' must have either a type annotation or an initializer")
+	p.skipToNextStatement()
+	return nil
 }
 
 func (p *Parser) parseReturnStatement() *ast.ReturnStatement {
@@ -239,11 +338,23 @@ func (p *Parser) parseStructStatement() *ast.StructStatement {
 			field := ast.StructField{}
 			field.Name = &ast.Identifier{Token: p.curToken, Value: p.curToken.Literal}
 
-			// Check for default value with ':'
+			// Check for ':' — could be type annotation or default value
 			if p.peekTokenIs(token.COLON) {
 				p.nextToken() // Move to ':'
-				p.nextToken() // Move to value
-				field.Default = p.parseExpression(LOWEST)
+				p.nextToken() // Move to next token
+
+				// Disambiguate: type keyword or compound type start → type annotation
+				// Otherwise → default value expression (back-compat)
+				if p.isTypeStart() {
+					field.Type = p.parseType()
+					// After parseType, curToken might be '=' for default value
+					if p.curTokenIs(token.ASSIGN) {
+						p.nextToken()
+						field.Default = p.parseExpression(LOWEST)
+					}
+				} else {
+					field.Default = p.parseExpression(LOWEST)
+				}
 			}
 
 			stmt.Fields = append(stmt.Fields, field)
