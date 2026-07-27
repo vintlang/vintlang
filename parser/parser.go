@@ -39,6 +39,8 @@ var precedences = map[token.TokenType]int{
 	token.GT:              LESSGREATER,
 	token.GTE:             LESSGREATER,
 	token.RANGE:           RANGE,
+	token.AS:              EQUALS,
+	token.IS:              EQUALS,
 	token.PLUS:            SUM,
 	token.PLUS_ASSIGN:     SUM,
 	token.MINUS:           SUM,
@@ -187,6 +189,8 @@ func New(l *lexer.Lexer) *Parser {
 	p.registerInfix(token.IN, p.parseInfixExpression)
 	p.registerInfix(token.DOT, p.parseMethod)
 	p.registerInfix(token.RANGE, p.parseRangeExpression)
+	p.registerInfix(token.AS, p.parseTypeCast)
+	p.registerInfix(token.IS, p.parseTypeCheck)
 
 	p.postfixParseFns = make(map[token.TokenType]postfixParseFn)
 	p.registerPostfix(token.PLUS_PLUS, p.parsePostfixExpression)
