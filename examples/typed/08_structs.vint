@@ -20,7 +20,7 @@ struct Rectangle {
     },
 
     func perimeter(): float64 {
-        return 2 * (this.width + this.height);
+        return 2.0 * (this.width + this.height);
     }
 };
 

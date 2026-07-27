@@ -35,17 +35,6 @@ func compatible(declared ast.Type, obj object.VintObject) bool {
 		if t.Name == "any" {
 			return true
 		}
-		expected, ok := typeNameToRuntime[t.Name]
-		if !ok {
-			return false
-		}
-		if obj.Type() == expected {
-			return true
-		}
-		// error type also matches CUSTOM_ERROR
-		if t.Name == "error" && obj.Type() == object.CUSTOM_ERROR_OBJ {
-			return true
-		}
 		// Struct instances match by struct name
 		if si, ok := obj.(*object.StructInstance); ok {
 			return si.Struct.Name == t.Name
@@ -53,6 +42,15 @@ func compatible(declared ast.Type, obj object.VintObject) bool {
 		// Enum instances match by enum name
 		if e, ok := obj.(*object.Enum); ok {
 			return e.Name == t.Name
+		}
+		// Check built-in type map
+		expected, ok := typeNameToRuntime[t.Name]
+		if ok && obj.Type() == expected {
+			return true
+		}
+		// error type also matches CUSTOM_ERROR
+		if t.Name == "error" && obj.Type() == object.CUSTOM_ERROR_OBJ {
+			return true
 		}
 		return false
 	case *ast.ArrayType:
