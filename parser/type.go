@@ -36,7 +36,12 @@ func isTypeKeyword(name string) bool {
 func (p *Parser) isTypeStart() bool {
 	switch p.curToken.Type {
 	case token.IDENT:
-		return isTypeKeyword(p.curToken.Literal)
+		if isTypeKeyword(p.curToken.Literal) {
+			return true
+		}
+		// Check if it's a registered alias
+		_, ok := p.aliases[p.curToken.Literal]
+		return ok
 	case token.ERROR:
 		return true
 	case token.LBRACKET, token.LBRACE, token.ASTERISK, token.FUNCTION, token.CHAN, token.LPAREN:
@@ -51,6 +56,11 @@ func (p *Parser) isTypeStart() bool {
 func (p *Parser) parseType() ast.Type {
 	switch p.curToken.Type {
 	case token.IDENT:
+		// Check if this identifier is a registered type alias
+		if aliasTarget, ok := p.aliases[p.curToken.Literal]; ok {
+			p.nextToken()
+			return aliasTarget
+		}
 		return p.parseBasicType()
 	case token.ERROR:
 		return p.parseBasicType()
@@ -271,6 +281,9 @@ func (p *Parser) parseTypeAliasStatement() ast.Statement {
 		return nil
 	}
 
+	// Register the alias so subsequent type references can resolve it
+	p.aliases[stmt.Name.Value] = stmt.Target
+
 	if p.peekTokenIs(token.SEMICOLON) {
 		p.nextToken()
 	}
@@ -304,7 +317,14 @@ func (p *Parser) parseTypeCheck(left ast.Expression) ast.Expression {
 // This prevents consuming group terminators like ')' in as/is expressions.
 func (p *Parser) parseTypeNoAdvance() ast.Type {
 	switch p.curToken.Type {
-	case token.IDENT, token.ERROR:
+	case token.IDENT:
+		if aliasTarget, ok := p.aliases[p.curToken.Literal]; ok {
+			return aliasTarget
+		}
+		name := p.curToken.Literal
+		tok := p.curToken
+		return &ast.BasicType{Token: tok, Name: name}
+	case token.ERROR:
 		name := p.curToken.Literal
 		tok := p.curToken
 		return &ast.BasicType{Token: tok, Name: name}

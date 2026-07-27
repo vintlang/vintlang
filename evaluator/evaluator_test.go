@@ -508,3 +508,67 @@ func TestDictReduceNoDoubleCount(t *testing.T) {
 		})
 	}
 }
+
+func TestTypeAliasUsage(t *testing.T) {
+	tests := []struct {
+		input    string
+		expected interface{}
+	}{
+		{"type UserID = int; let x: UserID = 5; x", 5},
+		{"type Name = string; let n: Name = \"Alice\"; n", "Alice"},
+	}
+
+	for _, tt := range tests {
+		l := lexer.New(tt.input)
+		p := parser.New(l)
+		program := p.ParseProgram()
+		if len(p.Errors()) > 0 {
+			t.Errorf("parser errors: %v", p.Errors())
+			continue
+		}
+		env := object.NewEnvironment()
+		result := Eval(program, env)
+		if isError(result) {
+			t.Errorf("input %q: got error: %s", tt.input, result.Inspect())
+			continue
+		}
+		switch expected := tt.expected.(type) {
+		case int:
+			testIntegerObject(t, result, int64(expected))
+		case string:
+			testStringObject(t, result, expected)
+		}
+	}
+}
+
+func TestTypedLetEnforcement(t *testing.T) {
+	tests := []struct {
+		input    string
+		hasError bool
+	}{
+		{"let x: int = 5; x", false},
+		{"let x: int = \"hello\"", true},
+		{"let x: int; x", false},
+		{"let add = func(a: int, b: int): int { return a + b }; add(3, 4)", false},
+		{"let add = func(a: int, b: int): int { return a + b }; add(\"hello\", 4)", true},
+		{"type ID = int; let x: ID = 42; x", false},
+	}
+
+	for _, tt := range tests {
+		l := lexer.New(tt.input)
+		p := parser.New(l)
+		program := p.ParseProgram()
+		env := object.NewEnvironment()
+		result := Eval(program, env)
+
+		if tt.hasError {
+			if !isError(result) {
+				t.Errorf("input %q: expected error, got %s", tt.input, result.Inspect())
+			}
+		} else {
+			if isError(result) {
+				t.Errorf("input %q: unexpected error: %s", tt.input, result.Inspect())
+			}
+		}
+	}
+}

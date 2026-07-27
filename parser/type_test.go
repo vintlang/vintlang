@@ -626,6 +626,60 @@ func TestStructWithUntypedMethods(t *testing.T) {
 	}
 }
 
+func TestTypeAliasResolution(t *testing.T) {
+	input := `type UserID = int; let x: UserID = 5`
+	l := lexer.New(input)
+	p := New(l)
+	program := p.ParseProgram()
+	checkParserErrors(t, p)
+
+	if len(program.Statements) != 2 {
+		t.Fatalf("expected 2 statements, got %d", len(program.Statements))
+	}
+
+	aliasStmt, ok := program.Statements[0].(*ast.TypeAliasStatement)
+	if !ok {
+		t.Fatalf("stmt[0] not TypeAliasStatement, got %T", program.Statements[0])
+	}
+	if aliasStmt.Name.Value != "UserID" {
+		t.Errorf("alias name wrong, expected 'UserID', got %s", aliasStmt.Name.Value)
+	}
+
+	typedStmt, ok := program.Statements[1].(*ast.TypedLetStatement)
+	if !ok {
+		t.Fatalf("stmt[1] not TypedLetStatement, got %T", program.Statements[1])
+	}
+
+	// The alias should have been resolved to BasicType("int")
+	basicType, ok := typedStmt.TypeAnnotation.Type.(*ast.BasicType)
+	if !ok {
+		t.Fatalf("resolved type not BasicType, got %T", typedStmt.TypeAnnotation.Type)
+	}
+	if basicType.Name != "int" {
+		t.Errorf("resolved type name wrong, expected 'int', got %s", basicType.Name)
+	}
+}
+
+func TestTypeAliasResolutionInStruct(t *testing.T) {
+	input := `type UserID = int; struct User { id: UserID }`
+	l := lexer.New(input)
+	p := New(l)
+	program := p.ParseProgram()
+	checkParserErrors(t, p)
+
+	stmt := program.Statements[1].(*ast.StructStatement)
+	if stmt.Fields[0].Type == nil {
+		t.Fatal("field type is nil")
+	}
+	basicType, ok := stmt.Fields[0].Type.(*ast.BasicType)
+	if !ok {
+		t.Fatalf("field type not BasicType, got %T", stmt.Fields[0].Type)
+	}
+	if basicType.Name != "int" {
+		t.Errorf("field type wrong, expected 'int', got %s", basicType.Name)
+	}
+}
+
 func TestTypeCastInInfixPosition(t *testing.T) {
 	input := `let ratio: float64 = (a as float64) / (b as float64)`
 	l := lexer.New(input)

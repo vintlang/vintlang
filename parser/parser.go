@@ -76,6 +76,8 @@ type Parser struct {
 	prefixParseFns  map[token.TokenType]prefixParseFn
 	infixParseFns   map[token.TokenType]infixParseFn
 	postfixParseFns map[token.TokenType]postfixParseFn
+
+	aliases map[string]ast.Type // type aliases: type UserID = int
 }
 
 // adds error
@@ -96,7 +98,7 @@ func (p *Parser) registerPostfix(tokenType token.TokenType, fn postfixParseFn) {
 }
 
 func New(l *lexer.Lexer) *Parser {
-	p := &Parser{l: l, errors: []string{}}
+	p := &Parser{l: l, errors: []string{}, aliases: make(map[string]ast.Type)}
 
 	p.nextToken()
 	p.nextToken()
