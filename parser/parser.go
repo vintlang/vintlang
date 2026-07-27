@@ -207,9 +207,34 @@ func (p *Parser) ParseProgram() *ast.Program {
 
 	for !p.curTokenIs(token.EOF) {
 		stmt := p.parseStatement()
-		program.Statements = append(program.Statements, stmt)
+		if stmt != nil {
+			program.Statements = append(program.Statements, stmt)
+		}
 
-		p.nextToken()
+		// Skip any semicolons between statements
+		for p.curTokenIs(token.SEMICOLON) {
+			p.nextToken()
+		}
+
+		// For parse failures, always advance to avoid infinite loops
+		if stmt == nil {
+			p.nextToken()
+			continue
+		}
+
+		// For expression statements with nil expressions, always advance
+		if es, ok := stmt.(*ast.ExpressionStatement); ok && es.Expression == nil {
+			p.nextToken()
+			continue
+		}
+
+		// For successfully parsed statements: if we're already at a keyword
+		// that starts a new statement (LET, CONST, etc.), don't advance.
+		// This happens when zero-value typed declarations or type aliases
+		// consumed into the next statement's first token via parseType.
+		if !p.curTokenIs(token.EOF) && !p.isStatementStart() {
+			p.nextToken()
+		}
 	}
 	return program
 }
@@ -369,6 +394,23 @@ func (p *Parser) parsePrefixExpression() ast.Expression {
 	expression.Right = p.parseExpression(PREFIX)
 
 	return expression
+}
+
+// isStatementStart returns true if curToken is a keyword or identifier that
+// starts a new statement. Used to prevent double-advancing when parseType
+// consumed into the next statement's first token.
+func (p *Parser) isStatementStart() bool {
+	switch p.curToken.Type {
+	case token.LET, token.CONST, token.ENUM, token.STRUCT,
+		token.RETURN, token.BREAK, token.CONTINUE,
+		token.INCLUDE, token.GO, token.FUNCTION,
+		token.IF, token.WHILE, token.FOR, token.SWITCH, token.MATCH:
+		return true
+	case token.IDENT:
+		return p.curToken.Literal == "type"
+	default:
+		return false
+	}
 }
 
 func (p *Parser) noPrefixParseFnError(t token.TokenType) {

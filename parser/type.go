@@ -58,7 +58,6 @@ func (p *Parser) parseType() ast.Type {
 	case token.IDENT:
 		// Check if this identifier is a registered type alias
 		if aliasTarget, ok := p.aliases[p.curToken.Literal]; ok {
-			p.nextToken()
 			return aliasTarget
 		}
 		return p.parseBasicType()
@@ -89,7 +88,9 @@ func (p *Parser) parseBasicType() ast.Type {
 	}
 	name := p.curToken.Literal
 	tok := p.curToken
-	p.nextToken()
+	// Do NOT advance leave curToken at the type name so callers can
+	// decide whether to advance past it. Callers must call p.nextToken()
+	// after parseType if they need curToken past the type.
 	return &ast.BasicType{Token: tok, Name: name}
 }
 
@@ -114,10 +115,11 @@ func (p *Parser) parseArrayOrFixedArrayType() ast.Type {
 		if elemType == nil {
 			return nil
 		}
+		// leave curToken at element type caller advances as needed
 		return &ast.FixedArrayType{Token: tok, Size: size, ElementType: elemType}
 	}
 
-	// Slice type: []T — curToken should be ']'
+	// Slice type: []T curToken should be ']'
 	if !p.curTokenIs(token.RBRACKET) {
 		p.addError(p.l.GetFilename() + ":" + itoa(p.curToken.Line) + ": expected ']' in slice type, got " + p.curToken.Literal)
 		return nil
@@ -127,6 +129,7 @@ func (p *Parser) parseArrayOrFixedArrayType() ast.Type {
 	if elemType == nil {
 		return nil
 	}
+	// leave curToken at element type caller advances as needed
 	return &ast.ArrayType{Token: tok, ElementType: elemType}
 }
 
@@ -137,7 +140,7 @@ func (p *Parser) parseDictType() ast.Type {
 	if keyType == nil {
 		return nil
 	}
-	// After parseType, curToken should be ':'
+	p.nextToken() // advance past key type to reach ':'
 	if !p.curTokenIs(token.COLON) {
 		p.addError(p.l.GetFilename() + ":" + itoa(p.curToken.Line) +
 			": expected ':' in dict type, got " + p.curToken.Literal)
@@ -148,7 +151,7 @@ func (p *Parser) parseDictType() ast.Type {
 	if valueType == nil {
 		return nil
 	}
-	// After parseType, curToken should be '}'
+	p.nextToken() // advance past value type to reach '}'
 	if !p.curTokenIs(token.RBRACE) {
 		p.addError(p.l.GetFilename() + ":" + itoa(p.curToken.Line) +
 			": expected '}' in dict type, got " + p.curToken.Literal)
@@ -165,6 +168,7 @@ func (p *Parser) parsePointerType() ast.Type {
 	if baseType == nil {
 		return nil
 	}
+	// leave curToken at base type caller advances as needed
 	return &ast.PointerType{Token: tok, BaseType: baseType}
 }
 
@@ -175,6 +179,7 @@ func (p *Parser) parseChannelType() ast.Type {
 	if elemType == nil {
 		return nil
 	}
+	// leave curToken at element type caller advances as needed
 	return &ast.ChannelType{Token: tok, ElementType: elemType}
 }
 
@@ -199,6 +204,7 @@ func (p *Parser) parseFunctionType() ast.Type {
 			return nil
 		}
 		params = append(params, first)
+		p.nextToken() // advance past first param type
 		for p.curTokenIs(token.COMMA) {
 			p.nextToken()
 			t := p.parseType()
@@ -206,6 +212,7 @@ func (p *Parser) parseFunctionType() ast.Type {
 				return nil
 			}
 			params = append(params, t)
+			p.nextToken() // advance past param type
 		}
 	}
 
@@ -223,6 +230,7 @@ func (p *Parser) parseFunctionType() ast.Type {
 	}
 
 	returnType := p.parseType()
+	// leave curToken at return type caller advances as needed
 	return &ast.FunctionType{Token: tok, Parameters: params, ReturnType: returnType}
 }
 
@@ -237,6 +245,7 @@ func (p *Parser) parseMultiReturnType() ast.Type {
 			return nil
 		}
 		types = append(types, first)
+		p.nextToken() // advance past first type
 		for p.curTokenIs(token.COMMA) {
 			p.nextToken()
 			t := p.parseType()
@@ -244,6 +253,7 @@ func (p *Parser) parseMultiReturnType() ast.Type {
 				return nil
 			}
 			types = append(types, t)
+			p.nextToken() // advance past type
 		}
 	}
 
@@ -284,6 +294,7 @@ func (p *Parser) parseTypeAliasStatement() ast.Statement {
 	// Register the alias so subsequent type references can resolve it
 	p.aliases[stmt.Name.Value] = stmt.Target
 
+	p.nextToken() // advance past target type
 	if p.peekTokenIs(token.SEMICOLON) {
 		p.nextToken()
 	}

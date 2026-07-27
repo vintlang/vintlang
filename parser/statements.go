@@ -52,68 +52,17 @@ func (p *Parser) parseLetStatement() ast.Statement {
 	if p.peekTokenIs(token.COLON) {
 		p.nextToken() // consume ':'
 		p.nextToken()
-
-		// For simple zero-value declarations (let x: int), avoid parseType()
-		// since it would advance past the type and potentially consume the
-		// next statement. For compound types or typed values, use parseType.
-		if p.curTokenIs(token.IDENT) || p.curTokenIs(token.ERROR) {
-			// Simple type annotation: check if '=' follows (value) or not (zero value)
-			// Need to peek past the type to check for '='
-			// Save and restore: advance to peek, check, then restore
-			// Actually, simpler: just check if the type keyword is followed by '='
-			// For basic types: int, string, bool, float64, etc.
-			typeName := p.curToken.Literal
-			typeTok := p.curToken
-
-			// Check what follows this identifier — if it's '=', we have a value
-			if p.peekTokenIs(token.ASSIGN) {
-				// let x: int = 5 — curToken is 'int', parseType reads it and advances to '='
-				declaredType := p.parseType()
-				if declaredType == nil {
-					p.skipToNextStatement()
-					return nil
-				}
-				if p.curTokenIs(token.ASSIGN) {
-					p.nextToken()
-					value := p.parseExpression(LOWEST)
-					if p.peekTokenIs(token.SEMICOLON) {
-						p.nextToken()
-					}
-					return &ast.TypedLetStatement{
-						Token: tok,
-						Name:  name,
-						TypeAnnotation: &ast.TypeAnnotation{
-							Token: tok,
-							Type:  declaredType,
-						},
-						Value: value,
-					}
-				}
-			}
-
-			// Zero value: let x: int
-			declaredType := &ast.BasicType{Token: typeTok, Name: typeName}
-			if p.peekTokenIs(token.SEMICOLON) {
-				p.nextToken()
-			}
-			return &ast.TypedLetStatement{
-				Token: tok,
-				Name:  name,
-				TypeAnnotation: &ast.TypeAnnotation{
-					Token: tok,
-					Type:  declaredType,
-				},
-			}
-		}
-
-		// Compound type or unknown: use parseType (may have advancing issues
-		// with zero-value declarations but handles complex type syntax)
 		declaredType := p.parseType()
 		if declaredType == nil {
 			p.skipToNextStatement()
 			return nil
 		}
-		if p.curTokenIs(token.ASSIGN) {
+
+		// Check if '=' follows (peek past the type since parseType left
+		// curToken at the type name)
+		if p.peekTokenIs(token.ASSIGN) {
+			// Advance past type, then past '='
+			p.nextToken()
 			p.nextToken()
 			value := p.parseExpression(LOWEST)
 			if p.peekTokenIs(token.SEMICOLON) {
@@ -129,7 +78,10 @@ func (p *Parser) parseLetStatement() ast.Statement {
 				Value: value,
 			}
 		}
-		if p.peekTokenIs(token.SEMICOLON) {
+
+		// let x: type (zero value) — no '='
+		p.nextToken() // advance past type name
+		if p.curTokenIs(token.SEMICOLON) {
 			p.nextToken()
 		}
 		return &ast.TypedLetStatement{
@@ -187,6 +139,7 @@ func (p *Parser) parseConstStatement() ast.Statement {
 					p.skipToNextStatement()
 					return nil
 				}
+				p.nextToken() // advance past type name to '='
 				if p.curTokenIs(token.ASSIGN) {
 					p.nextToken()
 					value := p.parseExpression(LOWEST)
@@ -206,7 +159,8 @@ func (p *Parser) parseConstStatement() ast.Statement {
 			}
 
 			declaredType := &ast.BasicType{Token: typeTok, Name: typeName}
-			if p.peekTokenIs(token.SEMICOLON) {
+			p.nextToken() // advance past type name
+			if p.curTokenIs(token.SEMICOLON) {
 				p.nextToken()
 			}
 			return &ast.TypedLetStatement{
@@ -224,7 +178,9 @@ func (p *Parser) parseConstStatement() ast.Statement {
 			p.skipToNextStatement()
 			return nil
 		}
-		if p.curTokenIs(token.ASSIGN) {
+		if p.peekTokenIs(token.ASSIGN) {
+			p.nextToken() // advance past type
+			p.nextToken() // advance past '='
 			p.nextToken()
 			value := p.parseExpression(LOWEST)
 			if p.peekTokenIs(token.SEMICOLON) {
@@ -240,7 +196,8 @@ func (p *Parser) parseConstStatement() ast.Statement {
 				Value: value,
 			}
 		}
-		if p.peekTokenIs(token.SEMICOLON) {
+		p.nextToken() // advance past type name
+		if p.curTokenIs(token.SEMICOLON) {
 			p.nextToken()
 		}
 		return &ast.TypedLetStatement{
@@ -437,7 +394,7 @@ func (p *Parser) parseStructStatement() *ast.StructStatement {
 				// Otherwise → default value expression (back-compat)
 				if p.isTypeStart() {
 					field.Type = p.parseType()
-					// After parseType, curToken might be '=' for default value
+					p.nextToken() // advance past type
 					if p.curTokenIs(token.ASSIGN) {
 						p.nextToken()
 						field.Default = p.parseExpression(LOWEST)
