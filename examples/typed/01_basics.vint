@@ -7,7 +7,7 @@ let name: string = "VintLang"
 let count: int = 42
 let pi: float64 = 3.14159
 let data: byte = 255
-let nothing: any = nil
+let nothing: any = null
 
 // Zero-value declarations (no initializer = zero value)
 let zeroBool: bool
@@ -28,7 +28,7 @@ println("zero float:", zeroFloat)
 println("zero string:", zeroString)
 println("zero slice:", zeroSlice)
 
-// Mutability: let is immutable, mut is mutable
+// Mutability: let is immutable
 let counter: int = 0
 counter = counter + 1
 counter += 10
