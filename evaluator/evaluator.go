@@ -84,8 +84,8 @@ func Eval(node ast.Node, env *object.Environment) object.VintObject {
 		if f, ok := val.(*object.Function); ok {
 			f.Name = node.Name.Value
 		}
-		inferred := inferType(val)
-		return env.DefineTyped(node.Name.Value, val, inferred)
+		// Inferred types: don't enforce (use Define, not DefineTyped)
+		return env.Define(node.Name.Value, val)
 
 	case *ast.TypedLetStatement:
 		var val object.VintObject
@@ -111,9 +111,7 @@ func Eval(node ast.Node, env *object.Environment) object.VintObject {
 		if isError(val) {
 			return val
 		}
-		result := env.DefineConst(node.Name.Value, val)
-		env.SetDeclaredType(node.Name.Value, inferType(val))
-		return result
+		return env.DefineConst(node.Name.Value, val)
 
 	case *ast.EnumStatement:
 		return evalEnumStatement(node, env)
