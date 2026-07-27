@@ -109,8 +109,7 @@ func (p *Parser) parseLetStatement() ast.Statement {
 	}
 
 	// let x with no type, no value — error in strict mode
-	p.addError(p.l.GetFilename() + ":" + itoa(p.curToken.Line) +
-		": variable '" + name.Value + "' must have either a type annotation or an initializer")
+	p.addError("variable '" + name.Value + "' must have either a type annotation or an initializer")
 	p.skipToNextStatement()
 	return nil
 }
@@ -224,8 +223,7 @@ func (p *Parser) parseConstStatement() ast.Statement {
 		return stmt
 	}
 
-	p.addError(p.l.GetFilename() + ":" + itoa(p.curToken.Line) +
-		": constant '" + name.Value + "' must have either a type annotation or an initializer")
+	p.addError("constant '" + name.Value + "' must have either a type annotation or an initializer")
 	p.skipToNextStatement()
 	return nil
 }

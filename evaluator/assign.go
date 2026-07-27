@@ -14,7 +14,8 @@ func evalAssign(node *ast.Assign, env *object.Environment) object.VintObject {
 	// Check declared type
 	if declaredType, ok := env.GetDeclaredType(node.Name.Value); ok {
 		if !compatible(declaredType, val) {
-			return newError("TypeError: cannot assign %s to variable '%s' of type %s",
+			return newTypeError(node.Token.Line,
+				"cannot assign %s to variable '%s' of type %s",
 				val.Type(), node.Name.Value, declaredType.String())
 		}
 	}

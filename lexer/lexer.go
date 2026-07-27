@@ -296,6 +296,16 @@ func (l *Lexer) getSourceLine(lineNum int) string {
 	return ""
 }
 
+// GetSourceLine returns the source line at the given line number (1-indexed).
+func (l *Lexer) GetSourceLine(lineNum int) string {
+	return l.getSourceLine(lineNum)
+}
+
+// FormatSourceError formats an error message with source code context.
+func FormatSourceError(filename string, line, col int, msg string) string {
+	return fmt.Sprintf("%s:%d:%d: %s", filename, line, col, msg)
+}
+
 // addErrorWithContext adds an error with source code context
 func (l *Lexer) addErrorWithContext(msg string, line, column int) {
 	sourceLine := l.getSourceLine(line)

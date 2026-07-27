@@ -76,14 +76,14 @@ func (p *Parser) parseType() ast.Type {
 	case token.LPAREN:
 		return p.parseMultiReturnType()
 	default:
-		p.addError(p.l.GetFilename() + ":" + itoa(p.curToken.Line) + ": expected a type, got " + p.curToken.Literal)
+		p.addError("expected a type, got " + p.curToken.Literal)
 		return nil
 	}
 }
 
 func (p *Parser) parseBasicType() ast.Type {
 	if !p.curTokenIs(token.IDENT) && !p.curTokenIs(token.ERROR) {
-		p.addError(p.l.GetFilename() + ":" + itoa(p.curToken.Line) + ": expected type name, got " + p.curToken.Literal)
+		p.addError("expected type name, got " + p.curToken.Literal)
 		return nil
 	}
 	name := p.curToken.Literal
@@ -102,12 +102,12 @@ func (p *Parser) parseArrayOrFixedArrayType() ast.Type {
 	if p.curTokenIs(token.INT) {
 		size, err := strconv.ParseInt(p.curToken.Literal, 10, 64)
 		if err != nil {
-			p.addError(p.l.GetFilename() + ":" + itoa(p.curToken.Line) + ": invalid array size: " + p.curToken.Literal)
+			p.addError("invalid array size: " + p.curToken.Literal)
 			return nil
 		}
 		p.nextToken() // advance past size
 		if !p.curTokenIs(token.RBRACKET) {
-			p.addError(p.l.GetFilename() + ":" + itoa(p.curToken.Line) + ": expected ']' in fixed array type, got " + p.curToken.Literal)
+			p.addError("expected ']' in fixed array type, got " + p.curToken.Literal)
 			return nil
 		}
 		p.nextToken() // advance past ']'
@@ -121,7 +121,7 @@ func (p *Parser) parseArrayOrFixedArrayType() ast.Type {
 
 	// Slice type: []T curToken should be ']'
 	if !p.curTokenIs(token.RBRACKET) {
-		p.addError(p.l.GetFilename() + ":" + itoa(p.curToken.Line) + ": expected ']' in slice type, got " + p.curToken.Literal)
+		p.addError("expected ']' in slice type, got " + p.curToken.Literal)
 		return nil
 	}
 	p.nextToken() // advance past ']'
@@ -142,8 +142,7 @@ func (p *Parser) parseDictType() ast.Type {
 	}
 	p.nextToken() // advance past key type to reach ':'
 	if !p.curTokenIs(token.COLON) {
-		p.addError(p.l.GetFilename() + ":" + itoa(p.curToken.Line) +
-			": expected ':' in dict type, got " + p.curToken.Literal)
+		p.addError("expected ':' in dict type, got " + p.curToken.Literal)
 		return nil
 	}
 	p.nextToken() // advance past ':'
@@ -153,8 +152,7 @@ func (p *Parser) parseDictType() ast.Type {
 	}
 	p.nextToken() // advance past value type to reach '}'
 	if !p.curTokenIs(token.RBRACE) {
-		p.addError(p.l.GetFilename() + ":" + itoa(p.curToken.Line) +
-			": expected '}' in dict type, got " + p.curToken.Literal)
+		p.addError("expected '}' in dict type, got " + p.curToken.Literal)
 		return nil
 	}
 	return &ast.DictType{Token: tok, KeyType: keyType, ValueType: valueType}
@@ -188,8 +186,7 @@ func (p *Parser) parseFunctionType() ast.Type {
 
 	// p.nextToken() advanced past 'func', so curToken should be '('
 	if !p.curTokenIs(token.LPAREN) {
-		p.addError(p.l.GetFilename() + ":" + itoa(p.curToken.Line) +
-			": expected '(' after 'func' in function type, got " + p.curToken.Literal)
+		p.addError("expected '(' after 'func' in function type, got " + p.curToken.Literal)
 		return nil
 	}
 
@@ -217,8 +214,7 @@ func (p *Parser) parseFunctionType() ast.Type {
 
 	// curToken should be ')' now
 	if !p.curTokenIs(token.RPAREN) {
-		p.addError(p.l.GetFilename() + ":" + itoa(p.curToken.Line) +
-			": expected ')' in function type, got " + p.curToken.Literal)
+		p.addError("expected ')' in function type, got " + p.curToken.Literal)
 		return nil
 	}
 	p.nextToken() // advance past ')'
@@ -258,8 +254,7 @@ func (p *Parser) parseMultiReturnType() ast.Type {
 
 	// curToken should be ')' now
 	if !p.curTokenIs(token.RPAREN) {
-		p.addError(p.l.GetFilename() + ":" + itoa(p.curToken.Line) +
-			": expected ')' in multi-return type, got " + p.curToken.Literal)
+		p.addError("expected ')' in multi-return type, got " + p.curToken.Literal)
 		return nil
 	}
 	p.nextToken() // advance past ')'
@@ -342,7 +337,7 @@ func (p *Parser) parseTypeNoAdvance() ast.Type {
 		// For compound types, use parseType (may have advancing issues inside groups)
 		return p.parseType()
 	default:
-		p.addError(p.l.GetFilename() + ":" + itoa(p.curToken.Line) + ": expected a type, got " + p.curToken.Literal)
+		p.addError("expected a type, got " + p.curToken.Literal)
 		return nil
 	}
 }

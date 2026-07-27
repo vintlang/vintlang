@@ -92,8 +92,7 @@ func (p *Parser) parseTypedFunctionParameters() ([]*ast.TypedParameter, bool) {
 		}
 
 		if p.curToken.Type != token.IDENT {
-			p.addError(p.l.GetFilename() + ":" + itoa(p.curToken.Line) +
-				": expected parameter name, got " + p.curToken.Literal)
+			p.addError("expected parameter name, got " + p.curToken.Literal)
 			return nil, false
 		}
 
@@ -115,8 +114,7 @@ func (p *Parser) parseTypedFunctionParameters() ([]*ast.TypedParameter, bool) {
 			tp.Default = p.parseExpression(LOWEST)
 			hasDefaults = true
 		} else if hasDefaults {
-			p.addError(p.l.GetFilename() + ":" + itoa(p.curToken.Line) +
-				": non-default parameter cannot appear after a default parameter")
+			p.addError("non-default parameter cannot appear after a default parameter")
 			return nil, false
 		}
 
@@ -131,8 +129,7 @@ func (p *Parser) parseTypedFunctionParameters() ([]*ast.TypedParameter, bool) {
 		// If we're at an IDENT, the loop will continue parsing it.
 		// But we MUST have a comma before the next param.
 		if !p.curTokenIs(token.COMMA) && !p.peekTokenIs(token.RPAREN) && !p.peekTokenIs(token.COMMA) {
-			p.addError(p.l.GetFilename() + ":" + itoa(p.curToken.Line) +
-				": expected ',' or ')' after parameter, got " + p.peekToken.Literal)
+			p.addError("expected ',' or ')' after parameter, got " + p.peekToken.Literal)
 			return nil, false
 		}
 

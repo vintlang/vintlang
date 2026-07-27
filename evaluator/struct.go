@@ -54,7 +54,7 @@ func instantiateStruct(structDef *object.Struct, fieldArgs map[string]object.Vin
 		if val, ok := fieldArgs[field.Name]; ok {
 			// User provided a value for this field
 			if field.Type != nil && !compatible(field.Type, val) {
-				return newError("TypeError: field '%s' in struct '%s' expects %s, got %s",
+				return newTypeError(line, "field '%s' in struct '%s' expects %s, got %s",
 					field.Name, structDef.Name, field.Type.String(), val.Type())
 			}
 			instanceEnv.Define(field.Name, val)
@@ -100,7 +100,7 @@ func callStructMethod(instance *object.StructInstance, methodName string, args [
 	for i, arg := range args {
 		if i < len(method.ParamTypes) && method.ParamTypes[i] != nil {
 			if !compatible(method.ParamTypes[i], arg) {
-				return newError("TypeError: parameter '%s' in method '%s' expects %s, got %s",
+				return newTypeError(line, "parameter '%s' in method '%s' expects %s, got %s",
 					method.Parameters[i].Value, methodName, method.ParamTypes[i].String(), arg.Type())
 			}
 		}
@@ -136,7 +136,7 @@ func callStructMethod(instance *object.StructInstance, methodName string, args [
 	// Check return type
 	if method.ReturnType != nil && !isError(returnValue) {
 		if !compatible(method.ReturnType, returnValue) {
-			return newError("TypeError: method '%s' returns %s, but body returned %s",
+			return newTypeError(line, "method '%s' returns %s, but body returned %s",
 				methodName, method.ReturnType.String(), returnValue.Type())
 		}
 	}

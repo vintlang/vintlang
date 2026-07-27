@@ -2,6 +2,7 @@ package parser
 
 import (
 	"fmt"
+	"strings"
 
 	"github.com/vintlang/vintlang/ast"
 	"github.com/vintlang/vintlang/lexer"
@@ -80,9 +81,31 @@ type Parser struct {
 	aliases map[string]ast.Type // type aliases: type UserID = int
 }
 
-// adds error
+// sourceLine returns the source line at the given line number.
+func (p *Parser) sourceLine(line int) string {
+	return p.l.GetSourceLine(line)
+}
+
+// formatErr formats an error message with source code context.
+// Format: filename:line:col: message\n    source line\n    ^(position)
+func (p *Parser) formatErr(line, col int, msg string) string {
+	src := p.sourceLine(line)
+	if src != "" && col > 0 {
+		caret := strings.Repeat(" ", col-1) + "^"
+		return fmt.Sprintf("%s:%d:%d: %s\n    %s\n    %s",
+			p.l.GetFilename(), line, col, msg, src, caret)
+	}
+	return fmt.Sprintf("%s:%d: %s", p.l.GetFilename(), line, msg)
+}
+
+// addError adds an error message at the current token position.
 func (p *Parser) addError(msg string) {
-	p.errors = append(p.errors, msg)
+	p.errors = append(p.errors, p.formatErr(p.curToken.Line, p.curToken.Column, msg))
+}
+
+// syntaxError is an alias for addError with source context.
+func (p *Parser) syntaxError(msg string) {
+	p.addError(msg)
 }
 
 func (p *Parser) registerPrefix(tokenType token.TokenType, fn prefixParseFn) {
@@ -301,18 +324,16 @@ func (p *Parser) peekError(t token.TokenType) {
 		if kw == "" {
 			kw = p.peekToken.Literal
 		}
-		msg := fmt.Sprintf("%s:%d: '%s' is a reserved keyword and cannot be used as an identifier. Try a different name, e.g. '%s_val' or 'my_%s'",
-			p.l.GetFilename(), p.peekToken.Line, kw, kw, kw)
-		p.errors = append(p.errors, msg)
+		p.errors = append(p.errors, p.formatErr(p.peekToken.Line, p.peekToken.Column,
+			fmt.Sprintf("'%s' is a reserved keyword and cannot be used as an identifier. Try a different name, e.g. '%s_val' or 'my_%s'", kw, kw, kw)))
 		return
 	}
-	msg := fmt.Sprintf("%s:%d: Expected next token to be %s, got %s instead", p.l.GetFilename(), p.peekToken.Line, t, p.peekToken.Type)
-	p.errors = append(p.errors, msg)
+	p.errors = append(p.errors, p.formatErr(p.peekToken.Line, p.peekToken.Column,
+		fmt.Sprintf("Expected next token to be %s, got %s instead", t, p.peekToken.Type)))
 }
 
 func (p *Parser) AddErrorWithContext(msg string, line int) {
-	contextMsg := fmt.Sprintf("%s:%d: %s", p.l.GetFilename(), line, msg)
-	p.errors = append(p.errors, contextMsg)
+	p.errors = append(p.errors, p.formatErr(line, 1, msg))
 }
 
 // Synchronize parser after error - skip to next statement boundary
@@ -443,13 +464,12 @@ func (p *Parser) noPrefixParseFnError(t token.TokenType) {
 		if kw == "" {
 			kw = p.curToken.Literal
 		}
-		msg := fmt.Sprintf("%s:%d: '%s' is a reserved keyword and cannot be used as a value or identifier here",
-			p.l.GetFilename(), p.curToken.Line, kw)
-		p.errors = append(p.errors, msg)
+		p.errors = append(p.errors, p.formatErr(p.curToken.Line, p.curToken.Column,
+			fmt.Sprintf("'%s' is a reserved keyword and cannot be used as a value or identifier here", kw)))
 		return
 	}
-	msg := fmt.Sprintf("%s:%d: Unexpected token '%s' - this token cannot start an expression. Check for missing operands or invalid syntax", p.l.GetFilename(), p.curToken.Line, t)
-	p.errors = append(p.errors, msg)
+	p.errors = append(p.errors, p.formatErr(p.curToken.Line, p.curToken.Column,
+		fmt.Sprintf("Unexpected token '%s' - this token cannot start an expression", t)))
 }
 
 // infix expressions
@@ -485,13 +505,12 @@ func (p *Parser) noInfixParseFnError(t token.TokenType) {
 		if kw == "" {
 			kw = p.curToken.Literal
 		}
-		msg := fmt.Sprintf("%s:%d: '%s' is a reserved keyword and cannot be used in this context. Check syntax for operators, expressions, or missing semicolon",
-			p.l.GetFilename(), p.curToken.Line, kw)
-		p.errors = append(p.errors, msg)
+		p.errors = append(p.errors, p.formatErr(p.curToken.Line, p.curToken.Column,
+			fmt.Sprintf("'%s' is a reserved keyword and cannot be used in this context", kw)))
 		return
 	}
-	msg := fmt.Sprintf("%s:%d: Unexpected token '%s' - cannot be used in this context. Check syntax for operators, expressions, or missing semicolon", p.l.GetFilename(), p.curToken.Line, t)
-	p.errors = append(p.errors, msg)
+	p.errors = append(p.errors, p.formatErr(p.curToken.Line, p.curToken.Column,
+		fmt.Sprintf("Unexpected token '%s' in this position", t)))
 }
 
 func (p *Parser) parseGroupedExpression() ast.Expression {

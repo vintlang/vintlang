@@ -95,7 +95,8 @@ func Eval(node ast.Node, env *object.Environment) object.VintObject {
 				return val
 			}
 			if !compatible(node.TypeAnnotation.Type, val) {
-				return newError("TypeError: cannot assign %s to variable '%s' of type %s",
+				return newTypeError(node.Token.Line,
+					"cannot assign %s to variable '%s' of type %s",
 					val.Type(), node.Name.Value, node.TypeAnnotation.String())
 			}
 		} else {
@@ -550,6 +551,18 @@ func newError(format string, a ...any) *object.Error {
 	return &object.Error{Message: fmt.Sprintf(format, a...)}
 }
 
+// newLineError creates an error with a source line prefix.
+func newLineError(line int, format string, a ...any) *object.Error {
+	msg := fmt.Sprintf(format, a...)
+	return &object.Error{Message: fmt.Sprintf("line %d: %s", line, msg)}
+}
+
+// newTypeError creates a type error with source location.
+func newTypeError(line int, format string, a ...any) *object.Error {
+	msg := fmt.Sprintf(format, a...)
+	return &object.Error{Message: fmt.Sprintf("TypeError at line %d: %s", line, msg)}
+}
+
 // Helper function to check if an object is an error
 func isError(obj object.VintObject) bool {
 	if obj != nil {
@@ -582,7 +595,7 @@ func applyFunction(fn object.VintObject, args []object.VintObject, line int) obj
 			if i < len(fn.ParamTypes) && fn.ParamTypes[i] != nil {
 				if !compatible(fn.ParamTypes[i], arg) {
 					paramName := fn.Parameters[i].Value
-					return newError("TypeError: parameter '%s' expects %s, got %s",
+					return newTypeError(line, "parameter '%s' expects %s, got %s",
 						paramName, fn.ParamTypes[i].String(), arg.Type())
 				}
 			}
@@ -602,7 +615,7 @@ func applyFunction(fn object.VintObject, args []object.VintObject, line int) obj
 		// Check return type (skip if result is an error)
 		if fn.ReturnType != nil && !isError(result) {
 			if !compatible(fn.ReturnType, result) {
-				return newError("TypeError: function returns %s, but body returned %s",
+				return newTypeError(line, "function returns %s, but body returned %s",
 					fn.ReturnType.String(), result.Type())
 			}
 		}
