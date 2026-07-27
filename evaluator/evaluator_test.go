@@ -552,6 +552,8 @@ func TestTypedLetEnforcement(t *testing.T) {
 		{"let add = func(a: int, b: int): int { return a + b }; add(3, 4)", false},
 		{"let add = func(a: int, b: int): int { return a + b }; add(\"hello\", 4)", true},
 		{"type ID = int; let x: ID = 42; x", false},
+		{"struct Calc { func add(x: int, y: int): int { return x + y } }; let c = Calc(); c.add(3, 4)", false},
+		{"struct Calc { func add(x: int, y: int): int { return x + y } }; let c = Calc(); c.add(\"hi\", 4)", true},
 	}
 
 	for _, tt := range tests {

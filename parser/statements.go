@@ -398,39 +398,34 @@ func (p *Parser) parseStructMethod() *ast.StructMethod {
 		return nil
 	}
 
-	// Parse parameters inline (similar to parseFunctionParameters but for struct methods)
-	hasDefaults := false
-	for !p.peekTokenIs(token.RPAREN) {
-		p.nextToken()
-		if p.curTokenIs(token.COMMA) {
-			continue
-		}
-		ident := &ast.Identifier{Token: p.curToken, Value: p.curToken.Literal}
-		method.Parameters = append(method.Parameters, ident)
-
-		if p.peekTokenIs(token.ASSIGN) {
-			p.nextToken() // Consume '='
-			p.nextToken() // Parse default expression
-			method.Defaults[ident.Value] = p.parseExpression(LOWEST)
-			hasDefaults = true
-		} else {
-			if hasDefaults {
-				p.addError("Non-default parameter cannot appear after a default parameter")
-				return nil
-			}
-		}
-
-		if !(p.peekTokenIs(token.COMMA) || p.peekTokenIs(token.RPAREN)) {
-			return nil
-		}
-	}
-
-	if !p.expectPeek(token.RPAREN) {
+	// Parse parameters using the typed function parameters logic
+	typedParams, _ := p.parseTypedFunctionParameters()
+	if typedParams == nil {
 		return nil
 	}
 
+	// Convert TypedParameters to simple identifiers + types
+	for _, tp := range typedParams {
+		method.Parameters = append(method.Parameters, tp.Identifier)
+		method.ParamTypes = append(method.ParamTypes, tp.Type)
+		if tp.Default != nil {
+			method.Defaults[tp.Identifier.Value] = tp.Default
+		}
+	}
+
+	// Check for return type: func method(): returnType { ... }
+	var returnType ast.Type
+	if p.peekTokenIs(token.COLON) {
+		p.nextToken() // consume ':'
+		p.nextToken() // move to return type
+		returnType = p.parseType()
+	}
+	method.ReturnType = returnType
+
 	// Expect opening brace for body
-	if !p.expectPeek(token.LBRACE) {
+	if p.curTokenIs(token.LBRACE) {
+		// Already at '{' (e.g. after return type was parsed)
+	} else if !p.expectPeek(token.LBRACE) {
 		return nil
 	}
 

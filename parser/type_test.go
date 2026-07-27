@@ -626,6 +626,54 @@ func TestStructWithUntypedMethods(t *testing.T) {
 	}
 }
 
+func TestStructMethodTypedParams(t *testing.T) {
+	input := `struct Calc { func add(x: int, y: int): int { return x + y } }`
+	l := lexer.New(input)
+	p := New(l)
+	program := p.ParseProgram()
+	checkParserErrors(t, p)
+
+	stmt := program.Statements[0].(*ast.StructStatement)
+	if len(stmt.Methods) != 1 {
+		t.Fatalf("expected 1 method, got %d", len(stmt.Methods))
+	}
+
+	m := stmt.Methods[0]
+	if m.Name.Value != "add" {
+		t.Errorf("method name wrong, expected 'add', got %s", m.Name.Value)
+	}
+	if len(m.Parameters) != 2 {
+		t.Fatalf("expected 2 params, got %d", len(m.Parameters))
+	}
+	if len(m.ParamTypes) != 2 {
+		t.Fatalf("expected 2 param types, got %d", len(m.ParamTypes))
+	}
+	if m.ParamTypes[0].String() != "int" {
+		t.Errorf("param[0] type wrong, expected 'int', got %s", m.ParamTypes[0].String())
+	}
+	if m.ReturnType == nil || m.ReturnType.String() != "int" {
+		t.Errorf("return type wrong, expected 'int', got %v", m.ReturnType)
+	}
+}
+
+func TestStructMethodUntypedBackwardCompat(t *testing.T) {
+	input := `struct Point { x: int, y: int, func area() { return 0 } }`
+	l := lexer.New(input)
+	p := New(l)
+	program := p.ParseProgram()
+	checkParserErrors(t, p)
+
+	stmt := program.Statements[0].(*ast.StructStatement)
+	if len(stmt.Methods) != 1 {
+		t.Fatalf("expected 1 method, got %d", len(stmt.Methods))
+	}
+
+	m := stmt.Methods[0]
+	if len(m.ParamTypes) != 0 {
+		t.Fatalf("expected 0 param types for untyped method, got %d", len(m.ParamTypes))
+	}
+}
+
 func TestTypeAliasResolution(t *testing.T) {
 	input := `type UserID = int; let x: UserID = 5`
 	l := lexer.New(input)

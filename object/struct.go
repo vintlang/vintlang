@@ -19,6 +19,8 @@ type StructField struct {
 type StructMethod struct {
 	Name       string
 	Parameters []*ast.Identifier
+	ParamTypes []ast.Type      // parallel to Parameters, nil for untyped
+	ReturnType ast.Type        // nil for void/untyped
 	Defaults   map[string]ast.Expression
 	Body       *ast.BlockStatement
 }
