@@ -1,6 +1,11 @@
 package ast
 
-import "github.com/vintlang/vintlang/token"
+import (
+	"fmt"
+	"strings"
+
+	"github.com/vintlang/vintlang/token"
+)
 
 // Type system foundation for VintLang
 type Type interface {
@@ -80,6 +85,76 @@ func (dt *DictType) String() string {
 	return "{" + dt.KeyType.String() + ": " + dt.ValueType.String() + "}"
 }
 
+// Fixed-size array type: [4]byte
+type FixedArrayType struct {
+	Token       token.Token // the '[' token
+	Size        int64       // compile-time known size
+	ElementType Type
+}
+
+func (fat *FixedArrayType) expressionNode() {}
+func (fat *FixedArrayType) typeNode()       {}
+func (fat *FixedArrayType) TokenLiteral() string { return fat.Token.Literal }
+func (fat *FixedArrayType) String() string {
+	return fmt.Sprintf("[%d]%s", fat.Size, fat.ElementType.String())
+}
+
+// Pointer type: *int
+type PointerType struct {
+	Token    token.Token // the '*' token
+	BaseType Type
+}
+
+func (pt *PointerType) expressionNode() {}
+func (pt *PointerType) typeNode()       {}
+func (pt *PointerType) TokenLiteral() string { return pt.Token.Literal }
+func (pt *PointerType) String() string {
+	return "*" + pt.BaseType.String()
+}
+
+// Channel type: chan string
+type ChannelType struct {
+	Token       token.Token // the 'chan' token
+	ElementType Type
+}
+
+func (ct *ChannelType) expressionNode() {}
+func (ct *ChannelType) typeNode()       {}
+func (ct *ChannelType) TokenLiteral() string { return ct.Token.Literal }
+func (ct *ChannelType) String() string {
+	return "chan " + ct.ElementType.String()
+}
+
+// Multi-return type: (int, error)
+type MultiReturnType struct {
+	Token token.Token // the '(' token
+	Types []Type
+}
+
+func (mrt *MultiReturnType) expressionNode() {}
+func (mrt *MultiReturnType) typeNode()       {}
+func (mrt *MultiReturnType) TokenLiteral() string { return mrt.Token.Literal }
+func (mrt *MultiReturnType) String() string {
+	parts := make([]string, len(mrt.Types))
+	for i, t := range mrt.Types {
+		parts[i] = t.String()
+	}
+	return "(" + strings.Join(parts, ", ") + ")"
+}
+
+// Type alias statement: type UserID = int
+type TypeAliasStatement struct {
+	Token  token.Token // the 'type' token
+	Name   *Identifier
+	Target Type
+}
+
+func (tas *TypeAliasStatement) statementNode()       {}
+func (tas *TypeAliasStatement) TokenLiteral() string { return tas.Token.Literal }
+func (tas *TypeAliasStatement) String() string {
+	return "type " + tas.Name.String() + " = " + tas.Target.String()
+}
+
 // Union type: int | string | bool
 type UnionType struct {
 	Token token.Token // the first type token
@@ -145,13 +220,17 @@ func (tls *TypedLetStatement) String() string {
 	if tls.TypeAnnotation != nil {
 		result += tls.TypeAnnotation.String()
 	}
-	result += " = " + tls.Value.String() + ";"
+	if tls.Value != nil {
+		result += " = " + tls.Value.String()
+	}
+	result += ";"
 	return result
 }
 
 // Enhanced function literal with typed parameters and return type
 type TypedFunctionLiteral struct {
 	Token      token.Token // the 'func' token
+	Name       string      // optional function name
 	Parameters []*TypedParameter
 	ReturnType Type // optional return type annotation
 	Body       *BlockStatement
