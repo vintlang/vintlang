@@ -22,6 +22,7 @@ func evalStructStatement(node *ast.StructStatement, env *object.Environment) obj
 	for _, f := range node.Fields {
 		field := object.StructField{
 			Name:    f.Name.Value,
+			Type:    f.Type,
 			Default: f.Default,
 		}
 		structDef.Fields = append(structDef.Fields, field)
@@ -50,6 +51,10 @@ func instantiateStruct(structDef *object.Struct, fieldArgs map[string]object.Vin
 	for _, field := range structDef.Fields {
 		if val, ok := fieldArgs[field.Name]; ok {
 			// User provided a value for this field
+			if field.Type != nil && !compatible(field.Type, val) {
+				return newError("TypeError: field '%s' in struct '%s' expects %s, got %s",
+					field.Name, structDef.Name, field.Type.String(), val.Type())
+			}
 			instanceEnv.Define(field.Name, val)
 		} else if field.Default != nil {
 			// Use the default value
