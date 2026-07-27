@@ -182,6 +182,7 @@ func (es *EnumStatement) String() string {
 // StructField represents a field declaration inside a struct
 type StructField struct {
 	Name    *Identifier // field name
+	Type    Type        // optional type annotation
 	Default Expression  // optional default value
 }
 
