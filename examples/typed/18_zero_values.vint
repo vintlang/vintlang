@@ -1,131 +1,72 @@
 // VintLang Zero Values
 // Demonstrates Go-style zero values for all types
 
-// ============================================================
-// 1. Primitive zero values
-// ============================================================
+// Primitive zero values
+let zBool: bool;
+let zInt: int;
+let zString: string;
+let zFloat64: float64;
+let zAny: any;
 
-let zBool: bool
-let zInt: int
-let zInt8: int8
-let zInt16: int16
-let zInt32: int32
-let zInt64: int64
-let zUint: uint
-let zUint8: uint8
-let zUint16: uint16
-let zUint32: uint32
-let zUint64: uint64
-let zByte: byte
-let zFloat32: float32
-let zFloat64: float64
-let zString: string
-let zAny: any
+println("bool:", zBool);
+println("int:", zInt);
+println("float64:", zFloat64);
+println("string:", zString);
+println("any:", zAny);
 
-println("bool:", zBool)
-println("int:", zInt)
-println("int8:", zInt8)
-println("int64:", zInt64)
-println("uint:", zUint)
-println("byte:", zByte)
-println("float32:", zFloat32)
-println("float64:", zFloat64)
-println("string:", zString)
-println("any:", zAny)
+// Compound type zero values
+let zSlice: []int;
+let zDict: {string: int};
+let zPointer: *int;
+let zFunc: func() int;
 
-// ============================================================
-// 2. Compound type zero values
-// ============================================================
+println("slice:", zSlice);
+println("dict:", zDict);
+println("pointer:", zPointer);
+println("func:", zFunc);
 
-let zSlice: []int
-let zArray: [5]int
-let zDict: {string: int}
-let zPointer: *int
-let zChan: chan int
-let zFunc: func(): int
-
-println("slice:", zSlice)
-println("array:", zArray)
-println("dict:", zDict)
-println("pointer:", zPointer)
-println("chan:", zChan)
-println("func:", zFunc)
-
-// ============================================================
-// 3. Struct zero values
-// ============================================================
-
+// Struct zero values
 struct Config {
-    host: string
-    port: int
-    debug: bool
-    rate: float64
-}
+    host: string,
+    port: int,
+    debugMode: bool
+};
 
-let zCfg: Config
-println("struct host:", zCfg.host)
-println("struct port:", zCfg.port)
-println("struct debug:", zCfg.debug)
-println("struct rate:", zCfg.rate)
+let zCfg: Config;
+println("struct host:", zCfg.host);
+println("struct port:", zCfg.port);
+println("struct debug:", zCfg.debugMode);
 
-// ============================================================
-// 4. Nested zero values
-// ============================================================
-
+// Nested zero values
 struct Inner {
-    value: int
+    value: int,
     label: string
-}
+};
 
 struct Outer {
-    inner: Inner
-    items: []int
+    inner: Inner,
+    items: []int,
     meta: {string: any}
-}
+};
 
-let zOuter: Outer
-println("outer.inner.value:", zOuter.inner.value)
-println("outer.inner.label:", zOuter.inner.label)
-println("outer.items:", zOuter.items)
-println("outer.meta:", zOuter.meta)
+let zOuter: Outer;
+println("outer.inner.value:", zOuter.inner.value);
+println("outer.items:", zOuter.items);
 
-// ============================================================
-// 5. Zero value in struct initialization
-// ============================================================
-
+// Zero value in struct initialization
 struct User {
-    id: int
-    name: string
-    email: string
+    id: int,
+    name: string,
+    email: string,
     role: string
-}
+};
 
-// Partial initialization - missing fields get zero values
-let u: User = User{id: 1, name: "Alice"}
-println("user:", u.name, u.email, u.role)
-
-// ============================================================
-// 6. Using zero values for initialization
-// ============================================================
-
-func initCounter(): int {
-    let count: int  // zero value
-    // count is 0, explicit return not needed for 0
-    return count
-}
-
-let counter: int = initCounter()
-println("counter:", counter)
+let u: User = User{id: 1, name: "Alice"};
+println("user:", u.name, u.email, u.role);
 
 // nil slice is safe to append
-let items: []int
-items = append(items, 1)
-items = append(items, 2)
-items = append(items, 3)
-println("items from nil:", items)
-
-// nil map needs initialization
-let scores: {string: int}
-// scores["alice"] = 95  // runtime panic: assignment to nil map
-scores = {"alice": 95}  // reassign with literal
-println("scores:", scores)
+let items: []int;
+items = append(items, 1);
+items = append(items, 2);
+items = append(items, 3);
+println("items from nil:", items);

@@ -84,10 +84,8 @@ func (p *Parser) parseLetStatement() ast.Statement {
 		}
 
 		// let x: type (zero value) — no '='
-		p.nextToken() // advance past type name
-		if p.curTokenIs(token.SEMICOLON) {
-			p.nextToken()
-		}
+		// DON'T advance past the type name — the caller (ParseProgram or
+		// parseBlockStatement) will handle advancement via its own p.nextToken().
 		return &ast.TypedLetStatement{
 			Token: tok,
 			Name:  name,
@@ -259,7 +257,11 @@ func (p *Parser) parseBlockStatement() *ast.BlockStatement {
 		}
 		stmt := p.parseStatement()
 		block.Statements = append(block.Statements, stmt)
+		// Advance past the statement and consume trailing semicolons
 		p.nextToken()
+		for p.curTokenIs(token.SEMICOLON) {
+			p.nextToken()
+		}
 	}
 
 	return block
@@ -371,6 +373,7 @@ func (p *Parser) parseStructStatement() *ast.StructStatement {
 	p.nextToken() // Move past {
 
 	// Parse struct members (fields and methods)
+	wasMethod := false
 	for !p.curTokenIs(token.RBRACE) && !p.curTokenIs(token.EOF) {
 		// Check if this is a method (starts with 'func')
 		if p.curTokenIs(token.FUNCTION) {
@@ -379,6 +382,7 @@ func (p *Parser) parseStructStatement() *ast.StructStatement {
 				return nil
 			}
 			stmt.Methods = append(stmt.Methods, *method)
+			wasMethod = true
 
 			// Skip comma if present after method
 			if p.peekTokenIs(token.COMMA) {
@@ -388,6 +392,7 @@ func (p *Parser) parseStructStatement() *ast.StructStatement {
 			// It's a field
 			field := ast.StructField{}
 			field.Name = &ast.Identifier{Token: p.curToken, Value: p.curToken.Literal}
+			wasMethod = false
 
 			// Check for ':' — could be type annotation or default value
 			if p.peekTokenIs(token.COLON) {
@@ -421,6 +426,11 @@ func (p *Parser) parseStructStatement() *ast.StructStatement {
 			return nil
 		}
 
+		// After a field, curToken may be '}' (struct close). Don't advance.
+		// After a method, curToken is '}' (method close). Advance to next token.
+		if p.curTokenIs(token.RBRACE) && !wasMethod {
+			break
+		}
 		p.nextToken()
 	}
 

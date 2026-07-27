@@ -1,90 +1,62 @@
 // VintLang Typed Arrays
 // Demonstrates slices (dynamic) and fixed-size arrays
 
-// ============================================================
-// 1. Slices (dynamic arrays)
-// ============================================================
+// Slices (dynamic arrays)
+let scores: []int = [85, 92, 78, 95, 88];
+let names: []string = ["Alice", "Bob", "Carol"];
 
-// Typed slice declarations
-let scores: []int = [85, 92, 78, 95, 88]
-let names: []string = ["Alice", "Bob", "Carol"]
-let coords: []float64 = [1.5, 2.5, 3.5]
-
-println("scores:", scores)
-println("names:", names)
+println("scores:", scores);
+println("names:", names);
 
 // Zero-value slice is nil
-let empty: []int
-println("nil slice:", empty, "len:", len(empty))
+let empty: []int;
+println("nil slice:", empty, "len:", len(empty));
 
-// Append and slice operations
-scores = append(scores, 100)
-println("after append:", scores)
+// Append operations
+scores = append(scores, 100);
+println("after append:", scores);
 
-let topScores: []int = scores[0:3]
-println("top 3:", topScores)
+let topScores: []int = scores[0:3];
+println("top 3:", topScores);
 
-// 2D slices (jagged arrays)
+// 2D slices
 let matrix: [][]int = [
     [1, 2, 3],
     [4, 5, 6],
     [7, 8, 9]
-]
-println("matrix[1][2]:", matrix[1][2])
+];
+println("matrix[1][2]:", matrix[1][2]);
 
-// ============================================================
-// 2. Fixed-size arrays
-// ============================================================
+// Fixed-size arrays
+let rgb: [3]int = [255, 0, 128];
+let ip: [4]byte = [192, 168, 1, 1];
+let days: [7]string = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
 
-let rgb: [3]int = [255, 0, 128]
-let ip: [4]byte = [192, 168, 1, 1]
-let days: [7]string = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"]
-
-println("RGB:", rgb)
-println("IP:", ip[0], ".", ip[1], ".", ip[2], ".", ip[3])
-println("Today:", days[0])
+println("RGB:", rgb);
+println("Today:", days[0]);
 
 // Zero-value fixed array
-let zeros: [5]int
-println("zero array:", zeros)
+let zeros: [5]int;
+println("zero array:", zeros);
 
-// ============================================================
-// 3. Slice vs array distinction
-// ============================================================
-
-// Fixed arrays have compile-time known length
-func sumFixed(arr: [5]int): int {
-    let total: int = 0
+// Functions with arrays
+let sumSlice = func(arr: []int): int {
+    let total: int = 0;
     for v in arr {
-        total = total + v
-    }
-    return total
-}
+        total = total + v;
+    };
+    return total;
+};
 
-// Slices have runtime length
-func sumSlice(arr: []int): int {
-    let total: int = 0
-    for v in arr {
-        total = total + v
-    }
-    return total
-}
-
-println("sum fixed:", sumFixed([5]int{1, 2, 3, 4, 5}))
-println("sum slice:", sumSlice([1, 2, 3, 4, 5]))
-
-// Slice from array
-let fixed: [4]int = [10, 20, 30, 40]
-let slice: []int = fixed[:]
-println("slice from array:", slice)
+println("sum slice:", sumSlice([1, 2, 3, 4, 5]));
 
 // Multi-dimensional fixed array
 let grid: [3][3]int = [
     [1, 0, 0],
     [0, 1, 0],
     [0, 0, 1]
-]
-println("identity matrix:")
+];
+println("identity matrix:");
 for row in grid {
-    println(" ", row)
-}
+    println(" ", row);
+};

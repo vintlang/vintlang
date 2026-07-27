@@ -1,449 +1,76 @@
-// VintLang Type System Showcase
-// Comprehensive example using every type in the system
+// VintLang Type System Showcase (v2 preview)
+// Demonstrates the type system with supported features
 
-import os
-import json
-import time
-import math
-import crypto
-
-// ============================================================
 // Type Aliases
-// ============================================================
+type UserID = int;
+type JSON = {string: any};
 
-type UserID = int
-type OrderID = string
-type Price = float64
-type Quantity = int
-type Timestamp = int64
-type JSON = {string: any}
-
-// ============================================================
 // Enums
-// ============================================================
-
-enum OrderStatus: string {
-    Pending = "pending"
-    Confirmed = "confirmed"
-    Shipped = "shipped"
+enum OrderStatus {
+    Pending = "pending",
+    Confirmed = "confirmed",
+    Shipped = "shipped",
     Delivered = "delivered"
-    Cancelled = "cancelled"
-}
+};
 
-enum UserRole: int {
-    Admin = 1
-    Moderator = 2
-    Member = 3
-    Guest = 4
-}
-
-enum PaymentMethod: string {
-    CreditCard = "credit_card"
-    DebitCard = "debit_card"
-    PayPal = "paypal"
-    Crypto = "crypto"
-}
-
-// ============================================================
 // Structs
-// ============================================================
-
 struct Address {
-    street: string
-    city: string
-    state: string
-    zipCode: string
+    street: string,
+    city: string,
+    state: string,
+    zipCode: string,
     country: string = "US"
-}
+};
 
 struct User {
-    id: UserID
-    name: string
-    email: string
-    role: UserRole
-    address: ?Address
-    createdAt: Timestamp
-    active: bool
-}
+    id: UserID,
+    name: string,
+    email: string,
+    address: Address,
+    createdAt: int64
+};
 
 struct OrderItem {
-    productID: string
-    name: string
-    price: Price
-    quantity: Quantity
-}
+    productID: string,
+    name: string,
+    price: float64,
+    quantity: int
+};
 
 struct Order {
-    id: OrderID
-    userID: UserID
+    id: string,
+    userID: UserID,
     items: []OrderItem
-    total: Price
-    status: OrderStatus
-    paymentMethod: PaymentMethod
-    shippingAddress: Address
-    createdAt: Timestamp
-    updatedAt: Timestamp
-}
+};
 
-struct InventoryItem {
-    productID: string
-    name: string
-    description: string
-    price: Price
-    stock: int
-    reserved: int
-}
-
-struct Transaction {
-    id: string
-    orderID: OrderID
-    amount: Price
-    method: PaymentMethod
-    status: string
-    timestamp: Timestamp
-}
-
-// ============================================================
-// Functions with complex signatures
-// ============================================================
-
-func calculateTotal(items: []OrderItem): Price {
-    let total: Price = 0.0
+// Functions with typed parameters
+let calculateTotal = func(items: []OrderItem): float64 {
+    let total: float64 = 0.0;
     for item in items {
-        total = total + (item.price * float64(item.quantity))
-    }
-    return total
-}
+        total = total + (item.price * float64(item.quantity));
+    };
+    return total;
+};
 
-func validateOrder(items: []OrderItem): ?error {
-    if len(items) == 0 {
-        return error("order must contain at least one item")
-    }
-    for item in items {
-        if item.quantity <= 0 {
-            return error("invalid quantity for: " + item.name)
-        }
-        if item.price <= 0.0 {
-            return error("invalid price for: " + item.name)
-        }
-    }
-    return nil
-}
+// Higher-order functions
+type OrderFilter = func(Order) bool;
 
-func findUserByID(uid: UserID): ?User {
-    for u in userDB {
-        if u.id == uid {
-            return u
-        }
-    }
-    return nil
-}
-
-func createOrder(userID: UserID, items: []OrderItem, payment: PaymentMethod): !Order {
-    let user: ?User = findUserByID(userID)
-    if user == nil {
-        return error("user not found: " + string(userID))
-    }
-
-    if user!.address == nil {
-        return error("user has no shipping address")
-    }
-
-    let validationErr: ?error = validateOrder(items)
-    if validationErr != nil {
-        return validationErr!
-    }
-
-    let total: Price = calculateTotal(items)
-    let orderID: OrderID = uuid.New()
-
-    let order: Order = Order{
-        id: orderID,
-        userID: userID,
-        items: items,
-        total: total,
-        status: OrderStatus.Pending,
-        paymentMethod: payment,
-        shippingAddress: user!.address!,
-        createdAt: time.now().unix(),
-        updatedAt: time.now().unix()
-    }
-
-    orders = append(orders, order)
-    return order
-}
-
-func processPayment(order: Order): !Transaction {
-    let txn: Transaction = Transaction{
-        id: uuid.New(),
-        orderID: order.id,
-        amount: order.total,
-        method: order.paymentMethod,
-        status: "processing",
-        timestamp: time.now().unix()
-    }
-
-    let result: !bool = mockPaymentGateway(order.total)
-    if result is error {
-        txn.status = "failed"
-        return error("payment failed: " + (result as error).message())
-    }
-
-    txn.status = "completed"
-    order.status = OrderStatus.Confirmed
-    order.updatedAt = time.now().unix()
-
-    transactions = append(transactions, txn)
-    return txn
-}
-
-func mockPaymentGateway(amount: Price): !bool {
-    if amount <= 0.0 {
-        return error("invalid amount")
-    }
-    if amount > 10000.0 {
-        return error("amount exceeds limit")
-    }
-    return true  // success!
-}
-
-func updateInventory(items: []OrderItem) ! {
-    for item in items {
-        let inv: ?InventoryItem = inventory[item.productID]
-        if inv == nil {
-            return error("product not found: " + item.productID)
-        }
-        inv!.stock = inv!.stock - item.quantity
-        inv!.reserved = inv!.reserved - item.quantity
-    }
-}
-
-func getOrdersByUser(uid: UserID, status: ?OrderStatus): []Order {
-    let result: []Order
+let filterOrders = func(orders: []Order, fn: OrderFilter): []Order {
+    let result: []Order;
     for order in orders {
-        if order.userID != uid {
-            continue
-        }
-        if status != nil && order.status != status! {
-            continue
-        }
-        result = append(result, order)
-    }
-    return result
-}
+        if (fn(order)) {
+            result = append(result, order);
+        };
+    };
+    return result;
+};
 
-// ============================================================
-// Higher-order functions with types
-// ============================================================
+// Type aliases in use
+let config: JSON = {
+    "app_name": "VintLang Showcase",
+    "version": 7,
+    "features": ["string", "int", "bool", "float64", "[]T", "{K: V}", "*T", "func(T) R"]
+};
 
-type OrderFilter = func(Order): bool
-
-func filterOrders(fn: OrderFilter): []Order {
-    let result: []Order
-    for order in orders {
-        if fn(order) {
-            result = append(result, order)
-        }
-    }
-    return result
-}
-
-type OrderTransformer = func(Order): Order
-
-func transformOrders(fn: OrderTransformer): []Order {
-    let result: []Order
-    for order in orders {
-        result = append(result, fn(order))
-    }
-    return result
-}
-
-func applyDiscount(percentage: Price): OrderTransformer {
-    return func(order: Order): Order {
-        order.total = order.total * (1.0 - percentage / 100.0)
-        return order
-    }
-}
-
-// ============================================================
-// Concurrency with types
-// ============================================================
-
-func processOrdersConcurrently(orderIDs: []OrderID) {
-    let ch: chan !Order = chan(!Order)
-
-    for id in orderIDs {
-        go func(oid: OrderID) {
-            let order: !Order = getOrderByID(oid)
-            send(ch, order)
-        }(id)
-    }
-
-    for _ in orderIDs {
-        let result: !Order = receive(ch)
-        match result {
-            Order o => {
-                let txn: !Transaction = processPayment(o)
-                if txn is error {
-                    println("payment failed for order", o.id, (txn as error).message())
-                } else {
-                    println("payment completed for order", o.id, (txn as Transaction).id)
-                }
-            }
-            error e => {
-                println("failed to process order:", e.message())
-            }
-        }
-    }
-
-    close(ch)
-}
-
-func getOrderByID(id: OrderID): !Order {
-    for order in orders {
-        if order.id == id {
-            return order
-        }
-    }
-    return error("order not found: " + id)
-}
-
-// ============================================================
-// Error union with typed errors
-// ============================================================
-
-error NetworkError { endpoint: string; statusCode: int }
-error ValidationError { field: string; reason: string }
-error DatabaseError { operation: string; cause: string }
-
-type AppError = NetworkError | ValidationError | DatabaseError | error
-
-func handleAppError(err: AppError): string {
-    match err {
-        NetworkError n => {
-            return "network: " + n.endpoint + " returned " + string(n.statusCode)
-        }
-        ValidationError v => {
-            return "validation: " + v.field + " - " + v.reason
-        }
-        DatabaseError d => {
-            return "database: " + d.operation + " failed - " + d.cause
-        }
-        error e => {
-            return "unknown: " + e.message()
-        }
-    }
-}
-
-// ============================================================
-// Main
-// ============================================================
-
-// Application state
-let userDB: []User
-let orders: []Order
-let inventory: {string: InventoryItem}
-let transactions: []Transaction
-
-let startTime: Timestamp = time.now().unix()
-
-func main() {
-    println("=== VintLang Type System Showcase ===")
-
-    // Seed some data
-    userDB = [
-        User{id: 1, name: "Alice", email: "alice@example.com",
-             role: UserRole.Admin,
-             address: Address{street: "123 Main", city: "Portland", state: "OR", zipCode: "97201"},
-             createdAt: startTime, active: true},
-        User{id: 2, name: "Bob", email: "bob@example.com",
-             role: UserRole.Member,
-             address: nil,
-             createdAt: startTime, active: true}
-    ]
-
-    inventory = {
-        "PROD-001": InventoryItem{
-            productID: "PROD-001", name: "Widget", description: "A useful widget",
-            price: 19.99, stock: 100, reserved: 0
-        },
-        "PROD-002": InventoryItem{
-            productID: "PROD-002", name: "Gadget", description: "A fancy gadget",
-            price: 49.99, stock: 50, reserved: 0
-        }
-    }
-
-    // Create an order
-    let items: []OrderItem = [
-        OrderItem{productID: "PROD-001", name: "Widget", price: 19.99, quantity: 2},
-        OrderItem{productID: "PROD-002", name: "Gadget", price: 49.99, quantity: 1}
-    ]
-
-    let orderResult: !Order = createOrder(1, items, PaymentMethod.CreditCard)
-    match orderResult {
-        Order o => {
-            println("created order:", o.id)
-            println("  total: $" + string(o.total))
-            println("  status:", string(o.status))
-            println("  items:", len(o.items))
-
-            // Process payment
-            let paymentResult: !Transaction = processPayment(o)
-            match paymentResult {
-                Transaction t => {
-                    println("  payment:", t.id, t.status)
-                }
-                error e => {
-                    println("  payment failed:", e.message())
-                }
-            }
-        }
-        error e => {
-            println("order failed:", e.message())
-        }
-    }
-
-    // Use higher-order functions
-    let pendingOrders: []Order = filterOrders(func(o: Order): bool {
-        return o.status == OrderStatus.Pending
-    })
-    println("pending orders:", len(pendingOrders))
-
-    // Error union example
-    let user: ?User = findUserByID(2)
-    println("found user:", user?.name ?? "unknown")
-    println("has address:", user?.address != nil)
-
-    // Type aliases in use
-    let currentTime: Timestamp = time.now().unix()
-    let uptime: int = int(currentTime - startTime)
-    println("uptime:", uptime, "seconds")
-
-    // JSON type alias
-    let config: JSON = {
-        "app_name": "VintLang Showcase",
-        "version": 7,
-        "types": ["string", "int", "float64", "bool", "byte",
-                  "int8", "int16", "int32", "int64",
-                  "uint", "uint8", "uint16", "uint32", "uint64",
-                  "float32", "float64",
-                  "[]T", "[n]T", "{K: V}", "*T",
-                  "chan T", "func(T) R",
-                  "any", "error",
-                  "?T", "!T", "E!T"],
-        "features": {
-            "generics": false,
-            "interfaces": false,
-            "type_inference": true,
-            "error_as_value": true
-        }
-    }
-
-    println("\n=== Type System Summary ===")
-    let types: []any = config["types"] as []any
-    for t in types {
-        println("  -", t)
-    }
-
-    println("\n=== Done ===")
-}
+println("showcase ready");
+println("config:", config);

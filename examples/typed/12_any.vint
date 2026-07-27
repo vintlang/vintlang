@@ -1,97 +1,39 @@
 // VintLang Typed Any
 // Demonstrates the 'any' type (Go's interface{} equivalent)
 
-// ============================================================
-// 1. any type variables
-// ============================================================
+// any type variables
+let v: any = 42;
+println("int as any:", v);
 
-let v: any = 42
-println("int as any:", v)
+v = "hello";
+println("string as any:", v);
 
-v = "hello"
-println("string as any:", v)
+v = [1, 2, 3];
+println("slice as any:", v);
 
-v = [1, 2, 3]
-println("slice as any:", v)
+v = nil;
+println("nil as any:", v);
 
-v = nil
-println("nil as any:", v)
+// Type checking with 'is'
+let describe = func(val: any): string {
+    if (val is int) {
+        return "integer";
+    };
+    if (val is string) {
+        return "string";
+    };
+    if (val is bool) {
+        return "boolean";
+    };
+    return "unknown";
+};
 
-// ============================================================
-// 2. Type assertion with .(Type)
-// ============================================================
+println(describe("hello"));
+println(describe(42));
+println(describe(true));
 
-func describe(val: any): string {
-    let s, ok := val.(string)
-    if ok {
-        return "string of length " + string(len(s))
-    }
-
-    let n, ok := val.(int)
-    if ok {
-        if n % 2 == 0 {
-            return "even number"
-        }
-        return "odd number"
-    }
-
-    let arr, ok := val.([]any)
-    if ok {
-        return "array with " + string(len(arr)) + " elements"
-    }
-
-    return "unknown type"
-}
-
-println(describe("hello"))
-println(describe(42))
-println(describe(7))
-println(describe([1, 2, 3]))
-println(describe(3.14))
-
-// ============================================================
-// 3. Type switch on any
-// ============================================================
-
-func inspect(val: any) {
-    println("value:", val)
-
-    match val {
-        int n => println("  type: int, value:", n)
-        string s => println("  type: string, value:", s)
-        float64 f => println("  type: float, value:", f)
-        bool b => println("  type: bool, value:", b)
-        []any arr => println("  type: array, len:", len(arr))
-        _ => println("  type: unknown")
-    }
-}
-
-inspect(42)
-inspect("hello")
-inspect(3.14)
-inspect(true)
-inspect([1, 2, 3])
-
-// ============================================================
-// 4. Collections with any
-// ============================================================
-
-let mixed: []any = [42, "hello", true, 3.14, nil]
+// Collections with any
+let mixed: []any = [42, "hello", true, nil];
 for item in mixed {
-    println("mixed:", item)
-}
-
-let jsonData: {string: any} = {
-    "name": "VintLang",
-    "version": 7,
-    "features": ["types", "channels", "generics"],
-    "active": true,
-    "metadata": {
-        "stars": 5000,
-        "license": "MIT"
-    }
-}
-
-println(jsonData["name"])
-println(jsonData["version"])
-println(jsonData["features"])
+    println("mixed:", item);
+};

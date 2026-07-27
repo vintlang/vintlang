@@ -1,132 +1,82 @@
 // VintLang Typed Structs
 // Demonstrates struct definitions with typed fields and methods
 
-// ============================================================
-// 1. Basic typed struct
-// ============================================================
-
+// Basic typed struct
 struct Point {
-    x: float64
+    x: float64,
     y: float64
-}
+};
 
-let p: Point = Point{x: 3.0, y: 4.0}
-println("Point:", p.x, p.y)
+let p: Point = Point(x = 3.0, y = 4.0);
+println("Point:", p.x, p.y);
 
-// ============================================================
-// 2. Struct with methods
-// ============================================================
-
+// Struct with methods
 struct Rectangle {
-    width: float64
-    height: float64
+    width: float64,
+    height: float64,
 
     func area(): float64 {
-        return this.width * this.height
-    }
+        return this.width * this.height;
+    },
 
     func perimeter(): float64 {
-        return 2 * (this.width + this.height)
+        return 2 * (this.width + this.height);
     }
+};
 
-    func scale(factor: float64): Rectangle {
-        return Rectangle{
-            width: this.width * factor,
-            height: this.height * factor
-        }
-    }
-}
+let rect: Rectangle = Rectangle(width = 10.0, height = 5.0);
+println("area:", rect.area());
+println("perimeter:", rect.perimeter());
 
-let rect: Rectangle = Rectangle{width: 10.0, height: 5.0}
-println("area:", rect.area())
-println("perimeter:", rect.perimeter())
-
-let big: Rectangle = rect.scale(2.0)
-println("scaled area:", big.area())
-
-// ============================================================
-// 3. Struct with typed fields + defaults
-// ============================================================
-
+// Struct with typed fields + defaults
 struct Config {
-    host: string = "localhost"
-    port: int = 8080
-    debug: bool = false
-    timeout: int = 30
-}
+    host: string = "localhost",
+    port: int = 8080,
+    debugMode: bool = false
+};
 
-let defaultCfg: Config = Config{}
-let customCfg: Config = Config{port: 9090, debug: true}
+let defaultCfg: Config = Config();
+let customCfg: Config = Config(port = 9090, debugMode = true);
 
-println("default:", defaultCfg.host, defaultCfg.port)
-println("custom:", customCfg.host, customCfg.port, customCfg.debug)
+println("default:", defaultCfg.host, defaultCfg.port);
+println("custom:", customCfg.host, customCfg.port, customCfg.debugMode);
 
-// ============================================================
-// 4. Nested structs
-// ============================================================
-
+// Nested structs
 struct Address {
-    street: string
-    city: string
+    street: string,
+    city: string,
     zipCode: string
-}
+};
 
 struct Person {
-    name: string
-    age: int
-    address: Address
+    name: string,
+    age: int,
+    address: Address,
     tags: []string
-}
+};
 
-let alice: Person = Person{
-    name: "Alice",
-    age: 30,
-    address: Address{
-        street: "123 Main St",
-        city: "Portland",
-        zipCode: "97201"
-    },
-    tags: ["developer", "golang"]
-}
+let alice: Person = Person(
+    name = "Alice",
+    age = 30,
+    address = Address(street = "123 Main St", city = "Portland", zipCode = "97201"),
+    tags = ["developer", "golang"]
+);
 
-println(alice.name, "lives at", alice.address.city)
+println(alice.name, "lives at", alice.address.city);
 
-// ============================================================
-// 5. Struct with pointer fields
-// ============================================================
-
-struct TreeNode {
-    value: int
-    left: *TreeNode
-    right: *TreeNode
-}
-
-let leaf: TreeNode = TreeNode{value: 42}
-let root: TreeNode = TreeNode{
-    value: 10,
-    left: &TreeNode{value: 5},
-    right: &leaf
-}
-
-println("tree root:", root.value)
-println("tree left:", root.left.value)
-
-// ============================================================
-// 6. Struct with slice fields
-// ============================================================
-
+// Struct with slice fields
 struct Team {
-    name: string
-    members: []string
+    name: string,
+    members: []string,
     scores: []int
-}
+};
 
-let team: Team = Team{
-    name: "VintDevs",
-    members: ["Alice", "Bob", "Carol"],
-    scores: [95, 88, 92]
-}
+let team: Team = Team(
+    name = "VintDevs",
+    members = ["Alice", "Bob", "Carol"],
+    scores = [95, 88, 92]
+);
 
 for m in team.members {
-    println("member:", m)
-}
+    println("member:", m);
+};

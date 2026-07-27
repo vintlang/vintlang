@@ -1,129 +1,18 @@
 // VintLang Typed Errors
-// Demonstrates Go-style error handling with typed errors
+// Demonstrates error handling with throw/catch
 
-// ============================================================
-// 1. Func returning (result, error)
-// ============================================================
+// Function that may error
+let divide = func(a: int, b: int): int {
+    if (b == 0) {
+        throw("division by zero");
+    };
+    return a / b;
+};
 
-func divide(a, b: int): (int, error) {
-    if b == 0 {
-        return 0, error("division by zero")
-    }
-    return a / b, nil
-}
+let result = divide(10, 2);
+println("result:", result);
 
-// Safe checking
-let result, err := divide(10, 2)
-if err != nil {
-    println("error:", err.message())
-} else {
-    println("result:", result)
-}
-
-let result2, err2 := divide(10, 0)
-if err2 != nil {
-    println("expected error:", err2.message())
-}
-
-// ============================================================
-// 2. Error shorthand with !
-// ============================================================
-
-func parseInt(s: string): (int, error) {
-    let val: int = int(s)
-    if val == 0 && s != "0" {
-        return 0, error("invalid integer: " + s)
-    }
-    return val, nil
-}
-
-let num: int = parseInt("42")!
-println("parsed:", num)
-
-// Will panic on error (use for cases where error is unexpected)
-// let bad: int = parseInt("abc")!  // runtime panic
-
-// ============================================================
-// 3. Custom error types
-// ============================================================
-
-error ValidationError {
-    field: string
-    reason: string
-}
-
-error NotFoundError {
-    resource: string
-    id: int
-}
-
-func findUser(id: int): (User, error) {
-    if id <= 0 {
-        return User{}, ValidationError{
-            field: "id",
-            reason: "must be positive"
-        }
-    }
-    if id > 100 {
-        return User{}, NotFoundError{
-            resource: "user",
-            id: id
-        }
-    }
-    return User{id: id, name: "User-" + string(id)}, nil
-}
-
-// ============================================================
-// 4. Type switch on errors
-// ============================================================
-
-func handleError(err: error): string {
-    match err {
-        ValidationError e => {
-            return "validation failed: " + e.field + " - " + e.reason
-        }
-        NotFoundError e => {
-            return e.resource + " not found: " + string(e.id)
-        }
-        _ => {
-            return "unknown: " + err.message()
-        }
-    }
-}
-
-let user, uErr := findUser(-1)
-if uErr != nil {
-    println(handleError(uErr))
-}
-
-let user2, uErr2 := findUser(999)
-if uErr2 != nil {
-    println(handleError(uErr2))
-}
-
-// ============================================================
-// 5. Error wrapping
-// ============================================================
-
-func readConfig(path: string): (Config, error) {
-    let data, readErr := os.readFile(path)
-    if readErr != nil {
-        return Config{}, error.wrap(readErr, "failed to read config")
-    }
-    return Config{host: data, port: 8080}, nil
-}
-
-func startServer() error {
-    let cfg, cfgErr := readConfig("/etc/app/config.yaml")
-    if cfgErr != nil {
-        return error.wrap(cfgErr, "server startup failed")
-    }
-    println("starting on", cfg.host, cfg.port)
-    return nil
-}
-
-let serverErr := startServer()
-if serverErr != nil {
-    println("server error:", serverErr.message())
-    println("caused by:", error.cause(serverErr))
-}
+// Custom error types
+error ValidationError { field: string, reason: string };
+let err = ValidationError{field: "id", reason: "must be positive"};
+println("error type:", type(err));

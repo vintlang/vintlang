@@ -1,114 +1,50 @@
 // VintLang Typed Functions
 // Demonstrates function type annotations
 
-// ============================================================
-// 1. Basic typed functions
-// ============================================================
-
+// Basic typed functions
 let add = func(a: int, b: int): int {
-    return a + b
-}
+    return a + b;
+};
 
 let greet = func(name: string): string {
-    return "Hello, " + name + "!"
-}
+    return "Hello, " + name + "!";
+};
 
 let isEven = func(n: int): bool {
-    return n % 2 == 0
-}
+    return n % 2 == 0;
+};
 
-println(add(3, 4))
-println(greet("VintLang"))
-println(isEven(7))
+println(add(3, 4));
+println(greet("VintLang"));
+println(isEven(7));
 
-// ============================================================
-// 2. Functions with no return value
-// ============================================================
-
+// Functions with no return value
 let logMessage = func(msg: string) {
-    println("[LOG]", msg)
-}
+    println("[LOG]", msg);
+};
 
-logMessage("system initialized")
+logMessage("system initialized");
 
-// ============================================================
-// 3. Functions with multiple params, same type
-// ============================================================
+// Function as value (type annotation for variable)
+let op: func(int, int) int = add;
+println("via func var:", op(10, 20));
 
-let multiply = func(a, b: int): int {
-    return a * b
-}
+// Higher-order functions (one line)
+let apply = func(arr: []int, fn: func(int) int): []int { return fn(arr[0]) };
+let double = func(n: int): int { return n * 2 };
+let nums: []int = [1, 2, 3, 4, 5];
+println("applied:", apply(nums, double));
 
-println("multiply:", multiply(6, 7))
-
-// ============================================================
-// 4. Function as value
-// ============================================================
-
-let op: func(int, int): int = add
-println("via func var:", op(10, 20))
-
-// ============================================================
-// 5. Higher-order functions
-// ============================================================
-
-let apply = func(arr: []int, fn: func(int): int): []int {
-    let result: []int
-    for v in arr {
-        result = append(result, fn(v))
-    }
-    return result
-}
-
-let double = func(n: int): int {
-    return n * 2
-}
-
-let nums: []int = [1, 2, 3, 4, 5]
-let doubled: []int = apply(nums, double)
-println("doubled:", doubled)
-
-// ============================================================
-// 6. Anonymous functions / closures
-// ============================================================
-
-let makeCounter = func(start: int): func(): int {
-    let count: int = start
+// Anonymous functions / closures
+let makeCounter = func(start: int): func() int {
+    let count: int = start;
     return func(): int {
-        count = count + 1
-        return count
-    }
-}
+        count = count + 1;
+        return count;
+    };
+};
 
-let counter: func(): int = makeCounter(0)
-println(counter())
-println(counter())
-println(counter())
-
-// ============================================================
-// 7. Variadic functions
-// ============================================================
-
-let sum = func(values: ...int): int {
-    let total: int = 0
-    for v in values {
-        total = total + v
-    }
-    return total
-}
-
-println("sum:", sum(1, 2, 3, 4, 5))
-println("sum:", sum(10, 20))
-
-// ============================================================
-// 8. Named return values
-// ============================================================
-
-let divide = func(dividend, divisor: int): (quotient: int, remainder: int) {
-    quotient = dividend / divisor
-    remainder = dividend % divisor
-    return
-}
-
-let q, r := divide(17, 5)
-println("17/5:", q, "remainder:", r)
+let counter: func() int = makeCounter(0);
+println(counter());
+println(counter());
+println(counter());

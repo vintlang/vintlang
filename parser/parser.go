@@ -211,10 +211,10 @@ func (p *Parser) ParseProgram() *ast.Program {
 			program.Statements = append(program.Statements, stmt)
 		}
 
-		// Zero-value TypedLetStatement may have a trailing semicolon that
-		// wasn't consumed by the statement itself. Consume it now and
-		// skip advancement (we already moved to the next token).
+		// Zero-value TypedLetStatement leaves curToken at the type name.
+		// Advance past it, consuming any trailing semicolon.
 		if tls, ok := stmt.(*ast.TypedLetStatement); ok && tls.Value == nil {
+			p.nextToken()
 			if p.curTokenIs(token.SEMICOLON) {
 				p.nextToken()
 			}

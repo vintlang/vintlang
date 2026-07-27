@@ -157,7 +157,6 @@ func (p *Parser) parseDictType() ast.Type {
 			": expected '}' in dict type, got " + p.curToken.Literal)
 		return nil
 	}
-	p.nextToken() // advance past '}'
 	return &ast.DictType{Token: tok, KeyType: keyType, ValueType: valueType}
 }
 

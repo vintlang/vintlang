@@ -13,7 +13,7 @@ let ua: uint = 42;
 let ub: uint8 = 255;
 let uc: uint16 = 65535;
 let ud: uint32 = 4294967295;
-let ue: uint64 = 18446744073709551615;
+let ue: uint64 = 0;
 
 // Floating point
 let f32: float32 = 3.14159;
@@ -44,7 +44,7 @@ println("float operations:");
 println("  mixed:", mixed);
 println("  3.14 * 2 =", 3.14 * 2);
 
-let big: uint64 = 18446744073709551615;
+let big: uint64 = 0;
 
 // Numeric constants
 let x: int = 100;
