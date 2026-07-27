@@ -5,7 +5,5 @@ import (
 )
 
 func (p *Parser) parseIdentifier() ast.Expression {
-	ident := &ast.Identifier{Token: p.curToken, Value: p.curToken.Literal}
-	p.nextToken()
-	return ident
+	return &ast.Identifier{Token: p.curToken, Value: p.curToken.Literal}
 }

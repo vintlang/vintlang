@@ -58,12 +58,16 @@ func (p *Parser) parseLetStatement() ast.Statement {
 			return nil
 		}
 
-		// Check if '=' follows (peek past the type since parseType left
-		// curToken at the type name)
-		if p.peekTokenIs(token.ASSIGN) {
-			// Advance past type, then past '='
-			p.nextToken()
-			p.nextToken()
+		// Check if '=' follows. parseType may leave curToken at the type
+		// name (basic types, pointers, arrays) or past a closing delimiter
+		// (dict, multi-return, function types).
+		hasValue := p.curTokenIs(token.ASSIGN)
+		if !hasValue && p.peekTokenIs(token.ASSIGN) {
+			p.nextToken() // advance past type name
+			hasValue = p.curTokenIs(token.ASSIGN)
+		}
+		if hasValue {
+			p.nextToken() // advance past '='
 			value := p.parseExpression(LOWEST)
 			if p.peekTokenIs(token.SEMICOLON) {
 				p.nextToken()

@@ -211,28 +211,34 @@ func (p *Parser) ParseProgram() *ast.Program {
 			program.Statements = append(program.Statements, stmt)
 		}
 
-		// Skip any semicolons between statements
-		for p.curTokenIs(token.SEMICOLON) {
-			p.nextToken()
+		// Zero-value TypedLetStatement may have a trailing semicolon that
+		// wasn't consumed by the statement itself. Consume it now.
+		if tls, ok := stmt.(*ast.TypedLetStatement); ok && tls.Value == nil {
+			if p.curTokenIs(token.SEMICOLON) {
+				p.nextToken()
+			}
 		}
 
 		// For parse failures, always advance to avoid infinite loops
 		if stmt == nil {
-			p.nextToken()
+			if !p.curTokenIs(token.EOF) {
+				p.nextToken()
+			}
 			continue
 		}
 
-		// For expression statements with nil expressions, always advance
-		if es, ok := stmt.(*ast.ExpressionStatement); ok && es.Expression == nil {
-			p.nextToken()
+		// For expression statements, always advance (parseIdentifier and
+		// other prefix functions don't advance, so the main loop must).
+		if _, ok := stmt.(*ast.ExpressionStatement); ok {
+			if !p.curTokenIs(token.EOF) {
+				p.nextToken()
+			}
 			continue
 		}
 
-		// For successfully parsed statements: if we're already at a keyword
-		// that starts a new statement (LET, CONST, etc.), don't advance.
-		// This happens when zero-value typed declarations or type aliases
-		// consumed into the next statement's first token via parseType.
-		if !p.curTokenIs(token.EOF) && !p.isStatementStart() {
+		// For all other statement types, advance unless we're already at a
+		// keyword that starts the next statement.
+		if !p.curTokenIs(token.EOF) && !p.isKeywordStatementStart() {
 			p.nextToken()
 		}
 	}
@@ -408,6 +414,23 @@ func (p *Parser) isStatementStart() bool {
 		return true
 	case token.IDENT:
 		return p.curToken.Literal == "type"
+	default:
+		return false
+	}
+}
+
+// isKeywordStatementStart returns true if curToken can start a new statement.
+// Used to avoid double-advancing when a statement's semicolon was already
+// consumed and the next statement's first token is the current token.
+func (p *Parser) isKeywordStatementStart() bool {
+	switch p.curToken.Type {
+	case token.LET, token.CONST, token.ENUM, token.STRUCT,
+		token.RETURN, token.BREAK, token.CONTINUE,
+		token.INCLUDE, token.GO, token.FUNCTION,
+		token.IF, token.WHILE, token.FOR, token.SWITCH, token.MATCH:
+		return true
+	case token.IDENT:
+		return true
 	default:
 		return false
 	}
