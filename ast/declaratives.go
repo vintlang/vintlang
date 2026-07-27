@@ -212,9 +212,9 @@ func (ss *StructStatement) String() string {
 	out.WriteString(" {\n")
 
 	for _, f := range ss.Fields {
-		out.WriteString("    " + f.Name.String())
+		out.WriteString("    ");out.WriteString(f.Name.String())
 		if f.Default != nil {
-			out.WriteString(": " + f.Default.String())
+			out.WriteString(": ");out.WriteString(f.Default.String())
 		}
 		out.WriteString("\n")
 	}
@@ -224,7 +224,7 @@ func (ss *StructStatement) String() string {
 		for _, p := range m.Parameters {
 			params = append(params, p.String())
 		}
-		out.WriteString("    func " + m.Name.String() + "(" + strings.Join(params, ", ") + ") {...}\n")
+		out.WriteString("    func ");out.WriteString(m.Name.String());out.WriteString("(");out.WriteString(strings.Join(params, ", "));out.WriteString(") {...}\n")
 	}
 
 	out.WriteString("}")
