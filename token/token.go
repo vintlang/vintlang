@@ -124,9 +124,9 @@ const (
 	LOG_CAP      = "LOG_CAP"
 
 	// Type system tokens
-	AS   = "AS" // type casting: x as int
-	IS   = "IS" // type checking: x is int
-	PIPE = "|"  // union types: int | string
+	AS   = "AS"   // type casting: x as int
+	IS   = "IS"   // type checking: x is int
+	PIPE = "|"    // union types: int | string
 )
 
 var keywords = map[string]TokenType{
