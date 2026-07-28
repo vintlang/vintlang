@@ -4,23 +4,52 @@ import (
 	"regexp"
 	"strings"
 
+	"github.com/vintlang/vintlang/ast"
 	"github.com/vintlang/vintlang/object"
 	"github.com/xrash/smetrics" // string metrics, like Levenshtein
 )
 
+func bt(name string) ast.Type { return &ast.BasicType{Name: name} }
+
 var StringFunctions = map[string]object.ModuleFunction{}
+var StringFuncTypes = map[string][]ast.Type{}
+var StringFuncReturns = map[string]ast.Type{}
 
 func init() {
 	StringFunctions["trim"] = trim
+	StringFuncTypes["trim"] = []ast.Type{bt("string")}
+	StringFuncReturns["trim"] = bt("string")
+
 	StringFunctions["contains"] = contains
+	StringFuncTypes["contains"] = []ast.Type{bt("string"), bt("string")}
+	StringFuncReturns["contains"] = bt("bool")
+
 	StringFunctions["toUpper"] = toUpper
+	StringFuncTypes["toUpper"] = []ast.Type{bt("string")}
+	StringFuncReturns["toUpper"] = bt("string")
+
 	StringFunctions["toLower"] = toLower
+	StringFuncTypes["toLower"] = []ast.Type{bt("string")}
+	StringFuncReturns["toLower"] = bt("string")
+
 	StringFunctions["replace"] = replace
+	StringFuncTypes["replace"] = []ast.Type{bt("string"), bt("string"), bt("string")}
+	StringFuncReturns["length"] = bt("string")
+
 	StringFunctions["split"] = split
+	StringFuncTypes["split"] = []ast.Type{bt("string"), bt("string")}
+
 	StringFunctions["join"] = join
-	StringFunctions["substring"] = substring
+	StringFuncTypes["join"] = []ast.Type{bt("string")}
+
 	StringFunctions["length"] = length
+	StringFuncTypes["length"] = []ast.Type{bt("string")}
+	StringFuncReturns["length"] = bt("int")
+
 	StringFunctions["indexOf"] = indexOf
+	StringFuncTypes["indexOf"] = []ast.Type{bt("string"), bt("string")}
+	StringFuncReturns["indexOf"] = bt("int")
+
 	StringFunctions["similarity"] = similarity
 	StringFunctions["slug"] = slug
 	StringFunctions["startsWith"] = startsWith

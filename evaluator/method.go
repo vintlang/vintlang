@@ -82,8 +82,28 @@ func applyMethod(obj object.VintObject, method ast.Expression, args []object.Vin
 			return obj.Method(method.(*ast.Identifier).Value, args)
 		}
 	case *object.Module:
-		if fn, ok := obj.Functions[method.(*ast.Identifier).Value]; ok {
-			return fn(args, defs)
+		methodName := method.(*ast.Identifier).Value
+		// Check argument types if declared
+		if paramTypes, ok := obj.FuncTypes[methodName]; ok {
+			for i, arg := range args {
+				if i < len(paramTypes) && paramTypes[i] != nil {
+					if !compatible(paramTypes[i], arg) {
+						return newTypeError(l, "argument %d to %s.%s() expects %s, got %s",
+							i+1, obj.Name, methodName, paramTypes[i].String(), arg.Type())
+					}
+				}
+			}
+		}
+		if fn, ok := obj.Functions[methodName]; ok {
+			result := fn(args, defs)
+			// Check return type if declared
+			if retType, ok := obj.FuncReturns[methodName]; ok && retType != nil && !isError(result) {
+				if !compatible(retType, result) {
+					return newTypeError(l, "%s.%s() returns %s, but got %s",
+						obj.Name, methodName, retType.String(), result.Type())
+				}
+			}
+			return result
 		}
 	case *object.Instance:
 		if val, ok := obj.Package.Scope.Get(method.(*ast.Identifier).Value); ok {
