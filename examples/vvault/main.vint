@@ -13,6 +13,7 @@ let main = func() {
         ::println("  password <length>   Generate a strong password (min 4)")
         ::println("  otp <length>        Generate a numeric OTP")
         ::println("  token <length>      Generate a hex token (length = byte count)")
+        
         os.exit(0)
     }
 
@@ -24,7 +25,7 @@ let main = func() {
             ::println("Usage: vint main.vint generate <length>")
             os.exit(1)
         }
-        let length = int(args[1])
+        let length = ::int(args[1])
         let result = vvault.generate(length)
         ::println("Generated: " + result)
 
@@ -34,7 +35,7 @@ let main = func() {
             ::println("Usage: vint main.vint password <length>")
             os.exit(1)
         }
-        let length = int(args[1])
+        let length = ::int(args[1])
         let result = vvault.password(length)
         ::println("Password: " + result)
 
@@ -44,7 +45,7 @@ let main = func() {
             ::println("Usage: vint main.vint otp <length>")
             os.exit(1)
         }
-        let length = int(args[1])
+        let length = ::int(args[1])
         let result = vvault.otp(length)
         ::println("OTP: " + result)
 
@@ -54,7 +55,7 @@ let main = func() {
             ::println("Usage: vint main.vint token <length>")
             os.exit(1)
         }
-        let length = int(args[1])
+        let length = ::int(args[1])
         let result = vvault.token(length)
         ::println("Token: " + result)
 
