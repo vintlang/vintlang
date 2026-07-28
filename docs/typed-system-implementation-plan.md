@@ -1,8 +1,8 @@
 # VintLang Type System — Implementation Plan
 
-**Version:** 0.1 (draft)
+**Version:** 1.0 (implemented)
 **Date:** July 2026
-**Status:** Locked for v1
+**Status:** ✅ All v1 phases complete
 
 ---
 
@@ -21,6 +21,26 @@
 11. [Deferred to v2](#11-deferred-to-v2)
 12. [Type Compatibility Table](#12-type-compatibility-table)
 13. [Error Messages Reference](#13-error-messages-reference)
+
+---
+
+## Implementation Status
+
+| Phase | Status |
+|-------|--------|
+| Phase 0: Lexer | ✅ Complete — `type` keyword handled contextually |
+| Phase 1: Parser | ✅ Complete — all type forms, as/is, type aliases, struct methods |
+| Phase 2: Object Layer | ✅ Complete — types map, DefineTyped, GetDeclaredType |
+| Phase 3: Runtime Type Enforcement | ✅ Complete — compatible() checks at all 8 sites |
+| Phase 4: Type Aliases | ✅ Complete — resolved during parsing |
+| Phase 5: Strict Mode | 🔲 Deferred |
+| Phase 6: Tests + Examples | ✅ Complete — 33 parser tests, 15 examples |
+
+**Bonus features added:**
+- `::` prefix for builtin function calls
+- Type signatures (`ParamTypes`/`ReturnType`) on builtins and module functions
+- Improved error messages with source context and line numbers
+- All `.vint` examples updated with `::` builtin prefix and type annotations
 
 ---
 

@@ -1,8 +1,20 @@
 # Built-in Functions in Vint
 
 Vint has a number of built-in functions that are globally available to perform common tasks.
+Builtins can be called normally (`println("hello")`) or with the `::` prefix (`::println("hello")`) for explicit visual distinction.
 
 ---
+
+## Type Signatures
+
+Many builtins have declared return types that participate in the type system:
+
+```vint
+let x: string = ::type(42)    // ✅ OK — type returns string
+let n: int = ::len("hello")   // ✅ OK — len returns int
+let s: string = ::string(42)  // ✅ OK — string returns string
+let m: int = ::type(42)       // ❌ TypeError — type returns string, not int
+```
 
 ## I/O and System Functions
 
