@@ -27,18 +27,18 @@ validate(xmlString)
 ```js
 import xml
 
-print("=== XML Validation Example ===")
+::print("=== XML Validation Example ===")
 
 // Valid XML
 valid_xml = "<root><name>John</name><age>30</age></root>"
 is_valid = xml.validate(valid_xml)
-print("Valid XML:", is_valid)
+::print("Valid XML:", is_valid)
 // Output: Valid XML: true
 
 // Invalid XML
 invalid_xml = "<root><name>John</age></root>"
 is_invalid = xml.validate(invalid_xml)
-print("Invalid XML:", is_invalid)
+::print("Invalid XML:", is_invalid)
 // Output: Invalid XML: false
 ```
 
@@ -56,14 +56,14 @@ extract(xmlString, tagName)
 ```js
 import xml
 
-print("=== XML Value Extraction Example ===")
+::print("=== XML Value Extraction Example ===")
 xml_data = "<user><name>John Doe</name><email>john@example.com</email></user>"
 
 name = xml.extract(xml_data, "name")
 email = xml.extract(xml_data, "email")
 
-print("Name:", name)
-print("Email:", email)
+::print("Name:", name)
+::print("Email:", email)
 // Output: 
 // Name: John Doe
 // Email: john@example.com
@@ -83,12 +83,12 @@ escape(text)
 ```js
 import xml
 
-print("=== XML Escape Example ===")
+::print("=== XML Escape Example ===")
 unsafe_text = "<script>alert('Hello & Goodbye');</script>"
 safe_text = xml.escape(unsafe_text)
 
-print("Original:", unsafe_text)
-print("Escaped: ", safe_text)
+::print("Original:", unsafe_text)
+::print("Escaped: ", safe_text)
 // Output: Escaped: &lt;script&gt;alert(&#39;Hello &amp; Goodbye&#39;);&lt;/script&gt;
 ```
 
@@ -106,12 +106,12 @@ unescape(escapedText)
 ```js
 import xml
 
-print("=== XML Unescape Example ===")
+::print("=== XML Unescape Example ===")
 escaped_text = "&lt;tag&gt;Hello &amp; Goodbye&lt;/tag&gt;"
 unescaped_text = xml.unescape(escaped_text)
 
-print("Escaped:  ", escaped_text)
-print("Unescaped:", unescaped_text)
+::print("Escaped:  ", escaped_text)
+::print("Unescaped:", unescaped_text)
 // Output: Unescaped: <tag>Hello & Goodbye</tag>
 ```
 
@@ -122,7 +122,7 @@ print("Unescaped:", unescaped_text)
 ```js
 import xml
 
-print("=== XML Module Complete Example ===")
+::print("=== XML Module Complete Example ===")
 
 // Create XML data
 user_name = "John & Jane"
@@ -134,11 +134,11 @@ safe_email = xml.escape(user_email)
 
 // Build XML string
 xml_string = "<user><name>" + safe_name + "</name><email>" + safe_email + "</email></user>"
-print("Generated XML:", xml_string)
+::print("Generated XML:", xml_string)
 
 // Validate the XML
 if xml.validate(xml_string) {
-    print("XML is valid!")
+    ::print("XML is valid!")
     
     // Extract values
     extracted_name = xml.extract(xml_string, "name")
@@ -148,10 +148,10 @@ if xml.validate(xml_string) {
     final_name = xml.unescape(extracted_name)
     final_email = xml.unescape(extracted_email)
     
-    print("Final Name:", final_name)
-    print("Final Email:", final_email)
+    ::print("Final Name:", final_name)
+    ::print("Final Email:", final_email)
 } else {
-    print("Generated XML is invalid!")
+    ::print("Generated XML is invalid!")
 }
 ```
 

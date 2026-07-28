@@ -1,10 +1,14 @@
 package object
 
+import "github.com/vintlang/vintlang/ast"
+
 type ModuleFunction func(args []VintObject, defs map[string]VintObject) VintObject
 
 type Module struct {
 	Name       string
 	Functions  map[string]ModuleFunction
+	FuncTypes  map[string][]ast.Type // param types per function, nil for untyped
+	FuncReturns map[string]ast.Type  // return type per function, nil for unknown
 	Variables  map[string]VintObject
 	Submodules map[string]*Module
 	Doc        string
@@ -18,16 +22,31 @@ func NewModule(name string, functions map[string]ModuleFunction) *Module {
 		functions = make(map[string]ModuleFunction)
 	}
 	return &Module{
-		Name:       name,
-		Functions:  functions,
-		Variables:  make(map[string]VintObject),
-		Submodules: make(map[string]*Module),
+		Name:        name,
+		Functions:   functions,
+		FuncTypes:   make(map[string][]ast.Type),
+		FuncReturns: make(map[string]ast.Type),
+		Variables:   make(map[string]VintObject),
+		Submodules:  make(map[string]*Module),
 	}
 }
 
 // Register a function at runtime
 func (m *Module) RegisterFunction(name string, fn ModuleFunction) {
 	m.Functions[name] = fn
+}
+
+// RegisterTypedFunction registers a function with parameter and return type info.
+// paramTypes can be nil for untyped params (no enforcement).
+// returnType can be nil for unknown/void return.
+func (m *Module) RegisterTypedFunction(name string, fn ModuleFunction, paramTypes []ast.Type, returnType ast.Type) {
+	m.Functions[name] = fn
+	if paramTypes != nil {
+		m.FuncTypes[name] = paramTypes
+	}
+	if returnType != nil {
+		m.FuncReturns[name] = returnType
+	}
 }
 
 // Register a variable at runtime

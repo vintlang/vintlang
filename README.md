@@ -6,6 +6,54 @@
 
 ## Language Features
 
+### Static Type System
+
+```vint
+// Explicit type annotations
+let name: string = "VintLang"
+let count: int = 42
+let pi: float64 = 3.14159
+let active: bool = true
+let items: []string = ["a", "b", "c"]
+let config: {string: any} = {"host": "localhost"}
+let ptr: *int = &x
+let callback: func(int) bool = isEven
+
+// Type inference
+let message = "hello"  // inferred as string
+
+// Zero-value declarations
+let x: int        // defaults to 0
+let s: string     // defaults to ""
+let arr: []int    // defaults to nil
+
+// Function parameters and returns
+let add = func(a: int, b: int): int {
+    return a + b
+}
+
+// Type aliases
+type UserID = int
+let uid: UserID = 42
+
+// Type casting and checking
+let n = x as int      // runtime cast
+if (x is string) {    // type check
+    println("it's a string")
+}
+```
+
+### `::` Builtin Function Prefix
+
+```vint
+::println("hello")        // explicit builtin call
+::len("hello")            // → 5
+::type(42)                // → "INTEGER"
+::string(100)             // → "100"
+```
+
+Builtins can also be called without `::` (regular `println("hello")` still works).
+
 ### Modern Syntax & Control Flow
 
 ```js

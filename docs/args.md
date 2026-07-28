@@ -9,7 +9,7 @@ Vint now provides built-in support for parsing command line arguments, making it
 ```js
 // Get all command line arguments as an array
 let allArgs = args()
-print(allArgs)  // ["input.txt", "--verbose", "--output", "result.txt"]
+::print(allArgs)  // ["input.txt", "--verbose", "--output", "result.txt"]
 ```
 
 ### Using the CLI Module
@@ -22,21 +22,21 @@ let cliArgs = cli.args()
 
 // Get only positional arguments (non-flags)
 let positional = cli.getPositional()
-print(positional)  // ["input.txt", "extra_file.txt"]
+::print(positional)  // ["input.txt", "extra_file.txt"]
 
 // Get flags as a dictionary
 let flags = cli.getFlags()
-print(flags)  // {verbose: true, output: "result.txt"}
+::print(flags)  // {verbose: true, output: "result.txt"}
 
 // Check if a specific flag is present
 if (cli.hasArg("--verbose")) {
-    print("Verbose mode enabled")
+    ::print("Verbose mode enabled")
 }
 
 // Get the value of a specific flag
 let outputFile = cli.getArgValue("--output")
 if (outputFile) {
-    print("Output file:", outputFile)
+    ::print("Output file:", outputFile)
 }
 ```
 
@@ -56,8 +56,8 @@ import cli
 
 // Check for help
 if (cli.hasArg("--help")) {
-    print("Usage: myapp <input> [options]")
-    exit(0)
+    ::print("Usage: myapp <input> [options]")
+    ::exit(0)
 }
 
 // Get input file from positional arguments
@@ -70,7 +70,7 @@ let format = cli.getArgValue("--format") || "txt"
 let verbose = cli.hasArg("--verbose")
 
 if (verbose) {
-    print("Processing", inputFile, "->", outputFile, "in", format, "format")
+    ::print("Processing", inputFile, "->", outputFile, "in", format, "format")
 }
 ```
 

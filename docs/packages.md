@@ -70,8 +70,8 @@ Attempting to access private members from outside the package will result in an 
 ```js
 import "MyPackage"
 
-print(MyPackage.publicVariable)  // ✅ Works
-print(MyPackage._privateVariable) // ❌ Error: cannot access private property
+::print(MyPackage.publicVariable)  // ✅ Works
+::print(MyPackage._privateVariable) // ❌ Error: cannot access private property
 
 ---
 

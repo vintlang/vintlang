@@ -11,13 +11,13 @@ You can open a file using the `open` keyword. This will return an object of type
 ### Syntax
 
 ```js
-fileObject = open("filename.txt")
+fileObject = ::open("filename.txt")
 ```
 
 ### Example
 
 ```js
-myFile = open("file.txt")
+myFile = ::open("file.txt")
 
 aina(myFile) // Output: FAILI
 ```
@@ -33,9 +33,9 @@ File objects in Vint come with powerful built-in methods for comprehensive file 
 Read the entire contents of a file as a string:
 
 ```js
-myFile = open("example.txt")
+myFile = ::open("example.txt")
 contents = myFile.read()
-print(contents)
+::print(contents)
 ```
 
 ### write()
@@ -43,7 +43,7 @@ print(contents)
 Write content to a file (overwrites existing content):
 
 ```js
-myFile = open("output.txt")
+myFile = ::open("output.txt")
 myFile.write("Hello, World!")
 ```
 
@@ -52,7 +52,7 @@ myFile.write("Hello, World!")
 Append content to the end of a file:
 
 ```js
-logFile = open("app.log")
+logFile = ::open("app.log")
 logFile.append("New log entry\n")
 ```
 
@@ -61,11 +61,11 @@ logFile.append("New log entry\n")
 Check if the file exists:
 
 ```js
-myFile = open("config.txt")
+myFile = ::open("config.txt")
 if (myFile.exists()) {
-    print("File exists!")
+    ::print("File exists!")
 } else {
-    print("File not found!")
+    ::print("File not found!")
 }
 ```
 
@@ -74,9 +74,9 @@ if (myFile.exists()) {
 Get the size of the file in bytes:
 
 ```js
-myFile = open("data.txt")
+myFile = ::open("data.txt")
 fileSize = myFile.size()
-print("File size:", fileSize, "bytes")
+::print("File size:", fileSize, "bytes")
 ```
 
 ### delete()
@@ -84,10 +84,10 @@ print("File size:", fileSize, "bytes")
 Delete the file from the filesystem:
 
 ```js
-tempFile = open("temp.txt")
+tempFile = ::open("temp.txt")
 if (tempFile.exists()) {
     tempFile.delete()
-    print("File deleted successfully")
+    ::print("File deleted successfully")
 }
 ```
 
@@ -96,9 +96,9 @@ if (tempFile.exists()) {
 Copy the file to a new location:
 
 ```js
-sourceFile = open("original.txt")
+sourceFile = ::open("original.txt")
 sourceFile.copy("backup.txt")
-print("File copied successfully")
+::print("File copied successfully")
 ```
 
 ### move()
@@ -106,9 +106,9 @@ print("File copied successfully")
 Move or rename the file:
 
 ```js
-oldFile = open("old_name.txt")
+oldFile = ::open("old_name.txt")
 oldFile.move("new_name.txt")
-print("File moved/renamed successfully")
+::print("File moved/renamed successfully")
 ```
 
 ### lines()
@@ -116,10 +116,10 @@ print("File moved/renamed successfully")
 Read the file content as an array of lines:
 
 ```js
-configFile = open("settings.conf")
+configFile = ::open("settings.conf")
 lines = configFile.lines()
 for line in lines {
-    print("Config:", line.trim())
+    ::print("Config:", line.trim())
 }
 ```
 
@@ -128,12 +128,12 @@ for line in lines {
 Get the file extension:
 
 ```js
-documentFile = open("report.pdf")
+documentFile = ::open("report.pdf")
 ext = documentFile.extension()
-print("File extension:", ext)  // .pdf
+::print("File extension:", ext)  // .pdf
 
-imageFile = open("photo.jpg")
-print("Extension:", imageFile.extension())  // .jpg
+imageFile = ::open("photo.jpg")
+::print("Extension:", imageFile.extension())  // .jpg
 ```
 
 ## Practical File Examples
@@ -143,7 +143,7 @@ Here are some practical examples using file methods:
 ```js
 // Log file manager
 let log_message = func(message) {
-    let logFile = open("application.log")
+    let logFile = ::open("application.log")
     let timestamp = time.now().format("2006-01-02 15:04:05")
     let entry = "[" + timestamp + "] " + message + "\n"
     logFile.append(entry)
@@ -154,14 +154,14 @@ log_message("User logged in")
 
 // File backup system
 let backup_file = func(filename) {
-    let sourceFile = open(filename)
+    let sourceFile = ::open(filename)
     if (sourceFile.exists()) {
         let backup_name = filename + ".backup"
         sourceFile.copy(backup_name)
-        print("Backup created:", backup_name)
+        ::print("Backup created:", backup_name)
         return true
     } else {
-        print("Source file not found:", filename)
+        ::print("Source file not found:", filename)
         return false
     }
 }
@@ -170,9 +170,9 @@ backup_file("important_data.txt")
 
 // Configuration file processor
 let process_config = func(config_file) {
-    let file = open(config_file)
+    let file = ::open(config_file)
     if (!file.exists()) {
-        print("Config file not found, creating default...")
+        ::print("Config file not found, creating default...")
         file.write("debug=false\nport=8080\nhost=localhost\n")
         return
     }
@@ -189,7 +189,7 @@ let process_config = func(config_file) {
         }
     }
     
-    print("Loaded settings:", settings)
+    ::print("Loaded settings:", settings)
     return settings
 }
 
@@ -201,7 +201,7 @@ let analyze_files = func(filenames) {
     let file_info = []
     
     for filename in filenames {
-        let file = open(filename)
+        let file = ::open(filename)
         if (file.exists()) {
             let size = file.size()
             let ext = file.extension()
@@ -215,10 +215,10 @@ let analyze_files = func(filenames) {
         }
     }
     
-    print("Total size:", total_size, "bytes")
-    print("File details:")
+    ::print("Total size:", total_size, "bytes")
+    ::print("File details:")
     for info in file_info {
-        print("  ", info["name"], "-", info["size"], "bytes", info["extension"])
+        ::print("  ", info["name"], "-", info["size"], "bytes", info["extension"])
     }
 }
 
@@ -226,10 +226,10 @@ analyze_files(["document.pdf", "image.jpg", "data.csv"])
 
 // Text file processor with method chaining
 let process_text_file = func(input_file, output_file) {
-    let inputFile = open(input_file)
+    let inputFile = ::open(input_file)
     
     if (!inputFile.exists()) {
-        print("Input file not found")
+        ::print("Input file not found")
         return false
     }
     
@@ -238,13 +238,13 @@ let process_text_file = func(input_file, output_file) {
     let processed = content.upper().replace("OLD", "NEW").trim()
     
     // Write to output file
-    let outputFile = open(output_file)
+    let outputFile = ::open(output_file)
     outputFile.write(processed)
     
-    print("Processing complete:")
-    print("  Input size:", inputFile.size(), "bytes")
-    print("  Output size:", outputFile.size(), "bytes")
-    print("  Output extension:", outputFile.extension())
+    ::print("Processing complete:")
+    ::print("  Input size:", inputFile.size(), "bytes")
+    ::print("  Output size:", outputFile.size(), "bytes")
+    ::print("  Output extension:", outputFile.extension())
     
     return true
 }
@@ -257,16 +257,16 @@ let cleanup_temp_files = func(directory_pattern) {
     let deleted_count = 0
     
     for filename in temp_files {
-        let file = open(filename)
+        let file = ::open(filename)
         if (file.exists()) {
             let size = file.size()
             file.delete()
-            print("Deleted:", filename, "(" + size.to_string() + " bytes)")
+            ::print("Deleted:", filename, "(" + size.to_string() + " bytes)")
             deleted_count++
         }
     }
     
-    print("Cleanup complete. Deleted", deleted_count, "files")
+    ::print("Cleanup complete. Deleted", deleted_count, "files")
 }
 
 cleanup_temp_files("*.tmp")
@@ -278,19 +278,19 @@ When working with files, it's important to handle potential errors:
 
 ```js
 let safe_file_operation = func(filename, operation) {
-    let file = open(filename)
+    let file = ::open(filename)
     
     // Always check if file exists for read operations
     if (operation == "read" && !file.exists()) {
-        print("Error: File", filename, "does not exist")
+        ::print("Error: File", filename, "does not exist")
         return null
     }
     
     // Get file info before operations
     if (file.exists()) {
-        print("File info:")
-        print("  Size:", file.size(), "bytes")
-        print("  Extension:", file.extension())
+        ::print("File info:")
+        ::print("  Size:", file.size(), "bytes")
+        ::print("  Extension:", file.extension())
     }
     
     // Perform the operation
@@ -308,7 +308,7 @@ let safe_file_operation = func(filename, operation) {
 // Safe file reading
 let content = safe_file_operation("data.txt", "read")
 if (content != null) {
-    print("File content loaded successfully")
+    ::print("File content loaded successfully")
 }
 ```
 

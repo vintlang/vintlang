@@ -15,7 +15,7 @@ When the Vint interpreter encounters a `debug` statement, it prints a magenta-co
 ```js
 let value = 42
 debug "Current value is: " + value
-println("Done.")
+::println("Done.")
 ```
 
 Running this script will output:

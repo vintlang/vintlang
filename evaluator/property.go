@@ -84,6 +84,14 @@ func evalPropertyAssignment(name *ast.PropertyExpression, val object.VintObject,
 	case *object.StructInstance:
 		si := left.(*object.StructInstance)
 		prop := name.Property.(*ast.Identifier).Value
+		// Check declared field type
+		if fieldType := si.Struct.GetFieldType(prop); fieldType != nil {
+			if !compatible(fieldType, val) {
+				return newTypeError(name.Token.Line,
+					"field '%s' in struct '%s' expects %s, got %s",
+					prop, si.Struct.Name, fieldType.String(), val.Type())
+			}
+		}
 		if err := si.SetField(prop, val); err != nil {
 			return newError(err.Error())
 		}

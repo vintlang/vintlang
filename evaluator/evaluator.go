@@ -84,7 +84,28 @@ func Eval(node ast.Node, env *object.Environment) object.VintObject {
 		if f, ok := val.(*object.Function); ok {
 			f.Name = node.Name.Value
 		}
+		// Inferred types: don't enforce (use Define, not DefineTyped)
 		return env.Define(node.Name.Value, val)
+
+	case *ast.TypedLetStatement:
+		var val object.VintObject
+		if node.Value != nil {
+			val = Eval(node.Value, env)
+			if isError(val) {
+				return val
+			}
+			if !compatible(node.TypeAnnotation.Type, val) {
+				return newTypeError(node.Token.Line,
+					"cannot assign %s to variable '%s' of type %s",
+					val.Type(), node.Name.Value, node.TypeAnnotation.String())
+			}
+		} else {
+			val = zeroValueFromType(node.TypeAnnotation.Type)
+		}
+		if f, ok := val.(*object.Function); ok {
+			f.Name = node.Name.Value
+		}
+		return env.DefineTyped(node.Name.Value, val, node.TypeAnnotation.Type)
 
 	case *ast.ConstStatement:
 		val := Eval(node.Value, env)
@@ -108,6 +129,9 @@ func Eval(node ast.Node, env *object.Environment) object.VintObject {
 	case *ast.FunctionLiteral:
 		return evalFunction(node, env)
 
+	case *ast.TypedFunctionLiteral:
+		return evalTypedFunction(node, env)
+
 	case *ast.MethodExpression:
 		return evalMethodExpression(node, env)
 
@@ -117,10 +141,26 @@ func Eval(node ast.Node, env *object.Environment) object.VintObject {
 	case *ast.CallExpression:
 		return evalCall(node, env)
 
+	case *ast.TypeCastExpression:
+		return evalTypeCast(node, env)
+
+	case *ast.TypeCheckExpression:
+		return evalTypeCheck(node, env)
+
+	case *ast.TypeAliasStatement:
+		// Type aliases are stored and resolved during parsing for now
+		return NULL
+
 	case *ast.StringLiteral:
 		return &object.String{Value: node.Value}
 	case *ast.At:
 		return evalAt(node, env)
+	case *ast.BuiltinExpression:
+		builtin, ok := GetBuiltinFunction(node.Name)
+		if !ok {
+			return newError("unknown builtin function: '%s'", node.Name)
+		}
+		return builtin
 	case *ast.ArrayLiteral:
 		elements := evalExpressions(node.Elements, env)
 		if len(elements) == 1 && isError(elements[0]) {
@@ -517,6 +557,18 @@ func newError(format string, a ...any) *object.Error {
 	return &object.Error{Message: fmt.Sprintf(format, a...)}
 }
 
+// newLineError creates an error with a source line prefix.
+func newLineError(line int, format string, a ...any) *object.Error {
+	msg := fmt.Sprintf(format, a...)
+	return &object.Error{Message: fmt.Sprintf("line %d: %s", line, msg)}
+}
+
+// newTypeError creates a type error with source location.
+func newTypeError(line int, format string, a ...any) *object.Error {
+	msg := fmt.Sprintf(format, a...)
+	return &object.Error{Message: fmt.Sprintf("TypeError at line %d: %s", line, msg)}
+}
+
 // Helper function to check if an object is an error
 func isError(obj object.VintObject) bool {
 	if obj != nil {
@@ -544,6 +596,16 @@ func evalExpressions(exps []ast.Expression, env *object.Environment) []object.Vi
 func applyFunction(fn object.VintObject, args []object.VintObject, line int) object.VintObject {
 	switch fn := fn.(type) {
 	case *object.Function:
+		// Check argument types against parameter types
+		for i, arg := range args {
+			if i < len(fn.ParamTypes) && fn.ParamTypes[i] != nil {
+				if !compatible(fn.ParamTypes[i], arg) {
+					paramName := fn.Parameters[i].Value
+					return newTypeError(line, "parameter '%s' expects %s, got %s",
+						paramName, fn.ParamTypes[i].String(), arg.Type())
+				}
+			}
+		}
 		if fn.Name != "" {
 			fn.Env.Define(fn.Name, fn)
 		}
@@ -555,15 +617,41 @@ func applyFunction(fn object.VintObject, args []object.VintObject, line int) obj
 			}
 		}()
 		evaluated := Eval(fn.Body, extendedEnv)
-		return unwrapReturnValue(evaluated)
+		result := unwrapReturnValue(evaluated)
+		// Check return type (skip if result is an error)
+		if fn.ReturnType != nil && !isError(result) {
+			if !compatible(fn.ReturnType, result) {
+				return newTypeError(line, "function returns %s, but body returned %s",
+					fn.ReturnType.String(), result.Type())
+			}
+		}
+		return result
 	case *object.AsyncFunction:
 		// Execute async function and return a promise
 		return fn.Execute(args, Eval)
 	case *object.Builtin:
-		if result := fn.Fn(args...); result != nil {
-			return result
+		// Check argument types against declared parameter types
+		for i, arg := range args {
+			if i < len(fn.ParamTypes) && fn.ParamTypes[i] != nil {
+				if !compatible(fn.ParamTypes[i], arg) {
+					return newTypeError(line, "argument %d to builtin '%s' expects %s, got %s",
+						i+1, "builtin", fn.ParamTypes[i].String(), arg.Type())
+				}
+			}
 		}
-		return NULL
+		// Call the builtin function
+		result := fn.Fn(args...)
+		if result == nil {
+			return NULL
+		}
+		// Check return type against declared return type
+		if fn.ReturnType != nil && !isError(result) {
+			if !compatible(fn.ReturnType, result) {
+				return newTypeError(line, "builtin returns %s, but got %s",
+					fn.ReturnType.String(), result.Type())
+			}
+		}
+		return result
 	case *object.DebouncedFunction:
 		// Set the apply function callback if not already set
 		fn.SetApplyFunction(applyFunction)
@@ -625,12 +713,29 @@ func extendedFunctionEnv(
 	env := object.NewEnclosedEnvironment(fn.Env)
 	for i, param := range fn.Parameters {
 		if i < len(args) {
+			// Type check argument against parameter type
+			if i < len(fn.ParamTypes) && fn.ParamTypes[i] != nil {
+				if !compatible(fn.ParamTypes[i], args[i]) {
+					env.Define(param.Value, args[i])
+					return env // will cause error in applyFunction
+				}
+			}
 			env.Define(param.Value, args[i])
 		} else if _, ok := fn.Defaults[param.Value]; ok {
 			env.Define(param.Value, Eval(fn.Defaults[param.Value], env))
 		}
 	}
 	return env
+}
+
+func checkReturnType(fn *object.Function, val object.VintObject) object.VintObject {
+	if fn.ReturnType != nil {
+		if !compatible(fn.ReturnType, val) {
+			return newError("TypeError: function returns %s, but body returned %s",
+				fn.ReturnType.String(), val.Type())
+		}
+	}
+	return val
 }
 
 func unwrapReturnValue(obj object.VintObject) object.VintObject {

@@ -31,7 +31,7 @@ os()
 import sysinfo
 
 os_name = sysinfo.os()
-print("Operating System:", os_name)
+::print("Operating System:", os_name)
 // Output: "Operating System: Linux" (or whatever the actual OS is)
 ```
 
@@ -52,7 +52,7 @@ arch()
 import sysinfo
 
 architecture = sysinfo.arch()
-print("System Architecture:", architecture)
+::print("System Architecture:", architecture)
 // Output: "System Architecture: x86_64" (or whatever the actual architecture is)
 ```
 
@@ -68,7 +68,7 @@ import sysinfo
 os_name = sysinfo.os()
 architecture = sysinfo.arch()
 
-print("OS:", os_name, "Arch:", architecture)
+::print("OS:", os_name, "Arch:", architecture)
 // Output: "OS: Linux Arch: x86_64" (or whatever the actual OS and architecture are)
 ```
 
@@ -91,11 +91,11 @@ memInfo()
 import sysinfo
 
 let memory = sysinfo.memInfo()
-print("Total Memory:", memory["total"])
-print("Available Memory:", memory["available"])
-print("Used Memory:", memory["used"])
-print("Free Memory:", memory["free"])
-print("Usage Percentage:", memory["percent"] + "%")
+::print("Total Memory:", memory["total"])
+::print("Available Memory:", memory["available"])
+::print("Used Memory:", memory["used"])
+::print("Free Memory:", memory["free"])
+::print("Usage Percentage:", memory["percent"] + "%")
 // Output example:
 // Total Memory: 15.62 GB
 // Available Memory: 14.18 GB
@@ -121,10 +121,10 @@ cpuInfo()
 import sysinfo
 
 let cpu = sysinfo.cpuInfo()
-print("CPU Model:", cpu["model"])
-print("CPU Cores:", cpu["cores"])
-print("CPU Frequency:", cpu["frequency"])
-print("CPU Usage:", cpu["usage"] + "%")
+::print("CPU Model:", cpu["model"])
+::print("CPU Cores:", cpu["cores"])
+::print("CPU Frequency:", cpu["frequency"])
+::print("CPU Usage:", cpu["usage"] + "%")
 // Output example:
 // CPU Model: AMD EPYC 7763 64-Core Processor
 // CPU Cores: 1
@@ -149,10 +149,10 @@ diskInfo()
 import sysinfo
 
 let disk = sysinfo.diskInfo()
-print("Total Disk Space:", disk["total"])
-print("Used Disk Space:", disk["used"])
-print("Free Disk Space:", disk["free"])
-print("Disk Usage:", disk["percent"] + "%")
+::print("Total Disk Space:", disk["total"])
+::print("Used Disk Space:", disk["used"])
+::print("Free Disk Space:", disk["free"])
+::print("Disk Usage:", disk["percent"] + "%")
 // Output example:
 // Total Disk Space: 71.61 GB
 // Used Disk Space: 49.81 GB
@@ -177,11 +177,11 @@ netInfo()
 import sysinfo
 
 let interfaces = sysinfo.netInfo()
-print("Number of interfaces:", len(interfaces))
-for i = 0; i < len(interfaces); i = i + 1 {
+::print("Number of interfaces:", ::len(interfaces))
+for i = 0; i < ::len(interfaces); i = i + 1 {
     let iface = interfaces[i]
-    print("Interface:", iface["name"])
-    print("Addresses:", iface["addrs"])
+    ::print("Interface:", iface["name"])
+    ::print("Addresses:", iface["addrs"])
 }
 // Output example:
 // Number of interfaces: 3
@@ -202,27 +202,27 @@ Here's an example that demonstrates all available sysinfo functions:
 ```js
 import sysinfo
 
-print("=== System Information ===")
+::print("=== System Information ===")
 
 // Basic system info
-print("OS:", sysinfo.os())
-print("Architecture:", sysinfo.arch())
+::print("OS:", sysinfo.os())
+::print("Architecture:", sysinfo.arch())
 
 // Memory information
 let mem = sysinfo.memInfo()
-print("Memory - Total:", mem["total"], "Used:", mem["used"], "Usage:", mem["percent"] + "%")
+::print("Memory - Total:", mem["total"], "Used:", mem["used"], "Usage:", mem["percent"] + "%")
 
 // CPU information
 let cpu = sysinfo.cpuInfo()
-print("CPU:", cpu["model"], "(" + cpu["cores"] + " cores)")
+::print("CPU:", cpu["model"], "(" + cpu["cores"] + " cores)")
 
 // Disk information
 let disk = sysinfo.diskInfo()
-print("Disk - Total:", disk["total"], "Used:", disk["used"], "Usage:", disk["percent"] + "%")
+::print("Disk - Total:", disk["total"], "Used:", disk["used"], "Usage:", disk["percent"] + "%")
 
 // Network interfaces
 let net = sysinfo.netInfo()
-print("Network interfaces:", len(net))
+::print("Network interfaces:", ::len(net))
 ```
 
 ---

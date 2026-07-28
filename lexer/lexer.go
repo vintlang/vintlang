@@ -175,7 +175,13 @@ func (l *Lexer) NextToken() token.Token {
 	case rune(']'):
 		tok = newToken(token.RBRACKET, l.line, l.ch)
 	case rune(':'):
-		tok = newToken(token.COLON, l.line, l.ch)
+		if l.peekChar() == rune(':') {
+			ch := l.ch
+			l.readChar()
+			tok = token.Token{Type: token.DOUBLECOLON, Literal: string(ch) + string(l.ch), Line: l.line}
+		} else {
+			tok = newToken(token.COLON, l.line, l.ch)
+		}
 	case rune('@'):
 		tok = newToken(token.AT, l.line, l.ch)
 	case rune('.'):
@@ -229,9 +235,8 @@ func (l *Lexer) NextToken() token.Token {
 		if l.peekChar() == rune('!') && l.line == 1 {
 			l.skipSingleLineComment()
 			return l.NextToken()
-		} else {
-			tok = l.createIllegalToken(l.ch, "- '#' is not a valid token")
 		}
+		tok = l.createIllegalToken(l.ch, "- '#' is not a valid token, did you mean '::' for builtins?")
 	case 0:
 		tok.Literal = ""
 		tok.Type = token.EOF
@@ -294,6 +299,16 @@ func (l *Lexer) getSourceLine(lineNum int) string {
 		return lines[lineNum-1]
 	}
 	return ""
+}
+
+// GetSourceLine returns the source line at the given line number (1-indexed).
+func (l *Lexer) GetSourceLine(lineNum int) string {
+	return l.getSourceLine(lineNum)
+}
+
+// FormatSourceError formats an error message with source code context.
+func FormatSourceError(filename string, line, col int, msg string) string {
+	return fmt.Sprintf("%s:%d:%d: %s", filename, line, col, msg)
 }
 
 // addErrorWithContext adds an error with source code context

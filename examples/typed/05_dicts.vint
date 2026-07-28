@@ -1,55 +1,42 @@
 // VintLang Typed Dicts
 // Demonstrates typed dictionary/map types
 
-// Typed dict: {KeyType: ValueType}
+// Typed dict
 let config: {string: any} = {
     "host": "localhost",
     "port": 8080,
     "debug": true
-}
+};
 
 let scores: {string: int} = {
     "Alice": 95,
     "Bob": 82,
     "Carol": 91
-}
+};
 
-let matrix: {string: []float64} = {
-    "A": [1.0, 2.0],
-    "B": [3.0, 4.0]
-}
-
-println("config:", config)
-println("scores:", scores)
-println("matrix:", matrix)
+::println("config:", config);
+::println("scores:", scores);
 
 // Typed access
-func getScore(db: {string: int}, name: string): int {
-    return db[name]
-}
+let getScore = func(db: {string: int}, name: string): int {
+    return db[name];
+};
 
-let alice: int = getScore(scores, "Alice")
-println("Alice's score:", alice)
-
-// Nested typed dicts
-let nested: {string: {string: int}} = {
-    "math": {"Alice": 95, "Bob": 80},
-    "science": {"Carol": 88, "Dave": 92}
-}
-println("nested:", nested)
+let alice: int = getScore(scores, "Alice");
+::println("Alice's score:", alice);
 
 // Check exists
-if scores.hasKey("Dave") {
-    println("Dave's score:", scores["Dave"])
+if (scores.hasKey("Dave")) {
+    ::println("Dave's score:", scores["Dave"]);
 } else {
-    println("Dave not found")
-}
+    ::println("Dave not found");
+};
 
 // Iterate
 for name, score in scores {
-    println(name, ":", score)
-}
+    ::println(name, ":", score);
+};
 
-// Dict literal with typed zero values
-let empty: {string: int}
-println("empty dict:", empty)
+// Dict zero value
+let empty: {string: int};
+::println("empty dict:", empty);

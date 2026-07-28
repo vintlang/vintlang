@@ -385,5 +385,42 @@
 
 ---
 
+## [July-2026] — Type System :: Builtin Prefix & Error Improvements
+
+### Static Type System
+- **Type annotations**: `let x: int = 5`, `func(a: int): string { ... }`, struct field types
+- **All type forms**: `int`, `string`, `bool`, `float64`, `[]T`, `[n]T`, `{K: V}`, `*T`, `chan T`, `func(P) R`, `(T1, T2)`
+- **Type aliases**: `type UserID = int` resolved during parsing
+- **Zero-value declarations**: `let x: int` (defaults to 0)
+- **`as` cast / `is` check operators**: `x as int`, `x is string`
+
+### Runtime Type Enforcement
+- 8 check sites: let/const declarations, function args/returns, variable assignment, struct field set, struct instantiation
+- `TypeError at line N` messages with source context
+- Struct and method type checking for parameters and return values
+
+### `::` Builtin Function Prefix
+- New `::println("hello")` syntax for explicit builtin calls
+- `::len`, `::type`, `::string`, `::int` all work
+- Regular `println("hello")` without `::` still works
+
+### Type Signatures on Builtins & Modules
+- Builtins have `ReturnType` metadata enforced at runtime
+- Module functions have `FuncTypes` / `FuncReturns` maps for type checking
+- String module has type signatures (trim, contains, length, etc.)
+
+### Improved Error Messages
+- Parser errors include source line with caret pointer
+- TypeError messages include `at line N`
+- Consistent `filename:line:col: message` format
+
+### Documentation
+- Updated README with type system and `::` prefix docs
+- Updated builtins.md with type signature info
+- Added typed example files under `examples/typed/`
+- Updated vvault examples with full type annotations
+
+---
+  
 **Summary:**
 These updates make VintLang more expressive, robust, and user-friendly. The language now supports modern declarative statements, flexible iteration, advanced function features, and improved error reporting—all backed by a new VM/compiler foundation for future growth. 

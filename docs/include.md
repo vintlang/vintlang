@@ -19,7 +19,7 @@ Let's say you have a file named `greetings.vint` with the following content:
 let greeting = "Hello, Vint!"
 
 func sayHello() {
-    println(greeting)
+    ::println(greeting)
 }
 ```
 
@@ -32,7 +32,7 @@ include "greetings.vint"
 sayHello() // Output: Hello, Vint!
 
 let customMessage = greeting + " How are you?"
-println(customMessage) // Output: Hello, Vint! How are you?
+::println(customMessage) // Output: Hello, Vint! How are you?
 ```
 
 In this example, the `include` statement at the beginning of `main.vint` makes the `greeting` variable and the `sayHello` function from `greetings.vint` available for use. This helps in keeping the code modular and easy to manage. 

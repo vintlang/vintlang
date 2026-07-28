@@ -18,7 +18,7 @@ Computes the MD5 hash of a string.
 import crypto
 
 let hashed = crypto.hashMD5("hello world")
-println(hashed) // "5eb63bbbe01eeed093cb22bb8f5acdc3"
+::println(hashed) // "5eb63bbbe01eeed093cb22bb8f5acdc3"
 ```
 
 ### `hashSHA256(data)`
@@ -35,7 +35,7 @@ Computes the SHA-256 hash of a string.
 import crypto
 
 let hashed = crypto.hashSHA256("hello world")
-println(hashed) // "b94d27b9934d3e08a52e52d7da7dabfac484efe37a5380ee9088f7ace2efcde9"
+::println(hashed) // "b94d27b9934d3e08a52e52d7da7dabfac484efe37a5380ee9088f7ace2efcde9"
 ```
 
 ## Symmetric Encryption Functions (AES)
@@ -58,7 +58,7 @@ let secret = "this is a secret message"
 let key = "a_16_byte_secret_key"
 
 let encrypted = crypto.encryptAES(secret, key)
-println("Encrypted:", encrypted)
+::println("Encrypted:", encrypted)
 ```
 
 ### `decryptAES(encryptedData, key)`
@@ -79,7 +79,7 @@ let key = "a_16_byte_secret_key"
 let encrypted = "..." // Result from encryptAES
 
 let decrypted = crypto.decryptAES(encrypted, key)
-println("Decrypted:", decrypted)
+::println("Decrypted:", decrypted)
 ```
 
 ## Asymmetric Encryption Functions (RSA)
@@ -103,8 +103,8 @@ let keys = crypto.generateRSA()
 // Generate 4096-bit RSA key pair
 let strongKeys = crypto.generateRSA(4096)
 
-println("Private key:", keys["private"])
-println("Public key:", keys["public"])
+::println("Private key:", keys["private"])
+::println("Public key:", keys["public"])
 ```
 
 ### `encryptRSA(data, publicKey)`
@@ -125,7 +125,7 @@ let keys = crypto.generateRSA(2048)
 let message = "Secret message"
 
 let encrypted = crypto.encryptRSA(message, keys["public"])
-println("Encrypted:", encrypted)
+::println("Encrypted:", encrypted)
 ```
 
 ### `decryptRSA(encryptedData, privateKey)`
@@ -146,7 +146,7 @@ let keys = crypto.generateRSA(2048)
 let encrypted = "..." // Result from encryptRSA
 
 let decrypted = crypto.decryptRSA(encrypted, keys["private"])
-println("Decrypted:", decrypted)
+::println("Decrypted:", decrypted)
 ```
 
 ## Digital Signature Functions
@@ -169,7 +169,7 @@ let keys = crypto.generateRSA(2048)
 let document = "Important document content"
 
 let signature = crypto.signRSA(document, keys["private"])
-println("Signature:", signature)
+::println("Signature:", signature)
 ```
 
 ### `verifyRSA(data, signature, publicKey)`
@@ -192,10 +192,10 @@ let document = "Important document content"
 let signature = crypto.signRSA(document, keys["private"])
 
 let isValid = crypto.verifyRSA(document, signature, keys["public"])
-println("Signature valid:", isValid) // true
+::println("Signature valid:", isValid) // true
 
 let isTampered = crypto.verifyRSA("Tampered content", signature, keys["public"])
-println("Tampered signature valid:", isTampered) // false
+::println("Tampered signature valid:", isTampered) // false
 ```
 
 ## Complete Example
@@ -212,16 +212,16 @@ let message = "Hello, secure world!"
 // Test encryption/decryption
 let encrypted = crypto.encryptRSA(message, keys["public"])
 let decrypted = crypto.decryptRSA(encrypted, keys["private"])
-println("Encryption test:", message == decrypted)
+::println("Encryption test:", message == decrypted)
 
 // Test digital signatures
 let signature = crypto.signRSA(message, keys["private"])
 let isValid = crypto.verifyRSA(message, signature, keys["public"])
-println("Signature test:", isValid)
+::println("Signature test:", isValid)
 
 // Test hashing
-println("MD5:", crypto.hashMD5(message))
-println("SHA256:", crypto.hashSHA256(message))
+::println("MD5:", crypto.hashMD5(message))
+::println("SHA256:", crypto.hashSHA256(message))
 ```
 
 ## Security Notes

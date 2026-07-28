@@ -10,7 +10,7 @@ To create a for loop, use the for keyword followed by a temporary identifier (su
 name = "hello"
 
 for i in name {
-    print(i)
+    ::print(i)
 }
 ```
 Output:
@@ -33,7 +33,7 @@ vint allows you to iterate over both the value or the key-value pair of an itera
 dict = {"a": "apple", "b": "banana"}
 
 for v in dict {
-    print(v)
+    ::print(v)
 }
 ```
 
@@ -48,7 +48,7 @@ To iterate over both the keys and the values, use two temporary identifiers:
 
 ```s
 for k, v in dict {
-    print(k + " is " + v)
+    ::print(k + " is " + v)
 }
 ```
 
@@ -65,7 +65,7 @@ To iterate over just the values in a string, use one temporary identifier:
 
 ```s
 for v in "mojo" {
-    print(v)
+    ::print(v)
 }
 ```
 
@@ -80,7 +80,7 @@ To iterate over both the keys and the values in a string, use two temporary iden
 
 ```s
 for i, v in "mojo" {
-    print(i, "->", v)
+    ::print(i, "->", v)
 }
 ```
 Output:
@@ -99,7 +99,7 @@ To iterate over just the values in a list, use one temporary identifier:
 names = ["alice", "bob", "charlie"]
 
 for v in names {
-    print(v)
+    ::print(v)
 }
 ```
 
@@ -115,7 +115,7 @@ To iterate over both the keys and the values in a list, use two temporary identi
 
 ```s
 for i, v in names {
-    print(i, "-", v)
+    ::print(i, "-", v)
 }
 ```
 
@@ -136,10 +136,10 @@ Use the break keyword to terminate a loop:
 ```s
 for i, v in "hello" {
     if (i == 2) {
-        print("breaking loop")
+        ::print("breaking loop")
         break
     }
-    print(v)
+    ::print(v)
 }
 ```
 
@@ -158,10 +158,10 @@ Use the continue keyword to skip a specific iteration:
 ```s
 for i, v in "hello" {
     if (i == 2) {
-        print("skipping iteration")
+        ::print("skipping iteration")
         continue
     }
-    print(v)
+    ::print(v)
 }
 ```
 

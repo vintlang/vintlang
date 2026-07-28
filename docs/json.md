@@ -27,10 +27,10 @@ decode(jsonString)
 ```js
 import json
 
-print("=== Example 1: Decode ===")
+::print("=== Example 1: Decode ===")
 raw_json = '{"name": "John", "age": 30, "isAdmin": false, "friends": ["Jane", "Doe"]}'
 decoded = json.decode(raw_json)
-print("Decoded Object:", decoded)
+::print("Decoded Object:", decoded)
 // Output: Decoded Object: {"name": "John", "age": 30, "isAdmin": false, "friends": ["Jane", "Doe"]}
 ```
 
@@ -48,14 +48,14 @@ encode(data, indent = 0)
 ```js
 import json
 
-print("\n=== Example 2: Encode ===")
+::print("\n=== Example 2: Encode ===")
 data = {
   "language": "Vint",
   "version": 1.0,
   "features": ["custom modules", "native objects"]
 }
 encoded_json = json.encode(data, indent=2)
-print("Encoded JSON:", encoded_json)
+::print("Encoded JSON:", encoded_json)
 // Output:
 // Encoded JSON: {
 //   "language": "Vint",
@@ -78,10 +78,10 @@ pretty(jsonString)
 ```js
 import json
 
-print("\n=== Example 3: Pretty Print ===")
+::print("\n=== Example 3: Pretty Print ===")
 raw_json_pretty = '{"name":"John","age":30,"friends":["Jane","Doe"]}'
 pretty_json = json.pretty(raw_json_pretty)
-print("Pretty JSON:\n", pretty_json)
+::print("Pretty JSON:\n", pretty_json)
 // Output:
 // Pretty JSON:
 // {
@@ -105,11 +105,11 @@ merge(json1, json2)
 ```js
 import json
 
-print("\n=== Example 4: Merge ===")
+::print("\n=== Example 4: Merge ===")
 json1 = {"name": "John", "age": 30}
 json2 = {"city": "New York", "age": 35}
 merged_json = json.merge(json1, json2)
-print("Merged JSON:", merged_json)
+::print("Merged JSON:", merged_json)
 // Output: Merged JSON: {"name": "John", "age": 35, "city": "New York"}
 ```
 
@@ -127,15 +127,15 @@ get(jsonObject, key)
 ```js
 import json
 
-print("\n=== Example 5: Get Value by Key ===")
+::print("\n=== Example 5: Get Value by Key ===")
 json_object = {"name": "John", "age": 30, "city": "New York"}
 
 value = json.get(json_object, "age")
-print("Age:", value)
+::print("Age:", value)
 // Output: Age: 30
 
 missing_value = json.get(json_object, "country")
-print("Country (missing key):", missing_value)
+::print("Country (missing key):", missing_value)
 // Output: Country (missing key): null
 ```
 

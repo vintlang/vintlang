@@ -36,7 +36,7 @@ To retrieve all rows from a query, use `postgres.fetchAll()`.
 
 ```js
 users = postgres.fetchAll(conn, "SELECT * FROM users")
-print(users)
+::print(users)
 ```
 
 ### Fetch a Single Row
@@ -45,7 +45,7 @@ To retrieve just one row, use `postgres.fetchOne()`.
 
 ```js
 user = postgres.fetchOne(conn, "SELECT * FROM users WHERE id = $1", 1)
-print(user)
+::print(user)
 ```
 
 ## Full Example
@@ -60,9 +60,9 @@ conn_str = "user=postgres password=password dbname=testdb sslmode=disable"
 conn = postgres.open(conn_str)
 
 if conn.type() == "ERROR" {
-    print("Error connecting to PostgreSQL:", conn.message())
+    ::print("Error connecting to PostgreSQL:", conn.message())
 } else {
-    print("Successfully connected to PostgreSQL")
+    ::print("Successfully connected to PostgreSQL")
 
     // Create a table
     create_query = "CREATE TABLE IF NOT EXISTS users (id SERIAL PRIMARY KEY, name VARCHAR(255), age INT)"
@@ -73,9 +73,9 @@ if conn.type() == "ERROR" {
 
     // Fetch and print data
     users = postgres.fetchAll(conn, "SELECT * FROM users")
-    print("All users:", users)
+    ::print("All users:", users)
 
     // Close the connection
     postgres.close(conn)
-    print("Connection closed")
+    ::print("Connection closed")
 } 

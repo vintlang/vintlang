@@ -76,9 +76,9 @@ The VintLang Bundler now supports bundling multi-file packages with both imports
 import my_utils
 import os
 
-print("Starting application...")
+::print("Starting application...")
 let result = my_utils.process_data("hello")
-print("Result:", result)
+::print("Result:", result)
 ```
 
 **my_utils.vint**:
@@ -107,8 +107,8 @@ The bundler automatically discovers `my_utils.vint`, processes the package struc
 include "config.vint"
 include "helpers.vint"
 
-print("Application:", appName)
-print("Result:", processData("test"))
+::print("Application:", appName)
+::print("Result:", processData("test"))
 ```
 
 **config.vint**:
@@ -165,7 +165,7 @@ To run the binary:
 Given a simple `hello.vint` file:
 
 ```js
-print("Hello, World!");
+::print("Hello, World!");
 ```
 
 Run:
@@ -291,7 +291,7 @@ The resulting binary is completely portable and self-contained - no VintLang int
 │                 │    │                 │    │                 │
 │ import math_utils│    │ package math_utils│   │ let appName =   │
 │ include "config"│    │ {               │    │   "My App"      │
-│ print(appName)  │    │   let add = ... │    │ let version =   │
+│ ::print(appName)  │    │   let add = ... │    │ let version =   │
 │ ...             │    │ }               │    │   "1.0"         │
 └─────────────────┘    └─────────────────┘    └─────────────────┘
          │                       │                       │
@@ -317,7 +317,7 @@ The resulting binary is completely portable and self-contained - no VintLang int
                     │ }                        │
                     │ let appName = "My App"   │
                     │ let version = "1.0"      │
-                    │ print(appName)           │
+                    │ ::print(appName)           │
                     │ ...                      │
                     └────────────┬─────────────┘
                                  │
@@ -389,8 +389,8 @@ Let's see exactly what happens when bundling a multi-file project:
 // main.vint
 import math_utils
 include "config.vint"
-print("App:", appName)
-print("Result:", math_utils.add(5, 3))
+::print("App:", appName)
+::print("Result:", math_utils.add(5, 3))
 
 // math_utils.vint
 package math_utils {
@@ -420,8 +420,8 @@ package math_utils {
 
 let appName = "Calculator"
 
-print("App:", appName)
-print("Result:", math_utils.add(5, 3))
+::print("App:", appName)
+::print("Result:", math_utils.add(5, 3))
 ```
 
 **After Go Code Generation:**
@@ -436,8 +436,8 @@ func main() {
 
 let appName = "Calculator"
 
-print("App:", appName)
-print("Result:", math_utils.add(5, 3))`
+::print("App:", appName)
+::print("Result:", math_utils.add(5, 3))`
     repl.Read(code)
 }
 ```

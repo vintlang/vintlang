@@ -13,10 +13,10 @@ The `const` keyword is used to declare a constant. It follows the same naming ru
 
 ```js
 const PI = 3.14159
-print(PI)  // Output: 3.14159
+::print(PI)  // Output: 3.14159
 
 const GREETING = "Hello, Vint!"
-print(GREETING)  // Output: "Hello, Vint!"
+::print(GREETING)  // Output: "Hello, Vint!"
 ```
 
 In the examples above, `PI` and `GREETING` are declared as constants and can be used throughout the program.
@@ -29,7 +29,7 @@ Once a constant is declared, its value cannot be changed. Attempting to reassign
 
 ```js
 const MAX_CONNECTIONS = 5
-print(MAX_CONNECTIONS) // Output: 5
+::print(MAX_CONNECTIONS) // Output: 5
 
 // This will cause an error
 MAX_CONNECTIONS = 10 
@@ -80,11 +80,11 @@ package Config {
 import "Config"
 
 // Accessing public constants
-print("App Version:", Config.VERSION)  // ✅ Works
-print("Max Users:", Config.MAX_USERS)  // ✅ Works
+::print("App Version:", Config.VERSION)  // ✅ Works
+::print("Max Users:", Config.MAX_USERS)  // ✅ Works
 
 // Attempting to access private constants
-print(Config._SECRET_KEY)  // ❌ Error: cannot access private property
+::print(Config._SECRET_KEY)  // ❌ Error: cannot access private property
 ```
 
 For more information about packages and access control, see the [Packages documentation](packages.md). 

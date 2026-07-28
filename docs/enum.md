@@ -31,7 +31,7 @@ enum Status {
 }
 
 let currentStatus = Status.ACTIVE
-print(currentStatus)  // Output: 1
+::print(currentStatus)  // Output: 1
 ```
 
 ## Enum Types
@@ -49,7 +49,7 @@ enum Priority {
 }
 
 let taskPriority = Priority.HIGH
-print("Priority level: " + taskPriority)  // Output: Priority level: 2
+::print("Priority level: " + taskPriority)  // Output: Priority level: 2
 ```
 
 ### String Enums
@@ -64,7 +64,7 @@ enum Environment {
 }
 
 let currentEnv = Environment.PROD
-print("Running in: " + currentEnv)  // Output: Running in: production
+::print("Running in: " + currentEnv)  // Output: Running in: production
 ```
 
 ### HTTP Status Codes
@@ -80,7 +80,7 @@ enum HttpStatus {
 
 let statusCode = HttpStatus.OK
 if statusCode == HttpStatus.OK {
-    print("Request successful!")
+    ::print("Request successful!")
 }
 ```
 
@@ -116,11 +116,11 @@ enum OrderStatus {
 let order = OrderStatus.CONFIRMED
 
 if order == OrderStatus.CONFIRMED {
-    print("Order has been confirmed")
+    ::print("Order has been confirmed")
 }
 
 if order >= OrderStatus.CONFIRMED {
-    print("Order is confirmed or further along")
+    ::print("Order is confirmed or further along")
 }
 ```
 
@@ -138,7 +138,7 @@ enum Level {
 
 let currentLevel = Level.INTERMEDIATE
 let nextLevel = currentLevel + 1
-print("Next level: " + nextLevel)  // Output: Next level: 3
+::print("Next level: " + nextLevel)  // Output: Next level: 3
 ```
 
 ### String Concatenation
@@ -153,7 +153,7 @@ enum Greeting {
 }
 
 let message = Greeting.HELLO + ", World!"
-print(message)  // Output: Hello, World!
+::print(message)  // Output: Hello, World!
 ```
 
 ## Immutability
@@ -198,7 +198,7 @@ enum AppState {
 let state = AppState.INITIALIZING
 
 if state == AppState.ERROR {
-    print("Application encountered an error")
+    ::print("Application encountered an error")
 }
 ```
 
@@ -215,7 +215,7 @@ enum Role {
 let userRole = Role.ADMIN
 
 if userRole == Role.ADMIN {
-    print("Admin access granted")
+    ::print("Admin access granted")
 }
 ```
 
@@ -233,7 +233,7 @@ enum LogLevel {
 let currentLogLevel = LogLevel.INFO
 
 if currentLogLevel >= LogLevel.WARN {
-    print("Warning or higher level message")
+    ::print("Warning or higher level message")
 }
 ```
 
@@ -267,7 +267,7 @@ enum ResponseCode {
 let response = ResponseCode.SUCCESS
 
 if response == ResponseCode.SUCCESS {
-    print("Operation completed successfully")
+    ::print("Operation completed successfully")
 }
 ```
 
@@ -293,7 +293,7 @@ let checkStatus = func(status) {
 }
 
 let result = checkStatus(Status.ACTIVE)
-print(result)  // Output: In progress...
+::print(result)  // Output: In progress...
 ```
 
 ## Error Handling
@@ -447,16 +447,16 @@ let status = TaskStatus.INPROGRESS
 
 switch status {
     case TaskStatus.TODO {
-        print("Task not started")
+        ::print("Task not started")
     }
     case TaskStatus.INPROGRESS {
-        print("Task in progress")
+        ::print("Task in progress")
     }
     case TaskStatus.REVIEW {
-        print("Task under review")
+        ::print("Task under review")
     }
     case TaskStatus.DONE {
-        print("Task completed")
+        ::print("Task completed")
     }
 }
 ```
@@ -473,7 +473,7 @@ enum Status {
 let statuses = [Status.PENDING, Status.ACTIVE, Status.COMPLETED]
 
 for status in statuses {
-    print("Processing status: " + status)
+    ::print("Processing status: " + status)
 }
 ```
 
@@ -492,7 +492,7 @@ let statusMessages = {
     Status.COMPLETED: "All done!"
 }
 
-print(statusMessages[Status.ACTIVE])  // Output: Currently processing
+::print(statusMessages[Status.ACTIVE])  // Output: Currently processing
 ```
 
 ## Limitations

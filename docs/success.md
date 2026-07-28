@@ -14,7 +14,7 @@ When the Vint interpreter encounters a `success` statement, it prints a green-co
 
 ```js
 success "Backup completed successfully!"
-println("All done.")
+::println("All done.")
 ```
 
 Running this script will output:

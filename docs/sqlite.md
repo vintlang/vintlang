@@ -40,14 +40,14 @@ Use `sqlite.fetchAll()` to retrieve all rows from a query.
 
 ```js
 users = sqlite.fetchAll(db, "SELECT * FROM users")
-print(users)
+::print(users)
 ```
 
 You can also fetch a single row with `sqlite.fetchOne()`.
 
 ```js
 first_user = sqlite.fetchOne(db, "SELECT * FROM users LIMIT 1")
-print(first_user)
+::print(first_user)
 ```
 
 ## Create a Table
@@ -82,11 +82,11 @@ sqlite.execute(db, "INSERT INTO users (name, age) VALUES (?, ?)", "Alice", 25)
 
 // Fetch all rows
 users = sqlite.fetchAll(db, "SELECT * FROM users")
-print(users)
+::print(users)
 
 // Fetch a single row
 first_user = sqlite.fetchOne(db, "SELECT * FROM users LIMIT 1")
-print(first_user)
+::print(first_user)
 
 // Close the database connection
 sqlite.close(db)

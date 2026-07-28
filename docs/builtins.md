@@ -1,16 +1,28 @@
 # Built-in Functions in Vint
 
 Vint has a number of built-in functions that are globally available to perform common tasks.
+Builtins can be called normally (`println("hello")`) or with the `::` prefix (`::println("hello")`) for explicit visual distinction.
 
 ---
+
+## Type Signatures
+
+Many builtins have declared return types that participate in the type system:
+
+```vint
+let x: string = ::type(42)    // ✅ OK — type returns string
+let n: int = ::len("hello")   // ✅ OK — len returns int
+let s: string = ::string(42)  // ✅ OK — string returns string
+let m: int = ::type(42)       // ❌ TypeError — type returns string, not int
+```
 
 ## I/O and System Functions
 
 ### `print(...)`
 Prints messages to the standard output. It can take zero or more arguments, which will be printed with a space between them.
 ```js
-print("Hello,", "world!") // Output: Hello, world!
-print(1, 2, 3)         // Output: 1 2 3
+::print("Hello,", "world!") // Output: Hello, world!
+::print(1, 2, 3)         // Output: 1 2 3
 ```
 
 ### `println(...)`
@@ -19,24 +31,24 @@ Similar to `print`, but it adds a newline character at the end of the output.
 ### `input(prompt)`
 Reads a line of input from the user from standard input. It can optionally take a string argument to use as a prompt.
 ```js
-let name = input("Enter your name: ")
-println("Hello,", name)
+let name = ::input("Enter your name: ")
+::println("Hello,", name)
 ```
 
 ### `sleep(milliseconds)`
 Pauses the program's execution for a specified duration in milliseconds.
 ```js
-println("Waiting for 1 second...")
-sleep(1000)
-println("Done.")
+::println("Waiting for 1 second...")
+::sleep(1000)
+::println("Done.")
 ```
 
 ### `exit(code)`
 Terminates the program with a specified exit code. An exit code of `0` typically indicates success, while any other number indicates an error.
 ```js
 if (some_error) {
-    println("An error occurred!")
-    exit(1)
+    ::println("An error occurred!")
+    ::exit(1)
 }
 ```
 
@@ -55,9 +67,9 @@ type([])      // Output: "ARRAY"
 ### `len(object)`
 Returns the length of a string, array, or dictionary.
 ```js
-len("hello")      // Output: 5
-len([1, 2, 3])    // Output: 3
-len({"a": 1})   // Output: 1
+::len("hello")      // Output: 5
+::len([1, 2, 3])    // Output: 3
+::len({"a": 1})   // Output: 1
 ```
 
 ---
@@ -68,17 +80,17 @@ len({"a": 1})   // Output: 1
 Returns a *new* array with the given elements added to the end.
 ```js
 let arr = [1, 2]
-let new_arr = append(arr, 3, 4)
-println(new_arr) // Output: [1, 2, 3, 4]
+let new_arr = ::append(arr, 3, 4)
+::println(new_arr) // Output: [1, 2, 3, 4]
 ```
 
 ### `pop(array)`
 Removes the last element from an array and returns that element. This function modifies the array in-place.
 ```js
 let arr = [1, 2, 3]
-let last = pop(arr)
-println(last) // Output: 3
-println(arr)  // Output: [1, 2]
+let last = ::pop(arr)
+::println(last) // Output: 3
+::println(arr)  // Output: [1, 2]
 ```
 
 ---
@@ -89,22 +101,22 @@ println(arr)  // Output: [1, 2]
 Returns an array containing all the keys from a dictionary. The order is not guaranteed.
 ```js
 let dict = {"name": "Alex", "age": 30}
-println(keys(dict)) // Output: ["name", "age"] (or ["age", "name"])
+::println(::keys(dict)) // Output: ["name", "age"] (or ["age", "name"])
 ```
 
 ### `values(dictionary)`
 Returns an array containing all the values from a dictionary. The order corresponds to the order of the keys returned by `keys()`.
 ```js
 let dict = {"name": "Alex", "age": 30}
-println(values(dict)) // Output: ["Alex", 30] (or [30, "Alex"])
+::println(::values(dict)) // Output: ["Alex", 30] (or [30, "Alex"])
 ```
 
 ### `has_key(dictionary, key)`
 Returns `true` if the dictionary contains the given key, and `false` otherwise. This is also available as a method on dictionary objects: `my_dict.has_key(key)`.
 ```js
 let dict = {"a": 1}
-println(has_key(dict, "a")) // Output: true
-println(dict.has_key("b"))  // Output: false
+::println(has_key(dict, "a")) // Output: true
+::println(dict.has_key("b"))  // Output: false
 ```
 
 ---
@@ -114,13 +126,13 @@ println(dict.has_key("b"))  // Output: false
 ### `chr(integer)`
 Returns a single-character string corresponding to the given integer ASCII code.
 ```js
-println(chr(65)) // Output: "A"
+::println(chr(65)) // Output: "A"
 ```
 
 ### `ord(string)`
 Returns the integer ASCII code of the first character of a given string.
 ```js
-println(ord("A")) // Output: 65
+::println(ord("A")) // Output: 65
 ```
 
 ---
@@ -130,7 +142,7 @@ println(ord("A")) // Output: 65
 ### `open(filepath)`
 Opens a file and returns a file object. This is typically used for reading file contents.
 ```js
-let file = open("data.txt")
+let file = ::open("data.txt")
 // You can then use methods on the file object
 ```
 
@@ -287,17 +299,17 @@ isNull("")         // Output: false
 #### `parseInt(string)`
 Parses a string and returns an integer.
 ```js
-parseInt("42")     // Output: 42
-parseInt("-10")    // Output: -10
-parseInt("abc")    // Error: cannot parse 'abc' as integer
+::parseInt("42")     // Output: 42
+::parseInt("-10")    // Output: -10
+::parseInt("abc")    // Error: cannot parse 'abc' as integer
 ```
 
 #### `parseFloat(string)`
 Parses a string and returns a float.
 ```js
-parseFloat("3.14")    // Output: 3.14
-parseFloat("-2.5")    // Output: -2.5
-parseFloat("hello")   // Error: cannot parse 'hello' as float
+::parseFloat("3.14")    // Output: 3.14
+::parseFloat("-2.5")    // Output: -2.5
+::parseFloat("hello")   // Error: cannot parse 'hello' as float
 ```
 
 ### Utility Functions
@@ -327,7 +339,7 @@ debouncedPrint("Third call")   // Only this prints after 500ms
 
 // Example with user-defined function
 let logMessage = func(msg) {
-    println("LOG:", msg)
+    ::println("LOG:", msg)
 }
 
 let debouncedLog = debounce(1000, logMessage)

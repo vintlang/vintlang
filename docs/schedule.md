@@ -20,7 +20,7 @@ import schedule
 
 // Execute every 5 seconds
 let ticker = schedule.ticker(5, func() {
-    print("Tick at", time.now())
+    ::print("Tick at", time.now())
 })
 
 // Stop the ticker after some time
@@ -67,22 +67,22 @@ import schedule
 
 // Every minute at second 0
 schedule.schedule("0 * * * * *", func() {
-    print("Top of the minute!")
+    ::print("Top of the minute!")
 })
 
 // Daily at 9:30 AM
 schedule.schedule("0 30 9 * * *", func() {
-    print("Good morning!")
+    ::print("Good morning!")
 })
 
 // Every 30 seconds
 schedule.schedule("*/30 * * * * *", func() {
-    print("Every 30 seconds")
+    ::print("Every 30 seconds")
 })
 
 // Every Friday at 5:00 PM
 schedule.schedule("0 0 17 * * 5", func() {
-    print("TGIF!")
+    ::print("TGIF!")
 })
 ```
 
@@ -106,7 +106,7 @@ Executes a callback every second. Equivalent to `ticker(1, callback)`.
 **Example:**
 ```javascript
 let job = schedule.everySecond(func() {
-    print("Ping!")
+    ::print("Ping!")
 })
 ```
 
@@ -117,7 +117,7 @@ Executes a callback every minute at second 0. Equivalent to `schedule("0 * * * *
 **Example:**
 ```javascript
 let job = schedule.everyMinute(func() {
-    print("Another minute passed")
+    ::print("Another minute passed")
 })
 ```
 
@@ -128,7 +128,7 @@ Executes a callback every hour at minute 0, second 0. Equivalent to `schedule("0
 **Example:**
 ```javascript
 let job = schedule.everyHour(func() {
-    print("It's a new hour!")
+    ::print("It's a new hour!")
 })
 ```
 
@@ -145,7 +145,7 @@ Executes a callback daily at the specified time.
 ```javascript
 // Daily reminder at 2:30 PM
 let job = schedule.daily(14, 30, func() {
-    print("Time for afternoon coffee!")
+    ::print("Time for afternoon coffee!")
 })
 ```
 
@@ -155,40 +155,40 @@ let job = schedule.daily(14, 30, func() {
 import schedule
 import time
 
-print("Starting scheduling demo...")
+::print("Starting scheduling demo...")
 
 // Ticker example - every 3 seconds
 let ticker = schedule.ticker(3, func() {
-    print("[TICKER] Current time:", time.now())
+    ::print("[TICKER] Current time:", time.now())
 })
 
 // Schedule example - every 10 seconds
 let job1 = schedule.schedule("*/10 * * * * *", func() {
-    print("[SCHEDULE] Every 10 seconds")
+    ::print("[SCHEDULE] Every 10 seconds")
 })
 
 // Helper function example
 let job2 = schedule.everySecond(func() {
-    print("[HELPER] Ping!")
+    ::print("[HELPER] Ping!")
 })
 
 // Daily example (would execute at specified time)
 let job3 = schedule.daily(9, 0, func() {
-    print("[DAILY] Good morning! Time to start the day.")
+    ::print("[DAILY] Good morning! Time to start the day.")
 })
 
 // Let everything run for 30 seconds
-print("Running for 30 seconds...")
+::print("Running for 30 seconds...")
 time.sleep(30)
 
 // Clean up
-print("Stopping all jobs...")
+::print("Stopping all jobs...")
 schedule.stopTicker(ticker)
 schedule.stopSchedule(job1)
 schedule.stopTicker(job2)
 schedule.stopSchedule(job3)
 
-print("Demo completed!")
+::print("Demo completed!")
 ```
 
 ## Notes

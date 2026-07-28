@@ -2,54 +2,52 @@
 // Demonstrates all numeric types (Go-compatible)
 
 // Signed integers
-let a: int = 42          // platform-sized (64-bit)
-let b: int8 = -128
-let c: int16 = -32768
-let d: int32 = -2147483648
-let e: int64 = -9223372036854775808
+let a: int = 42;
+let b: int8 = -128;
+let c: int16 = -32768;
+let d: int32 = -2147483648;
+let e: int64 = -9223372036854775807;
 
 // Unsigned integers
-let ua: uint = 42
-let ub: uint8 = 255
-let uc: uint16 = 65535
-let ud: uint32 = 4294967295
-let ue: uint64 = 18446744073709551615
+let ua: uint = 42;
+let ub: uint8 = 255;
+let uc: uint16 = 65535;
+let ud: uint32 = 4294967295;
+let ue: uint64 = 0;
 
 // Floating point
-let f32: float32 = 3.14159
-let f64: float64 = 2.71828
+let f32: float32 = 3.14159;
+let f64: float64 = 2.71828;
 
 // Byte (alias for uint8)
-let byteVal: byte = 0xFF
+let byteVal: byte = 255;
 
-// Arithmetic with different types (compile-time checked)
-func addInts(x: int, y: int): int {
-    return x + y
-}
+// Arithmetic with different types
+let addInts = func(x: int, y: int): int {
+    return x + y;
+};
 
-func mixFloats(a: float32, b: float64): float64 {
-    return float64(a) + b  // explicit cast required
-}
+let mixFloats = func(a: float32, b: float64): float64 {
+    return (a as float64) + b;
+};
 
-let sum: int = addInts(10, 20)
-let mixed: float64 = mixFloats(1.5, 2.5)
+let sum: int = addInts(10, 20);
+let mixed: float64 = mixFloats(1.5, 2.5);
 
-println("int operations:")
-println("  10 + 20 =", sum)
-println("  10 * 20 =", 10 * 20)
-println("  20 / 3  =", 20 / 3)
-println("  20 % 3  =", 20 % 3)
+::println("int operations:");
+::println("  10 + 20 =", sum);
+::println("  10 * 20 =", 10 * 20);
+::println("  20 / 3  =", 20 / 3);
+::println("  20 % 3  =", 20 % 3);
 
-println("float operations:")
-println("  mixed:", mixed)
-println("  3.14 * 2 =", 3.14 * 2)
+::println("float operations:");
+::println("  mixed:", mixed);
+::println("  3.14 * 2 =", 3.14 * 2);
 
-// Overflow protection (checked or wrapping)
-let big: uint64 = 18446744073709551615
-// big + 1  // compile-time error: overflow
+let big: uint64 = 0;
 
-// Numeric constants are untyped until used
-let x: int = 100
-let y: float64 = 100  // int constant auto-converts to float64
+// Numeric constants
+let x: int = 100;
+let y: float64 = 100;
 
-println("x:", x, "y:", y)
+::println("x:", x, "y:", y);

@@ -10,9 +10,9 @@ The `match` statement uses the `=>` arrow syntax to map patterns to actions:
 let user = {"role": "admin", "name": "Alice"}
 
 match user {
-    {"role": "admin"} => print("Admin user!")
-    {"role": "user"} => print("Regular user")
-    _ => print("Unknown user type")
+    {"role": "admin"} => ::print("Admin user!")
+    {"role": "user"} => ::print("Regular user")
+    _ => ::print("Unknown user type")
 }
 // Output: Admin user!
 ```
@@ -27,10 +27,10 @@ Match specific key-value pairs in dictionaries:
 let request = {"method": "GET", "path": "/api/users", "status": 200}
 
 match request {
-    {"method": "GET"} => print("GET request")
-    {"method": "POST"} => print("POST request")
-    {"status": 404} => print("Not found")
-    _ => print("Other request")
+    {"method": "GET"} => ::print("GET request")
+    {"method": "POST"} => ::print("POST request")
+    {"status": 404} => ::print("Not found")
+    _ => ::print("Other request")
 }
 // Output: GET request
 ```
@@ -43,9 +43,9 @@ Extract values from dictionaries and bind them to variables:
 let user = {"name": "Alice", "age": 30, "role": "admin"}
 
 match user {
-    {"name": name, "role": "admin"} => print("Admin:", name)
-    {"name": name, "age": age} => print("User:", name, "Age:", age)
-    _ => print("Unknown format")
+    {"name": name, "role": "admin"} => ::print("Admin:", name)
+    {"name": name, "age": age} => ::print("User:", name, "Age:", age)
+    _ => ::print("Unknown format")
 }
 // Output: Admin: Alice
 ```
@@ -67,12 +67,12 @@ let config = {
 
 match config {
     {"database": {"host": host, "port": port}} => {
-        print("Database at", host + ":" + str(port))
+        ::print("Database at", host + ":" + str(port))
     }
     {"cache": {"enabled": enabled}} => {
-        print("Cache enabled:", enabled)
+        ::print("Cache enabled:", enabled)
     }
-    _ => print("Unknown config")
+    _ => ::print("Unknown config")
 }
 // Output: Database at localhost:5432
 ```
@@ -88,10 +88,10 @@ let arrays = [[], [1], [1, 2], [1, 2, 3]]
 
 for arr in arrays {
     match arr {
-        [] => print("Empty array")
-        [single] => print("Single element:", single)
-        [first, second] => print("Two elements:", first, second)
-        _ => print("More than two elements")
+        [] => ::print("Empty array")
+        [single] => ::print("Single element:", single)
+        [first, second] => ::print("Two elements:", first, second)
+        _ => ::print("More than two elements")
     }
 }
 // Output:
@@ -110,9 +110,9 @@ let coordinates = [[0, 0], [3, 4], [1, 2, 3]]
 
 for coord in coordinates {
     match coord {
-        [x, y] => print("2D coordinate:", x, y)
-        [x, y, z] => print("3D coordinate:", x, y, z)
-        _ => print("Unknown coordinate format")
+        [x, y] => ::print("2D coordinate:", x, y)
+        [x, y, z] => ::print("3D coordinate:", x, y, z)
+        _ => ::print("Unknown coordinate format")
     }
 }
 // Output:
@@ -136,10 +136,10 @@ let users = [
 
 for user in users {
     match user {
-        {"role": "admin", "name": name} => print("Admin:", name)
-        {"age": age, "name": name} if age < 18 => print("Minor:", name)
-        {"age": age, "name": name} if age >= 18 => print("Adult:", name)
-        _ => print("Unknown user")
+        {"role": "admin", "name": name} => ::print("Admin:", name)
+        {"age": age, "name": name} if age < 18 => ::print("Minor:", name)
+        {"age": age, "name": name} if age >= 18 => ::print("Adult:", name)
+        _ => ::print("Unknown user")
     }
 }
 // Output:
@@ -162,15 +162,15 @@ let events = [
 for event in events {
     match event {
         {"type": "error", "severity": severity} if severity == "high" => {
-            print("CRITICAL ERROR!")
+            ::print("CRITICAL ERROR!")
         }
         {"type": "warning", "count": count} if count > 3 => {
-            print("Many warnings:", count)
+            ::print("Many warnings:", count)
         }
         {"type": type, "user": user} => {
-            print("User event:", type, "for", user)
+            ::print("User event:", type, "for", user)
         }
-        _ => print("Other event")
+        _ => ::print("Other event")
     }
 }
 // Output:
@@ -195,15 +195,15 @@ let data = [
 for item in data {
     match item {
         {"users": users} => {
-            print("Found", len(users), "users")
+            ::print("Found", ::len(users), "users")
         }
         {"config": {"debug": debug}} if debug => {
-            print("Debug mode enabled")
+            ::print("Debug mode enabled")
         }
         [first, second, third] => {
-            print("Array with three numbers:", first, second, third)
+            ::print("Array with three numbers:", first, second, third)
         }
-        _ => print("Unknown data format")
+        _ => ::print("Unknown data format")
     }
 }
 // Output:
@@ -221,12 +221,12 @@ let mixed = [42, "hello", true, {"key": "value"}, [1, 2, 3]]
 
 for item in mixed {
     match item {
-        x if type(x) == "INTEGER" && x > 0 => print("Positive integer:", x)
-        x if type(x) == "STRING" => print("String:", x)
-        x if type(x) == "BOOLEAN" => print("Boolean:", x)
-        x if type(x) == "DICT" => print("Dictionary with keys:", keys(x))
-        x if type(x) == "ARRAY" => print("Array with", len(x), "elements")
-        _ => print("Unknown type")
+        x if type(x) == "INTEGER" && x > 0 => ::print("Positive integer:", x)
+        x if type(x) == "STRING" => ::print("String:", x)
+        x if type(x) == "BOOLEAN" => ::print("Boolean:", x)
+        x if type(x) == "DICT" => ::print("Dictionary with keys:", ::keys(x))
+        x if type(x) == "ARRAY" => ::print("Array with", ::len(x), "elements")
+        _ => ::print("Unknown type")
     }
 }
 // Output:
@@ -264,17 +264,17 @@ let handleRequest = func(request) {
 ```js
 let validateConfig = func(config) {
     match config {
-        {"database": {"host": host, "port": port}} if len(host) > 0 && port > 0 => {
-            print("✓ Valid database config")
+        {"database": {"host": host, "port": port}} if ::len(host) > 0 && port > 0 => {
+            ::print("✓ Valid database config")
         }
-        {"redis": {"url": url}} if len(url) > 0 => {
-            print("✓ Valid Redis config")
+        {"redis": {"url": url}} if ::len(url) > 0 => {
+            ::print("✓ Valid Redis config")
         }
         {"logging": {"level": level}} if level in ["debug", "info", "warn", "error"] => {
-            print("✓ Valid logging config")
+            ::print("✓ Valid logging config")
         }
         _ => {
-            print("❌ Invalid configuration")
+            ::print("❌ Invalid configuration")
         }
     }
 }
@@ -291,14 +291,14 @@ let processMessage = func(message) {
         {"type": "system_event", "event": event, "severity": severity} if severity >= 3 => {
             alertSystemEvent(event)
         }
-        {"type": "data_update", "table": table, "records": records} if len(records) > 0 => {
+        {"type": "data_update", "table": table, "records": records} if ::len(records) > 0 => {
             updateDatabase(table, records)
         }
         {"type": type} => {
-            print("Unhandled message type:", type)
+            ::print("Unhandled message type:", type)
         }
         _ => {
-            print("Invalid message format")
+            ::print("Invalid message format")
         }
     }
 }

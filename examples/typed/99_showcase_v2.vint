@@ -1,0 +1,76 @@
+// VintLang Type System Showcase (v2 preview)
+// Demonstrates the type system with supported features
+
+// Type Aliases
+type UserID = int;
+type JSON = {string: any};
+
+// Enums
+enum OrderStatus {
+    Pending = "pending",
+    Confirmed = "confirmed",
+    Shipped = "shipped",
+    Delivered = "delivered"
+};
+
+// Structs
+struct Address {
+    street: string,
+    city: string,
+    state: string,
+    zipCode: string,
+    country: string = "US"
+};
+
+struct User {
+    id: UserID,
+    name: string,
+    email: string,
+    address: Address,
+    createdAt: int64
+};
+
+struct OrderItem {
+    productID: string,
+    name: string,
+    price: float64,
+    quantity: int
+};
+
+struct Order {
+    id: string,
+    userID: UserID,
+    items: []OrderItem
+};
+
+// Functions with typed parameters
+let calculateTotal = func(items: []OrderItem): float64 {
+    let total: float64 = 0.0;
+    for item in items {
+        total = total + (item.price * float64(item.quantity));
+    };
+    return total;
+};
+
+// Higher-order functions
+type OrderFilter = func(Order) bool;
+
+let filterOrders = func(orders: []Order, fn: OrderFilter): []Order {
+    let result: []Order;
+    for order in orders {
+        if (fn(order)) {
+            result = ::append(result, order);
+        };
+    };
+    return result;
+};
+
+// Type aliases in use
+let config: JSON = {
+    "app_name": "VintLang Showcase",
+    "version": 7,
+    "features": ["string", "int", "bool", "float64", "[]T", "{K: V}", "*T", "func(T) R"]
+};
+
+::println("showcase ready");
+::println("config:", config);

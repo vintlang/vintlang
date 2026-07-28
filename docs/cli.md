@@ -14,7 +14,7 @@ Returns an array of all command-line arguments passed to the script.
 import cli
 
 let allArgs = cli.getArgs()
-println("All arguments:", allArgs)
+::println("All arguments:", allArgs)
 ```
 
 ### `getFlags()`
@@ -28,7 +28,7 @@ import cli
 
 // Command: vint my_script.vint --verbose --output "file.txt"
 let flags = cli.getFlags()
-println("Flags:", flags)
+::println("Flags:", flags)
 // Output: Flags: {"verbose": true, "output": "file.txt"}
 ```
 
@@ -43,7 +43,7 @@ import cli
 
 // Command: vint my_script.vint my_file.txt --verbose
 let positional = cli.getPositional()
-println("Positional arguments:", positional)
+::println("Positional arguments:", positional)
 // Output: Positional arguments: ["my_file.txt"]
 ```
 
@@ -60,7 +60,7 @@ import cli
 
 // Command: vint my_script.vint --output="report.txt"
 let outputFile = cli.getArgValue("--output")
-println("Output file:", outputFile) // "report.txt"
+::println("Output file:", outputFile) // "report.txt"
 ```
 
 ### `hasArg(flagName)`
@@ -76,7 +76,7 @@ import cli
 
 // Command: vint my_script.vint --verbose
 if (cli.hasArg("--verbose")) {
-    println("Verbose mode enabled.")
+    ::println("Verbose mode enabled.")
 }
 ```
 
@@ -92,11 +92,11 @@ import cli
 // Command: vint my_script.vint --input="data.csv" process
 let args = cli.parse()
 
-println("Flags:", args.flags)
-println("Positional:", args.positional())
+::println("Flags:", args.flags)
+::println("Positional:", args.positional())
 
 if (args.has("--input")) {
-    println("Input file:", args.get("--input"))
+    ::println("Input file:", args.get("--input"))
 }
 ```
 
@@ -112,7 +112,7 @@ Displays a message to the user and waits for them to enter a line of text.
 import cli
 
 let name = cli.prompt("Enter your name: ")
-println("Hello, " + name)
+::println("Hello, " + name)
 ```
 
 ### `confirm(message)`
@@ -127,9 +127,9 @@ Asks the user a yes/no question and returns `true` for "yes" and `false` for "no
 import cli
 
 if (cli.confirm("Are you sure you want to continue?")) {
-    println("Proceeding...")
+    ::println("Proceeding...")
 } else {
-    println("Operation cancelled.")
+    ::println("Operation cancelled.")
 }
 ```
 
@@ -145,7 +145,7 @@ Executes a shell command and returns its combined standard output and standard e
 import cli
 
 let files = cli.execCommand("ls -l")
-println(files)
+::println(files)
 ```
 
 ### `exit(statusCode)`

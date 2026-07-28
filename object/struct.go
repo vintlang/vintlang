@@ -11,6 +11,7 @@ import (
 // StructField defines a field in a struct definition
 type StructField struct {
 	Name    string
+	Type    ast.Type       // optional type annotation
 	Default ast.Expression // optional default value expression
 }
 
@@ -18,6 +19,8 @@ type StructField struct {
 type StructMethod struct {
 	Name       string
 	Parameters []*ast.Identifier
+	ParamTypes []ast.Type      // parallel to Parameters, nil for untyped
+	ReturnType ast.Type        // nil for void/untyped
 	Defaults   map[string]ast.Expression
 	Body       *ast.BlockStatement
 }
@@ -56,6 +59,16 @@ func (s *Struct) Inspect() string {
 	out.WriteString(" }")
 
 	return out.String()
+}
+
+// GetFieldType returns the declared type of a field, or nil if untyped.
+func (s *Struct) GetFieldType(name string) ast.Type {
+	for _, f := range s.Fields {
+		if f.Name == name {
+			return f.Type
+		}
+	}
+	return nil
 }
 
 // HasField checks if the struct definition has a field with the given name

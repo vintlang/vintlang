@@ -17,12 +17,12 @@ let p = &x  # p is now a pointer to the value of x
 
 ### Dereferencing a Pointer
 ```js
-print(*p)  # prints 42
+::print(*p)  # prints 42
 ```
 
 ### Printing a Pointer
 ```js
-print(p)  # prints something like Pointer(42) or Pointer(addr=0x..., value=42)
+::print(p)  # prints something like Pointer(42) or Pointer(addr=0x..., value=42)
 ```
 
 ## Limitations
@@ -35,10 +35,10 @@ print(p)  # prints something like Pointer(42) or Pointer(addr=0x..., value=42)
 ```js
 let x = 10
 let p = &x
-print(p)    # Pointer(10)
-print(*p)   # 10
+::print(p)    # Pointer(10)
+::print(*p)   # 10
 x = 20
-print(*p)   # Still 10, because p points to the original value
+::print(*p)   # Still 10, because p points to the original value
 ```
 
 ## Error Handling

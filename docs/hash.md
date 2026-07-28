@@ -27,11 +27,11 @@ sha1(data)
 ```js
 import hash
 
-print("=== SHA1 Hash Example ===")
+::print("=== SHA1 Hash Example ===")
 data = "hello world"
 sha1_hash = hash.sha1(data)
-print("Input:", data)
-print("SHA1 Hash:", sha1_hash)
+::print("Input:", data)
+::print("SHA1 Hash:", sha1_hash)
 // Output: SHA1 Hash: 2aae6c35c94fcfb415dbe95f408b9ce91ee846ed
 ```
 
@@ -49,11 +49,11 @@ sha512(data)
 ```js
 import hash
 
-print("=== SHA512 Hash Example ===")
+::print("=== SHA512 Hash Example ===")
 data = "hello world"
 sha512_hash = hash.sha512(data)
-print("Input:", data)
-print("SHA512 Hash:", sha512_hash)
+::print("Input:", data)
+::print("SHA512 Hash:", sha512_hash)
 // Output: SHA512 Hash: 309ecc489c12d6eb4cc40f50c902f2b4d0ed77ee511a7c7a9bcd3ca86d4cd86f989dd35bc5ff499670da34255b45b0cfd830e81f605dcf7dc5542e93ae9cd76f
 ```
 
@@ -64,7 +64,7 @@ print("SHA512 Hash:", sha512_hash)
 ```js
 import hash
 
-print("=== Hash Module Complete Example ===")
+::print("=== Hash Module Complete Example ===")
 
 // Test different types of data
 test_data = [
@@ -75,16 +75,16 @@ test_data = [
 ]
 
 for data in test_data {
-    print("\nInput:", data)
-    print("SHA1:  ", hash.sha1(data))
-    print("SHA512:", hash.sha512(data))
+    ::print("\nInput:", data)
+    ::print("SHA1:  ", hash.sha1(data))
+    ::print("SHA512:", hash.sha512(data))
 }
 
 // Example with password hashing
 password = "mySecretPassword123"
-print("\n=== Password Hashing ===")
-print("Password SHA1:  ", hash.sha1(password))
-print("Password SHA512:", hash.sha512(password))
+::print("\n=== Password Hashing ===")
+::print("Password SHA1:  ", hash.sha1(password))
+::print("Password SHA512:", hash.sha512(password))
 ```
 
 ---

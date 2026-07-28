@@ -27,7 +27,7 @@ validate(emailAddress)
 ```js
 import email
 
-print("=== Email Validation Example ===")
+::print("=== Email Validation Example ===")
 
 // Valid email addresses
 valid_emails = [
@@ -44,16 +44,16 @@ invalid_emails = [
     "user..name@example.com"
 ]
 
-print("Valid Emails:")
+::print("Valid Emails:")
 for valid_email in valid_emails {
     result = email.validate(valid_email)
-    print("  " + valid_email + " -> " + string(result))
+    ::print("  " + valid_email + " -> " + string(result))
 }
 
-print("\nInvalid Emails:")
+::print("\nInvalid Emails:")
 for invalid_email in invalid_emails {
     result = email.validate(invalid_email)
-    print("  " + invalid_email + " -> " + string(result))
+    ::print("  " + invalid_email + " -> " + string(result))
 }
 ```
 
@@ -71,11 +71,11 @@ extractDomain(emailAddress)
 ```js
 import email
 
-print("=== Email Domain Extraction Example ===")
+::print("=== Email Domain Extraction Example ===")
 email_address = "john.doe@example.com"
 domain = email.extractDomain(email_address)
-print("Email:  ", email_address)
-print("Domain: ", domain)
+::print("Email:  ", email_address)
+::print("Domain: ", domain)
 // Output: Domain: example.com
 ```
 
@@ -93,11 +93,11 @@ extractUsername(emailAddress)
 ```js
 import email
 
-print("=== Email Username Extraction Example ===")
+::print("=== Email Username Extraction Example ===")
 email_address = "john.doe@example.com"
 username = email.extractUsername(email_address)
-print("Email:    ", email_address)
-print("Username: ", username)
+::print("Email:    ", email_address)
+::print("Username: ", username)
 // Output: Username: john.doe
 ```
 
@@ -115,11 +115,11 @@ normalize(emailAddress)
 ```js
 import email
 
-print("=== Email Normalization Example ===")
+::print("=== Email Normalization Example ===")
 messy_email = "  John.DOE@EXAMPLE.COM  "
 normalized = email.normalize(messy_email)
-print("Original:   ", messy_email)
-print("Normalized: ", normalized)
+::print("Original:   ", messy_email)
+::print("Normalized: ", normalized)
 // Output: Normalized: john.doe@example.com
 ```
 
@@ -130,7 +130,7 @@ print("Normalized: ", normalized)
 ```js
 import email
 
-print("=== Email Module Complete Example ===")
+::print("=== Email Module Complete Example ===")
 
 // Process a list of email addresses
 email_list = [
@@ -141,34 +141,34 @@ email_list = [
     "diana.jones@website.net"
 ]
 
-print("Processing email addresses:")
+::print("Processing email addresses:")
 for email_addr in email_list {
-    print("\n--- Processing: " + email_addr + " ---")
+    ::print("\n--- Processing: " + email_addr + " ---")
     
     // Normalize the email first
     normalized = email.normalize(email_addr)
-    print("Normalized: " + normalized)
+    ::print("Normalized: " + normalized)
     
     // Validate the email
     is_valid = email.validate(normalized)
-    print("Valid: " + string(is_valid))
+    ::print("Valid: " + string(is_valid))
     
     if is_valid {
         // Extract components
         username = email.extractUsername(normalized)
         domain = email.extractDomain(normalized)
         
-        print("Username: " + username)
-        print("Domain: " + domain)
+        ::print("Username: " + username)
+        ::print("Domain: " + domain)
         
         // Example: Check for specific domains
         if domain == "company.com" {
-            print("✓ Corporate email detected")
+            ::print("✓ Corporate email detected")
         } else {
-            print("→ External email")
+            ::print("→ External email")
         }
     } else {
-        print("✗ Invalid email format")
+        ::print("✗ Invalid email format")
     }
 }
 ```
@@ -190,7 +190,7 @@ for email_addr in email_list {
 ```js
 import email
 
-print("=== Email Domain Statistics ===")
+::print("=== Email Domain Statistics ===")
 
 emails = [
     "user1@gmail.com",
@@ -215,9 +215,9 @@ for email_addr in emails {
     }
 }
 
-print("Domain statistics:")
+::print("Domain statistics:")
 for domain, count in domain_count {
-    print("  " + domain + ": " + string(count) + " emails")
+    ::print("  " + domain + ": " + string(count) + " emails")
 }
 ```
 

@@ -20,7 +20,7 @@ Parses a YAML string and converts it to Vint objects.
 import yaml
 
 let yamlData = yaml.decode("name: John\nage: 30\nactive: true")
-print(yamlData) // {"name": "John", "age": 30, "active": true}
+::print(yamlData) // {"name": "John", "age": 30, "active": true}
 ```
 
 ### yaml.encode(object)
@@ -44,7 +44,7 @@ let data = {
     "active": true
 }
 let yamlString = yaml.encode(data)
-print(yamlString)
+::print(yamlString)
 ```
 
 ### yaml.merge(object1, object2)
@@ -66,7 +66,7 @@ import yaml
 let obj1 = {"name": "John", "age": 30}
 let obj2 = {"city": "NYC", "age": 35}
 let merged = yaml.merge(obj1, obj2)
-print(merged) // {"name": "John", "age": 35, "city": "NYC"}
+::print(merged) // {"name": "John", "age": 35, "city": "NYC"}
 ```
 
 ### yaml.get(object, key)
@@ -87,7 +87,7 @@ import yaml
 
 let data = yaml.decode("person:\n  name: Jane\n  age: 25")
 let name = yaml.get(data.person, "name")
-print(name) // "Jane"
+::print(name) // "Jane"
 ```
 
 ## Supported YAML Features

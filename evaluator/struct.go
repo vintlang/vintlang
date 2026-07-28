@@ -22,6 +22,7 @@ func evalStructStatement(node *ast.StructStatement, env *object.Environment) obj
 	for _, f := range node.Fields {
 		field := object.StructField{
 			Name:    f.Name.Value,
+			Type:    f.Type,
 			Default: f.Default,
 		}
 		structDef.Fields = append(structDef.Fields, field)
@@ -32,6 +33,8 @@ func evalStructStatement(node *ast.StructStatement, env *object.Environment) obj
 		method := &object.StructMethod{
 			Name:       m.Name.Value,
 			Parameters: m.Parameters,
+			ParamTypes: m.ParamTypes,
+			ReturnType: m.ReturnType,
 			Defaults:   m.Defaults,
 			Body:       m.Body,
 		}
@@ -50,6 +53,10 @@ func instantiateStruct(structDef *object.Struct, fieldArgs map[string]object.Vin
 	for _, field := range structDef.Fields {
 		if val, ok := fieldArgs[field.Name]; ok {
 			// User provided a value for this field
+			if field.Type != nil && !compatible(field.Type, val) {
+				return newTypeError(line, "field '%s' in struct '%s' expects %s, got %s",
+					field.Name, structDef.Name, field.Type.String(), val.Type())
+			}
 			instanceEnv.Define(field.Name, val)
 		} else if field.Default != nil {
 			// Use the default value
@@ -89,6 +96,16 @@ func callStructMethod(instance *object.StructInstance, methodName string, args [
 			line, instance.Struct.Name, methodName)
 	}
 
+	// Check argument types
+	for i, arg := range args {
+		if i < len(method.ParamTypes) && method.ParamTypes[i] != nil {
+			if !compatible(method.ParamTypes[i], arg) {
+				return newTypeError(line, "parameter '%s' in method '%s' expects %s, got %s",
+					method.Parameters[i].Value, methodName, method.ParamTypes[i].String(), arg.Type())
+			}
+		}
+	}
+
 	// Create a new environment for the method execution
 	// The method's environment encloses the struct definition's environment
 	methodEnv := object.NewEnclosedEnvironment(instance.Struct.Env)
@@ -114,10 +131,17 @@ func callStructMethod(instance *object.StructInstance, methodName string, args [
 
 	// Execute the method body
 	result := Eval(method.Body, methodEnv)
+	returnValue := unwrapReturnValue(result)
 
-	// Copy back any field changes made through 'this'
-	// This ensures mutations via 'this.field = value' persist on the instance
-	return unwrapReturnValue(result)
+	// Check return type
+	if method.ReturnType != nil && !isError(returnValue) {
+		if !compatible(method.ReturnType, returnValue) {
+			return newTypeError(line, "method '%s' returns %s, but body returned %s",
+				methodName, method.ReturnType.String(), returnValue.Type())
+		}
+	}
+
+	return returnValue
 }
 
 // evalStructCall handles struct instantiation via call syntax:

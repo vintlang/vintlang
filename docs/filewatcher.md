@@ -20,29 +20,29 @@ import filewatcher
 
 // Watch a single file
 let watcherId = filewatcher.watch("config.json", func(event) {
-    print("File changed:", event["path"])
-    print("Event type:", event["type"])
-    print("Time:", event["time"])
+    ::print("File changed:", event["path"])
+    ::print("Event type:", event["type"])
+    ::print("Time:", event["time"])
     
     // Read the updated file
-    let content = open(event["path"])
-    print("New content:", content)
+    let content = ::open(event["path"])
+    ::print("New content:", content)
 })
 
 // Watch a directory
 let dirWatcherId = filewatcher.watchDir("src", func(event) {
-    print("File system change detected:")
-    print("  Path:", event["path"])
-    print("  Type:", event["type"]) // "created", "modified", or "deleted"
-    print("  Time:", event["time"])
+    ::print("File system change detected:")
+    ::print("  Path:", event["path"])
+    ::print("  Type:", event["type"]) // "created", "modified", or "deleted"
+    ::print("  Time:", event["time"])
     
     // React to the change
     if (event["type"] == "created") {
-        print("New file created!")
+        ::print("New file created!")
     } else if (event["type"] == "modified") {
-        print("File was modified")
+        ::print("File was modified")
     } else if (event["type"] == "deleted") {
-        print("File was deleted")
+        ::print("File was deleted")
     }
 })
 
@@ -50,7 +50,7 @@ let dirWatcherId = filewatcher.watchDir("src", func(event) {
 setTimeout(func() {
     filewatcher.stopWatch(watcherId)
     filewatcher.stopWatch(dirWatcherId)
-    print("Stopped watching")
+    ::print("Stopped watching")
 }, 60000) // Stop after 60 seconds
 ```
 
@@ -123,17 +123,17 @@ import os
 let server = http.createServer(func(req, res) {
     if (req.path == "/") {
         // Serve index.html
-        let content = open("public/index.html")
+        let content = ::open("public/index.html")
         res.writeHead(200, {"Content-Type": "text/html"})
         res.end(content)
     } else if (req.path == "/app.js") {
         // Serve app.js
-        let content = open("public/app.js")
+        let content = ::open("public/app.js")
         res.writeHead(200, {"Content-Type": "application/javascript"})
         res.end(content)
     } else if (req.path == "/style.css") {
         // Serve style.css
-        let content = open("public/style.css")
+        let content = ::open("public/style.css")
         res.writeHead(200, {"Content-Type": "text/css"})
         res.end(content)
     } else {
@@ -145,14 +145,14 @@ let server = http.createServer(func(req, res) {
 
 // Start the server
 server.listen(8080)
-print("Server running at http://localhost:8080/")
+::print("Server running at http://localhost:8080/")
 
 // Set up WebSocket for live reload
 let wsServer = http.createWebSocketServer(server)
 let clients = []
 
 wsServer.on("connection", func(client) {
-    print("New client connected")
+    ::print("New client connected")
     clients.push(client)
     
     client.on("close", func() {
@@ -166,7 +166,7 @@ wsServer.on("connection", func(client) {
 
 // Watch the public directory for changes
 filewatcher.watchDir("public", func(event) {
-    print("File changed:", event["path"])
+    ::print("File changed:", event["path"])
     
     // Notify all connected clients to reload
     for (let client in clients) {
@@ -180,7 +180,7 @@ filewatcher.watchDir("public", func(event) {
     extensions: [".html", ".js", ".css"]
 })
 
-print("Watching public directory for changes...")
+::print("Watching public directory for changes...")
 ```
 
 ### Build Tool
@@ -192,7 +192,7 @@ import shell
 
 // Function to build the project
 let buildProject = func() {
-    print("Building project...")
+    ::print("Building project...")
     
     // Compile all .vint files to .js
     let files = os.listDir("src")
@@ -201,16 +201,16 @@ let buildProject = func() {
             let inputPath = "src/" + file
             let outputPath = "dist/" + file.replace(".vint", ".js")
             
-            print("Compiling", inputPath, "to", outputPath)
+            ::print("Compiling", inputPath, "to", outputPath)
             shell.exec("vint compile " + inputPath + " -o " + outputPath)
         }
     }
     
     // Bundle the JavaScript files
-    print("Bundling JavaScript...")
+    ::print("Bundling JavaScript...")
     shell.exec("webpack --config webpack.config.js")
     
-    print("Build completed!")
+    ::print("Build completed!")
 }
 
 // Ensure dist directory exists
@@ -222,11 +222,11 @@ if (!os.exists("dist")) {
 buildProject()
 
 // Watch for changes
-print("Watching for changes...")
+::print("Watching for changes...")
 filewatcher.watchDir("src", func(event) {
     if (event["type"] == "modified" || event["type"] == "created") {
         if (event["path"].endsWith(".vint")) {
-            print("Source file changed:", event["path"])
+            ::print("Source file changed:", event["path"])
             buildProject()
         }
     }
@@ -235,7 +235,7 @@ filewatcher.watchDir("src", func(event) {
     extensions: [".vint"]
 })
 
-print("Build watcher started. Press Ctrl+C to stop.")
+::print("Build watcher started. Press Ctrl+C to stop.")
 ```
 
 ### Log File Monitor
@@ -246,7 +246,7 @@ import term
 
 // Function to display the last N lines of a file
 let tailFile = func(filePath, lines) {
-    let content = open(filePath)
+    let content = ::open(filePath)
     let allLines = content.split("\n")
     let lastLines = allLines.slice(Math.max(0, allLines.length - lines))
     
@@ -280,14 +280,14 @@ let tailFile = func(filePath, lines) {
 // Check command line arguments
 if (args.length < 2) {
     term.println("Usage: vint logmonitor.vint <log_file> [lines]", "#ff5555")
-    exit(1)
+    ::exit(1)
 }
 
 let logFile = args[1]
 let lines = 10 // Default to 10 lines
 
 if (args.length >= 3) {
-    lines = parseInt(args[2])
+    lines = ::parseInt(args[2])
 }
 
 // Initial display
@@ -300,5 +300,5 @@ filewatcher.watch(logFile, func(event) {
     interval: 500 // Check every 500ms
 })
 
-print("Monitoring log file. Press Ctrl+C to exit.")
+::print("Monitoring log file. Press Ctrl+C to exit.")
 ```

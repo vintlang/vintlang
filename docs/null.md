@@ -16,9 +16,9 @@ When evaluating a `null` data type in a conditional expression, it will evaluate
 
 ```js
 if (a) {
-    print("a is null")
+    ::print("a is null")
 } else {
-    print("a has a value")
+    ::print("a has a value")
 }
 
 // Output: a has a value
@@ -34,7 +34,7 @@ Always returns `true` for null values:
 
 ```js
 let value = null
-print(value.isNull())  // true
+::print(value.isNull())  // true
 ```
 
 ### coalesce()
@@ -44,7 +44,7 @@ Returns the first non-null value from the arguments:
 ```js
 let value = null
 let result = value.coalesce("default", "backup")
-print(result)  // "default"
+::print(result)  // "default"
 ```
 
 ### ifNull()
@@ -54,7 +54,7 @@ Returns the provided value if this is null:
 ```js
 let value = null
 let result = value.ifNull("default value")
-print(result)  // "default value"
+::print(result)  // "default value"
 ```
 
 ### toString()
@@ -63,7 +63,7 @@ Returns the string representation of null:
 
 ```js
 let value = null
-print(value.toString())  // "null"
+::print(value.toString())  // "null"
 ```
 
 ### equals()
@@ -74,8 +74,8 @@ Checks if another value is also null:
 let value1 = null
 let value2 = null
 let value3 = "something"
-print(value1.equals(value2))  // true
-print(value1.equals(value3))  // false
+::print(value1.equals(value2))  // true
+::print(value1.equals(value3))  // false
 ```
 
 The `null` data type is useful in Vint when you need to represent an uninitialized, missing, or undefined value in your programs. By understanding the `null` data type and its methods, you can create more robust and flexible code.

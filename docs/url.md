@@ -18,7 +18,7 @@ Parses a URL string and returns its components.
 import url
 
 let components = url.parse("https://example.com/path?query=value#fragment")
-println(components)
+::println(components)
 // Output: scheme:https host:example.com path:/path query:query=value fragment:fragment
 ```
 
@@ -47,11 +47,11 @@ import url
 
 let components = {"scheme": "https", "host": "api.example.com", "path": "/v1/users", "query": "limit=10"}
 let built_url = url.build(components)
-println(built_url) // "https://api.example.com/v1/users?limit=10"
+::println(built_url) // "https://api.example.com/v1/users?limit=10"
 
 // Minimal example
 let minimal = {"scheme": "http", "host": "localhost"}
-println(url.build(minimal)) // "http://localhost"
+::println(url.build(minimal)) // "http://localhost"
 ```
 
 ### `encode(text)`
@@ -68,7 +68,7 @@ URL-encodes a string.
 import url
 
 let encoded = url.encode("hello world!")
-println(encoded) // "hello%20world%21"
+::println(encoded) // "hello%20world%21"
 ```
 
 ### `decode(encodedText)`
@@ -85,7 +85,7 @@ Decodes a URL-encoded string.
 import url
 
 let decoded = url.decode("hello%20world%21")
-println(decoded) // "hello world!"
+::println(decoded) // "hello world!"
 ```
 
 ### `join(baseURL, path)`
@@ -103,7 +103,7 @@ Joins a base URL and a relative path to create a full URL.
 import url
 
 let fullURL = url.join("https://example.com/", "/path/to/resource")
-println(fullURL) // "https://example.com/path/to/resource"
+::println(fullURL) // "https://example.com/path/to/resource"
 ```
 
 ### `isValid(urlString)`
@@ -119,6 +119,6 @@ Checks if a string is a valid URL.
 ```js
 import url
 
-println(url.isValid("https://example.com")) // true
-println(url.isValid("not a url")) // false
+::println(url.isValid("https://example.com")) // true
+::println(url.isValid("not a url")) // false
 ```

@@ -181,11 +181,11 @@ vint new_error_format_test.vint
 When adding new functions or modules, use the `ErrorMessage` helper:
 
 ```go
-if len(args) != expectedCount {
+if ::len(args) != expectedCount {
     return ErrorMessage(
         "moduleName", "functionName",
         "description of expected arguments",
-        fmt.Sprintf("%d arguments", len(args)),
+        fmt.Sprintf("%d arguments", ::len(args)),
         "usage.example() -> expected output",
     )
 }

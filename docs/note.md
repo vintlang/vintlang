@@ -14,7 +14,7 @@ When the Vint interpreter encounters a `note` statement, it prints a blue-colore
 
 ```js
 note "This script was last updated on 2024-06-01."
-println("Script running...")
+::println("Script running...")
 ```
 
 Running this script will output:

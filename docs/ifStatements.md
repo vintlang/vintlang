@@ -8,7 +8,7 @@ The `if` statement checks a condition inside parentheses `()`. If the condition 
 
 ```js
 if (2 > 1) {
-    print(true)  // Output: true
+    ::print(true)  // Output: true
 }
 ```
 
@@ -22,11 +22,11 @@ You can use `else if` to test additional conditions after an `if` statement. The
 let a = 10
 
 if (a > 100) {
-    print("a is greater than 100")
+    ::print("a is greater than 100")
 } else if (a < 10) {
-    print("a is less than 10")
+    ::print("a is less than 10")
 } else {
-    print("The value of a is", a)
+    ::print("The value of a is", a)
 }
 
 // Output: The value of a is 10
@@ -70,7 +70,7 @@ let x = 0
 if (true) {
     x = 42
 }
-print("Classic if statement result: ", x)
+::print("Classic if statement result: ", x)
 ```
 
 ---
@@ -91,10 +91,10 @@ let result = if (condition) { valueIfTrue } else { valueIfFalse }
 ```js
 let status = ""
 status = if (x > 0) { "Online" } else { "Offline" }
-print("If as an expression result: ", status)
+::print("If as an expression result: ", status)
 
 let y = if (false) { 123 }
-print("If as an expression with no else: ", y) // prints: null
+::print("If as an expression with no else: ", y) // prints: null
 ```
 
 ---

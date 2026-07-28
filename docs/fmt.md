@@ -19,7 +19,7 @@ Formats a string using Go's fmt.Sprintf format specifiers.
 ```vint
 import fmt
 let result = fmt.sprintf("Hello, %s! You have %d messages.", "Alice", 5)
-print(result)  // "Hello, Alice! You have 5 messages."
+::print(result)  // "Hello, Alice! You have 5 messages."
 ```
 
 #### `printf(format, ...args) -> nil`
@@ -202,22 +202,22 @@ let age = 30
 let height = 5.75
 
 let intro = fmt.sprintf("Hi, I'm %s, %d years old, %.1f feet tall", name, age, height)
-print(intro)
+::print(intro)
 
 // Number formatting
 let num = 255
-print("Decimal:", fmt.formatInt(num, 10))     // "255"
-print("Binary:", fmt.formatBin(num))          // "11111111"
-print("Hex:", fmt.formatHex(num, true))       // "FF"
-print("Octal:", fmt.formatOct(num))           // "377"
+::print("Decimal:", fmt.formatInt(num, 10))     // "255"
+::print("Binary:", fmt.formatBin(num))          // "11111111"
+::print("Hex:", fmt.formatHex(num, true))       // "FF"
+::print("Octal:", fmt.formatOct(num))           // "377"
 
 // Padding and alignment
 let title = "REPORT"
 let border = fmt.repeat("=", 20)
 
-print(border)
-print(fmt.padCenter(title, 20))
-print(border)
+::print(border)
+::print(fmt.padCenter(title, 20))
+::print(border)
 
 // Table formatting
 let items = [

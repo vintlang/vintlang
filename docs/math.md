@@ -11,8 +11,8 @@ import math
 You can then call functions and access constants from the module:
 
 ```js
-println(math.PI())
-println(math.sqrt(16))
+::println(math.PI())
+::println(math.sqrt(16))
 ```
 
 ## Contents
@@ -198,8 +198,8 @@ Here is a complete list of the available functions and constants:
 - **Example**: 
   ```js
   let c = math.complex(3, 4)
-  print(c["real"])  // 3
-  print(c["imag"])  // 4
+  ::print(c["real"])  // 3
+  ::print(c["imag"])  // 4
   ```
 
 #### `abs(n)` (extended)
@@ -221,7 +221,7 @@ Here is a complete list of the available functions and constants:
 - **Example**: 
   ```js
   let big = math.bigint("999999999999999999999")
-  print(big["value"])  // "999999999999999999999"
+  ::print(big["value"])  // "999999999999999999999"
   ```
 
 ---

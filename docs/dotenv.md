@@ -50,7 +50,7 @@ import dotenv
 
 dotenv.load(".env")
 apiKey = dotenv.get("API_KEY")
-print(apiKey)  // Expected output: The value of the "API_KEY" from the .env file
+::print(apiKey)  // Expected output: The value of the "API_KEY" from the .env file
 ```
 In this example, the value of the `API_KEY` environment variable is retrieved and printed.
 

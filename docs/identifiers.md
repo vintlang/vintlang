@@ -13,10 +13,10 @@ Identifiers can include letters, numbers, and underscores. However, they must ad
 
 ```js
 let birth_year = 2020
-print(birth_year)  // Output: 2020
+::print(birth_year)  // Output: 2020
 
 let convert_c_to_p = "C to P"
-print(convert_c_to_p)  // Output: "C to P"
+::print(convert_c_to_p)  // Output: "C to P"
 ```
 
 In the examples above, `birth_year` and `convert_c_to_p` follow all syntax rules and are valid identifiers.
@@ -38,7 +38,7 @@ To make your **Vint** code more readable and maintainable, follow these best pra
 3. **Avoid Ambiguity:** Use meaningful names instead of single letters, except for common cases like loop counters:
    ```js
    for (let i = 0; i < 10; i++) {
-       print(i)
+       ::print(i)
    }
    ```
 

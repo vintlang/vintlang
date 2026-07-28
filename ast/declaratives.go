@@ -182,6 +182,7 @@ func (es *EnumStatement) String() string {
 // StructField represents a field declaration inside a struct
 type StructField struct {
 	Name    *Identifier // field name
+	Type    Type        // optional type annotation
 	Default Expression  // optional default value
 }
 
@@ -189,6 +190,8 @@ type StructField struct {
 type StructMethod struct {
 	Name       *Identifier
 	Parameters []*Identifier
+	ParamTypes []Type         // parallel to Parameters, nil for untyped
+	ReturnType Type           // nil for void/untyped
 	Defaults   map[string]Expression
 	Body       *BlockStatement
 }
@@ -212,9 +215,9 @@ func (ss *StructStatement) String() string {
 	out.WriteString(" {\n")
 
 	for _, f := range ss.Fields {
-		out.WriteString("    " + f.Name.String())
+		out.WriteString("    ");out.WriteString(f.Name.String())
 		if f.Default != nil {
-			out.WriteString(": " + f.Default.String())
+			out.WriteString(": ");out.WriteString(f.Default.String())
 		}
 		out.WriteString("\n")
 	}
@@ -224,7 +227,7 @@ func (ss *StructStatement) String() string {
 		for _, p := range m.Parameters {
 			params = append(params, p.String())
 		}
-		out.WriteString("    func " + m.Name.String() + "(" + strings.Join(params, ", ") + ") {...}\n")
+		out.WriteString("    func ");out.WriteString(m.Name.String());out.WriteString("(");out.WriteString(strings.Join(params, ", "));out.WriteString(") {...}\n")
 	}
 
 	out.WriteString("}")

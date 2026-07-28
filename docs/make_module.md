@@ -32,9 +32,9 @@ Check if a command exists in the system PATH.
 **Example:**
 ```js
 if (make.check("upx")) {
-    print("UPX is available")
+    ::print("UPX is available")
 } else {
-    print("UPX not found. Please install it.")
+    ::print("UPX not found. Please install it.")
 }
 ```
 
@@ -66,7 +66,7 @@ Execute a shell command and return its output.
 **Example:**
 ```js
 let output = make.exec("go build -o myapp")
-print(output)
+::print(output)
 ```
 
 ### make.echo(message: string) -> null
@@ -95,7 +95,7 @@ const VERSION = "1.0.0"
 const LDFLAGS = "-s -w"
 
 let echo = func(msg) {
-    print("🔨 " + msg)
+    ::print("🔨 " + msg)
 }
 
 // Define build tasks
@@ -107,7 +107,7 @@ let tasks = {
         if (result.type != "error") {
             echo("✅ Build successful!")
         } else {
-            print("❌ Build failed")
+            ::print("❌ Build failed")
         }
     },
     
@@ -134,7 +134,7 @@ let tasks = {
     "install_deps": func() {
         echo("Installing dependencies...")
         if (!make.check("go")) {
-            print("❌ Go not found. Please install Go first.")
+            ::print("❌ Go not found. Please install Go first.")
             os.exit(1)
         }
         make.exec("go mod download")
@@ -144,9 +144,9 @@ let tasks = {
 
 // Main execution
 let args = cli.getArgs()
-if (len(args) < 1) {
-    print("Usage: vint build.vint <task>")
-    print("Available tasks:", tasks.keys())
+if (::len(args) < 1) {
+    ::print("Usage: vint build.vint <task>")
+    ::print("Available tasks:", tasks.keys())
     os.exit(1)
 }
 
@@ -154,7 +154,7 @@ let taskName = args[0]
 if (tasks[taskName] != null) {
     tasks[taskName]()
 } else {
-    print("Unknown task:", taskName)
+    ::print("Unknown task:", taskName)
     os.exit(1)
 }
 ```
@@ -238,7 +238,7 @@ build:
 **VintLang:**
 ```js
 if (!make.check("upx")) {
-    print("UPX not found")
+    ::print("UPX not found")
 }
 ```
 

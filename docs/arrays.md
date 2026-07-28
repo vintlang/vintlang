@@ -41,7 +41,7 @@ Use the `in` keyword to check if an item exists in an array:
 
 ```s
 num = [10, 20, 30]
-print(20 in num)  // will print true
+::print(20 in num)  // will print true
 ```
 
 ## Looping Over Arrays
@@ -52,7 +52,7 @@ You can use the for and in keywords to loop over array elements. To loop over ju
 num = [1, 2, 3, 4, 5]
 
 for value in num {
-    print(value)
+    ::print(value)
 }
 ```
 
@@ -62,7 +62,7 @@ To loop over both index and value pairs, use this syntax:
 man = ["Tach", "ekilie", "Tachera Sasi"]
 
 for idx, n in man {
-    print(idx, "-", n)
+    ::print(idx, "-", n)
 }
 ```
 
@@ -77,7 +77,7 @@ length() returns the length of an array:
 ```s
 a = [1, 2, 3]
 urefu = a.length()
-print(urefu)  // will print 3
+::print(urefu)  // will print 3
 ```
 
 ### push()
@@ -87,7 +87,7 @@ push() adds one or more items to the end of an array:
 ```s
 a = [1, 2, 3]
 a.push("s", "g")
-print(a)  // will print [1, 2, 3, "s", "g"]
+::print(a)  // will print [1, 2, 3, "s", "g"]
 ```
 
 ### last()
@@ -97,11 +97,11 @@ last() returns the last item in an array, or null if the array is empty:
 ```s
 a = [1, 2, 3]
 last_el = a.last()
-print(last_el)  // will print 3
+::print(last_el)  // will print 3
 
 b = []
 last_el = b.last()
-print(last_el)  // will print tupu
+::print(last_el)  // will print tupu
 ```
 
 ### pop()
@@ -111,8 +111,8 @@ pop() removes and returns the last item in the array. If the array is empty, it 
 ```s
 a = [1, 2, 3]
 last = a.pop()
-print(last)  // will print 3
-print(a)     // will print [1, 2]
+::print(last)  // will print 3
+::print(a)     // will print [1, 2]
 ```
 
 ### shift()
@@ -122,8 +122,8 @@ shift() removes and returns the first item in the array. If the array is empty, 
 ```s
 a = [1, 2, 3]
 first = a.shift()
-print(first)  // will print 1
-print(a)      // will print [2, 3]
+::print(first)  // will print 1
+::print(a)      // will print [2, 3]
 ```
 
 ### unshift()
@@ -133,7 +133,7 @@ unshift() adds one or more items to the beginning of the array:
 ```s
 a = [3, 4]
 a.unshift(1, 2)
-print(a)  // will print [1, 2, 3, 4]
+::print(a)  // will print [1, 2, 3, 4]
 ```
 
 ### reverse()
@@ -143,7 +143,7 @@ reverse() reverses the array in place:
 ```s
 a = [1, 2, 3]
 a.reverse()
-print(a)  // will print [3, 2, 1]
+::print(a)  // will print [3, 2, 1]
 ```
 
 ### sort()
@@ -153,15 +153,15 @@ sort() sorts the array in place. It works for arrays of integers, floats, or str
 ```s
 a = [3, 1, 2]
 a.sort()
-print(a)  // will print [1, 2, 3]
+::print(a)  // will print [1, 2, 3]
 
 b = ["banana", "apple", "cherry"]
 b.sort()
-print(b)  // will print ["apple", "banana", "cherry"]
+::print(b)  // will print ["apple", "banana", "cherry"]
 
 c = [3.14, 1.41, 2.71]
 c.sort()
-print(c)  // will print [1.41, 2.71, 3.14]
+::print(c)  // will print [1.41, 2.71, 3.14]
 ```
 
 ### map()
@@ -171,7 +171,7 @@ map() goes through every element in the array and applies the passed function to
 ```s
 a = [1, 2, 3]
 b = a.map(func(x){ return x * 2 })
-print(b) // [2, 4, 6]
+::print(b) // [2, 4, 6]
 ```
 
 ### filter()
@@ -186,7 +186,7 @@ b = a.filter(func(x){
     return false
     })
 
-print(b) // [2, 4]
+::print(b) // [2, 4]
 ```
 
 ### slice()
@@ -196,11 +196,11 @@ slice() extracts a section of an array and returns a new array:
 ```s
 a = [1, 2, 3, 4, 5]
 sliced = a.slice(1, 3)
-print(sliced)  // [2, 3]
+::print(sliced)  // [2, 3]
 
 // With just start index
 sliced2 = a.slice(2)
-print(sliced2)  // [3, 4, 5]
+::print(sliced2)  // [3, 4, 5]
 ```
 
 ### concat()
@@ -212,7 +212,7 @@ a = [1, 2]
 b = [3, 4]
 c = [5, 6]
 combined = a.concat(b, c)
-print(combined)  // [1, 2, 3, 4, 5, 6]
+::print(combined)  // [1, 2, 3, 4, 5, 6]
 ```
 
 ### includes()
@@ -221,8 +221,8 @@ includes() checks if an array contains a specific element:
 
 ```s
 numbers = [1, 2, 3, 4, 5]
-print(numbers.includes(3))  // true
-print(numbers.includes(10)) // false
+::print(numbers.includes(3))  // true
+::print(numbers.includes(10)) // false
 ```
 
 ### every()
@@ -232,7 +232,7 @@ every() tests whether all elements pass a test function:
 ```s
 numbers = [2, 4, 6, 8]
 allEven = numbers.every(func(x){ return x % 2 == 0 })
-print(allEven)  // true
+::print(allEven)  // true
 ```
 
 ### some()
@@ -242,7 +242,7 @@ some() tests whether at least one element passes a test function:
 ```s
 numbers = [1, 3, 5, 8]
 hasEven = numbers.some(func(x){ return x % 2 == 0 })
-print(hasEven)  // true
+::print(hasEven)  // true
 ```
 
 ### reduce()
@@ -252,11 +252,11 @@ reduce() reduces the array to a single value using an accumulator function:
 ```s
 numbers = [1, 2, 3, 4]
 sum = numbers.reduce(func(acc, val){ return acc + val }, 0)
-print(sum)  // 10
+::print(sum)  // 10
 
 // Without initial value
 product = numbers.reduce(func(acc, val){ return acc * val })
-print(product)  // 24
+::print(product)  // 24
 ```
 
 ### flatten()
@@ -266,12 +266,12 @@ flatten() flattens nested arrays into a single array:
 ```s
 nested = [[1, 2], [3, 4], [5]]
 flat = nested.flatten()
-print(flat)  // [1, 2, 3, 4, 5]
+::print(flat)  // [1, 2, 3, 4, 5]
 
 // With depth limit
 deep = [[[1, 2]], [3, 4]]
 flatOne = deep.flatten(1)
-print(flatOne)  // [[1, 2], 3, 4]
+::print(flatOne)  // [[1, 2], 3, 4]
 ```
 
 ### unique()
@@ -281,7 +281,7 @@ unique() returns a new array with duplicate elements removed:
 ```s
 numbers = [1, 2, 2, 3, 3, 4]
 uniqueNumbers = numbers.unique()
-print(uniqueNumbers)  // [1, 2, 3, 4]
+::print(uniqueNumbers)  // [1, 2, 3, 4]
 ```
 
 ### fill()
@@ -291,12 +291,12 @@ fill() fills all elements of an array with a static value:
 ```s
 arr = [1, 2, 3, 4]
 arr.fill(0)
-print(arr)  // [0, 0, 0, 0]
+::print(arr)  // [0, 0, 0, 0]
 
 // Fill with start and end positions
 arr2 = [1, 2, 3, 4, 5]
 arr2.fill(9, 1, 3)
-print(arr2)  // [1, 9, 9, 4, 5]
+::print(arr2)  // [1, 9, 9, 4, 5]
 ```
 
 ### lastIndexOf()
@@ -306,11 +306,11 @@ lastIndexOf() returns the last index at which a given element can be found:
 ```s
 numbers = [1, 2, 3, 2, 4]
 lastIndex = numbers.lastIndexOf(2)
-print(lastIndex)  // 3
+::print(lastIndex)  // 3
 
 // Element not found
 notFound = numbers.lastIndexOf(10)
-print(notFound)  // -1
+::print(notFound)  // -1
 ```
 
 ## Mathematical Array Methods
@@ -324,11 +324,11 @@ sum() calculates the sum of all numeric elements:
 ```s
 numbers = [1, 2, 3, 4, 5]
 total = numbers.sum()
-print(total)  // 15
+::print(total)  // 15
 
 floats = [1.5, 2.5, 3.5]
 floatSum = floats.sum()
-print(floatSum)  // 7.5
+::print(floatSum)  // 7.5
 ```
 
 ### average() / mean()
@@ -338,11 +338,11 @@ average() calculates the arithmetic mean of all numeric elements:
 ```s
 numbers = [2, 4, 6, 8]
 avg = numbers.average()
-print(avg)  // 5
+::print(avg)  // 5
 
 // mean() is an alias for average()
 mean = numbers.mean()
-print(mean)  // 5
+::print(mean)  // 5
 ```
 
 ### min() / max()
@@ -352,10 +352,10 @@ min() and max() find the minimum and maximum values:
 ```s
 numbers = [5, 1, 9, 3, 7]
 minimum = numbers.min()
-print(minimum)  // 1
+::print(minimum)  // 1
 
 maximum = numbers.max()
-print(maximum)  // 9
+::print(maximum)  // 9
 ```
 
 ### median()
@@ -365,11 +365,11 @@ median() calculates the median (middle value) of numeric elements:
 ```s
 oddNumbers = [1, 3, 5, 7, 9]
 medianOdd = oddNumbers.median()
-print(medianOdd)  // 5
+::print(medianOdd)  // 5
 
 evenNumbers = [2, 4, 6, 8]
 medianEven = evenNumbers.median()
-print(medianEven)  // 5 (average of 4 and 6)
+::print(medianEven)  // 5 (average of 4 and 6)
 ```
 
 ### mode()
@@ -379,7 +379,7 @@ mode() returns the most frequently occurring value(s):
 ```s
 numbers = [1, 2, 2, 3, 2, 4]
 mostFrequent = numbers.mode()
-print(mostFrequent)  // [2]
+::print(mostFrequent)  // [2]
 ```
 
 ### variance()
@@ -389,7 +389,7 @@ variance() calculates the population variance:
 ```s
 data = [2, 4, 4, 4, 5, 5, 7, 9]
 var = data.variance()
-print(var)  // 4
+::print(var)  // 4
 ```
 
 ### standardDeviation()
@@ -399,7 +399,7 @@ standardDeviation() calculates the population standard deviation:
 ```s
 data = [2, 4, 4, 4, 5, 5, 7, 9]
 stdDev = data.standardDeviation()
-print(stdDev)  // 2
+::print(stdDev)  // 2
 ```
 
 ### product()
@@ -409,7 +409,7 @@ product() calculates the product of all numeric elements:
 ```s
 numbers = [2, 3, 4]
 prod = numbers.product()
-print(prod)  // 24
+::print(prod)  // 24
 ```
 
 ## Enhanced Sorting Methods
@@ -423,7 +423,7 @@ sortAsc() is an alias for sort() that explicitly sorts in ascending order:
 ```s
 numbers = [3, 1, 4, 1, 5]
 numbers.sortAsc()
-print(numbers)  // [1, 1, 3, 4, 5]
+::print(numbers)  // [1, 1, 3, 4, 5]
 ```
 
 ### sortDesc()
@@ -433,7 +433,7 @@ sortDesc() sorts the array in descending order:
 ```s
 numbers = [3, 1, 4, 1, 5]
 numbers.sortDesc()
-print(numbers)  // [5, 4, 3, 1, 1]
+::print(numbers)  // [5, 4, 3, 1, 1]
 ```
 
 ### sortBy()
@@ -444,10 +444,10 @@ sortBy() sorts the array using a custom comparison function:
 // Sort by absolute value
 numbers = [-3, 1, -4, 2]
 numbers.sortBy(func(x){ return abs(x) })
-print(numbers)  // [1, 2, -3, -4]
+::print(numbers)  // [1, 2, -3, -4]
 
 // Sort strings by length
 words = ["hello", "hi", "world", "a"]
-words.sortBy(func(x){ return len(x) })
-print(words)  // ["a", "hi", "hello", "world"]
+words.sortBy(func(x){ return ::len(x) })
+::print(words)  // ["a", "hi", "hello", "world"]
 ```

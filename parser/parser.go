@@ -2,6 +2,7 @@ package parser
 
 import (
 	"fmt"
+	"strings"
 
 	"github.com/vintlang/vintlang/ast"
 	"github.com/vintlang/vintlang/lexer"
@@ -39,6 +40,8 @@ var precedences = map[token.TokenType]int{
 	token.GT:              LESSGREATER,
 	token.GTE:             LESSGREATER,
 	token.RANGE:           RANGE,
+	token.AS:              EQUALS,
+	token.IS:              EQUALS,
 	token.PLUS:            SUM,
 	token.PLUS_ASSIGN:     SUM,
 	token.MINUS:           SUM,
@@ -74,11 +77,35 @@ type Parser struct {
 	prefixParseFns  map[token.TokenType]prefixParseFn
 	infixParseFns   map[token.TokenType]infixParseFn
 	postfixParseFns map[token.TokenType]postfixParseFn
+
+	aliases map[string]ast.Type // type aliases: type UserID = int
 }
 
-// adds error
+// sourceLine returns the source line at the given line number.
+func (p *Parser) sourceLine(line int) string {
+	return p.l.GetSourceLine(line)
+}
+
+// formatErr formats an error message with source code context.
+// Format: filename:line:col: message\n    source line\n    ^(position)
+func (p *Parser) formatErr(line, col int, msg string) string {
+	src := p.sourceLine(line)
+	if src != "" && col > 0 {
+		caret := strings.Repeat(" ", col-1) + "^"
+		return fmt.Sprintf("%s:%d:%d: %s\n    %s\n    %s",
+			p.l.GetFilename(), line, col, msg, src, caret)
+	}
+	return fmt.Sprintf("%s:%d: %s", p.l.GetFilename(), line, msg)
+}
+
+// addError adds an error message at the current token position.
 func (p *Parser) addError(msg string) {
-	p.errors = append(p.errors, msg)
+	p.errors = append(p.errors, p.formatErr(p.curToken.Line, p.curToken.Column, msg))
+}
+
+// syntaxError is an alias for addError with source context.
+func (p *Parser) syntaxError(msg string) {
+	p.addError(msg)
 }
 
 func (p *Parser) registerPrefix(tokenType token.TokenType, fn prefixParseFn) {
@@ -94,7 +121,7 @@ func (p *Parser) registerPostfix(tokenType token.TokenType, fn postfixParseFn) {
 }
 
 func New(l *lexer.Lexer) *Parser {
-	p := &Parser{l: l, errors: []string{}}
+	p := &Parser{l: l, errors: []string{}, aliases: make(map[string]ast.Type)}
 
 	p.nextToken()
 	p.nextToken()
@@ -128,6 +155,7 @@ func New(l *lexer.Lexer) *Parser {
 	p.registerPrefix(token.ERROR, p.parseErrorStatement)
 	p.registerPrefix(token.DEFER, p.parseDeferStatement)
 	p.registerPrefix(token.AT, p.parseAt)
+	p.registerPrefix(token.DOUBLECOLON, p.parseBuiltinExpression)
 	p.registerPrefix(token.ELLIPSIS, p.parseSpreadPattern)
 	p.registerPrefix(token.INFO, p.parseInfoStatement)
 	p.registerPrefix(token.DEBUG, p.parseDebugStatement)
@@ -187,6 +215,8 @@ func New(l *lexer.Lexer) *Parser {
 	p.registerInfix(token.IN, p.parseInfixExpression)
 	p.registerInfix(token.DOT, p.parseMethod)
 	p.registerInfix(token.RANGE, p.parseRangeExpression)
+	p.registerInfix(token.AS, p.parseTypeCast)
+	p.registerInfix(token.IS, p.parseTypeCheck)
 
 	p.postfixParseFns = make(map[token.TokenType]postfixParseFn)
 	p.registerPostfix(token.PLUS_PLUS, p.parsePostfixExpression)
@@ -201,9 +231,41 @@ func (p *Parser) ParseProgram() *ast.Program {
 
 	for !p.curTokenIs(token.EOF) {
 		stmt := p.parseStatement()
-		program.Statements = append(program.Statements, stmt)
+		if stmt != nil {
+			program.Statements = append(program.Statements, stmt)
+		}
 
-		p.nextToken()
+		// Zero-value TypedLetStatement leaves curToken at the type name.
+		// Advance past it, consuming any trailing semicolon.
+		if tls, ok := stmt.(*ast.TypedLetStatement); ok && tls.Value == nil {
+			p.nextToken()
+			if p.curTokenIs(token.SEMICOLON) {
+				p.nextToken()
+			}
+			continue
+		}
+
+		// For parse failures, always advance to avoid infinite loops
+		if stmt == nil {
+			if !p.curTokenIs(token.EOF) {
+				p.nextToken()
+			}
+			continue
+		}
+
+		// For expression statements, always advance (parseIdentifier and
+		// other prefix functions don't advance, so the main loop must).
+		if _, ok := stmt.(*ast.ExpressionStatement); ok {
+			if !p.curTokenIs(token.EOF) {
+				p.nextToken()
+			}
+			continue
+		}
+
+		// For all other statement types, always advance.
+		if !p.curTokenIs(token.EOF) {
+			p.nextToken()
+		}
 	}
 	return program
 }
@@ -263,18 +325,16 @@ func (p *Parser) peekError(t token.TokenType) {
 		if kw == "" {
 			kw = p.peekToken.Literal
 		}
-		msg := fmt.Sprintf("%s:%d: '%s' is a reserved keyword and cannot be used as an identifier. Try a different name, e.g. '%s_val' or 'my_%s'",
-			p.l.GetFilename(), p.peekToken.Line, kw, kw, kw)
-		p.errors = append(p.errors, msg)
+		p.errors = append(p.errors, p.formatErr(p.peekToken.Line, p.peekToken.Column,
+			fmt.Sprintf("'%s' is a reserved keyword and cannot be used as an identifier. Try a different name, e.g. '%s_val' or 'my_%s'", kw, kw, kw)))
 		return
 	}
-	msg := fmt.Sprintf("%s:%d: Expected next token to be %s, got %s instead", p.l.GetFilename(), p.peekToken.Line, t, p.peekToken.Type)
-	p.errors = append(p.errors, msg)
+	p.errors = append(p.errors, p.formatErr(p.peekToken.Line, p.peekToken.Column,
+		fmt.Sprintf("Expected next token to be %s, got %s instead", t, p.peekToken.Type)))
 }
 
 func (p *Parser) AddErrorWithContext(msg string, line int) {
-	contextMsg := fmt.Sprintf("%s:%d: %s", p.l.GetFilename(), line, msg)
-	p.errors = append(p.errors, contextMsg)
+	p.errors = append(p.errors, p.formatErr(line, 1, msg))
 }
 
 // Synchronize parser after error - skip to next statement boundary
@@ -365,19 +425,52 @@ func (p *Parser) parsePrefixExpression() ast.Expression {
 	return expression
 }
 
+// isStatementStart returns true if curToken is a keyword or identifier that
+// starts a new statement. Used to prevent double-advancing when parseType
+// consumed into the next statement's first token.
+func (p *Parser) isStatementStart() bool {
+	switch p.curToken.Type {
+	case token.LET, token.CONST, token.ENUM, token.STRUCT,
+		token.RETURN, token.BREAK, token.CONTINUE,
+		token.INCLUDE, token.GO, token.FUNCTION,
+		token.IF, token.WHILE, token.FOR, token.SWITCH, token.MATCH:
+		return true
+	case token.IDENT:
+		return p.curToken.Literal == "type"
+	default:
+		return false
+	}
+}
+
+// isKeywordStatementStart returns true if curToken can start a new statement.
+// Used to avoid double-advancing when a statement's semicolon was already
+// consumed and the next statement's first token is the current token.
+func (p *Parser) isKeywordStatementStart() bool {
+	switch p.curToken.Type {
+	case token.LET, token.CONST, token.ENUM, token.STRUCT,
+		token.RETURN, token.BREAK, token.CONTINUE,
+		token.INCLUDE, token.GO, token.FUNCTION,
+		token.IF, token.WHILE, token.FOR, token.SWITCH, token.MATCH:
+		return true
+	case token.IDENT:
+		return true
+	default:
+		return false
+	}
+}
+
 func (p *Parser) noPrefixParseFnError(t token.TokenType) {
 	if token.IsKeyword(t) {
 		kw := token.KeywordLiteral(t)
 		if kw == "" {
 			kw = p.curToken.Literal
 		}
-		msg := fmt.Sprintf("%s:%d: '%s' is a reserved keyword and cannot be used as a value or identifier here",
-			p.l.GetFilename(), p.curToken.Line, kw)
-		p.errors = append(p.errors, msg)
+		p.errors = append(p.errors, p.formatErr(p.curToken.Line, p.curToken.Column,
+			fmt.Sprintf("'%s' is a reserved keyword and cannot be used as a value or identifier here", kw)))
 		return
 	}
-	msg := fmt.Sprintf("%s:%d: Unexpected token '%s' - this token cannot start an expression. Check for missing operands or invalid syntax", p.l.GetFilename(), p.curToken.Line, t)
-	p.errors = append(p.errors, msg)
+	p.errors = append(p.errors, p.formatErr(p.curToken.Line, p.curToken.Column,
+		fmt.Sprintf("Unexpected token '%s' - this token cannot start an expression", t)))
 }
 
 // infix expressions
@@ -413,13 +506,12 @@ func (p *Parser) noInfixParseFnError(t token.TokenType) {
 		if kw == "" {
 			kw = p.curToken.Literal
 		}
-		msg := fmt.Sprintf("%s:%d: '%s' is a reserved keyword and cannot be used in this context. Check syntax for operators, expressions, or missing semicolon",
-			p.l.GetFilename(), p.curToken.Line, kw)
-		p.errors = append(p.errors, msg)
+		p.errors = append(p.errors, p.formatErr(p.curToken.Line, p.curToken.Column,
+			fmt.Sprintf("'%s' is a reserved keyword and cannot be used in this context", kw)))
 		return
 	}
-	msg := fmt.Sprintf("%s:%d: Unexpected token '%s' - cannot be used in this context. Check syntax for operators, expressions, or missing semicolon", p.l.GetFilename(), p.curToken.Line, t)
-	p.errors = append(p.errors, msg)
+	p.errors = append(p.errors, p.formatErr(p.curToken.Line, p.curToken.Column,
+		fmt.Sprintf("Unexpected token '%s' in this position", t)))
 }
 
 func (p *Parser) parseGroupedExpression() ast.Expression {

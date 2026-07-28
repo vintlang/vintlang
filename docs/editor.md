@@ -34,7 +34,7 @@ editor.setText(ed, "Hello, world!\nThis is a simple text editor.\nTry it out!")
 
 // Render the editor
 let editorContent = editor.render(ed)
-print(editorContent)
+::print(editorContent)
 
 // Handle keypresses
 while (true) {
@@ -51,7 +51,7 @@ while (true) {
     // Re-render the editor
     editorContent = editor.render(ed)
     term.clear()
-    print(editorContent)
+    ::print(editorContent)
 }
 ```
 
@@ -271,7 +271,7 @@ while (true) {
     // Render the editor
     let content = editor.render(ed)
     term.clear()
-    print(content)
+    ::print(content)
     
     // Get keypress
     let key = term.getKey()
@@ -339,7 +339,7 @@ let loadConfig = func(filename) {
         }
     }
     
-    let content = open(filename)
+    let content = ::open(filename)
     return JSON.parse(content)
 }
 
@@ -372,7 +372,7 @@ let editSection = func(section, data) {
         term.clear()
         term.println("Editing " + section + " configuration", "#ffcc00")
         term.println("Press Ctrl+S to save, Ctrl+Q to cancel", "#88ff88")
-        print(content)
+        ::print(content)
         
         // Get keypress
         let key = term.getKey()
@@ -500,7 +500,7 @@ let main = func() {
     // Check command line arguments
     if (args.length < 2) {
         term.println("Usage: vint markdown_editor.vint <filename>", "#ff5555")
-        exit(1)
+        ::exit(1)
     }
     
     let filename = args[1]
@@ -521,7 +521,7 @@ let main = func() {
         term.clear()
         term.println("Markdown Editor - " + filename, "#ffcc00")
         term.println("Ctrl+S: Save | Ctrl+P: Preview | Ctrl+Q: Quit", "#88ff88")
-        print(content)
+        ::print(content)
         
         // Get keypress
         let key = term.getKey()

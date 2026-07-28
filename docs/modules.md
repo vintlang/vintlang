@@ -33,7 +33,7 @@ To use a module, you need to:
 import math
 
 result = math.add(5, 3)
-print(result)  // Output: 8
+::print(result)  // Output: 8
 ```
 
 ## Module Structure
@@ -123,8 +123,8 @@ import calculator
 result1 = calculator.add(10, 5)
 result2 = calculator.multiply(4, 3)
 
-print("Addition: " + result1)      // Output: Addition: 15
-print("Multiplication: " + result2) // Output: Multiplication: 12
+::print("Addition: " + result1)      // Output: Addition: 15
+::print("Multiplication: " + result2) // Output: Multiplication: 12
 ```
 
 ## Built-in Modules

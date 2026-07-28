@@ -1,6 +1,10 @@
 package object
 
-import "sync"
+import (
+	"sync"
+
+	"github.com/vintlang/vintlang/ast"
+)
 
 // Environment represents a variable/function scope in VintLang.
 // Now supports function overloading: multiple functions with the same name but different signatures.
@@ -8,6 +12,7 @@ type Environment struct {
 	store     map[string]VintObject  // For variables and non-function objects
 	funcs     map[string][]*Function // For overloaded functions
 	constants map[string]bool
+	types     map[string]ast.Type // declared types for each name (Phase 2+)
 	outer     *Environment
 
 	isFuncScope   bool            // true for environments created by function calls
@@ -20,7 +25,8 @@ func NewEnvironment() *Environment {
 	s := make(map[string]VintObject)
 	f := make(map[string][]*Function)
 	c := make(map[string]bool)
-	return &Environment{store: s, funcs: f, constants: c, outer: nil}
+	t := make(map[string]ast.Type)
+	return &Environment{store: s, funcs: f, constants: c, types: t, outer: nil}
 }
 
 // NewEnclosedEnvironment creates a new environment with an outer (parent) environment.
@@ -75,6 +81,43 @@ func (e *Environment) DefineConst(name string, val VintObject) VintObject {
 	e.constants[name] = true
 	e.store[name] = val
 	return val
+}
+
+// DefineTyped adds a variable with an associated declared type.
+func (e *Environment) DefineTyped(name string, val VintObject, t ast.Type) VintObject {
+	if fn, ok := val.(*Function); ok {
+		e.funcs[name] = append(e.funcs[name], fn)
+		if t != nil {
+			e.types[name] = t
+		}
+		return fn
+	}
+	if _, ok := e.store[name]; ok {
+		return NewError("Identifier '" + name + "' has already been declared")
+	}
+	e.store[name] = val
+	if t != nil {
+		e.types[name] = t
+	}
+	return val
+}
+
+// SetDeclaredType records the declared type for a name in the current scope.
+func (e *Environment) SetDeclaredType(name string, t ast.Type) {
+	if t != nil {
+		e.types[name] = t
+	}
+}
+
+// GetDeclaredType returns the declared type for a name, walking the closure chain.
+func (e *Environment) GetDeclaredType(name string) (ast.Type, bool) {
+	if t, ok := e.types[name]; ok {
+		return t, true
+	}
+	if e.outer != nil {
+		return e.outer.GetDeclaredType(name)
+	}
+	return nil, false
 }
 
 // Assign updates the value of a variable in the environment.

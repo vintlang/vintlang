@@ -35,7 +35,7 @@ match(pattern, string);
 import regex
 
 result = regex.match("^Hello", "Hello World")
-print(result)  // Expected output: true
+::print(result)  // Expected output: true
 ```
 
 In this case, the string starts with `"Hello"`, so it matches the pattern.
@@ -52,7 +52,7 @@ You can use `match` to check if a string does _not_ match a given pattern. If th
 import regex
 
 result = regex.match("^World", "Hello World")
-print(result)  // Expected output: false
+::print(result)  // Expected output: false
 ```
 
 Since the string does not start with `"World"`, the result is `false`.
@@ -79,7 +79,7 @@ replaceString(pattern, replacement, string);
 import regex
 
 newString = regex.replaceString("World", "VintLang", "Hello World")
-print(newString)  // Expected output: "Hello VintLang"
+::print(newString)  // Expected output: "Hello VintLang"
 ```
 
 In this case, `"World"` is replaced by `"VintLang"`, resulting in `"Hello VintLang"`.
@@ -105,7 +105,7 @@ splitString(pattern, string);
 import regex
 
 words = regex.splitString("\\s+", "Hello World VintLang")
-print(words)  // Expected output: ["Hello", "World", "VintLang"]
+::print(words)  // Expected output: ["Hello", "World", "VintLang"]
 ```
 
 Here, `\\s+` matches one or more whitespace characters, so the string is split into words.
@@ -122,7 +122,7 @@ You can also split a string by a specific delimiter, such as a comma, using `spl
 import regex
 
 csv = regex.splitString(",", "apple,banana,orange")
-print(csv)  // Expected output: ["apple", "banana", "orange"]
+::print(csv)  // Expected output: ["apple", "banana", "orange"]
 ```
 
 The string `"apple,banana,orange"` is split at each comma.
@@ -139,7 +139,7 @@ You can match more complex patterns, such as an email address, using `match` wit
 import regex
 
 emailMatch = regex.match("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$", "test@example.com")
-print(emailMatch)  // Expected output: true
+::print(emailMatch)  // Expected output: true
 ```
 
 This pattern matches valid email addresses, so `"test@example.com"` matches successfully.
@@ -156,7 +156,7 @@ You can use `replaceString` to replace parts of a string that match a pattern, s
 import regex
 
 maskedString = regex.replaceString("\\d", "*", "My phone number is 123456789")
-print(maskedString)  // Expected output: "My phone number is *********"
+::print(maskedString)  // Expected output: "My phone number is *********"
 ```
 
 Here, `\\d` matches any digit, so the digits in the phone number are replaced with asterisks.

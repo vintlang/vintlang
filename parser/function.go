@@ -6,62 +6,137 @@ import (
 )
 
 func (p *Parser) parseFunctionLiteral() ast.Expression {
-	lit := &ast.FunctionLiteral{Token: p.curToken}
+	tok := p.curToken
 
+	name := ""
 	if p.peekTokenIs(token.IDENT) {
 		p.nextToken()
-		lit.Name = p.curToken.Literal
+		name = p.curToken.Literal
 	}
 
 	if !p.expectPeek(token.LPAREN) {
 		return nil
 	}
 
-	if !p.parseFunctionParameters(lit) {
+	params, hasTypes := p.parseTypedFunctionParameters()
+	if params == nil {
 		return nil
 	}
 
-	if !p.expectPeek(token.LBRACE) {
+	var returnType ast.Type
+	if p.peekTokenIs(token.COLON) {
+		p.nextToken() // consume ':'
+		p.nextToken() // move to return type
+		returnType = p.parseType()
+		hasTypes = true
+	}
+
+	if p.curTokenIs(token.LBRACE) {
+		// Already at '{' (e.g. after return type was parsed)
+	} else if !p.expectPeek(token.LBRACE) {
 		return nil
 	}
 
-	lit.Body = p.parseBlockStatement()
+	body := p.parseBlockStatement()
 
-	return lit
+	if !hasTypes {
+		lit := &ast.FunctionLiteral{Token: tok, Name: name}
+		lit.Defaults = make(map[string]ast.Expression)
+		for _, tp := range params {
+			lit.Parameters = append(lit.Parameters, tp.Identifier)
+			if tp.Default != nil {
+				lit.Defaults[tp.Identifier.Value] = tp.Default
+			}
+		}
+		lit.Body = body
+		return lit
+	}
+
+	flit := &ast.TypedFunctionLiteral{
+		Token:      tok,
+		Parameters: params,
+		ReturnType: returnType,
+		Body:       body,
+	}
+	if name != "" {
+		flit.Name = name
+	}
+	return flit
 }
 
-func (p *Parser) parseFunctionParameters(lit *ast.FunctionLiteral) bool {
-    lit.Defaults = make(map[string]ast.Expression)
-    hasDefaults := false // Track if any default parameter has been encountered
+// parseTypedFunctionParameters parses function parameters, supporting typed syntax.
+// Returns the list of TypedParameters and whether any type annotations were found.
+func (p *Parser) parseTypedFunctionParameters() ([]*ast.TypedParameter, bool) {
+	params := []*ast.TypedParameter{}
+	hasTypes := false
+	hasDefaults := false
 
-    for !p.peekTokenIs(token.RPAREN) {
-        p.nextToken()
+	// Advance past '('
+	p.nextToken()
 
-        if p.curTokenIs(token.COMMA) {
-            continue
-        }
+	// Handle empty parameter list
+	if p.curTokenIs(token.RPAREN) {
+		return params, hasTypes
+	}
 
-        ident := &ast.Identifier{Token: p.curToken, Value: p.curToken.Literal}
-        lit.Parameters = append(lit.Parameters, ident)
+	for {
+		// Skip commas between parameters
+		if p.curTokenIs(token.COMMA) {
+			p.nextToken()
+			continue
+		}
 
-        if p.peekTokenIs(token.ASSIGN) {
-            p.nextToken() // Consume '='
-            p.nextToken() // Parse default expression
-            lit.Defaults[ident.Value] = p.parseExpression(LOWEST)
-            hasDefaults = true
-        } else {
-            if hasDefaults {
-                p.addError("Non-default parameter cannot appear after a default parameter")
-                return false
-            }
-        }
+		// End of parameter list
+		if p.curTokenIs(token.RPAREN) {
+			break
+		}
 
-        if !(p.peekTokenIs(token.COMMA) || p.peekTokenIs(token.RPAREN)) {
-            return false
-        }
-    }
+		if p.curToken.Type != token.IDENT {
+			p.addError("expected parameter name, got " + p.curToken.Literal)
+			return nil, false
+		}
 
-    return p.expectPeek(token.RPAREN)
+		ident := &ast.Identifier{Token: p.curToken, Value: p.curToken.Literal}
+		tp := &ast.TypedParameter{Token: p.curToken, Identifier: ident}
+
+		// Check for type annotation: name: type
+		if p.peekTokenIs(token.COLON) {
+			p.nextToken() // consume ':'
+			p.nextToken() // move to type
+			tp.Type = p.parseType()
+			hasTypes = true
+		}
+
+		// Check for default value: name: type = value
+		if p.peekTokenIs(token.ASSIGN) {
+			p.nextToken() // '='
+			p.nextToken() // value
+			tp.Default = p.parseExpression(LOWEST)
+			hasDefaults = true
+		} else if hasDefaults {
+			p.addError("non-default parameter cannot appear after a default parameter")
+			return nil, false
+		}
+
+		params = append(params, tp)
+
+		// After parsing a parameter, check what comes next.
+		// parseType may have left us at ',' (typed param) or at the next token.
+		if p.curTokenIs(token.RPAREN) {
+			break
+		}
+		// If we're at a comma, the next iteration will skip it.
+		// If we're at an IDENT, the loop will continue parsing it.
+		// But we MUST have a comma before the next param.
+		if !p.curTokenIs(token.COMMA) && !p.peekTokenIs(token.RPAREN) && !p.peekTokenIs(token.COMMA) {
+			p.addError("expected ',' or ')' after parameter, got " + p.peekToken.Literal)
+			return nil, false
+		}
+
+		p.nextToken()
+	}
+
+	return params, hasTypes
 }
 
 func (p *Parser) parseCallExpression(function ast.Expression) ast.Expression {

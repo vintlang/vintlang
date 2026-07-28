@@ -10,6 +10,8 @@ import (
 type Function struct {
 	Name        string
 	Parameters  []*ast.Identifier
+	ParamTypes  []ast.Type            // parallel to Parameters, nil for untyped
+	ReturnType  ast.Type              // nil for void/untyped
 	Defaults    map[string]ast.Expression
 	Body        *ast.BlockStatement
 	Env         *Environment

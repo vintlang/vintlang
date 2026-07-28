@@ -1,100 +1,31 @@
 // VintLang Typed Enums
-// Demonstrates typed enum declarations
+// Demonstrates enum declarations (typed enums deferred to v2)
 
-// ============================================================
-// 1. Simple enum (int by default)
-// ============================================================
-
-enum Status: int {
-    Pending = 0
-    Active = 1
-    Inactive = 2
+// Simple enum
+enum Status {
+    Pending = 0,
+    Active = 1,
+    Inactive = 2,
     Banned = 3
-}
+};
 
-let currentStatus: Status = Status.Active
-println("status:", currentStatus)
+let currentStatus: Status = Status.Active;
+::println("status:", currentStatus);
 
-// Enum in types context
-func canLogin(status: Status): bool {
-    return status == Status.Active
-}
+// Enum as function parameter type
+let canLogin = func(status: Status): bool {
+    return status == Status.Active;
+};
 
-println("can login:", canLogin(currentStatus))
-println("can login banned:", canLogin(Status.Banned))
+::println("can login:", canLogin(currentStatus));
+::println("can login banned:", canLogin(Status.Banned));
 
-// ============================================================
-// 2. String enum
-// ============================================================
-
-enum Color: string {
-    Red = "red"
-    Green = "green"
-    Blue = "blue"
-    Yellow = "yellow"
-}
-
-let primary: Color = Color.Blue
-println("color:", primary)
-
-// ============================================================
-// 3. Float enum
-// ============================================================
-
-enum Grade: float64 {
-    A = 4.0
-    B = 3.0
-    C = 2.0
-    D = 1.0
-    F = 0.0
-}
-
-func gpaToGrade(gpa: float64): Grade {
-    if gpa >= 3.7 { return Grade.A }
-    if gpa >= 2.7 { return Grade.B }
-    if gpa >= 1.7 { return Grade.C }
-    if gpa >= 0.7 { return Grade.D }
-    return Grade.F
-}
-
-let myGrade: Grade = gpaToGrade(3.5)
-println("grade:", myGrade)
-
-// ============================================================
-// 4. Enum with explicit values
-// ============================================================
-
-enum HttpStatus: int {
-    OK = 200
-    Created = 201
-    NoContent = 204
-    BadRequest = 400
-    Unauthorized = 401
-    NotFound = 404
-    InternalServerError = 500
-}
-
-func describeHttp(code: HttpStatus): string {
-    match code {
-        HttpStatus.OK => return "OK"
-        HttpStatus.NotFound => return "Not Found"
-        HttpStatus.InternalServerError => return "Server Error"
-        _ => return "Unknown"
-    }
-}
-
-println("200:", describeHttp(HttpStatus.OK))
-println("404:", describeHttp(HttpStatus.NotFound))
-
-// ============================================================
-// 5. Enum as struct field type
-// ============================================================
-
+// Enum in struct field
 struct User {
-    id: int
-    name: string
+    id: int,
+    name: string,
     role: Status
-}
+};
 
-let admin: User = User{id: 1, name: "Alice", role: Status.Active}
-println("user:", admin.name, "role:", admin.role)
+let admin: User = User{id: 1, name: "Alice", role: Status.Active};
+::println("user:", admin.name, "role:", admin.role);

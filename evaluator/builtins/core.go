@@ -7,8 +7,14 @@ import (
 	"os"
 	"time"
 
+	"github.com/vintlang/vintlang/ast"
 	"github.com/vintlang/vintlang/object"
 )
+
+// basicType creates a BasicType with the given name for builtin signatures.
+func basicType(name string) ast.Type {
+	return &ast.BasicType{Name: name}
+}
 
 func init() {
 	registerCoreBuiltins()
@@ -65,6 +71,7 @@ func registerCoreBuiltins() {
 	})
 
 	RegisterBuiltin("type", &object.Builtin{
+		ReturnType: basicType("string"),
 		Fn: func(args ...object.VintObject) object.VintObject {
 			if len(args) != 1 {
 				return newError("Function 'type' requires exactly 1 argument, got %d", len(args))
@@ -205,6 +212,7 @@ func registerCoreBuiltins() {
 	})
 
 	RegisterBuiltin("len", &object.Builtin{
+		ReturnType: basicType("int"),
 		Fn: func(args ...object.VintObject) object.VintObject {
 			if len(args) != 1 {
 				return newError("wrong number of arguments. got=%d, want=1", len(args))
