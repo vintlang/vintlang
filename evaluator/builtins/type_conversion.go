@@ -42,6 +42,7 @@ func registerTypeConversionBuiltins() {
 	})
 
 	RegisterBuiltin("string", &object.Builtin{
+		ReturnType: basicType("string"),
 		Fn: func(args ...object.VintObject) object.VintObject {
 			if len(args) != 1 {
 				return newError("string() requires exactly 1 argument, you provided %d", len(args))
@@ -53,6 +54,7 @@ func registerTypeConversionBuiltins() {
 	})
 
 	RegisterBuiltin("int", &object.Builtin{
+		ReturnType: basicType("int"),
 		Fn: func(args ...object.VintObject) object.VintObject {
 			if len(args) != 1 {
 				return newError("int() requires exactly 1 argument, you provided %d", len(args))

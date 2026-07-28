@@ -624,10 +624,28 @@ func applyFunction(fn object.VintObject, args []object.VintObject, line int) obj
 		// Execute async function and return a promise
 		return fn.Execute(args, Eval)
 	case *object.Builtin:
-		if result := fn.Fn(args...); result != nil {
-			return result
+		// Check argument types against declared parameter types
+		for i, arg := range args {
+			if i < len(fn.ParamTypes) && fn.ParamTypes[i] != nil {
+				if !compatible(fn.ParamTypes[i], arg) {
+					return newTypeError(line, "argument %d to builtin '%s' expects %s, got %s",
+						i+1, "builtin", fn.ParamTypes[i].String(), arg.Type())
+				}
+			}
 		}
-		return NULL
+		// Call the builtin function
+		result := fn.Fn(args...)
+		if result == nil {
+			return NULL
+		}
+		// Check return type against declared return type
+		if fn.ReturnType != nil && !isError(result) {
+			if !compatible(fn.ReturnType, result) {
+				return newTypeError(line, "builtin returns %s, but got %s",
+					fn.ReturnType.String(), result.Type())
+			}
+		}
+		return result
 	case *object.DebouncedFunction:
 		// Set the apply function callback if not already set
 		fn.SetApplyFunction(applyFunction)
