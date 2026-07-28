@@ -66,7 +66,7 @@ let u: User = User{id: 1, name: "Alice"};
 
 // nil slice is safe to append
 let items: []int;
-items = append(items, 1);
-items = append(items, 2);
-items = append(items, 3);
+items = ::append(items, 1);
+items = ::append(items, 2);
+items = ::append(items, 3);
 ::println("items from nil:", items);

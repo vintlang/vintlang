@@ -59,7 +59,7 @@ let filterOrders = func(orders: []Order, fn: OrderFilter): []Order {
     let result: []Order;
     for order in orders {
         if (fn(order)) {
-            result = append(result, order);
+            result = ::append(result, order);
         };
     };
     return result;

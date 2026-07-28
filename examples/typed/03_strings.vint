@@ -11,10 +11,10 @@ let message: string = greeting + " " + name;
 
 // String length and indexing
 let text: string = "VintLang";
-let length: int = len(text);
+let length: int = ::len(text);
 let first: byte = text[0];
 let last: byte = text[len(text) - 1];
-::println("length:", length, "first:", string(first), "last:", string(last));
+::println("length:", length, "first:", ::string(first), "last:", ::string(last));
 
 // String slicing
 let sub: string = text[0:4];
@@ -22,8 +22,8 @@ let sub: string = text[0:4];
 
 // String conversion
 let count: int = 42;
-let strCount: string = string(count);
-let parsed: int = int("100");
+let strCount: string = ::string(count);
+let parsed: int = ::int("100");
 ::println("strCount:", strCount, "parsed:", parsed);
 
 // String methods

@@ -15,4 +15,4 @@ let result = divide(10, 2);
 // Custom error types
 error ValidationError { field: string, reason: string };
 let err = ValidationError{field: "id", reason: "must be positive"};
-::println("error type:", type(err));
+::println("error type:", ::type(err));

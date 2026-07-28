@@ -10,10 +10,10 @@ let names: []string = ["Alice", "Bob", "Carol"];
 
 // Zero-value slice is nil
 let empty: []int;
-::println("nil slice:", empty, "len:", len(empty));
+::println("nil slice:", empty, "len:", ::len(empty));
 
 // Append operations
-scores = append(scores, 100);
+scores = ::append(scores, 100);
 ::println("after append:", scores);
 
 let topScores: []int = scores[0:3];
