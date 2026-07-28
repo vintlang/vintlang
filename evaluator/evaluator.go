@@ -155,6 +155,12 @@ func Eval(node ast.Node, env *object.Environment) object.VintObject {
 		return &object.String{Value: node.Value}
 	case *ast.At:
 		return evalAt(node, env)
+	case *ast.BuiltinExpression:
+		builtin, ok := GetBuiltinFunction(node.Name)
+		if !ok {
+			return newError("unknown builtin function: '%s'", node.Name)
+		}
+		return builtin
 	case *ast.ArrayLiteral:
 		elements := evalExpressions(node.Elements, env)
 		if len(elements) == 1 && isError(elements[0]) {

@@ -62,6 +62,7 @@ const (
 	ELLIPSIS  = "..."
 	AT        = "@"
 	ARROW     = "=>"
+	HASH      = "#"   // builtin function prefix: #println
 
 	// Keywords
 	FUNCTION = "FUNCTION"
