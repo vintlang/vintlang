@@ -37,16 +37,16 @@ messages = [
 ]
 response, err = llm.chat(messages)
 if err != null {
-    print("Chat error: ", err)
+    ::print("Chat error: ", err)
 } else {
-    print("Chat response: ", response)
+    ::print("Chat response: ", response)
 }
 
 completion, err = llm.completion("Write a poem about the stars.")
 if err != null {
-    print("Completion error: ", err)
+    ::print("Completion error: ", err)
 } else {
-    print("Completion: ", completion)
+    ::print("Completion: ", completion)
 }
 ```
 

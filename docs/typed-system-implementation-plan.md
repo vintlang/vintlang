@@ -146,9 +146,9 @@ func divide(a: int, b: int): (int, error) {
 
 let result, err := divide(10, 2)
 if err != nil {
-    println(err.message())
+    ::println(err.message())
 } else {
-    println(result)
+    ::println(result)
 }
 ```
 
@@ -324,7 +324,7 @@ func (p *Parser) parseFunctionParameters(lit *ast.FunctionLiteral) bool {
     for !p.peekTokenIs(token.RPAREN) {
         p.nextToken()
         ident := &ast.Identifier{...}
-        lit.Parameters = append(lit.Parameters, ident)
+        lit.Parameters = ::append(lit.Parameters, ident)
         // ... defaults handling ...
     }
 }
@@ -709,7 +709,7 @@ Need `zeroValue(ast.Type) object.VintObject` helper that returns the zero object
 After resolving each argument to a value, check against `fn.ParamTypes[i]`:
 
 ```go
-if i < len(fn.ParamTypes) && fn.ParamTypes[i] != nil {
+if i < ::len(fn.ParamTypes) && fn.ParamTypes[i] != nil {
     if !compatible(fn.ParamTypes[i], args[i].Type()) {
         return newError("type mismatch: parameter '%s' expects %s, got %s",
             fn.Parameters[i], fn.ParamTypes[i].String(), args[i].Type())
@@ -729,7 +729,7 @@ Option: pass return type through the environment chain. Add `currentReturnType` 
 
 ```go
 result := Eval(fn.Body, extendedEnv)
-if len(fn.ReturnTypes) > 0 {
+if ::len(fn.ReturnTypes) > 0 {
     result = unwrapReturnValue(result)
     if !compatible(fn.ReturnTypes[0], result.Type()) {
         return newError("type mismatch: function returns %s, but body returned %s",

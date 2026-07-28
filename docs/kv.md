@@ -55,10 +55,10 @@ Retrieves a value by its key.
 
 ```js
 let user = kv.get("user:123");
-println("User:", user); // {name: John, age: 30}
+::println("User:", user); // {name: John, age: 30}
 
 let missing = kv.get("nonexistent");
-println("Missing:", missing); // null
+::println("Missing:", missing); // null
 ```
 
 ### delete(key)
@@ -75,7 +75,7 @@ Removes a key-value pair from the store.
 
 ```js
 let deleted = kv.delete("session:456");
-println("Deleted:", deleted); // true
+::println("Deleted:", deleted); // true
 ```
 
 ### exists(key)
@@ -92,7 +92,7 @@ Checks if a key exists in the store (and is not expired).
 
 ```js
 if (kv.exists("user:123")) {
-  println("User exists");
+  ::println("User exists");
 }
 ```
 
@@ -106,7 +106,7 @@ Removes all key-value pairs from the store.
 
 ```js
 kv.clear();
-println("Store cleared");
+::println("Store cleared");
 ```
 
 ## Store Information
@@ -123,7 +123,7 @@ Returns an array of all keys in the store (excluding expired keys).
 kv.set("key1", "value1");
 kv.set("key2", "value2");
 let allKeys = kv.keys();
-println("Keys:", allKeys); // ["key1", "key2"]
+::println("Keys:", allKeys); // ["key1", "key2"]
 ```
 
 ### values()
@@ -136,7 +136,7 @@ Returns an array of all values in the store (excluding expired values).
 
 ```js
 let allValues = kv.values();
-println("Values:", allValues); // ["value1", "value2"]
+::println("Values:", allValues); // ["value1", "value2"]
 ```
 
 ### size()
@@ -148,7 +148,7 @@ Returns the number of key-value pairs in the store.
 **Example:**
 
 ```js
-println("Store size:", kv.size()); // 2
+::println("Store size:", kv.size()); // 2
 ```
 
 ### isEmpty()
@@ -161,7 +161,7 @@ Checks if the store is empty.
 
 ```js
 if (kv.isEmpty()) {
-  println("Store is empty");
+  ::println("Store is empty");
 }
 ```
 
@@ -204,7 +204,7 @@ Gets the remaining time-to-live for a key.
 ```js
 let remaining = kv.getTTL("session:temp");
 if (remaining != null && remaining > 0) {
-  println("Session expires in", remaining, "seconds");
+  ::println("Session expires in", remaining, "seconds");
 }
 ```
 
@@ -245,7 +245,7 @@ kv.set("user:1", "Alice");
 kv.set("user:2", "Bob");
 
 let users = kv.mget(["user:1", "user:2", "user:3"]);
-println("Users:", users); // ["Alice", "Bob", null]
+::println("Users:", users); // ["Alice", "Bob", null]
 ```
 
 ### mset(pairs)
@@ -293,16 +293,16 @@ Atomically increments a numeric value.
 ```js
 // Simple counter
 let count = kv.increment("page:views");
-println("Views:", count); // 1
+::println("Views:", count); // 1
 
 // Increment by custom amount
 let score = kv.increment("user:score", 10);
-println("Score:", score); // 10
+::println("Score:", score); // 10
 
 // Increment existing value
 kv.set("counter", 5);
 let newCount = kv.increment("counter", 3);
-println("New count:", newCount); // 8
+::println("New count:", newCount); // 8
 ```
 
 ### decrement(key, [delta])
@@ -327,12 +327,12 @@ Atomically decrements a numeric value.
 ```js
 // Simple countdown
 let remaining = kv.decrement("lives");
-println("Lives remaining:", remaining); // -1
+::println("Lives remaining:", remaining); // -1
 
 // Decrement by custom amount
 kv.set("inventory", 100);
 let newInventory = kv.decrement("inventory", 15);
-println("Inventory:", newInventory); // 85
+::println("Inventory:", newInventory); // 85
 ```
 
 ## Utility Functions
@@ -349,7 +349,7 @@ Returns all key-value pairs in the store as a dictionary (excluding expired keys
 kv.set("key1", "value1");
 kv.set("key2", 42);
 let allData = kv.dump();
-println("All data:", allData); // {key1: value1, key2: 42}
+::println("All data:", allData); // {key1: value1, key2: 42}
 ```
 
 ### stats()
@@ -367,7 +367,7 @@ Returns statistics about the KV store.
 
 ```js
 let statistics = kv.stats();
-println("Store stats:", statistics);
+::println("Store stats:", statistics);
 // {total_keys: 10, active_keys: 8, expired_keys: 2, keys_with_ttl: 5}
 ```
 
@@ -447,7 +447,7 @@ func isRateLimited(userId, limit, windowSeconds) {
 
 // Usage: Allow 100 requests per minute
 if (isRateLimited("user123", 100, 60)) {
-    println("Rate limited!")
+    ::println("Rate limited!")
 }
 ```
 

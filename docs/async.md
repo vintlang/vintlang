@@ -18,7 +18,7 @@ let promise = fetchData("https://api.example.com")
 
 // Wait for the result
 let result = await promise
-print("Result:", result)
+::print("Result:", result)
 ```
 
 ## Async/Await
@@ -31,7 +31,7 @@ let processData = async func(data) {
 }
 
 let result = await processData("my data")
-print(result)  // Output: Processed: my data
+::print(result)  // Output: Processed: my data
 ```
 
 ## Concurrent Execution with `go`
@@ -40,10 +40,10 @@ Use the `go` keyword to execute code concurrently:
 
 ```javascript
 // Execute concurrently
-go print("This runs in a goroutine")
-go print("This also runs concurrently")
+go ::print("This runs in a goroutine")
+go ::print("This also runs concurrently")
 
-print("This runs in the main thread")
+::print("This runs in the main thread")
 ```
 
 ## Channels
@@ -64,13 +64,13 @@ let bufferedCh = chan(5)
 
 ```javascript
 // Send to channel
-send(ch, "Hello")
+::send(ch, "Hello")
 
 // Receive from channel
-let message = receive(ch)
+let message = ::receive(ch)
 
 // Close channel
-close(ch)
+::close(ch)
 ```
 
 ### Producer-Consumer Pattern
@@ -80,18 +80,18 @@ let dataChan = chan(3)
 
 // Producer goroutine
 go func() {
-    send(dataChan, "Item 1")
-    send(dataChan, "Item 2")
-    send(dataChan, "Item 3")
-    close(dataChan)
+    ::send(dataChan, "Item 1")
+    ::send(dataChan, "Item 2")
+    ::send(dataChan, "Item 3")
+    ::close(dataChan)
 }()
 
 // Consumer
-let item1 = receive(dataChan)
-let item2 = receive(dataChan)
-let item3 = receive(dataChan)
+let item1 = ::receive(dataChan)
+let item2 = ::receive(dataChan)
+let item3 = ::receive(dataChan)
 
-print("Received:", item1, item2, item3)
+::print("Received:", item1, item2, item3)
 ```
 
 ## Complex Example: Async with Channels
@@ -105,17 +105,17 @@ let processInBackground = async func(input) {
     // Process in background
     go func() {
         let processed = "Processed: " + input
-        send(resultChan, processed)
+        ::send(resultChan, processed)
     }()
     
     // Wait for result
-    let result = receive(resultChan)
+    let result = ::receive(resultChan)
     return result
 }
 
 let promise = processInBackground("data")
 let result = await promise
-print("Final result:", result)
+::print("Final result:", result)
 ```
 
 ## Error Handling
@@ -129,7 +129,7 @@ let riskyFunction = async func() {
 }
 
 let result = await riskyFunction()
-print("Result:", result)
+::print("Result:", result)
 ```
 
 ## Multiple Concurrent Operations
@@ -151,7 +151,7 @@ let r1 = await p1
 let r2 = await p2
 let r3 = await p3
 
-print("All tasks done:", r1, r2, r3)
+::print("All tasks done:", r1, r2, r3)
 ```
 
 ## Best Practices

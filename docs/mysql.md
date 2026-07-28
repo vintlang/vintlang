@@ -36,7 +36,7 @@ To get all rows from a query result, use `mysql.fetchAll()`.
 
 ```js
 users = mysql.fetchAll(conn, "SELECT * FROM users")
-print(users)
+::print(users)
 ```
 
 ### Fetch a Single Row
@@ -45,7 +45,7 @@ To get only the first row from a query result, use `mysql.fetchOne()`.
 
 ```js
 user = mysql.fetchOne(conn, "SELECT * FROM users WHERE id = ?", 1)
-print(user)
+::print(user)
 ```
 
 ## Full Example
@@ -60,9 +60,9 @@ conn_str = "user:password@tcp(127.0.0.1:3306)/testdb"
 conn = mysql.open(conn_str)
 
 if conn.type() == "ERROR" {
-    print("Error connecting to MySQL:", conn.message())
+    ::print("Error connecting to MySQL:", conn.message())
 } else {
-    print("Successfully connected to MySQL")
+    ::print("Successfully connected to MySQL")
 
     // Create a table
     create_query = "CREATE TABLE IF NOT EXISTS users (id INT AUTO_INCREMENT PRIMARY KEY, name VARCHAR(255), age INT)"
@@ -73,9 +73,9 @@ if conn.type() == "ERROR" {
 
     // Fetch and print data
     users = mysql.fetchAll(conn, "SELECT * FROM users")
-    print("All users:", users)
+    ::print("All users:", users)
 
     // Close the connection
     mysql.close(conn)
-    print("Connection closed")
+    ::print("Connection closed")
 } 

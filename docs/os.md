@@ -28,7 +28,7 @@ os.exit(0)  // Exit with status code 0 (success)
 
 ```js
 result = os.run("ls -la")
-print(result)  // Outputs the directory listing
+::print(result)  // Outputs the directory listing
 ```
 
 ### Process Information
@@ -48,7 +48,7 @@ egid = os.getegid()      // Effective group ID
 
 // Get all groups the user belongs to
 groups = os.getgroups()  // Returns array of group IDs
-print("User groups:", groups)
+::print("User groups:", groups)
 
 // System information
 pageSize = os.getpagesize()  // Memory page size
@@ -64,7 +64,7 @@ os.setEnv("API_KEY", "12345")
 
 // Get environment variable
 api_key = os.getEnv("API_KEY")
-print(api_key)  // Outputs: "12345"
+::print(api_key)  // Outputs: "12345"
 
 // Remove environment variable
 os.unsetEnv("API_KEY")
@@ -76,7 +76,7 @@ os.unsetEnv("API_KEY")
 // Get all environment variables
 envVars = os.environ()
 for (env in envVars) {
-    print(env)  // Each entry is "KEY=value"
+    ::print(env)  // Each entry is "KEY=value"
 }
 
 // Clear all environment variables (use with caution!)
@@ -85,14 +85,14 @@ os.clearenv()
 // Check if environment variable exists
 result = os.lookupEnv("PATH")
 if (result["exists"]) {
-    print("PATH exists:", result["value"])
+    ::print("PATH exists:", result["value"])
 } else {
-    print("PATH not found")
+    ::print("PATH not found")
 }
 
 // Expand environment variables in strings
 expanded = os.expandEnv("Home is $HOME and user is $USER")
-print(expanded)
+::print(expanded)
 
 // Alternative expansion method
 expanded2 = os.expand("$HOME/documents", os.getEnv)
@@ -108,15 +108,15 @@ os.writeFile("example.txt", "Hello, Vint!")
 
 // Read from a file
 content = os.readFile("example.txt")
-print(content)  // Outputs: "Hello, Vint!"
+::print(content)  // Outputs: "Hello, Vint!"
 
 // Read file lines as array
 lines = os.readLines("example.txt")
-print(lines)  // Array of lines
+::print(lines)  // Array of lines
 
 // Check if file exists
 exists = os.fileExists("example.txt")
-print(exists)  // true or false
+::print(exists)  // true or false
 ```
 
 ### Advanced File Operations
@@ -124,11 +124,11 @@ print(exists)  // true or false
 ```js
 // Get detailed file information
 fileInfo = os.stat("example.txt")
-print("File name:", fileInfo["name"])
-print("File size:", fileInfo["size"])
-print("Is directory:", fileInfo["isDir"])
-print("Mode:", fileInfo["mode"])
-print("Modification time:", fileInfo["modTime"])
+::print("File name:", fileInfo["name"])
+::print("File size:", fileInfo["size"])
+::print("Is directory:", fileInfo["isDir"])
+::print("Mode:", fileInfo["mode"])
+::print("Modification time:", fileInfo["modTime"])
 
 // Get file info without following symlinks
 linkInfo = os.lstat("symlink.txt")
@@ -149,7 +149,7 @@ os.move("old_location.txt", "new_location.txt")
 
 // Create temporary files
 tempFile = os.createTemp("", "prefix_*.tmp")
-print("Created temp file:", tempFile)
+::print("Created temp file:", tempFile)
 
 // Check if two files are the same
 same = os.sameFile("file1.txt", "file2.txt")
@@ -162,7 +162,7 @@ same = os.sameFile("file1.txt", "file2.txt")
 ```js
 // Get current working directory
 currentDir = os.getwd()
-print("Current directory:", currentDir)
+::print("Current directory:", currentDir)
 
 // Change directory
 os.changeDir("/path/to/directory")
@@ -185,18 +185,18 @@ os.removeAll("folder_with_contents")
 ```js
 // Get directory contents as comma-separated string
 files = os.listDir(".")
-print(files)
+::print(files)
 
 // Get files only (excluding directories) as array
 filesOnly = os.listFiles(".")
-print(filesOnly)  // ["file1.txt", "file2.txt", ...]
+::print(filesOnly)  // ["file1.txt", "file2.txt", ...]
 
 // Get detailed directory information
 dirContents = os.readDir(".")
 for (item in dirContents) {
-    print("Name:", item["name"])
-    print("Is Directory:", item["isDir"])
-    print("Size:", item["size"])
+    ::print("Name:", item["name"])
+    ::print("Is Directory:", item["isDir"])
+    ::print("Size:", item["size"])
 }
 ```
 
@@ -205,7 +205,7 @@ for (item in dirContents) {
 ```js
 // Create temporary directory
 tempDir = os.mkdirTemp("", "myapp_")
-print("Created temp dir:", tempDir)
+::print("Created temp dir:", tempDir)
 ```
 
 ## File Permissions and Ownership
@@ -235,7 +235,7 @@ os.symlink("target.txt", "symlink.txt")
 
 // Read symbolic link target
 target = os.readlink("symlink.txt")
-print("Link points to:", target)
+::print("Link points to:", target)
 ```
 
 ## System Information
@@ -246,13 +246,13 @@ cpuCount = os.cpuCount()
 hostname = os.hostname()
 pageSize = os.getpagesize()
 
-print("CPUs:", cpuCount)
-print("Hostname:", hostname)
-print("Page size:", pageSize)
+::print("CPUs:", cpuCount)
+::print("Hostname:", hostname)
+::print("Page size:", pageSize)
 
 // Get executable path
 execPath = os.executable()
-print("Current executable:", execPath)
+::print("Current executable:", execPath)
 
 // Check path separator
 isSeparator = os.isPathSeparator("/")  // true on Unix, false on Windows for "\"
@@ -265,22 +265,22 @@ The OS module provides functions to check specific types of errors:
 ```js
 // Check if error indicates file exists
 if (os.isExist(errorMsg)) {
-    print("File already exists")
+    ::print("File already exists")
 }
 
 // Check if error indicates file doesn't exist
 if (os.isNotExist(errorMsg)) {
-    print("File not found")
+    ::print("File not found")
 }
 
 // Check if error is permission-related
 if (os.isPermission(errorMsg)) {
-    print("Permission denied")
+    ::print("Permission denied")
 }
 
 // Check if error is timeout-related
 if (os.isTimeout(errorMsg)) {
-    print("Operation timed out")
+    ::print("Operation timed out")
 }
 ```
 
@@ -293,10 +293,10 @@ cacheDir = os.userCacheDir()
 configDir = os.userConfigDir()
 tempDir = os.tempDir()
 
-print("Home:", homeDir)
-print("Cache:", cacheDir)
-print("Config:", configDir)
-print("Temp:", tempDir)
+::print("Home:", homeDir)
+::print("Cache:", cacheDir)
+::print("Config:", configDir)
+::print("Temp:", tempDir)
 ```
 
 ## Legacy Functions
@@ -325,30 +325,30 @@ Here's a comprehensive example demonstrating various OS module functions:
 const os = import("os")
 
 // Process and system info
-println("=== System Information ===")
-println("Process ID:", os.getpid())
-println("CPU Count:", os.cpuCount())
-println("Hostname:", os.hostname())
-println("Home Directory:", os.userHomeDir())
+::println("=== System Information ===")
+::println("Process ID:", os.getpid())
+::println("CPU Count:", os.cpuCount())
+::println("Hostname:", os.hostname())
+::println("Home Directory:", os.userHomeDir())
 
 // Environment variables
-println("\n=== Environment ===")
+::println("\n=== Environment ===")
 os.setEnv("MYVAR", "hello world")
-println("MYVAR:", os.getEnv("MYVAR"))
-println("PATH exists:", os.lookupEnv("PATH")["exists"])
+::println("MYVAR:", os.getEnv("MYVAR"))
+::println("PATH exists:", os.lookupEnv("PATH")["exists"])
 
 // File operations
-println("\n=== File Operations ===")
+::println("\n=== File Operations ===")
 os.writeFile("test.txt", "Hello, Vint!")
-println("File exists:", os.fileExists("test.txt"))
+::println("File exists:", os.fileExists("test.txt"))
 
 fileInfo = os.stat("test.txt")
-println("File size:", fileInfo["size"])
-println("Is directory:", fileInfo["isDir"])
+::println("File size:", fileInfo["size"])
+::println("Is directory:", fileInfo["isDir"])
 
 // Cleanup
 os.remove("test.txt")
-println("File removed")
+::println("File removed")
 ```
 
 The **Vint** OS module provides comprehensive system-level functionality, enabling powerful file system operations, process management, and environment interaction in your Vint programs.

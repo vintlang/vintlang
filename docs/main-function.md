@@ -15,7 +15,7 @@ Use VintLang's existing function syntax to define a main function:
 
 ```javascript
 let main = func() {
-    println("Hello from main!")
+    ::println("Hello from main!")
     return 0
 }
 ```
@@ -24,7 +24,7 @@ Or with `const`:
 
 ```javascript
 const main = func() {
-    println("Hello from main!")
+    ::println("Hello from main!")
     return "success"
 }
 ```
@@ -34,11 +34,11 @@ const main = func() {
 ```javascript
 // Setup phase - runs first
 import time
-println("🚀 Program starting...")
+::println("🚀 Program starting...")
 
 // Define helper functions
 let greet = func(name) {
-    println("Hello,", name, "!")
+    ::println("Hello,", name, "!")
 }
 
 let calculate = func(a, b) {
@@ -47,18 +47,18 @@ let calculate = func(a, b) {
 
 // Main function - entry point
 let main = func() {
-    println("=== Main Function ===")
+    ::println("=== Main Function ===")
     
     greet("Developer")
     let result = calculate(10, 20)
-    println("Result:", result)
-    println("Time:", time.now())
+    ::println("Result:", result)
+    ::println("Time:", time.now())
     
     return result
 }
 
 // More setup
-println("⚙️ Setup complete")
+::println("⚙️ Setup complete")
 ```
 
 **Output:**
@@ -80,7 +80,7 @@ Main functions currently don't receive command-line arguments, but this could be
 ```javascript
 let main = func() {
     // No parameters for now
-    println("Main executed")
+    ::println("Main executed")
 }
 ```
 
@@ -111,9 +111,9 @@ Programs **without** a main function continue to work exactly as before:
 
 ```javascript
 // This still works - no main function needed
-println("Hello World")
+::println("Hello World")
 let x = 42
-println("x =", x)
+::println("x =", x)
 ```
 
 ## When to Use Main Functions
@@ -149,8 +149,8 @@ To convert existing VintLang programs to use main functions:
 ```javascript
 import time
 let x = 42
-println("Hello World")
-println("Time:", time.now())
+::println("Hello World")
+::println("Time:", time.now())
 ```
 
 **After:**
@@ -159,8 +159,8 @@ import time  // Still runs in setup phase
 
 let main = func() {
     let x = 42
-    println("Hello World")  
-    println("Time:", time.now())
+    ::println("Hello World")  
+    ::println("Time:", time.now())
 }
 ```
 

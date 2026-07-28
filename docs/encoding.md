@@ -30,7 +30,7 @@ base64Encode(inputString)
 import encoding
 
 encoded = encoding.base64Encode("Hello, World!")
-print(encoded)  // Expected output: "SGVsbG8sIFdvcmxkIQ=="
+::print(encoded)  // Expected output: "SGVsbG8sIFdvcmxkIQ=="
 ```
 In this example, the string `"Hello, World!"` is encoded into Base64 format.
 
@@ -50,10 +50,10 @@ base64Decode(encodedString)
 import encoding
 
 encoded = encoding.base64Encode("Hello, World!")
-print(encoded)  // Expected output: "SGVsbG8sIFdvcmxkIQ=="
+::print(encoded)  // Expected output: "SGVsbG8sIFdvcmxkIQ=="
 
 decoded = encoding.base64Decode(encoded)
-print(decoded)  // Expected output: "Hello, World!"
+::print(decoded)  // Expected output: "Hello, World!"
 ```
 In this example, the Base64-encoded string is decoded back to its original value.
 

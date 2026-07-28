@@ -22,7 +22,7 @@ Creates a JWT token with the provided payload and secret using HS256 signing met
 ```js
 let payload = { user: "john", role: "admin" };
 let token = jwt.create(payload, "my-secret-key");
-print(token); // eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+::print(token); // eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
 ```
 
 ### `jwt.createHS256(payload, secret, [expiration_hours])`
@@ -44,7 +44,7 @@ Creates a JWT token with HS256 signing method, with optional expiration.
 ```js
 let payload = { user: "john", role: "admin" };
 let token = jwt.createHS256(payload, "my-secret-key", 24); // Expires in 24 hours
-print(token);
+::print(token);
 ```
 
 ### `jwt.verify(token, secret)`
@@ -68,10 +68,10 @@ let token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...";
 let result = jwt.verify(token, "my-secret-key");
 
 if (result.type != "ERROR") {
-  print("User:", result["user"]);
-  print("Role:", result["role"]);
+  ::print("User:", result["user"]);
+  ::print("Role:", result["role"]);
 } else {
-  print("Invalid token:", result.message);
+  ::print("Invalid token:", result.message);
 }
 ```
 
@@ -96,7 +96,7 @@ let token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...";
 let result = jwt.verifyHS256(token, "my-secret-key");
 
 if (result.type != "ERROR") {
-  print("Verified HS256 token:", result);
+  ::print("Verified HS256 token:", result);
 }
 ```
 
@@ -119,8 +119,8 @@ Decodes a JWT token without verification (useful for inspecting headers/payload)
 let token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...";
 let decoded = jwt.decode(token);
 
-print("Header:", decoded["header"]);
-print("Payload:", decoded["payload"]);
+::print("Header:", decoded["header"]);
+::print("Payload:", decoded["payload"]);
 ```
 
 ## Error Handling
@@ -130,7 +130,7 @@ All JWT functions return error objects when something goes wrong:
 ```js
 let result = jwt.verify("invalid-token", "secret");
 if (result.type == "ERROR") {
-  print("Error:", result.message);
+  ::print("Error:", result.message);
 }
 ```
 

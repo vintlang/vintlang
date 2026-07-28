@@ -12,7 +12,7 @@ When the interpreter encounters a `warn` statement, it will print a formatted wa
 
 ```js
 warn "Configuration file not found, using default settings."
-println("Program is running with default configuration.")
+::println("Program is running with default configuration.")
 ```
 Running this will output:
 ```

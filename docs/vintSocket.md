@@ -16,7 +16,7 @@ Creates a WebSocket server on the specified port.
 import vintSocket
 
 vintSocket.createServer("8080")
-println("WebSocket server started on port 8080")
+::println("WebSocket server started on port 8080")
 ```
 
 ### `connect(url)`

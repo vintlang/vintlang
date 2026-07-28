@@ -94,7 +94,7 @@ Returns an array of all sheet names.
 
 ```js
 sheets = excel.getSheets(file_id)
-print("Available sheets:", sheets)
+::print("Available sheets:", sheets)
 // Output: ["Sheet1", "Data", "Summary"]
 ```
 
@@ -105,7 +105,7 @@ Adds a new worksheet.
 
 ```js
 sheet_index = excel.addSheet(file_id, "NewSheet")
-print("Created sheet at index:", sheet_index)
+::print("Created sheet at index:", sheet_index)
 ```
 
 #### `excel.deleteSheet(file_id, sheet_name)`
@@ -151,7 +151,7 @@ Reads the value from a specific cell.
 
 ```js
 value = excel.getCell(file_id, "Sheet1", "A1")
-print("Cell A1 contains:", value)
+::print("Cell A1 contains:", value)
 ```
 
 #### `excel.setCell(file_id, sheet_name, cell_reference, value)`
@@ -171,7 +171,7 @@ Gets the formula from a cell.
 
 ```js
 formula = excel.getCellFormula(file_id, "Sheet1", "E1")
-print("Formula:", formula)
+::print("Formula:", formula)
 ```
 
 #### `excel.setCellFormula(file_id, sheet_name, cell_reference, formula)`
@@ -197,8 +197,8 @@ data = excel.getRange(file_id, "Sheet1", "A1:C3")
 // Returns nested arrays: [["A1", "B1", "C1"], ["A2", "B2", "C2"], ["A3", "B3", "C3"]]
 
 // Access specific cell from range
-print("First row:", data[0])
-print("Cell B2:", data[1][1])
+::print("First row:", data[0])
+::print("Cell B2:", data[1][1])
 ```
 
 #### `excel.setRange(file_id, sheet_name, range_reference, data)`
@@ -281,9 +281,9 @@ Returns comprehensive information about the Excel file.
 
 ```js
 info = excel.getFileInfo(file_id)
-print("Number of sheets:", info.sheetCount)
-print("Active sheet index:", info.activeSheet)
-print("Sheet names:", info.sheets)
+::print("Number of sheets:", info.sheetCount)
+::print("Active sheet index:", info.activeSheet)
+::print("Sheet names:", info.sheets)
 ```
 
 ---
@@ -293,7 +293,7 @@ print("Sheet names:", info.sheets)
 ```js
 import excel
 
-print("=== Excel Module Complete Example ===")
+::print("=== Excel Module Complete Example ===")
 
 // Create a new workbook
 file_id = excel.create("employee_data.xlsx")
@@ -345,16 +345,16 @@ excel.setCellFormula(file_id, "Summary", "B5", "=SUM(Employees.D:D)+SUM(Employee
 
 // Get file information
 info = excel.getFileInfo(file_id)
-print("Created workbook with", info.sheetCount, "sheets:")
+::print("Created workbook with", info.sheetCount, "sheets:")
 for sheet in info.sheets {
-    print("-", sheet)
+    ::print("-", sheet)
 }
 
 // Save and close
 excel.save(file_id)
 excel.close(file_id)
 
-print("Excel file 'employee_data.xlsx' created successfully!")
+::print("Excel file 'employee_data.xlsx' created successfully!")
 
 // Re-open to read data
 file_id = excel.open("employee_data.xlsx")
@@ -364,8 +364,8 @@ employee_name = excel.getCell(file_id, "Employees", "B2")
 employee_salary = excel.getCell(file_id, "Employees", "D2") 
 total_employees = excel.getCell(file_id, "Summary", "B3")
 
-print("First employee:", employee_name, "- Salary:", employee_salary)
-print("Total employees:", total_employees)
+::print("First employee:", employee_name, "- Salary:", employee_salary)
+::print("Total employees:", total_employees)
 
 excel.close(file_id)
 ```
@@ -390,13 +390,13 @@ file_id = excel.openWithPassword("secure_data.xlsx", "mypassword")
 // Process multiple sheets in a workbook
 sheets = excel.getSheets(file_id)
 for sheet_name in sheets {
-    print("Processing sheet:", sheet_name)
+    ::print("Processing sheet:", sheet_name)
     
     // Get all data from each sheet  
     data = excel.getRange(file_id, sheet_name, "A1:Z100")
     
     // Process data...
-    print("Sheet", sheet_name, "has", data.length, "rows")
+    ::print("Sheet", sheet_name, "has", data.length, "rows")
 }
 ```
 
@@ -437,9 +437,9 @@ Always use proper error handling when working with Excel files:
 try {
     file_id = excel.open("data.xlsx")
     data = excel.getCell(file_id, "Sheet1", "A1")
-    print("Data:", data)
+    ::print("Data:", data)
 } catch error {
-    print("Error reading Excel file:", error)
+    ::print("Error reading Excel file:", error)
 } finally {
     if file_id {
         excel.close(file_id)

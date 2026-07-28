@@ -65,18 +65,18 @@ It will return a `time` object with the specified time added.
 
 ### Print the current timestamp
 ```js
-print(time.now())
+::print(time.now())
 ```
 
 ### Function to greet a user based on the time of the day
 ```js
 let greet = func(name) {
     let current_time = time.now()  // Get the current time
-    print(current_time)            // Print the current time
+    ::print(current_time)            // Print the current time
     if (current_time.hour < 12) {  // Check if it's before noon
-        print("Good morning, " + name + "!")
+        ::print("Good morning, " + name + "!")
     } else {
-        print("Good evening, " + name + "!")
+        ::print("Good evening, " + name + "!")
     }
 }
 ```
@@ -84,10 +84,10 @@ let greet = func(name) {
 ### Time-related operations
 ```js
 year = 2024
-print("Is", year, "Leap year:", time.isLeapYear(year))
-print(time.format(time.now(), "02-01-2006 15:04:05"))
-print(time.add(time.now(), "1h"))
-print(time.subtract(time.now(), "2h30m45s"))
+::print("Is", year, "Leap year:", time.isLeapYear(year))
+::print(time.format(time.now(), "02-01-2006 15:04:05"))
+::print(time.add(time.now(), "1h"))
+::print(time.subtract(time.now(), "2h30m45s"))
 ```
 
 ## Time Object Methods
@@ -103,12 +103,12 @@ import time
 
 now = time.now()
 formatted = now.format("2006-01-02 15:04:05")  // Standard format
-print(formatted)  // 2024-08-11 15:30:45
+::print(formatted)  // 2024-08-11 15:30:45
 
 // Custom formats
-print(now.format("02-01-2006"))           // 11-08-2024
-print(now.format("15:04"))                // 15:30
-print(now.format("Monday, January 2, 2006"))  // Sunday, August 11, 2024
+::print(now.format("02-01-2006"))           // 11-08-2024
+::print(now.format("15:04"))                // 15:30
+::print(now.format("Monday, January 2, 2006"))  // Sunday, August 11, 2024
 ```
 
 ### year()
@@ -120,7 +120,7 @@ import time
 
 now = time.now()
 current_year = now.year()
-print("Current year:", current_year)  // Current year: 2024
+::print("Current year:", current_year)  // Current year: 2024
 ```
 
 ### month()
@@ -132,7 +132,7 @@ import time
 
 now = time.now()
 current_month = now.month()
-print("Current month:", current_month)  // Current month: 8
+::print("Current month:", current_month)  // Current month: 8
 ```
 
 ### day()
@@ -144,7 +144,7 @@ import time
 
 now = time.now()
 current_day = now.day()
-print("Current day:", current_day)  // Current day: 11
+::print("Current day:", current_day)  // Current day: 11
 ```
 
 ### hour()
@@ -156,7 +156,7 @@ import time
 
 now = time.now()
 current_hour = now.hour()
-print("Current hour:", current_hour)  // Current hour: 15
+::print("Current hour:", current_hour)  // Current hour: 15
 ```
 
 ### minute()
@@ -168,7 +168,7 @@ import time
 
 now = time.now()
 current_minute = now.minute()
-print("Current minute:", current_minute)  // Current minute: 30
+::print("Current minute:", current_minute)  // Current minute: 30
 ```
 
 ### second()
@@ -180,7 +180,7 @@ import time
 
 now = time.now()
 current_second = now.second()
-print("Current second:", current_second)  // Current second: 45
+::print("Current second:", current_second)  // Current second: 45
 ```
 
 ### weekday()
@@ -192,7 +192,7 @@ import time
 
 now = time.now()
 day_name = now.weekday()
-print("Today is:", day_name)  // Today is: Sunday
+::print("Today is:", day_name)  // Today is: Sunday
 ```
 
 ## Practical Time Examples
@@ -206,7 +206,7 @@ import time
 let log_with_timestamp = func(message) {
     let now = time.now()
     let timestamp = now.format("2006-01-02 15:04:05")
-    print("[" + timestamp + "] " + message)
+    ::print("[" + timestamp + "] " + message)
 }
 
 log_with_timestamp("Application started")
@@ -224,7 +224,7 @@ let display_date = func() {
                   "July", "August", "September", "October", "November", "December"]
     
     let formatted = weekday + ", " + months[month] + " " + day.to_string() + ", " + year.to_string()
-    print(formatted)
+    ::print(formatted)
 }
 
 display_date()
@@ -244,7 +244,7 @@ let get_greeting = func() {
     }
 }
 
-print(get_greeting())
+::print(get_greeting())
 
 // Schedule checker
 let is_business_hours = func() {
@@ -260,9 +260,9 @@ let is_business_hours = func() {
 }
 
 if (is_business_hours()) {
-    print("Office is open!")
+    ::print("Office is open!")
 } else {
-    print("Office is closed!")
+    ::print("Office is closed!")
 }
 
 // Age calculator
@@ -273,7 +273,7 @@ let calculate_age = func(birth_year) {
 }
 
 let age = calculate_age(1990)
-print("Age:", age)
+::print("Age:", age)
 
 // Deadline checker
 let check_deadline = func(deadline_date) {
@@ -283,9 +283,9 @@ let check_deadline = func(deadline_date) {
     let days_left = deadline.since(now) / (24 * 60 * 60)  // Convert seconds to days
     
     if (days_left > 0) {
-        print("Deadline in", days_left.floor(), "days")
+        ::print("Deadline in", days_left.floor(), "days")
     } else {
-        print("Deadline has passed!")
+        ::print("Deadline has passed!")
     }
 }
 ```
@@ -303,7 +303,7 @@ let birthday_info = "Birthday: " + birthday.weekday() + ", " +
                    birthday.format("January 2, 2006") + " at " +
                    birthday.format("15:04")
 
-print(birthday_info)
+::print(birthday_info)
 // Output: Birthday: Tuesday, September 10, 2024 at 15:30
 
 // Create time-based file naming
@@ -319,5 +319,5 @@ let create_backup_filename = func(base_name) {
 }
 
 let filename = create_backup_filename("database")
-print(filename)  // database_20240811_1530.backup
+::print(filename)  // database_20240811_1530.backup
 ```

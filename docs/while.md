@@ -10,7 +10,7 @@ A while loop is executed when a specified condition is true. You initialize a wh
 let i = 1
 
 while (i <= 5) {
-    print(i)
+    ::print(i)
     i++
 }
 ```
@@ -35,10 +35,10 @@ let i = 1
 
 while (i < 5) {
     if (i == 3) {
-        print("broken")
+        ::print("broken")
         break
     }
-    print(i)
+    ::print(i)
     i++
 }
 ```
@@ -60,10 +60,10 @@ let i = 0
 while (i < 5) {
     i++
     if (i == 3) {
-        print("skipped")
+        ::print("skipped")
         continue
     }
-    print(i)
+    ::print(i)
 }
 ```
 
@@ -86,7 +86,7 @@ The `repeat` keyword allows you to execute a block of code a specific number of 
 
 ```js
 repeat 5 {
-    println("Iteration:", i)
+    ::println("Iteration:", i)
 }
 ```
 
@@ -105,7 +105,7 @@ You can also use an expression for the count:
 ```js
 let n = 3
 repeat n {
-    println(i)
+    ::println(i)
 }
 ```
 

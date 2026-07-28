@@ -23,7 +23,7 @@ Keys can be of various data types like strings, integers, floats, or booleans, a
 You can access individual elements in a dictionary by using the key. For example:
 
 ```js
-print(dict["name"]) // John
+::print(dict["name"]) // John
 ```
 
 This will print `"John"`, the value associated with the key `"name"`.
@@ -34,7 +34,7 @@ To update the value of an existing key, simply assign a new value to the key:
 
 ```js
 dict["age"] = 35
-print(dict["age"]) // 35
+::print(dict["age"]) // 35
 ```
 
 This updates the `"age"` key to have the value `35`.
@@ -45,7 +45,7 @@ To add a new key-value pair to a dictionary, assign a value to a new key:
 
 ```js
 dict["city"] = "Dar es Salaam"
-print(dict["city"]) // Dar es Salaam
+::print(dict["city"]) // Dar es Salaam
 ```
 
 This adds a new key `"city"` with the value `"Dar es Salaam"`.
@@ -58,7 +58,7 @@ You can combine two dictionaries into one using the `+` operator:
 dict1 = {"a": "apple", "b": "banana"}
 dict2 = {"c": "cherry", "d": "date"}
 combined = dict1 + dict2
-print(combined) // {"a": "apple", "b": "banana", "c": "cherry", "d": "date"}
+::print(combined) // {"a": "apple", "b": "banana", "c": "cherry", "d": "date"}
 ```
 
 In this case, `dict1` and `dict2` are merged into a new dictionary called `combined`.
@@ -81,7 +81,7 @@ You can loop over the keys and values of a dictionary using the `for` keyword:
 ```js
 hobby = {"a": "reading", "b": "cycling", "c": "eating"}
 for key, value in hobby {
-    print(key, "=>", value)
+    ::print(key, "=>", value)
 }
 ```
 
@@ -97,7 +97,7 @@ You can also loop over just the values without the keys:
 
 ```js
 for value in hobby {
-    print(value)
+    ::print(value)
 }
 ```
 
@@ -120,7 +120,7 @@ Get all keys from the dictionary as an array:
 ```js
 contacts = {"Alice": "alice@email.com", "Bob": "bob@email.com"}
 keyList = contacts.keys()
-print(keyList)  // ["Alice", "Bob"]
+::print(keyList)  // ["Alice", "Bob"]
 ```
 
 ### values()
@@ -130,7 +130,7 @@ Get all values from the dictionary as an array:
 ```js
 contacts = {"Alice": "alice@email.com", "Bob": "bob@email.com"}
 valueList = contacts.values()
-print(valueList)  // ["alice@email.com", "bob@email.com"]
+::print(valueList)  // ["alice@email.com", "bob@email.com"]
 ```
 
 ### size()
@@ -139,7 +139,7 @@ Get the number of key-value pairs in the dictionary:
 
 ```js
 contacts = {"Alice": "alice@email.com", "Bob": "bob@email.com"}
-print(contacts.size())  // 2
+::print(contacts.size())  // 2
 ```
 
 ### has()
@@ -148,8 +148,8 @@ Check if a key exists in the dictionary:
 
 ```js
 contacts = {"Alice": "alice@email.com", "Bob": "bob@email.com"}
-print(contacts.has("Alice"))   // true
-print(contacts.has("Charlie")) // false
+::print(contacts.has("Alice"))   // true
+::print(contacts.has("Charlie")) // false
 ```
 
 ### get()
@@ -160,8 +160,8 @@ Get a value by key with an optional default value:
 contacts = {"Alice": "alice@email.com", "Bob": "bob@email.com"}
 email = contacts.get("Alice", "unknown")        // "alice@email.com"
 unknownEmail = contacts.get("Charlie", "unknown") // "unknown"
-print(email)        // alice@email.com
-print(unknownEmail) // unknown
+::print(email)        // alice@email.com
+::print(unknownEmail) // unknown
 ```
 
 ### set()
@@ -171,7 +171,7 @@ Set a key-value pair in the dictionary:
 ```js
 contacts = {"Alice": "alice@email.com"}
 contacts.set("Bob", "bob@email.com")
-print(contacts)  // {"Alice": "alice@email.com", "Bob": "bob@email.com"}
+::print(contacts)  // {"Alice": "alice@email.com", "Bob": "bob@email.com"}
 
 // Method chaining is supported
 contacts.set("Charlie", "charlie@email.com").set("Dave", "dave@email.com")
@@ -184,7 +184,7 @@ Remove a key-value pair from the dictionary:
 ```js
 contacts = {"Alice": "alice@email.com", "Bob": "bob@email.com"}
 contacts.remove("Bob")
-print(contacts)  // {"Alice": "alice@email.com"}
+::print(contacts)  // {"Alice": "alice@email.com"}
 ```
 
 ### clear()
@@ -194,7 +194,7 @@ Remove all key-value pairs from the dictionary:
 ```js
 contacts = {"Alice": "alice@email.com", "Bob": "bob@email.com"}
 contacts.clear()
-print(contacts)  // {}
+::print(contacts)  // {}
 ```
 
 ### merge()
@@ -205,7 +205,7 @@ Merge another dictionary into this one:
 contacts = {"Alice": "alice@email.com"}
 newContacts = {"Bob": "bob@email.com", "Charlie": "charlie@email.com"}
 contacts.merge(newContacts)
-print(contacts)  // {"Alice": "alice@email.com", "Bob": "bob@email.com", "Charlie": "charlie@email.com"}
+::print(contacts)  // {"Alice": "alice@email.com", "Bob": "bob@email.com", "Charlie": "charlie@email.com"}
 ```
 
 ### copy()
@@ -216,8 +216,8 @@ Create a shallow copy of the dictionary:
 original = {"Alice": "alice@email.com", "Bob": "bob@email.com"}
 backup = original.copy()
 backup.set("Charlie", "charlie@email.com")
-print(original)  // {"Alice": "alice@email.com", "Bob": "bob@email.com"}
-print(backup)    // {"Alice": "alice@email.com", "Bob": "bob@email.com", "Charlie": "charlie@email.com"}
+::print(original)  // {"Alice": "alice@email.com", "Bob": "bob@email.com"}
+::print(backup)    // {"Alice": "alice@email.com", "Bob": "bob@email.com", "Charlie": "charlie@email.com"}
 ```
 
 ### filter()
@@ -227,7 +227,7 @@ Create a new dictionary with key-value pairs that pass a test function:
 ```js
 scores = {"Alice": 85, "Bob": 92, "Charlie": 78, "Diana": 95}
 highScores = scores.filter(func(key, value) { return value >= 90 })
-print(highScores)  // {"Bob": 92, "Diana": 95}
+::print(highScores)  // {"Bob": 92, "Diana": 95}
 ```
 
 ### map()
@@ -237,7 +237,7 @@ Create a new dictionary with transformed values:
 ```js
 prices = {"apple": 1.5, "banana": 0.8, "orange": 2.0}
 discountedPrices = prices.map(func(key, value) { return value * 0.9 })
-print(discountedPrices)  // {"apple": 1.35, "banana": 0.72, "orange": 1.8}
+::print(discountedPrices)  // {"apple": 1.35, "banana": 0.72, "orange": 1.8}
 ```
 
 ### forEach()
@@ -247,7 +247,7 @@ Execute a function for each key-value pair:
 ```js
 contacts = {"Alice": "alice@email.com", "Bob": "bob@email.com"}
 contacts.forEach(func(key, value) { 
-    print("Name:", key, "Email:", value) 
+    ::print("Name:", key, "Email:", value) 
 })
 // Output:
 // Name: Alice Email: alice@email.com
@@ -261,7 +261,7 @@ Find the first key-value pair that satisfies a test function:
 ```js
 users = {"user1": 25, "user2": 17, "user3": 32}
 adult = users.find(func(key, value) { return value >= 18 })
-print(adult)  // ["user1", 25] or null if not found
+::print(adult)  // ["user1", 25] or null if not found
 ```
 
 ### some()
@@ -271,7 +271,7 @@ Test whether at least one key-value pair passes the test:
 ```js
 scores = {"Alice": 85, "Bob": 72, "Charlie": 95}
 hasHighScore = scores.some(func(key, value) { return value >= 90 })
-print(hasHighScore)  // true
+::print(hasHighScore)  // true
 ```
 
 ### every()
@@ -281,7 +281,7 @@ Test whether all key-value pairs pass the test:
 ```js
 scores = {"Alice": 85, "Bob": 92, "Charlie": 95}
 allPassed = scores.every(func(key, value) { return value >= 80 })
-print(allPassed)  // true
+::print(allPassed)  // true
 ```
 
 ### pick()
@@ -291,7 +291,7 @@ Create a new dictionary with only specified keys:
 ```js
 user = {"name": "Alice", "age": 25, "email": "alice@email.com", "password": "secret"}
 publicInfo = user.pick("name", "age", "email")
-print(publicInfo)  // {"name": "Alice", "age": 25, "email": "alice@email.com"}
+::print(publicInfo)  // {"name": "Alice", "age": 25, "email": "alice@email.com"}
 ```
 
 ### omit()
@@ -301,7 +301,7 @@ Create a new dictionary excluding specified keys:
 ```js
 user = {"name": "Alice", "age": 25, "email": "alice@email.com", "password": "secret"}
 safeInfo = user.omit("password")
-print(safeInfo)  // {"name": "Alice", "age": 25, "email": "alice@email.com"}
+::print(safeInfo)  // {"name": "Alice", "age": 25, "email": "alice@email.com"}
 ```
 
 ### isEmpty()
@@ -311,8 +311,8 @@ Check if the dictionary is empty:
 ```js
 emptyDict = {}
 filledDict = {"key": "value"}
-print(emptyDict.isEmpty())   // true
-print(filledDict.isEmpty())  // false
+::print(emptyDict.isEmpty())   // true
+::print(filledDict.isEmpty())  // false
 ```
 
 ### equals()
@@ -323,8 +323,8 @@ Check if two dictionaries are equal:
 dict1 = {"name": "Alice", "age": 25}
 dict2 = {"name": "Alice", "age": 25}
 dict3 = {"name": "Bob", "age": 30}
-print(dict1.equals(dict2))   // true
-print(dict1.equals(dict3))   // false
+::print(dict1.equals(dict2))   // true
+::print(dict1.equals(dict3))   // false
 ```
 
 ### entries()
@@ -334,7 +334,7 @@ Get an array of [key, value] pairs:
 ```js
 contacts = {"Alice": "alice@email.com", "Bob": "bob@email.com"}
 entryList = contacts.entries()
-print(entryList)  // [["Alice", "alice@email.com"], ["Bob", "bob@email.com"]]
+::print(entryList)  // [["Alice", "alice@email.com"], ["Bob", "bob@email.com"]]
 ```
 
 ### flatten()
@@ -347,7 +347,7 @@ nested = {
     "status": "active"
 }
 flattened = nested.flatten()
-print(flattened)  // {"user.name": "Alice", "user.age": 25, "status": "active"}
+::print(flattened)  // {"user.name": "Alice", "user.age": 25, "status": "active"}
 ```
 
 ### deepMerge()
@@ -358,7 +358,7 @@ Recursively merge dictionaries:
 dict1 = {"user": {"name": "Alice"}, "status": "active"}
 dict2 = {"user": {"age": 25}, "role": "admin"}
 merged = dict1.deepMerge(dict2)
-print(merged)  // {"user": {"name": "Alice", "age": 25}, "status": "active", "role": "admin"}
+::print(merged)  // {"user": {"name": "Alice", "age": 25}, "status": "active", "role": "admin"}
 ```
 
 ## Practical Examples

@@ -34,8 +34,8 @@ struct Point {
 }
 
 let p = Point(x = 10, y = 20)
-print(p.x)  // Output: 10
-print(p.y)  // Output: 20
+::print(p.x)  // Output: 10
+::print(p.y)  // Output: 20
 ```
 
 ---
@@ -54,8 +54,8 @@ struct Config {
 }
 
 let cfg = Config()  // All defaults used
-print(cfg.host)     // Output: localhost
-print(cfg.port)     // Output: 8080
+::print(cfg.host)     // Output: localhost
+::print(cfg.port)     // Output: 8080
 ```
 
 ### Fields with Methods
@@ -77,8 +77,8 @@ struct User {
 }
 
 let user = User(name = "Alice", age = 30)
-print(user.greet())    // Output: Hello, I'm Alice
-print(user.isAdult())  // Output: true
+::print(user.greet())    // Output: Hello, I'm Alice
+::print(user.isAdult())  // Output: true
 ```
 
 ### Fields Only (No Methods)
@@ -93,7 +93,7 @@ struct Color {
 }
 
 let red = Color(r = 255, g = 0, b = 0)
-print("R=" + string(red.r) + " G=" + string(red.g) + " B=" + string(red.b))
+::print("R=" + string(red.r) + " G=" + string(red.g) + " B=" + string(red.b))
 // Output: R=255 G=0 B=0
 ```
 
@@ -125,8 +125,8 @@ struct Point {
 }
 
 let p = Point(5, 15)  // x = 5, y = 15
-print(p.x)  // Output: 5
-print(p.y)  // Output: 15
+::print(p.x)  // Output: 5
+::print(p.y)  // Output: 15
 ```
 
 ### Using Default Values
@@ -145,8 +145,8 @@ let cfg1 = Config()
 
 // Override some, keep rest as defaults
 let cfg2 = Config(host = "example.com")
-print(cfg2.host)  // Output: example.com
-print(cfg2.port)  // Output: 8080
+::print(cfg2.host)  // Output: example.com
+::print(cfg2.port)  // Output: 8080
 ```
 
 ### Partial Overrides
@@ -163,9 +163,9 @@ struct Server {
 let prod = Server(host = "api.example.com", port = 443, protocol = "https")
 let dev = Server(port = 3000)
 
-print(dev.host)      // Output: localhost
-print(dev.port)      // Output: 3000
-print(dev.protocol)  // Output: http
+::print(dev.host)      // Output: localhost
+::print(dev.port)      // Output: 3000
+::print(dev.protocol)  // Output: http
 ```
 
 ---
@@ -200,7 +200,7 @@ c.increment()
 c.increment()
 c.increment()
 c.decrement()
-print(c.value())  // Output: 2
+::print(c.value())  // Output: 2
 ```
 
 ---
@@ -218,8 +218,8 @@ struct Person {
 }
 
 let p = Person(name = "Alice", age = 25)
-print(p.name)  // Output: Alice
-print(p.age)   // Output: 25
+::print(p.name)  // Output: Alice
+::print(p.age)   // Output: 25
 ```
 
 ### Mutating Fields
@@ -228,12 +228,12 @@ Fields can be reassigned after instantiation:
 
 ```vint
 let user = User(name = "Alice", age = 30)
-print(user.name)  // Output: Alice
+::print(user.name)  // Output: Alice
 
 user.name = "Bob"
 user.age = 25
-print(user.name)  // Output: Bob
-print(user.age)   // Output: 25
+::print(user.name)  // Output: Bob
+::print(user.age)   // Output: 25
 ```
 
 ### Field Validation
@@ -273,8 +273,8 @@ struct Rectangle {
 }
 
 let rect = Rectangle(width = 10, height = 5)
-print(rect.area())       // Output: 50
-print(rect.perimeter())  // Output: 30
+::print(rect.area())       // Output: 50
+::print(rect.perimeter())  // Output: 30
 ```
 
 ### Methods with Parameters
@@ -295,8 +295,8 @@ struct Calculator {
 }
 
 let calc = Calculator(value = 10)
-print(calc.add(5))       // Output: 15
-print(calc.multiply(3))  // Output: 30
+::print(calc.add(5))       // Output: 15
+::print(calc.multiply(3))  // Output: 30
 ```
 
 ### Methods with Default Parameters
@@ -313,8 +313,8 @@ struct Greeter {
 }
 
 let g = Greeter(name = "VintLang")
-print(g.greet())       // Output: Hello, VintLang!
-print(g.greet("Hi"))   // Output: Hi, VintLang!
+::print(g.greet())       // Output: Hello, VintLang!
+::print(g.greet("Hi"))   // Output: Hi, VintLang!
 ```
 
 ### Methods That Mutate State
@@ -345,13 +345,13 @@ struct Account {
 }
 
 let acc = Account(owner = "Alice", balance = 100)
-print(acc.summary())    // Output: Alice: $100
+::print(acc.summary())    // Output: Alice: $100
 
 acc.deposit(50)
-print(acc.summary())    // Output: Alice: $150
+::print(acc.summary())    // Output: Alice: $150
 
 acc.withdraw(30)
-print(acc.summary())    // Output: Alice: $120
+::print(acc.summary())    // Output: Alice: $120
 ```
 
 ### Methods Calling Other Methods
@@ -379,7 +379,7 @@ struct Rectangle {
 }
 
 let rect = Rectangle(width = 10, height = 5)
-print(rect.describe())
+::print(rect.describe())
 // Output: Rectangle(10x5) area=50 perimeter=30
 ```
 
@@ -402,12 +402,12 @@ struct User {
 let alice = User(name = "Alice", age = 30)
 let bob = User(name = "Bob", age = 25)
 
-print(alice.greet())  // Output: Hello, I'm Alice
-print(bob.greet())    // Output: Hello, I'm Bob
+::print(alice.greet())  // Output: Hello, I'm Alice
+::print(bob.greet())    // Output: Hello, I'm Bob
 
 alice.name = "Charlie"
-print(alice.greet())  // Output: Hello, I'm Charlie
-print(bob.greet())    // Output: Hello, I'm Bob (unchanged)
+::print(alice.greet())  // Output: Hello, I'm Charlie
+::print(bob.greet())    // Output: Hello, I'm Bob (unchanged)
 ```
 
 ---
@@ -424,8 +424,8 @@ struct User {
 
 let u = User(name = "Alice", age = 30)
 
-print(type(u))     // Output: User
-print(type(User))  // Output: struct:User
+::print(type(u))     // Output: User
+::print(type(User))  // Output: struct:User
 ```
 
 - `type(instance)` returns the struct's name (e.g., `"User"`)
@@ -454,8 +454,8 @@ struct Vector {
 let v1 = Vector(x = 3, y = 4)
 let v2 = v1.scale(2)
 
-print(v1.display())  // Output: Vector(3, 4) — original unchanged
-print(v2.display())  // Output: Vector(6, 8)
+::print(v1.display())  // Output: Vector(3, 4) — original unchanged
+::print(v2.display())  // Output: Vector(6, 8)
 ```
 
 ---
@@ -480,7 +480,7 @@ struct Product {
 }
 
 let item = Product(name = "Widget", price = 25, quantity = 4)
-print(item.display())  // Output: Widget - $25 x 4 = $100
+::print(item.display())  // Output: Widget - $25 x 4 = $100
 ```
 
 ### 2. State Management
@@ -511,9 +511,9 @@ c.increment()
 c.increment()
 c.increment()
 c.decrement()
-print(c.value())  // Output: 2
+::print(c.value())  // Output: 2
 c.reset()
-print(c.value())  // Output: 0
+::print(c.value())  // Output: 0
 ```
 
 ### 3. Configuration Objects
@@ -532,7 +532,7 @@ struct DatabaseConfig {
 }
 
 let devDB = DatabaseConfig()
-print(devDB.connectionString())
+::print(devDB.connectionString())
 // Output: admin@localhost:5432/app_db
 
 let prodDB = DatabaseConfig(
@@ -542,7 +542,7 @@ let prodDB = DatabaseConfig(
     user = "prod_admin",
     password = "secret"
 )
-print(prodDB.connectionString())
+::print(prodDB.connectionString())
 // Output: prod_admin@db.production.com:5433/prod_db
 ```
 
@@ -561,8 +561,8 @@ struct HTMLBuilder {
 let heading = HTMLBuilder(tag = "h1", content = "Welcome to VintLang")
 let paragraph = HTMLBuilder(tag = "p", content = "Structs are powerful!")
 
-print(heading.render())    // Output: <h1>Welcome to VintLang</h1>
-print(paragraph.render())  // Output: <p>Structs are powerful!</p>
+::print(heading.render())    // Output: <h1>Welcome to VintLang</h1>
+::print(paragraph.render())  // Output: <p>Structs are powerful!</p>
 ```
 
 ### 5. Todo List
@@ -588,7 +588,7 @@ let todos = [
 ]
 
 for item in todos {
-    print(item.status())
+    ::print(item.status())
 }
 // Output:
 // [ ] Buy groceries
@@ -612,8 +612,8 @@ struct Circle {
 }
 
 let c = Circle(cx = 0, cy = 0, radius = 5)
-print(c.containsPoint(3, 4))  // Output: true
-print(c.containsPoint(6, 0))  // Output: false
+::print(c.containsPoint(3, 4))  // Output: true
+::print(c.containsPoint(6, 0))  // Output: false
 ```
 
 ---
@@ -635,7 +635,7 @@ let students = [
 ]
 
 for s in students {
-    print(s.name + ": " + string(s.grade))
+    ::print(s.name + ": " + string(s.grade))
 }
 ```
 
@@ -662,7 +662,7 @@ for key, val in roster {
     if (!val.passing()) {
         status = "FAIL"
     }
-    print(val.name + ": " + string(val.grade) + " - " + status)
+    ::print(val.name + ": " + string(val.grade) + " - " + status)
 }
 ```
 

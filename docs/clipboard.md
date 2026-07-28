@@ -63,26 +63,26 @@ clipboard.write("Hello, World!")
 
 // Read from clipboard
 let content = clipboard.read()
-print("Clipboard content:", content)
+::print("Clipboard content:", content)
 
 // Check if clipboard has content
 if clipboard.hasContent() {
-    print("Clipboard has content")
+    ::print("Clipboard has content")
 } else {
-    print("Clipboard is empty")
+    ::print("Clipboard is empty")
 }
 
 // Get all clipboard data as array
 let allData = clipboard.all()
-print("All clipboard data:", allData)
+::print("All clipboard data:", allData)
 
 // Clear clipboard
 clipboard.clear()
-print("Clipboard cleared")
+::print("Clipboard cleared")
 
 // Check all data after clear
 let emptyData = clipboard.all()
-print("Clipboard after clear:", emptyData)
+::print("Clipboard after clear:", emptyData)
 ```
 
 ### Writing Different Data Types
@@ -111,14 +111,14 @@ import clipboard
 // The clipboard functions return error objects if operations fail
 let result = clipboard.write("test")
 if result.type == "ERROR" {
-    print("Failed to write to clipboard:", result.message)
+    ::print("Failed to write to clipboard:", result.message)
 }
 
 let content = clipboard.read()
 if content.type == "ERROR" {
-    print("Failed to read from clipboard:", content.message)
+    ::print("Failed to read from clipboard:", content.message)
 } else {
-    print("Clipboard content:", content)
+    ::print("Clipboard content:", content)
 }
 ```
 
@@ -136,8 +136,8 @@ let processed_text = "Processed: " + backup
 // Write processed text back to clipboard
 clipboard.write(processed_text)
 
-print("Original:", backup)
-print("Modified clipboard content:", clipboard.read())
+::print("Original:", backup)
+::print("Modified clipboard content:", clipboard.read())
 ```
 
 ## Platform Support

@@ -31,7 +31,7 @@ run(command)
 import shell
 
 output = shell.run("echo Hello, Shell!")
-print(output)
+::print(output)
 // Output: "Hello, Shell!"
 ```
 
@@ -54,15 +54,15 @@ exists(command)
 import shell
 
 exists_ls = shell.exists("ls")
-print(exists_ls)
+::print(exists_ls)
 // Output: true if the 'ls' command exists
 
 exists_python = shell.exists("python")
-print(exists_python)
+::print(exists_python)
 // Output: true if the 'python' command exists
 
 exists_nonexistent = shell.exists("nonexistent_command")
-print(exists_nonexistent)
+::print(exists_nonexistent)
 // Output: false if the 'nonexistent_command' does not exist
 ```
 
@@ -78,7 +78,7 @@ You can also pass arguments to shell commands within the `run` function.
 import shell
 
 output = shell.run("ls -l")
-print(output)
+::print(output)
 // Output: The list of files and directories in the current directory with detailed info.
 ```
 

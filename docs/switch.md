@@ -15,10 +15,10 @@ let a = 2
 
 switch (a) {
 	case 3 {
-		print("a is three")
+		::print("a is three")
 	}
 	case 2 {
-		print("a is two")
+		::print("a is two")
 	}
 }
 ```
@@ -32,10 +32,10 @@ A single `case` can handle multiple possible values. These values are separated 
 ```js
 switch (a) {
 	case 1, 2, 3 {
-		print("a is one, two, or three")
+		::print("a is one, two, or three")
 	}
 	case 4 {
-		print("a is four")
+		::print("a is four")
 	}
 }
 ```
@@ -51,13 +51,13 @@ let z = 20
 
 switch(z) {
 	case 10 {
-		print("ten")
+		::print("ten")
 	}
 	case 30 {
-		print("thirty")
+		::print("thirty")
 	}
 	default {
-		print("twenty")
+		::print("twenty")
 	}
 }
 ```
@@ -76,15 +76,15 @@ switch (x) {
 	case 1 {
 		switch (y) {
 			case 2 {
-				print("x is one and y is two")
+				::print("x is one and y is two")
 			}
 			case 3 {
-				print("x is one and y is three")
+				::print("x is one and y is three")
 			}
 		}
 	}
 	case 2 {
-		print("x is two")
+		::print("x is two")
 	}
 }
 ```
@@ -101,13 +101,13 @@ let isFalse = false
 
 switch (isTrue) {
 	case true {
-		print("isTrue is true")
+		::print("isTrue is true")
 	}
 	case isFalse {
-		print("isFalse is true")
+		::print("isFalse is true")
 	}
 	default {
-		print("Neither condition is true")
+		::print("Neither condition is true")
 	}
 }
 ```
@@ -125,22 +125,22 @@ let number = 15
 
 switch (number) {
     case x if x > 0 && x < 10 {
-        print("Small positive number:", x)
+        ::print("Small positive number:", x)
     }
     case x if x >= 10 && x < 100 {
-        print("Medium positive number:", x)
+        ::print("Medium positive number:", x)
     }
     case x if x >= 100 {
-        print("Large positive number:", x)
+        ::print("Large positive number:", x)
     }
     case x if x < 0 {
-        print("Negative number:", x)
+        ::print("Negative number:", x)
     }
     case 0 {
-        print("Zero")
+        ::print("Zero")
     }
     default {
-        print("Unknown number")
+        ::print("Unknown number")
     }
 }
 // Output: Medium positive number: 15
@@ -154,20 +154,20 @@ Guard conditions enable type checking in switch statements:
 let value = "hello world"
 
 switch (value) {
-    case x if type(x) == "STRING" && len(x) > 5 {
-        print("Long string:", x)
+    case x if type(x) == "STRING" && ::len(x) > 5 {
+        ::print("Long string:", x)
     }
     case x if type(x) == "STRING" {
-        print("Short string:", x)
+        ::print("Short string:", x)
     }
     case x if type(x) == "INTEGER" && x > 0 {
-        print("Positive integer:", x)
+        ::print("Positive integer:", x)
     }
     case x if type(x) == "BOOLEAN" {
-        print("Boolean value:", x)
+        ::print("Boolean value:", x)
     }
     default {
-        print("Other type:", type(value))
+        ::print("Other type:", type(value))
     }
 }
 // Output: Long string: hello world
@@ -182,22 +182,22 @@ let input = 42
 
 switch (input) {
     case 0 {
-        print("Exactly zero")
+        ::print("Exactly zero")
     }
     case 1 {
-        print("Exactly one")
+        ::print("Exactly one")
     }
     case x if x > 1 && x <= 10 {
-        print("Small number:", x)
+        ::print("Small number:", x)
     }
     case x if x > 10 && x <= 100 {
-        print("Medium number:", x)
+        ::print("Medium number:", x)
     }
     case x if x > 100 {
-        print("Large number:", x)
+        ::print("Large number:", x)
     }
     default {
-        print("Negative or unknown")
+        ::print("Negative or unknown")
     }
 }
 // Output: Medium number: 42

@@ -7,9 +7,9 @@ The `range` function in Vint generates a sequence of numbers and is commonly use
 ## Syntax
 
 ```js
-range(end)
-range(start, end)
-range(start, end, step)
+::range(end)
+::range(start, end)
+::range(start, end, step)
 ```
 
 ---
@@ -33,8 +33,8 @@ The function returns an array of integers.
 ### Basic Usage
 ```js
 // Generate numbers from 0 to 4
-for i in range(5) {
-    print(i)
+for i in ::range(5) {
+    ::print(i)
 }
 // Output: 0 1 2 3 4
 ```
@@ -42,8 +42,8 @@ for i in range(5) {
 ### Specifying a Start and End
 ```js
 // Generate numbers from 1 to 9
-for i in range(1, 10) {
-    print(i)
+for i in ::range(1, 10) {
+    ::print(i)
 }
 // Output: 1 2 3 4 5 6 7 8 9
 ```
@@ -51,8 +51,8 @@ for i in range(1, 10) {
 ### Using a Step Value
 ```js
 // Generate even numbers from 0 to 8
-for i in range(0, 10, 2) {
-    print(i)
+for i in ::range(0, 10, 2) {
+    ::print(i)
 }
 // Output: 0 2 4 6 8
 ```
@@ -60,8 +60,8 @@ for i in range(0, 10, 2) {
 ### Generating a Reverse Sequence
 ```js
 // Generate numbers in reverse order
-for i in range(10, 0, -1) {
-    print(i)
+for i in ::range(10, 0, -1) {
+    ::print(i)
 }
 // Output: 10 9 8 7 6 5 4 3 2 1
 ```

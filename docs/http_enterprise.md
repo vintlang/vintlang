@@ -244,7 +244,7 @@ let authMiddleware = func(req, res, next) {
 
 // Logging middleware
 let logMiddleware = func(req, res, next) {
-    print("Request: " + req.method() + " " + req.path())
+    ::print("Request: " + req.method() + " " + req.path())
     next()
 }
 
@@ -394,7 +394,7 @@ http.security()
 
 // Global middleware
 http.use(func(req, res, next) {
-    print("Request: " + req.method() + " " + req.path())
+    ::print("Request: " + req.method() + " " + req.path())
     res.header("X-Powered-By", "VintLang")
     next()
 })
@@ -478,7 +478,7 @@ http.get("/health", func(req, res) {
 
 // Error handler
 http.errorHandler(func(err, req, res) {
-    print("Error: " + err.message)
+    ::print("Error: " + err.message)
     res.status(500).json({
         "error": {
             "type": "INTERNAL_SERVER_ERROR",

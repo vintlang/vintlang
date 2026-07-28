@@ -110,7 +110,7 @@ logger.fatal("Critical system failure")
 ```js
 import logger
 
-print("=== Logger Module Example ===")
+::print("=== Logger Module Example ===")
 
 // Log application lifecycle
 logger.info("Application starting...")

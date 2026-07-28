@@ -16,7 +16,7 @@ When the Vint interpreter encounters a `todo` statement, it will print a warning
 todo "Implement user authentication"
 
 let x = 10
-println(x)
+::println(x)
 ```
 
 Running this script will output:

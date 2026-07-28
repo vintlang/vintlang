@@ -8,7 +8,7 @@ You can define and immediately execute a function:
 
 ```js
 let go = func() {
-    print("this is a function")
+    ::print("this is a function")
 }()
 ```
 
@@ -20,7 +20,7 @@ Functions can also be declared without being executed immediately:
 
 ```js
 let vint = func() {
-    print("This is also a function\nBut not invoked immediately after being declared")
+    ::print("This is also a function\nBut not invoked immediately after being declared")
 }
 
 vint()  // Executes the function
@@ -34,12 +34,12 @@ Functions in **Vint** can be passed as arguments to other functions:
 
 ```js
 let w = func() {
-    print("w function")
+    ::print("w function")
 }
 
 func(w) {
     w()  // Executes the function passed as an argument
-    print("func")
+    ::print("func")
 }(w)  // Passes `w` as an argument and immediately invokes the outer function
 ```
 

@@ -49,13 +49,13 @@ Request and response interceptors for cross-cutting concerns:
 ```js
 // Request interceptor - runs before route handlers
 http.interceptor("request", func(req) {
-    print("Processing request:", req.path())
+    ::print("Processing request:", req.path())
     // Add request timestamp, validate format, etc.
 })
 
 // Response interceptor - runs after route handlers
 http.interceptor("response", func(res) {
-    print("Processing response")
+    ::print("Processing response")
     // Add security headers, log response time, etc.
 })
 ```
@@ -66,19 +66,19 @@ Security guards for authentication, authorization, and rate limiting:
 ```js
 // Authentication guard
 http.guard(func(req) {
-    print("Checking authentication")
+    ::print("Checking authentication")
     // Verify JWT token, session, etc.
 })
 
 // Rate limiting guard
 http.guard(func(req) {
-    print("Checking rate limits")
+    ::print("Checking rate limits")
     // Track requests per IP, enforce limits
 })
 
 // Custom validation guard
 http.guard(func(req) {
-    print("Custom security checks")
+    ::print("Custom security checks")
     // SQL injection detection, XSS prevention, etc.
 })
 ```
@@ -95,12 +95,12 @@ http.bodyParser()
 
 // Authentication middleware
 http.auth(func(req, res, next) {
-    print("Processing authentication")
+    ::print("Processing authentication")
 })
 
 // Global error handler
 http.errorHandler(func(err, req, res) {
-    print("Handling error:", err)
+    ::print("Handling error:", err)
 })
 ```
 
@@ -136,32 +136,32 @@ http.app()
 
 // Add interceptors
 http.interceptor("request", func(req) {
-    print("Request interceptor")
+    ::print("Request interceptor")
 })
 
 http.interceptor("response", func(res) {
-    print("Response interceptor")
+    ::print("Response interceptor")
 })
 
 // Add guards
 http.guard(func(req) {
-    print("Auth guard")
+    ::print("Auth guard")
 })
 
 http.guard(func(req) {
-    print("Rate limit guard")
+    ::print("Rate limit guard")
 })
 
 // Add middleware
 http.cors()
 http.bodyParser()
 http.auth(func(req, res, next) {
-    print("Auth middleware")
+    ::print("Auth middleware")
 })
 
 // Set error handler
 http.errorHandler(func(err, req, res) {
-    print("Error handler")
+    ::print("Error handler")
 })
 
 // Define routes

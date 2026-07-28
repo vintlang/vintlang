@@ -14,7 +14,7 @@ When the Vint interpreter encounters an `info` statement, it prints a cyan-color
 
 ```js
 info "Starting the backup process."
-println("Backup in progress...")
+::println("Backup in progress...")
 ```
 
 Running this script will output:

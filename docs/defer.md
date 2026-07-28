@@ -16,8 +16,8 @@ Here’s a simple example that demonstrates how `defer` works. The deferred `pri
 
 ```js
 let my_function = func() {
-    defer println("This will be printed last");
-    println("This will be printed first");
+    defer ::println("This will be printed last");
+    ::println("This will be printed first");
 };
 
 my_function();
@@ -32,9 +32,9 @@ If a function has multiple `defer` statements, they are pushed onto a stack. Whe
 
 ```js
 let another_function = func() {
-    defer println("deferred: 1");
-    defer println("deferred: 2");
-    println("function body");
+    defer ::println("deferred: 1");
+    defer ::println("deferred: 2");
+    ::println("function body");
 };
 
 another_function();

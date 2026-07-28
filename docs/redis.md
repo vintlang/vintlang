@@ -282,18 +282,18 @@ conn = redis.connect("localhost:6379");
 // Basic string operations
 redis.set(conn, "greeting", "Hello, World!");
 message = redis.get(conn, "greeting");
-print(message); // Output: Hello, World!
+::print(message); // Output: Hello, World!
 
 // Working with hashes
 redis.hset(conn, "user:1", "name", "John Doe");
 redis.hset(conn, "user:1", "email", "john@example.com");
 user = redis.hgetall(conn, "user:1");
-print(user); // Output: {"name": "John Doe", "email": "john@example.com"}
+::print(user); // Output: {"name": "John Doe", "email": "john@example.com"}
 
 // Working with lists
 redis.rpush(conn, "tasks", "task1", "task2", "task3");
 task = redis.lpop(conn, "tasks");
-print(task); // Output: task1
+::print(task); // Output: task1
 
 // Close connection
 redis.close(conn);

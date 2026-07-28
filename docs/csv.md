@@ -14,7 +14,7 @@ Reads a CSV file and returns its contents as an array of arrays.
 // bob,25
 
 data = csv.read("data.csv")
-print(data) 
+::print(data) 
 // Outputs: [["name", "age"], ["alice", "30"], ["bob", "25"]]
 ```
 

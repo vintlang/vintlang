@@ -52,12 +52,12 @@ let verbose = args["verbose"]
 let outputFile = args["output"]
 
 if (verbose) {
-    print("Verbose mode enabled")
+    ::print("Verbose mode enabled")
 }
 
-print("Input file:", inputFile)
+::print("Input file:", inputFile)
 if (outputFile) {
-    print("Output file:", outputFile)
+    ::print("Output file:", outputFile)
 }
 ```
 
@@ -196,14 +196,14 @@ if (operation == "add") {
     result = a * b
 } else if (operation == "divide") {
     if (b == 0) {
-        print("Error: Division by zero")
-        exit(1)
+        ::print("Error: Division by zero")
+        ::exit(1)
     }
     result = a / b
 }
 
 // Format result with specified precision
-print(result.toFixed(precision))
+::print(result.toFixed(precision))
 ```
 
 ### File Processor
@@ -267,7 +267,7 @@ if (lowercase) {
 // Write output
 if (outputFile) {
     os.writeFile(outputFile, content)
-    print("Processed content written to", outputFile)
+    ::print("Processed content written to", outputFile)
 }
 
 // Count statistics
@@ -276,8 +276,8 @@ if (count) {
     let words = content.split(/\s+/).length
     let chars = content.length
     
-    print("Lines:", lines)
-    print("Words:", words)
-    print("Characters:", chars)
+    ::print("Lines:", lines)
+    ::print("Words:", words)
+    ::print("Characters:", chars)
 }
 ```

@@ -12,7 +12,7 @@ You can generate a new UUID using the `uuid.generate()` function. It returns a u
 import uuid
 
 // Generate and print a new UUID
-print(uuid.generate())
+::print(uuid.generate())
 ```
 
 Each time `uuid.generate()` is called, it generates a new, unique UUID value. This is useful for ensuring that each identifier is distinct across systems.
