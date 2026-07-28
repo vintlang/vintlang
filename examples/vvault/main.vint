@@ -1,12 +1,12 @@
 import cli, os
+import vvault
 
 
 let main = func() {
-    const vvault = ::import("vvault")
-    let args = cli.getArgs()
+    let args: []string = cli.getArgs()
 
     if (len(args) == 0) {
-        ::println("Usage: vint main.vint <command> [options]")
+        ::println("Usage: vvault <command> [options]")
         ::println("")
         ::println("Commands:")
         ::println("  generate <length>   Generate a random alphanumeric string")
@@ -17,46 +17,46 @@ let main = func() {
         os.exit(0)
     }
 
-    let command = args[0]
+    let command: string = args[0]
 
     if (command == "generate") {
-        if (len(args) < 2) {
+        if (::len(args) < 2) {
             ::println("Please provide the length.")
             ::println("Usage: vint main.vint generate <length>")
             os.exit(1)
         }
-        let length = ::int(args[1])
-        let result = vvault.generate(length)
+        let length: int = ::int(args[1])
+        let result: string = vvault.generate(length)
         ::println("Generated: " + result)
 
     } else if (command == "password") {
-        if (len(args) < 2) {
+        if (::len(args) < 2) {
             ::println("Please provide the length (minimum 4).")
             ::println("Usage: vint main.vint password <length>")
             os.exit(1)
         }
-        let length = ::int(args[1])
-        let result = vvault.password(length)
+        let length: int = ::int(args[1])
+        let result: string = vvault.password(length)
         ::println("Password: " + result)
 
     } else if (command == "otp") {
-        if (len(args) < 2) {
+        if (::len(args) < 2) {
             ::println("Please provide the OTP length.")
             ::println("Usage: vint main.vint otp <length>")
             os.exit(1)
         }
-        let length = ::int(args[1])
-        let result = vvault.otp(length)
+        let length: int = ::int(args[1])
+        let result: string = vvault.otp(length)
         ::println("OTP: " + result)
 
     } else if (command == "token") {
-        if (len(args) < 2) {
+        if (::len(args) < 2) {
             ::println("Please provide the byte length.")
             ::println("Usage: vint main.vint token <length>")
             os.exit(1)
         }
-        let length = ::int(args[1])
-        let result = vvault.token(length)
+        let length: int = ::int(args[1])
+        let result: string = vvault.token(length)
         ::println("Token: " + result)
 
     } else {
