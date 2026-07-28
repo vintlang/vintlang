@@ -8,7 +8,7 @@ struct Point {
 };
 
 let p: Point = Point(x = 3.0, y = 4.0);
-println("Point:", p.x, p.y);
+::println("Point:", p.x, p.y);
 
 // Struct with methods
 struct Rectangle {
@@ -25,8 +25,8 @@ struct Rectangle {
 };
 
 let rect: Rectangle = Rectangle(width = 10.0, height = 5.0);
-println("area:", rect.area());
-println("perimeter:", rect.perimeter());
+::println("area:", rect.area());
+::println("perimeter:", rect.perimeter());
 
 // Struct with typed fields + defaults
 struct Config {
@@ -38,8 +38,8 @@ struct Config {
 let defaultCfg: Config = Config();
 let customCfg: Config = Config(port = 9090, debugMode = true);
 
-println("default:", defaultCfg.host, defaultCfg.port);
-println("custom:", customCfg.host, customCfg.port, customCfg.debugMode);
+::println("default:", defaultCfg.host, defaultCfg.port);
+::println("custom:", customCfg.host, customCfg.port, customCfg.debugMode);
 
 // Nested structs
 struct Address {
@@ -62,7 +62,7 @@ let alice: Person = Person(
     tags = ["developer", "golang"]
 );
 
-println(alice.name, "lives at", alice.address.city);
+::println(alice.name, "lives at", alice.address.city);
 
 // Struct with slice fields
 struct Team {
@@ -78,5 +78,5 @@ let team: Team = Team(
 );
 
 for m in team.members {
-    println("member:", m);
+    ::println("member:", m);
 };

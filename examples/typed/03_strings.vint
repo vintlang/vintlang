@@ -7,26 +7,26 @@ let age: int = 7;
 
 // String concatenation
 let message: string = greeting + " " + name;
-println(message);
+::println(message);
 
 // String length and indexing
 let text: string = "VintLang";
 let length: int = len(text);
 let first: byte = text[0];
 let last: byte = text[len(text) - 1];
-println("length:", length, "first:", string(first), "last:", string(last));
+::println("length:", length, "first:", string(first), "last:", string(last));
 
 // String slicing
 let sub: string = text[0:4];
-println("slice [0:4]:", sub);
+::println("slice [0:4]:", sub);
 
 // String conversion
 let count: int = 42;
 let strCount: string = string(count);
 let parsed: int = int("100");
-println("strCount:", strCount, "parsed:", parsed);
+::println("strCount:", strCount, "parsed:", parsed);
 
 // String methods
 let words: []string = "hello world vint".split(" ");
-println("words:", words);
-println("uppercase:", "hello".upper());
+::println("words:", words);
+::println("uppercase:", "hello".upper());

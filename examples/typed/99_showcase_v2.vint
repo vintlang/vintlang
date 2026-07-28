@@ -72,5 +72,5 @@ let config: JSON = {
     "features": ["string", "int", "bool", "float64", "[]T", "{K: V}", "*T", "func(T) R"]
 };
 
-println("showcase ready");
-println("config:", config);
+::println("showcase ready");
+::println("config:", config);

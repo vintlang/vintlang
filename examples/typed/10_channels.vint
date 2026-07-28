@@ -4,11 +4,11 @@
 // Channel example deferred to v2
 // For concurrency, use go + sync primitives
 
-println("channels are deferred to v2");
+::println("channels are deferred to v2");
 
 // Basic go routine
 let sayHello = func(name: string) {
-    println("Hello from", name);
+    ::println("Hello from", name);
 };
 
 sayHello("main");

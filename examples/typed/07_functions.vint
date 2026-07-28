@@ -14,26 +14,26 @@ let isEven = func(n: int): bool {
     return n % 2 == 0;
 };
 
-println(add(3, 4));
-println(greet("VintLang"));
-println(isEven(7));
+::println(add(3, 4));
+::println(greet("VintLang"));
+::println(isEven(7));
 
 // Functions with no return value
 let logMessage = func(msg: string) {
-    println("[LOG]", msg);
+    ::println("[LOG]", msg);
 };
 
 logMessage("system initialized");
 
 // Function as value (type annotation for variable)
 let op: func(int, int) int = add;
-println("via func var:", op(10, 20));
+::println("via func var:", op(10, 20));
 
 // Higher-order functions (one line)
 let apply = func(arr: []int, fn: func(int) int): []int { return fn(arr[0]) };
 let double = func(n: int): int { return n * 2 };
 let nums: []int = [1, 2, 3, 4, 5];
-println("applied:", apply(nums, double));
+::println("applied:", apply(nums, double));
 
 // Anonymous functions / closures
 let makeCounter = func(start: int): func() int {
@@ -45,6 +45,6 @@ let makeCounter = func(start: int): func() int {
 };
 
 let counter: func() int = makeCounter(0);
-println(counter());
-println(counter());
-println(counter());
+::println(counter());
+::println(counter());
+::println(counter());

@@ -14,8 +14,8 @@ let scores: {string: int} = {
     "Carol": 91
 };
 
-println("config:", config);
-println("scores:", scores);
+::println("config:", config);
+::println("scores:", scores);
 
 // Typed access
 let getScore = func(db: {string: int}, name: string): int {
@@ -23,20 +23,20 @@ let getScore = func(db: {string: int}, name: string): int {
 };
 
 let alice: int = getScore(scores, "Alice");
-println("Alice's score:", alice);
+::println("Alice's score:", alice);
 
 // Check exists
 if (scores.hasKey("Dave")) {
-    println("Dave's score:", scores["Dave"]);
+    ::println("Dave's score:", scores["Dave"]);
 } else {
-    println("Dave not found");
+    ::println("Dave not found");
 };
 
 // Iterate
 for name, score in scores {
-    println(name, ":", score);
+    ::println(name, ":", score);
 };
 
 // Dict zero value
 let empty: {string: int};
-println("empty dict:", empty);
+::println("empty dict:", empty);

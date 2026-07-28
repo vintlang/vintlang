@@ -3,16 +3,16 @@
 
 // any type variables
 let v: any = 42;
-println("int as any:", v);
+::println("int as any:", v);
 
 v = "hello";
-println("string as any:", v);
+::println("string as any:", v);
 
 v = [1, 2, 3];
-println("slice as any:", v);
+::println("slice as any:", v);
 
 v = nil;
-println("nil as any:", v);
+::println("nil as any:", v);
 
 // Type checking with 'is'
 let describe = func(val: any): string {
@@ -28,12 +28,12 @@ let describe = func(val: any): string {
     return "unknown";
 };
 
-println(describe("hello"));
-println(describe(42));
-println(describe(true));
+::println(describe("hello"));
+::println(describe(42));
+::println(describe(true));
 
 // Collections with any
 let mixed: []any = [42, "hello", true, nil];
 for item in mixed {
-    println("mixed:", item);
+    ::println("mixed:", item);
 };

@@ -8,11 +8,11 @@ let zString: string;
 let zFloat64: float64;
 let zAny: any;
 
-println("bool:", zBool);
-println("int:", zInt);
-println("float64:", zFloat64);
-println("string:", zString);
-println("any:", zAny);
+::println("bool:", zBool);
+::println("int:", zInt);
+::println("float64:", zFloat64);
+::println("string:", zString);
+::println("any:", zAny);
 
 // Compound type zero values
 let zSlice: []int;
@@ -20,10 +20,10 @@ let zDict: {string: int};
 let zPointer: *int;
 let zFunc: func() int;
 
-println("slice:", zSlice);
-println("dict:", zDict);
-println("pointer:", zPointer);
-println("func:", zFunc);
+::println("slice:", zSlice);
+::println("dict:", zDict);
+::println("pointer:", zPointer);
+::println("func:", zFunc);
 
 // Struct zero values
 struct Config {
@@ -33,9 +33,9 @@ struct Config {
 };
 
 let zCfg: Config;
-println("struct host:", zCfg.host);
-println("struct port:", zCfg.port);
-println("struct debug:", zCfg.debugMode);
+::println("struct host:", zCfg.host);
+::println("struct port:", zCfg.port);
+::println("struct debug:", zCfg.debugMode);
 
 // Nested zero values
 struct Inner {
@@ -50,8 +50,8 @@ struct Outer {
 };
 
 let zOuter: Outer;
-println("outer.inner.value:", zOuter.inner.value);
-println("outer.items:", zOuter.items);
+::println("outer.inner.value:", zOuter.inner.value);
+::println("outer.items:", zOuter.items);
 
 // Zero value in struct initialization
 struct User {
@@ -62,11 +62,11 @@ struct User {
 };
 
 let u: User = User{id: 1, name: "Alice"};
-println("user:", u.name, u.email, u.role);
+::println("user:", u.name, u.email, u.role);
 
 // nil slice is safe to append
 let items: []int;
 items = append(items, 1);
 items = append(items, 2);
 items = append(items, 3);
-println("items from nil:", items);
+::println("items from nil:", items);

@@ -5,10 +5,10 @@
 let x: int = 42;
 let p: *int = &x;
 
-println("x:", x);
-println("*p:", *p);
+::println("x:", x);
+::println("*p:", *p);
 
-println("pointer deref works");
+::println("pointer deref works");
 
 // Pointer to struct
 struct Point {
@@ -20,22 +20,22 @@ let pt: Point = Point{x: 3.0, y: 4.0};
 let ptr: *Point = &pt;
 ptr.x = 10.0;
 ptr.y = 20.0;
-println("point via ptr:", pt.x, pt.y);
+::println("point via ptr:", pt.x, pt.y);
 
 // Nil pointer safety
 let nilPtr: *int;
 if (nilPtr != nil) {
-    println("non-nil pointer");
+    ::println("non-nil pointer");
 } else {
-    println("nil pointer, cannot dereference");
+    ::println("nil pointer, cannot dereference");
 };
 
 // Pointer via function param
 let setTo42 = func(n: *int) {
-    println("pointer points to:", *n);
+    ::println("pointer points to:", *n);
 };
 
 let val: int = 42;
 let ptr: *int = &val;
 setTo42(ptr);
-println("val via pointer:", *ptr);
+::println("val via pointer:", *ptr);

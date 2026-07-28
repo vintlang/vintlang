@@ -8,8 +8,8 @@ const PI: float64 = 3.14159265359;
 const DEBUG: bool = true;
 const MAX_CONNECTIONS: int = 1000;
 
-println(APP_NAME, VERSION);
-println("PI:", PI);
+::println(APP_NAME, VERSION);
+::println("PI:", PI);
 
 // Untyped constants
 const TIMEOUT = 30;
@@ -21,7 +21,7 @@ let timeoutDuration: int = TIMEOUT;
 let interestRate: float64 = RATE;
 let prefixed: string = PREFIX + "types";
 
-println(timeoutDuration, interestRate, prefixed);
+::println(timeoutDuration, interestRate, prefixed);
 
 // Constant expressions
 const HOURS_PER_DAY: int = 24;
@@ -29,8 +29,8 @@ const MINUTES_PER_HOUR: int = 60;
 const MINUTES_PER_DAY: int = HOURS_PER_DAY * MINUTES_PER_HOUR;
 const SECONDS_PER_DAY: int = MINUTES_PER_DAY * 60;
 
-println("minutes in a day:", MINUTES_PER_DAY);
-println("seconds in a day:", SECONDS_PER_DAY);
+::println("minutes in a day:", MINUTES_PER_DAY);
+::println("seconds in a day:", SECONDS_PER_DAY);
 
 // Constants in math
 const GRAVITY: float64 = 9.81;
@@ -40,4 +40,4 @@ let energy = func(mass: float64): float64 {
     return mass * (SPEED_OF_LIGHT as float64) * (SPEED_OF_LIGHT as float64);
 };
 
-println("E = mc^2:", energy(1.0));
+::println("E = mc^2:", energy(1.0));

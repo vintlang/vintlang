@@ -34,15 +34,15 @@ let mixFloats = func(a: float32, b: float64): float64 {
 let sum: int = addInts(10, 20);
 let mixed: float64 = mixFloats(1.5, 2.5);
 
-println("int operations:");
-println("  10 + 20 =", sum);
-println("  10 * 20 =", 10 * 20);
-println("  20 / 3  =", 20 / 3);
-println("  20 % 3  =", 20 % 3);
+::println("int operations:");
+::println("  10 + 20 =", sum);
+::println("  10 * 20 =", 10 * 20);
+::println("  20 / 3  =", 20 / 3);
+::println("  20 % 3  =", 20 % 3);
 
-println("float operations:");
-println("  mixed:", mixed);
-println("  3.14 * 2 =", 3.14 * 2);
+::println("float operations:");
+::println("  mixed:", mixed);
+::println("  3.14 * 2 =", 3.14 * 2);
 
 let big: uint64 = 0;
 
@@ -50,4 +50,4 @@ let big: uint64 = 0;
 let x: int = 100;
 let y: float64 = 100;
 
-println("x:", x, "y:", y);
+::println("x:", x, "y:", y);

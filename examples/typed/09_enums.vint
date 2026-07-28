@@ -10,15 +10,15 @@ enum Status {
 };
 
 let currentStatus: Status = Status.Active;
-println("status:", currentStatus);
+::println("status:", currentStatus);
 
 // Enum as function parameter type
 let canLogin = func(status: Status): bool {
     return status == Status.Active;
 };
 
-println("can login:", canLogin(currentStatus));
-println("can login banned:", canLogin(Status.Banned));
+::println("can login:", canLogin(currentStatus));
+::println("can login banned:", canLogin(Status.Banned));
 
 // Enum in struct field
 struct User {
@@ -28,4 +28,4 @@ struct User {
 };
 
 let admin: User = User{id: 1, name: "Alice", role: Status.Active};
-println("user:", admin.name, "role:", admin.role);
+::println("user:", admin.name, "role:", admin.role);
