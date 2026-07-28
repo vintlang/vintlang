@@ -61,8 +61,8 @@ const (
 	RANGE     = ".."
 	ELLIPSIS  = "..."
 	AT        = "@"
-	ARROW     = "=>"
-	HASH      = "#"   // builtin function prefix: #println
+	ARROW      = "=>"
+	DOUBLECOLON = "::" // builtin function prefix: ::println
 
 	// Keywords
 	FUNCTION = "FUNCTION"

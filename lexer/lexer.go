@@ -175,7 +175,13 @@ func (l *Lexer) NextToken() token.Token {
 	case rune(']'):
 		tok = newToken(token.RBRACKET, l.line, l.ch)
 	case rune(':'):
-		tok = newToken(token.COLON, l.line, l.ch)
+		if l.peekChar() == rune(':') {
+			ch := l.ch
+			l.readChar()
+			tok = token.Token{Type: token.DOUBLECOLON, Literal: string(ch) + string(l.ch), Line: l.line}
+		} else {
+			tok = newToken(token.COLON, l.line, l.ch)
+		}
 	case rune('@'):
 		tok = newToken(token.AT, l.line, l.ch)
 	case rune('.'):
@@ -230,7 +236,7 @@ func (l *Lexer) NextToken() token.Token {
 			l.skipSingleLineComment()
 			return l.NextToken()
 		}
-		tok = newToken(token.HASH, l.line, l.ch)
+		tok = l.createIllegalToken(l.ch, "- '#' is not a valid token, did you mean '::' for builtins?")
 	case 0:
 		tok.Literal = ""
 		tok.Type = token.EOF

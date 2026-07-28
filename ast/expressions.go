@@ -614,12 +614,12 @@ func (sl *StructLiteral) String() string {
 	return out.String()
 }
 
-// BuiltinExpression represents a builtin function reference: #println
+// BuiltinExpression represents a builtin function reference: ::println
 type BuiltinExpression struct {
-	Token token.Token // the '#' token
+	Token token.Token // the '::' token
 	Name  string      // the builtin name (e.g., "println")
 }
 
 func (be *BuiltinExpression) expressionNode()      {}
 func (be *BuiltinExpression) TokenLiteral() string { return be.Token.Literal }
-func (be *BuiltinExpression) String() string       { return "#" + be.Name }
+func (be *BuiltinExpression) String() string       { return "::" + be.Name }
