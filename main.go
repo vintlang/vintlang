@@ -8,16 +8,16 @@ import (
 	"time"
 
 	"github.com/charmbracelet/lipgloss"
-	"github.com/vintlang/vintlang/bundler"
-	"github.com/vintlang/vintlang/config"
-	"github.com/vintlang/vintlang/evaluator"
-	"github.com/vintlang/vintlang/lexer"
-	"github.com/vintlang/vintlang/object"
-	"github.com/vintlang/vintlang/parser"
-	"github.com/vintlang/vintlang/repl"
-	"github.com/vintlang/vintlang/styles"
-	"github.com/vintlang/vintlang/token"
-	"github.com/vintlang/vintlang/toolkit"
+	"github.com/vintlang/vintlang/internal/bundler"
+	"github.com/vintlang/vintlang/internal/config"
+	"github.com/vintlang/vintlang/internal/evaluator"
+	"github.com/vintlang/vintlang/internal/lexer"
+	"github.com/vintlang/vintlang/internal/object"
+	"github.com/vintlang/vintlang/internal/parser"
+	"github.com/vintlang/vintlang/internal/repl"
+	"github.com/vintlang/vintlang/internal/styles"
+	"github.com/vintlang/vintlang/internal/token"
+	"github.com/vintlang/vintlang/internal/toolkit"
 )
 
 const VINT_VERSION = config.VINT_VERSION
@@ -211,7 +211,7 @@ func formatFile(file string) {
 
 	formatted := program.String()
 
-	err = os.WriteFile(file, []byte(formatted), 0644)
+	err = os.WriteFile(file, []byte(formatted), 0o644)
 	if err != nil {
 		fmt.Println(styles.ErrorStyle.Render("Error: Failed to write formatted code to file."))
 		os.Exit(1)
@@ -332,7 +332,7 @@ func runWithTrace(file string, outputFile string) {
 
 	trace.WriteString("\n=== END OF TRACE ===\n")
 
-	err = os.WriteFile(outputFile, []byte(trace.String()), 0644)
+	err = os.WriteFile(outputFile, []byte(trace.String()), 0o644)
 	if err != nil {
 		fmt.Println(styles.ErrorStyle.Render("Error: Failed to write trace file: " + err.Error()))
 		os.Exit(1)

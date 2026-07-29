@@ -2,13 +2,13 @@ import os
 import path
 import fmt
 
-const DOCS_DIR = "../docs"
+const DOCS_DIR = "../internal/docs"
 const EXAMPLE_DIR = "../examples"
 const DOCS_OUTPUT = "merged-doc.md"
 const EXAMPLES_OUTPUT = "merged-examples.md"
 
 // Collect files matching an extension from a directory
-let collectFiles = func(dir, ext) {
+let collectFiles = func(dir: string, ext: string) {
     return os.listFiles(dir).filter(func(f) { 
         return f.endsWith(ext) 
     })

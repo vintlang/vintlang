@@ -1,0 +1,900 @@
+package evaluator
+
+import (
+	"fmt"
+	"os"
+
+	"github.com/vintlang/vintlang/internal/ast"
+	"github.com/vintlang/vintlang/internal/lexer"
+	"github.com/vintlang/vintlang/internal/object"
+	"github.com/vintlang/vintlang/internal/parser"
+)
+
+var (
+	NULL     = &object.Null{}
+	TRUE     = &object.Boolean{Value: true}
+	FALSE    = &object.Boolean{Value: false}
+	BREAK    = &object.Break{}
+	CONTINUE = &object.Continue{}
+)
+
+func init() {
+	// Register the function caller callback so modules (e.g., HTTP handlers)
+	// can invoke Vint functions from Go code.
+	object.RegisterFuncCaller(func(fn *object.Function, args []object.VintObject) object.VintObject {
+		return applyFunction(fn, args, 0)
+	})
+}
+
+func Eval(node ast.Node, env *object.Environment) object.VintObject {
+	switch node := node.(type) {
+	case *ast.Program:
+		return evalProgram(node, env)
+
+	case *ast.ExpressionStatement:
+		return Eval(node.Expression, env)
+
+	case *ast.IntegerLiteral:
+		return &object.Integer{Value: node.Value}
+
+	case *ast.FloatLiteral:
+		return &object.Float{Value: node.Value}
+
+	case *ast.Boolean:
+		return nativeBoolToBooleanObject(node.Value)
+
+	case *ast.PrefixExpression:
+		right := Eval(node.Right, env)
+		if isError(right) {
+			return right
+		}
+		return evalPrefixExpression(node.Operator, right, node.Token.Line)
+
+	case *ast.InfixExpression:
+		left := Eval(node.Left, env)
+		if isError(left) {
+			return left
+		}
+		right := Eval(node.Right, env)
+		if isError(right) && right != nil {
+			return right
+		}
+		return evalInfixExpression(node.Operator, left, right, node.Token.Line)
+	case *ast.PostfixExpression:
+		return evalPostfixExpression(env, node.Operator, node)
+
+	case *ast.BlockStatement:
+		return evalBlockStatement(node, env)
+
+	case *ast.IfExpression:
+		return evalIfExpression(node, env)
+
+	case *ast.ReturnStatement:
+		val := Eval(node.ReturnValue, env)
+		if isError(val) {
+			return val
+		}
+		return &object.ReturnValue{Value: val}
+
+	case *ast.LetStatement:
+		val := Eval(node.Value, env)
+		if isError(val) {
+			return val
+		}
+		if f, ok := val.(*object.Function); ok {
+			f.Name = node.Name.Value
+		}
+		// Inferred types: don't enforce (use Define, not DefineTyped)
+		return env.Define(node.Name.Value, val)
+
+	case *ast.TypedLetStatement:
+		var val object.VintObject
+		if node.Value != nil {
+			val = Eval(node.Value, env)
+			if isError(val) {
+				return val
+			}
+			if !compatible(node.TypeAnnotation.Type, val) {
+				return newTypeError(node.Token.Line,
+					"cannot assign %s to variable '%s' of type %s",
+					val.Type(), node.Name.Value, node.TypeAnnotation.String())
+			}
+		} else {
+			val = zeroValueFromType(node.TypeAnnotation.Type)
+		}
+		if f, ok := val.(*object.Function); ok {
+			f.Name = node.Name.Value
+		}
+		return env.DefineTyped(node.Name.Value, val, node.TypeAnnotation.Type)
+
+	case *ast.ConstStatement:
+		val := Eval(node.Value, env)
+		if isError(val) {
+			return val
+		}
+		return env.DefineConst(node.Name.Value, val)
+
+	case *ast.EnumStatement:
+		return evalEnumStatement(node, env)
+
+	case *ast.StructStatement:
+		return evalStructStatement(node, env)
+
+	case *ast.StructLiteral:
+		return evalStructLiteral(node, env)
+
+	case *ast.Identifier:
+		return evalIdentifier(node, env)
+
+	case *ast.FunctionLiteral:
+		return evalFunction(node, env)
+
+	case *ast.TypedFunctionLiteral:
+		return evalTypedFunction(node, env)
+
+	case *ast.MethodExpression:
+		return evalMethodExpression(node, env)
+
+	case *ast.Import:
+		return evalImport(node, env)
+
+	case *ast.CallExpression:
+		return evalCall(node, env)
+
+	case *ast.TypeCastExpression:
+		return evalTypeCast(node, env)
+
+	case *ast.TypeCheckExpression:
+		return evalTypeCheck(node, env)
+
+	case *ast.TypeAliasStatement:
+		// Type aliases are stored and resolved during parsing for now
+		return NULL
+
+	case *ast.StringLiteral:
+		return &object.String{Value: node.Value}
+	case *ast.At:
+		return evalAt(node, env)
+	case *ast.BuiltinExpression:
+		builtin, ok := GetBuiltinFunction(node.Name)
+		if !ok {
+			return newError("unknown builtin function: '%s'", node.Name)
+		}
+		return builtin
+	case *ast.ArrayLiteral:
+		elements := evalExpressions(node.Elements, env)
+		if len(elements) == 1 && isError(elements[0]) {
+			return elements[0]
+		}
+		return &object.Array{Elements: elements}
+	case *ast.RangeExpression:
+		return evalRangeExpression(node, env)
+	case *ast.IndexExpression:
+		left := Eval(node.Left, env)
+		if isError(left) {
+			return left
+		}
+		index := Eval(node.Index, env)
+		if isError(index) {
+			return index
+		}
+		return evalIndexExpression(left, index, node.Token.Line)
+	case *ast.SliceExpression:
+		left := Eval(node.Left, env)
+		if isError(left) {
+			return left
+		}
+		var start, end object.VintObject
+		if node.Start != nil {
+			start = Eval(node.Start, env)
+			if isError(start) {
+				return start
+			}
+		}
+		if node.End != nil {
+			end = Eval(node.End, env)
+			if isError(end) {
+				return end
+			}
+		}
+		return evalSliceExpression(left, start, end, node.Token.Line)
+	case *ast.DictLiteral:
+		return evalDictLiteral(node, env)
+	case *ast.WhileExpression:
+		return evalWhileExpression(node, env)
+	case *ast.Break:
+		return evalBreak(node)
+	case *ast.Continue:
+		return evalContinue(node)
+	case *ast.SwitchExpression:
+		return evalSwitchStatement(node, env)
+	case *ast.MatchExpression:
+		return evalMatchExpression(node, env)
+	case *ast.Null:
+		return NULL
+	// case *ast.For:
+	// 	return evalForExpression(node, env)
+	case *ast.ForIn:
+		return evalForInExpression(node, env, node.Token.Line)
+	case *ast.Package:
+		return evalPackage(node, env)
+	case *ast.PropertyExpression:
+		return evalPropertyExpression(node, env)
+	case *ast.PropertyAssignment:
+		val := Eval(node.Value, env)
+		if isError(val) {
+			return val
+		}
+		return evalPropertyAssignment(node.Name, val, env)
+	case *ast.Assign:
+		return evalAssign(node, env)
+	case *ast.AssignEqual:
+		return evalAssignEqual(node, env)
+
+	case *ast.AssignmentExpression:
+		left := Eval(node.Left, env)
+		if isError(left) {
+			return left
+		}
+
+		value := Eval(node.Value, env)
+		if isError(value) {
+			return value
+		}
+
+		// This is an easy way to assign operators like +=, -= etc
+		// for index expressions (arrays and dicts) where applicable
+		op := node.Token.Literal
+		if len(op) >= 2 {
+			op = op[:len(op)-1]
+			value = evalInfixExpression(op, left, value, node.Token.Line)
+			if isError(value) {
+				return value
+			}
+		}
+
+		if ident, ok := node.Left.(*ast.Identifier); ok {
+			newVal, ok := env.Assign(ident.Value, value)
+			if !ok {
+				return newError("Line %d: Assignment to undeclared variable '%s'. Use 'let' to declare the variable first", node.Token.Line, ident.Value)
+			}
+			return newVal
+		} else if ie, ok := node.Left.(*ast.IndexExpression); ok {
+			obj := Eval(ie.Left, env)
+			if isError(obj) {
+				return obj
+			}
+
+			if array, ok := obj.(*object.Array); ok {
+				index := Eval(ie.Index, env)
+				if isError(index) {
+					return index
+				}
+				if idx, ok := index.(*object.Integer); ok {
+					arrayLen := int64(len(array.Elements))
+					actualIdx := idx.Value
+					// Support Python-style negative indexing
+					if actualIdx < 0 {
+						actualIdx = arrayLen + actualIdx
+					}
+					if actualIdx < 0 || actualIdx >= arrayLen {
+						return newError("Line %d: Array index %d out of bounds. Array length is %d", node.Token.Line, idx.Value, arrayLen)
+					}
+					array.Elements[actualIdx] = value
+					return value
+				} else {
+					return newError("Line %d: Array index must be an integer, got %s", node.Token.Line, index.Type())
+				}
+			} else if hash, ok := obj.(*object.Dict); ok {
+				key := Eval(ie.Index, env)
+				if isError(key) {
+					return key
+				}
+				if hashKey, ok := key.(object.Hashable); ok {
+					hashed := hashKey.HashKey()
+					hash.Pairs[hashed] = object.DictPair{Key: key, Value: value}
+					return value
+				} else {
+					return newError("Cannot perform this operation with %T", key)
+				}
+			} else {
+				return newError("%T does not support this operation", obj)
+			}
+		} else {
+			return newError("Use an identifier instead of %T", node.Left)
+		}
+	case *ast.IncludeStatement:
+		return evalIncludeStatement(node, env)
+
+	case *ast.TodoStatement:
+		val := Eval(node.Value, env)
+		if isError(val) {
+			return val
+		}
+		msg := val.Inspect()
+		fmt.Printf("\n\u001b[1;33m[TODO]\u001b[0m: %s\n\n", msg)
+		return NULL
+	case *ast.WarnStatement:
+		val := Eval(node.Value, env)
+		if isError(val) {
+			return val
+		}
+		fmt.Printf("\n\u001b[1;33m[WARN]\u001b[0m: %s\n\n", val.Inspect())
+		return NULL
+	case *ast.ErrorStatement:
+		val := Eval(node.Value, env)
+		if isError(val) {
+			return val
+		}
+		return newError(val.Inspect())
+	case *ast.DeferStatement:
+		call, ok := node.Call.(*ast.CallExpression)
+		if !ok {
+			return newError("defer statement must be followed by a function call")
+		}
+
+		fn := Eval(call.Function, env)
+		if isError(fn) {
+			return fn
+		}
+
+		args := evalExpressions(call.Arguments, env)
+		if len(args) == 1 && isError(args[0]) {
+			return args[0]
+		}
+
+		deferredCall := &object.DeferredCall{Fn: fn, Args: args}
+		env.AddDefer(deferredCall)
+
+		return NULL
+	case *ast.InfoStatement:
+		val := Eval(node.Value, env)
+		if isError(val) {
+			return val
+		}
+		fmt.Printf("\n\u001b[1;36m[INFO]\u001b[0m: %s\n\n", val.Inspect())
+		return NULL
+	case *ast.DebugStatement:
+		val := Eval(node.Value, env)
+		if isError(val) {
+			return val
+		}
+		fmt.Printf("\n\u001b[1;35m[DEBUG]\u001b[0m: %s\n\n", val.Inspect())
+		return NULL
+	case *ast.NoteStatement:
+		val := Eval(node.Value, env)
+		if isError(val) {
+			return val
+		}
+		fmt.Printf("\n\u001b[1;34m[NOTE]\u001b[0m: %s\n\n", val.Inspect())
+		return NULL
+	case *ast.SuccessStatement:
+		val := Eval(node.Value, env)
+		if isError(val) {
+			return val
+		}
+		fmt.Printf("\n\u001b[1;32m[SUCCESS]\u001b[0m: %s\n\n", val.Inspect())
+		return NULL
+	case *ast.TraceStatement:
+		val := Eval(node.Value, env)
+		if isError(val) {
+			return val
+		}
+		fmt.Printf("\n\u001b[1;37m[TRACE]\u001b[0m: %s\n\n", val.Inspect())
+		return NULL
+	case *ast.FatalStatement:
+		val := Eval(node.Value, env)
+		if isError(val) {
+			return val
+		}
+		fmt.Printf("\n\u001b[1;31m[FATAL]\u001b[0m: %s\n\n", val.Inspect())
+		return newError("FATAL: %s", val.Inspect())
+	case *ast.CriticalStatement:
+		val := Eval(node.Value, env)
+		if isError(val) {
+			return val
+		}
+		fmt.Printf("\n\u001b[1;91m[CRITICAL]\u001b[0m: %s\n\n", val.Inspect())
+		return newError("CRITICAL: %s", val.Inspect())
+	case *ast.LogStatement:
+		val := Eval(node.Value, env)
+		if isError(val) {
+			return val
+		}
+		fmt.Printf("\n\u001b[1;31m[LOG]\u001b[0m: %s\n\n", val.Inspect())
+		return NULL
+	case *ast.RepeatStatement:
+		countObj := Eval(node.Count, env)
+		if isError(countObj) {
+			return countObj
+		}
+		count, ok := countObj.(*object.Integer)
+		if !ok {
+			return newError("repeat expects an integer count, got %s", countObj.Type())
+		}
+		var result object.VintObject = NULL
+		varName := node.VarName
+		if varName == "" {
+			varName = "i"
+		}
+		for i := int64(0); i < count.Value; i++ {
+			loopEnv := object.NewEnclosedEnvironment(env)
+			loopEnv.Define(varName, &object.Integer{Value: i})
+			res := Eval(node.Block, loopEnv)
+			if isError(res) {
+				return res
+			}
+			if res != nil {
+				switch res.Type() {
+				case object.BREAK_OBJ:
+					return NULL
+				case object.CONTINUE_OBJ:
+					continue
+				case object.RETURN_VALUE_OBJ:
+					return res
+				}
+			}
+			result = res
+		}
+		return result
+
+	// Async/Concurrency constructs
+	case *ast.AsyncFunctionLiteral:
+		return &object.AsyncFunction{
+			Parameters: node.Parameters,
+			Body:       node.Body,
+			Env:        env,
+		}
+
+	case *ast.AwaitExpression:
+		promise := Eval(node.Value, env)
+		if isError(promise) {
+			return promise
+		}
+
+		promiseObj, ok := promise.(*object.Promise)
+		if !ok {
+			return newError("await can only be used with promises, got %T", promise)
+		}
+
+		// Block until promise resolves using channel-based waiting
+		promiseObj.Wait()
+
+		if promiseObj.Error != nil {
+			return promiseObj.Error
+		}
+		return promiseObj.Value
+
+	case *ast.GoStatement:
+		// Execute the expression concurrently
+		go func() {
+			Eval(node.Expression, env)
+		}()
+		return NULL
+
+	case *ast.ChannelExpression:
+		if node.Buffer != nil {
+			bufferSize := Eval(node.Buffer, env)
+			if isError(bufferSize) {
+				return bufferSize
+			}
+
+			size, ok := bufferSize.(*object.Integer)
+			if !ok {
+				return newError("channel buffer size must be an integer, got %T", bufferSize)
+			}
+
+			return object.NewBufferedChannel(int(size.Value))
+		}
+
+		return object.NewChannel()
+
+	case *ast.ErrorDeclaration:
+		return evalErrorDeclaration(node, env)
+
+	case *ast.ThrowStatement:
+		return evalThrowStatement(node, env)
+	}
+
+	return newError("Unhandled AST node type: %T", node)
+}
+
+func evalProgram(program *ast.Program, env *object.Environment) object.VintObject {
+	var result object.VintObject
+
+	// First pass: Execute all statements to define functions and variables
+	for _, statement := range program.Statements {
+		result = Eval(statement, env)
+
+		switch result := result.(type) {
+		case *object.ReturnValue:
+			return result.Value
+		case *object.Error:
+			return result
+		}
+	}
+
+	// Second pass: Check for main function and execute it
+	if mainFunc, exists := env.Get("main"); exists {
+		if fn, ok := mainFunc.(*object.Function); ok {
+			// Call main function with no arguments
+			mainResult := applyFunction(fn, []object.VintObject{}, 0)
+			if isError(mainResult) {
+				return mainResult
+			}
+			// Return the main function's result, but if it's null, return the last statement's result
+			if mainResult.Type() != object.NULL_OBJ {
+				return mainResult
+			}
+		}
+	}
+
+	return result
+}
+
+func nativeBoolToBooleanObject(input bool) *object.Boolean {
+	if input {
+		return TRUE
+	}
+	return FALSE
+}
+
+func isTruthy(obj object.VintObject) bool {
+	switch obj {
+	case NULL:
+		return false
+	case TRUE:
+		return true
+	case FALSE:
+		return false
+	default:
+		return true
+	}
+}
+
+// Helper function to create error objects with formatted messages
+func newError(format string, a ...any) *object.Error {
+	return &object.Error{Message: fmt.Sprintf(format, a...)}
+}
+
+// newLineError creates an error with a source line prefix.
+func newLineError(line int, format string, a ...any) *object.Error {
+	msg := fmt.Sprintf(format, a...)
+	return &object.Error{Message: fmt.Sprintf("line %d: %s", line, msg)}
+}
+
+// newTypeError creates a type error with source location.
+func newTypeError(line int, format string, a ...any) *object.Error {
+	msg := fmt.Sprintf(format, a...)
+	return &object.Error{Message: fmt.Sprintf("TypeError at line %d: %s", line, msg)}
+}
+
+// Helper function to check if an object is an error
+func isError(obj object.VintObject) bool {
+	if obj != nil {
+		return obj.Type() == object.ERROR_OBJ
+	}
+
+	return false
+}
+
+func evalExpressions(exps []ast.Expression, env *object.Environment) []object.VintObject {
+	var result []object.VintObject
+
+	for _, e := range exps {
+		evaluated := Eval(e, env)
+		if isError(evaluated) {
+			return []object.VintObject{evaluated}
+		}
+
+		result = append(result, evaluated)
+	}
+
+	return result
+}
+
+func applyFunction(fn object.VintObject, args []object.VintObject, line int) object.VintObject {
+	switch fn := fn.(type) {
+	case *object.Function:
+		// Check argument types against parameter types
+		for i, arg := range args {
+			if i < len(fn.ParamTypes) && fn.ParamTypes[i] != nil {
+				if !compatible(fn.ParamTypes[i], arg) {
+					paramName := fn.Parameters[i].Value
+					return newTypeError(line, "parameter '%s' expects %s, got %s",
+						paramName, fn.ParamTypes[i].String(), arg.Type())
+				}
+			}
+		}
+		if fn.Name != "" {
+			fn.Env.Define(fn.Name, fn)
+		}
+		extendedEnv := extendedFunctionEnv(fn, args)
+		extendedEnv.MarkAsFuncScope()
+		defer func() {
+			for _, dc := range extendedEnv.PopDefers() {
+				applyFunction(dc.Fn, dc.Args, 0)
+			}
+		}()
+		evaluated := Eval(fn.Body, extendedEnv)
+		result := unwrapReturnValue(evaluated)
+		// Check return type (skip if result is an error)
+		if fn.ReturnType != nil && !isError(result) {
+			if !compatible(fn.ReturnType, result) {
+				return newTypeError(line, "function returns %s, but body returned %s",
+					fn.ReturnType.String(), result.Type())
+			}
+		}
+		return result
+	case *object.AsyncFunction:
+		// Execute async function and return a promise
+		return fn.Execute(args, Eval)
+	case *object.Builtin:
+		// Check argument types against declared parameter types
+		for i, arg := range args {
+			if i < len(fn.ParamTypes) && fn.ParamTypes[i] != nil {
+				if !compatible(fn.ParamTypes[i], arg) {
+					return newTypeError(line, "argument %d to builtin '%s' expects %s, got %s",
+						i+1, "builtin", fn.ParamTypes[i].String(), arg.Type())
+				}
+			}
+		}
+		// Call the builtin function
+		result := fn.Fn(args...)
+		if result == nil {
+			return NULL
+		}
+		// Check return type against declared return type
+		if fn.ReturnType != nil && !isError(result) {
+			if !compatible(fn.ReturnType, result) {
+				return newTypeError(line, "builtin returns %s, but got %s",
+					fn.ReturnType.String(), result.Type())
+			}
+		}
+		return result
+	case *object.DebouncedFunction:
+		// Set the apply function callback if not already set
+		fn.SetApplyFunction(applyFunction)
+		return fn.Call(args...)
+	case *object.Package:
+		obj := &object.Instance{
+			Package: fn,
+			Env:     object.NewEnclosedEnvironment(fn.Env),
+		}
+		obj.Env.Define("@", obj)
+		node, ok := fn.Scope.Get("init")
+		if !ok {
+			return newError("Line %d: The package does not have an 'init' function", line)
+		}
+		initFn, ok := node.(*object.Function)
+		if !ok {
+			return newError("Line %d: Package 'init' must be a function, got %s", line, node.Type())
+		}
+		initFn.Env.Define("@", obj)
+		applyFunction(initFn, args, fn.Name.Token.Line)
+		initFn.Env.Del("@")
+		return obj
+
+	case *object.ErrorType:
+		// Check if number of arguments matches parameters
+		if len(args) != len(fn.Parameters) {
+			return newError("error %s expects %d arguments, got %d",
+				fn.Name, len(fn.Parameters), len(args))
+		}
+
+		// Create custom error instance
+		customError := &object.CustomError{
+			ErrorType: fn,
+			Arguments: args,
+		}
+
+		return customError
+
+	case *object.Struct:
+		// Struct instantiation via call syntax: User("Alice", 30)
+		// Arguments are matched to fields by position
+		fieldArgs := make(map[string]object.VintObject)
+		for i, field := range fn.Fields {
+			if i < len(args) {
+				fieldArgs[field.Name] = args[i]
+			}
+		}
+		return instantiateStruct(fn, fieldArgs, line)
+
+	default:
+		return newError("not a function: %s", fn.Type())
+	}
+}
+
+func extendedFunctionEnv(
+	fn *object.Function,
+	args []object.VintObject,
+) *object.Environment {
+	env := object.NewEnclosedEnvironment(fn.Env)
+	for i, param := range fn.Parameters {
+		if i < len(args) {
+			// Type check argument against parameter type
+			if i < len(fn.ParamTypes) && fn.ParamTypes[i] != nil {
+				if !compatible(fn.ParamTypes[i], args[i]) {
+					env.Define(param.Value, args[i])
+					return env // will cause error in applyFunction
+				}
+			}
+			env.Define(param.Value, args[i])
+		} else if _, ok := fn.Defaults[param.Value]; ok {
+			env.Define(param.Value, Eval(fn.Defaults[param.Value], env))
+		}
+	}
+	return env
+}
+
+func checkReturnType(fn *object.Function, val object.VintObject) object.VintObject {
+	if fn.ReturnType != nil {
+		if !compatible(fn.ReturnType, val) {
+			return newError("TypeError: function returns %s, but body returned %s",
+				fn.ReturnType.String(), val.Type())
+		}
+	}
+	return val
+}
+
+func unwrapReturnValue(obj object.VintObject) object.VintObject {
+	if returnValue, ok := obj.(*object.ReturnValue); ok {
+		return returnValue.Value
+	}
+
+	return obj
+}
+
+func evalBreak(node *ast.Break) object.VintObject {
+	return BREAK
+}
+
+func evalContinue(node *ast.Continue) object.VintObject {
+	return CONTINUE
+}
+
+// func evalForExpression(fe *ast.For, env *object.Environment) object.Object {
+// 	obj, ok := env.Get(fe.Identifier)
+// 	defer func() { // stay safe and not reassign an existing variable
+// 		if ok {
+// 			env.Set(fe.Identifier, obj)
+// 		}
+// 	}()
+// 	val := Eval(fe.StarterValue, env)
+// 	if isError(val) {
+// 		return val
+// 	}
+
+// 	env.Set(fe.StarterName.Value, val)
+
+// 	// err := Eval(fe.Starter, env)
+// 	// if isError(err) {
+// 	// 	return err
+// 	// }
+// 	for {
+// 		evaluated := Eval(fe.Condition, env)
+// 		if isError(evaluated) {
+// 			return evaluated
+// 		}
+// 		if !isTruthy(evaluated) {
+// 			break
+// 		}
+// 		res := Eval(fe.Block, env)
+// 		if isError(res) {
+// 			return res
+// 		}
+// 		if res.Type() == object.BREAK_OBJ {
+// 			break
+// 		}
+// 		if res.Type() == object.CONTINUE_OBJ {
+// 			err := Eval(fe.Closer, env)
+// 			if isError(err) {
+// 				return err
+// 			}
+// 			continue
+// 		}
+// 		if res.Type() == object.RETURN_VALUE_OBJ {
+// 			return res
+// 		}
+// 		err := Eval(fe.Closer, env)
+// 		if isError(err) {
+// 			return err
+// 		}
+// 	}
+// 	return NULL
+// }
+
+func evalIncludeStatement(node *ast.IncludeStatement, env *object.Environment) object.VintObject {
+	pathObj := Eval(node.Path, env)
+	if isError(pathObj) {
+		return pathObj
+	}
+	path, ok := pathObj.(*object.String)
+	if !ok {
+		return newError("include path must be a string, got %s", pathObj.Type())
+	}
+
+	// Read file content
+	content, err := os.ReadFile(path.Value)
+	if err != nil {
+		return newError("could not include file '%s': %s", path.Value, err)
+	}
+
+	// Create a new lexer, parser and evaluate the program
+	l := lexer.NewWithFilename(string(content), path.Value)
+	p := parser.New(l)
+	program := p.ParseProgram()
+	if len(p.Errors()) != 0 {
+		return newError("errors parsing included file '%s': %s", path.Value, p.Errors()[0])
+	}
+
+	return Eval(program, env)
+}
+
+func evalRangeExpression(node *ast.RangeExpression, env *object.Environment) object.VintObject {
+	start := Eval(node.Start, env)
+	if isError(start) {
+		return start
+	}
+
+	end := Eval(node.End, env)
+	if isError(end) {
+		return end
+	}
+
+	startInt, ok := start.(*object.Integer)
+	if !ok {
+		return newError("range start must be an integer, got %T", start)
+	}
+
+	endInt, ok := end.(*object.Integer)
+	if !ok {
+		return newError("range end must be an integer, got %T", end)
+	}
+
+	return &object.Range{
+		Start:   startInt.Value,
+		End:     endInt.Value,
+		Current: startInt.Value,
+	}
+}
+
+func evalErrorDeclaration(node *ast.ErrorDeclaration, env *object.Environment) object.VintObject {
+	// Extract parameter names
+	paramNames := make([]string, len(node.Parameters))
+	for i, param := range node.Parameters {
+		paramNames[i] = param.Value
+	}
+
+	// Create error type
+	errorType := &object.ErrorType{
+		Name:       node.Name.Value,
+		Parameters: paramNames,
+	}
+
+	// Store the error type in the environment
+	result := env.Define(node.Name.Value, errorType)
+	if isError(result) {
+		return result
+	}
+
+	// Return NULL for declarations (like let statements)
+	return NULL
+}
+
+func evalThrowStatement(node *ast.ThrowStatement, env *object.Environment) object.VintObject {
+	// Evaluate the error expression
+	errorExpr := Eval(node.ErrorExpr, env)
+	if isError(errorExpr) {
+		return errorExpr
+	}
+
+	// If it's a custom error, wrap it in a regular error for propagation
+	if customError, ok := errorExpr.(*object.CustomError); ok {
+		return newError("thrown: %s", customError.Inspect())
+	}
+
+	// If it's any other type, create a regular error
+	return newError("thrown: %s", errorExpr.Inspect())
+}
