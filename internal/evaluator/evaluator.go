@@ -517,14 +517,9 @@ func evalProgram(program *ast.Program, env *object.Environment) object.VintObjec
 	// Second pass: Check for main function and execute it
 	if mainFunc, exists := env.Get("main"); exists {
 		if fn, ok := mainFunc.(*object.Function); ok {
-			// Call main function with no arguments
-			mainResult := applyFunction(fn, []object.VintObject{}, 0)
-			if isError(mainResult) {
-				return mainResult
-			}
-			// Return the main function's result, but if it's null, return the last statement's result
-			if mainResult.Type() != object.NULL_OBJ {
-				return mainResult
+			result = applyFunction(fn, []object.VintObject{}, 0)
+			if isError(result) {
+				return result
 			}
 		}
 	}

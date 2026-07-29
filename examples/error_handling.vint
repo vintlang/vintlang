@@ -4,142 +4,142 @@
 // ============================================================
 // 1. Logging and status messages
 // ============================================================
-println("=== Logging Levels ===")
-info "Application starting up"
-debug "Loading configuration..."
-note "Remember to set API_KEY in your .env file"
-success "Configuration loaded successfully"
-warn "Running in development mode"
+::println("=== Logging Levels ===");
+info "Application starting up";
+debug "Loading configuration...";
+note "Remember to set API_KEY in your .env file";
+success "Configuration loaded successfully";
+warn "Running in development mode";
 
 // ============================================================
 // 2. Checking for null values (defensive programming)
 // ============================================================
-println("\n=== Null Checks ===")
+::println("\n=== Null Checks ===");
 
-let safeDivide = func(a, b) {
+let safeDivide = func(a: int, b: int): any {
     if (b == 0) {
-        warn "Division by zero attempted"
-        return null
-    }
-    return a / b
-}
+        warn "Division by zero attempted";
+        return null;
+    };
+    return a / b;
+};
 
-let r1 = safeDivide(10, 2)
-let r2 = safeDivide(10, 0)
+let r1: any = safeDivide(10, 2);
+let r2: any = safeDivide(10, 0);
 
 if (r1 != null) {
-    println("10 / 2 =", r1)
+    ::println("10 / 2 =", r1);
 } else {
-    println("10 / 2 failed")
-}
+    ::println("10 / 2 failed");
+};
 
 if (r2 != null) {
-    println("10 / 0 =", r2)
+    ::println("10 / 0 =", r2);
 } else {
-    println("10 / 0 returned null (division by zero)")
-}
+    ::println("10 / 0 returned null (division by zero)");
+};
 
 // ============================================================
 // 3. Returning error information from functions
 // ============================================================
-println("\n=== Returning Errors ===")
+::println("\n=== Returning Errors ===");
 
-let parseAge = func(input) {
-    let age = int(input)
+let parseAge = func(input: string): {string: any} {
+    let age: int = ::int(input);
     if (age == null || age < 0) {
-        return {"ok": false, "error": "Age must be a non-negative number"}
-    }
+        return {"ok": false, "error": "Age must be a non-negative number"};
+    };
     if (age > 150) {
-        return {"ok": false, "error": "Age seems unrealistically large"}
-    }
-    return {"ok": true, "value": age}
-}
+        return {"ok": false, "error": "Age seems unrealistically large"};
+    };
+    return {"ok": true, "value": age};
+};
 
-let tests = ["25", "200", "-5", "42"]
+let tests: []string = ["25", "200", "-5", "42"];
 for t in tests {
-    let result = parseAge(t)
+    let result: {string: any} = parseAge(t);
     if (result["ok"]) {
-        println("Input '" + t + "' -> valid age:", result["value"])
+        ::println("Input '" + t + "' -> valid age:", result["value"]);
     } else {
-        println("Input '" + t + "' -> error:", result["error"])
-    }
-}
+        ::println("Input '" + t + "' -> error:", result["error"]);
+    };
+};
 
 // ============================================================
 // 4. Validating user input
 // ============================================================
-println("\n=== Input Validation ===")
+::println("\n=== Input Validation ===");
 
-let strmod = import("string")
+let strmod = ::import("string");
 
-let validateEmail = func(email) {
+let validateEmail = func(email: string): any {
     if (email == null || email == "") {
-        return "Email cannot be empty"
-    }
+        return "Email cannot be empty";
+    };
     if (!strmod.contains(email, "@")) {
-        return "Email must contain @"
-    }
+        return "Email must contain @";
+    };
     if (!strmod.contains(email, ".")) {
-        return "Email must contain a domain"
-    }
-    return null  // null means no error
-}
+        return "Email must contain a domain";
+    };
+    return null;  // null means no error
+};
 
-let emails = ["alice@example.com", "notanemail", "", "bob@test.org"]
+let emails: []string = ["alice@example.com", "notanemail", "", "bob@test.org"];
 for email in emails {
-    let err = validateEmail(email)
+    let err: any = validateEmail(email);
     if (err == null) {
-        success "Valid email: " + email
+        success "Valid email: " + email;
     } else {
-        warn "Invalid email '" + email + "': " + err
-    }
-}
+        warn "Invalid email '" + email + "': " + err;
+    };
+};
 
 // ============================================================
 // 5. Graceful handling with defaults
 // ============================================================
-println("\n=== Default Values ===")
+::println("\n=== Default Values ===");
 
-let getConfig = func(key, defaultValue) {
-    let config = {
+let getConfig = func(key: string, defaultValue: any): any {
+    let config: {string: any} = {
         "host": "localhost",
         "port": 8080,
         "debug": false
-    }
-    let val = config[key]
+    };
+    let val: any = config[key];
     if (val == null) {
-        return defaultValue
-    }
-    return val
-}
+        return defaultValue;
+    };
+    return val;
+};
 
-println("host:", getConfig("host", "127.0.0.1"))
-println("port:", getConfig("port", 3000))
-println("timeout:", getConfig("timeout", 30))   // uses default
-println("debug:", getConfig("debug", true))
+::println("host:", getConfig("host", "127.0.0.1"));
+::println("port:", getConfig("port", 3000));
+::println("timeout:", getConfig("timeout", 30));   // uses default
+::println("debug:", getConfig("debug", true));
 
 // ============================================================
 // 6. Retry pattern
 // ============================================================
-println("\n=== Retry Pattern ===")
+::println("\n=== Retry Pattern ===");
 
-let attempt = 0
-let maxAttempts = 3
-let succeeded = false
+let attempt: int = 0;
+const maxAttempts: int = 3;
+let succeeded: bool = false;
 
 while (attempt < maxAttempts && !succeeded) {
-    attempt = attempt + 1
-    debug "Attempt " + string(attempt) + " of " + string(maxAttempts)
+    attempt = attempt + 1;
+    debug "Attempt " + ::string(attempt) + " of " + ::string(maxAttempts);
 
     // Simulate success on the 3rd try
     if (attempt == 3) {
-        succeeded = true
-        success "Operation succeeded on attempt " + string(attempt)
+        succeeded = true;
+        success "Operation succeeded on attempt " + ::string(attempt);
     } else {
-        warn "Attempt " + string(attempt) + " failed, retrying..."
-    }
-}
+        warn "Attempt " + ::string(attempt) + " failed, retrying...";
+    };
+};
 
 if (!succeeded) {
-    println("All", maxAttempts, "attempts failed")
-}
+    ::println("All", maxAttempts, "attempts failed");
+};

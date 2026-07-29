@@ -7,226 +7,226 @@ import time
 import os
 import uuid
 
-print("🌐 VintLang Web Data Fetcher & Analyzer")
-print("=" * 50)
-print("Demonstrating network and data processing capabilities")
-print("=" * 50)
+::print("🌐 VintLang Web Data Fetcher & Analyzer");
+::print("=" * 50);
+::print("Demonstrating network and data processing capabilities");
+::print("=" * 50);
 
 // Test 1: Simple HTTP Request
-print("\n🔄 Test 1: Basic HTTP Request")
-print("-" * 40)
+::print("\n🔄 Test 1: Basic HTTP Request");
+::print("-" * 40);
 
-let url1 = "https://httpbin.org/json"
-print("Fetching data from: " + url1)
-let response1 = net.get(url1)
+let url1: string = "https://httpbin.org/json";
+::print("Fetching data from: " + url1);
+let response1: string = net.get(url1);
 
 if (response1 != "") {
-    print("✓ Successfully fetched data!")
-    print("Response length: " + string(len(response1)) + " characters")
-    
+    ::print("✓ Successfully fetched data!");
+    ::print("Response length: " + string(::len(response1)) + " characters");
+
     // Save raw response
-    os.writeFile("web_response_1.json", response1)
-    print("✓ Saved response to web_response_1.json")
-    
+    os.writeFile("web_response_1.json", response1);
+    ::print("✓ Saved response to web_response_1.json");
+
     // Parse JSON response
-    let data1 = json.decode(response1)
-    print("✓ Successfully parsed JSON response")
-    print("Data type: " + type(data1))
+    let data1: any = json.decode(response1);
+    ::print("✓ Successfully parsed JSON response");
+    ::print("Data type: " + ::type(data1));
 } else {
-    print("❌ Failed to fetch data from " + url1)
-}
+    ::print("❌ Failed to fetch data from " + url1);
+};
 
 // Test 2: Different API Endpoint
-print("\n🔄 Test 2: User Agent and Headers Test")
-print("-" * 40)
+::print("\n🔄 Test 2: User Agent and Headers Test");
+::print("-" * 40);
 
-let url2 = "https://httpbin.org/user-agent"
-print("Fetching user agent info from: " + url2)
-let response2 = net.get(url2)
+let url2: string = "https://httpbin.org/user-agent";
+::print("Fetching user agent info from: " + url2);
+let response2: string = net.get(url2);
 
 if (response2 != "") {
-    print("✓ Successfully fetched user agent data!")
-    print("Response: " + response2)
-    
+    ::print("✓ Successfully fetched user agent data!");
+    ::print("Response: " + response2);
+
     // Save and analyze
-    os.writeFile("user_agent_response.json", response2)
-    let data2 = json.decode(response2)
-    print("✓ User agent data saved and parsed")
+    os.writeFile("user_agent_response.json", response2);
+    let data2: any = json.decode(response2);
+    ::print("✓ User agent data saved and parsed");
 } else {
-    print("❌ Failed to fetch user agent data")
-}
+    ::print("❌ Failed to fetch user agent data");
+};
 
 // Test 3: Multiple Endpoints Analysis
-print("\n📊 Test 3: Multi-Source Data Analysis")
-print("-" * 40)
+::print("\n📊 Test 3: Multi-Source Data Analysis");
+::print("-" * 40);
 
-let endpoints = [
+let endpoints: []string = [
     "https://httpbin.org/json",
     "https://httpbin.org/uuid",
     "https://httpbin.org/time/now"
-]
+];
 
-let results = []
-let successCount = 0
+let results: []any = [];
+let successCount: int = 0;
 
 for i, endpoint in endpoints {
-    print("Fetching from endpoint " + string(i + 1) + ": " + endpoint)
-    let response = net.get(endpoint)
-    
+    ::print("Fetching from endpoint " + string(i + 1) + ": " + endpoint);
+    let response: string = net.get(endpoint);
+
     if (response != "") {
-        successCount += 1
-        let result = {
+        successCount = successCount + 1;
+        let result: any = {
             "endpoint": endpoint,
             "success": true,
-            "response_length": len(response),
+            "response_length": ::len(response),
             "timestamp": time.format(time.now(), "2006-01-02 15:04:05"),
             "data": response
-        }
-        results.push(result)
-        print("  ✓ Success (" + string(len(response)) + " bytes)")
+        };
+        results.push(result);
+        ::print("  ✓ Success (" + string(::len(response)) + " bytes)");
     } else {
-        let result = {
+        let result: any = {
             "endpoint": endpoint,
             "success": false,
             "response_length": 0,
             "timestamp": time.format(time.now(), "2006-01-02 15:04:05"),
             "error": "Failed to fetch"
-        }
-        results.push(result)
-        print("  ❌ Failed")
-    }
-}
+        };
+        results.push(result);
+        ::print("  ❌ Failed");
+    };
+};
 
-print("\nResults Summary:")
-print("  Total endpoints tested: " + string(len(endpoints)))
-print("  Successful requests: " + string(successCount))
-print("  Success rate: " + string((successCount * 100) / len(endpoints)) + "%")
+::print("\nResults Summary:");
+::print("  Total endpoints tested: " + string(::len(endpoints)));
+::print("  Successful requests: " + string(successCount));
+::print("  Success rate: " + string((successCount * 100) / ::len(endpoints)) + "%");
 
 // Test 4: Data Processing and Storage
-print("\n💾 Test 4: Data Processing and Storage")
-print("-" * 40)
+::print("\n💾 Test 4: Data Processing and Storage");
+::print("-" * 40);
 
 // Save all results to a comprehensive file
-let analysisReport = {
+let analysisReport: {string: any} = {
     "report_id": uuid.generate(),
     "generated_at": time.format(time.now(), "2006-01-02 15:04:05"),
     "summary": {
-        "total_endpoints": len(endpoints),
+        "total_endpoints": ::len(endpoints),
         "successful_requests": successCount,
-        "success_rate": (successCount * 100) / len(endpoints)
+        "success_rate": (successCount * 100) / ::len(endpoints)
     },
     "results": results
-}
+};
 
-let reportJson = json.encode(analysisReport)
-let reportFile = "web_analysis_report_" + time.format(time.now(), "2006-01-02_15-04-05") + ".json"
-os.writeFile(reportFile, reportJson)
-print("✓ Comprehensive analysis saved to: " + reportFile)
+let reportJson: string = json.encode(analysisReport);
+let reportFile: string = "web_analysis_report_" + time.format(time.now(), "2006-01-02_15-04-05") + ".json";
+os.writeFile(reportFile, reportJson);
+::print("✓ Comprehensive analysis saved to: " + reportFile);
 
 // Generate text report
-let textReport = "WEB DATA FETCHER ANALYSIS REPORT\n"
-textReport += "Generated: " + time.format(time.now(), "02-01-2006 15:04:05") + "\n"
-textReport += "=" * 50 + "\n\n"
+let textReport: string = "WEB DATA FETCHER ANALYSIS REPORT\n";
+textReport = textReport + "Generated: " + time.format(time.now(), "02-01-2006 15:04:05") + "\n";
+textReport = textReport + "=" * 50 + "\n\n";
 
-textReport += "SUMMARY\n"
-textReport += "-------\n"
-textReport += "Total Endpoints Tested: " + string(len(endpoints)) + "\n"
-textReport += "Successful Requests: " + string(successCount) + "\n"
-textReport += "Success Rate: " + string((successCount * 100) / len(endpoints)) + "%\n\n"
+textReport = textReport + "SUMMARY\n";
+textReport = textReport + "-------\n";
+textReport = textReport + "Total Endpoints Tested: " + string(::len(endpoints)) + "\n";
+textReport = textReport + "Successful Requests: " + string(successCount) + "\n";
+textReport = textReport + "Success Rate: " + string((successCount * 100) / ::len(endpoints)) + "%\n\n";
 
-textReport += "DETAILED RESULTS\n"
-textReport += "----------------\n"
+textReport = textReport + "DETAILED RESULTS\n";
+textReport = textReport + "----------------\n";
 for result in results {
-    textReport += "Endpoint: " + result["endpoint"] + "\n"
-    textReport += "Status: " + string(result["success"]) + "\n"
-    textReport += "Response Size: " + string(result["response_length"]) + " bytes\n"
-    textReport += "Timestamp: " + result["timestamp"] + "\n"
-    textReport += "\n"
-}
+    textReport = textReport + "Endpoint: " + result["endpoint"] + "\n";
+    textReport = textReport + "Status: " + string(result["success"]) + "\n";
+    textReport = textReport + "Response Size: " + string(result["response_length"]) + " bytes\n";
+    textReport = textReport + "Timestamp: " + result["timestamp"] + "\n";
+    textReport = textReport + "\n";
+};
 
-textReport += "=" * 50 + "\n"
-textReport += "Report generated by VintLang Web Fetcher v1.0\n"
+textReport = textReport + "=" * 50 + "\n";
+textReport = textReport + "Report generated by VintLang Web Fetcher v1.0\n";
 
-let textReportFile = "web_analysis_" + time.format(time.now(), "2006-01-02_15-04-05") + ".txt"
-os.writeFile(textReportFile, textReport)
-print("✓ Text report saved to: " + textReportFile)
+let textReportFile: string = "web_analysis_" + time.format(time.now(), "2006-01-02_15-04-05") + ".txt";
+os.writeFile(textReportFile, textReport);
+::print("✓ Text report saved to: " + textReportFile);
 
 // Test 5: Network Performance Analysis
-print("\n⏱️ Test 5: Network Performance Analysis")
-print("-" * 40)
+::print("\n⏱️ Test 5: Network Performance Analysis");
+::print("-" * 40);
 
-let performanceTest = func(url) {
-    let startTime = time.now()
-    let response = net.get(url)
-    let endTime = time.now()
-    
+let performanceTest = func(url: string): {string: any} {
+    let startTime: any = time.now();
+    let response: string = net.get(url);
+    let endTime: any = time.now();
+
     return {
         "url": url,
         "success": response != "",
-        "response_size": len(response),
+        "response_size": ::len(response),
         "start_time": startTime,
         "end_time": endTime
-    }
-}
+    };
+};
 
-print("Running performance tests...")
-let perfResults = []
+::print("Running performance tests...");
+let perfResults: []any = [];
 
 for endpoint in endpoints {
-    let result = performanceTest(endpoint)
-    perfResults.push(result)
-    
+    let result: {string: any} = performanceTest(endpoint);
+    perfResults.push(result);
+
     if (result["success"]) {
-        print("  " + endpoint + " - Success (" + string(result["response_size"]) + " bytes)")
+        ::print("  " + endpoint + " - Success (" + string(result["response_size"]) + " bytes)");
     } else {
-        print("  " + endpoint + " - Failed")
-    }
-}
+        ::print("  " + endpoint + " - Failed");
+    };
+};
 
 // Save performance data
-let perfReport = {
+let perfReport: {string: any} = {
     "test_id": uuid.generate(),
     "test_time": time.format(time.now(), "2006-01-02 15:04:05"),
     "performance_results": perfResults
-}
+};
 
-os.writeFile("performance_test.json", json.encode(perfReport))
-print("✓ Performance data saved to performance_test.json")
+os.writeFile("performance_test.json", json.encode(perfReport));
+::print("✓ Performance data saved to performance_test.json");
 
 // Final Summary
-print("\n🎉 Web Data Fetcher Analysis Complete!")
-print("-" * 50)
+::print("\n🎉 Web Data Fetcher Analysis Complete!");
+::print("-" * 50);
 
-print("📊 DEMONSTRATION SUMMARY:")
-print("  • HTTP requests made: " + string(len(endpoints) * 2))
-print("  • Successful requests: " + string(successCount * 2))
-print("  • JSON responses processed: " + string(successCount))
-print("  • Files generated: 5+")
-print("  • Performance tests run: " + string(len(endpoints)))
+::print("📊 DEMONSTRATION SUMMARY:");
+::print("  • HTTP requests made: " + string(::len(endpoints) * 2));
+::print("  • Successful requests: " + string(successCount * 2));
+::print("  • JSON responses processed: " + string(successCount));
+::print("  • Files generated: 5+");
+::print("  • Performance tests run: " + string(::len(endpoints)));
 
-print("\n✨ NETWORKING FEATURES DEMONSTRATED:")
-print("  ✓ HTTP GET Requests - Multiple API endpoints")
-print("  ✓ Response Processing - JSON parsing and analysis")
-print("  ✓ Error Handling - Graceful failure management")
-print("  ✓ Data Storage - Multiple output formats")
-print("  ✓ Performance Testing - Request timing analysis")
-print("  ✓ Report Generation - Comprehensive documentation")
+::print("\n✨ NETWORKING FEATURES DEMONSTRATED:");
+::print("  ✓ HTTP GET Requests - Multiple API endpoints");
+::print("  ✓ Response Processing - JSON parsing and analysis");
+::print("  ✓ Error Handling - Graceful failure management");
+::print("  ✓ Data Storage - Multiple output formats");
+::print("  ✓ Performance Testing - Request timing analysis");
+::print("  ✓ Report Generation - Comprehensive documentation");
 
-print("\n🚀 VintLang Network Capabilities:")
-print("  • RESTful API integration")
-print("  • JSON data processing")
-print("  • Web scraping potential")
-print("  • API testing automation")
-print("  • Data aggregation from multiple sources")
-print("  • Network performance monitoring")
+::print("\n🚀 VintLang Network Capabilities:");
+::print("  • RESTful API integration");
+::print("  • JSON data processing");
+::print("  • Web scraping potential");
+::print("  • API testing automation");
+::print("  • Data aggregation from multiple sources");
+::print("  • Network performance monitoring");
 
-print("\n🎯 VintLang is ready for:")
-print("  • API integration projects")
-print("  • Data aggregation systems")
-print("  • Web monitoring tools")
-print("  • Automated testing scripts")
-print("  • Content fetching applications")
+::print("\n🎯 VintLang is ready for:");
+::print("  • API integration projects");
+::print("  • Data aggregation systems");
+::print("  • Web monitoring tools");
+::print("  • Automated testing scripts");
+::print("  • Content fetching applications");
 
-print("\n" + "=" * 50)
-print("🌐 Network Demonstration Complete!")
-print("=" * 50)
+::print("\n" + "=" * 50);
+::print("🌐 Network Demonstration Complete!");
+::print("=" * 50);

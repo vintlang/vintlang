@@ -4,35 +4,35 @@
 import cli
 
 // Initialize the todos list with some default items
-let todos = ["new", "todo"]
+let todos: []string = ["new", "todo"];
 
 // Get command line arguments
-let args = args()
-let args_len = len(args)
-info "Length: " + str(args_len)
+let args: []string = ::args();
+let args_len: int = ::len(args);
+::info "Length: " + ::str(args_len);
 
 // Check if any arguments were provided
 if (args_len == 0) {
-    info "Invalid options"
-    return
-}
+    ::info "Invalid options";
+    return;
+};
 
 // Handle 'all' command - list all todos
 if (args[0] == "all") {
-    if (len(todos) == 0) {
-        println("NO todo found")
+    if (::len(todos) == 0) {
+        ::println("NO todo found");
     } else {
         for todo in todos {
-            println(todo)
-        }
-    }
+            ::println(todo);
+        };
+    };
 } else if (args[0] == "add") {
     // Handle 'add' command - add a new todo
-    let newtodo = input("Enter the todo title: ")
-    todos.push(newtodo)
-    info "Added: " + newtodo
+    let newtodo: string = ::input("Enter the todo title: ");
+    todos.push(newtodo);
+    ::info "Added: " + newtodo;
 } else {
     // Handle unknown commands
-    info "Unknown command: " + args[0]
-    info "Available commands: all, add"
-}
+    ::info "Unknown command: " + args[0];
+    ::info "Available commands: all, add";
+};

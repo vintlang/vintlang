@@ -1,19 +1,19 @@
 // Sample Vint program demonstrating logical operators
 
 // Define a function to test 'and', 'or', and 'not'
-let test_logical_operators = func () {
+let test_logical_operators: func() = func() {
     // Testing 'and' operator
-    let result_and = and(1+2==3, false) // Should return false
-    print("Result of true AND false: ", result_and)
-    print(1+2==4)
+    let result_and: bool = ::and(1+2==3, false) // Should return false
+    ::print("Result of true AND false: ", result_and)
+    ::print(1+2==4)
 
     // Testing 'or' operator
-    let result_or = or(false, true) // Should return true
-    print("Result of false OR true: ", result_or)
+    let result_or: bool = ::or(false, true) // Should return true
+    ::print("Result of false OR true: ", result_or)
 
     // Testing 'not' operator
-    let result_not = not(true) // Should return false
-    print("Result of NOT true: ", result_not)
+    let result_not: bool = ::not(true) // Should return false
+    ::print("Result of NOT true: ", result_not)
 }
 
 // Call the function to test the logical operators

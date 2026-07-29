@@ -3,26 +3,26 @@
 
 // Example 1: Immediately Invoked Function Expression (IIFE)
 // This function is defined and executed immediately using ()
-let runNow = func(){
-    print("this is a function executed immediately")
+let runNow: any = func(): any {
+    ::print("this is a function executed immediately")
 }()
 
 // Example 2: Named function stored in a variable
 // This function is defined but not invoked until called explicitly
-let vint = func(){
-    print("This is also a function\nBut not invoked immediately after being declared")
+let vint: func() = func() {
+    ::print("This is also a function\nBut not invoked immediately after being declared")
 }
 
 // Example 3: Call the stored function
 vint()
 
 // Example 4: Higher-order function (function that takes another function as parameter)
-let w = func(){
-    print("w function")
+let w: func() = func() {
+    ::print("w function")
 }
 
 // Pass function 'w' as an argument to another function and execute it
-func(w){
-    w()
-    print("func")
+let temp: any = func(fn: func()) {
+    fn()
+    ::print("func")
 }(w)

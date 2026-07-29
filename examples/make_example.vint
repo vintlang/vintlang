@@ -4,50 +4,50 @@
 import make
 import os
 
-print("🔨 Make Module Example - Build Automation")
-print("==========================================\n")
+::print("Make Module Example - Build Automation")
+::print("==========================================\n")
 
 // Example 1: Check if a command exists
-print("1. Checking if 'go' command exists...")
-let hasGo = make.check("go")
+::print("1. Checking if 'go' command exists...")
+let hasGo: bool = make.check("go")
 if (hasGo) {
-    print("   ✅ Go is installed!")
+    ::print("   Go is installed!")
 } else {
-    print("   ❌ Go is not installed!")
+    ::print("   Go is not installed!")
 }
 
 // Example 2: Set environment variables
-print("\n2. Setting environment variables...")
+::print("\n2. Setting environment variables...")
 make.env("EXAMPLE_VAR", "Hello from Vint!")
-let envValue = os.getEnv("EXAMPLE_VAR")
-print("   Set EXAMPLE_VAR=" + envValue)
+let envValue: string = os.getEnv("EXAMPLE_VAR")
+::print("   Set EXAMPLE_VAR=" + envValue)
 
 // Example 3: Execute a simple command
-print("\n3. Executing a command (echo)...")
-let result = make.exec("echo 'Hello from make.exec!'")
-print("   Output: " + result)
+::print("\n3. Executing a command (echo)...")
+let result: string = make.exec("echo 'Hello from make.exec!'")
+::print("   Output: " + result)
 
 // Example 4: Execute a command that lists files
-print("\n4. Listing .vint files in examples directory...")
-let lsResult = make.exec("ls examples/*.vint 2>/dev/null | head -5")
+::print("\n4. Listing .vint files in examples directory...")
+let lsResult: any = make.exec("ls examples/*.vint 2>/dev/null | head -5")
 if (lsResult.type != "error") {
-    print("   Files:\n" + lsResult)
+    ::print("   Files:\n" + lsResult)
 } else {
-    print("   Could not list files")
+    ::print("   Could not list files")
 }
 
 // Example 5: Echo message (like Make's @echo)
-print("\n5. Using make.echo (like Makefile @echo)...")
+::print("\n5. Using make.echo (like Makefile @echo)...")
 make.echo("This is a build message!")
 make.echo("Building project...")
 
 // Example 6: Check for a command that doesn't exist
-print("\n6. Checking for a command that doesn't exist...")
-let hasUPX = make.check("upx")
+::print("\n6. Checking for a command that doesn't exist...")
+let hasUPX: bool = make.check("upx")
 if (hasUPX) {
-    print("   ✅ UPX is installed!")
+    ::print("   UPX is installed!")
 } else {
-    print("   ℹ️  UPX is not installed (this is expected)")
+    ::print("   UPX is not installed (this is expected)")
 }
 
-print("\n✅ Make module example completed!")
+::print("\nMake module example completed!")

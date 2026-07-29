@@ -4,18 +4,17 @@ enum Status {
     PENDING = 0,
     ACTIVE = 1,
     COMPLETED = 2
-}
+};
 
-let current = Status.ACTIVE
-print(current)
+let current: Status = Status.ACTIVE;
+::print(current);
 
 // String enum
 enum Color {
     RED = "red",
     GREEN = "green",
     BLUE = "blue"
-}
+};
 
-let myColor = Color.RED
-print(myColor)
-
+let myColor: Color = Color.RED;
+::println(myColor);

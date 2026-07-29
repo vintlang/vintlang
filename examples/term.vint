@@ -2,106 +2,106 @@ import term
 import time
 
 // Display a banner
-let banner = term.banner("Welcome to VintLang Terminal Demo!")
-term.println(banner)
+let banner: string = term.banner("Welcome to VintLang Terminal Demo!");
+term.println(banner);
 
 // Get terminal size
-let size = term.getSize()
-term.println("Terminal size: 80x24 (default)")
+let size: any = term.getSize();
+term.println("Terminal size: 80x24 (default)");
 
 // Create a select menu
-term.println("Select an option:")
-let choice = term.select([
+term.println("Select an option:");
+let choice: string = term.select([
     "Start Game",
     "Show Settings",
     "Exit"
-])
-term.println("You selected: " + choice)
+]);
+term.println("You selected: " + choice);
 
 // Create a checkbox list
-term.println("Select multiple options (enter numbers like '1 3 4'):")
-let selected = term.checkbox([
+term.println("Select multiple options (enter numbers like '1 3 4'):");
+let selected: []string = term.checkbox([
     "Option 1",
-    "Option 2", 
+    "Option 2",
     "Option 3",
     "Option 4"
-])
-term.println("Selected options:")
+]);
+term.println("Selected options:");
 for option in selected {
-    term.println("- " + option)
-}
+    term.println("- " + option);
+};
 
 // Create a radio button list
-term.println("Select one option:")
-let radioChoice = term.radio([
+term.println("Select one option:");
+let radioChoice: string = term.radio([
     "Yes",
-    "No", 
+    "No",
     "Maybe"
-])
-term.println("You selected: " + radioChoice)
+]);
+term.println("You selected: " + radioChoice);
 
 // Get password input
-let password = term.password("Enter your password: ")
-term.println("Password entered (hidden)")
+let password: string = term.password("Enter your password: ");
+term.println("Password entered (hidden)");
 
 // Ask for confirmation
-let confirmed = term.confirm("Do you want to proceed?")
+let confirmed: bool = term.confirm("Do you want to proceed?");
 if (confirmed) {
-    term.success("Proceeding...")
+    term.success("Proceeding...");
 } else {
-    term.error("Operation cancelled")
-}
+    term.error("Operation cancelled");
+};
 
 // Show different types of messages
-term.info("This is an information message")
-term.warning("This is a warning message")
-term.error("This is an error message")
-term.success("This is a success message") 
-term.notify("This is a notification")
+term.info("This is an information message");
+term.warning("This is a warning message");
+term.error("This is an error message");
+term.success("This is a success message");
+term.notify("This is a notification");
 
 // Show a loading spinner
-term.loading("Processing...")
+term.loading("Processing...");
 
 // Create a styled table
-let table = term.table([
+let table: string = term.table([
     ["Feature", "Status"],
     ["Select Menu", "✓"],
-    ["Checkbox", "✓"], 
+    ["Checkbox", "✓"],
     ["Radio Buttons", "✓"],
     ["Password Input", "✓"],
     ["Confirmations", "✓"],
     ["Messages", "✓"]
-])
-term.println(table)
+]);
+term.println(table);
 
 // Show progress indication
-let progress = term.progress(100)
-term.println(progress)
+let progress: string = term.progress(100);
+term.println(progress);
 
 // Create a boxed message
-let message = term.box("Thank you for trying the terminal features!")
-term.println(message)
+let message: string = term.box("Thank you for trying the terminal features!");
+term.println(message);
 
 // Hide cursor, show message, then show cursor
-term.cursor(false)
-term.println("Cursor is hidden")
-term.cursor(true)
+term.cursor(false);
+term.println("Cursor is hidden");
+term.cursor(true);
 
 // Play a beep
-term.beep()
+term.beep();
 
 // Clear screen and show final message
-term.clear()
-let styledMsg = term.style("Demo completed!", {
-    "color": "green", 
+term.clear();
+let styledMsg: string = term.style("Demo completed!", {
+    "color": "green",
     "bold": "true"
-})
-term.println(styledMsg)
+});
+term.println(styledMsg);
 
 // Show some charts
-let data = [10, 20, 30, 40, 50]
-let chart = term.chart(data)
-term.println("Sample chart:")
-term.println(chart)
+let data: []int = [10, 20, 30, 40, 50];
+let chart: string = term.chart(data);
+term.println("Sample chart:");
+term.println(chart);
 
-term.println("Terminal demo completed successfully!")
+term.println("Terminal demo completed successfully!");

@@ -1,3 +1,0 @@
-// File 1 - has syntax errors
-let x = 5
-let y $ 10  // Invalid character $

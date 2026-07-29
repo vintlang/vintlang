@@ -2,42 +2,41 @@
 // Demonstrates built-in string methods and type conversion functions
 
 // Define a variable and assign a string to it
-let name = "Tachera Sasi"
+let name: string = "Tachera Sasi";
 
 // Split the string into an array of characters and print the result
-print(name.split("")) 
+::print(name.split("")); 
 
 // Reverse the string and print the result
-print(name.reverse()) 
+::print(name.reverse()); 
 
 // Get the length of the string and print it
-print(name.len()) 
+::print(name.len()); 
 
 // Convert the string to uppercase and print it
-print(name.upper()) 
+::print(name.upper()); 
 
 // Convert the string to lowercase and print it
-print(name.lower()) 
+::print(name.lower()); 
 
 // Check if the string contains the substring "sasi" (case-sensitive) and print the result
-print(name.contains("sasi")) 
+::print(name.contains("sasi")); 
 
 // Convert the string to uppercase and check if it contains the substring "SASI" (case-sensitive), then print the result
-print(name.upper().contains("SASI")) 
+::print(name.upper().contains("SASI")); 
 
 // Replace the substring "Sasi" with "Vint" and print the result
-print(name.replace("Sasi", "Vint")) 
+::print(name.replace("Sasi", "Vint")); 
 
 // Trim any occurrence of the character "a" from the start and end of the string and print the result
-print(name.trim("a"))
+::print(name.trim("a"));
 
-print(string(123))           // "123"
-print(string(true))          // "true"
-print(string(12.34))         // "12.34"
-print(string("Hello World")) // "Hello World"
+::print(::string(123));           // "123"
+::print(::string(true));          // "true"
+::print(::string(12.34));         // "12.34"
+::print(::string("Hello World")); // "Hello World"
 
-
-print(int("123"))    // 123
-print(int(12.34))    // 12
-print(int(true))     // 1
-print(int(false))    // 0
+::print(::int("123"));    // 123
+::print(::int(12.34));    // 12
+::print(::int(true));     // 1
+::print(::int(false));    // 0

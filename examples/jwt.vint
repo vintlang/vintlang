@@ -1,19 +1,19 @@
 // import jwt
 const jwt = import("jwt") // Both ways work
 
-const secret = "vint-is-so-awaseome"
+const secret: string = "vint-is-so-awaseome"
 // Create a JWT token
-let payload = {"user": "Tachera", "role": "admin"}
-let token = jwt.create(payload, secret)
-info "token is "+ token
+let payload: {string: string} = {"user": "Tachera", "role": "admin"}
+let token: string = jwt.create(payload, secret)
+::info "token is " + token
 
-const decoded = jwt.decode(token)
+const decoded: any = jwt.decode(token)
 
-println("DECODED", decoded)
+::println("DECODED", decoded)
 
 // Verify the token
-let result = jwt.verify(token, secret)
+let result: any = jwt.verify(token, secret)
 if (result) {
-    println("User:", result["user"])
-    println("Role:", result["role"])
+    ::println("User:", result["user"])
+    ::println("Role:", result["role"])
 }

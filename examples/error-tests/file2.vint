@@ -1,3 +1,0 @@
-// File 2 - has different errors  
-let name = "John"
-let age  // Missing value assignment

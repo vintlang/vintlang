@@ -3,66 +3,66 @@
 
 import fmt
 
-println("=== String Formatting (sprintf) ===")
+::println("=== String Formatting (sprintf) ===")
 
 // Basic string interpolation
-let name = "VintLang"
-let version = "1.0"
-let users = 1234
-let intro = fmt.sprintf("Welcome to %s v%s! We have %d active users.", name, version, users)
-println(intro)
+let name: string = "VintLang"
+let version: string = "1.0"
+let users: int = 1234
+let intro: string = fmt.sprintf("Welcome to %s v%s! We have %d active users.", name, version, users)
+::println(intro)
 
 // Float formatting
-let pi = 3.14159265359
-println(fmt.sprintf("Pi to 4 decimal places: %.4f", pi))
-println(fmt.sprintf("Hex: %x, Octal: %o, Binary: %b", 255, 8, 15))
+let pi: float64 = 3.14159265359
+::println(fmt.sprintf("Pi to 4 decimal places: %.4f", pi))
+::println(fmt.sprintf("Hex: %x, Octal: %o, Binary: %b", 255, 8, 15))
 
-println("\n=== Number Formatting ===")
+::println("\n=== Number Formatting ===")
 
-let number = 255
-println("Decimal:", fmt.formatInt(number, 10))
-println("Binary: ", fmt.formatBin(number))
-println("Hex:    ", fmt.formatHex(number))
-println("Octal:  ", fmt.formatOct(number))
+let number: int = 255
+::println("Decimal:", fmt.formatInt(number, 10))
+::println("Binary: ", fmt.formatBin(number))
+::println("Hex:    ", fmt.formatHex(number))
+::println("Octal:  ", fmt.formatOct(number))
 
-println("\nFloat precision:")
-println("pi (2 dec):", fmt.formatFloat(pi, 2))
-println("pi (5 dec):", fmt.formatFloat(pi, 5))
-println("pi (prec 6):", fmt.precision(pi, 6))
+::println("\nFloat precision:")
+::println("pi (2 dec):", fmt.formatFloat(pi, 2))
+::println("pi (5 dec):", fmt.formatFloat(pi, 5))
+::println("pi (prec 6):", fmt.precision(pi, 6))
 
-println("\n=== Text Padding & Alignment ===")
+::println("\n=== Text Padding & Alignment ===")
 
-let items = ["Apple", "Banana", "Fig", "Dragonfruit"]
-let sep = "=" * 40
+let items: []string = ["Apple", "Banana", "Fig", "Dragonfruit"]
+let sep: string = "=" * 40
 
 // Left-aligned (padded right)
-println(sep)
-println("Left-aligned (padded right, width 15):")
+::println(sep)
+::println("Left-aligned (padded right, width 15):")
 for item in items {
-    println("  [" + fmt.padRight(item, 15, ".") + "]")
+    ::println("  [" + fmt.padRight(item, 15, ".") + "]")
 }
 
 // Right-aligned (padded left)
-println("\nRight-aligned (padded left, width 15):")
+::println("\nRight-aligned (padded left, width 15):")
 for item in items {
-    println("  [" + fmt.padLeft(item, 15, ".") + "]")
+    ::println("  [" + fmt.padLeft(item, 15, ".") + "]")
 }
 
 // Centered
-println("\nCentered (width 15):")
+::println("\nCentered (width 15):")
 for item in items {
-    println("  [" + fmt.padCenter(item, 15, "-") + "]")
+    ::println("  [" + fmt.padCenter(item, 15, "-") + "]")
 }
 
-println("\n=== Table Formatting ===")
+::println("\n=== Table Formatting ===")
 
-let header = fmt.sprintf("| %-10s | %8s | %6s |", "Product", "Price", "Stock")
-let border = "-" * len(header)
-println(border)
-println(header)
-println(border)
+let header: string = fmt.sprintf("| %-10s | %8s | %6s |", "Product", "Price", "Stock")
+let border: string = "-" * ::len(header)
+::println(border)
+::println(header)
+::println(border)
 
-let products = [
+let products: [][]string = [
     ["Laptop", "$999.99", "15"],
     ["Mouse", "$25.50", "150"],
     ["Keyboard", "$75.00", "45"],
@@ -70,38 +70,38 @@ let products = [
 ]
 
 for p in products {
-    let row = fmt.sprintf("| %-10s | %8s | %6s |", p[0], p[1], p[2])
-    println(row)
+    let row: string = fmt.sprintf("| %-10s | %8s | %6s |", p[0], p[1], p[2])
+    ::println(row)
 }
-println(border)
+::println(border)
 
-println("\n=== Fixed Width ===")
+::println("\n=== Fixed Width ===")
 
-let titles = ["Short", "Medium Title", "A Very Long Title Here"]
-println("Fixed width (18 chars):")
+let titles: []string = ["Short", "Medium Title", "A Very Long Title Here"]
+::println("Fixed width (18 chars):")
 for title in titles {
-    println("  [" + fmt.width(title, 18) + "]")
+    ::println("  [" + fmt.width(title, 18) + "]")
 }
 
-println("\n=== Report Generation ===")
+::println("\n=== Report Generation ===")
 
-let reportWidth = 40
-let title = "MONTHLY SALES REPORT"
-println("=" * reportWidth)
-println(fmt.padCenter(title, reportWidth))
-println("=" * reportWidth)
+let reportWidth: int = 40
+let reportTitle: string = "MONTHLY SALES REPORT"
+::println("=" * reportWidth)
+::println(fmt.padCenter(reportTitle, reportWidth))
+::println("=" * reportWidth)
 
-let totalSales = 1245.75
-let totalOrders = 28
-let avgOrder = totalSales / totalOrders
+let totalSales: float64 = 1245.75
+let totalOrders: int = 28
+let avgOrder: float64 = totalSales / totalOrders
 
-let salesLine = fmt.sprintf("Total Sales:   $%8.2f", totalSales)
-let ordersLine = fmt.sprintf("Total Orders:  %8d", totalOrders)
-let avgLine    = fmt.sprintf("Avg Per Order: $%8.2f", avgOrder)
+let salesLine: string = fmt.sprintf("Total Sales:   $%8.2f", totalSales)
+let ordersLine: string = fmt.sprintf("Total Orders:  %8d", totalOrders)
+let avgLine: string = fmt.sprintf("Avg Per Order: $%8.2f", avgOrder)
 
-println(salesLine)
-println(ordersLine)
-println(avgLine)
-println("=" * reportWidth)
+::println(salesLine)
+::println(ordersLine)
+::println(avgLine)
+::println("=" * reportWidth)
 
-println("\nAll fmt functions demonstrated successfully!")
+::println("\nAll fmt functions demonstrated successfully!")

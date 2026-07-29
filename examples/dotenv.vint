@@ -15,5 +15,5 @@ import dotenv
 // API_KEY=your_api_key_here
 // DATABASE_URL=your_database_url
 
-println("DotEnv module requires a .env file to be present")
-println("Create a .env file with key=value pairs, then uncomment the code above")
+::println("DotEnv module requires a .env file to be present");
+::println("Create a .env file with key=value pairs, then uncomment the code above");

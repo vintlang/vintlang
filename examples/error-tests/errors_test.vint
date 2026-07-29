@@ -1,3 +1,0 @@
-import "errors"
-
-errors.new("this is a test error") 

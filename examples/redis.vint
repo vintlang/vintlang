@@ -1,19 +1,19 @@
-const redis = import("redis")
+const redis = import("redis");
 
 // Connect to Redis
-conn = redis.connect("localhost:6379")
+let conn: any = redis.connect("localhost:6379");
 
 // Basic operations
-redis.set(conn, "greeting", "Hello, World!")
-message = redis.get(conn, "greeting")
+redis.set(conn, "greeting", "Hello, World!");
+let message: string = redis.get(conn, "greeting");
 
 // Hash operations
-redis.hset(conn, "user:1", "name", "John Doe")
-user = redis.hgetall(conn, "user:1")
+redis.hset(conn, "user:1", "name", "John Doe");
+let user: {string: string} = redis.hgetall(conn, "user:1");
 
 // List operations
-redis.rpush(conn, "tasks", "task1", "task2")
-task = redis.lpop(conn, "tasks")
+redis.rpush(conn, "tasks", "task1", "task2");
+let task: string = redis.lpop(conn, "tasks");
 
 // Close connection
-redis.close(conn)
+redis.close(conn);

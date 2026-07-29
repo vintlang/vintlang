@@ -4,9 +4,9 @@
 import shell
 
 // Execute a shell command and capture the output
-let output = shell.run("echo Hello, Shell!")
-print(output) // Outputs "Hello, Shell!"
+let output: string = shell.run("echo Hello, Shell!");
+::print(output); // Outputs "Hello, Shell!"
 
 // Check if a command exists in the system PATH
-let exists = shell.exists("ls")
-print(exists) // Outputs true if the 'ls' command exists
+let exists: bool = shell.exists("ls");
+::print(exists); // Outputs true if the 'ls' command exists

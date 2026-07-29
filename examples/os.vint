@@ -7,35 +7,35 @@ import os
 // os.exit(1)
  
 // Example 2: Run a shell command and capture output
-let result = os.run("ls -la")
-print(result)
-// print(os.run("go run . vintLang/main.vint"))
+let result: string = os.run("ls -la");
+::print(result);
+// ::print(os.run("go run . vintLang/main.vint"));
 
 // Example 3: Get and set environment variables
 // os.setEnv("API_KEY", "12345")  // Set environment variable
-let api_key = os.getEnv("API_KEY")  // Get environment variable
-print(api_key)
+let api_key: string = os.getEnv("API_KEY");  // Get environment variable
+::print(api_key);
 
 // Example 4: Write and read files
-os.writeFile("example.txt", "Hello, Vint!")
-let content = os.readFile("example.txt")
-print(content)
+os.writeFile("example.txt", "Hello, Vint!");
+let content: string = os.readFile("example.txt");
+::print(content);
 
 // Example 5: List directory contents
-let files = os.listDir(".")
-print(files)
+let files: []string = os.listDir(".");
+::print(files);
 
 // Example 6: Create a directory
-os.makeDir("new_folder")
+os.makeDir("new_folder");
 
 // Example 7: Check if a file exists
-let exists = os.fileExists("example.txt")
-print(exists) // Outputs: true (after writing the file above)
+let exists: bool = os.fileExists("example.txt");
+::print(exists); // Outputs: true (after writing the file above)
 
 // Example 8: Write a file and read it line by line
-os.writeFile("example.txt", "Hello\nWorld")
-let lines = os.readLines("example.txt")
-print(lines) // Outputs: ["Hello", "World"]
+os.writeFile("example.txt", "Hello\nWorld");
+let lines: []string = os.readLines("example.txt");
+::print(lines); // Outputs: ["Hello", "World"]
 
 // Example 9: Delete a file (commented to keep example file)
 // os.deleteFile("example.txt")

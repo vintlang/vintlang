@@ -3,19 +3,19 @@
 
 // Example 1: Using if as a statement (classic approach)
 // The if statement modifies an existing variable
-let x = 0
+let x: int = 0
 if (true) {
     x = 42
 }
-print("Classic if statement result: ", x)
+::print("Classic if statement result: ", x)
 
 // Example 2: Using if as an expression (functional approach)
 // The if expression returns a value that can be assigned
-let status = ""
+let status: string = ""
 status = if (x > 0) { "Online" } else { "Offline" }
-print("If as an expression result: ", status)
+::print("If as an expression result: ", status)
 
 // Example 3: If expression without else clause
 // If the condition is false and there's no else, returns null
-let y = if (false) { 123 }
-print("If as an expression with no else: ", y) 
+let y: any = if (false) { 123 }
+::print("If as an expression with no else: ", y)

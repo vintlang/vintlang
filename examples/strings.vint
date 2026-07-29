@@ -3,57 +3,56 @@
 import string
 
 // Example 1: Trim whitespace
-let result = string.trim("  Hello, World!  ")
-print(result)  // Output: "Hello, World!"
+let result: string = string.trim("  Hello, World!  ");
+::print(result);  // Output: "Hello, World!"
 
 // Example 2: Check if a string contains a substring
-let containsResult = string.contains("Hello, World!", "World")
-print(containsResult)  // Output: true
+let containsResult: bool = string.contains("Hello, World!", "World");
+::print(containsResult);  // Output: true
 
 // Example 3: Convert to uppercase
-let upperResult = string.toUpper("hello")
-print(upperResult)  // Output: "HELLO"
+let upperResult: string = string.toUpper("hello");
+::print(upperResult);  // Output: "HELLO"
 
 // Example 4: Convert to lowercase
-let lowerResult = string.toLower("HELLO")
-print(lowerResult)  // Output: "hello"
+let lowerResult: string = string.toLower("HELLO");
+::print(lowerResult);  // Output: "hello"
 
 // Example 5: Replace a substring
-let replaceResult = string.replace("Hello, World!", "World", "Vint")
-print(replaceResult)  // Output: "Hello, Vint!"
+let replaceResult: string = string.replace("Hello, World!", "World", "Vint");
+::print(replaceResult);  // Output: "Hello, Vint!"
 
 // Example 6: Split string into parts
-let splitResult = string.split("a,b,c,d", ",")
-print(splitResult)  // Output: ["a", "b", "c", "d"]
+let splitResult: []string = string.split("a,b,c,d", ",");
+::print(splitResult);  // Output: ["a", "b", "c", "d"]
 
 // Example 7: Join string parts
-let joinResult = string.join(["a", "b", "c"], "-")
-print(joinResult)  // Output: "a-b-c"
+let joinResult: string = string.join(["a", "b", "c"], "-");
+::print(joinResult);  // Output: "a-b-c"
 
 // Example 8: Get a substring
-let substringResult = string.substring("Hello, World!", 7, 12)
-print(substringResult)  // Output: "World"
+let substringResult: string = string.substring("Hello, World!", 7, 12);
+::print(substringResult);  // Output: "World"
 
 // Example 9: Get the length of a string
-let lengthResult = string.length("Hello")
-print(lengthResult)  // Output: 5
+let lengthResult: int = string.length("Hello");
+::print(lengthResult);  // Output: 5
 
 // Example 10: Find index of a substring
-let indexResult = string.indexOf("Hello, World!", "World")
-print(indexResult)  // Output: 7
+let indexResult: int = string.indexOf("Hello, World!", "World");
+::print(indexResult);  // Output: 7
 
 // Example 11: Get a substring (valid start and end indices)
-result = string.substring("Hello, World!", 0, 5)
-print(result)  // Output: "Hello"
+result = string.substring("Hello, World!", 0, 5);
+::print(result);  // Output: "Hello"
 
 // Example 12: Invalid indices (start >= end)
 // result = string.substring("Hello, World!", 7, 3)
 // print(result)  // Output: Error: Invalid start or end index
 
-//Example 13: Generating a slug
-result = string.slug("Creates a slug string from a normal string")
-print(result)   //Output: string: creates-a-slug-string-from-a-normal-string
-
+// Example 13: Generating a slug
+result = string.slug("Creates a slug string from a normal string");
+::print(result);  // Output: string: creates-a-slug-string-from-a-normal-string
 
 /*
 More methods for this module

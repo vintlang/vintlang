@@ -6,17 +6,17 @@ import crypto
 
 // Example 1: MD5 Hashing
 // MD5 is a cryptographic hash function that produces a 128-bit hash value
-let md5_hash = crypto.hashMD5("Hello, World!")
-print(md5_hash)  // Prints the MD5 hash of "Hello, World!"
+let md5_hash: string = crypto.hashMD5("Hello, World!");
+::print(md5_hash);  // Prints the MD5 hash of "Hello, World!"
 
 // Example 2: AES Encryption and Decryption
 // AES (Advanced Encryption Standard) is a symmetric encryption algorithm
-let key = "mysecretkey12345"  // Encryption key (must be appropriate length for AES)
-let data = "Sensitive data"    // Data to encrypt
-let encrypted = crypto.encryptAES(data, key)  // Encrypt the data
-print(encrypted)
+let key: string = "mysecretkey12345";  // Encryption key (must be appropriate length for AES)
+let data: string = "Sensitive data";    // Data to encrypt
+let encrypted: string = crypto.encryptAES(data, key);  // Encrypt the data
+::print(encrypted);
 
 // Decrypt the encrypted data back to original
-let decrypted = crypto.decryptAES(encrypted, key)
-print(decrypted)  
-print(type(decrypted)) 
+let decrypted: string = crypto.decryptAES(encrypted, key);
+::print(decrypted);
+::println(::type(decrypted));

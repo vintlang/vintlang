@@ -3,79 +3,58 @@
 
 import excel
 
-println("=== Excel Module Demo ===")
+::println("=== Excel Module Demo ===");
 
-// ============================================================
-// 1. Create a new workbook
-// ============================================================
-let wb = excel.create("report.xlsx")
-println("Created workbook: report.xlsx")
+let wb: any = excel.create("report.xlsx");
+::println("Created workbook: report.xlsx");
 
-// ============================================================
-// 2. Set up the first sheet - Sales Data
-// ============================================================
-excel.renameSheet(wb, "Sheet1", "Sales")
-excel.addSheet(wb, "Summary")
+excel.renameSheet(wb, "Sheet1", "Sales");
+excel.addSheet(wb, "Summary");
 
-// Add headers to Sales sheet
-excel.setCell(wb, "Sales", "A1", "Month")
-excel.setCell(wb, "Sales", "B1", "Revenue")
-excel.setCell(wb, "Sales", "C1", "Expenses")
-excel.setCell(wb, "Sales", "D1", "Profit")
+excel.setCell(wb, "Sales", "A1", "Month");
+excel.setCell(wb, "Sales", "B1", "Revenue");
+excel.setCell(wb, "Sales", "C1", "Expenses");
+excel.setCell(wb, "Sales", "D1", "Profit");
 
-// Add monthly data
-let months    = ["Jan", "Feb", "Mar", "Apr", "May", "Jun"]
-let revenues  = [12000, 15000, 18000, 14000, 20000, 22000]
-let expenses  = [8000,  9000,  10000, 8500,  11000, 12000]
+let months: []string = ["Jan", "Feb", "Mar", "Apr", "May", "Jun"];
+let revenues: []int = [12000, 15000, 18000, 14000, 20000, 22000];
+let expenses: []int = [8000, 9000, 10000, 8500, 11000, 12000];
 
-for i in range(len(months)) {
-    let row = string(i + 2)
-    excel.setCell(wb, "Sales", "A" + row, months[i])
-    excel.setCell(wb, "Sales", "B" + row, revenues[i])
-    excel.setCell(wb, "Sales", "C" + row, expenses[i])
-    // Profit formula: Revenue - Expenses
-    excel.setCellFormula(wb, "Sales", "D" + row, "=B" + row + "-C" + row)
-}
+for i in ::range(::len(months)) {
+    let row: string = ::string(i + 2);
+    excel.setCell(wb, "Sales", "A" + row, months[i]);
+    excel.setCell(wb, "Sales", "B" + row, revenues[i]);
+    excel.setCell(wb, "Sales", "C" + row, expenses[i]);
+    excel.setCellFormula(wb, "Sales", "D" + row, "=B" + row + "-C" + row);
+};
 
-println("Added 6 months of sales data with profit formulas")
+::println("Added 6 months of sales data with profit formulas");
 
-// ============================================================
-// 3. Fill in the Summary sheet
-// ============================================================
-excel.setCell(wb, "Summary", "A1", "Metric")
-excel.setCell(wb, "Summary", "B1", "Value")
+excel.setCell(wb, "Summary", "A1", "Metric");
+excel.setCell(wb, "Summary", "B1", "Value");
 
-excel.setCell(wb, "Summary", "A2", "Total Revenue")
-excel.setCellFormula(wb, "Summary", "B2", "=SUM(Sales!B2:B7)")
+excel.setCell(wb, "Summary", "A2", "Total Revenue");
+excel.setCellFormula(wb, "Summary", "B2", "=SUM(Sales!B2:B7)");
 
-excel.setCell(wb, "Summary", "A3", "Total Expenses")
-excel.setCellFormula(wb, "Summary", "B3", "=SUM(Sales!C2:C7)")
+excel.setCell(wb, "Summary", "A3", "Total Expenses");
+excel.setCellFormula(wb, "Summary", "B3", "=SUM(Sales!C2:C7)");
 
-excel.setCell(wb, "Summary", "A4", "Total Profit")
-excel.setCellFormula(wb, "Summary", "B4", "=B2-B3")
+excel.setCell(wb, "Summary", "A4", "Total Profit");
+excel.setCellFormula(wb, "Summary", "B4", "=B2-B3");
 
-println("Created summary sheet with totals")
+::println("Created summary sheet with totals");
 
-// ============================================================
-// 4. Merge cells for a title
-// ============================================================
-excel.mergeCells(wb, "Summary", "A1:B1")
-excel.setCell(wb, "Summary", "A1", "H1 2024 FINANCIAL SUMMARY")
+excel.mergeCells(wb, "Summary", "A1:B1");
+excel.setCell(wb, "Summary", "A1", "H1 2024 FINANCIAL SUMMARY");
 
-// ============================================================
-// 5. Save the workbook
-// ============================================================
-excel.save(wb)
-println("Saved to report.xlsx")
+excel.save(wb);
+::println("Saved to report.xlsx");
 
-// ============================================================
-// 6. Read back data to verify
-// ============================================================
-let jan = excel.getCell(wb, "Sales", "A2")
-let jan_rev = excel.getCell(wb, "Sales", "B2")
-let jan_exp = excel.getCell(wb, "Sales", "C2")
-println("\nVerification - " + jan + ": Revenue=" + string(jan_rev) + " Expenses=" + string(jan_exp))
+let jan: string = excel.getCell(wb, "Sales", "A2");
+let jan_rev: any = excel.getCell(wb, "Sales", "B2");
+let jan_exp: any = excel.getCell(wb, "Sales", "C2");
+::println("\nVerification - " + jan + ": Revenue=" + ::string(jan_rev) + " Expenses=" + ::string(jan_exp));
 
-excel.close(wb)
-println("\nDone! Excel demo complete.")
-println("File 'report.xlsx' created with Sales and Summary sheets.")
+excel.close(wb);
+::println("\nDone! Excel demo complete.");
+::println("File 'report.xlsx' created with Sales and Summary sheets.");

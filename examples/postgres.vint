@@ -7,40 +7,40 @@ import postgres
 // The connection string should be in the format: "user=youruser password=yourpassword dbname=yourdbname sslmode=disable"
 
 // Example 1: Open a PostgreSQL database connection
-const conn = postgres.open("user=postgres password=password dbname=testdb sslmode=disable")
+const conn = postgres.open("user=postgres password=password dbname=testdb sslmode=disable");
 
-if (type(conn) == "ERROR") {
-    error "Error connecting to PostgreSQL: " + str(conn)
+if (::type(conn) == "ERROR") {
+    ::error "Error connecting to PostgreSQL: " + ::str(conn)
 } else {
-    info "Successfully connected to PostgreSQL"
+    ::info "Successfully connected to PostgreSQL";
 
     // Example 2: Create a table
     // Creates a users table with auto-incrementing SERIAL id
-    let create_table_query = "CREATE TABLE IF NOT EXISTS users (id SERIAL PRIMARY KEY, name VARCHAR(255), age INT)"
-    let err = postgres.execute(conn, create_table_query)
+    let create_table_query: string = "CREATE TABLE IF NOT EXISTS users (id SERIAL PRIMARY KEY, name VARCHAR(255), age INT)";
+    let err: any = postgres.execute(conn, create_table_query);
     if (err != null) {
-        print("Error creating table:", err)
-    }
+        ::print("Error creating table:", err);
+    };
 
     // Example 3: Insert data into the table
     // PostgreSQL uses $1, $2 instead of ? for placeholders
-    let insert_query = "INSERT INTO users (name, age) VALUES ($1, $2)"
-    postgres.execute(conn, insert_query, "Alice", 25)
-    postgres.execute(conn, insert_query, "Bob", 30)
+    let insert_query: string = "INSERT INTO users (name, age) VALUES ($1, $2)";
+    postgres.execute(conn, insert_query, "Alice", 25);
+    postgres.execute(conn, insert_query, "Bob", 30);
 
     // Example 4: Fetch all rows from the table
-    print("\n=== All Users ===")
-    let fetch_all_query = "SELECT * FROM users"
-    let users = postgres.fetchAll(conn, fetch_all_query)
-    print(users)
+    ::print("\n=== All Users ===");
+    let fetch_all_query: string = "SELECT * FROM users";
+    let users: any = postgres.fetchAll(conn, fetch_all_query);
+    ::print(users);
 
     // Example 5: Fetch a single row
-    print("\n=== First User ===")
-    let fetch_one_query = "SELECT * FROM users LIMIT 1"
-    let first_user = postgres.fetchOne(conn, fetch_one_query)
-    print(first_user)
+    ::print("\n=== First User ===");
+    let fetch_one_query: string = "SELECT * FROM users LIMIT 1";
+    let first_user: any = postgres.fetchOne(conn, fetch_one_query);
+    ::print(first_user);
 
     // Example 6: Close the connection
-    postgres.close(conn)
-    print("\nConnection closed")
-} 
+    postgres.close(conn);
+    ::print("\nConnection closed");
+};

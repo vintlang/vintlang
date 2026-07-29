@@ -5,10 +5,10 @@ import encoding
 
 // Example 1: Base64 Encoding
 // Encode a string to base64 format
-let encoded = encoding.base64Encode("Hello, World!")
-print(encoded) // Outputs "SGVsbG8sIFdvcmxkIQ=="
+let encoded: string = encoding.base64Encode("Hello, World!");
+::print(encoded); // Outputs "SGVsbG8sIFdvcmxkIQ=="
 
 // Example 2: Base64 Decoding
 // Decode a base64 string back to original text
-let decoded = encoding.base64Decode(encoded)
-print(decoded) // Outputs "Hello, World!"
+let decoded: string = encoding.base64Decode(encoded);
+::print(decoded); // Outputs "Hello, World!"

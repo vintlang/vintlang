@@ -7,52 +7,52 @@
 
 import regex
 
-println("=== Pattern Matching ===")
+::println("=== Pattern Matching ===");
 
 // Check if a string contains digits
-println("Contains digits:", regex.test("\\d+", "hello123"))         // true
-println("Contains digits:", regex.test("\\d+", "helloworld"))       // false
+::println("Contains digits:", regex.test("\\d+", "hello123"));         // true
+::println("Contains digits:", regex.test("\\d+", "helloworld"));       // false
 
 // Validate an email address
-let email = "user@example.com"
-let emailPattern = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$"
-println("Valid email:", regex.test(emailPattern, email))             // true
-println("Valid email:", regex.test(emailPattern, "notanemail"))      // false
+let email: string = "user@example.com";
+let emailPattern: string = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$";
+::println("Valid email:", regex.test(emailPattern, email));             // true
+::println("Valid email:", regex.test(emailPattern, "notanemail"));      // false
 
 // Match a URL
-let url = "https://vintlang.org/docs"
-println("Is URL:", regex.test("^https?://", url))                   // true
+let url: string = "https://vintlang.org/docs";
+::println("Is URL:", regex.test("^https?://", url));                   // true
 
-println("\n=== Text Replacement ===")
+::println("\n=== Text Replacement ===");
 
 // Mask digits with *
-let phone = "Call me at 123-456-7890 or 555-0000"
-let masked = regex.replaceString("\\d", "*", phone)
-println("Masked:", masked)
+let phone: string = "Call me at 123-456-7890 or 555-0000";
+let masked: string = regex.replaceString("\\d", "*", phone);
+::println("Masked:", masked);
 
 // Remove extra whitespace
-let messy = "hello    world   from   vint"
-let clean = regex.replaceString("\\s+", " ", messy)
-println("Cleaned:", clean)
+let messy: string = "hello    world   from   vint";
+let clean: string = regex.replaceString("\\s+", " ", messy);
+::println("Cleaned:", clean);
 
 // Replace URLs with [link]
-let text = "Visit https://vintlang.org and http://example.com today"
-let replaced = regex.replaceString("https?://[^\\s]+", "[link]", text)
-println("Replaced URLs:", replaced)
+let text: string = "Visit https://vintlang.org and http://example.com today";
+let replaced: string = regex.replaceString("https?://[^\\s]+", "[link]", text);
+::println("Replaced URLs:", replaced);
 
-println("\n=== String Splitting ===")
+::println("\n=== String Splitting ===");
 
 // Split by comma (CSV-like)
-let csv = "alice,bob,charlie,diana"
-let names = regex.splitString(",", csv)
-println("CSV split:", names)
+let csv: string = "alice,bob,charlie,diana";
+let names: []string = regex.splitString(",", csv);
+::println("CSV split:", names);
 
 // Split by whitespace
-let sentence = "The quick   brown  fox"
-let words = regex.splitString("\\s+", sentence)
-println("Word split:", words)
+let sentence: string = "The quick   brown  fox";
+let words: []string = regex.splitString("\\s+", sentence);
+::println("Word split:", words);
 
 // Split by punctuation
-let code = "if(x>0){return x}"
-let tokens = regex.splitString("[(){}]", code)
-println("Code tokens:", tokens)
+let code: string = "if(x>0){return x}";
+let tokens: []string = regex.splitString("[(){}]", code);
+::println("Code tokens:", tokens);

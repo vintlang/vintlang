@@ -1,26 +1,22 @@
 import math, random
 
-// greet("Tach")
-
 // Guessing game in Vint
-let guess = input("Guess a number: ")
-guess = int(guess) // You can also use convert(guess, "INTEGER") to convert the guess input to an integer
+let guess: int = ::int(::input("Guess a number: "))
 
-let number = random.int(1, 10)
+let number: int = random.int(1, 10)
 while (number != guess) {
     // Check if the guess is correct
     if (number == guess) {
-        println("Woo hoo you've guessed it right!")
+        ::println("Woo hoo you've guessed it right!")
         break
-    }else if(number > guess){
-        println("Too small")
-    }else{
-        println("Too big")
+    } else if (number > guess) {
+        ::println("Too small")
+    } else {
+        ::println("Too big")
     }
 
     // Prompt for a new guess if incorrect
-    guess = input("Guess Again: ")
-    guess = int(guess) // Converting the guess input to an integer
+    guess = ::int(::input("Guess Again: "))
 }
-println("Woo hoo you've guessed it right")
-println("Game over!")
+::println("Woo hoo you've guessed it right")
+::println("Game over!")

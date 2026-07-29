@@ -21,7 +21,7 @@ vint examples/<filename>.vint
 | `closures.vint` | Closures, function factories, map/filter/reduce, memoization |
 | `overloading.vint` | Function overloading by arity (number of arguments) |
 | `if_expression.vint` | if as statement and as expression |
-| `switch.vint` | Switch-case control flow |
+| `switch.vint` | Switch-case control flow (typed) |
 | `for_loops.vint` | for, while, repeat loops; break and continue |
 | `repeat-keyword.vint` | The repeat loop |
 | `logicals.vint` | Logical operators: and, or, not |
@@ -34,11 +34,11 @@ vint examples/<filename>.vint
 |------|-------------|
 | `arrays.vint` | Array creation, slicing, sorting, searching, iteration |
 | `dictionaries.vint` | Dict creation, access, iteration, has_key, nested dicts |
-| `strings.vint` | String module: trim, split, join, replace, etc. |
+| `strings.vint` | String module: trim, split, join, replace, etc. (typed) |
 | `nativeStrings.vint` | Native string methods: .upper(), .split(), .replace(), etc. |
 | `json.vint` | JSON encode, decode, pretty-print, merge |
 | `enum_demo.vint` | Enum types with integer and string values |
-| `structs.vint` | Struct definitions with fields and methods |
+| `structs.vint` | Struct definitions with typed fields and methods |
 
 ### Pattern Matching
 
@@ -53,9 +53,9 @@ vint examples/<filename>.vint
 |------|-------------|
 | `math_extensions.vint` | Statistics, complex numbers, linear algebra, GCD/LCM |
 | `random.vint` | Random integers, floats, strings, choices |
-| `time.vint` | Current time, formatting, arithmetic, sleep |
+| `time.vint` | Current time, formatting, arithmetic, sleep (typed) |
 | `encoding.vint` | Base64 encode and decode |
-| `uuid.vint` | UUID generation |
+| `uuid.vint` | UUID generation (typed) |
 | `regex.vint` | Pattern matching, text replacement, splitting |
 | `colors.vint` | RGB to hex color conversion |
 | `reflect.vint` | Runtime type inspection |
@@ -74,7 +74,7 @@ vint examples/<filename>.vint
 | `os.vint` | File I/O, directory listing, environment variables |
 | `path.vint` | File path manipulation: join, basename, dirname, ext |
 | `shell.vint` | Run shell commands from VintLang |
-| `sysinfo.vint` | OS, CPU, memory, disk, network information |
+| `sysinfo.vint` | OS, CPU, memory, disk, network information (typed) |
 | `make_example.vint` | Build automation with the make module |
 | `dotenv.vint` | Load environment variables from a .env file |
 
@@ -102,7 +102,7 @@ vint examples/<filename>.vint
 
 | File | Description |
 |------|-------------|
-| `sqlite.vint` | SQLite: create, insert, fetch, update |
+| `sqlite.vint` | SQLite: create, insert, fetch, update (typed) |
 | `mysql.vint` | MySQL database operations *(requires MySQL server)* |
 | `postgres.vint` | PostgreSQL database operations *(requires PostgreSQL server)* |
 | `redis.vint` | Redis key-value operations *(requires Redis server)* |
@@ -115,34 +115,34 @@ vint examples/<filename>.vint
 | `backend_demo.vint` | HTTP backend with routes, middleware, interceptors |
 | `complete_backend_app.vint` | Full REST API backend definition |
 | `express_like_server.vint` | Express-like HTTP server with routes |
-| `web_fetcher.vint` | HTTP GET requests and JSON parsing *(requires network)* |
+| `web_fetcher.vint` | HTTP GET requests and JSON parsing *(requires network)* (typed) |
 | `github-profile.vint` | Profile view counter via HTTP *(requires network)* |
-| `vintSocket.vint` | WebSocket server and client |
+| `vintSocket.vint` | WebSocket server and client (typed) |
 
 ### Visualization
 
 | File | Description |
 |------|-------------|
-| `vintChart.vint` | Bar chart, pie chart, line graph generation |
+| `vintChart.vint` | Bar chart, pie chart, line graph generation (typed) |
 
 ### Modules & Packages
 
 | File | Description |
 |------|-------------|
-| `greetings_module.vint` | Package definition with functions |
+| `greetings_module.vint` | Package definition with typed functions |
 
 ### CLI Applications
 
 | File | Description |
 |------|-------------|
-| `cli-todo.vint` | Todo list CLI with add/list commands |
+| `cli-todo.vint` | Todo list CLI with add/list commands (typed) |
 | `cli.vint` | CLI argument parsing with the cli module |
 
 ### Terminal UI
 
 | File | Description |
 |------|-------------|
-| `term.vint` | Terminal banners, menus, and prompts |
+| `term.vint` | Terminal banners, menus, and prompts (typed) |
 
 ### AI / LLM
 
@@ -156,6 +156,26 @@ vint examples/<filename>.vint
 |------|-------------|
 | `guessingGame.vint` | Number guessing game *(interactive)* |
 | `simplegame.vint` | Text adventure with save/load *(interactive)* |
+
+### Typed Examples (Type System Preview)
+
+| File | Description |
+|------|-------------|
+| `typed/01_basics.vint` | Typed variable declarations and constants |
+| `typed/02_numbers.vint` | Numeric types and operations |
+| `typed/03_strings.vint` | String type annotations |
+| `typed/04_arrays.vint` | Array type annotations |
+| `typed/05_dicts.vint` | Dict type annotations |
+| `typed/06_pointers.vint` | Pointer type annotations |
+| `typed/07_functions.vint` | Typed function signatures |
+| `typed/08_structs.vint` | Typed struct definitions and methods |
+| `typed/09_enums.vint` | Typed enum definitions |
+| `typed/10_channels.vint` | Channel type annotations |
+| `typed/11_errors.vint` | Error handling with types |
+| `typed/12_any.vint` | The any type |
+| `typed/17_constants.vint` | Typed constants |
+| `typed/18_zero_values.vint` | Zero value initialization |
+| `typed/99_showcase_v2.vint` | Full type system showcase |
 
 ---
 
@@ -176,12 +196,12 @@ Some examples require external resources and will not run without them:
 
 ## 🎯 Learning Path
 
-1. **Start here**: `builtins.vint`, `functions.vint`, `if_expression.vint`
+1. **Start here**: `builtins.vint`, `functions.vint`, `if_expression.vint`, `typed/01_basics.vint`
 2. **Control flow**: `for_loops.vint`, `switch.vint`, `repeat-keyword.vint`
 3. **Data structures**: `arrays.vint`, `dictionaries.vint`, `strings.vint`
-4. **Functions**: `closures.vint`, `overloading.vint`
+4. **Functions**: `closures.vint`, `overloading.vint`, `typed/07_functions.vint`
 5. **Pattern matching**: `pattern_matching.vint`
-6. **OOP-style**: `structs.vint`, `enum_demo.vint`
+6. **OOP-style**: `structs.vint`, `enum_demo.vint`, `typed/08_structs.vint`
 7. **Modules**: `math_extensions.vint`, `time.vint`, `regex.vint`
 8. **System**: `os.vint`, `shell.vint`, `sysinfo.vint`
 9. **Concurrency**: `concurrency.vint`

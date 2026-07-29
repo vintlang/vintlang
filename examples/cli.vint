@@ -1,30 +1,30 @@
 import cli
 
 // Get all command-line arguments
-let args = cli.getArgs()
+let args: []string = cli.getArgs();
 
 // Parse flags
-let flags = cli.getFlags()
+let flags: {string: bool} = cli.getFlags();
 if (flags["verbose"]) {
-    print("Verbose mode enabled")
-}
+    ::print("Verbose mode enabled");
+};
 
 // Get a specific argument value
-let output = cli.getArgValue("output")
+let output: any = cli.getArgValue("output");
 if (output != null) {
-    print("Output file:", output)
-}
+    ::print("Output file:", output);
+};
 
 // Prompt for user input
-let name = cli.prompt("Enter your name: ")
-print("Hello,", name)
+let name: string = cli.prompt("Enter your name: ");
+::print("Hello,", name);
 
 // Confirm an action
 if (cli.confirm("Do you want to proceed?")) {
     // Execute a command
-    let result = cli.execCommand("ls -l")
-    print(result)
-}
+    let result: string = cli.execCommand("ls -l");
+    ::print(result);
+};
 
 // Exit with status code
-cli.cliExit(0)
+cli.cliExit(0);

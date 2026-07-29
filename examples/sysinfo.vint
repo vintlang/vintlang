@@ -1,47 +1,47 @@
 import sysinfo
 
-println("=== Vint System Information Module Demo ===")
-println("")
+::println("=== Vint System Information Module Demo ===");
+::println("");
 
 // Basic system information
-println("1. Basic System Info:")
-println("   Operating System:", sysinfo.os())
-println("   Architecture:", sysinfo.arch())
-println("")
+::println("1. Basic System Info:");
+::println("   Operating System:", sysinfo.os());
+::println("   Architecture:", sysinfo.arch());
+::println("");
 
 // Memory information
-println("2. Memory Information:")
-let memory = sysinfo.memInfo()
-println("   Total Memory:", memory["total"])
-println("   Available Memory:", memory["available"])
-println("   Used Memory:", memory["used"])
-println("   Free Memory:", memory["free"])
-println("   Usage Percentage:", memory["percent"] + "%")
-println("")
+::println("2. Memory Information:");
+let memory: {string: any} = sysinfo.memInfo();
+::println("   Total Memory:", memory["total"]);
+::println("   Available Memory:", memory["available"]);
+::println("   Used Memory:", memory["used"]);
+::println("   Free Memory:", memory["free"]);
+::println("   Usage Percentage:", memory["percent"] + "%");
+::println("");
 
 // CPU information
-println("3. CPU Information:")
-let cpu = sysinfo.cpuInfo()
-println("   CPU Model:", cpu["model"])
-println("   CPU Cores:", cpu["cores"])
-println("   CPU Frequency:", cpu["frequency"])
-println("   CPU Usage:", cpu["usage"] + "%")
-println("")
+::println("3. CPU Information:");
+let cpu: {string: any} = sysinfo.cpuInfo();
+::println("   CPU Model:", cpu["model"]);
+::println("   CPU Cores:", cpu["cores"]);
+::println("   CPU Frequency:", cpu["frequency"]);
+::println("   CPU Usage:", cpu["usage"] + "%");
+::println("");
 
 // Disk information
-println("4. Disk Information:")
-let disk = sysinfo.diskInfo()
-println("   Total Disk Space:", disk["total"])
-println("   Used Disk Space:", disk["used"])
-println("   Free Disk Space:", disk["free"])
-println("   Disk Usage:", disk["percent"] + "%")
-println("")
+::println("4. Disk Information:");
+let disk: {string: any} = sysinfo.diskInfo();
+::println("   Total Disk Space:", disk["total"]);
+::println("   Used Disk Space:", disk["used"]);
+::println("   Free Disk Space:", disk["free"]);
+::println("   Disk Usage:", disk["percent"] + "%");
+::println("");
 
 // Network interfaces
-println("5. Network Interfaces:")
-let interfaces = sysinfo.netInfo()
-println("   Number of interfaces:", len(interfaces))
-println("   Example interface data:", interfaces)
-println("")
+::println("5. Network Interfaces:");
+let interfaces: []any = sysinfo.netInfo();
+::println("   Number of interfaces:", ::len(interfaces));
+::println("   Example interface data:", interfaces);
+::println("");
 
-println("=== Complete! All sysinfo functions working ===")
+::println("=== Complete! All sysinfo functions working ===");

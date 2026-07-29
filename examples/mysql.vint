@@ -7,40 +7,40 @@ import mysql
 // The connection string should be in the format: "user:password@tcp(127.0.0.1:3306)/dbname"
 
 // Example 1: Open a MySQL database connection
-let conn = mysql.open("user:password@tcp(127.0.0.1:3306)/testdb")
+let conn: any = mysql.open("user:password@tcp(127.0.0.1:3306)/testdb")
 
-if (type(conn) == "ERROR") {
-    print("Error connecting to MySQL:", conn)
+if (::type(conn) == "ERROR") {
+    ::print("Error connecting to MySQL:", conn)
 } else {
-    print("Successfully connected to MySQL")
+    ::print("Successfully connected to MySQL")
 
     // Example 2: Create a table
     // Creates a users table with auto-incrementing id
-    let create_table_query = "CREATE TABLE IF NOT EXISTS users (id INT AUTO_INCREMENT PRIMARY KEY, name VARCHAR(255), age INT)"
-    let err = mysql.execute(conn, create_table_query)
+    let create_table_query: string = "CREATE TABLE IF NOT EXISTS users (id INT AUTO_INCREMENT PRIMARY KEY, name VARCHAR(255), age INT)"
+    let err: any = mysql.execute(conn, create_table_query)
     if (err != null) {
-        print("Error creating table:", err)
+        ::print("Error creating table:", err)
     }
 
     // Example 3: Insert data into the table
     // Uses prepared statements with ? placeholders
-    let insert_query = "INSERT INTO users (name, age) VALUES (?, ?)"
+    let insert_query: string = "INSERT INTO users (name, age) VALUES (?, ?)"
     mysql.execute(conn, insert_query, "Alice", 25)
     mysql.execute(conn, insert_query, "Bob", 30)
 
     // Example 4: Fetch all rows from the table
-    print("\n=== All Users ===")
-    let fetch_all_query = "SELECT * FROM users"
-    let users = mysql.fetchAll(conn, fetch_all_query)
-    print(users)
+    ::print("\n=== All Users ===")
+    let fetch_all_query: string = "SELECT * FROM users"
+    let users: any = mysql.fetchAll(conn, fetch_all_query)
+    ::print(users)
 
     // Example 5: Fetch a single row
-    print("\n=== First User ===")
-    let fetch_one_query = "SELECT * FROM users LIMIT 1"
-    let first_user = mysql.fetchOne(conn, fetch_one_query)
-    print(first_user)
+    ::print("\n=== First User ===")
+    let fetch_one_query: string = "SELECT * FROM users LIMIT 1"
+    let first_user: any = mysql.fetchOne(conn, fetch_one_query)
+    ::print(first_user)
 
     // Example 6: Close the connection
     mysql.close(conn)
-    print("\nConnection closed")
-} 
+    ::print("\nConnection closed")
+}
