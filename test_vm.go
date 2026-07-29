@@ -3,10 +3,10 @@ package main
 // import (
 // 	"fmt"
 
-// 	"github.com/vintlang/vintlang/compiler"
-// 	"github.com/vintlang/vintlang/lexer"
-// 	"github.com/vintlang/vintlang/parser"
-// 	"github.com/vintlang/vintlang/vm"
+// 	"github.com/vintlang/vintlang/internal/compiler"
+// 	"github.com/vintlang/vintlang/internal/lexer"
+// 	"github.com/vintlang/vintlang/internal/parser"
+// 	"github.com/vintlang/vintlang/internal/vm"
 // )
 
 // func main() {
