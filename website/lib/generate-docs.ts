@@ -91,7 +91,7 @@ function formatTitle(title: string): string {
  * Generates the docs registry from markdown files
  */
 export async function generateDocsRegistry(): Promise<DocItem[]> {
-  const docsDir = path.join(process.cwd(), "..", "docs");
+  const docsDir = path.join(process.cwd(), "..", "internal", "docs");
 
   try {
     const files = fs.readdirSync(docsDir);
