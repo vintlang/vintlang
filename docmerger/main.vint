@@ -12,7 +12,7 @@ let collectFiles = func(dir, ext) {
     return os.listFiles(dir).filter(func(f) { 
         return f.endsWith(ext) 
     })
-}
+} 
 
 // Build merged content from a list of files
 let mergeFiles = func(dir, files, title, codeBlock) {

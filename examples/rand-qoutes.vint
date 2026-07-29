@@ -1,0 +1,3 @@
+let main = func(){
+  ::println("CLI Random qoutes generator")
+}

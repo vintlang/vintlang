@@ -8,7 +8,7 @@
 
 ### Static Type System
 
-```vint
+```js
 // Explicit type annotations
 let name: string = "VintLang"
 let count: int = 42
@@ -45,7 +45,7 @@ if (x is string) {    // type check
 
 ### `::` Builtin Function Prefix
 
-```vint
+```ts
 ::println("hello")        // explicit builtin call
 ::len("hello")            // → 5
 ::type(42)                // → "INTEGER"
