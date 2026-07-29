@@ -8,7 +8,7 @@ const DOCS_OUTPUT = "merged-doc.md"
 const EXAMPLES_OUTPUT = "merged-examples.md"
 
 // Collect files matching an extension from a directory
-let collectFiles = func(dir: string, ext: string) {
+let collectFiles = func(dir, ext) {
     return os.listFiles(dir).filter(func(f) { 
         return f.endsWith(ext) 
     })
