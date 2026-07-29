@@ -7,4 +7,4 @@ import colors
 // RGB values range from 0-255
 // (255, 255, 255) represents white color
 let hex: string = colors.rgbToHex(255, 255, 255);
-::print(hex); // Outputs "#FFFFFF"
+::println(hex); // Outputs "#FFFFFF"
