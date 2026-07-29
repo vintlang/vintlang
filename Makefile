@@ -15,12 +15,12 @@ CGO_ENABLED ?= 0
 
 # ── Development ───────────────────────────────────────────────────────────────
 build: deps
-	go run counter.go > toolkit/count.txt
+	go run counter.go > internal/toolkit/count.txt
 	CGO_ENABLED=0 go build -ldflags "$(LDFLAGS)" -o $(APP_NAME) .
 
 # ── Cross-platform builds (all) ──────────────────────────────────────────────
 build-all: deps
-	go run counter.go > toolkit/count.txt
+	go run counter.go > internal/toolkit/count.txt
 	@echo "==> Building for all platforms ($(VERSION))..."
 	mkdir -p $(BUILD_DIR)
 	# macOS Apple Silicon (M1/M2/M3/M4)

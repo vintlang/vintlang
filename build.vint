@@ -64,7 +64,7 @@ let tasks = {
     "build": func() {
         tasks["deps"]()
         echo("Building local binary...")
-        make.exec("go run counter.go > toolkit/count.txt")
+        make.exec("go run counter.go > internal/toolkit/count.txt")
         make.env("CGO_ENABLED", "0")
         make.exec("go build -ldflags=\"" + LDFLAGS + "\" -o " + APP_NAME + " .")
         echo("✅ Build complete: ./" + APP_NAME)
@@ -73,7 +73,7 @@ let tasks = {
     // ── build-all (every platform + packaging) ──────────────────────────
     "build-all": func() {
         tasks["deps"]()
-        make.exec("go run counter.go > toolkit/count.txt")
+        make.exec("go run counter.go > internal/toolkit/count.txt")
         echo("Building for all platforms (" + VERSION + ")...")
         make.exec("mkdir -p " + BUILD_DIR)
 

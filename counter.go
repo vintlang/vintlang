@@ -1,3 +1,4 @@
+//go:build ignore
 // +build ignore
 
 package main
@@ -50,13 +51,12 @@ func main() {
 
 		return nil
 	})
-
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Error walking directory: %v\n", err)
 		os.Exit(1)
 	}
 
-	counterTXTFile, err := os.OpenFile("toolkit/count.txt", os.O_WRONLY|os.O_CREATE|os.O_TRUNC, 0644)
+	counterTXTFile, err := os.OpenFile("internal/toolkit/count.txt", os.O_WRONLY|os.O_CREATE|os.O_TRUNC, 0644)
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Error opening count.txt: %v\n", err)
 		os.Exit(1)
