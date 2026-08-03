@@ -239,8 +239,8 @@ func runWithTrace(file string, outputFile string) {
 
 	// Header
 	trace.WriteString("=== VINT TRACE OUTPUT ===\n")
-	trace.WriteString(fmt.Sprintf("File: %s\n", file))
-	trace.WriteString(fmt.Sprintf("Date: %s\n", time.Now().Format(time.RFC3339)))
+	fmt.Fprintf(&trace, "File: %s\n", file)
+	fmt.Fprintf(&trace, "Date: %s\n", time.Now().Format(time.RFC3339))
 	trace.WriteString("\n")
 
 	// Stage 1: Source Code
@@ -258,8 +258,8 @@ func runWithTrace(file string, outputFile string) {
 	for i := 1; ; i++ {
 		tok := l.NextToken()
 		tokens = append(tokens, tok)
-		trace.WriteString(fmt.Sprintf("  Token[%d]: Type=%-14s Literal=%-20q Line=%d Col=%d\n",
-			i, tok.Type, tok.Literal, tok.Line, tok.Column))
+		fmt.Fprintf(&trace, "  Token[%d]: Type=%-14s Literal=%-20q Line=%d Col=%d\n",
+			i, tok.Type, tok.Literal, tok.Line, tok.Column)
 		if tok.Type == token.EOF {
 			break
 		}
@@ -267,12 +267,12 @@ func runWithTrace(file string, outputFile string) {
 
 	lexerErrors := l.Errors()
 	if len(lexerErrors) > 0 {
-		trace.WriteString(fmt.Sprintf("\nLexer Errors (%d):\n", len(lexerErrors)))
+		fmt.Fprintf(&trace, "\nLexer Errors (%d):\n", len(lexerErrors))
 		for _, msg := range lexerErrors {
-			trace.WriteString(fmt.Sprintf("  - %s\n", msg))
+			fmt.Fprintf(&trace, "  - %s\n", msg)
 		}
 	} else {
-		trace.WriteString(fmt.Sprintf("\nTokens: %d (including EOF)\n", len(tokens)))
+		fmt.Fprintf(&trace, "\nTokens: %d (including EOF)\n", len(tokens))
 		trace.WriteString("Lexer Errors: None\n")
 	}
 	trace.WriteString("\n")
@@ -285,15 +285,15 @@ func runWithTrace(file string, outputFile string) {
 
 	parserErrors := p.Errors()
 	if len(parserErrors) > 0 {
-		trace.WriteString(fmt.Sprintf("Parser Errors (%d):\n", len(parserErrors)))
+		fmt.Fprintf(&trace, "Parser Errors (%d):\n", len(parserErrors))
 		for _, msg := range parserErrors {
-			trace.WriteString(fmt.Sprintf("  - %s\n", msg))
+			fmt.Fprintf(&trace, "  - %s\n", msg)
 		}
 	} else {
 		trace.WriteString("Parser Errors: None\n")
 	}
 
-	trace.WriteString(fmt.Sprintf("Statements: %d\n", len(program.Statements)))
+	fmt.Fprintf(&trace, "Statements: %d\n", len(program.Statements))
 	trace.WriteString("\nAST:\n")
 	astStr := program.String()
 	trace.WriteString(astStr)
@@ -317,11 +317,11 @@ func runWithTrace(file string, outputFile string) {
 		evaluated := evaluator.Eval(program, env)
 
 		if evaluated != nil {
-			trace.WriteString(fmt.Sprintf("Result Type: %s\n", evaluated.Type()))
+			fmt.Fprintf(&trace, "Result Type: %s\n", evaluated.Type())
 			if errObj, ok := evaluated.(*object.Error); ok {
-				trace.WriteString(fmt.Sprintf("Error: %s\n", errObj.Message))
+				fmt.Fprintf(&trace, "Error: %s\n", errObj.Message)
 			} else if evaluated.Type() != object.NULL_OBJ {
-				trace.WriteString(fmt.Sprintf("Result Value: %s\n", evaluated.Inspect()))
+				fmt.Fprintf(&trace, "Result Value: %s\n", evaluated.Inspect())
 			} else {
 				trace.WriteString("Result Value: null\n")
 			}
