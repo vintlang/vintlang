@@ -535,15 +535,18 @@ func nativeBoolToBooleanObject(input bool) *object.Boolean {
 }
 
 func isTruthy(obj object.VintObject) bool {
-	switch obj {
-	case NULL:
+	// Use type assertion + value comparison to handle booleans
+	// from any source (literals, builtins, modules, functions).
+	if obj == nil {
 		return false
-	case TRUE:
-		return true
-	case FALSE:
+	}
+	switch val := obj.(type) {
+	case *object.Null:
 		return false
+	case *object.Boolean:
+		return val.Value
 	default:
-		return true
+		return obj != NULL && obj != FALSE
 	}
 }
 
