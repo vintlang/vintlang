@@ -205,83 +205,103 @@ type VintConfig struct {
 	Description string `json:"description"`
 }
 
-const sampleReadme = `# Simple VintLang Starter
+const sampleReadme = `# VintLang Starter
 
-This is a minimal VintLang project using built-in modules and a custom package.
+A modern VintLang project using typed declarations, :: builtin prefix, and a custom package.
+
+## Run
+
+` + "```" + `bash
+vint main.vint
+` + "```" + `
+
+## Structure
+
+- ` + "`main.vint`" + ` — entry point with ` + "`main()`" + ` function
+- ` + "`vintconfig.json`" + ` — project metadata
 `
 
-const sampleVintCode = `// Simple VintLang program using all package features
-import greetings_module
-import time
+const sampleReadmeMinimal = `# VintLang Minimal Starter
 
-println("Hello from VintLang!")
-println("Current time:", time.now())
-greetings_module.greet("World")
+A bare-bones VintLang project.
 
-// Use package constants and utility
-println("Module info:", greetings_module.getInfo())
+## Run
 
-// Use encapsulated process function
-println(greetings_module.process("sample data"))
-
-// Show counter after greetings
-println("Greeted count:", greetings_module.getInfo()["counter"])
+` + "```" + `bash
+vint main.vint
+` + "```" + `
 `
 
-const sampleGreetingsCode = `package greetings_module{
-    // Public constants
-    const VERSION = "2.0.0"
-    const AUTHOR = "VintLang Team"
-    const DESCRIPTION = "A demo package with all features"
+const sampleVintCode = `// VintLang starter project
+import greetings_module, time
 
-    // Public variables
-    let greeting = "Hello"
-    let publicCounter = 0
+let main = func() {
+    ::println("Hello from VintLang!");
+    ::println("Current time:", time.now());
 
-    // Private members
-    let _privateSecret = "shhh"
-    const _PRIVATE_KEY = "abc123"
-    let _internalCounter = 0
+    greetings_module.greet("World");
+    ::println("Module info:", greetings_module.getInfo());
 
-    // Auto-init function
+    ::println(greetings_module.process("sample data"));
+
+    ::println("Greeted count:", greetings_module.getInfo()["counter"]);
+};
+`
+
+const sampleVintCodeMinimal = `// VintLang minimal starter
+import cli
+
+let main = func() {
+    ::println("Hello from VintLang!");
+};
+`
+
+const sampleGreetingsCode = `package greetings_module {
+    const VERSION: string = "2.0.0";
+    const AUTHOR: string = "VintLang Team";
+    const DESCRIPTION: string = "A demo package with all features";
+
+    let greeting: string = "Hello";
+    let publicCounter: int = 0;
+
+    let _privateSecret: string = "shhh";
+    const _PRIVATE_KEY: string = "abc123";
+    let _internalCounter: int = 0;
+
     let init = func() {
-        @.greeting = "Welcome"
-        @.publicCounter = 1
-        print("greetings_module v" + VERSION + " initialized!")
-    }
+        @.greeting = "Welcome";
+        @.publicCounter = 1;
+        ::print("greetings_module v" + VERSION + " initialized!");
+    };
 
-    // Public function
-    let greet = func(name) {
-        print(greeting + ", " + name + "!")
-        publicCounter = publicCounter + 1
-    }
+    let greet = func(name: string) {
+        ::print(greeting + ", " + name + "!");
+        publicCounter = publicCounter + 1;
+    };
 
-    // Utility function
     let getInfo = func() {
         return {
             "version": VERSION,
             "author": AUTHOR,
             "desc": DESCRIPTION,
             "counter": publicCounter
-        }
-    }
+        };
+    };
 
-    // Encapsulated private function
-    let _logDebug = func(msg) {
-        print("[DEBUG] " + msg)
-    }
+    let _logDebug = func(msg: string) {
+        ::print("[DEBUG] " + msg);
+    };
 
-    // Public function using private
-    let process = func(data) {
-        _logDebug("Processing: " + data)
-        return "Processed: " + data
-    }
-}
+    let process = func(data: string): string {
+        _logDebug("Processing: " + data);
+        return "Processed: " + data;
+    };
+};
 `
 
-// createProject scaffolds a new Vint project in the given directory
-func createProject(projectName string) {
-	// Structure for vintconfig.json
+// createProject scaffolds a new Vint project in the given directory.
+// If minimal is true, only main.vint and vintconfig.json are created.
+func createProject(projectName string, minimal bool) {
 	var vintConfig = VintConfig{
 		Name:        projectName,
 		Version:     "1.0.0",
@@ -289,89 +309,113 @@ func createProject(projectName string) {
 		Description: "A modern VintLang starter project",
 	}
 
-	// creating the project directory
 	os.Mkdir(projectName, 0755)
 	os.Chdir(projectName)
 
-	// Creating README.md
-	fmt.Println("🫠 Creating README.md...")
+	// README.md
+	readmeContent := sampleReadme
+	if minimal {
+		readmeContent = sampleReadmeMinimal
+	}
+	fmt.Println("Creating README.md...")
 	readmeFile, err := os.Create("README.md")
 	if err != nil {
-		fmt.Printf("❌ Error creating README.md: %v\n", err)
+		fmt.Printf("Error creating README.md: %v\n", err)
 		return
 	}
 	defer readmeFile.Close()
-	if _, err := readmeFile.WriteString(sampleReadme); err != nil {
-		fmt.Printf("❌ Error writing to README.md: %v\n", err)
+	if _, err := readmeFile.WriteString(readmeContent); err != nil {
+		fmt.Printf("Error writing to README.md: %v\n", err)
 		return
 	}
-	fmt.Println("✅ README.md created successfully!")
+	fmt.Println("README.md created")
 
-	// Creating vintconfig.json
-	fmt.Println("🫠 Creating vintconfig.json...")
+	// vintconfig.json
+	if minimal {
+		vintConfig.Description = "A minimal VintLang project"
+	}
+	fmt.Println("Creating vintconfig.json...")
 	vintFile, err := os.Create("vintconfig.json")
 	if err != nil {
-		fmt.Printf("❌ Error creating vintconfig.json: %v\n", err)
+		fmt.Printf("Error creating vintconfig.json: %v\n", err)
 		return
 	}
 	defer vintFile.Close()
-
 	vintData, err := json.MarshalIndent(vintConfig, "", "  ")
 	if err != nil {
-		fmt.Printf("❌ Error marshalling vintconfig.json: %v\n", err)
+		fmt.Printf("Error marshalling vintconfig.json: %v\n", err)
 		return
 	}
 	if _, err := vintFile.Write(vintData); err != nil {
-		fmt.Printf("❌ Error writing to vintconfig.json: %v\n", err)
+		fmt.Printf("Error writing to vintconfig.json: %v\n", err)
 		return
 	}
-	fmt.Println("✅ vintconfig.json created successfully!")
+	fmt.Println("vintconfig.json created")
 
-	// Creating main.vint
-	fmt.Println("🫠 Creating main.vint...")
+	// main.vint
+	mainContent := sampleVintCode
+	if minimal {
+		mainContent = sampleVintCodeMinimal
+	}
+	fmt.Println("Creating main.vint...")
 	mainFile, err := os.Create("main.vint")
 	if err != nil {
-		fmt.Printf("❌ Error creating main.vint: %v\n", err)
+		fmt.Printf("Error creating main.vint: %v\n", err)
 		return
 	}
 	defer mainFile.Close()
-
-	if _, err := mainFile.WriteString(sampleVintCode); err != nil {
-		fmt.Printf("❌ Error writing to main.vint: %v\n", err)
+	if _, err := mainFile.WriteString(mainContent); err != nil {
+		fmt.Printf("Error writing to main.vint: %v\n", err)
 		return
 	}
-	fmt.Println("✅ main.vint created successfully!")
+	fmt.Println("main.vint created")
 
-	// Creating greetings_module.vint
-	greetingsModuleFile, err := os.Create("greetings_module.vint")
-	if err != nil {
-		fmt.Printf("❌ Error creating greetings_module.vint: %v\n", err)
-		return
+	// greetings_module.vint (only in full mode)
+	if !minimal {
+		fmt.Println("Creating greetings_module.vint...")
+		greetingsModuleFile, err := os.Create("greetings_module.vint")
+		if err != nil {
+			fmt.Printf("Error creating greetings_module.vint: %v\n", err)
+			return
+		}
+		defer greetingsModuleFile.Close()
+		if _, err := greetingsModuleFile.WriteString(sampleGreetingsCode); err != nil {
+			fmt.Printf("Error writing to greetings_module.vint: %v\n", err)
+		}
+		fmt.Println("greetings_module.vint created")
 	}
-	defer greetingsModuleFile.Close()
-	if _, err := greetingsModuleFile.WriteString(sampleGreetingsCode); err != nil {
-		fmt.Printf("❌ Error writing to greetings_module.vint: %v\n", err)
-	}
-	fmt.Println("✅ greetings_module.vint created successfully!")
 
-	// Success message
-	fmt.Printf("🚀 Project '%s' initialized successfully!\n", projectName)
+	fmt.Printf("Project '%s' initialized successfully!\n", projectName)
 }
 
-// Init is the legacy project initializer, now uses createProject
+// Init is the project initializer for 'vint init'.
+// Accepts --minimal for a bare-bones scaffold.
 func Init(args []string) {
-	projectName := "vint-project"
-	if len(args) >= 3 {
-		projectName = args[2]
-	}
-	createProject(projectName)
+	projectName, minimal := parseInitArgs(args)
+	createProject(projectName, minimal)
 }
 
-// New is the new project initializer for 'vint new'
+// New is the project initializer for 'vint new'.
+// Accepts --minimal for a bare-bones scaffold.
 func New(args []string) {
+	projectName, minimal := parseInitArgs(args)
+	createProject(projectName, minimal)
+}
+
+// parseInitArgs extracts the project name and --minimal flag from CLI args.
+// args[0] is the program name, args[1] is the command (init/new),
+// subsequent args may be the project name and/or flags.
+func parseInitArgs(args []string) (string, bool) {
 	projectName := "vint-project"
-	if len(args) >= 3 {
-		projectName = args[2]
+	minimal := false
+
+	for _, arg := range args[2:] {
+		if arg == "--minimal" || arg == "-m" {
+			minimal = true
+		} else if arg != "" && arg[0] != '-' {
+			projectName = arg
+		}
 	}
-	createProject(projectName)
+
+	return projectName, minimal
 }
