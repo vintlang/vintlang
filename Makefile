@@ -6,7 +6,7 @@ MODULE      := github.com/vintlang/vintlang
 VERSION     ?= $(shell git describe --tags --always --dirty 2>/dev/null || echo "dev")
 COMMIT      := $(shell git rev-parse --short HEAD 2>/dev/null || echo "unknown")
 BUILD_DATE  := $(shell date -u '+%Y-%m-%dT%H:%M:%SZ')
-LDFLAGS     := -s -w \
+LDFLAGS     = -s -w \
 	-X '$(MODULE)/config.VINT_VERSION=$(VERSION)' \
 	-X '$(MODULE)/config.Commit=$(COMMIT)' \
 	-X '$(MODULE)/config.BuildDate=$(BUILD_DATE)'
@@ -85,10 +85,18 @@ checksums:
 	@cat $(BUILD_DIR)/checksums.txt
 
 # ── GitHub Release (requires gh CLI) ─────────────────────────────────────────
+# The release version is computed by bumping the most recent vX.Y.Z tag,
+# then the tag is created and pushed via git before the release is published.
+LAST_TAG    := $(shell git tag --sort=-v:refname | grep -E '^v[0-9]+\.[0-9]+\.[0-9]+$$' | head -n1)
+RELEASE_TAG := $(shell printf '%s' "$(LAST_TAG)" | awk -F. '{printf "v%d.%d.%d", substr($$1,2)+0, $$2, $$3+1}')
+
+release: VERSION := $(RELEASE_TAG)
 release: clean build-all checksums
-	@echo "==> Creating GitHub release $(VERSION)..."
-	gh release create $(VERSION) \
-		--title "VintLang $(VERSION)" \
+	@echo "==> Creating tag $(RELEASE_TAG) and GitHub release..."
+	git tag "$(RELEASE_TAG)"
+	git push origin "$(RELEASE_TAG)"
+	gh release create "$(RELEASE_TAG)" \
+		--title "VintLang $(RELEASE_TAG)" \
 		--generate-notes \
 		$(BUILD_DIR)/*.tar.gz \
 		$(BUILD_DIR)/*.zip \

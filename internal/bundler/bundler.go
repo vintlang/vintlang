@@ -101,20 +101,24 @@ func Bundle(args []string) error {
 	}
 	printlnVerbose(verbose, "OK")
 
+	printVerbose(verbose, "=> Copying interpreter runtime... ")
+	if err := copyRuntime(tempDir); err != nil {
+		err = fmt.Errorf("failed to copy interpreter runtime: %w", err)
+		logError(err)
+		return err
+	}
+	printlnVerbose(verbose, "OK")
+
 	printVerbose(verbose, "=> Initializing modules... ")
 
-	// Use the current vintlang version for the dependency
-	vintVersion := config.VINT_VERSION
-	if !strings.HasPrefix(vintVersion, "v") {
-		vintVersion = "v" + vintVersion
-	}
-
-	goMod := fmt.Sprintf(`module vint-bundled
+	// The bundle module adopts the vintlang module path so the generated
+	// main.go can import the internal packages (which were copied above).
+	// Depending on the published module would violate Go's internal package
+	// visibility rules and would always use a stale released version.
+	goMod := `module github.com/vintlang/vintlang
 
 go 1.25
-
-require github.com/vintlang/vintlang %s
-`, vintVersion)
+`
 
 	if err := os.WriteFile(filepath.Join(tempDir, "go.mod"), []byte(goMod), 0644); err != nil {
 		err = fmt.Errorf("failed to create go.mod in temp dir '%s': %w", tempDir, err)
@@ -272,11 +276,13 @@ func BundleMulti(args []string) error {
 		return fmt.Errorf("failed to write main.go: %w", err)
 	}
 
-	vintVersion := config.VINT_VERSION
-	if !strings.HasPrefix(vintVersion, "v") {
-		vintVersion = "v" + vintVersion
+	// Copy the interpreter runtime so the bundle module can import the
+	// internal packages (see Bundle for details).
+	if err := copyRuntime(tempDir); err != nil {
+		return fmt.Errorf("failed to copy interpreter runtime: %w", err)
 	}
-	goMod := fmt.Sprintf("module vint-bundled\n\ngo 1.25\n\nrequire github.com/vintlang/vintlang %s\n", vintVersion)
+
+	goMod := "module github.com/vintlang/vintlang\n\ngo 1.25\n"
 	if err := os.WriteFile(filepath.Join(tempDir, "go.mod"), []byte(goMod), 0644); err != nil {
 		return fmt.Errorf("failed to write go.mod: %w", err)
 	}
