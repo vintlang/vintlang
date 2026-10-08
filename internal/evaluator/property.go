@@ -93,7 +93,7 @@ func evalPropertyAssignment(name *ast.PropertyExpression, val object.VintObject,
 			}
 		}
 		if err := si.SetField(prop, val); err != nil {
-			return newError(err.Error())
+			return newError("%s", err.Error())
 		}
 		return NULL
 	default:

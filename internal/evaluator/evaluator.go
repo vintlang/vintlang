@@ -326,7 +326,7 @@ func Eval(node ast.Node, env *object.Environment) object.VintObject {
 		if isError(val) {
 			return val
 		}
-		return newError(val.Inspect())
+		return newError("%s", val.Inspect())
 	case *ast.DeferStatement:
 		call, ok := node.Call.(*ast.CallExpression)
 		if !ok {
