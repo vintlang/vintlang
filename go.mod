@@ -1,8 +1,8 @@
 module github.com/vintlang/vintlang
 
-go 1.21.0
+go 1.27
 
-toolchain go1.24.4
+toolchain go1.27.1
 
 require (
 	github.com/AvicennaJr/GoPrompt v0.0.0-20230411215003-be2316d88e2d

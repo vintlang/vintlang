@@ -28,7 +28,7 @@ func registerCoreBuiltins() {
 			}
 
 			if len(args) > 0 && args[0].Type() != object.STRING_OBJ {
-				return newError(fmt.Sprintf(`Please use quotes: "%s"`, args[0].Inspect()))
+				return newError("Please use quotes: \"%s\"", args[0].Inspect())
 			}
 			if len(args) == 1 {
 				prompt := args[0].(*object.String).Value
